@@ -33,3 +33,11 @@ None.
 6. (Optional) Remove Kiali.
 
    Perform procedure(s) in [Remove Kiali](../system_management_health/Remove_Kiali.md).
+
+7. (Optional) Kubernetes API audit log file parameter settings.
+
+   If Kubernetes API Auditing is enabled, then it is recommended to set `--audit-log-maxage` to 30 or appropriate value
+
+   and `--audit-log-maxsize` parameter to 100 or appropriate value.
+
+   For more information on setting the audit parameters refer [Audit parameter settings](../security_and_authentication/Audit_Logs.md).

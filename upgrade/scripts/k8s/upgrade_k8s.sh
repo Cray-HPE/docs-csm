@@ -256,6 +256,9 @@ for host in ${workers}; do
     ssh "${host}" zypper --non-interactive install "kubernetes-cni-${k8s_cni[${minor_target_version}]}"
     ssh "${host}" kubeadm upgrade node
     kubectl drain --ignore-daemonsets --delete-emptydir-data "${host}"
+    # Wait for nexus pod to be Ready
+    echo "$(prefix) Wait for nexus to be Ready ..."
+    kubectl wait pod -n nexus -l app=nexus --for=condition=Ready --timeout=5m
 
     # Fix /etc/sysconfig/kubelet
     fix_sysconfig "${host}"

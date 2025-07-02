@@ -402,47 +402,455 @@ Example output:
 
 ### Container Image Signature Verification Kyverno Policy
 
-Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno
-policy engine) as part of CSM 1.6 release in `Audit` only mode. (`Audit` only mode will log the policy violation
-warning messages in to the cluster report and as events)
+   Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno
+   policy engine) as part of CSM 1.6 release in `Audit` only mode. (`Audit` only mode will log the policy violation
+   warning messages in to the cluster report and as events)
 
-By default, the `check-image` policy is shipped as a `ClusterPolicy` and is configured to work in a sample (non-existent) namespace. To enable the policy, end users must customize it to the targeted namespaces.
+   By default, the `check-image` policy is shipped as a `ClusterPolicy` and is configured to work in a sample (non-existent) namespace. To enable the policy, end users must customize it to the targeted namespaces.
 
-CSM runs in an air gapped environment, where the images stored in `artifactory` are mirrored to the local Nexus registry. Kyverno policy engine does not support
-this environment for image verification. To enable Kyverno policy for such environments, all `image specs` need to be replaced from `artifactory.algol60.net/csm-docker/stable/image:tag`
-to `registry.local/artifactory.algol60.net/csm-docker/stable/image:tag` (prepend `registry.local/` to the image spec). This will force Kyverno to check local Nexus
-registry for the images. Without `registry.local/`, Kyverno will try to contact remote registry (`artifactory`) every time, and this may trigger timeouts due to delays,
-and eventually lead to policy failure.
+   CSM runs in an air gapped environment, where the images stored in `artifactory` are mirrored to the local Nexus registry. Kyverno policy engine does not support
+   this environment for image verification. To enable Kyverno policy for such environments, all `image specs` need to be replaced from `artifactory.algol60.net/csm-docker/stable/image:tag`
+   to `registry.local/artifactory.algol60.net/csm-docker/stable/image:tag` (prepend `registry.local/` to the image spec). This will force Kyverno to check local Nexus
+   registry for the images. Without `registry.local/`, Kyverno will try to contact remote registry (`artifactory`) every time, and this may trigger timeouts due to delays,
+   and eventually lead to policy failure.
 
-Prepending `registry.local/` to the image spec can be achieved either manually or through a mutation policy.
+   Prepending `registry.local/` to the image spec can be achieved either manually or through a mutation policy.
 
-For more information on mutation policy, refer to the [Mutation Policy](https://kyverno.io/policies/other/prepend-image-registry/prepend-image-registry/).
+   For more information on mutation policy, refer to the [Mutation Policy](https://kyverno.io/policies/other/prepend-image-registry/prepend-image-registry/).
 
 #### Policy customization
 
-If any changes are to be made to the policy, for example, including or excluding certain namespaces and adding
-a new public key, then the end user must change the CSM customizations and redeploy the `kyverno-policy` chart.
-For more information on customization and redeployment, see [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md).
+   If any changes are to be made to the policy, for example, including or excluding certain namespaces and adding
+   a new public key, then the end user must change the CSM customizations and redeploy the `kyverno-policy` chart.
+   For more information on customization and redeployment, see [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md).
 
-For more information on policy exception and matchings, refer to the Kyverno documentation at [Policy Exceptions](https://release-1-10-0.kyverno.io/docs/writing-policies/exceptions/)
-and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/match-exclude/).
+   For more information on policy exception and matchings, refer to the Kyverno documentation at [Policy Exceptions](https://release-1-10-0.kyverno.io/docs/writing-policies/exceptions/)
+   and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/match-exclude/).
+
+## What is new in the HPE CSM 1.7 release and above
+
+1. Kyverno is upgraded from 1.10.7 version to 1.13.4 version and is now available for customers as part of the HPE CSM 1.7 release.
+
+   This is a major upgrade with many new features and bug fixes. For a complete list, refer to the external [CHANGELOG](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md).
+
+2. Container image signature verification is enforced using Kyverno policy.
+
+3. Pod Security Policies (PSP) are removed and Baseline Pod Security Standards (PSS) are enforced using Kyverno Policies.
+
+### Container image signature verification is enforced using Kyverno policy
+
+   Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno
+   policy engine) as part of CSM 1.7 release in `Enforce` mode. (`Audit` only mode will log the policy violation
+   warning messages into the cluster report and as events whereas `Enforce` mode will block the resources if they fail signature verification)
+
+   By default, the `check-image` policy is shipped as a `ClusterPolicy`. Policy can be customized based on the end users environment.
+   In CSM 1.7, a cluster-wide mutation policy named `prepend-registry` is provided to prepend `registry.local/` to all the container images that are being used in the Kubernetes resources.
+   Also, a policy exception named `check-image-exceptions` is provided that can be used to provide exceptions from both `prepend-registry` and `check-image` policy. End users can modify the `check-image-exceptions` to add any exceptions.
+
+   For more information on the above mutation policy, refer to the [Mutation Policy](https://kyverno.io/policies/other/prepend-image-registry/prepend-image-registry/).
+   In CSM 1.7, Container image signature verification policy `check-image` is separated from `kyverno-policy` helm chart and is delivered as a new helm chart named `image-verification-policy`.
+   This new chart is deployed after the nexus deployment. This change is introduced as Kyverno doesn't have the intelligence to look into the pit node(until nexus is up) for the image signatures.
+   Kyverno will look into nexus due to the prepended 'registry.local/'.
+
+#### How to identify container image signature verification failures
+
+##### Checking Existing Resources
+
+Use the following command:
+
+`kubectl get polr -A | awk '$6 > 0'`
+
+This command filters the `Policy Reports (polr)` to list resources with at least one verification failure. Sample output:
+
+```text
+NAMESPACE     NAME                                   KIND        NAME                                             PASS   FAIL   WARN   ERROR   SKIP   AGE
+ceph-cephfs   1d32041d-5dcd-438f-8cd8-91dc7d240f0f   Pod         cray-ceph-csi-cephfs-nodeplugin-hpflx            1      1      0      0       0      19d
+ceph-rbd      878cd835-4a5b-4e2c-97c3-a4da33cfd297   DaemonSet   cray-ceph-csi-rbd-nodeplugin                     0      1      0      0       0      25d
+non-existent  12678622-c38b-409c-a372-3b7d2e5688e8   Pod         test-failure-ff8fd69cf-x99qb                     1      1      0      0       0      119s
+```
+
+In this example, each listed resource has at least one verification failure (FAIL column).
+
+##### Verification Failures Investigation
+
+To better understand the reason for the failure, inspect the specific Policy Report by describing it:
+
+Example:
+
+```bash
+kubectl describe polr 12678622-c38b-409c-a372-3b7d2e5688e8 -n non-existent
+```
+
+This command gives detailed information about the verification failure, such as:
+
+```text
+Name:         12678622-c38b-409c-a372-3b7d2e5688e8
+Namespace:    non-existent
+Labels:       app.kubernetes.io/managed-by=kyverno
+Annotations:  <none>
+API Version:  wgpolicyk8s.io/v1alpha2
+Kind:         PolicyReport
+
+Results:
+  Message:  failed to verify image registry.local/arti.hpc.amslabs.hpecorp.net/quay-remote/frrouting/frr:8.4.2: 
+            .attestors[0].entries[0].keys: no signatures found; 
+            .attestors[0].entries[1].keys: no signatures found; 
+            .attestors[0].entries[2].keys: no signatures found; 
+            .attestors[0].entries[3].keys: no signatures found; 
+            .attestors[0].entries[4].keys: no signatures found; 
+            .attestors[0].entries[5].keys: no signatures found
+  Policy:   check-image
+  Result:   fail
+  Rule:     check-image
+  Scored:   true
+  Source:   kyverno
+```
+
+This detailed message explicitly states that no valid signatures were found for the specified image.
+
+##### Resolving Verification Failures
+
+Below two options are available when facing verification failures:
+
+##### Sign the Image and add the public key to the policy
+
+Ensure that your container images are properly signed using a signing tool named Cosign. Properly signed images will pass verification policies and deploy successfully.
+
+Refer this official documentation of [Cosign](https://docs.sigstore.dev/quickstart/quickstart-cosign/) to sign the images.
+
+Once, it is signed, you must add the public key to the Kyverno cluster policy `check-image` and redeploy the chart `image-verification-policy` with the base chart `kyverno-policy`.
+Refer this CSM documentation on [redeploying the chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/).
+Change to `check-image policy` looks as below:
+
+```text
+# kubectl get cpol check-image -o yaml
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  annotations:
+    ...
+    ...
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: check-image
+
+spec:
+  admission: true
+  ...
+  rules:
+  - match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+    name: check-image
+    verifyImages:
+    - attestors:
+      - count: 1
+        entries:
+        - keys:
+            ctlog:
+              ignoreSCT: true
+            publicKeys: |
+              -----BEGIN PUBLIC KEY-----
+              ...
+              -----END PUBLIC KEY-----
+              -----BEGIN PUBLIC KEY-----
+              ...
+              -----END PUBLIC KEY-----
+              .
+              .
+
+              -----END PUBLIC KEY-----
+            rekor:
+              ignoreTlog: true
+            ...  
+  validationFailureAction: Enforce
+```
+
+Under `keys.publicKeys`, the new public key needs to be added following the [redeploy chart](https://cray-hpe.github.io/docs-csm/en-16/operations/csm_product_management/redeploying_a_chart/) approach.
+
+##### Add an Exception
+
+If signing the image isn't possible or desired, explicitly add the resource that uses this image as an exception in the `check-image-exceptions` policy exception in the Kyverno namespace.
+
+`check-image-exceptions` policy exception looks as below:
+
+```text
+# kubectl -n kyverno get policyexception check-image-exceptions -o yaml
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  annotations:
+    ...
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  name: check-image-exceptions
+  namespace: kyverno
+spec:
+  exceptions:
+  - policyName: prepend-registry
+    ruleNames:
+    - prepend-registry-containers
+    - prepend-registry-initcontainers
+  - policyName: check-image
+    ruleNames:
+    - check-image
+  match:
+    any:
+    - resources:
+        names:
+        - '*sample-resource-name*'
+    - resources:
+        names:
+        - '*samp-1*'
+        - '*samp-2*'
+        - '*samp-3*'
+```
+
+Use the following command to add the exception(make sure to take a backup before doing the changes).
+
+`kubectl -n kyverno edit policyexception check-image-exceptions`
+
+```text
+spec:
+  exceptions:
+  - policyName: prepend-registry
+    ruleNames:
+    - prepend-registry-containers
+    - prepend-registry-initcontainers
+  - policyName: check-image
+    ruleNames:
+    - check-image
+  match:
+    any:
+    .
+    .
+    .
+    - resources:
+        names:
+        - '*samp-1*'
+        - '*samp-2*'
+        - '*samp-3*'
+    - resources:
+        names:
+        - '*updated-resource-name*'
+        - '*new-resource-pattern*'
+```
+
+Add the exceptions and exit.
+
+Now, the resource will be allowed for deployment.
+Refer [Kyverno documentation](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/) on adding exceptions.
+
+#### Policy customization through redeploying the chart
+
+   If any changes are to be made in the image verification policy, for example, making it to Audit mode or adding
+   a new public key, then the end user must change the CSM customizations and redeploy the `image-verification-policy` chart under the base chart `kyverno-policy`.
+   For more information on customization and redeployment, see [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md).
+
+   For more information on policy exception and matchings, refer to the Kyverno documentation at [Policy Exceptions](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/).
+
+### Baseline Pod Security Standards (PSS) Enforced using Kyverno policies
+
+  Pod Security Policies were removed from Kubernetes 1.25. Instead, Kubernetes introduced [Pod Security Standards (PSS)](https://kubernetes.io/docs/concepts/security/pod-security-standards/) to strengthen the Kubernetes Pod Security.
+
+From CSM 1.4 onwards upstream Discrete PSS Baseline Policies are shipped in Audit mode. From CSM `v1.7`, a single `podsecurity-subrule-baseline` policy is shipped
+which takes advantage of Kyverno's `podSecurity` `subrule`, which in turn paves way for easier implementation of exceptions.
+
+  The `podsecurity-subrule-baseline` Kyverno Policy has been shipped in **Enforce** Mode from CSM 1.7. This means that pods or pod controllers not adhering to the policy will NOT be admitted to the cluster.
+  Kyverno will block that admission, unless an Exception is issued.
+
+#### Analyzing PSS Policy Violations
+
+  To list the failing policy reports for all the Kyverno policies existing in a cluster, the following command can be used:
+
+  ```shell
+  ncn-m001:~/ # kubectl get polr -A | awk '$6 > 0'
+  NAMESPACE            NAME                                   KIND          NAME                                                              PASS   FAIL   WARN   ERROR   SKIP   AGE
+  ceph-cephfs          75d41f86-4141-457b-ad0f-317af7764a36   DaemonSet     cray-ceph-csi-cephfs-nodeplugin                                   0      1      0      0       0      11d
+  ceph-rbd             26270dc0-0464-45e1-90f7-8cdc8131a00a   DaemonSet     cray-ceph-csi-rbd-nodeplugin                                      0      1      0      0       0      11d
+  ```
+
+  The `policyreport` is a `namespaced` resource that is generated by Kyverno for each resource that is matched by a policy. Inside a `PolicyReport`, there may be multiple results, based on the number of policies that matched the resource,
+  and a subsequent result field mentioning if it passed or failed. These details can be seen by describing the `policyreport`:
+
+  ```yaml
+  ncn-m001:~ # kubectl describe polr -n ceph-cephfs 75d41f86-4141-457b-ad0f-317af7764a36
+  Name:         75d41f86-4141-457b-ad0f-317af7764a36
+  Namespace:    ceph-cephfs
+  Labels:       app.kubernetes.io/managed-by=kyverno
+  Annotations:  <none>
+  API Version:  wgpolicyk8s.io/v1alpha2
+  Kind:         PolicyReport
+  Metadata:
+    Owner References:
+      API Version:     apps/v1
+      Kind:            DaemonSet
+      Name:            cray-ceph-csi-cephfs-nodeplugin
+  Results:
+    Message:  Validation rule 'autogen-baseline' failed. It violates PodSecurity "baseline:latest":
+    (Forbidden reason: non-default capabilities, field error list: [spec.template.spec.containers[0].securityContext.capabilities.add is forbidden, forbidden values found: [SYS_ADMIN]])
+    (Forbidden reason: host namespaces, field error list: [spec.template.spec.hostNetwork is forbidden, forbidden values found: true, spec.template.spec.hostPID is forbidden, forbidden values found: true])
+    (Forbidden reason: hostPath volumes, field error list: [spec.template.spec.volumes[0].hostPath is forbidden, forbidden values found: /var/lib/kubelet/plugins/cephfs.csi.ceph.com, spec.template.spec.volumes[1].hostPath is forbidden,
+    forbidden values found: /var/lib/kubelet/plugins_registry, spec.template.spec.volumes[2].hostPath is forbidden, forbidden values found: /var/lib/kubelet/pods, spec.template.spec.volumes[3].hostPath is forbidden,
+    forbidden values found: /var/lib/kubelet/plugins, spec.template.spec.volumes[4].hostPath is forbidden, forbidden values found: /sys, spec.template.spec.volumes[5].hostPath is forbidden,
+    forbidden values found: /etc/selinux, spec.template.spec.volumes[6].hostPath is forbidden, forbidden values found: /run/mount, spec.template.spec.volumes[7].hostPath is forbidden,
+    forbidden values found: /lib/modules, spec.template.spec.volumes[8].hostPath is forbidden, forbidden values found: /dev, spec.template.spec.volumes[12].hostPath is forbidden,
+    forbidden values found: /var/lib/kubelet/plugins/cephfs.csi.ceph.com/mountinfo])(Forbidden reason: privileged, field error list: [spec.template.spec.containers[0].securityContext.privileged is forbidden,
+    forbidden values found: true, spec.template.spec.containers[1].securityContext.privileged is forbidden,
+    forbidden values found: true, spec.template.spec.containers[2].securityContext.privileged is forbidden, forbidden values found: true])
+    Policy:   podsecurity-subrule-baseline
+    Properties:
+      Controls:       capabilities_baseline,hostNamespaces,hostPathVolumes,privileged
+      Controls JSON:  [{"ID":"capabilities_baseline","Name":"Capabilities","Images":["artifactory.algol60.net/csm-docker/stable/quay.io/cephcsi/cephcsi:v3.14.0"]},{"ID":"hostNamespaces","Name":"Host Namespaces","Images":null},
+      {"ID":"hostPathVolumes","Name":"HostPath Volumes","Images":null},
+      {"ID":"privileged","Name":"Privileged Containers","Images":["artifactory.algol60.net/csm-docker/stable/quay.io/cephcsi/cephcsi:v3.14.0","artifactory.algol60.net/csm-docker/stable/registry.k8s.io/sig-storage/csi-node-driver-registrar:v2.13.0",
+      "artifactory.algol60.net/csm-docker/stable/quay.io/cephcsi/cephcsi:v3.14.0"]}]
+      Standard:       baseline
+      Version:        latest
+    Result:           fail
+    Rule:             autogen-baseline
+    Scored:           true
+    Source:           kyverno
+  Scope:
+    API Version:  apps/v1
+    Kind:         DaemonSet
+    Name:         cray-ceph-csi-cephfs-nodeplugin
+    Namespace:    ceph-cephfs
+  Summary:
+    Error:  0
+    Fail:   1
+    Pass:   0
+    Skip:   0
+    Warn:   0
+  Events:   <none>
+  ncn-m001:~ # 
+  ```
+
+  As seen above, the pod fails the `podsecurity-subrule-baseline` policy as it uses `hostPath` volumes, uses additional capabilities, and allows privileged containers.
+
+#### Exempting Pods from the PSS policy
+
+  There are situations where certain pods cannot adhere to the Baseline policies due to their functionalities. Such resources can be exempted by using `PolicyExceptions`. From CSM 1.7,
+  we have enabled `PolicyExceptions` in all namespaces so that they can be used for resources that are unable to adhere to the policies.
+  We have issued a set of exceptions in the `kyverno` namespace for such pods found within the CSM deployment. They can be seen using the command `kubectl get policyexception -n kyverno`.
+
+  If more pods are found to be violating the PSS Policy, more exceptions may be required. The Kyverno [documentation for `PolicyExceptions`](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/)
+  can be referred if any further exceptions are required. For example for the earlier policy report from `cray-ceph-csi-cephfs-nodeplugin`, the following `PolicyException` is added to allow the DaemonSet and its pods to use those resources:
+
+  ```yaml
+  apiVersion: kyverno.io/v2
+  kind: PolicyException
+  metadata:
+    name: ceph-nodeplugin
+    namespace: kyverno
+  spec:
+    exceptions:
+    - policyName: podsecurity-subrule-baseline
+      ruleNames:
+      - baseline
+      - autogen-baseline
+    match:
+      any:
+      - resources:
+          kinds:
+          - Pod
+          - DaemonSet
+          names:
+          - cray-ceph-csi-cephfs-nodeplugin*
+          - cray-ceph-csi-rbd-nodeplugin*
+          namespaces:
+          - ceph-cephfs
+          - ceph-rbd
+    podSecurity:
+    - controlName: Privileged Containers
+      images:
+      - '*/quay.io/cephcsi/cephcsi:*'
+      - '*/registry.k8s.io/sig-storage/csi-node-driver-registrar:*'
+      restrictedField: spec.containers[*].securityContext.privileged
+      values:
+      - "true"
+    - controlName: Capabilities
+      images:
+      - '*/quay.io/cephcsi/cephcsi:*'
+      restrictedField: spec.containers[*].securityContext.capabilities.add
+      values:
+      - SYS_ADMIN
+    - controlName: Host Namespaces
+      restrictedField: spec.hostNetwork
+      values:
+      - "true"
+    - controlName: Host Namespaces
+      restrictedField: spec.hostPID
+      values:
+      - "true"
+    - controlName: Host Ports
+      images:
+      - '*/quay.io/cephcsi/cephcsi:*'
+      restrictedField: spec.containers[*].ports[*].hostPort
+      values:
+      - "8080"
+      - "8081"
+    - controlName: HostPath Volumes
+      restrictedField: spec.volumes[*].hostPath
+      values:
+      - /dev
+      - /etc/selinux
+      - /lib/modules
+      - /run/mount
+      - /sys
+      - /var/lib/kubelet/plugins
+      - /var/lib/kubelet/plugins/cephfs.csi.ceph.com
+      - /var/lib/kubelet/plugins/cephfs.csi.ceph.com/mountinfo
+      - /var/lib/kubelet/plugins/rbd.csi.ceph.com
+      - /var/lib/kubelet/plugins_registry
+      - /var/lib/kubelet/pods
+      - /var/log/ceph
+  ```
+
+  As seen above, the `PolicyException` first matches the resource to be exempted from the policy, mentions the policy and its rules to be exempted. Further, it mentions the `podSecurity` Exemptions to allow the use of privileged containers,
+  additional capabilities, host namespaces, ports, and `hostPath` volumes. Notice that only the required fields and required values are supposed to be exempted. Make sure not to be too permissive with `PolicyExceptions`
+  as it ruins the purpose of having a policy in the first place. Further documentation about `PolicyException` specific to PSS policy can be found as part of the
+  [Kyverno Documentation](https://release-1-13-0.kyverno.io/docs/writing-policies/exceptions/#pod-security-exemptions).
+
+#### Switching between Enforce and Audit mode
+
+  As mentioned earlier, pods will NOT be allowed to be admitted to the cluster if in case it violates the PSS policy as we place it in Enforce mode. A message similar to the following will appear if a violating pod is attempted to be added to the cluster.
+
+  ```text
+  Error from server: error when creating "badpod.yaml": admission webhook "validate.kyverno.svc-fail" denied the request: 
+  
+  resource Pod/default/badpod01 was blocked due to the following policies 
+  
+  podsecurity-subrule-baseline:
+    baseline: 'Validation rule ''baseline'' failed. It violates PodSecurity "baseline:latest":
+      (Forbidden reason: non-default capabilities, field error list: [spec.containers[0].securityContext.capabilities.add
+      is forbidden, forbidden values found: [NET_RAW]])'
+  ```
+
+  The pods getting admitted are expected to be compliant to the PSS policy. In case the pods are not expected to be compliant, and require to be allowed, a `PolicyException` can be issued as described above.
+  If in case Enforce mode must be switched back to Audit mode, then this can be done by Redeploying the `cray-kyverno-policies-upstream` chart after setting the following in the `customizations.yaml`:
+
+  ```yaml
+  cray-kyverno-policies-upstream:
+      pssFailureAction: Audit
+  ```
+
+  You can redeploy the `cray-kyverno-policies-upstream` chart under the `platform` manifest by applying the above customization and following the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) documentation.
 
 ## Known issues
 
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
-* Kyverno failed to verify `tls` certificate for signature verification from CSM 1.6 and above
+* [IUF workflows failing because of a really long activity name](https://github.com/argoproj/argo-workflows/issues/11356)
 
-    ```bash
-    10m         Warning   PolicyViolation   pod/canu-test-6ff597df6d-fbnbd   policy check-image/check-image fail: failed to 
-    verify image registry.local/artifactory.algol60.net/csm-docker/stable/cray-canu/canu-test:1.6.36: 
-    .attestors[0].entries[0].keys: Get "https://registry.local/v2/": tls: failed to verify certificate: x509: certificate 
-    signed by unknown authority
-    ```
+  ```text
+  2025-04-16T08:02:20Z | Pod: argo/this-is-a-really-long-activity-name-ilfqr-deploy-productt87tk-shell-script3210929130 | Message: policy podsecurity-subrule-baseline/baseline fail: Validation rule 'baseline' failed. It violates PodSecurity "baseline:latest": (Forbidden reason: hostPath volumes, field error list: [spec.volumes[2].hostPath is forbidden, forbidden values found: /var/lib/ca-certificates, spec.volumes[3].hostPath is forbidden, forbidden values found: /etc/cray/upgrade/csm])
+  ```
 
-    When end user encounters the above issue for signature verification then the solution is to restart the Kyverno pods.
-    Follow the commands mentioned in [Restart Kyverno](https://release-1-10-0.kyverno.io/docs/troubleshooting/)
-
-    Incase the issue still persists after restarting the Kyverno pods, we recommend to disable the background scanning in the Kyverno policy.
-    Set `background` to `false` to disable background scanning in the Kyverno policy
+  Our `podsecurity-subrule-baseline` policy's exceptions for IUF workflows rely on matching the naming of IUF Argo pods. For a really long activity name as shown in the error above, the Argo workflows might
+  truncate the generated `argo` pod names which will cause the Policy Exceptions to not work. In such a scenario, Kyverno will block the pod as it violates the PSS
+  policy and hence the IUF workflow will fail. Please retry the workflow with a smaller activity name.
+  We suggest to use an activity name that's at most 16-20 characters. The idea is to have the generated pod name under 63 characters according to the Kubernetes Standards.

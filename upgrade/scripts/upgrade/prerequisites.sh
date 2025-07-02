@@ -253,6 +253,22 @@ function do_upgrade_csm_chart {
   fi
 }
 
+# Undeploy the chart if it exists on the system.
+# Use this if a chart has been removed from a manifest and needs
+# to be removed from the system as part of an upgrade.
+function undeploy() {
+  # Check if the chart exists by running helm status
+  if [[ $(helm status -o json "$@" 2> /dev/null | jq -r .info.status) == "deployed" ]]; then
+    echo "Chart ${*: -1} exists. Uninstalling it now."
+    # Remove the chart completely without keeping history.
+    helm uninstall "$@"
+    return $?
+  else
+    echo "Chart ${*: -1} doesn't exist"
+    return 0
+  fi
+}
+
 function is_vshasta_node {
   # This is the best check for an image specifically booted to vshasta
   [[ -f /etc/google_system ]] && return 0
@@ -558,6 +574,25 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Undeploy old spire chart if it exists
+# In 1.7 the old spire server is removed.
+# The new cray-spire server should be around from 1.5 on.
+state_name="UNDEPLOY_SPIRE_CHART"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    # We first need to change the serviceAccountName in cray-spire daemonset request-ncn-join-token in
+    # case it is using the cray-spire-request-ncn-join-token service account which will be deleted with the
+    # undeploy of spire.
+    kubectl patch daemonsets.apps -n spire request-ncn-join-token --type='json' -p='[{"op": "replace", "path": '/spec/template/spec/serviceAccountName', "value":"default"}]'
+    undeploy -n spire spire
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # Pre-cache images needed for istio upgrade. As soon as cray-istio-pilot is upgraded, network
 # connection to nexus will be broken, due to istio proxy and istiod versions mismatch. Upgrade of
 # cray-istio will fix that, but images must be pre-cached for it to succeed.
@@ -587,22 +622,6 @@ kubectl annotate backupstoragelocations default -n velero \
   meta.helm.sh/release-namespace=velero --overwrite \
   && echo "Successfully annotated Velero Backup Storage Locations" \
   || echo "Failed to annotate Velero Backup Storage Locations"
-
-# Undeploy the chart if it exists on the system.
-# Use this if a chart has been removed from a manifest and needs
-# to be removed from the system as part of an upgrade.
-function undeploy() {
-  # Check if the chart exists by running helm status
-  if [[ $(helm status -o json "$@" 2> /dev/null | jq -r .info.status) == "deployed" ]]; then
-    echo "Chart ${*: -1} exists. Uninstalling it now."
-    # Remove the chart completely without keeping history.
-    helm uninstall "$@"
-    return $?
-  else
-    echo "Chart ${*: -1} doesn't exist"
-    return 0
-  fi
-}
 
 # Undeploy Istio charts if they exist
 # cray-istio-operator and cray-istio-deploy are removed with upgrade to Istio 1.26.0
@@ -716,38 +735,56 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPDATE_CRAY_POSTGRES_OPERATOR_CRDS"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-    postgres_chart_path=$(find "${CSM_ARTI_DIR}/helm" -name "cray-postgres-operator*.tgz")
-    if [[ -z $postgres_chart_path ]]; then
-      echo "Error: failed to find cray-postgres-operator chart in ${CSM_ARTI_DIR}/helm."
-      exit 1
-    fi
-    # check if file exists before applying crds, needed for backwards compatibility
-    if tar -tf "$postgres_chart_path" cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml > /dev/null 2>&1; then
-      # create CRDs for cray-postgres-operator, this is necessary when postgres is upgraded to 1.10.1 in CSM 1.7
-      tar --extract --file="$postgres_chart_path" --to-stdout cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml | kubectl apply -f -
-      # 5 second sleep is necessary for cray-postgres-operator chart deploy. Chart fails with CRD error if no sleep
-      sleep 5
-    else
-      echo "File 'cray-postgres-operator/files/postgres-operator-crds-1.10.1.yaml' does not exist in $postgres_chart_path"
-    fi
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
+# We have a strange situation where upgrading the CRDs gets
+# reverted when the postgres operator is updated.  It doesn't
+# happen all the time, but a brute-force fix is to upgrade the
+# CRDs both before and after upgrading the postgres operator.
+
+update_cray_postgres_operator_crds() {
+  state_name=$1
+  state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+  if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+    echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+    {
+      postgres_chart_path=$(find "${CSM_ARTI_DIR}/helm" -name "cray-postgres-operator*.tgz")
+      if [[ -z $postgres_chart_path ]]; then
+        echo "Error: failed to find cray-postgres-operator chart in ${CSM_ARTI_DIR}/helm."
+        exit 1
+      fi
+      # check if file exists before applying crds, needed for backwards compatibility
+      postgres_crd_file=postgres-operator-crds-1.10.1.yaml
+      postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file}" 2> /dev/null)
+      if [ -n "${postgres_crd_path}" ]; then
+        # create CRDs for cray-postgres-operator, this is necessary when postgres is upgraded to 1.10.1 in CSM 1.7
+        tar --extract --file="${postgres_chart_path}" --to-stdout ${postgres_crd_path} | kubectl apply -f -
+      else
+        echo "File '${postgres_crd_file}' does not exist in ${postgres_chart_path}"
+      fi
+    } >> "${LOG_FILE}" 2>&1
+    record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+  else
+    echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+  fi
+}
+
+update_cray_postgres_operator_crds UPDATE_CRAY_POSTGRES_OPERATOR_CRDS
+# A 10 second sleep is necessary before cray-postgres-operator chart deploy. Chart fails with CRD error if no sleep
+sleep 10
 
 # Workaround for CASMTRIAGE-8332 before upgrading postgres-operator for CSM 1.7.x
-kubectl label --overwrite rolebinding --namespace default postgres-pod app.kubernetes.io/managed-by=Helm
-kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-name=cray-postgres-operator
-kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-namespace=services
+{
+  if kubectl get rolebinding --namespace default postgres-pod &> /dev/null; then
+    kubectl label --overwrite rolebinding --namespace default postgres-pod app.kubernetes.io/managed-by=Helm || true
+    kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-name=cray-postgres-operator || true
+    kubectl annotate --overwrite rolebinding --namespace default postgres-pod meta.helm.sh/release-namespace=services || true
+  fi
+} >> "${LOG_FILE}" 2>&1
 
 # Upgrade postgres-operator
 do_upgrade_csm_chart cray-postgres-operator platform.yaml
+
+# Upgrade the postgres CRDs again
+update_cray_postgres_operator_crds RE_UPDATE_CRAY_POSTGRES_OPERATOR_CRDS
 
 state_name="FIX_POSTGRES"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
@@ -1329,6 +1366,25 @@ if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     "${locOfScript}/util/postgres-reinit.sh"
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
+# Workaround for CASMTRIAGE-8340. A particular etcd test requires an updated
+# version of platform-utils, which is normally not available until we boot into
+# the newer node image, so we upgrade it here. We do the update on all masters,
+# to prevent issues if things are run out of order.
+state_name="UPDATE_PLATFORM_UTILS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    masters=$(grep -oP 'ncn-m\d+' /etc/hosts | sort -u | grep -Ev "^$(hostname -s)$" | tr -t '\n' ',')
+    # We install platform-utils 1.7.1 specifically as it contains a backported
+    # bugfix necessary for the etcd test to run.
+    pdsh -S -b -w ${masters} "zypper --non-interactive update platform-utils=1.7.1"
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
