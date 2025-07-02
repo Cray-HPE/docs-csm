@@ -9,6 +9,7 @@ directory which contains important customizations for various products.
     1. [Setup LDAP configuration](#setup-ldap-configuration)
     1. [Customize DNS Configuration](#customize-dns-configuration)
     1. [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
+    1. [Configure Max Istio Gateway Pods](#configure-max-istio-gateway-pods)
 1. [Encrypt secrets](#4-encrypt-secrets)
 1. [Customer-Specific Customizations](#5-customer-specific-customizations)
 
@@ -416,6 +417,60 @@ the [Prometheus SNMP Exporter](../operations/network/management_network/snmp_exp
 information and review the
 [Adding SNMP Credentials to the System](../operations/network/management_network/snmp_exporter_configs.md#adding-snmp-credentials-to-the-system)
 section for links to the relevant procedures.
+
+### Configure Max Istio Gateway Pods
+
+The Istio Gatways have a Horizontal Pod Autoscaler configured to allow Kubernetes to grow and shrink the
+deployment as needed due to increased load. This by default is configured to a max of 6 and a minumum of 3
+pods. On some smaller systems this leads to Kubernetes attempting to start up more pods than avaliable
+worker nodes. This leads to test failures and a pod stuck in the pending state. The minumum and maximum
+should be configured to fit the system.
+
+This step can be skipped if the default of a maximum of 6 pods and a minimum of 3 pods is approprate for
+the system size.
+
+1. (`pit#`) Set the minimum and maximum replicas wanted
+
+> ***NOTE*** the maximum should not be higher than the total number of worker nodes on a system, and
+the minimum has to be less than or equal to the maximum. This can have both be the same value but
+that will mean the pods will never automatically create or remove pods as load changes.
+
+```bash
+max_amount=4
+min_amount=3
+```
+
+1. (`pit#`) Update the customizations file.
+
+```bash
+yq write -i ${SITE_INIT}/customizations.yaml \
+  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway.autoscaleMax' \
+  "$max_amount"
+yq write -i ${SITE_INIT}/customizations.yaml \
+  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway.autoscaleMin' \
+  "$min_amount"
+
+yq write -i ${SITE_INIT}/customizations.yaml \
+  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-customer-admin.autoscaleMax' \
+  "$max_amount"
+yq write -i ${SITE_INIT}/customizations.yaml \
+  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-customer-admin.autoscaleMin' \
+  "$min_amount"
+
+yq write -i ${SITE_INIT}/customizations.yaml \
+  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-customer-user.autoscaleMax' \
+  "$max_amount"
+yq write -i ${SITE_INIT}/customizations.yaml \
+  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-customer-user.autoscaleMin' \
+  "$min_amount"
+
+yq write -i ${SITE_INIT}/customizations.yaml \
+  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-hmn.autoscaleMax' \
+  "$max_amount"
+yq write -i ${SITE_INIT}/customizations.yaml \
+  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-hmn.autoscaleMin' \
+  "$min_amount"
+```
 
 ## 4. Encrypt secrets
 

@@ -143,6 +143,23 @@ fi
 yq4 eval -i 'del(.spec.proxiedWebAppExternalHostnames.customerManagement.[] | select(. == "*cray-istio*"))' "$c"
 yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-istio-ingress'].istio.tracing.externalAuthority }}\"" -i "$c"
 
+# Update cray-istio-ingress HPA to limit to amount of workers avaliable
+worker_count=$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join("\n")' | wc -l)
+istio_ingress_path=".spec.kubernetes.services.cray-istio-ingress.deployments"
+
+if [ $worker_count -lt 6 ]; then
+  yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway.autoscaleMax = $worker_count)) += 0" "$c"
+  yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-customer-admin.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway-customer-admin.autoscaleMax = $worker_count)) += 0" "$c"
+  yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-customer-user.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway-customer-user.autoscaleMax = $worker_count)) += 0" "$c"
+  yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-hmn.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway-hmn.autoscaleMax = $worker_count)) += 0" "$c"
+  if [ $worker_count -lt 3 ]; then
+    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway.autoscaleMin = $worker_count)) += 0" "$c"
+    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-customer-admin.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway-customer-admin.autoscaleMin = $worker_count)) += 0" "$c"
+    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-customer-user.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway-customer-user.autoscaleMin = $worker_count)) += 0" "$c"
+    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-hmn.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway-hmn.autoscaleMin = $worker_count)) += 0" "$c"
+  fi
+fi
+
 metallb_path='.spec.kubernetes.services."cray-metallb".metallb'
 config_inline_key='configInline'
 config_inline_new_key='configInlineHistorical'
