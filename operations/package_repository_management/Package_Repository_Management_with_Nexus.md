@@ -218,24 +218,21 @@ nexus   [services/services-gateway]   [packages.local registry.local nexus.odin.
 
 ### Adding images
 
-#### Prerequisites
+Images can only be added to the container registry through the Docker API. To push images, you will need to use a compatible client, such as Skopeo, Podman, or Docker.
 
-Make sure you have the following:
+By default, product installers depend on Podman, paired with a vendor-specific Skopeo image, to synchronize container images from a release distribution to registry.local.
+The Cray System Management \(CSM\) product adds a recent version of `quay.io/skopeo/stable` to the container registry, and it may be used to copy images into
+`registry.local`.
+
+#### Ensure that you have the following prerequisites in place before adding images
 
 - Valid credentials for both Artifactory and Nexus:
   - `ARTIFACTORY_USERNAME` & `ARTIFACTORY_TOKEN`
   - `NEXUS_USERNAME` & `NEXUS_PASSWORD`
-- Nexus registry up & running.
-- CSM Docker images already pushed to Artifactory.
+- The Nexus registry is up & running.
+- CSM Docker images have already been pushed to Artifactory.
 
-The only way to add images to the container registry is with the Docker API. Use a client \(such as Skopeo, Podman, or Docker\) to push images. By default,
-product installers use Podman with a vendor version of the [Skopeo](https://github.com/containers/skopeo) image to sync container images included in a release
-distribution to `registry.local`.
-
-The Cray System Management \(CSM\) product adds a recent version of `quay.io/skopeo/stable` to the container registry, and it may be used to copy images into
-`registry.local`.
-
-(`ncn-mw#`) For example, to upload the image `artifactory.algol60.net/csm-docker/stable/amazon/aws-cli:latest`:
+Example: Upload the image `artifactory.algol60.net/csm-docker/stable/amazon/aws-cli:latest` using following command.
 
 ```bash
 podman run --rm \
@@ -252,7 +249,7 @@ podman run --rm \
     registry.local/artifactory.algol60.net/csm-docker/stable/amazon
 ```
 
-Example output:
+Corresponding output:
 
 ```text
 Getting image source signatures
@@ -270,8 +267,7 @@ time="2025-07-02T06:41:57Z" level=info msg="Synced 1 images from 1 sources"
 
 ```
 
-This will ensure that the image along with its signature(if present) is uploaded to Nexus.
-
+This ensures that both the image and its signature (if available) are successfully uploaded to Nexus.
 
 ### Registry mirror configuration
 
