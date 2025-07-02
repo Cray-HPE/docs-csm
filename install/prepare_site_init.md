@@ -420,13 +420,13 @@ section for links to the relevant procedures.
 
 ### Configure Max Istio Gateway Pods
 
-The Istio Gatways have a Horizontal Pod Autoscaler configured to allow Kubernetes to grow and shrink the
-deployment as needed due to increased load. This by default is configured to a max of 6 and a minumum of 3
-pods. On some smaller systems this leads to Kubernetes attempting to start up more pods than avaliable
-worker nodes. This leads to test failures and a pod stuck in the pending state. The minumum and maximum
+The Istio Gateways have a `Horizontal Pod Autoscaler` configured to allow Kubernetes to grow and shrink the
+deployment as needed due to increased load. This by default is configured to a max of 6 and a minimum of 3
+pods. On some smaller systems this leads to Kubernetes attempting to start up more pods than available
+worker nodes. This leads to test failures and a pod stuck in the pending state. The minimum and maximum
 should be configured to fit the system.
 
-This step can be skipped if the default of a maximum of 6 pods and a minimum of 3 pods is approprate for
+This step can be skipped if the default of a maximum of 6 pods and a minimum of 3 pods is appropriate for
 the system size.
 
 1. (`pit#`) Set the minimum and maximum replicas wanted
