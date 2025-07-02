@@ -74,6 +74,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
    Follow these IUF instructions in order:
 
    1. [Deploy product](deploy_product.md)
+   1. [Cilium Migration](cilium_migration.md)
    1. [Validate deployment](validate_deployment.md)
    1. [Perform Slingshot switch and management network switch firmware updates](slingshot_management_network_switch_updates.md)
 
