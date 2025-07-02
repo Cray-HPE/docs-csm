@@ -218,6 +218,16 @@ nexus   [services/services-gateway]   [packages.local registry.local nexus.odin.
 
 ### Adding images
 
+#### Prerequisites
+
+Make sure you have the following:
+
+- Valid credentials for both Artifactory and Nexus:
+  - `ARTIFACTORY_USERNAME` & `ARTIFACTORY_TOKEN`
+  - `NEXUS_USERNAME` & `NEXUS_PASSWORD`
+- Nexus registry up & running.
+- CSM Docker images already pushed to Artifactory.
+
 The only way to add images to the container registry is with the Docker API. Use a client \(such as Skopeo, Podman, or Docker\) to push images. By default,
 product installers use Podman with a vendor version of the [Skopeo](https://github.com/containers/skopeo) image to sync container images included in a release
 distribution to `registry.local`.
@@ -225,26 +235,43 @@ distribution to `registry.local`.
 The Cray System Management \(CSM\) product adds a recent version of `quay.io/skopeo/stable` to the container registry, and it may be used to copy images into
 `registry.local`.
 
-(`ncn-mw#`) For example, to update the version of `quay.io/skopeo/stable`:
+(`ncn-mw#`) For example, to upload the image `artifactory.algol60.net/csm-docker/stable/amazon/aws-cli:latest`:
 
 ```bash
-podman run --rm registry.local/skopeo/stable copy --dest-tls-verify=false docker://quay.io/skopeo/stable docker://registry.local/skopeo/stable
+podman run --rm \
+  registry.local/artifactory.algol60.net/csm-docker/stable/quay.io/skopeo/stable:v1 \
+  sync --all \
+    --src-tls-verify=false \
+    --src-creds "${ARTIFACTORY_USERNAME}:${ARTIFACTORY_TOKEN}" \
+    --dest-creds "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
+    --dest-tls-verify=false \
+    --src docker \
+    --dest docker \
+    --format oci \
+    artifactory.algol60.net/csm-docker/stable/amazon/aws-cli\:latest \
+    registry.local/artifactory.algol60.net/csm-docker/stable/amazon
 ```
 
 Example output:
 
 ```text
 Getting image source signatures
-Copying blob sha256:85a74b04b5b84b45c763e9763cc0f62269390bb30058d3e2b2545d820d3558f7
-Copying blob sha256:ab9d1e8c4764f52ed5041c38bd3d64b6ae9c27d0f436be50f658ece38440a97b
-Copying blob sha256:e5c8e56645c4d70308640ede3f72f76386b466cf5d97010b9c2f31054caf30a5
-Copying blob sha256:bcf471c5e964dc3ce3e7249bd2b1493acf3dd103a28af0cfe5af70351ad399d0
-Copying blob sha256:d62975d5ffa72581b912ee3e1a850e2ac14435a4238253a8ebf80f5d10f2df4c
-Copying blob sha256:8c87d899c1ab2cc2d25708ba0ff9a1726fe6b57bf415c8fdc7de973e6b185f63
-Copying config sha256:49f2b6d9790b48aadb2ac29f5bfef56ebb2fccec6319b3981639d04452887848
+Checking if image destination supports signatures
+Copying blob sha256:12ad2aecf25ecc57687aabc01ea39fa31c5e2feca6d83cb7910c5400e26e231a
+Copying blob sha256:dae20f1e149603a860c328aed919c488e37a2d510d7eced1479a92b230b54fd7
+Copying blob sha256:5988150955c78d228263e2ee75db073f251cbbae8b9879e036f5271b1d66523f
+Copying blob sha256:37373184fe69e0fc20370c26317bf4c5b9b843c60b375563d4ee1c7766a89782
+Copying blob sha256:3cf2d07cbbca11902445f57e6365c9fb5a31e92fe8f525d3ef9fc7a3232ad2e1
+Copying blob sha256:50942d897f992e94b4685b904f45bd52b76bea9a4ef57c61e7592674d596a8dd
+Copying config sha256:74bd2f6f62afddb128691920e64818dac6fad1a07ca1ad8f4ad861047cbb7447
 Writing manifest to image destination
 Storing signatures
+time="2025-07-02T06:41:57Z" level=info msg="Synced 1 images from 1 sources"
+
 ```
+
+This will ensure that the image along with its signature(if present) is uploaded to Nexus.
+
 
 ### Registry mirror configuration
 
