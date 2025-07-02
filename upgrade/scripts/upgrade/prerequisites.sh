@@ -755,8 +755,19 @@ update_cray_postgres_operator_crds() {
       postgres_crd_file=postgres-operator-crds-1.10.1.yaml
       postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file}" 2> /dev/null)
       if [ -n "${postgres_crd_path}" ]; then
+        # Remove the "last-applied-configuration" and "preserveUnknownFields" fields
+        postgres_crds=$(kubectl get crd -l app.kubernetes.io/name=postgres-operator -o jsonpath='{.items[*].metadata.name}')
+        for crd in ${postgres_crds}; do
+          kubectl patch --type merge crd ${crd} -p '{"metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration": null}},"spec":{"preserveUnknownFields": null}}'
+        done
         # create CRDs for cray-postgres-operator, this is necessary when postgres is upgraded to 1.10.1 in CSM 1.7
         tar --extract --file="${postgres_chart_path}" --to-stdout ${postgres_crd_path} | kubectl apply -f -
+        # Remove the last-applied-configuration that "kubectl apply" added
+        # Just in case, fetch the list of crds again
+        postgres_crds=$(kubectl get crd -l app.kubernetes.io/name=postgres-operator -o jsonpath='{.items[*].metadata.name}')
+        for crd in ${postgres_crds}; do
+          kubectl patch --type merge crd ${crd} -p '{"metadata":{"annotations":{"kubectl.kubernetes.io/last-applied-configuration": null}}}'
+        done
       else
         echo "File '${postgres_crd_file}' does not exist in ${postgres_chart_path}"
       fi
