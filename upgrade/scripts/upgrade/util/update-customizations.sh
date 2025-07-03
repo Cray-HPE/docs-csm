@@ -148,15 +148,13 @@ worker_count=$(cray hsm state components list --role Management --subrole Worker
 istio_ingress_path=".spec.kubernetes.services.cray-istio-ingress.deployments"
 
 if [ $worker_count -lt 6 ]; then
-  yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway.autoscaleMax = $worker_count)) += 0" "$c"
-  yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-customer-admin.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway-customer-admin.autoscaleMax = $worker_count)) += 0" "$c"
-  yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-customer-user.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway-customer-user.autoscaleMax = $worker_count)) += 0" "$c"
-  yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-hmn.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway-hmn.autoscaleMax = $worker_count)) += 0" "$c"
+  for gw in "" -customer-admin -customer-user -hmn; do
+    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway${gw}.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway${gw}.autoscaleMax = $worker_count)) += 0" "$c"
+  done
   if [ $worker_count -lt 3 ]; then
-    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway.autoscaleMin = $worker_count)) += 0" "$c"
-    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-customer-admin.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway-customer-admin.autoscaleMin = $worker_count)) += 0" "$c"
-    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-customer-user.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway-customer-user.autoscaleMin = $worker_count)) += 0" "$c"
-    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway-hmn.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway-hmn.autoscaleMin = $worker_count)) += 0" "$c"
+    for gw in "" -customer-admin -customer-user -hmn; do
+      yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway${gw}.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway${gw}.autoscaleMin = $worker_count)) += 0" "$c"
+    done
   fi
 fi
 
