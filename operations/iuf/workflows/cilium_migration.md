@@ -23,4 +23,4 @@ This section describes how to migrate your Kubernetes CNI from Weave to Cilium d
     argo watch <workflow-name> -n argo
     ```
 
-    Replace `<workflow-name>` with the actual name of the workflow created by the
+    Replace `<workflow-name>` with the actual name of the workflow created by the cilium_migration.sh script.
