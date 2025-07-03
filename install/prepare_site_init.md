@@ -443,33 +443,14 @@ min_amount=3
 1. (`pit#`) Update the customizations file.
 
 ```bash
-yq write -i ${SITE_INIT}/customizations.yaml \
-  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway.autoscaleMax' \
-  "$max_amount"
-yq write -i ${SITE_INIT}/customizations.yaml \
-  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway.autoscaleMin' \
-  "$min_amount"
-
-yq write -i ${SITE_INIT}/customizations.yaml \
-  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-customer-admin.autoscaleMax' \
-  "$max_amount"
-yq write -i ${SITE_INIT}/customizations.yaml \
-  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-customer-admin.autoscaleMin' \
-  "$min_amount"
-
-yq write -i ${SITE_INIT}/customizations.yaml \
-  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-customer-user.autoscaleMax' \
-  "$max_amount"
-yq write -i ${SITE_INIT}/customizations.yaml \
-  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-customer-user.autoscaleMin' \
-  "$min_amount"
-
-yq write -i ${SITE_INIT}/customizations.yaml \
-  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-hmn.autoscaleMax' \
-  "$max_amount"
-yq write -i ${SITE_INIT}/customizations.yaml \
-  'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway-hmn.autoscaleMin' \
-  "$min_amount"
+for gw in "" -customer-admin -customer-user -hmn; do
+  yq write -i ${SITE_INIT}/customizations.yaml \
+    'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMax' \
+    "$max_amount"
+  yq write -i ${SITE_INIT}/customizations.yaml \
+    'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMin' \
+    "$min_amount"
+done
 ```
 
 ## 4. Encrypt secrets
