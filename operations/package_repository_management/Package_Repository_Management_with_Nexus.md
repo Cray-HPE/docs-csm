@@ -220,15 +220,15 @@ nexus   [services/services-gateway]   [packages.local registry.local nexus.odin.
 
 Images can only be added to the container registry through the Docker API. To push images, you will need to use a compatible client, such as Skopeo, Podman, or Docker.
 
-By default, product installers depend on Podman, paired with a vendor-specific Skopeo image, to synchronize container images from a release distribution to registry.local.
+By default, product installers depend on Podman, paired with a vendor-specific Skopeo image, to synchronize container images from a release distribution to `registry.local`.
 The Cray System Management \(CSM\) product adds a recent version of `quay.io/skopeo/stable` to the container registry, and it may be used to copy images into
 `registry.local`.
 
 #### Ensure that you have the following prerequisites in place before adding images
 
 - Valid credentials for both Artifactory and Nexus:
-  - `ARTIFACTORY_USERNAME` & `ARTIFACTORY_TOKEN`
-  - `NEXUS_USERNAME` & `NEXUS_PASSWORD`
+    - `ARTIFACTORY_USERNAME` & `ARTIFACTORY_TOKEN`
+    - `NEXUS_USERNAME` & `NEXUS_PASSWORD`
 - The Nexus registry is up & running.
 - CSM Docker images have already been pushed to Artifactory.
 
