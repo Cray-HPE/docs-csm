@@ -11,6 +11,9 @@
 ### Miscellaneous functionality
 
 * Console logs and interaction is now available and tenant aware through the `cray` CLI, see [console](operations/conman/ConMan.md#console) for more information.
+* [Configuration Framework Service (CFS)](glossary.md#configuration-framework-service-cfs) components can now be updated in bulk through the [Cray CLI (`cray`)](glossary.md#cray-cli-cray).
+  See [Managing many components](operations/configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components) for more information.
+  Support is added for `v2` and `v3` API versions.
 * Recipe builds using kiwi-ng now include the signing keys contained in the `hpe-signing-key` secret, which allows for the verification of the recipe build artifacts.
 
 ### New hardware support
@@ -20,6 +23,8 @@
 ### Automation improvements
 
 ### Base platform component upgrades
+
+* Kata upgraded to version 3.17.0.
 
 ### Security improvements
 
@@ -31,6 +36,10 @@
 * CSM now provides the `csm.ssh_config` Ansible role to automatically restore the root user's SSH configuration file during
   [Management Node Personalization](operations/configuration_management/Management_Node_Personalization.md).
   For more details, see [SSH configuration files](operations/CSM_product_management/Set_Up_Passwordless_SSH.md#ssh-configuration-files).
+* [CFS](glossary.md#configuration-framework-service-cfs) import tool now checks for running sessions before importing data.
+  For more details, see [Import](operations/configuration_management/Exporting_and_Importing_CFS_Data.md#import).
+* [BOS](glossary.md#boot-orchestration-service-bos) import tool now checks for running sessions before importing data. For more details,
+  see [Import BOS session templates](operations/boot_orchestration/Exporting_and_Importing_BOS_Data.md#exporting-and-importing-bos-data).
 * When a [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos) session starts,
   any nodes that are locked in the [Hardware State Manager (HSM)](glossary.md#hardware-state-manager-hsm) are removed from the session.
   For more information, see [BOS sessions and HSM locks](operations/boot_orchestration/Sessions.md#bos-sessions-and-hsm-locks).
@@ -47,6 +56,16 @@
 * Fixed intermittent failures sometimes seen when running `check_key_id_in_jwks.sh`
 * Added retry logic to `goss-postgresql-syncfailed.yaml` to prevent intermittent false positives
 * Added retry logic to `postgres_clusters_running.sh to prevent` intermittent false positives
+* Added tests to the Software Management Services (SMS) health checks:
+    * Added [BOS](glossary.md#boot-orchestration-service-bos) create/update/delete (CRUD) tests for session templates and sessions.
+    * Added [CFS](glossary.md#configuration-framework-service-cfs) CRUD tests for configurations and sources.
+    * Added [IMS](glossary.md#image-management-service-ims) CRUD tests for images, recipes, and public keys.
+    * These tests are part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
+    * For more information on the SMS health checks, see
+      [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks).
+* Added [CFS](glossary.md#configuration-framework-service-cfs) node personalization to the barebones image boot test.
+    * This tests is part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
+    * For more information, see [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md).
 
 ## Bug fixes
 
@@ -79,6 +98,14 @@
       [SCSD](glossary.md#system-configuration-service-scsd),
       [SLS](glossary.md#system-layout-service-sls)
 * A bug was fixed in the `hmcollector-poll` service so that event subscriptions are no longer lost after updating Paradise BMC firmware.  The service no longer needs to be restarted after performing firmware updates.
+* Fixed an issue where a soft deleted IMS recipe was always assigned the architecture `x86_64`, regardless of the architecture of the recipe that was deleted.
+* Fixed an issue where a soft deleted IMS recipe was always assigned `require_dkms=true`, regardless of the value of the recipe that was deleted.
+* Fixed an issue where incorrect metadata was stored for newly created IMS images.
+* Fixed an issue where IMS image tags were removed by a soft delete.
+* Fixed an issue where updating a CFS session could fail and cause the session to be stuck in pending state.
+* Fixed an issue where `cfs-debugger` crashed when `cfs-state-reporter` service status did not include a `since` timestamp.
+* Fixed an issue where the post-upgrade job of `cms-ipxe` would fail if a previously failed `cms-ipxe` upgrade job entry existed.
+* Fixed an issue where, when building an IMS image from a recipe, the job status would not update to `error` when the `zypper` repositories were not available.
 
 ## Deprecations
 
