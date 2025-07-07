@@ -84,7 +84,3 @@ sw-spine-002:  |
         exit
     system interface-group 3 speed 10g
 ```
-
-
-
-
