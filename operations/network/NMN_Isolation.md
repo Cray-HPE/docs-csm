@@ -18,7 +18,14 @@ TODO
 
 ### Mountain Cabinet Node Access Controls
 
-TODO
+Denied the access between Cabinets.
+e.g
+
+```text
+160 comment BLOCK traffic between NMN_MTN_CABINETS
+170 deny any 10.100.0.0/255.255.252.0 10.100.4.0/255.255.252.0
+180 deny any 10.100.4.0/255.255.252.0 10.100.0.0/255.255.252.0
+```
 
 ### River Managed Node Access Controls
 
