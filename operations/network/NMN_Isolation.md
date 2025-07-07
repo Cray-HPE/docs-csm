@@ -38,7 +38,6 @@ TODO
 `canu validate switch config ... --enable-nmn-isolation`
 `canu validate network config <snip> --enable-nmn-isolation`
 
-
 The `--enable-nmn-isolation` flag enables all three components of NMN Isolation in the switch configurations.
 
 ## CANU expert mode
