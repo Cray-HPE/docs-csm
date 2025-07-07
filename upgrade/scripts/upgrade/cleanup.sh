@@ -31,4 +31,7 @@ TOKEN=$(curl -s -S -d grant_type=client_credentials \
 export TOKEN
 
 python3 /usr/share/doc/csm/upgrade/scripts/upgrade/cleanup.py
-rm -f /etc/cray/kubernetes/upgrade
+
+# Remove the upgrade file from all NCN hosts.
+ncns=$(grep -oP 'ncn-\aw\d+' /etc/hosts | sort -u | tr -t '\n' ',')
+pdsh -S -b -w ${ncns} "rm -f /etc/cray/kubernetes/upgrade"
