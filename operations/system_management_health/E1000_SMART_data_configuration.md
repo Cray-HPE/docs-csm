@@ -320,7 +320,7 @@ This procedure can be performed on any master or worker NCN.
          ```yaml
          listen_port: 9220
          timeout: 30
-         username: "abxyz"
+         username: "abcxyz"
          password: "Abcxyz@123"
          rf_port: 8081
          ```
