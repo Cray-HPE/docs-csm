@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -43,7 +43,6 @@ function ssh_keygen_keyscan() {
 
 #shellcheck disable=SC2046
 num_storage_nodes=$(printf "%03d" $(craysys metadata get num_storage_nodes))
-truncate /root/.ssh/known_hosts --size=0
 
 for node_num in $(seq 1 "$num_storage_nodes"); do
   nodename=$(printf "ncn-s%03d" "$node_num")
