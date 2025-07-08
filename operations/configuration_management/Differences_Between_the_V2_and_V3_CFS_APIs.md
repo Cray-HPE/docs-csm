@@ -12,12 +12,15 @@ For convenience all changes are listed here.
   (E.g. `{"components":[]}` for the components endpoint).
   Responses will also include a `next` section that is used for paging through records.
   See [Paging CFS Records](Paging_CFS_Records.md) for more information.
+* The v3 API supports the creation of [CFS Sources](CFS_Sources.md) which allows CFS to use
+  configuration and inventory content from external repositories. See [Using sources in a configuration layer](CFS_Configurations.md#using-sources-in-a-configuration-layer)
+  and [Using sources in additional inventory](Adding_Additional_Inventory.md#using-sources-in-additional-inventory).
 * Component records no longer include the `state` list of applied playbooks by default.
   The `state` can requested with the `state_details` parameter.
 * Some fields now have maximum sizes:
-  * Configuration names are now limited to 60 characters
-  * Additional inventory URLs are limited to 240 characters
-  * Configuration layer names are limited to 45 characters
+    * Configuration names are now limited to 60 characters
+    * Additional inventory URLs are limited to 240 characters
+    * Configuration layer names are limited to 45 characters
 * The v3 API has three new global options: `default_page_size`, `debug_wait_time` and `include_ara_links`.
   See [CFS Global Options](CFS_Global_Options.md) for more information.
 * Session and component records now include a `logs` field with a link to the ARA UI with the appropriate filter for that session or component.
