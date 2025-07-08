@@ -162,6 +162,35 @@ def get_access_token(force_refresh = False):
 
     return ACCESS_TOKEN
 
+def is_nmn_mtn():
+    headers = {
+        'Authorization': "Bearer " + get_access_token()
+    }
+
+    sls_networks_url = "{}/sls/v1/networks".format(get_api_gateway_uri())
+
+    try:
+        r = requests.request("GET", sls_networks_url, headers = headers, verify = False)
+    except Exception as err:
+        logging.error(f"An unanticipated exception occurred while retrieving SLS Networks {err}")
+        raise CsmApiError from None
+
+    if r.status_code != 200:
+        logging.error("Got HTTP {} when accessing {}".format(r.status_code, sls_networks_url))
+        raise CsmApiError from None
+
+    networks = r.json()
+
+    for network in networks:
+        if network["Name"] == "NMN_MTN":
+            if network["ExtraProperties"]["SystemDefaultRoute"] == "CHN":
+                return True
+            else:
+                return False
+
+    return False
+
+
 def is_bican_chm():
     headers = {
         'Authorization': "Bearer " + get_access_token()
