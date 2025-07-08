@@ -1448,6 +1448,12 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Workaround for CASMSMF-8606
+echo "====> PATCH_SMA_CRONJOBS ..." | tee -a "${LOG_FILE}"
+{
+  "${locOfScript}/patch_sma_cronjobs.sh"
+}
+
 # restore previous ssh config if there was one, remove ours
 rm -f /root/.ssh/config
 test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
