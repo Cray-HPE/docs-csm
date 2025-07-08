@@ -693,7 +693,7 @@ function delete_helm_secrets() {
   chart_name="$1"
 
   # Find all secrets matching the Helm release pattern for the given chart across all namespaces
-  secrets=$(kubectl get secrets --all-namespaces --no-headers -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name" | grep "sh\.helm\.release\.v1\.$chart_name\.v[0-9]\+$")
+  secrets=$(kubectl get secrets --all-namespaces --no-headers -o custom-columns="NAMESPACE:.metadata.namespace,NAME:.metadata.name" | grep "sh\.helm\.release\.v1\.$chart_name\.v[0-9]\+$" || [[ "$?" == "1" ]])
 
   if [[ -z $secrets ]]; then
     echo "No Helm secrets found for chart '$chart_name' in any namespace"
