@@ -133,8 +133,10 @@ yq4 -i eval ".spec.proxiedWebAppExternalHostnames.customerManagement |= (. + [\"
 # to reflect this change. We will rename cray-istio to cray-istio-ingress and update the
 # proxiedWebAppExternalHostnames to use cray-istio-ingress instead of cray-istio.
 if [ "$(yq4 eval '.spec.kubernetes.services."cray-istio"' "$c")" != "null" ]; then
-  # Copy the cray-istio configuration to cray-istio-ingress
-  yq4 eval -i '.spec.kubernetes.services."cray-istio-ingress" = .spec.kubernetes.services."cray-istio"' "$c"
+  # If the cray-istio-ingress configuration does not exist, copy the cray-istio configuration to cray-istio-ingress
+  if [ "$(yq4 eval '.spec.kubernetes.services."cray-istio-ingress"' "$c")" == "null" ]; then
+    yq4 eval -i '.spec.kubernetes.services."cray-istio-ingress" = .spec.kubernetes.services."cray-istio"' "$c"
+  fi
   # Delete the old cray-istio key
   yq4 eval -i 'del(.spec.kubernetes.services."cray-istio")' "$c"
 fi
