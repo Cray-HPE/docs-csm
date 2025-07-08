@@ -20,7 +20,7 @@ to become ready.
 
 ## Solution
 
-1. (`ncn-mw#`) Force delete the Keycloak pods
+1. (`ncn-mw#`) Force delete the Keycloak pods.
 
    Command:
 
