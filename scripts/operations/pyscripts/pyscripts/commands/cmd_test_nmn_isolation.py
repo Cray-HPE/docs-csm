@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -37,9 +37,6 @@ import os
     help="What networks to test with. Defaults: ('nmn', 'nmn_mtn')"
 )
 @pass_environment
-#def cli(ctx, from_types, to_types, networks):
 def cli(ctx, networks):
-    #print(f"Going to test from node types {from_types} to node types {to_types} on networks {networks}.")
-    #test_bican_internal.start_test(from_types, to_types, networks)
     test_nmn_isolation.start_test()
 

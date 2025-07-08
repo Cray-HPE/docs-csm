@@ -1,3 +1,26 @@
+#
+# MIT License
+#
+# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
 import subprocess
 import requests
 import base64
@@ -49,6 +72,7 @@ def get_nmn_mtn_network(token):
     except Exception as e:
         print(f"Failed to fetch NMN_MTN network: {e}")
         return None
+
 def get_subnet_ips(subnet):
     """Return all usable IPs in the subnet range."""
     try:
@@ -58,107 +82,158 @@ def get_subnet_ips(subnet):
     except ValueError:
         return []
 
-def is_reachable_from_node(node, target_ip):
-    """Ping the target IP from a remote node via SSH."""
+def is_reachable(node):
+    """Check if a node is reachable via ping."""
     try:
-        cmd = [
-            "ssh",
-            node,
-            f"ping -c 1 -W 1 {target_ip}"
-        ]
-        subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
+        subprocess.check_output(
+            ["ping", "-c", "1", "-W", "1", node],
+            stderr=subprocess.DEVNULL,
+        )
         return True
     except subprocess.CalledProcessError:
         return False
+
+def is_reachable_from_node(node, target_ip):
+    """Ping the target IP from a remote node via SSH."""
+
+    if not is_reachable(node):
+        return None
+    else:
+        try:
+            cmd = ["ssh", node, f"ping -c 1 -W 1 {target_ip}"]
+            subprocess.check_output(cmd, stderr=subprocess.DEVNULL)
+            return True
+        except subprocess.CalledProcessError:
+            return False
 
 def is_ssh_reachable_from_node(from_node, target_ip):
     """
     SSH into `from_node`, then try SSH to `target_ip` from within that node.
-    Assumes key-based auth and no password prompts at either level.
+    Returns:
+        - True if SSH from `from_node` to `target_ip` works.
+        - False if outer SSH works but inner SSH fails.
+        - None if outer SSH to `from_node` fails.
     """
+    # First: verify outer SSH works
     try:
-        # Command to run on from_node
-        inner_ssh_cmd = f"ssh -o BatchMode=yes -o ConnectTimeout=2 {target_ip} echo ok"
-        
-        # Outer SSH: go to from_node and run the inner SSH command
-        full_cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", from_node, inner_ssh_cmd]
+        outer_test_cmd = [
+            "ssh",
+            "-o", "StrictHostKeyChecking=no",
+            "-o", "UserKnownHostsFile=/dev/null",
+            "-o", "BatchMode=yes",
+            "-o", "ConnectTimeout=3",
+            from_node,
+            "echo outer_ok"
+        ]
 
-        subprocess.check_output(full_cmd, stderr=subprocess.DEVNULL)
-        return True
-    except subprocess.CalledProcessError:
+        result = subprocess.check_output(outer_test_cmd, stderr=subprocess.STDOUT, timeout=5)
+        if b"outer_ok" not in result:
+            print(f"[ERROR] Outer SSH to {from_node} succeeded but gave unexpected output: {result.decode().strip()}")
+            return None
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+        return None
+
+    # Second: try SSH from within from_node to target_ip
+    try:
+
+        #inner_ssh_cmd = f"ssh -o BatchMode=yes -o ConnectTimeout=2 {target_ip} echo ok"
+        inner_ssh_cmd = (
+            f"ssh -o StrictHostKeyChecking=no "
+            f"-o UserKnownHostsFile=/dev/null "
+            f"-o BatchMode=yes -o ConnectTimeout=2 {target_ip} echo ok"
+        )
+
+        full_cmd = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=3", from_node, inner_ssh_cmd]
+        output = subprocess.check_output(full_cmd, stderr=subprocess.STDOUT, timeout=5)
+        if b"ok" in output:
+           return True
+        else:
+           return False
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
         return False
 
-def test_isolation(sls_data, node1, node2):
-    
-    subnets = sls_data.get("ExtraProperties", {}).get("Subnets", [])
+def test_isolation(node1, node2):
+    """
+    Test network and SSH isolation between two nodes in both directions.
 
-    if len(subnets) < 2:
-        print("Need at least two subnets to test isolation.")
-        return
-    else: 
-        cab_a, cab_b = subnets[0], subnets[1]
-        print(f"cab_a: {cab_a['Name']} - {cab_a['CIDR']}")
-        print(f"cab_b: {cab_b['Name']} - {cab_b['CIDR']}")
+    For each direction:
+    - Checks if the source node can ping the destination node.
+    - Checks if the source node can SSH into the destination node.
+    - Prints the results with clear pass/fail indicators.
+    """
+    print(f"\nTesting isolation between {node1} and {node2} (both directions)")
 
-    # Get IPs from the two subnets
-    ips_a = get_subnet_ips(cab_a)
-    ips_b = get_subnet_ips(cab_b)
+    pairs = [(node1, node2), (node2, node1)]
+    for idx, (src, dest) in enumerate(pairs):
+        if idx == 1:
+            print(f"\nTesting reverse direction: {src} → {dest}")
 
-    print(f"\nTesting isolation between {cab_a['Name']} and {cab_b['Name']}")
-    print(f"\nPerforming ping checks from {cab_a['Name']} node {node1}")
+        # Ping test
+        ping_result = is_reachable_from_node(src, dest)
+        if ping_result is True:
+            ping_msg = f"✅ {src} can ping {dest}"
+        elif ping_result is False:
+            ping_msg = f"❌ {src} is reachable, but cannot ping {dest}"
+        else:
+            ping_msg = f"❌ Cannot reach {src} (ping test not possible)"
+        print("PING Status:", ping_msg)
 
-    for src_ip in ips_a[:1]:  # Test first 3 IPs from cabinet A
-        for dst_ip in ips_b[:253]:  # Test first 3 IPs from cabinet B
-            ping_result = is_reachable_from_node(node1, dst_ip)
-            ssh_result = is_ssh_reachable_from_node(node1, dst_ip)
-            print(f"  To {dst_ip} -> ping: {'✅' if ping_result else '❌'}, ssh: {'✅' if ssh_result else '❌'}")
-    
-    print("=======================================================")
-    print(f"\nTesting isolation between {cab_b['Name']} and {cab_a['Name']}")
-    print(f"\nPerforming ping checks from  {cab_b['Name']} node {node2}")
-    
-    for src_ip in ips_b[:1]:  # Test first 3 IPs from cabinet B
-        print(f"\nFrom {cab_b['Name']} node {src_ip}:")
+        # SSH test
+        ssh_result = is_ssh_reachable_from_node(src, dest)
+        if ssh_result is True:
+            ssh_msg = f"✅ {src} can SSH into {dest}"
+        elif ssh_result is False:
+            ssh_msg = f"❌ {src} is reachable, but cannot SSH into {dest}"
+        else:
+            ssh_msg = f"❌ Cannot reach {src} (SSH test not possible)"
+        print("SSH Status:", ssh_msg)
 
-        for dst_ip in ips_a[:253]:  # Test first 3 IPs from cabinet A
-            ping_result = is_reachable_from_node(node2, dst_ip)
-            ssh_result = is_ssh_reachable_from_node(node2, dst_ip)
-            #print(f"  To {dst_ip} -> ping: {'✅' if ping_result else '❌'}")
-            print(f"  To {dst_ip} -> ping: {'✅' if ping_result else '❌'}, ssh: {'✅' if ssh_result else '❌'}")
-   
+
 def get_ready_mountain_nodes():
+    node1 = None
+    node2 = None
+    seen_cabinets = set()
+    all_nodes = []
+
     try:
-        # Run the sat status command and capture output
         cmd = ["sat", "status", "--hsm-fields", "--filter", "role=compute", "--no-headings", "--no-borders"]
-        #output = subprocess.check_output(cmd, text=True)
         output = subprocess.check_output(cmd, universal_newlines=True)
+        lines = output.strip().splitlines()
 
-        x1000_node = None
-        x1001_node = None
+        # Filter and sort ready nodes
+        ready_nodes = sorted([
+            line.strip().split()[0]
+            for line in lines
+            if len(line.strip().split()) >= 4 and line.strip().split()[3] == "Ready"
+        ])
 
-        for line in output.strip().splitlines():
-            fields = line.split()
-            if len(fields) < 4:
-                continue  # Skip malformed lines
+        all_nodes = ready_nodes  # for fallback if needed
 
-            xname = fields[0]
-            status = fields[3]
+        for xname in ready_nodes:
+            cabinet = xname[:6]  # adjust if cabinet parsing changes
 
-            if status == "Ready":
-                if xname.startswith("x1000") and not x1000_node:
-                    x1000_node = xname
-                elif xname.startswith("x1001") and not x1001_node:
-                    x1001_node = xname
-
-            # Break early if both found
-            if x1000_node and x1001_node:
+            if not node1:
+                node1 = xname
+                seen_cabinets.add(cabinet)
+            elif not node2 and cabinet not in seen_cabinets:
+                node2 = xname
                 break
 
-        return x1000_node, x1001_node
+        # Fallback to second node from same cabinet if needed
+        if not node2 and len(all_nodes) >= 2:
+            node2 = all_nodes[1]
 
-    except subprocess.CalledProcessError as e:
-        print("Error running `sat status`:", e)
+        return node1, node2
+
+    except Exception as e:
+        print(f"Error while selecting nodes: {e}")
         return None, None
+
+
+def get_user_nodes():
+    node1 = input("Enter node from CabinetX (or press Enter to auto-select): ").strip()
+    node2 = input("Enter node from CabinetY (or press Enter to auto-select): ").strip()
+    return node1 if node1 else None, node2 if node2 else None
 
 def start_test():
     secret = get_client_secret()
@@ -170,25 +245,26 @@ def start_test():
         exit(1)
 
     network_info = get_nmn_mtn_network(token)
-    #if network_info:
-    #    print(json.dumps(network_info, indent=2))
 
-    #print("DBG", network_info["Name"])
     if network_info["Name"] == "NMN_MTN":
         print("NMN_MTN network found in the sls file")
+        subnets = network_info.get("ExtraProperties", {}).get("Subnets", [])
+        if len(subnets) < 2:
+            print(f"Need at least two Mountain cabinets to test isolation, found{subnets}")
+            exit(1)
+
     else:
         print("NMN_MTN network not found in the SLS data.")
         exit(1)
 
-    node1, node2 = get_ready_mountain_nodes()
-    print("x1000 Ready node:", node1)
-    print("x1001 Ready node:", node2)
-    
-    #node2 = "x1000c5s5b1n0"
+    node1, node2 = get_user_nodes()
+
+    if not node1 or not node2:
+        print(f"User did not provide valid nodes: {node1}, {node2} Auto-selecting nodes from cabinets...")
+        node1, node2 = get_ready_mountain_nodes()
 
     if node1 and node2:
-        print(f"Found nodes: node1 = {node1}, node2 = {node2}")
-        test_isolation(network_info, node1, node2)
+        test_isolation(node1, node2)
     else:
         print("❌ No matching One or both Mountain/Ready nodes found.")
         exit(1)

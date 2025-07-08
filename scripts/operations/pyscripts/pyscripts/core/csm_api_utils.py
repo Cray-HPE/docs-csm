@@ -164,11 +164,9 @@ def get_access_token(force_refresh = False):
 
 def is_nmn_mtn():
     headers = {
-        'Authorization': "Bearer " + get_access_token()
+        'Authorization': f"Bearer {get_access_token()}"
     }
-
-    sls_networks_url = "{}/sls/v1/networks".format(get_api_gateway_uri())
-
+    sls_networks_url = f"{get_api_gateway_uri()}/sls/v1/networks"
     try:
         r = requests.request("GET", sls_networks_url, headers = headers, verify = False)
     except Exception as err:
@@ -176,20 +174,16 @@ def is_nmn_mtn():
         raise CsmApiError from None
 
     if r.status_code != 200:
-        logging.error("Got HTTP {} when accessing {}".format(r.status_code, sls_networks_url))
+        logging.error(f"Got HTTP {r.status_code} when accessing {sls_networks_url}")
         raise CsmApiError from None
 
     networks = r.json()
 
     for network in networks:
         if network["Name"] == "NMN_MTN":
-            if network["ExtraProperties"]["SystemDefaultRoute"] == "CHN":
-                return True
-            else:
-                return False
-
-    return False
-
+            return True, network
+        else:
+             return False, None
 
 def is_bican_chm():
     headers = {
@@ -230,7 +224,7 @@ def __get_api_gateway_base_domain():
 
     system_domain = get_system_domain()
 
-    networks = ["cmn", "can", "chn", "nmnlb"]
+    networks = ["cmn", "can", "chn", "nmnlb", "nmn", "nmn_mtn"]
     for network in networks:
         API_GATEWAY_BASE_DOMAIN = "{}.{}".format(network, system_domain)
         test_domain = "{}.{}".format("auth", API_GATEWAY_BASE_DOMAIN)
