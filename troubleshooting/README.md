@@ -69,6 +69,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
+* [Keycloak Hung During Prerequisites](known_issues/keycloak_hung_during_prerequisites.md)
 
 ## Booting
 
