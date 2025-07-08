@@ -50,6 +50,7 @@ section of the [Upgrade CSM and additional products with IUF](../operations/iuf/
    Follow these IUF instructions in order:
 
    1. [Deploy product](../operations/iuf/workflows/deploy_product.md)
+   1. [Cilium Migration](../operations/iuf/workflows/cilium_migration.md)
    1. [Validate deployment](../operations/iuf/workflows/validate_deployment.md)
 
 The IUF upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
