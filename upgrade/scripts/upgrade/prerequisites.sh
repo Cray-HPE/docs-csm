@@ -1298,7 +1298,7 @@ fi
 # Removing PodSecurityPolicy causes cascading restarts of many pods.
 state_name="REMOVE_PSP"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" ]]; then
+if [[ ${state_recorded} == "0" && ${KUBERNETES_MINOR_VERSION} -eq 24 ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     # Get all master nodes
