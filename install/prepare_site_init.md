@@ -429,29 +429,29 @@ should be configured to fit the system.
 This step can be skipped if the default of a maximum of 6 pods and a minimum of 3 pods is appropriate for
 the system size.
 
-1. (`pit#`) Set the minimum and maximum replicas wanted
+1. (`pit#`) Set the minimum and maximum replicas wanted.
 
-> ***NOTE*** the maximum should not be higher than the total number of worker nodes on a system, and
-the minimum has to be less than or equal to the maximum. This can have both be the same value but
-that will mean the pods will never automatically create or remove pods as load changes.
+    > ***NOTE:*** The maximum should not be higher than the total number of worker nodes on a system, and
+    the minimum has to be less than or equal to the maximum. This can have both be the same value but
+    that will mean the pods will never automatically create or remove pods as load changes.
 
-```bash
-max_amount=4
-min_amount=3
-```
+    ```bash
+    max_amount=4
+    min_amount=3
+    ```
 
 1. (`pit#`) Update the customizations file.
 
-```bash
-for gw in "" -customer-admin -customer-user -hmn; do
-  yq write -i ${SITE_INIT}/customizations.yaml \
-    'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMax' \
-    "$max_amount"
-  yq write -i ${SITE_INIT}/customizations.yaml \
-    'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMin' \
-    "$min_amount"
-done
-```
+    ```bash
+    for gw in "" -customer-admin -customer-user -hmn; do
+      yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMax' \
+        "$max_amount"
+      yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMin' \
+        "$min_amount"
+    done
+    ```
 
 ## 4. Encrypt secrets
 
