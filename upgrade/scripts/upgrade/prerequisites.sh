@@ -36,6 +36,7 @@ trap 'err_report' ERR INT TERM HUP EXIT
 declare -a UNMOUNTS=()
 
 PRIMARY_NODE="ncn-m001"
+KUBERNETES_MINOR_VERSION=$(cut -d'.' -f2 /etc/cray/kubernetes/version)
 
 while [[ $# -gt 0 ]]; do
   key=$1
@@ -1256,9 +1257,12 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Only run PREPARE_KUBEADM if we're on Kubernetes 1.24, otherwise the step will
+# fail. This can occur when upgrading internally between CSM 1.7 versions,
+# because Kubernetes will remain at 1.32.
 state_name="PREPARE_KUBEADM"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" ]]; then
+if [[ ${state_recorded} == "0" && ${KUBERNETES_MINOR_VERSION} -eq 24 ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     tmpdir=$(mktemp -d)
