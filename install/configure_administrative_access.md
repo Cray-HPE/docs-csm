@@ -19,8 +19,9 @@ and BMC/controller passwords.
 1. [Set up passwordless SSH](#5-set-up-passwordless-ssh)
 1. [Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
 1. [Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
-1. [Configure management nodes with CFS](#8-configure-management-nodes-with-cfs)
-1. [Proceed to next topic](#9-proceed-to-next-topic)
+1. [iSCSI SBPS configuration](#8-iscsi-sbps-configuration)
+1. [Configure management nodes with CFS](#9-configure-management-nodes-with-cfs)
+1. [Proceed to next topic](#10-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -124,7 +125,7 @@ to managed nodes.
 
 This procedure sets up resources in Kubernetes (a Kubernetes Secret and ConfigMap) which are later
 applied to the management nodes using CFS node personalization in section
-[7. Configure management nodes with CFS](#8-configure-management-nodes-with-cfs) below.
+[7. Configure management nodes with CFS](#9-configure-management-nodes-with-cfs) below.
 
 ## 6. Configure the root password and SSH keys in Vault
 
@@ -133,7 +134,7 @@ for the procedure to configure the `root` password and SSH keys in Vault.
 
 This procedure writes the `root` password hash and SSH keys to Vault which are later
 applied to the management nodes using CFS node personalization in section
-[7. Configure management nodes with CFS](#8-configure-management-nodes-with-cfs) below.
+[7. Configure management nodes with CFS](#9-configure-management-nodes-with-cfs) below.
 
 ## 7. Add switch admin password to Vault
 
@@ -159,7 +160,17 @@ Password read from Vault matches what was written
 SUCCESS
 ```
 
-## 8. Configure management nodes with CFS
+## 8. iSCSI SBPS configuration
+
+In CSM 1.7.0, iSCSI SBPS configuration has to be done where worker nodes need to be configured as iSCSI targets for
+iSCSI SBPS. This is because, in CSM 1.7, support for selective worker node personalization is introduced unlike in
+CSM 1.6.0 where all worker nodes were configured as iSCSI targets by default. So for selective worker node personalization, we need to create an HSM group named `iscsi_worker` and add the xnames of worker nodes which are intended to be
+configured as iSCSI targets. If this is not done, none of the worker nodes will be configured as iSCSI targets.
+Please refer steps for the same under `Steps to create HSM group` of [HSM groups iSCSI](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md).
+
+For the details on iSCSI SBPS Please refer [iSCSI SBPS](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/iscsi_sbps.md)
+
+## 9. Configure management nodes with CFS
 
 Management nodes need to be configured after booting for administrative access, security, and other
 purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
@@ -198,7 +209,7 @@ then applies that configuration to the management nodes.
 
     The number reported should match the number of management nodes in the system. If there are failures, see [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md).
 
-## 9. Proceed to next topic
+## 10. Proceed to next topic
 
 After completing the operational procedures above which configure administrative access, the next
 step is to validate the health of management nodes and CSM services.
