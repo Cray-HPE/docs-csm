@@ -62,7 +62,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
    Follow the IUF [Backup](backup.md) instructions.
 
 1. iSCSI SBPS Configuration
-    
+
    In CSM 1.7, selective node personalization of iSCSI SBPS is introduced where it requires to create HSM group named
    `iscsi_worker` and add the xnames of worker nodes which are intended to be configured as iSCSI targets.
    Please refer steps for the same under 'Worker node personalization' section of [iSCSI SBPS Configuration](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/iscsi_sbps.md)
