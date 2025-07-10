@@ -143,6 +143,21 @@ fi
 yq4 eval -i 'del(.spec.proxiedWebAppExternalHostnames.customerManagement.[] | select(. == "*cray-istio*"))' "$c"
 yq4 eval ".spec.proxiedWebAppExternalHostnames.customerManagement += \"{{ kubernetes.services['cray-istio-ingress'].istio.tracing.externalAuthority }}\"" -i "$c"
 
+# Update cray-istio-ingress HPA to limit to amount of workers avaliable
+worker_count=$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join("\n")' | wc -l)
+istio_ingress_path=".spec.kubernetes.services.cray-istio-ingress.deployments"
+
+if [ $worker_count -lt 6 ]; then
+  for gw in "" -customer-admin -customer-user -hmn; do
+    yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway${gw}.autoscaleMax // (${istio_ingress_path}.istio-ingressgateway${gw}.autoscaleMax = $worker_count)) += 0" "$c"
+  done
+  if [ $worker_count -lt 3 ]; then
+    for gw in "" -customer-admin -customer-user -hmn; do
+      yq4 eval -i "(${istio_ingress_path}.istio-ingressgateway${gw}.autoscaleMin // (${istio_ingress_path}.istio-ingressgateway${gw}.autoscaleMin = $worker_count)) += 0" "$c"
+    done
+  fi
+fi
+
 metallb_path='.spec.kubernetes.services."cray-metallb".metallb'
 config_inline_key='configInline'
 config_inline_new_key='configInlineHistorical'
