@@ -7,3 +7,4 @@ Refer to the following for more information about Nexus:
 
 - [The official Sonatype documentation](https://help.sonatype.com/repomanager3)
 - [Manage Repositories with Nexus](Manage_Repositories_with_Nexus.md)
+- [GPG Signature and Verification for Nexus repository](https://help.sonatype.com/en/gpg-signatures-for-yum-proxy-group.html)
