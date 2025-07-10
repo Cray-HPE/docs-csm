@@ -135,8 +135,8 @@ spec:
             echo "====================="
             cat /tmp/${ts}.sh
             touch {{inputs.parameters.script_output_file}}
-          else
-            bash -e /tmp/${ts}.sh
+          elif ! bash -e /tmp/${ts}.sh; then
+            exit 1
           fi
 
           # make sure the output file is not empty otherwise Argo barfs

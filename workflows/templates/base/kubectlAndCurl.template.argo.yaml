@@ -101,6 +101,6 @@ spec:
             echo "=======DRY RUN======="
             echo "====================="
             cat ${ts}.sh
-          else
-            bash -e ${ts}.sh
+          elif ! bash -e ${ts}.sh; then
+            exit 1
           fi
