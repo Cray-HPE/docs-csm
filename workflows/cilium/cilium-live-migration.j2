@@ -12,6 +12,7 @@ metadata:
     target-ncns:  {{ target_ncns|join('.') }}
   name: cilium-live-migration-{{ uid }}
 spec:
+  activeDeadlineSeconds: 86400
   podMetadata:
     annotations:
       sidecar.istio.io/inject: "false"    
@@ -69,6 +70,17 @@ spec:
                 value: {{ ncn }} 
               - name: dryRun
                 value: "false"
+            podSpecPatch: |
+              affinity:
+                podAntiAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchExpressions:
+                          - key: kubernetes.io/hostname
+                            operator: In
+                            values:
+                              - {{ ncn }}
+                      topologyKey: kubernetes.io/hostname
             {% set ns.prev_ncn = ncn %}
           {% endfor %}
           - name: post-migrate-cilium
