@@ -21,6 +21,15 @@ Once this step has completed:
 
 - Host firmware has been updated on management nodes
 
+Note: Before proceeding with `management-nodes-rollout` iSCSI SBPS configuration has to be done where worker nodes need
+to be configured as iSCSI targets for iSCSI SBPS. Unlike in CSM 1.6.0, where all worker nodes were configured as iSCSI
+targets by default without requiring any manual steps, in CSM 1.7.0, selective worker node personalization is introduced
+where it requires to create an HSM group named 'iscsi_worker' and add the xnames of worker nodes which are intended to
+be configured as iSCSI targets. If this is not done, none of the worker nodes will be configured as iSCSI targets. So
+please refer the steps for the same under `Steps to create HSM group` of [HSM groups iSCSI](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md).
+
+For the details on iSCSI SBPS Please refer [iSCSI SBPS](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/iscsi_sbps.md)
+
 ## 2. Execute the IUF `management-nodes-rollout` stage
 
 This section describes how to update software on management nodes. It describes how to test a new image and CFS configuration on a single node first to ensure they work as expected before rolling the changes out to the other management
