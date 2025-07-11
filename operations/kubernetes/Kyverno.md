@@ -854,3 +854,8 @@ which takes advantage of Kyverno's `podSecurity` `subrule`, which in turn paves 
   truncate the generated `argo` pod names which will cause the Policy Exceptions to not work. In such a scenario, Kyverno will block the pod as it violates the PSS
   policy and hence the IUF workflow will fail. Please retry the workflow with a smaller activity name.
   We suggest to use an activity name that's at most 16-20 characters. The idea is to have the generated pod name under 63 characters according to the Kubernetes Standards.
+
+* **Unsigned container image restarts are Blocked During Upgrade to CSM 1.7**  
+Starting from CSM 1.7, `container image verification policy` is being `Enforced`. During the upgrade to CSM 1.7, if any unsigned images need a restart, they will be blocked.
+
+  **Work-around:** Customize the `check-image` policy. Change `validationFailureAction` from `Enforce` to `Audit`; then switch the policy back to `Enforce` when the upgrade is done. For more information on changing the customizations, look at [Policy customization](#policy-customization)
