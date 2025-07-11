@@ -1152,6 +1152,7 @@ Perform a search for networks matching a set of criteria.  Any of the properties
     "LastUpdatedTime": "string",
     "ExtraProperties": {
       "CIDR": "10.253.0.0/16",
+      "CIDR6": "fdf8:413:de2c:205::/64",
       "VlanRange": [
         0
       ],
@@ -1161,13 +1162,16 @@ Perform a search for networks matching a set of criteria.  Any of the properties
           "Name": "cabinet_1008_hsn\"",
           "FullName": "Cabinet 1008 HSN",
           "CIDR": "10.253.0.0/16",
+          "CIDR6": "fdf8:413:de2c:205::/64",
           "VlanID": 60,
           "Gateway": "192.168.0.1",
+          "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
           "DHCPStart": "192.168.0.1",
           "DHCPEnd": "192.168.0.1",
           "IPReservations": [
             {
               "IPAddress": "192.168.0.1",
+              "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
               "Name": "S3",
               "Aliases": [
                 "rgw-vip.local"
@@ -1206,18 +1210,22 @@ Status Code **200**
 |» LastUpdatedTime|[last_updated_time](#schemalast_updated_time)|false|read-only|The human-readable time this object was last created or updated.|
 |» ExtraProperties|[network_extra_properties](#schemanetwork_extra_properties)|false|none|none|
 |»» CIDR|string|false|none|none|
+|»» CIDR6|string|false|none|none|
 |»» VlanRange|[integer]|false|none|none|
 |»» MTU|integer|false|none|none|
 |»» Subnets|[[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]|false|none|none|
 |»»» Name|string|true|none|none|
 |»»» FullName|string|false|none|none|
 |»»» CIDR|string|true|none|none|
+|»»» CIDR6|string|false|none|none|
 |»»» VlanID|integer|true|none|none|
 |»»» Gateway|string(ipv4)|false|none|none|
+|»»» Gateway6|string(ipv6)|false|none|none|
 |»»» DHCPStart|string(ipv4)|false|none|none|
 |»»» DHCPEnd|string(ipv4)|false|none|none|
 |»»» IPReservations|[[network_ip_reservation](#schemanetwork_ip_reservation)]|false|none|none|
 |»»»» IPAddress|string(ipv4)|true|none|none|
+|»»»» IPAddress6|string(ipv6)|false|none|none|
 |»»»» Name|string|true|none|none|
 |»»»» Aliases|[string]|false|none|none|
 |»»»» Comment|string|false|none|none|
@@ -1351,6 +1359,7 @@ Get a dump of current service state. The format of this is implementation-specif
       "LastUpdatedTime": "string",
       "ExtraProperties": {
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanRange": [
           0
         ],
@@ -1360,13 +1369,16 @@ Get a dump of current service state. The format of this is implementation-specif
             "Name": "cabinet_1008_hsn\"",
             "FullName": "Cabinet 1008 HSN",
             "CIDR": "10.253.0.0/16",
+            "CIDR6": "fdf8:413:de2c:205::/64",
             "VlanID": 60,
             "Gateway": "192.168.0.1",
+            "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "DHCPStart": "192.168.0.1",
             "DHCPEnd": "192.168.0.1",
             "IPReservations": [
               {
                 "IPAddress": "192.168.0.1",
+                "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
                 "Name": "S3",
                 "Aliases": [
                   "rgw-vip.local"
@@ -1391,6 +1403,7 @@ Get a dump of current service state. The format of this is implementation-specif
       "LastUpdatedTime": "string",
       "ExtraProperties": {
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanRange": [
           0
         ],
@@ -1400,13 +1413,16 @@ Get a dump of current service state. The format of this is implementation-specif
             "Name": "cabinet_1008_hsn\"",
             "FullName": "Cabinet 1008 HSN",
             "CIDR": "10.253.0.0/16",
+            "CIDR6": "fdf8:413:de2c:205::/64",
             "VlanID": 60,
             "Gateway": "192.168.0.1",
+            "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "DHCPStart": "192.168.0.1",
             "DHCPEnd": "192.168.0.1",
             "IPReservations": [
               {
                 "IPAddress": "192.168.0.1",
+                "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
                 "Name": "S3",
                 "Aliases": [
                   "rgw-vip.local"
@@ -1526,6 +1542,7 @@ sls_dump:
       Type: slingshot10
       ExtraProperties:
         CIDR: 10.253.0.0/16
+        CIDR6: fdf8:413:de2c:205::/64
         VlanRange:
           - 0
         MTU: 9000
@@ -1533,12 +1550,15 @@ sls_dump:
           - Name: cabinet_1008_hsn"
             FullName: Cabinet 1008 HSN
             CIDR: 10.253.0.0/16
+            CIDR6: fdf8:413:de2c:205::/64
             VlanID: 60
             Gateway: 192.168.0.1
+            Gateway6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
             DHCPStart: 192.168.0.1
             DHCPEnd: 192.168.0.1
             IPReservations:
               - IPAddress: 192.168.0.1
+                IPAddress6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
                 Name: S3
                 Aliases:
                   - rgw-vip.local
@@ -1553,6 +1573,7 @@ sls_dump:
       Type: slingshot10
       ExtraProperties:
         CIDR: 10.253.0.0/16
+        CIDR6: fdf8:413:de2c:205::/64
         VlanRange:
           - 0
         MTU: 9000
@@ -1560,12 +1581,15 @@ sls_dump:
           - Name: cabinet_1008_hsn"
             FullName: Cabinet 1008 HSN
             CIDR: 10.253.0.0/16
+            CIDR6: fdf8:413:de2c:205::/64
             VlanID: 60
             Gateway: 192.168.0.1
+            Gateway6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
             DHCPStart: 192.168.0.1
             DHCPEnd: 192.168.0.1
             IPReservations:
               - IPAddress: 192.168.0.1
+                IPAddress6: 2001:0db8:85a3:0000:0000:8a2e:0370:7334
                 Name: S3
                 Aliases:
                   - rgw-vip.local
@@ -1638,18 +1662,22 @@ sls_dump:
 |»»»» LastUpdatedTime|body|[last_updated_time](#schemalast_updated_time)|false|The human-readable time this object was last created or updated.|
 |»»»» ExtraProperties|body|[network_extra_properties](#schemanetwork_extra_properties)|false|none|
 |»»»»» CIDR|body|string|false|none|
+|»»»»» CIDR6|body|string|false|none|
 |»»»»» VlanRange|body|[integer]|false|none|
 |»»»»» MTU|body|integer|false|none|
 |»»»»» Subnets|body|[[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]|false|none|
 |»»»»»» Name|body|string|true|none|
 |»»»»»» FullName|body|string|false|none|
 |»»»»»» CIDR|body|string|true|none|
+|»»»»»» CIDR6|body|string|false|none|
 |»»»»»» VlanID|body|integer|true|none|
 |»»»»»» Gateway|body|string(ipv4)|false|none|
+|»»»»»» Gateway6|body|string(ipv6)|false|none|
 |»»»»»» DHCPStart|body|string(ipv4)|false|none|
 |»»»»»» DHCPEnd|body|string(ipv4)|false|none|
 |»»»»»» IPReservations|body|[[network_ip_reservation](#schemanetwork_ip_reservation)]|false|none|
 |»»»»»»» IPAddress|body|string(ipv4)|true|none|
+|»»»»»»» IPAddress6|body|string(ipv6)|false|none|
 |»»»»»»» Name|body|string|true|none|
 |»»»»»»» Aliases|body|[string]|false|none|
 |»»»»»»» Comment|body|string|false|none|
@@ -2146,6 +2174,7 @@ is an array of strings with each string representing the name field of the netwo
     "LastUpdatedTime": "string",
     "ExtraProperties": {
       "CIDR": "10.253.0.0/16",
+      "CIDR6": "fdf8:413:de2c:205::/64",
       "VlanRange": [
         0
       ],
@@ -2155,13 +2184,16 @@ is an array of strings with each string representing the name field of the netwo
           "Name": "cabinet_1008_hsn\"",
           "FullName": "Cabinet 1008 HSN",
           "CIDR": "10.253.0.0/16",
+          "CIDR6": "fdf8:413:de2c:205::/64",
           "VlanID": 60,
           "Gateway": "192.168.0.1",
+          "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
           "DHCPStart": "192.168.0.1",
           "DHCPEnd": "192.168.0.1",
           "IPReservations": [
             {
               "IPAddress": "192.168.0.1",
+              "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
               "Name": "S3",
               "Aliases": [
                 "rgw-vip.local"
@@ -2199,18 +2231,22 @@ Status Code **200**
 |» LastUpdatedTime|[last_updated_time](#schemalast_updated_time)|false|read-only|The human-readable time this object was last created or updated.|
 |» ExtraProperties|[network_extra_properties](#schemanetwork_extra_properties)|false|none|none|
 |»» CIDR|string|false|none|none|
+|»» CIDR6|string|false|none|none|
 |»» VlanRange|[integer]|false|none|none|
 |»» MTU|integer|false|none|none|
 |»» Subnets|[[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]|false|none|none|
 |»»» Name|string|true|none|none|
 |»»» FullName|string|false|none|none|
 |»»» CIDR|string|true|none|none|
+|»»» CIDR6|string|false|none|none|
 |»»» VlanID|integer|true|none|none|
 |»»» Gateway|string(ipv4)|false|none|none|
+|»»» Gateway6|string(ipv6)|false|none|none|
 |»»» DHCPStart|string(ipv4)|false|none|none|
 |»»» DHCPEnd|string(ipv4)|false|none|none|
 |»»» IPReservations|[[network_ip_reservation](#schemanetwork_ip_reservation)]|false|none|none|
 |»»»» IPAddress|string(ipv4)|true|none|none|
+|»»»» IPAddress6|string(ipv6)|false|none|none|
 |»»»» Name|string|true|none|none|
 |»»»» Aliases|[string]|false|none|none|
 |»»»» Comment|string|false|none|none|
@@ -2298,6 +2334,7 @@ Create a new network. Must include all fields at the time of upload.
   "Type": "slingshot10",
   "ExtraProperties": {
     "CIDR": "10.253.0.0/16",
+    "CIDR6": "fdf8:413:de2c:205::/64",
     "VlanRange": [
       0
     ],
@@ -2307,13 +2344,16 @@ Create a new network. Must include all fields at the time of upload.
         "Name": "cabinet_1008_hsn\"",
         "FullName": "Cabinet 1008 HSN",
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanID": 60,
         "Gateway": "192.168.0.1",
+        "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
         "DHCPStart": "192.168.0.1",
         "DHCPEnd": "192.168.0.1",
         "IPReservations": [
           {
             "IPAddress": "192.168.0.1",
+            "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "Name": "S3",
             "Aliases": [
               "rgw-vip.local"
@@ -2434,6 +2474,7 @@ Retrieve the specific network.
   "LastUpdatedTime": "string",
   "ExtraProperties": {
     "CIDR": "10.253.0.0/16",
+    "CIDR6": "fdf8:413:de2c:205::/64",
     "VlanRange": [
       0
     ],
@@ -2443,13 +2484,16 @@ Retrieve the specific network.
         "Name": "cabinet_1008_hsn\"",
         "FullName": "Cabinet 1008 HSN",
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanID": 60,
         "Gateway": "192.168.0.1",
+        "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
         "DHCPStart": "192.168.0.1",
         "DHCPEnd": "192.168.0.1",
         "IPReservations": [
           {
             "IPAddress": "192.168.0.1",
+            "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "Name": "S3",
             "Aliases": [
               "rgw-vip.local"
@@ -2557,6 +2601,7 @@ Update a network object. Parent objects will be created, if possible.
   "Type": "slingshot10",
   "ExtraProperties": {
     "CIDR": "10.253.0.0/16",
+    "CIDR6": "fdf8:413:de2c:205::/64",
     "VlanRange": [
       0
     ],
@@ -2566,13 +2611,16 @@ Update a network object. Parent objects will be created, if possible.
         "Name": "cabinet_1008_hsn\"",
         "FullName": "Cabinet 1008 HSN",
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanID": 60,
         "Gateway": "192.168.0.1",
+        "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
         "DHCPStart": "192.168.0.1",
         "DHCPEnd": "192.168.0.1",
         "IPReservations": [
           {
             "IPAddress": "192.168.0.1",
+            "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "Name": "S3",
             "Aliases": [
               "rgw-vip.local"
@@ -2611,6 +2659,7 @@ Update a network object. Parent objects will be created, if possible.
   "LastUpdatedTime": "string",
   "ExtraProperties": {
     "CIDR": "10.253.0.0/16",
+    "CIDR6": "fdf8:413:de2c:205::/64",
     "VlanRange": [
       0
     ],
@@ -2620,13 +2669,16 @@ Update a network object. Parent objects will be created, if possible.
         "Name": "cabinet_1008_hsn\"",
         "FullName": "Cabinet 1008 HSN",
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanID": 60,
         "Gateway": "192.168.0.1",
+        "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
         "DHCPStart": "192.168.0.1",
         "DHCPEnd": "192.168.0.1",
         "IPReservations": [
           {
             "IPAddress": "192.168.0.1",
+            "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "Name": "S3",
             "Aliases": [
               "rgw-vip.local"
@@ -2776,6 +2828,7 @@ bearerAuth
   "LastUpdatedTime": "string",
   "ExtraProperties": {
     "CIDR": "10.253.0.0/16",
+    "CIDR6": "fdf8:413:de2c:205::/64",
     "VlanRange": [
       0
     ],
@@ -2785,13 +2838,16 @@ bearerAuth
         "Name": "cabinet_1008_hsn\"",
         "FullName": "Cabinet 1008 HSN",
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanID": 60,
         "Gateway": "192.168.0.1",
+        "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
         "DHCPStart": "192.168.0.1",
         "DHCPEnd": "192.168.0.1",
         "IPReservations": [
           {
             "IPAddress": "192.168.0.1",
+            "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "Name": "S3",
             "Aliases": [
               "rgw-vip.local"
@@ -2866,6 +2922,7 @@ bearerAuth
 ```json
 {
   "CIDR": "10.253.0.0/16",
+  "CIDR6": "fdf8:413:de2c:205::/64",
   "VlanRange": [
     0
   ],
@@ -2875,13 +2932,16 @@ bearerAuth
       "Name": "cabinet_1008_hsn\"",
       "FullName": "Cabinet 1008 HSN",
       "CIDR": "10.253.0.0/16",
+      "CIDR6": "fdf8:413:de2c:205::/64",
       "VlanID": 60,
       "Gateway": "192.168.0.1",
+      "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
       "DHCPStart": "192.168.0.1",
       "DHCPEnd": "192.168.0.1",
       "IPReservations": [
         {
           "IPAddress": "192.168.0.1",
+          "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
           "Name": "S3",
           "Aliases": [
             "rgw-vip.local"
@@ -2902,6 +2962,7 @@ bearerAuth
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |CIDR|string|false|none|none|
+|CIDR6|string|false|none|none|
 |VlanRange|[integer]|false|none|none|
 |MTU|integer|false|none|none|
 |Subnets|[[network_ipv4_subnet](#schemanetwork_ipv4_subnet)]|false|none|none|
@@ -2919,13 +2980,16 @@ bearerAuth
   "Name": "cabinet_1008_hsn\"",
   "FullName": "Cabinet 1008 HSN",
   "CIDR": "10.253.0.0/16",
+  "CIDR6": "fdf8:413:de2c:205::/64",
   "VlanID": 60,
   "Gateway": "192.168.0.1",
+  "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
   "DHCPStart": "192.168.0.1",
   "DHCPEnd": "192.168.0.1",
   "IPReservations": [
     {
       "IPAddress": "192.168.0.1",
+      "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
       "Name": "S3",
       "Aliases": [
         "rgw-vip.local"
@@ -2945,8 +3009,10 @@ bearerAuth
 |Name|string|true|none|none|
 |FullName|string|false|none|none|
 |CIDR|string|true|none|none|
+|CIDR6|string|false|none|none|
 |VlanID|integer|true|none|none|
 |Gateway|string(ipv4)|false|none|none|
+|Gateway6|string(ipv6)|false|none|none|
 |DHCPStart|string(ipv4)|false|none|none|
 |DHCPEnd|string(ipv4)|false|none|none|
 |IPReservations|[[network_ip_reservation](#schemanetwork_ip_reservation)]|false|none|none|
@@ -2962,6 +3028,7 @@ bearerAuth
 ```json
 {
   "IPAddress": "192.168.0.1",
+  "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
   "Name": "S3",
   "Aliases": [
     "rgw-vip.local"
@@ -2976,6 +3043,7 @@ bearerAuth
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |IPAddress|string(ipv4)|true|none|none|
+|IPAddress6|string(ipv6)|false|none|none|
 |Name|string|true|none|none|
 |Aliases|[string]|false|none|none|
 |Comment|string|false|none|none|
@@ -3714,6 +3782,7 @@ xor
       "LastUpdatedTime": "string",
       "ExtraProperties": {
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanRange": [
           0
         ],
@@ -3723,13 +3792,16 @@ xor
             "Name": "cabinet_1008_hsn\"",
             "FullName": "Cabinet 1008 HSN",
             "CIDR": "10.253.0.0/16",
+            "CIDR6": "fdf8:413:de2c:205::/64",
             "VlanID": 60,
             "Gateway": "192.168.0.1",
+            "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "DHCPStart": "192.168.0.1",
             "DHCPEnd": "192.168.0.1",
             "IPReservations": [
               {
                 "IPAddress": "192.168.0.1",
+                "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
                 "Name": "S3",
                 "Aliases": [
                   "rgw-vip.local"
@@ -3754,6 +3826,7 @@ xor
       "LastUpdatedTime": "string",
       "ExtraProperties": {
         "CIDR": "10.253.0.0/16",
+        "CIDR6": "fdf8:413:de2c:205::/64",
         "VlanRange": [
           0
         ],
@@ -3763,13 +3836,16 @@ xor
             "Name": "cabinet_1008_hsn\"",
             "FullName": "Cabinet 1008 HSN",
             "CIDR": "10.253.0.0/16",
+            "CIDR6": "fdf8:413:de2c:205::/64",
             "VlanID": 60,
             "Gateway": "192.168.0.1",
+            "Gateway6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
             "DHCPStart": "192.168.0.1",
             "DHCPEnd": "192.168.0.1",
             "IPReservations": [
               {
                 "IPAddress": "192.168.0.1",
+                "IPAddress6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
                 "Name": "S3",
                 "Aliases": [
                   "rgw-vip.local"
