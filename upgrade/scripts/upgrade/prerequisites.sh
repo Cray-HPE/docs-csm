@@ -1397,9 +1397,13 @@ if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
   {
     ncns=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr -t '\n' ',')
-    # We install platform-utils 1.7.1 specifically as it contains a backported
-    # bugfix necessary for the etcd test to run.
-    pdsh -S -b -w ${ncns} "zypper --non-interactive update platform-utils=1.7.1"
+    # We install platform-utils 1.7.1 specifically when at K8s 1.24 as it contains
+    # a backported bugfix necessary for the etcd test to run.
+    if [ ${KUBERNETES_MINOR_VERSION} -eq 24 ]; then
+      pdsh -S -b -w ${ncns} "zypper --non-interactive update platform-utils=1.7.1"
+    else
+      pdsh -S -b -w ${ncns} "zypper --non-interactive update platform-utils"
+    fi
   } >> "${LOG_FILE}" 2>&1
   record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
 else
