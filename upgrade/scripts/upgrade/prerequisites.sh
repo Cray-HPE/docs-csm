@@ -810,6 +810,24 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="REMOVE_OBSOLETE_CRDS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    # These CRDs are from CSM 1.3 and were part of cray-opa-gatekeeper which
+    # was removed in CSM 1.4, but the CRDs were never cleaned up during any of
+    # the previous upgrades
+    old_psp_crds=$(kubectl get crd -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' | grep -e '^configs.*gatekeeper.sh' -e '^constraint.*gatekeeper.sh' -e '^k8spsp.*gatekeeper.sh' || true)
+    if [ -n "${old_psp_crds}" ]; then
+      kubectl delete crd ${old_psp_crds} || true
+    fi
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="UPLOAD_NEW_NCN_IMAGE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
