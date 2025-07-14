@@ -56,7 +56,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [NCN health checks known issues](known_issues/issues_with_ncn_health_checks.md)
 * [`kubectl logs -f` returns no space left on device](known_issues/kubectl_logs_no_space_left_on_device.md)
-* [Mellanox `lacp-individual` Limitations](known_issues/mellanox_lacp_individual.md)
 * [NCN resource checks known issues](known_issues/ncn_resource_checks.md)
 * [Spire database connection pool configuration in an air*gapped environment](known_issues/spire_database_airgap_configuration.md)
 * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
