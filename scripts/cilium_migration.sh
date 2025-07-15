@@ -55,6 +55,8 @@ else
   fi
 
   WORKFLOW_NAME=$(grep '^  name:' /usr/share/doc/csm/workflows/cilium/cilium-live-migration.yaml | awk '{print $2}')
+  MAX_RETRIES=12
+  ERROR_COUNT=0
 
   echo "INFO Monitoring Cilium workflow status"
   while true; do
@@ -66,6 +68,15 @@ else
     elif [[ $STATUS == "Failed" ]]; then
       echo "ERROR Workflow ${WORKFLOW_NAME} failed"
       exit 1
+    elif [[ $STATUS == "Error" ]]; then
+      ((ERROR_COUNT++))
+      echo "WARNING Workflow ${WORKFLOW_NAME} in Error state (attempt ${ERROR_COUNT}/${MAX_RETRIES})"
+      if [[ $ERROR_COUNT -ge $MAX_RETRIES ]]; then
+        echo "ERROR Workflow ${WORKFLOW_NAME} remained in Error state after ${MAX_RETRIES} retries"
+        exit 1
+      fi
+      sleep 15
+      continue
     elif [[ -z $STATUS ]]; then
       echo "INFO Waiting for workflow ${WORKFLOW_NAME} to be created..."
     else
