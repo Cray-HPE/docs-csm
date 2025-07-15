@@ -175,7 +175,7 @@ spec:
                     else
                       echo "WARNING "
                       echo "WARNING Note: master node ncn-m001 has not been successfully upgraded during previous run." 
-                      echo "WARNING To Re-run ncn-m001 upgrade, run the command: 'rm -f ncn-m001-bootparameters-update.done' "
+                      echo "WARNING To Re-run ncn-m001 upgrade, run the command: 'rm -f /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done' "
                       echo "WARNING This should be done only if the conditions causing upgrade failure during previous run has been fixed."
                       echo "WARNING "
                       exit 1
