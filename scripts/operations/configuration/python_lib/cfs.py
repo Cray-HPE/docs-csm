@@ -25,7 +25,7 @@
 
 import logging
 import traceback
-from typing import Dict, List, NamedTuple, NoReturn, Union
+from typing import Dict, List, NamedTuple, NoReturn, Optional, Union
 import urllib.parse
 
 from . import api_requests
@@ -73,7 +73,7 @@ class CfsVersion(NamedTuple):
         """
         return f"{self.major}.{self.minor}.{self.patch}"
 
-def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None] = None) -> NoReturn:
+def log_error_raise_exception(msg: str, parent_exception: Optional[Exception] = None) -> NoReturn:
     """
     1) If a parent exception is passed in, make a debug log entry with its stack trace.
     2) Log an error with the specified message.
@@ -92,7 +92,7 @@ def log_error_raise_exception(msg: str, parent_exception: Union[Exception, None]
 
 
 def __list_and_merge(object_field_name: str, url: str,
-                     params: Union[JsonDict, None]=None) -> List[JsonObject]:
+                     params: Optional[JsonDict] = None) -> List[JsonObject]:
     """
     For paginated CFS list endpoints, this repeatedly queries them until all items
     are found, then returns the list.
@@ -112,16 +112,23 @@ def __list_and_merge(object_field_name: str, url: str,
     return obj_list
 
 
-def list_components(id_list: Union[None, List[str], str]=None) -> List[JsonDict]:
+def list_components(id_list: Union[None, List[str], str] = None,
+                    include_state_details: Optional[bool] = None) -> List[JsonDict]:
     """
     Queries CFS to list all components, and returns the list.
     If an id_list is specified, query CFS for just those components.
     Merges paged responses together
+
+    If include_state_details is specified, it will be passed on with the query
     """
-    if id_list is None:
+    if id_list is None and include_state_details is None:
         params = None
     else:
-        params = { "ids": id_list if isinstance(id_list, str) else ",".join(id_list) }
+        params = {}
+        if id_list is not None:
+            params["ids"] = id_list if isinstance(id_list, str) else ",".join(id_list)
+        if include_state_details is not None:
+            params["state_details"] = include_state_details
     return __list_and_merge("components", CFS_V3_COMPS_URL, params=params)
 
 
@@ -161,9 +168,23 @@ def update_components_by_ids(comp_ids: List[str], update_data: JsonObject) -> Js
     return api_requests.patch_retry_validate_return_json(**request_kwargs)
 
 
+def update_components_by_list(patch_data: List[JsonDict]) -> None:
+    """
+    Perform a bulk component update using the specified patch data list.
+    """
+    # Even though it does not follow convention for patch operations,
+    # the status code when successful is 200
+    request_kwargs = {"url": CFS_V3_COMPS_URL,
+                      "add_api_token": True,
+                      "expected_status_codes": {200},
+                      "json": patch_data}
+    return api_requests.patch_retry_validate_return_json(**request_kwargs)
+
+
 # CFS configuration functions
 
-def create_configuration(config_name: str, layers: List[Dict[str, str]], **config_fields) -> JsonObject:
+def create_configuration(config_name: str, layers: List[Dict[str, str]],
+                         **config_fields) -> JsonObject:
     """
     Creates or updates a CFS configuration with the specified name and layers.
     The layers should be dictionaries with the following fields set:
@@ -288,7 +309,7 @@ def update_options(new_options: CfsOptions) -> CfsOptions:
 
 
 def create_dynamic_session(session_name: str, config_name: str,
-                           xname_limit: Union[List[str], None] = None) -> JsonObject:
+                           xname_limit: Optional[List[str]] = None) -> JsonObject:
     """
     Creates a CFS session of dynamic type with the specified name, running the specified
     CFS configuration. By default this will be run on all applicable nodes, based on
@@ -331,7 +352,7 @@ def get_session(session_name: str, expected_to_exist: bool = True) -> Union[Json
         log_error_raise_exception("Response from CFS has unexpected format", exc)
     return json_object
 
-def list_sessions(params: Union[JsonDict, None]=None) -> List[JsonObject]:
+def list_sessions(params: Optional[JsonDict] = None) -> List[JsonObject]:
     """
     Queries CFS to list all sessions, and returns the list.
     """
