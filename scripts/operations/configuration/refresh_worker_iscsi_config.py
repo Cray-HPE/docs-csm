@@ -109,17 +109,22 @@ def main() -> None:
           if cfs_comp_has_no_iscsi_status(comp)
         ]
     )
+    have_iscsi_status = sorted(set(worker_comp_map).difference(no_iscsi_status))
+
+    if not have_iscsi_status:
+        print("WARNING: No workers have iSCSI layers in their CFS component states; nothing to do")
+        return
 
     if no_iscsi_status:
         print("WARNING: The following workers have no iSCSI layer in their CFS "
               f"component states; they will not be modified: {no_iscsi_status}")
+
     print("The following workers will have their CFS states updated and error "
-          f"counts reset: {sorted(set(worker_comp_map).difference(no_iscsi_status))}")
+          f"counts reset: {have_iscsi_status}")
 
     comp_patches = []
-    for xname, comp in worker_comp_map.items():
-        if xname in no_iscsi_status:
-            continue
+    for xname in have_iscsi_status:
+        comp = worker_comp_map[xname]
         state = []
         for layer in comp["state"]:
             if layer["playbook"] == ISCSI_PLAYBOOK:
