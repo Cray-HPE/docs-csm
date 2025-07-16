@@ -81,7 +81,7 @@ def main() -> None:
 
     # First check to make sure we got back one component for every worker
     worker_cfs_comp_ids = sorted([ comp["id"] for comp in worker_cfs_comps ])
-    missing_xnames = set(worker_ncn_xnames).difference_update(worker_cfs_comp_ids)
+    missing_xnames = set(worker_ncn_xnames).difference(worker_cfs_comp_ids)
     if missing_xnames:
         raise ScriptException(
             f"No CFS component found for following worker NCNs: {sorted(missing_xnames)}")
