@@ -21,7 +21,7 @@ and BMC/controller passwords.
 1. [Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
 1. [iSCSI SBPS configuration](#8-iscsi-sbps-configuration)
 1. [Configure management nodes with CFS](#9-configure-management-nodes-with-cfs)
-1. [Proceed to next topic](#9-proceed-to-next-topic)
+1. [Proceed to next topic](#10101010101010101010-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -162,15 +162,15 @@ SUCCESS
 
 ## 8. iSCSI SBPS configuration
 
-In CSM 1.6.0, all the worker nodes were configured as iSCSI SBPS targets by default. In CSM 1.7.0, selective 
-node personalization is supported where if user/admin wants to limit some worker nodes to be configured as 
+In CSM 1.6.0, all the worker nodes were configured as iSCSI SBPS targets by default. In CSM 1.7.0, selective
+node personalization is supported where if user/admin wants to limit some worker nodes to be configured as
 iSCSI targets, then it requires to create an HSM group name `iscsi_worker` and add the worker node xnames
-of the nodes which are required to be configured as iSCSI targets to this group. For the steps/procedue for 
-the same, see [HSM groups iSCSI](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md) 
+of the nodes which are required to be configured as iSCSI targets to this group. For the steps/procedure for
+the same, see [HSM groups iSCSI](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md)
 
 This has to be done before "Configure management nodes with CFS" during CSM installation. If this is not done,
 all the worker nodes will be configured as iSCSI targets. But this `iscsi_worker` HSM group can be created post
-install and re-run iSCSI CFS layer to avail this selective node personalization. Procedure/steps for the same are at: 
+install and re-run iSCSI CFS layer to avail this selective node personalization. Procedure/steps for the same are at:
 
 TBD
 
