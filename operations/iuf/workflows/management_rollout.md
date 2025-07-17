@@ -32,7 +32,6 @@ TBD
 
 For more information on iSCSI SBPS, see [iSCSI SBPS](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/iscsi_sbps.md)
 
-
 ## 2. Execute the IUF `management-nodes-rollout` stage
 
 This section describes how to update software on management nodes. It describes how to test a new image and CFS configuration on a single node first to ensure they work as expected before rolling the changes out to the other management
