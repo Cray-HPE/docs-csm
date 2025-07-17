@@ -174,6 +174,8 @@ install and re-run iSCSI CFS layer to avail this selective node personalization.
 
 TBD
 
+For more information on iSCSI SBPS, see [iSCSI SBPS](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/iscsi_sbps.md)
+
 ## 9. Configure management nodes with CFS
 
 Management nodes need to be configured after booting for administrative access, security, and other
