@@ -21,7 +21,7 @@ and BMC/controller passwords.
 1. [Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
 1. [iSCSI SBPS configuration](#8-iscsi-sbps-configuration)
 1. [Configure management nodes with CFS](#9-configure-management-nodes-with-cfs)
-1. [Proceed to next topic](#10101010101010101010-proceed-to-next-topic)
+1. [Proceed to next topic](#10-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
