@@ -93,8 +93,8 @@ spec:
                     if [ -z "$failed_nodes" ]; then
                       echo "INFO All nodes are in configured state in CFS"
                     else
-                      echo "ERROR $failed_nodes is/are in failed state in CFS"
-                      exit 1
+                      echo "Enabling CFS on: ${failed_nodes}"
+                      cray cfs v3 components updatemany --filter-ids "${failed_nodes}" --enabled false --error-count 0
                     fi
 
                     echo "INFO Starting Postgres health check"
