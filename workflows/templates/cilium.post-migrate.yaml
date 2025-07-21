@@ -116,7 +116,7 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
-                  kubectl delete -n kube-system ciliumnodeconfig cilium-default 
+                  kubectl delete -n kube-system ciliumnodeconfig cilium-default --ignore-not-found=true
         - name: remove-weave 
           dependencies:
             - delete-cilium-node-config 
