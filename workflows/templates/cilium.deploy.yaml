@@ -91,9 +91,23 @@ spec:
               - name: scriptContent
                 value: |
                   kubectl apply --server-side -f /srv/cray/resources/common/cilium-node-config.yaml
+        - name: "apply-cilium-net-attach-definition"
+          dependencies:
+            - install-cilium-migration-chart
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  kubectl apply --server-side -f /srv/cray/resources/common/cilium-net-attach-def.yml
         - name: "wait-for-cilium-status"
           dependencies:
             - install-cilium-migration-chart 
+            - apply-cilium-net-attach-definition
           templateRef:
             name: ssh-template
             template: shell-script
@@ -134,3 +148,17 @@ spec:
                     kubectl -n argo create configmap stash-netpol --from-file=/tmp/netpol.yaml
                   fi
                   kubectl get netpol -A
+        - name: "set-check-image-to-audit"
+          dependencies:
+            - wait-for-cilium-status
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Setting Kyverno check-image policy to Audit mode"
+                  kubectl -n kyverno patch cpol check-image --type=json -p '[{"op": "replace", "path": "/spec/validationFailureAction", "value": "Audit"}]'
