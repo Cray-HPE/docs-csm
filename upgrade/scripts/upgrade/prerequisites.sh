@@ -263,6 +263,22 @@ function is_vshasta_node {
   return $?
 }
 
+# Undeploy the chart if it exists on the system.
+# Use this if a chart has been removed from a manifest and needs
+# to be removed from the system as part of an upgrade.
+function undeploy() {
+  # Check if the chart exists by running helm status
+  if [[ $(helm status -o json "$@" 2> /dev/null | jq -r .info.status) == "deployed" ]]; then
+    echo "Chart ${*: -1} exists. Uninstalling it now."
+    # Remove the chart completely without keeping history.
+    helm uninstall "$@"
+    return $?
+  else
+    echo "Chart ${*: -1} doesn't exist"
+    return 0
+  fi
+}
+
 function set_backupBucket_var {
   backupBucket="config-data"
   cray artifacts list "${backupBucket}" || backupBucket="vbis"
@@ -615,6 +631,21 @@ fi
 do_upgrade_csm_chart cray-kyverno platform.yaml
 do_upgrade_csm_chart kyverno-policy platform.yaml
 do_upgrade_csm_chart cray-kyverno-policies-upstream platform.yaml
+
+# Undeploy old cray-uas-mgr chart if it exists
+# UAI was deprecated in CSM 1.5 and has been removed in CSM 1.6
+state_name="UNDEPLOY_UAS_CHART"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    undeploy -n services cray-uas-mgr
+    undeploy -n services update-uas
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
 
 # Pre-cache images needed for istio upgrade. As soon as cray-istio-deploy is upgraded, network
 # connection to nexus will be broken, due to istio proxy and istiod versions mismatch. Upgrade of
