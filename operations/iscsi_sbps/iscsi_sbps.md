@@ -287,7 +287,7 @@ For details on creating this group, see [Managing selective node personalization
      1.2 Enable/ Configure iSCSI SBPS
 
      For creating HSM group, please refer [Managing_selective_node_personalization](../iscsi_sbps/Managing_selective_node_personalization.md)
-     And this has to be done before the step #8 in the document [configure administrative access](../docs-csm/blob/release/1.7/install/configure_administrative_access.md)
+     And this has to be done before the step #8 in the document [configure administrative access](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/install/configure_administrative_access.md)
 
      iSCSI SBPS will be enabled /configured during bootprep stage mentioned at [Automatic setup with bootprep](#automatic-setup-with-bootprep)
 
