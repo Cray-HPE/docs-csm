@@ -1,4 +1,4 @@
-# Managing_selective_node_personalization.md
+# Managing_selective_node_personalization
 
 Example command(s) to manage selective worker node personalization for iSCSI SBPS:
 
