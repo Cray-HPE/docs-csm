@@ -1,4 +1,4 @@
-# Managing_selective_node_personalization
+# Managing selective node personalization
 
 Example command(s) to manage selective worker node personalization for iSCSI SBPS:
 
@@ -54,7 +54,6 @@ message = "deleted 1 entry"
 ```
 
 Checking the group after node deletion which shows empty list as below:
-
 
 ```text
 # cray hsm groups members list iscsi_worker
