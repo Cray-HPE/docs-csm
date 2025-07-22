@@ -280,8 +280,8 @@ no worker nodes will be enabled as iSCSI targets, which in turn will mean that n
 
 Therefore CSM generally treats it as an error if the HSM group exists but it contains no worker nodes.
 
-For more details on creating this group, see [Steps to create HSM group](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md#steps-to-create-hsm-group) and this has to be done in certain stages in
-below scenarios to avail this feature:
+For more details on creating this group, see [Managing_selective_node_personalization](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iscsi_sbps/Managing_selective_node_personalization.md) and this has to be done in certain
+stages in below scenarios to avail this feature:
 
 1) Fresh Install:
 
@@ -289,7 +289,7 @@ below scenarios to avail this feature:
 
      1.2 Enable/ Configure iSCSI SBPS
 
-     For creating HSM group, please refer `Steps to create HSM group` of [HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md).
+     For creating HSM group, please refer [Managing_selective_node_personalization](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/Managing_selective_node_personalization.md)
      And this has to be done before the step #8 in the document [configure administrative access](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/install/configure_administrative_access.md)
 
      iSCSI SBPS will be enabled /configured during bootprep stage mentioned at [Automatic setup with bootprep](#automatic-setup-with-bootprep)
@@ -308,9 +308,11 @@ below scenarios to avail this feature:
 
      3.1 Create HSM group
 
-     3.2 Enable/ Configure iSCSI SBPS
+     3.2 Enable/ Configure iSCSI SBPS 
 
-     As mentioned in 1.1 create HSM group followed by `CFS` configuration/component update mentioned in [HSM groups iscsi](https://github.com/Cray-HPE/docs-csm/tree/release/1.7/operations/iscsi_sbps/HSM_groups_iscsi.md).
+     As mentioned in 1.1 create HSM group and enable/configure iSCSI SBPS by re-running iSCSI CFS layer using the script:
+     /usr/share/doc/csm/scripts/operations/configuration/refresh_worker_iscsi_config.py 
+
      An alternative to `CFS` configuration/component update is using [Manual setup with CFS session](#manual-setup-with-cfs-session)
 
 #### Automatic setup with bootprep
