@@ -308,7 +308,7 @@ For details on creating this group, see [Managing selective node personalization
      3.2 Enable/ Configure iSCSI SBPS
 
      As mentioned in 1.1 create HSM group and enable/configure iSCSI SBPS by re-running iSCSI CFS layer as mentioned in
-[Managing_selective_node_personalization](../iscsi_sbps/Managing_selective_node_personalization.md) 
+[Managing selective node personalization](../iscsi_sbps/Managing_selective_node_personalization.md)
 
 #### Automatic setup with bootprep
 

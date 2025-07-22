@@ -15,7 +15,7 @@ Example output:
 URI = "/hsm/v2/groups/iscsi_worker"
 ```
 
-HSM group `iscsi_worker` created with xname `x3000c0s5b0n0` added. 
+HSM group `iscsi_worker` created with xname `x3000c0s5b0n0` added.
 (`ncn-m001#`) Adding one more xname of worker node is as below:
 
 ```bash
