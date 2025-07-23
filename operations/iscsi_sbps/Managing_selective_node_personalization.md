@@ -1,10 +1,20 @@
 # Managing Selective Node Personalization
 
-Selective iSCSI worker node personalization uses an HSM group named `iscsi_worker` as the mechanism for an administrator
-to specify which workers should be enabled as iSCSI targets. If this group does not exist, then all worker nodes will be
-enabled as iSCSI targets. While it is technically possible to create this group and leave it empty, this will mean that
-no worker nodes will be enabled as iSCSI targets, which in turn will mean that no managed nodes will be able to boot.
-Therefore CSM generally treats it as an error if the HSM group exists but it contains no worker nodes.
+## Overview
+
+The selective iSCSI worker node personalization feature allows administrators to specify which worker NCNs are enabled as 
+iSCSI targets. The mechanism by which an administrator specifies this is an HSM group named `iscsi_worker`.
+The existence of this group on the system means that selective iSCSI worker node personalization is enabled.
+If the group does not exist, then the feature is disabled, and all worker nodes will be enabled as iSCSI targets.
+While it is technically possible to create this group and leave it empty, this will mean that no worker nodes will be
+enabled as iSCSI targets, which in turn will mean that no managed nodes will be able to boot. Therefore CSM generally
+treats it as an error if the HSM group exists but it contains no worker nodes.
+
+The [Group commands](#group-commands) section goes over the commands used to create, remove, or modify the group.
+The [Procedures](#procedures) section discusses the different contexts in which this may be done, and any additional
+steps that must be performed to effectuate the changes.
+
+## Group commands
 
 Example commands to manage selective worker node personalization for iSCSI SBPS:
 
