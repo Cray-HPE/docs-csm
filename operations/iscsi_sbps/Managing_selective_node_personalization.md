@@ -89,7 +89,7 @@ scenario when this is happening.
 ### CSM install
 
 The `iscsi_worker` HSM group needs to be created just before the `Configure management nodes with CFS` step in
-[configure administrative access](../1.7/install/configure_administrative_access.md).
+[configure administrative access](../docs-csm/blob/release/1.7/install/configure_administrative_access.md).
 This will take into effect when SAT bootprep creates the CFS configurations and run NCN personalization.
 
 If creating `iscsi_worker` group is skipped and if admin wants to create post CSM install, then it requires additional
