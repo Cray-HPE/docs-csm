@@ -2,7 +2,7 @@
 
 ## Overview
 
-The selective iSCSI worker node personalization feature allows administrators to specify which worker NCNs are enabled as 
+The selective iSCSI worker node personalization feature allows administrators to specify which worker NCNs are enabled as
 iSCSI targets. The mechanism by which an administrator specifies this is an HSM group named `iscsi_worker`.
 The existence of this group on the system means that selective iSCSI worker node personalization is enabled.
 If the group does not exist, then the feature is disabled, and all worker nodes will be enabled as iSCSI targets.
