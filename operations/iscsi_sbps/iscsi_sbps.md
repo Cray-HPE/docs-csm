@@ -13,7 +13,8 @@ is a boot content projection solution that replaces the Cray
 [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs).
 SBPS projects boot content like `rootfs` and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images.
 SBPS is aimed to offer better reliability, availability, security, ease and speed of deployment and ease of management than CPS/DVS.
-SBPS was introduced in CSM 1.6. In CSM 1.7, support is removed for projecting root filesystems and PE images using CPS and DVS. And also, in CSM 1.7 support for selective worker node personalization feature is introduced with iSCSI SBPS.
+SBPS was introduced in CSM 1.6. In CSM 1.7.0 support is removed for projecting root filesystems and PE images using
+CPS and DVS. Also, in CSM 1.7.0, the iSCSI SBPS selective worker node personalization feature is introduced.
 
 The SBPS solution is spread across different components, including:
 
@@ -265,50 +266,20 @@ Node personalization is the prerequisite step of SBPS solution where we need to 
 with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image in CSM 1.6.
 The SBPS Marshal Agent gets installed during node personalization using CFS.
 
-In CSM 1.6.0, all worker nodes are configured and enabled as iSCSI SBPS targets during worker node personalization.
+#### Selective worker node personalization
 
-In CSM 1.7.0, selective iSCSI worker node personalization is introduced. All worker nodes are still **configured** for
-iSCSI, but selective node personalization gives administrators control over which worker nodes are enabled as iSCSI SBPS
-targets. The default behavior is still the same as in CSM 1.6.0, so if no action is taken to use this feature, then all
-worker nodes will continue to be enabled as iSCSI targets.
+In CSM 1.6, all worker nodes are configured and enabled as iSCSI SBPS targets during [Management Node Personalization](../configuration_management/Management_Node_Personalization.md)
 
-Selective iSCSI worker node personalization uses an HSM group named `iscsi_worker` as the mechanism for an administrator
-to specify which workers should be enabled as iSCSI targets. If this group does not exist, then all worker nodes will be
-enabled as iSCSI targets. While it is technically possible to create this group and leave it empty, this will mean that
-no worker nodes will be enabled as iSCSI targets, which in turn will mean that no managed nodes will be able to boot.
-Therefore CSM generally treats it as an error if the HSM group exists but it contains no worker nodes.
+Starting in CSM 1.7.0, selective iSCSI worker node personalization is introduced. All worker nodes are still **configured** for iSCSI, but selective node personalization gives administrators control over which worker nodes are enabled as iSCSI 
+SBPS targets. The default behavior is still the same as in CSM 1.6, so if no action is taken to use this feature,
+then all worker nodes will continue to be enabled as iSCSI targets.
 
-For details on creating this group, see [Managing selective node personalization](../iscsi_sbps/Managing_selective_node_personalization.md) and this has to be done in certain stages in below scenarios to avail this feature:
+For details on iSCSI selective worker node personalization, see [Managing selective node personalization](../iscsi_sbps/Managing_selective_node_personalization.md). 
 
-1) Fresh Install:
+#### Worker node personalization procedure
 
-     1.1 Create HSM group
-
-     1.2 Enable/ Configure iSCSI SBPS
-
-     For creating HSM group, please refer [Managing_selective_node_personalization](../iscsi_sbps/Managing_selective_node_personalization.md)
-     And this has to be done before the step #8 in the document [configure administrative access](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/install/configure_administrative_access.md)
-
-     iSCSI SBPS will be enabled /configured during bootprep stage mentioned at [Automatic setup with bootprep](#automatic-setup-with-bootprep)
-
-2) Upgrade:
-
-     2.1 Create HSM group
-
-     2.2 Enable/ Configure iSCSI SBPS
-
-     As mentioned in 1.1 create HSM group before management node rollout mentioned in [upgrade CSM and additional products with IUF](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
-
-     iSCSI SBPS will be enabled /configured during bootprep stage mentioned in [Automatic setup with bootprep](#automatic-setup-with-bootprep)
-
-3) Post Upgrade:
-
-     3.1 Create HSM group
-
-     3.2 Enable/ Configure iSCSI SBPS
-
-     As mentioned in 1.1 create HSM group and enable/configure iSCSI SBPS by re-running iSCSI CFS layer as mentioned in
-[Managing selective node personalization](../iscsi_sbps/Managing_selective_node_personalization.md)
+This procedure varies depending on whether this is being done during a fresh install of CSM, an upgrade from CSM 1.6
+to CSM 1.7, or on an operational CSM 1.7+ system.
 
 #### Automatic setup with bootprep
 
