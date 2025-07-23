@@ -1660,7 +1660,6 @@ Create a new ImageRecord and register the new image with IMS.
 {
   "id": "46a2731e-a1d0-4f98-ba92-4f78c756bb12",
   "created": "2018-07-28T03:26:01.234Z",
-  "deleted": "2018-07-28T03:26:01.234Z",
   "name": "centos7.5_barebones",
   "link": {
     "path": "s3://boot-images/1fb58f4e-ad23-489b-89b7-95868fca7ee6/manifest.json",
@@ -1675,7 +1674,7 @@ Create a new ImageRecord and register the new image with IMS.
 
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
-|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New image record|[DeletedImageRecord](#schemadeletedimagerecord)|
+|201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|New image record|[ImageRecord](#schemaimagerecord)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|No input provided. Determine the specific information that is missing or invalid and then re-run the request with valid information.|[ProblemDetails](#schemaproblemdetails)|
 |422|[Unprocessable Entity](https://tools.ietf.org/html/rfc2518#section-10.3)|Input data was understood, but failed validation. Re-run request with valid input values for the fields indicated in the response.|[ProblemDetails](#schemaproblemdetails)|
 |500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|An internal error occurred. Re-running the request may or may not succeed.|[ProblemDetails](#schemaproblemdetails)|
