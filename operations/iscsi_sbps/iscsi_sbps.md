@@ -274,7 +274,7 @@ Starting in CSM 1.7.0, selective iSCSI worker node personalization is introduced
 SBPS targets. The default behavior is still the same as in CSM 1.6, so if no action is taken to use this feature,
 then all worker nodes will continue to be enabled as iSCSI targets.
 
-For details on iSCSI selective worker node personalization, see [Managing selective node personalization](../iscsi_sbps/Managing_selective_node_personalization.md). 
+For details on iSCSI selective worker node personalization, see [Managing selective node personalization](../iscsi_sbps/Managing_selective_node_personalization.md).
 
 #### Worker node personalization procedure
 

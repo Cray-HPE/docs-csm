@@ -83,21 +83,22 @@ message = "deleted 1 entry"
 
 ## Procedures
 
-To avail selective worker node personalization, the procedure with `iscsi_worker` group creating differs based on the 
+To avail selective worker node personalization, the procedure with `iscsi_worker` group creating differs based on the
 scenario when this is happening.
 
 ### CSM install
 
-`iscsi_worker` HSM group needs to be created just before the `configure administrative access` [configure administrative access](../install/configure_administrative_access.md). This will take into effect when SAT bootprep creates the CFS configurations and run NCN personalization.
+The `iscsi_worker` HSM group needs to be created just before the `configure administrative access` [configure administrative access](../install/configure_administrative_access.md).
+This will take into effect when SAT bootprep creates the CFS configurations and run NCN personalization.
 
 If creating `iscsi_worker` group is skipped and if admin wants to create post CSM install, then it requires additional
-things to be taken care like updating DNS SRV and A records manually. 
+things to be taken care like updating DNS SRV and A records manually.
 
 ### CSM Upgrade from 1.6 to 1.7
 
-`iscsi_worker` HSM group needs to be created just before the `Management node rollout` mentioned in [upgrade CSM and additional products with IUF](../iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) 
+The `iscsi_worker` HSM group needs to be created just before the `Management node rollout` mentioned in [upgrade CSM and additional products with IUF](../iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
 
-In this case, the DNS information will have been added for all of the worker nodes back when the system was running 
+In this case, the DNS information will have been added for all of the worker nodes back when the system was running
 CSM 1.6. So if selective worker node personalization feature is to be used, DNS SRV and A records have to be updated
 manually.
 
@@ -105,7 +106,7 @@ manually.
 
 In the scenario where adding or removing worker NCNs, then `iscsi_worker` HSM group needs to be created before the worker nodes are added or removed.
 
-In the scenario where `iscsi_worker` group is not created during CSM install/upgrade, then it can be created post CSM install/upgrade and also in the scenario where any modifications to the group is to be done post install/upgrade, like 
+In the scenario where `iscsi_worker` group is not created during CSM install/upgrade, then it can be created post CSM install/upgrade and also in the scenario where any modifications to the group is to be done post install/upgrade, like
 adding/removing worker nodes to/from the group, then it is required to re-run the iSCSI CFS layer on worker nodes and
 update DNS SRV and A records manually.
 
