@@ -21,10 +21,12 @@ Once this step has completed:
 
 - Host firmware has been updated on management nodes
 
-Note: In CSM 1.6, all the worker nodes are configured as iSCSI SBPS targets. In CSM 1.7.0, selective worker node
+Note: In CSM 1.6, all the worker nodes are configured as iSCSI SBPS targets. Starting CSM 1.7.0, selective worker node
 personalization is introduced where if user/admin wants to limit some worker nodes to be configured as iSCSI targets,
 then it requires to create an HSM group by name `iscsi_worker` and add the worker node xnames to this group which are
-intended to be configured as iSCSI targets. For details, see [Managing selective node personalization](../../iscsi_sbps/Managing_selective_node_personalization.md) and [worker node personalization](../../iscsi_sbps/iscsi_sbps.md#1-worker-node-personalization)
+intended to be configured as iSCSI targets. This has to be done just before `Management node rollout`.
+
+For details on this new feature, see [Managing selective node personalization](../../iscsi_sbps/Managing_selective_node_personalization.md) and [worker node personalization](../../iscsi_sbps/iscsi_sbps.md#1-worker-node-personalization)
 
 ## 2. Execute the IUF `management-nodes-rollout` stage
 

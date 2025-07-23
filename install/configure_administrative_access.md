@@ -165,7 +165,10 @@ SUCCESS
 In CSM 1.6, all the worker nodes were configured and enabled as iSCSI SBPS targets. In CSM 1.7.0, selective
 node personalization is introduced where if user/admin wants to limit some worker nodes to be configured as
 iSCSI targets, then it requires to create an HSM group named `iscsi_worker` and add the worker node xnames
-which are intended to be configured as iSCSI targets to this group. For details, see [Managing selective node personalization](../operations/iscsi_sbps/Managing_selective_node_personalization.md) and [worker node personalization](../operations/iscsi_sbps/iscsi_sbps.md#1-worker-node-personalization)
+which are intended to be configured as iSCSI targets to this group. This has to be done during `Configure
+administrative access`.
+
+For details, see [Managing selective node personalization](../operations/iscsi_sbps/Managing_selective_node_personalization.md) and [worker node personalization](../operations/iscsi_sbps/iscsi_sbps.md#1-worker-node-personalization)
 
 ## 9. Configure management nodes with CFS
 
