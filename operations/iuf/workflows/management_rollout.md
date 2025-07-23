@@ -24,7 +24,7 @@ Once this step has completed:
 Note: In CSM 1.6, all the worker nodes are configured as iSCSI SBPS targets. In CSM 1.7.0, selective worker node
 personalization is introduced where if user/admin wants to limit some worker nodes to be configured as iSCSI targets,
 then it requires to create an HSM group by name `iscsi_worker` and add the worker node xnames to this group which are
-intended to be configured as iSCSI targets. For details, see [Managing_selective_node_personalization](../../iscsi_sbps/Managing_selective_node_personalization.md) and [worker node personalization](../../iscsi_sbps/iscsi_sbps.md#1-worker-node-personalization)
+intended to be configured as iSCSI targets. For details, see [Managing selective node personalization](../../iscsi_sbps/Managing_selective_node_personalization.md) and [worker node personalization](../../iscsi_sbps/iscsi_sbps.md#1-worker-node-personalization)
 
 ## 2. Execute the IUF `management-nodes-rollout` stage
 
