@@ -61,7 +61,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
-* [Istio-Proxy failing with too many open files](known_issues/Istio-Proxy_failing_with_too_many_open_files.md)
 * [Spire pods stuck in `PodInitializing`](known_issues/spire_pod_initializing.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
