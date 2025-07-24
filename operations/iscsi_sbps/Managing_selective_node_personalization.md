@@ -3,7 +3,7 @@
 ## Overview
 
 The selective iSCSI worker node personalization feature allows administrators to specify which worker NCNs are enabled as
-iSCSI targets. The mechanism by which an administrator specifies this is an HSM group named `iscsi_worker`.
+iSCSI targets. The mechanism by which an administrator specifies this is an HSM group named `iscsi_worker` [component group](../hardware_state_manager/Component_Groups_and_Partitions.md#groups) in the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
 The existence of this group on the system means that selective iSCSI worker node personalization is enabled.
 If the group does not exist, then the feature is disabled, and all worker nodes will be enabled as iSCSI targets.
 While it is technically possible to create this group and leave it empty, this will mean that no worker nodes will be
@@ -18,6 +18,14 @@ steps that must be performed to effectuate the changes.
 
 Example commands to manage selective worker node personalization for iSCSI SBPS:
 
+This section contains example commands for managing selective worker node personalization
+for iSCSI SBPS.
+
+For more in-depth information on managing HSM groups in general, see
+[Manage Component Groups](../hardware_state_manager/Manage_Component_Groups.md)
+
+### Creating group
+
 (`ncn-mw#`) Create HSM group:
 
 ```bash
@@ -26,12 +34,14 @@ cray hsm groups create --label iscsi_worker --description "iscsi node personaliz
 
 Example output:
 
-```json
+```toml
 [[results]]
 URI = "/hsm/v2/groups/iscsi_worker"
 ```
 
 HSM group `iscsi_worker` created with xname `x3000c0s5b0n0` added.
+
+### Adding workers to the group
 
 (`ncn-mw#`) Adding one more xname of worker node is as below:
 
@@ -57,6 +67,8 @@ Example output:
 ```json
 ids = [ "x3000c0s5b0n0", "x3000c0s18b0n0",]
 ```
+
+## Deleting workers from the group
 
 (`ncn-mw#`) Deleting the worker node from `iscsi_worker` group:
 
