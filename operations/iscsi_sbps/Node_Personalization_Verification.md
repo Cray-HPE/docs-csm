@@ -20,7 +20,7 @@
                  └─ 2878373 /usr/lib/sbps-marshal/bin/python /usr/lib/sbps-marshal/bin/sbps-marshal
     ```
 
-1. Verify that the images/LUN mappings are created.
+1. Verify that the images and LUN mappings have been created.
 
     Check to see if the `targetcli ls` output shows that `fileio` backing store are created for `rootfs` images,
     along with corresponding iSCSI `LUNs`. These should have the `rootfs` ID being mapped and network portals created (HSN and NMN).
