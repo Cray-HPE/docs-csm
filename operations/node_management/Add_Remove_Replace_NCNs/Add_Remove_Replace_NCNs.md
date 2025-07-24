@@ -28,6 +28,10 @@ All activities required for site maintenance are complete.
 
 The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
+Note: With respect to add/remove/replace worker nodes, we need to check if selective worker node personalization of iSCSI
+SBPS is being used. If so, the HSM group `iscsi_worker` may need to be modified accordingly before add/remove/replace
+worker nodes. For details, See [Managing selective node personalization] (../iscsi_sbps/Managing_selective_node_personalization.md) and mainly the section `After initial CSM 1.7 install or upgrade`. 
+
 1. (`ncn-m#`) Run `ncn_add_pre-req.py` to adjust the network.
 
    ```bash
