@@ -76,7 +76,7 @@ cray hsm groups members create --id x3000c0s18b0n0 iscsi_worker
 
 Example output:
 
-```json
+```toml
 [[results]]
 URI = "/hsm/v2/groups/iscsi_worker/members/x3000c0s18b0n0"
 ```
@@ -91,7 +91,7 @@ cray hsm groups members list iscsi_worker
 
 Example output:
 
-```json
+```toml
 ids = [ "x3000c0s5b0n0", "x3000c0s18b0n0",]
 ```
 
@@ -107,7 +107,7 @@ cray hsm groups members delete x3000c0s18b0n0 iscsi_worker
 
 Example output:
 
-```json
+```toml
 code = 0
 message = "deleted 1 entry"
 ```
@@ -122,7 +122,7 @@ cray hsm groups delete iscsi_worker
 
 Example output:
 
-```json
+```toml
 code = 0
 message = "deleted 1 entry"
 ```
