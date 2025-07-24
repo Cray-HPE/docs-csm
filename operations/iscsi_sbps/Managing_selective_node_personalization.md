@@ -34,8 +34,6 @@ steps that must be performed to effectuate the changes.
 
 ## Group commands
 
-Example commands to manage selective worker node personalization for iSCSI SBPS:
-
 This section contains example commands for managing selective worker node personalization for iSCSI SBPS.
 
 For more in-depth information on managing HSM groups in general, see
