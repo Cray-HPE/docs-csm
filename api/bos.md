@@ -524,8 +524,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
           "string"
         ],
         "arch": "X86",
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
       },
       "property2": {
         "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -547,8 +547,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
           "string"
         ],
         "arch": "X86",
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
       }
     },
     "links": [
@@ -800,8 +800,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -823,8 +823,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -953,8 +953,8 @@ Create a new Session Template.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "name": "compute",
@@ -977,8 +977,8 @@ Create a new Session Template.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   }
 }
@@ -1034,8 +1034,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -1057,8 +1057,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -1187,8 +1187,8 @@ Update an existing Session Template.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "name": "compute",
@@ -1211,8 +1211,8 @@ Update an existing Session Template.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   }
 }
@@ -1268,8 +1268,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -1291,8 +1291,8 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -1530,8 +1530,8 @@ Session Templates.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "path": "s3://boot-images/9e3c75e1-ac42-42c7-873c-e758048897d6/manifest.json",
@@ -1553,8 +1553,8 @@ Session Templates.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -4520,7 +4520,7 @@ The Boot Set name.
 <a id="tocsbootsetrootfsprovider"></a>
 
 ```json
-"cpss3"
+"sbps"
 
 ```
 
@@ -4540,7 +4540,7 @@ The root file system provider.
 <a id="tocsbootsetrootfsproviderpassthrough"></a>
 
 ```json
-"dvs:api-gw-service-nmn.local:300:nmn0"
+"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
 
 ```
 
@@ -5092,8 +5092,8 @@ a Session Template, or individually within a Boot Set.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     },
     "property2": {
       "name": "compute",
@@ -5116,8 +5116,8 @@ a Session Template, or individually within a Boot Set.
         "string"
       ],
       "arch": "X86",
-      "rootfs_provider": "cpss3",
-      "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+      "rootfs_provider": "sbps",
+      "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
     }
   },
   "links": [
@@ -5415,8 +5415,8 @@ Information on the status of a Session.
     "string"
   ],
   "arch": "X86",
-  "rootfs_provider": "cpss3",
-  "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+  "rootfs_provider": "sbps",
+  "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
 }
 
 ```
@@ -5497,8 +5497,8 @@ boot_sets field of the containing V2SessionTemplate.
           "string"
         ],
         "arch": "X86",
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
       },
       "property2": {
         "name": "compute",
@@ -5521,8 +5521,8 @@ boot_sets field of the containing V2SessionTemplate.
           "string"
         ],
         "arch": "X86",
-        "rootfs_provider": "cpss3",
-        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:nmn0"
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"
       }
     },
     "links": [
