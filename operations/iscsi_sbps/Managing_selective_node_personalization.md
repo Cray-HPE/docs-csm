@@ -11,10 +11,10 @@
     * [CSM install](#csm-install)
     * [CSM upgrade from 1.6 to 1.7](#csm-upgrade-from-16-to-17)
     * [Adding or removing worker NCN](#adding-or-removing-worker-ncn)
-        * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsisbps-group-does-not-exist)
-        * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsisbps-group-exists)
-        * [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsisbps-group-does-not-exist)
-        * [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsisbps-group-exists)
+        * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsi_sbps-group-does-not-exist)
+        * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsi_sbps-group-exists)
+        * [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsi_sbps-group-does-not-exist)
+        * [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsi_sbps-group-exists)
     * [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade)
 * [Manual DNS records update](#manual-dns-records-update)
 
@@ -136,10 +136,10 @@ as part of adding or removing a worker NCN, or on an operational CSM 1.7+ system
 * [CSM install](#csm-install)
 * [CSM upgrade from 1.6 to 1.7](#csm-upgrade-from-16-to-17)
 * [Adding or removing worker NCN](#adding-or-removing-worker-ncn)
-    * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsisbps-group-does-not-exist)
-    * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsisbps-group-exists)
-    * [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsisbps-group-does-not-exist)
-    * [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsisbps-group-exists)
+    * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsi_sbps-group-does-not-exist)
+    * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsi_sbps-group-exists)
+    * [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsi_sbps-group-does-not-exist)
+    * [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsi_sbps-group-exists)
 * [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade)
 
 ### CSM install
@@ -181,10 +181,10 @@ read the section that applies to the current operation and whether or not the `i
 > If it succeeds, the group exists (and its member list will be shown). If the group does not exist,
 > the command will fail with an error that it cannot find the group.
 
-* [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsisbps-group-does-not-exist)
-* [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsisbps-group-exists)
-* [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsisbps-group-does-not-exist)
-* [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsisbps-group-exists)
+* [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsi_sbps-group-does-not-exist)
+* [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsi_sbps-group-exists)
+* [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsi_sbps-group-does-not-exist)
+* [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsi_sbps-group-exists)
 
 #### Adding worker NCN when `iscsi_sbps` group does not exist
 
