@@ -11,6 +11,10 @@
     * [CSM install](#csm-install)
     * [CSM upgrade from 1.6 to 1.7](#csm-upgrade-from-16-to-17)
     * [Adding or removing worker NCN](#adding-or-removing-worker-ncn)
+        * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsisbps-group-does-not-exist)
+        * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsisbps-group-exists)
+        * [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsisbps-group-does-not-exist)
+        * [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsisbps-group-exists)
     * [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade)
 * [Manual DNS records update](#manual-dns-records-update)
 
@@ -34,7 +38,8 @@ Example commands to manage selective worker node personalization for iSCSI SBPS:
 
 This section contains example commands for managing selective worker node personalization for iSCSI SBPS.
 
-For more in-depth information on managing HSM groups in general, see [Manage Component Groups](../hardware_state_manager/Manage_Component_Groups.md)
+For more in-depth information on managing HSM groups in general, see
+[Manage Component Groups](../hardware_state_manager/Manage_Component_Groups.md).
 
 * [Creating the group](#creating-the-group)
 * [Adding a worker to the group](#adding-a-worker-to-the-group)
@@ -44,7 +49,7 @@ For more in-depth information on managing HSM groups in general, see [Manage Com
 
 ### Creating the group
 
-(`ncn-mw#`) Create `iscsi_worker` group
+(`ncn-mw#`) Create the `iscsi_worker` group.
 
 ```bash
 cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0
@@ -63,7 +68,7 @@ The output does not contain the list of members in the group. If an administrato
 
 (`ncn-mw#`) Add one more worker node to the `iscsi_worker` group.
 
-Note: Each command may only add a single worker.
+> Note: Each command may only add a single worker.
 
 ```bash
 cray hsm groups members create --id x3000c0s18b0n0 iscsi_worker
@@ -94,7 +99,7 @@ ids = [ "x3000c0s5b0n0", "x3000c0s18b0n0",]
 
 (`ncn-mw#`) Remove a worker node from the `iscsi_worker` group.
 
-Each command may only remove a single worker.
+> Each command may only remove a single worker.
 
 ```bash
 cray hsm groups members delete x3000c0s18b0n0 iscsi_worker
@@ -109,7 +114,7 @@ message = "deleted 1 entry"
 
 ### Deleting the group
 
-(`ncn-mw#`) Delete the `iscsi_worker` group:
+(`ncn-mw#`) Delete the `iscsi_worker` group.
 
 ```bash
 cray hsm groups delete iscsi_worker
@@ -124,13 +129,17 @@ message = "deleted 1 entry"
 
 ## Procedures
 
-The procedures vary for enabling or disabling this feature, or modifying the set of worker nodes designated as iSCSI
+The procedures vary for enabling or disabling this feature, or modifying the set of worker nodes that are enabled as iSCSI
 targets. It depends on whether this is being done during a fresh install of CSM, an upgrade from CSM 1.6 to CSM 1.7,
-or on an operational CSM 1.7+ system.
+as part of adding or removing a worker NCN, or on an operational CSM 1.7+ system.
 
 * [CSM install](#csm-install)
 * [CSM upgrade from 1.6 to 1.7](#csm-upgrade-from-16-to-17)
 * [Adding or removing worker NCN](#adding-or-removing-worker-ncn)
+    * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsisbps-group-does-not-exist)
+    * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsisbps-group-exists)
+    * [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsisbps-group-does-not-exist)
+    * [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsisbps-group-exists)
 * [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade)
 
 ### CSM install
@@ -156,10 +165,11 @@ beginning of [2. Execute the IUF `management-nodes-rollout` stage](../iuf/workfl
 
 1. Perform manual DNS update.
 
-This step is required any time a worker node is changed from being enabled for iSCSI to being disabled for iSCSI.
-In CSM 1.6, all worker nodes were enabled for iSCSI. Therefore, this step will always be required when first enabling this feature on a system that previously was running CSM 1.6.
+   This step is required any time a worker node is changed from being enabled for iSCSI to being disabled for iSCSI.
+   In CSM 1.6, all worker nodes were enabled for iSCSI. Therefore, this step will always be required when first enabling
+   this feature on a system that previously was running CSM 1.6.
 
-See [Manual DNS records update](#manual-dns-records-update).
+   See [Manual DNS records update](#manual-dns-records-update).
 
 ### Adding or removing worker NCN
 
