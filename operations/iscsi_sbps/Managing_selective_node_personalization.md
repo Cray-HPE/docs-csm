@@ -165,7 +165,8 @@ See [Manual DNS records update](#manual-dns-records-update).
 
 When [adding or removing a worker NCN](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md), the
 administrator may also wish to create, modify, or delete the `iscsi_worker` HSM group, in order to have the desired
-set of worker NCNs enabled as iSCSI targets. If this is the case, then this should be done **before** adding or removing the worker NCN. 
+set of worker NCNs enabled as iSCSI targets. If this is the case, then this should be done **before** adding or
+removing the worker NCN.
 
 For the procedure itself, see [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade).
 
@@ -182,14 +183,13 @@ for iSCSI can be changed. To do this, use the following procedure:
     * If this feature is currently disabled (meaning that all worker nodes are enabled as iSCSI targets), then it can be
       enabled by creating the HSM group and specifying which worker nodes should be enabled for iSCSI.
       See [Creating the group](#creating-the-group).
-
-    * If this feature is currently enabled (meaning that the `iscsi_worker` HSM group exists), 
+    * If this feature is currently enabled (meaning that the `iscsi_worker` HSM group exists),
       then there are two options:
 
-          * The feature can be disabled (meaning that all worker nodes will be enabled as iSCSI targets) by deleting
+          - The feature can be disabled (meaning that all worker nodes will be enabled as iSCSI targets) by deleting
             the group. See [Deleting the group](#deleting-the-group).
           
-          * The set of worker NCNs being enabled for iSCSI can be modified by changing the membership of the group.
+          - The set of worker NCNs being enabled for iSCSI can be modified by changing the membership of the group.
             This can be done by adding workers to it, removing workers from it, or a combination of both.
             See [Adding a worker to the group](#adding-a-worker-to-the-group) and [Removing a worker from the group](#removing-a-worker-from-the-group).
 
@@ -198,7 +198,7 @@ for iSCSI can be changed. To do this, use the following procedure:
 
    The latest CSM documentation RPM must be installed on the node where this step is being performed.
    See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation)
-    
+
    (`ncn-mw#`) The `refresh_worker_iscsi_config.py` script is provided to modify the CFS state of the worker NCNs to
    force them to re-run the iSCSI configuration layer. It is run without arguments.
 
