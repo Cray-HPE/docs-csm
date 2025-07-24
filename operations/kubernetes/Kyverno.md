@@ -859,5 +859,5 @@ which takes advantage of Kyverno's `podSecurity` `subrule`, which in turn paves 
 Starting from CSM 1.7, `container image verification policy` is being `Enforced`. During the upgrade to CSM 1.7, if any unsigned images need a restart, they will be blocked.
 
   **Work-around:** Customize the `check-image` policy. Change `validationFailureAction` from `Enforce` to `Audit`; then switch the policy back to `Enforce` when the upgrade is done. For more information on changing the customizations, look at [Policy customization](#policy-customization)
-* **Incorrectly copying container images can block the pods**  
-When container images are copied improperly from Artifactory to Nexus, their signatures can be lost, preventing pods from starting. To ensure signatures are preserved and pods deploy successfully, follow this procedure:: [Adding images](https://github.com/Cray-HPE/docs-csm/blob/f1e638ca4bc2371a390305b5ea3d136f5c3a832d/operations/package_repository_management/Package_Repository_Management_with_Nexus.md#adding-images)
+* **Incorrectly copying container images from Artifactory to Nexus can block the pods**  
+When container images are copied from Artifactory to Nexus, their signatures must be copied. Otherwise, the pods that use those images can be blocked. To ensure signatures are copied along with images to Nexus, follow this procedure:: [Adding images](https://github.com/Cray-HPE/docs-csm/blob/f1e638ca4bc2371a390305b5ea3d136f5c3a832d/operations/package_repository_management/Package_Repository_Management_with_Nexus.md#adding-images)
