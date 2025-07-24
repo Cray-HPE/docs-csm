@@ -860,4 +860,5 @@ Starting from CSM 1.7, `container image verification policy` is being `Enforced`
 
   **Work-around:** Customize the `check-image` policy. Change `validationFailureAction` from `Enforce` to `Audit`; then switch the policy back to `Enforce` when the upgrade is done. For more information on changing the customizations, look at [Policy customization](#policy-customization)
 * **Incorrectly copying container images from Artifactory to Nexus can block the pods**  
-When container images are copied from Artifactory to Nexus, their signatures must be copied along with them. Otherwise, the pods that use those images can be blocked. To ensure signatures are copied along with images to Nexus, follow this procedure: [Adding images](https://github.com/Cray-HPE/docs-csm/blob/f1e638ca4bc2371a390305b5ea3d136f5c3a832d/operations/package_repository_management/Package_Repository_Management_with_Nexus.md#adding-images)
+When container images are copied from Artifactory to Nexus, their signatures must be copied along with them. Otherwise, the pods that use those images can be blocked.
+To ensure signatures are copied along with images to Nexus, follow this procedure: [Adding images](https://github.com/Cray-HPE/docs-csm/blob/f1e638ca4bc2371a390305b5ea3d136f5c3a832d/operations/package_repository_management/Package_Repository_Management_with_Nexus.md#adding-images)
