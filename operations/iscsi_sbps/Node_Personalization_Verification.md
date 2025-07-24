@@ -22,7 +22,7 @@
 
 1. Verify that the images and LUN mappings have been created.
 
-    Check to see if the `targetcli ls` output shows that `fileio` backing store are created for `rootfs` images,
+    Check to see if the `fileio` backing stores exist for `rootfs` images,
     along with corresponding iSCSI `LUNs`. These should have the `rootfs` ID being mapped and network portals created (HSN and NMN).
 
     ```bash
