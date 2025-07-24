@@ -4,8 +4,8 @@ This section updates the software running on management NCNs.
 
 - [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
 - [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
-         - [Selective iSCSI worker node personalization](#selective-iscsi-worker-node-personalization)
-         - [`management-nodes-rollout` overview](#management-nodes-rollout-overview)
+    - [Selective iSCSI worker node personalization](#selective-iscsi-worker-node-personalization)
+    - [`management-nodes-rollout` overview](#management-nodes-rollout-overview)
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
     - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
     - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
