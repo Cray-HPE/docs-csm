@@ -186,13 +186,14 @@ for iSCSI can be changed. To do this, use the following procedure:
     * If this feature is currently enabled (meaning that the `iscsi_worker` HSM group exists),
       then there are two options:
 
-          - The feature can be disabled (meaning that all worker nodes will be enabled as iSCSI targets) by deleting
-            the group. See [Deleting the group](#deleting-the-group).
+```text
+    * The feature can be disabled (meaning that all worker nodes will be enabled as iSCSI targets) by deleting
+      the group. See [Deleting the group](#deleting-the-group).
           
-          - The set of worker NCNs being enabled for iSCSI can be modified by changing the membership of the group.
-            This can be done by adding workers to it, removing workers from it, or a combination of both.
-            See [Adding a worker to the group](#adding-a-worker-to-the-group) and [Removing a worker from the group](#removing-a-worker-from-the-group).
-
+    * The set of worker NCNs being enabled for iSCSI can be modified by changing the membership of the group.
+      This can be done by adding workers to it, removing workers from it, or a combination of both.
+      See [Adding a worker to the group](#adding-a-worker-to-the-group) and [Removing a worker from the group](#removing-a-worker-from-the-group).
+```
 1. Instruct the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) to update
    the iSCSI configuration.
 
