@@ -21,7 +21,7 @@
 ## Overview
 
 The selective iSCSI worker node personalization feature allows administrators to specify which worker NCNs are enabled as
-iSCSI targets. The mechanism by which an administrator specifies this is an HSM group named `iscsi_worker` [component group](../hardware_state_manager/Component_Groups_and_Partitions.md#groups) in the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
+iSCSI targets. The mechanism by which an administrator specifies this is the `iscsi_worker` [component group](../hardware_state_manager/Component_Groups_and_Partitions.md#groups) in the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
 The existence of this group on the system means that selective iSCSI worker node personalization is enabled.
 If the group does not exist, then the feature is disabled, and all worker nodes will be enabled as iSCSI targets.
 While it is technically possible to create this group and leave it empty, this will mean that no worker nodes will be
@@ -52,7 +52,7 @@ For more in-depth information on managing HSM groups in general, see
 (`ncn-mw#`) Create the `iscsi_worker` group.
 
 ```bash
-cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0
+cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0,x3001c0s35b0n0
 ```
 
 Example output:
@@ -92,7 +92,7 @@ cray hsm groups members list iscsi_worker
 Example output:
 
 ```toml
-ids = [ "x3000c0s5b0n0", "x3000c0s18b0n0",]
+ids = [ "x3000c0s5b0n0", "x3001c0s35b0n0", "x3000c0s18b0n0",]
 ```
 
 ### Removing a worker from the group
