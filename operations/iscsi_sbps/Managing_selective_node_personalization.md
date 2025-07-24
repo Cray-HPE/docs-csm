@@ -194,6 +194,7 @@ for iSCSI can be changed. To do this, use the following procedure:
       This can be done by adding workers to it, removing workers from it, or a combination of both.
       See [Adding a worker to the group](#adding-a-worker-to-the-group) and [Removing a worker from the group](#removing-a-worker-from-the-group).
 ```
+
 1. Instruct the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) to update
    the iSCSI configuration.
 
