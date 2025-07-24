@@ -133,7 +133,6 @@ or on an operational CSM 1.7+ system.
 * [Adding or removing worker NCN](#adding-or-removing-worker-ncn)
 * [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade)
 
-
 ### CSM install
 
 During a CSM install, if the administrator wants to enable this feature, they should [create the `iscsi_worker` HSM group](#creating-the-group) as part of [Configure Administrative Access](../../install/configure_administrative_access.md)
@@ -168,7 +167,7 @@ When [adding or removing a worker NCN](../node_management/Add_Remove_Replace_NCN
 administrator may also wish to create, modify, or delete the `iscsi_worker` HSM group, in order to have the desired
 set of worker NCNs enabled as iSCSI targets. If this is the case, then this should be done **before** adding or removing the worker NCN. 
 
-For the procedure itself, see [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade). 
+For the procedure itself, see [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade).
 
 ### After initial CSM 1.7 install or upgrade
 
@@ -184,7 +183,8 @@ for iSCSI can be changed. To do this, use the following procedure:
       enabled by creating the HSM group and specifying which worker nodes should be enabled for iSCSI.
       See [Creating the group](#creating-the-group).
 
-    * If this feature is currently enabled (meaning that the `iscsi_worker` HSM group exists), then there are two options:
+    * If this feature is currently enabled (meaning that the `iscsi_worker` HSM group exists), 
+      then there are two options:
 
           * The feature can be disabled (meaning that all worker nodes will be enabled as iSCSI targets) by deleting
             the group. See [Deleting the group](#deleting-the-group).
@@ -196,16 +196,15 @@ for iSCSI can be changed. To do this, use the following procedure:
 1. Instruct the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) to update
    the iSCSI configuration.
 
-   > The latest CSM documentation RPM must be installed on the node where this step is being performed.
-
-   > See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation)
+   The latest CSM documentation RPM must be installed on the node where this step is being performed.
+   See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation)
     
    (`ncn-mw#`) The `refresh_worker_iscsi_config.py` script is provided to modify the CFS state of the worker NCNs to
    force them to re-run the iSCSI configuration layer. It is run without arguments.
 
    ```bash
    /usr/share/doc/csm/scripts/operations/configuration/refresh_worker_iscsi_config.py
-   ```    
+   ```
 
 ## Manual DNS records update
 
