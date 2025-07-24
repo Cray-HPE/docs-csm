@@ -25,13 +25,13 @@ Once this step has completed:
 
 ### Selective iSCSI worker node personalization
 
-If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, this section should be skipped.
+> If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
 
-In CSM 1.6, all the worker nodes are configured as iSCSI SBPS targets. Starting CSM 1.7.0, selective worker node
+In CSM 1.6, all the worker nodes are configured and enabled as iSCSI SBPS targets. Starting in CSM 1.7.0, selective worker node
 personalization is supported. All worker nodes are still **configured** for iSCSI, but selective node personalization
 gives administrators control over which worker nodes are actually enabled as iSCSI SBPS targets. The default behavior
 is still the same as in CSM 1.6, so if no action is taken to use this feature, then all worker nodes will continue to
- be enabled as iSCSI targets.
+be enabled as iSCSI targets.
 
 For administrators who do not wish to use this feature, no action is required, and this step can be skipped.
 Otherwise, before proceeding, follow the procedure in the [CSM upgrade from 1.6 to 1.7](../../iscsi_sbps/Managing_selective_node_personalization.md#csm-upgrade-from-16-to-17) section of [Managing Selective Node Personalization](../../iscsi_sbps/Managing_selective_node_personalization.md).
