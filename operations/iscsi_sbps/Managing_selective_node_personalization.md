@@ -173,17 +173,127 @@ beginning of [2. Execute the IUF `management-nodes-rollout` stage](../iuf/workfl
 
 ### Adding or removing worker NCN
 
-When [adding or removing a worker NCN](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md), the
-administrator may also wish to create, modify, or delete the `iscsi_worker` HSM group, in order to have the desired
-set of worker NCNs enabled as iSCSI targets. If this is the case, then this should be done **before** adding or
-removing the worker NCN.
+When [adding or removing a worker NCN](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md),
+additional steps may be required. **Before** performing the add or remove procedure for the worker NCN,
+read the section that applies to the current operation and whether or not the `iscsi_sbps` group currently exists:
 
-For the procedure itself, see [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade).
+> If unsure whether or not the group exists, try [Listing the group members](#listing-group-members).
+> If it succeeds, the group exists (and its member list will be shown). If the group does not exist,
+> the command will fail with an error that it cannot find the group.
+
+* [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsisbps-group-does-not-exist)
+* [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsisbps-group-exists)
+* [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsisbps-group-does-not-exist)
+* [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsisbps-group-exists)
+
+#### Adding worker NCN when `iscsi_sbps` group does not exist
+
+This means that all current worker NCNs are enabled as iSCSI targets.
+If the new worker NCN being added should also be enabled as an iSCSI target, then no additional steps are required.
+Skip the rest of this document and perform the procedure to add the worker NCN to the system.
+
+Otherwise (if the new worker NCN should NOT be configured as an iSCSI target), perform the following steps **before**
+following the add NCN procedure:
+
+1. (`ncn-mw#`) Get the xnames of all of the worker NCNs currently in the system.
+
+    ```bash
+    WORKER_XNAMES=$(cray hsm state components list --role Management --subrole Worker --type Node --format json \
+                    | jq -r .Components[].ID | sort -u | tr '\n' , | sed 's/,$//')
+    echo ${WORKER_XNAMES}
+    ```
+
+    Example output:
+
+    ```text
+    x3000c0s7b0n0,x3000c0s9b0n0,x3000c0s38b0n0,x3000c0s11b0n0
+    ```
+
+1. Create the `iscsi_sbps` group.
+ 
+    The `iscsi_sbps` group needs to be created and contain the xnames of all of the worker NCNs except the one being added
+    (the same list obtained in the previous step). See [Creating the group](#creating-the-group).
+
+1. Skip the rest of this document and perform the procedure to add the worker NCN to the system. When the new worker performs
+   [Management Node Personalization](../configuration_management/Management_Node_Personalization.md), it will not be
+   enabled as an iSCSI target.
+
+#### Adding worker NCN when `iscsi_sbps` group exists
+
+If the new worker NCN being added should not be configured as an iSCSI target, then no additional steps are required.
+Skip the rest of this document and perform the procedure to add the worker NCN to the system.
+
+Otherwise (if the new worker NCN should be configured as an iSCSI target), perform the following steps:
+
+1. (`ncn-mw#`) Get the xnames of all of the worker NCNs currently in the system.
+
+    ```bash
+    echo $(cray hsm state components list --role Management --subrole Worker --type Node --format json \
+           | jq -r .Components[].ID | sort -u)
+    ```
+
+    Example output:
+
+    ```text
+    x3000c0s11b0n0 x3000c0s38b0n0 x3000c0s7b0n0 x3000c0s9b0n0
+    ```
+
+1. Proceed with the add worker NCN procedure until the xname for the new worker NCN exists in HSM.
+
+    This can be checked by running the same command as in the previous step, and comparing the output.
+    As soon as a new xname shows up in the list, that is the xname of the worker being added.
+
+1. Add the xname of the new worker node to the `iscsi_sbps` group.
+
+    See [Adding a worker to the group](#adding-a-worker-to-the-group).
+
+1. Skip the rest of this document and perform the rest of the procedure to add the worker NCN to the system. When new worker performs
+   [Management Node Personalization](../configuration_management/Management_Node_Personalization.md), it will be
+   enabled as an iSCSI target.
+
+#### Removing worker NCN when `iscsi_sbps` group does not exist
+
+This means that all worker NCNs are configured as iSCSI targets.
+In this scenario, the remove NCN procedure can be performed as usual. After it is done, the
+administrator must manually update DNS records. See [Manual DNS records update](#manual-dns-records-update).
+
+#### Removing worker NCN when `iscsi_sbps` group exists
+
+1. Check if the worker being removed is not a member of the `iscsi_sbps` group.
+
+    See [Listing group members](#listing-group-members) for how to see the current members of the group.
+
+1. If the worker being removed is not a member of the group, then skip the rest of this document and perform the procedure to
+   remove the worker NCN from the system. No additional steps are required in this case. Otherwise, if the worker being removed
+   is a member of the group, then proceed with the remaining steps in this section.
+
+1. Remove the worker being removed from the group.
+
+    See [Removing a worker from the group](#removing-a-worker-from-the-group).
+
+1. Instruct the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) to update
+   the iSCSI configuration.
+
+   > The latest CSM documentation RPM must be installed on the node where this step is being performed.
+   > See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+
+   (`ncn-mw#`) The `refresh_worker_iscsi_config.py` script is provided to modify the CFS state of the worker NCNs to
+   force them to re-run the iSCSI configuration layer. It is run without arguments.
+
+   ```bash
+   /usr/share/doc/csm/scripts/operations/configuration/refresh_worker_iscsi_config.py
+   ```
+
+1. Manually update the DNS records.
+
+    See [Manual DNS records update](#manual-dns-records-update).
+
+1. Skip the rest of this document and perform the procedure to remove the worker NCN from the system.
 
 ### After initial CSM 1.7 install or upgrade
 
-If this is being done in the context of adding or removing a worker NCN, these steps should be done **before**
- carrying out that procedure.
+**IMPORTANT**: If this is being done in the context of adding or removing a worker NCN, see
+[Adding or removing worker NCN](#adding-or-removing-worker-ncn) instead.
 
 During normal system operation, this feature can be enabled or disabled, or the set of worker nodes being enabled
 for iSCSI can be changed. To do this, use the following procedure:
@@ -195,21 +305,18 @@ for iSCSI can be changed. To do this, use the following procedure:
       See [Creating the group](#creating-the-group).
     * If this feature is currently enabled (meaning that the `iscsi_worker` HSM group exists),
       then there are two options:
-
-```text
-    * The feature can be disabled (meaning that all worker nodes will be enabled as iSCSI targets) by deleting
-      the group. See [Deleting the group](#deleting-the-group).
-          
-    * The set of worker NCNs being enabled for iSCSI can be modified by changing the membership of the group.
-      This can be done by adding workers to it, removing workers from it, or a combination of both.
-      See [Adding a worker to the group](#adding-a-worker-to-the-group) and [Removing a worker from the group](#removing-a-worker-from-the-group).
-```
+        * The feature can be disabled (meaning that all worker nodes will be enabled as iSCSI targets) by deleting
+          the group. See [Deleting the group](#deleting-the-group).
+        * The set of worker NCNs being enabled for iSCSI can be modified by changing the membership of the group.
+          This can be done by adding workers to it, removing workers from it, or a combination of both.
+          See [Adding a worker to the group](#adding-a-worker-to-the-group) and
+          [Removing a worker from the group](#removing-a-worker-from-the-group).
 
 1. Instruct the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) to update
    the iSCSI configuration.
 
-   The latest CSM documentation RPM must be installed on the node where this step is being performed.
-   See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation)
+   > The latest CSM documentation RPM must be installed on the node where this step is being performed.
+   > See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
    (`ncn-mw#`) The `refresh_worker_iscsi_config.py` script is provided to modify the CFS state of the worker NCNs to
    force them to re-run the iSCSI configuration layer. It is run without arguments.
@@ -218,11 +325,16 @@ for iSCSI can be changed. To do this, use the following procedure:
    /usr/share/doc/csm/scripts/operations/configuration/refresh_worker_iscsi_config.py
    ```
 
+1. Manually update DNS records, if needed.
+
+    If the changes made in the first step result in a worker being disabled as an iSCSI target when previously
+    it had been enabled as an iSCSI target, then an additional manual procedure is required.
+    See [Manual DNS records update](#manual-dns-records-update).
+
 ## Manual DNS records update
 
 One of the things that the iSCSI Ansible playbook does is to add DNS entries for the workers that are enabled for iSCSI.
 However, this playbook does not have logic to remove these entries, in the case where a worker had previously been enabled for iSCSI but now is not. In this case, the administrator must manually remove these entries.
 
 These entries are added by the `csm.sbps.dns_srv_records` Ansible role in the `csm-config-management` repository in the [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
-
 See that role to determine which entries must be manually removed.
