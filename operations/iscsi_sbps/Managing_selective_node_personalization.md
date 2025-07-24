@@ -210,7 +210,6 @@ following the add NCN procedure:
     ```
 
 1. Create the `iscsi_sbps` group.
- 
     The `iscsi_sbps` group needs to be created and contain the xnames of all of the worker NCNs except the one being added
     (the same list obtained in the previous step). See [Creating the group](#creating-the-group).
 
