@@ -268,7 +268,8 @@ The SBPS Marshal Agent gets installed during node personalization using CFS.
 
 #### Selective worker node personalization
 
-In CSM 1.6, all worker nodes are configured and enabled as iSCSI SBPS targets during [Management Node Personalization](../configuration_management/Management_Node_Personalization.md)
+In CSM 1.6, all worker NCNs are configured and enabled as iSCSI SBPS targets using
+[Management Node Personalization](../configuration_management/Management_Node_Personalization.md).
 
 Starting in CSM 1.7.0, selective iSCSI worker node personalization is introduced.
 All worker nodes are still **configured** for iSCSI, but selective node personalization gives administrators control over which worker nodes are enabled as iSCSI SBPS targets.
