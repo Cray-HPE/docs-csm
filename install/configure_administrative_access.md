@@ -25,12 +25,13 @@ and BMC/controller passwords.
 
 ## 1. Configure the Cray command line interface
 
-The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST
-APIs into easily usable commands.
+The `cray` command line interface (CLI) is a framework created to integrate all of the
+system management REST APIs into easily usable commands.
 
-Later procedures in the installation workflow use the `cray` command to interact with multiple services.
-The `cray` CLI configuration needs to be initialized for the Linux account. The Keycloak user who initializes the
-CLI configuration needs to be authorized for administrative actions.
+Later procedures in the installation workflow use the `cray` command to interact with
+multiple services. The `cray` CLI configuration needs to be initialized for the Linux
+account. The Keycloak user who initializes the CLI configuration needs to be authorized for
+administrative actions.
 
 There are two options to proceed with `cray` CLI authentication:
 
@@ -62,9 +63,12 @@ Manually configure the `cray` CLI with a valid Keycloak account using the follow
 
 ## 2. Set `Management` role on the BMCs of management nodes
 
-The BMCs that control management nodes will not have been marked with the `Management` role in HSM. It is important
-to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
-as protections for FAS and PCS/CAPMC actions.
+The [Baseboard Management Controllers (BMCs)](../glossary.md#baseboard-management-controller-bmc) that control management nodes
+will not have been marked with the `Management` role in the [Hardware State Manager (HSM)](../glossary.md#hardware-state-manager-hsm).
+It is important to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
+as protections actions by the [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas), the
+[Cray Advanced Platform Monitoring and Control (CAPMC)](../glossary.md#cray-advanced-platform-monitoring-and-control-capmc), and the
+[Power Control Service (PCS)](../glossary.md#power-control-service-pcs).
 
 **Set BMC `Management` roles now!**
 
@@ -97,11 +101,11 @@ For more information about locking and unlocking nodes, see [Lock and Unlock Nod
 
 > **`NOTE`** If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
 
-The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for
-components in liquid-cooled cabinets. At this point in the install, SCSD should be used to set the
-SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
-down or power up as part of the compute node booting process, it may be necessary to look at the logs
-on the BMC for node power down or node power up.
+The [System Configuration Service (SCSD)](../glossary.md#system-configuration-service-scsd) allows administrators to set
+various BMC and controller parameters for components in liquid-cooled cabinets. At this point in the install, SCSD should
+be used to set the SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
+down or power up as part of the compute node booting process, it may be necessary to look at the logs on the BMC for node
+power down or node power up.
 
 See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
 
@@ -112,8 +116,8 @@ for the procedure to configure passwordless SSH between management nodes and fro
 to managed nodes.
 
 This procedure sets up resources in Kubernetes (a Kubernetes Secret and ConfigMap) which are later
-applied to the management nodes using CFS node personalization in section
-[7. Configure management nodes with CFS](#7-configure-management-nodes-with-cfs) below.
+applied to the management nodes by the [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs)
+during node personalization in section [7. Configure management nodes with CFS](#7-configure-management-nodes-with-cfs) below.
 
 ## 6. Configure the root password and SSH keys in Vault
 
@@ -121,21 +125,23 @@ See [Configure the `root` password and SSH keys in Vault](../operations/CSM_prod
 for the procedure to configure the `root` password and SSH keys in Vault.
 
 This procedure writes the `root` password hash and SSH keys to Vault which are later
-applied to the management nodes using CFS node personalization in section
+applied to the management nodes by CFS during node personalization in section
 [7. Configure management nodes with CFS](#7-configure-management-nodes-with-cfs) below.
 
 ## 7. Configure management nodes with CFS
 
 Management nodes need to be configured after booting for administrative access, security, and other
-purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
+purposes. The [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs)
 is used to apply post-boot configuration in a decoupled, layered manner. Individual software products
-provide one or more layers included in a CFS configuration. The CFS configuration is applied to components,
-including management nodes, during post-boot node personalization.
+provide one or more layers included in a CFS configuration. The CFS configuration is applied to node
+images (during image customization) and to booted nodes (during node personalization). This includes
+both management nodes and managed nodes.
 
-The procedure here creates a CFS configuration that contains only the layer provided by the CSM product and
-then applies that configuration to the management nodes.
+The procedure in this step creates a CFS configuration that contains only the base layers provided by the CSM product, and then applies
+that configuration to the booted management nodes. Later, [SAT Bootprep](../operations/system_admin_toolkit/usage/SAT_Bootprep.md)
+will generate the full CFS configuration including additional CSM layers and all product layers.
 
-1. (`ncn-m001#`) Set the variable `CSM_RELEASE` to the CSM release version.
+1. (`ncn-mw#`) Set the variable `CSM_RELEASE` to the CSM release version.
 
     For example:
 
@@ -143,7 +149,7 @@ then applies that configuration to the management nodes.
     CSM_RELEASE="1.4.0"
     ```
 
-1. (`ncn-m001#`) Run the `apply_csm_configuration.sh` script.
+1. (`ncn-mw#`) Run the `apply_csm_configuration.sh` script.
 
     This script creates a new CFS configuration named `management-csm-${CSM_RELEASE}`
     and applies it to the management node components in CFS, enables them,
@@ -161,8 +167,8 @@ then applies that configuration to the management nodes.
     Configuration complete. 9 component(s) completed successfully.  0 component(s) failed.
     ```
 
-    The number reported should match the number of management nodes in the system. If there are failures, see
-    [Track the Status of a Session](../operations/configuration_management/Track_the_Status_of_a_Session.md).
+    The number reported should match the number of management nodes in the system.
+    If there are failures, see [Track the Status of a Session](../operations/configuration_management/Track_the_Status_of_a_Session.md).
 
 ## 8. Proceed to next topic
 

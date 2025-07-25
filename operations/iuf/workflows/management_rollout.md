@@ -245,12 +245,12 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${MASTER_XNAMES}" --clear-state
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${MASTER_XNAMES}" --clear-state
         ```
 
         The expected output is:
 
-          ```bash
+          ```text
           Configuration complete. 3 component(s) completed successfully.  0 component(s) failed.
           ```
 
@@ -375,7 +375,7 @@ Return to the procedure that was being followed for `management-nodes-rollout` t
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${STORAGE_XNAMES}" --clear-state
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${STORAGE_XNAMES}" --clear-state
         ```
 
         The expected output is:
@@ -407,7 +407,8 @@ Continue to the next section [5. Update management host Slingshot NIC firmware](
 
 ## 5. Update management host Slingshot NIC firmware
 
-If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _HPE Slingshot Operations Guide_ for details on how to update NIC firmware on management nodes.
+If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the  _HPE Slingshot Operations Guide_
+for details on how to update NIC firmware on management nodes.
 
 After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.
 Follow the [reboot NCNs procedure](../../node_management/Reboot_NCNs.md#ncn-worker-nodes) for all nodes where the firmware was updated.
@@ -420,10 +421,10 @@ Once this step has completed:
 
 ## 6. Next steps
 
-- If performing an initial install or an upgrade of non-CSM products only, return to the
+- If performing an initial install or an upgrade of non-CSM products only, then return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
   workflow to continue the install or upgrade.
 
-- If performing an upgrade that includes upgrading CSM, return to the
+- If performing an upgrade that includes upgrading CSM, then return to the
   [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
   workflow to continue the upgrade.
