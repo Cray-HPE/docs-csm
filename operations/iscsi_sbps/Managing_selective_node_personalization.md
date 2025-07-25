@@ -161,7 +161,8 @@ For details, see [After initial CSM 1.7 install or upgrade](#after-initial-csm-1
 
 ### CSM upgrade from 1.6 to 1.7
 
-During an upgrade from CSM 1.6 to CSM 1.7, if the administrator does not wish to enable this feature, no special steps need to be taken. If the administrator does wish to enable this feature, then the following steps need to be followed at the
+During an upgrade from CSM 1.6 to CSM 1.7, if the administrator does not wish to enable this feature, no special steps
+need to be taken. If the administrator does wish to enable this feature, then the following steps need to be followed at the
 beginning of [2. Execute the IUF `management-nodes-rollout` stage](../iuf/workflows/management_rollout.md#2-execute-the-iuf-management-nodes-rollout-stage).
 
 1. Create the `iscsi_worker` HSM group.
