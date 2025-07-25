@@ -35,12 +35,13 @@ See [Configure Keycloak Account](../operations/CSM_product_management/Configure_
 
 ## 2. Configure the Cray command line interface
 
-The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST
-APIs into easily usable commands.
+The `cray` command line interface (CLI) is a framework created to integrate all of the
+system management REST APIs into easily usable commands.
 
-Later procedures in the installation workflow use the `cray` command to interact with multiple services.
-The `cray` CLI configuration needs to be initialized for the Linux account. The Keycloak user who initializes the
-CLI configuration needs to be authorized for administrative actions.
+Later procedures in the installation workflow use the `cray` command to interact with
+multiple services. The `cray` CLI configuration needs to be initialized for the Linux
+account. The Keycloak user who initializes the CLI configuration needs to be authorized for
+administrative actions.
 
 See [Configure the Cray command line interface](../operations/configure_cray_cli.md).
 
@@ -67,11 +68,11 @@ See [Lock and Unlock Nodes](../operations/hardware_state_manager/Lock_and_Unlock
 
 **NOTE:** If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
 
-The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for
-components in liquid-cooled cabinets. At this point in the install, SCSD should be used to set the
-SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
-down or power up as part of the compute node booting process, it may be necessary to look at the logs
-on the BMC for node power down or node power up.
+The [System Configuration Service (SCSD)](../glossary.md#system-configuration-service-scsd) allows administrators to set
+various BMC and controller parameters for components in liquid-cooled cabinets. At this point in the install, SCSD should
+be used to set the SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
+down or power up as part of the compute node booting process, it may be necessary to look at the logs on the BMC for node
+power down or node power up.
 
 See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
 
@@ -79,10 +80,12 @@ See [Configure BMC and Controller Parameters with SCSD](../operations/system_con
 
 ## 5. Configure non-compute nodes with CFS
 
-Non-compute Nodes (NCN) need to be configured after booting for administrative access, security, and other
-purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
-is used to apply post-boot configuration in a decoupled, layered manner. Individual software products including
-CSM provide one or more layers of configuration in a process called "NCN personalization".
+Management nodes need to be configured after booting for administrative access, security, and other
+purposes. The [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs)
+is used to apply post-boot configuration in a decoupled, layered manner. Individual software products
+provide one or more layers included in a CFS configuration. The CFS configuration is applied to node
+images (during image customization) and to booted nodes (during node personalization). This includes
+both management nodes and managed nodes.
 
 See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
 
