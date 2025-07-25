@@ -78,7 +78,7 @@ to configure `sat` and authenticate to the API Gateway.
 The [Baseboard Management Controllers (BMCs)](../glossary.md#baseboard-management-controller-bmc) that control management nodes
 will not have been marked with the `Management` role in the [Hardware State Manager (HSM)](../glossary.md#hardware-state-manager-hsm).
 It is important to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
-as protections actions by the [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas) and the
+for protection from actions by the [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas) and the
 [Power Control Service (PCS)](../glossary.md#power-control-service-pcs).
 
 **Set BMC `Management` roles now!**
