@@ -137,8 +137,7 @@ images (during image customization) and to booted nodes (during node personaliza
 both management nodes and managed nodes.
 
 The procedure in this step creates a CFS configuration that contains only the base layers provided by the CSM product, and then applies
-that configuration to the booted management nodes. Later, [SAT Bootprep](../operations/system_admin_toolkit/usage/SAT_Bootprep.md)
-will generate the full CFS configuration including additional CSM layers and all product layers.
+that configuration to the booted management nodes.
 
 1. (`ncn-mw#`) Set the variable `CSM_RELEASE` to the CSM release version.
 
