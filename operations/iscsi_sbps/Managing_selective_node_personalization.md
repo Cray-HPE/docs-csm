@@ -62,7 +62,8 @@ Example output:
 URI = "/hsm/v2/groups/iscsi_worker"
 ```
 
-The output does not contain the list of members in the group. If an administrator wishes to confirm that the group was created with the correct members, see [Listing group members](#listing-group-members).
+The output does not contain the list of members in the group. If an administrator wishes to confirm that the group was
+created with the correct members, see [Listing group members](#listing-group-members).
 
 ### Adding a worker to the group
 
