@@ -38,14 +38,13 @@ else
   if [[ $? -ne 0 ]]; then
     echo "ERROR Failed to upgrade kubernetes to v1.29"
     exit 1
-  else
-    touch "$DONE_DIR/upgrade_k8s_1_29.done"
-    if [[ $? -ne 0 ]]; then
-      echo "ERROR Failed to create done file for v1.29 upgrade"
-      exit 1
-    fi
-    echo "INFO Successfully upgraded kubernetes to v1.29"
   fi
+  touch "$DONE_DIR/upgrade_k8s_1_29.done"
+  if [[ $? -ne 0 ]]; then
+    echo "ERROR Failed to create done file for v1.29 upgrade"
+    exit 1
+  fi
+  echo "INFO Successfully upgraded kubernetes to v1.29"
 fi
 
 if [[ -f "$DONE_DIR/deploy_charts_post_k8s_upgrade.done" ]]; then
@@ -56,14 +55,13 @@ else
   if [[ $? -ne 0 ]]; then
     echo "ERROR Failed to deploy manifests for v1.29"
     exit 1
-  else
-    touch "$DONE_DIR/deploy_charts_post_k8s_upgrade.done"
-    if [[ $? -ne 0 ]]; then
-      echo "ERROR Failed to create done file for v1.29 charts deployment"
-      exit 1
-    fi
-    echo "INFO Successfully deployed manifests for v1.29"
   fi
+  touch "$DONE_DIR/deploy_charts_post_k8s_upgrade.done"
+  if [[ $? -ne 0 ]]; then
+    echo "ERROR Failed to create done file for v1.29 charts deployment"
+    exit 1
+  fi
+  echo "INFO Successfully deployed manifests for v1.29"
 fi
 
 if [[ -f "$DONE_DIR/upgrade_k8s_1_32.done" ]]; then
@@ -74,13 +72,12 @@ else
   if [[ $? -ne 0 ]]; then
     echo "ERROR Failed to upgrade kubernetes to v1.32"
     exit 1
-  else
-    touch "$DONE_DIR/upgrade_k8s_1_32.done"
-    if [[ $? -ne 0 ]]; then
-      echo "ERROR Failed to create done file for v1.32 upgrade"
-    fi
-    echo "INFO Successfully upgraded kubernetes to v1.32"
   fi
+  touch "$DONE_DIR/upgrade_k8s_1_32.done"
+  if [[ $? -ne 0 ]]; then
+    echo "ERROR Failed to create done file for v1.32 upgrade"
+  fi
+  echo "INFO Successfully upgraded kubernetes to v1.32"
 fi
 
 if [[ -f "$DONE_DIR/cleanup_bss.done" ]]; then
@@ -91,14 +88,13 @@ else
   if [[ $? -ne 0 ]]; then
     echo "ERROR Failed to update BSS to remove upgrade and upgrade_version."
     exit 1
-  else
-    touch "$DONE_DIR/cleanup_bss.done"
-    if [[ $? -ne 0 ]]; then
-      echo "ERROR Failed to create done file for BSS cleanup"
-      exit 1
-    fi
-    echo "INFO Successfully updated BSS to remove upgrade and upgrade_version."
   fi
+  touch "$DONE_DIR/cleanup_bss.done"
+  if [[ $? -ne 0 ]]; then
+    echo "ERROR Failed to create done file for BSS cleanup"
+    exit 1
+  fi
+  echo "INFO Successfully updated BSS to remove upgrade and upgrade_version."
 fi
 
 echo "INFO Deploying manifests for v1.32"
@@ -114,14 +110,12 @@ else
   if [[ $? -ne 0 ]]; then
     echo "ERROR Failed to deploy manifests for v1.32"
     exit 1
-  else
-    echo "INFO Successfully deployed manifests for v1.32"
-    touch "$DONE_DIR/deploy_manifests.done"
-    if [[ $? -ne 0 ]]; then
-      echo "ERROR Failed to create done file for v1.32 manifests deployment"
-      exit 1
-    fi
-
+  fi
+  echo "INFO Successfully deployed manifests for v1.32"
+  touch "$DONE_DIR/deploy_manifests.done"
+  if [[ $? -ne 0 ]]; then
+    echo "ERROR Failed to create done file for v1.32 manifests deployment"
+    exit 1
   fi
 fi
 

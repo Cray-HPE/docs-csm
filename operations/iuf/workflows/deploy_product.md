@@ -27,7 +27,7 @@ Refer to that table and any corresponding product documents before continuing to
 Once this step has completed:
 
 > **NOTE**  
-> In CSM 1.7, as part of the `deploy-product` stage during CSM upgrade:  
+> As part of the `deploy-product` stage during upgrades from CSM 1.6 to CSM 1.7:  
 >
 > - Kubernetes will be upgraded from version 1.26 to 1.32.5.  
 > - The `deploy-product-onexit` hook will launch a Kubernetes upgrade job that runs outside of IUF, in the `argo` namespace.  
