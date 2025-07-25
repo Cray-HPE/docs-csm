@@ -66,7 +66,7 @@ Manually configure the `cray` CLI with a valid Keycloak account using the follow
 The [Baseboard Management Controllers (BMCs)](../glossary.md#baseboard-management-controller-bmc) that control management nodes
 will not have been marked with the `Management` role in the [Hardware State Manager (HSM)](../glossary.md#hardware-state-manager-hsm).
 It is important to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
-for protection from actions by the [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas), the
+for protection from actions by the [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas),
 [Cray Advanced Platform Monitoring and Control (CAPMC)](../glossary.md#cray-advanced-platform-monitoring-and-control-capmc), and the
 [Power Control Service (PCS)](../glossary.md#power-control-service-pcs).
 
