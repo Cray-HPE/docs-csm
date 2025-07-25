@@ -342,7 +342,9 @@ for iSCSI can be changed. To do this, use the following procedure:
 ## Manual DNS records update
 
 One of the things that the iSCSI Ansible playbook does is to add DNS entries for the workers that are enabled for iSCSI.
-However, this playbook does not have logic to remove these entries, in the case where a worker had previously been enabled for iSCSI but now is not. In this case, the administrator must manually remove these entries.
+However, this playbook does not have logic to remove these entries, in the case where a worker had previously been
+enabled for iSCSI but now is not. In this case, the administrator must manually remove these entries.
 
-These entries are added by the `csm.sbps.dns_srv_records` Ansible role in the `csm-config-management` repository in the [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
+These entries are added by the `csm.sbps.dns_srv_records` Ansible role in the `csm-config-management` repository in
+the [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
 See that role to determine which entries must be manually removed.
