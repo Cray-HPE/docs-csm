@@ -278,7 +278,7 @@ administrators control over which worker nodes are enabled as iSCSI SBPS targets
 The default behavior is still the same as in CSM 1.6, so if no action is taken to use this
 feature, then all worker nodes will continue to be enabled as iSCSI targets.
 
-For details on iSCSI selective worker node personalization, 
+For details on iSCSI selective worker node personalization,
 see [Managing selective node personalization](Managing_selective_node_personalization.md).
 
 #### Automatic setup with bootprep
@@ -296,8 +296,8 @@ using [Node Personalization Verification](Node_Personalization_Verification.md)
 In order to verify the readiness of the iSCSI targets before triggering the boot of compute nodes or
 UANs, it is important to run GOSS tests as sanity checks on iSCSI targets.
 
-Refer to [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-
-marshal/blob/main/GOSS_tests_for_sbps.md) for the details.
+Refer to [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md)
+for the details.
 
 ### 3. Create BOS session template
 
