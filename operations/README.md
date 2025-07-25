@@ -40,7 +40,7 @@ The following administrative topics can be found in this guide:
 - [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 - [Backup and recovery](#backup-and-recovery)
 - [Multi-tenancy](#multi-tenancy)
-- [iSCSI SBPS](#iscsi-sbps)
+- [iSCSI SBPS (Scalable Boot Content Projection Service)](#iscsi-sbps-scalable-boot-content-projection-service) 
 
 ## CSM product management
 
@@ -863,6 +863,6 @@ these backups.
 
 Below are the documents related to iSCSI based boot content projection.
 
-- [iscsi `sbps`](iscsi_sbps/iscsi_sbps.md)
-- [Managing selective node personalization](iscsi_sbps/Managing_selective_node_personalization.md)
+- [iSCSI SBPS](iscsi_sbps/iscsi_sbps.md)
+- [Managing Selective Node Personalization](iscsi_sbps/Managing_selective_node_personalization.md)
 - [Node Personalization Verification](iscsi_sbps/Node_Personalization_Verification.md)

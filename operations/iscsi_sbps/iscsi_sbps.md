@@ -263,19 +263,23 @@ size=11G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
 ### 1. Worker node personalization
 
 Node personalization is the prerequisite step of SBPS solution where we need to first setup/configure worker nodes as iSCSI targets (servers)
-with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image in CSM 1.6.
+with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image.
 The SBPS Marshal Agent gets installed during node personalization using CFS.
 
 #### Selective worker node personalization
 
-In CSM 1.6, all worker NCNs are configured and enabled as iSCSI SBPS targets using
-[Management Node Personalization](../configuration_management/Management_Node_Personalization.md).
+In CSM 1.6, all worker nodes are configured and enabled as iSCSI SBPS targets using
+[Management Node Personalization](../configuration_management/Management_Node_Personalization.md)
 
 Starting in CSM 1.7.0, selective iSCSI worker node personalization is introduced.
-All worker nodes are still **configured** for iSCSI, but selective node personalization gives administrators control over which worker nodes are enabled as iSCSI SBPS targets.
-The default behavior is still the same as in CSM 1.6, so if no action is taken to use this feature, then all worker nodes will continue to be enabled as iSCSI targets.
+All worker nodes are still **configured** for iSCSI, but selective node personalization gives
+administrators control over which worker nodes are enabled as iSCSI SBPS targets.
 
-For details on iSCSI selective worker node personalization, see [Managing selective node personalization](Managing_selective_node_personalization.md).
+The default behavior is still the same as in CSM 1.6, so if no action is taken to use this
+feature, then all worker nodes will continue to be enabled as iSCSI targets.
+
+For details on iSCSI selective worker node personalization, 
+see [Managing selective node personalization](Managing_selective_node_personalization.md).
 
 #### Automatic setup with bootprep
 
@@ -284,13 +288,16 @@ By default worker node personalization of iSCSI SBPS is done during CSM install/
 It is initiated during bootprep (`management-nodes-rollout`) in order to do worker node personalization
 automatically during boot time.
 
-After the worker node personalization, verify the same using [Node Personalization Verification](Node_Personalization_Verification.md)
+After the workers have run node personalization, administrators may verify the iSCSI configuration
+using [Node Personalization Verification](Node_Personalization_Verification.md)
 
 ### 2. Run GOSS test suite
 
-In order to verify the readiness of the iSCSI targets before triggering the boot of compute nodes or UANs, it is important to run GOSS tests as sanity checks on iSCSI targets.
+In order to verify the readiness of the iSCSI targets before triggering the boot of compute nodes or
+UANs, it is important to run GOSS tests as sanity checks on iSCSI targets.
 
-Refer to [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md) for the details.
+Refer to [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-
+marshal/blob/main/GOSS_tests_for_sbps.md) for the details.
 
 ### 3. Create BOS session template
 

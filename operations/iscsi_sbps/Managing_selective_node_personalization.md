@@ -21,9 +21,7 @@
 ## Overview
 
 The selective iSCSI worker node personalization feature allows administrators to specify which worker NCNs are enabled as
-iSCSI targets. The mechanism by which an administrator specifies this is the `iscsi_worker`
-[component group](../hardware_state_manager/Component_Groups_and_Partitions.md#groups) in the
-[Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
+iSCSI targets. The mechanism by which an administrator specifies this is the `iscsi_worker` [component group](../hardware_state_manager/Component_Groups_and_Partitions.md#groups) in the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
 The existence of this group on the system means that selective iSCSI worker node personalization is enabled.
 If the group does not exist, then the feature is disabled, and all worker nodes will be enabled as iSCSI targets.
 While it is technically possible to create this group and leave it empty, this will mean that no worker nodes will be
@@ -62,8 +60,7 @@ Example output:
 URI = "/hsm/v2/groups/iscsi_worker"
 ```
 
-The output does not contain the list of members in the group. If an administrator wishes to confirm that the group was
-created with the correct members, see [Listing group members](#listing-group-members).
+The output does not contain the list of members in the group. If an administrator wishes to confirm that the group was created with the correct members, see [Listing group members](#listing-group-members).
 
 ### Adding a worker to the group
 
@@ -145,12 +142,13 @@ as part of adding or removing a worker NCN, or on an operational CSM 1.7+ system
 
 ### CSM install
 
-During a CSM install, if the administrator wants to enable this feature, they should
+During a CSM install, if the administrator wants to enable this feature, they should 
 [create the `iscsi_worker` HSM group](#creating-the-group) as part of
-[Configure Administrative Access](../../install/configure_administrative_access.md).
+[Configure Administrative Access](../../install/configure_administrative_access.md)
 
-The feature will take effect when [Management Node Personalization](../configuration_management/Management_Node_Personalization.md)
-runs on the NCNs, after [SAT Bootprep](../system_admin_toolkit/usage/SAT_Bootprep.md) has run.
+The feature will take effect when [Management Node Personalization]
+(../configuration_management/Management_Node_Personalization.md)
+ runs on the NCNs, after [SAT Bootprep](../system_admin_toolkit/usage/SAT_Bootprep.md) has run.
 
 If the group is not created at this time, and an administrator wishes to enable this feature post-install, additional
 manual steps are required. This is also true if an administrator creates the group during the install, but later wants
@@ -160,8 +158,7 @@ For details, see [After initial CSM 1.7 install or upgrade](#after-initial-csm-1
 
 ### CSM upgrade from 1.6 to 1.7
 
-During an upgrade from CSM 1.6 to CSM 1.7, if the administrator does not wish to enable this feature, no special steps
-need to be taken. If the administrator does wish to enable this feature, then the following steps need to be followed at the
+During an upgrade from CSM 1.6 to CSM 1.7, if the administrator does not wish to enable this feature, no special steps need to be taken. If the administrator does wish to enable this feature, then the following steps need to be followed at the
 beginning of [2. Execute the IUF `management-nodes-rollout` stage](../iuf/workflows/management_rollout.md#2-execute-the-iuf-management-nodes-rollout-stage).
 
 1. Create the `iscsi_worker` HSM group.
@@ -329,6 +326,8 @@ for iSCSI can be changed. To do this, use the following procedure:
    ```bash
    /usr/share/doc/csm/scripts/operations/configuration/refresh_worker_iscsi_config.py
    ```
+
+   Post personalization verification [Node Personalization Verification](Node_Personalization_Verification.md)is optional if the above script is run.
 
 1. Manually update DNS records, if needed.
 
