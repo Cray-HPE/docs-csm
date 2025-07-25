@@ -35,12 +35,12 @@ Once this step has completed:
 >
 > The output from the `deploy-product` stage will look like:
 >
-> ```bash
+> ```text
 > INFO Job upgrade-k8s-job-zm55x has been created in the argo namespace. This is performing k8s upgrade from 1.26 to 1.32
 > INFO Monitor the job and ensure it is successful before proceeding to next stage.
 > ```  
 >
-> To monitor the job, run:
+> (`ncn-mw#`) To monitor the job, run:
 >
 > ```bash
 > kubectl wait job -n argo upgrade-k8s-job-zm55x --for=condition=complete --timeout=120m

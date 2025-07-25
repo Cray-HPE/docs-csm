@@ -26,6 +26,8 @@
 echo "INFO Running k8s upgrade script"
 . /etc/cray/upgrade/csm/myenv
 
+set -u
+
 DONE_DIR="/etc/cray/upgrade/csm/${CSM_REL_NAME}"
 
 if [[ -f "$DONE_DIR/upgrade_k8s_1_29.done" ]]; then
@@ -38,6 +40,10 @@ else
     exit 1
   else
     touch "$DONE_DIR/upgrade_k8s_1_29.done"
+    if [[ $? -ne 0 ]]; then
+      echo "ERROR Failed to create done file for v1.29 upgrade"
+      exit 1
+    fi
     echo "INFO Successfully upgraded kubernetes to v1.29"
   fi
 fi
@@ -52,6 +58,10 @@ else
     exit 1
   else
     touch "$DONE_DIR/deploy_charts_post_k8s_upgrade.done"
+    if [[ $? -ne 0 ]]; then
+      echo "ERROR Failed to create done file for v1.29 charts deployment"
+      exit 1
+    fi
     echo "INFO Successfully deployed manifests for v1.29"
   fi
 fi
@@ -66,6 +76,9 @@ else
     exit 1
   else
     touch "$DONE_DIR/upgrade_k8s_1_32.done"
+    if [[ $? -ne 0 ]]; then
+      echo "ERROR Failed to create done file for v1.32 upgrade"
+    fi
     echo "INFO Successfully upgraded kubernetes to v1.32"
   fi
 fi
@@ -80,23 +93,35 @@ else
     exit 1
   else
     touch "$DONE_DIR/cleanup_bss.done"
+    if [[ $? -ne 0 ]]; then
+      echo "ERROR Failed to create done file for BSS cleanup"
+      exit 1
+    fi
     echo "INFO Successfully updated BSS to remove upgrade and upgrade_version."
   fi
 fi
 
 echo "INFO Deploying manifests for v1.32"
-pushd ${CSM_ARTI_DIR}
+
 if [[ -f "$DONE_DIR/deploy_manifests.done" ]]; then
   echo "INFO Manifests deployment already completed, skipping."
 else
+  pushd "${CSM_ARTI_DIR}" || {
+    echo "ERROR Failed to change directory to ${CSM_ARTI_DIR}"
+    exit 1
+  }
   ./upgrade.sh
   if [[ $? -ne 0 ]]; then
     echo "ERROR Failed to deploy manifests for v1.32"
     exit 1
   else
-    popd +0
     echo "INFO Successfully deployed manifests for v1.32"
     touch "$DONE_DIR/deploy_manifests.done"
+    if [[ $? -ne 0 ]]; then
+      echo "ERROR Failed to create done file for v1.32 manifests deployment"
+      exit 1
+    fi
+
   fi
 fi
 
