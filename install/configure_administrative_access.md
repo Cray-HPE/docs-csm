@@ -134,7 +134,7 @@ for the procedure to configure the `root` password and SSH keys in Vault.
 
 This procedure writes the `root` password hash and SSH keys to Vault which are later
 applied to the management nodes using CFS node personalization in section
-[7. Configure management nodes with CFS](#9-configure-management-nodes-with-cfs) below.
+[9. Configure management nodes with CFS](#9-configure-management-nodes-with-cfs) below.
 
 ## 7. Add switch admin password to Vault
 
