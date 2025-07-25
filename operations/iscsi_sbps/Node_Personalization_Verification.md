@@ -120,7 +120,7 @@ for details on how worker NCNs are designated to be enabled as iSCSI targets.
     10.252.1.11
     ```
 
-###. Run readiness checks.
+### Run readiness checks.
 
     After worker node personalization, in order to verify the overall readiness of the iSCSI targets before booting compute nodes or UANs,
     run GOSS tests to do additional verification of the iSCSI targets.
