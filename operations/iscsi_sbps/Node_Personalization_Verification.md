@@ -1,11 +1,11 @@
 # Node Personalization Verification
 
-Worker node personalization installs SBPS Marshal agent, adds kubernetes labels for the worker NCNs intended to be configured as iSCSI targets, it also removes the labels from workers that are not designated to be iSCSI targets, creates DNS
+Worker node personalization installs the SBPS Marshal agent, adds `kubernetes` labels for the worker NCNs intended to be configured as iSCSI targets, it also removes the labels from workers that are not designated to be iSCSI targets, creates DNS
 SRV and A records etc. See [Managing selective node personalization](Managing_selective_node_personalization.md) for details on how worker NCNs designated to be enabled as iSCSI targets.
 
 ## Post-personalization Verification
 
-(`ncn-w#`) Run these checks on worker nodes that are enabled as an iSCSI target in order to verify that it is
+(`ncn-w#`) Run these checks on worker nodes that are enabled as an iSCSI target only in order to verify that it is
  configured correctly.
 
 1. Verify that the SBPS Marshal Agent is running without any errors.
@@ -26,7 +26,7 @@ SRV and A records etc. See [Managing selective node personalization](Managing_se
                  └─ 2878373 /usr/lib/sbps-marshal/bin/python /usr/lib/sbps-marshal/bin/sbps-marshal
     ```
 
-1. Verify that the images/LUN mappings have been created.
+1. Verify that the images and LUN mappings have been created.
 
     Check to see if the `fileio` backing stores exist for `rootfs` images,
     along with corresponding iSCSI `LUNs`. These should have the `rootfs` ID being mapped and network portals created (HSN and NMN).
