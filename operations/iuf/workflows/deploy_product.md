@@ -26,6 +26,26 @@ Refer to that table and any corresponding product documents before continuing to
 
 Once this step has completed:
 
+> **NOTE**  
+> As part of the `deploy-product` stage during upgrades from CSM 1.6 to CSM 1.7:  
+>
+> - Kubernetes will be upgraded from version 1.26 to 1.32.5.  
+> - The `deploy-product-onexit` hook will launch a Kubernetes upgrade job that runs outside of IUF, in the `argo` namespace.  
+> - This job must be monitored manually and must complete successfully before proceeding to the next stage.  
+>
+> The output from the `deploy-product` stage will look like:
+>
+> ```text
+> INFO Job upgrade-k8s-job-zm55x has been created in the argo namespace. This is performing k8s upgrade from 1.26 to 1.32
+> INFO Monitor the job and ensure it is successful before proceeding to next stage.
+> ```  
+>
+> (`ncn-mw#`) To monitor the job, run:
+>
+> ```bash
+> kubectl wait job -n argo upgrade-k8s-job-zm55x --for=condition=complete --timeout=120m
+> ```
+
 - New versions of product microservices have been deployed
 - Per-stage product hooks have executed for the `deploy-product` stage
 

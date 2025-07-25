@@ -594,6 +594,22 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+# Undeploy old cray-uas-mgr chart if it exists
+# UAI was removed in CSM 1.6 and should have ben removed during the upgrade then but wasn't.
+# Need to uninstall UAS before PSP is removed and the Kyverno check-policy goes live.
+state_name="UNDEPLOY_UAS_CHART"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    undeploy -n services cray-uas-mgr
+    undeploy -n services update-uas
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 # Pre-cache images needed for istio upgrade. As soon as cray-istio-pilot is upgraded, network
 # connection to nexus will be broken, due to istio proxy and istiod versions mismatch. Upgrade of
 # cray-istio will fix that, but images must be pre-cached for it to succeed.

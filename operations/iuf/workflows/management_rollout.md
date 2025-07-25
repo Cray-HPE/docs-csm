@@ -9,9 +9,8 @@ This section updates the software running on management NCNs.
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
     - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
     - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
-- [3. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns)
-- [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
-- [5. Next steps](#5-next-steps)
+- [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware)
+- [4. Next steps](#4-next-steps)
 
 ## 1. Update management host firmware (FAS)
 
@@ -76,7 +75,7 @@ procedures based on whether or not CSM is being upgraded:
 
 Starting with CSM `V1.7.0`, administrators can use an IMS image and configuration from CFS built outside of IUF to perform the `management-nodes-rollout` stage. The image and configuration can be explicitly passed in the IUF CLI command.
 
-For example, to upgrade a storage node using an image and CFS configuration created outside of the `prepare-images` stage, the command could look like this:
+(`ncn-m001#`) For example, to upgrade a storage node using an image and CFS configuration created outside of the `prepare-images` stage, the command could look like this:
 
 ```bash
 iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run \
@@ -85,10 +84,21 @@ iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run \
     -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
 ```
 
-The CFS configuration and IMS image being used can be described like shown below:
+(`ncn-m001#`) The CFS configuration can be described using the following command:
 
 ```bash
-ncn-m001:~ # cray cfs configurations describe management-main-1.7-1715924
+cray cfs configurations describe <cfs_configuration_name>
+```
+
+For example:
+
+```bash
+cray cfs configurations describe management-main-1.7-1715924
+```
+
+Example output:
+
+```toml
 lastUpdated = "2025-04-14T19:22:00Z"
 name = "management-main-1.7-1715924"
 [[layers]]
@@ -104,8 +114,21 @@ name = "shs-mellanox_install-integration-12.0.0"
 playbook = "shs_mellanox_install.yml"
 ```
 
+(`ncn-m001#`) The IMS image can be described using the following command:
+
 ```bash
-ncn-m001:~ # cray ims images describe f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6
+cray ims images describe <ims_image_ID>
+```
+
+For example:
+
+```bash
+cray ims images describe f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6
+```
+
+Example output:
+
+```toml
 arch = "x86_64"
 created = "2025-04-14T19:44:21.862319"
 id = "f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6"
@@ -119,7 +142,8 @@ type = "s3"
 [metadata]
 ```
 
-> **Important:** There is no built-in mechanism to validate the image and configuration being passed belong to the same role and subrole. Administrators must ensure that the correct image and configuration are used for the corresponding node and subrole.
+> **Important:** There is no built-in mechanism to validate the image and configuration being passed belong to the same role and subrole.
+Administrators must ensure that the correct image and configuration are used for the corresponding node and subrole.
 
 For the new parameters added, please refer to the command information in the [IUF run command details](../IUF.md#run) documentation.
 
@@ -271,7 +295,7 @@ Refer to that table and any corresponding product documents before continuing to
      - All management NCNs have been upgraded to the image and CFS configuration created in the previous steps of this workflow
      - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [3. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns).
+Continue to the next section [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware).
 
 ### 2.2 `management-nodes-rollout` without CSM upgrade
 
@@ -310,12 +334,12 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
         ```
 
         Sample output for configuring multiple management nodes is:
 
-          ```bash
+          ```text
           Taking snapshot of existing management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-management-23.11.0.json
           Setting desired configuration, clearing state, clearing error count, enabling components in CFS
           desiredConfig = "management-23.11.0"
@@ -368,7 +392,7 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $STORAGE_XNAMES --clear-state
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $STORAGE_XNAMES --clear-state
         ```
 
         Sample output for configuring multiple management nodes is:
@@ -410,7 +434,7 @@ Once this step has completed:
 - Management NCN storage and NCN master nodes have be updated with the CFS configuration created in the previous steps of this workflow.
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Continue to the next section [3. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns).
+Continue to the next section [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware).
 
 ### 2.3 NCN worker nodes
 
@@ -433,13 +457,10 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     ```bash
     WORKER_CANARY=ncn-w001
-    ```
-
-    ```bash
     iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
     ```
 
-1. Verify the canary node booted successfully with the desired image and CFS configuration.
+1. (`ncn-m001#`) Verify that the canary node booted successfully with the desired image and CFS configuration.
 
     ```bash
     XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
@@ -453,7 +474,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout=true
     ```
 
-1. (`ncn-m001#`) Verify the IUF node labels are present on the desired node.
+1. (`ncn-m001#`) Verify that the IUF node labels are present on the desired node.
 
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
@@ -467,20 +488,18 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
-    1. (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
+    - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
 
         ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
         ```
 
-    1. (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
+    - (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes.
+      The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
 
         ```bash
         WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -v $WORKER_CANARY |  awk '{print $1}' | xargs)
         echo $WORKER_NODES
-        ```
-
-        ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
         ```
 
@@ -494,8 +513,10 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     ```bash
     for ncn in $(cray hsm state components list --subrole Worker --type Node \
-      --format json | jq -r .Components[].ID | grep b0n | sort); do cray cfs components describe \
-      $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'; done
+        --format json | jq -r .Components[].ID | grep b0n | sort)
+    do
+        cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
+    done
     ```
 
 Once this step has completed:
@@ -503,34 +524,23 @@ Once this step has completed:
 - Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade) or
+Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step:
+either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade) or
 [Management-nodes-rollout without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade).
 
-## 3. Restart `goss-servers` on all NCNs
-
-**`NOTE`** Skip this step if the CSM version is 1.6.1 or above. This step will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
-
-If the CSM version is 1.6.0 or lower, then the `goss-servers` service needs to be restarted on all NCNs. This ensures the correct tests are run on each NCN. This is necessary due to a timing issue that is fixed in CSM 1.6.1.
-
-(`ncn-m001#`) Restart `goss-servers`.
-
-```bash
-ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
-ncn_nodes=${ncn_nodes%,}
-pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
-```
-
-## 4. Update management host Slingshot NIC firmware
+## 3. Update management host Slingshot NIC firmware
 
 **`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
-If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Installation Guide for CSM_ for details on how to update NIC firmware on management nodes.
+If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Installation Guide for CSM_
+for details on how to update NIC firmware on management nodes.
 
 After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.  
 
 Choose one of the below options to reboot worker nodes:
-To manually reboot the nodes follow the [Reboot NCNs manually](../../node_management/Reboot_NCNs_manual.md#ncn-worker-nodes) for all nodes where the firmware was updated.  
-To use IUF to reboot the nodes, follow the [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md#ncn-worker-nodes) for all nodes where the firmware was updated.
+
+- To manually reboot the nodes follow the [Reboot NCNs manually](../../node_management/Reboot_NCNs_manual.md#ncn-worker-nodes) for all nodes where the firmware was updated.  
+- To use IUF to reboot the nodes, follow the [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md#ncn-worker-nodes) for all nodes where the firmware was updated.
 
 Once this step has completed:
 
@@ -538,16 +548,16 @@ Once this step has completed:
 - Service checks have been run to verify product microservices are executing as expected
 - Per-stage product hooks have executed for the `deploy-product` and `post-install-service-check` stages
 
-## 5. Next steps
+## 4. Next steps
 
-- If performing an initial install or an upgrade of non-CSM products only, return to the
+- If performing an initial install or an upgrade of non-CSM products only, then return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
   workflow to continue the install or upgrade.
 
-- If performing an upgrade that includes upgrading CSM and additional products with IUF,
+- If performing an upgrade that includes upgrading CSM and additional products with IUF, then
   return to the [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
   workflow to continue the upgrade.
 
-- If performing an upgrade that includes upgrading only CSM, return to the
+- If performing an upgrade that includes upgrading only CSM, then return to the
   [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.

@@ -116,7 +116,7 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
-                  kubectl delete -n kube-system ciliumnodeconfig cilium-default 
+                  kubectl delete -n kube-system ciliumnodeconfig cilium-default --ignore-not-found=true
         - name: remove-weave 
           dependencies:
             - delete-cilium-node-config 
@@ -162,3 +162,17 @@ spec:
 
                   rm $ORIG_PARAMS
                   rm $NEW_PARAMS
+        - name: set-check-image-to-enforce
+          dependencies:
+            - remove-weave
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Setting Kyverno check-image policy to Enforce mode"
+                  kubectl -n kyverno patch cpol check-image --type=json -p '[{"op": "replace", "path": "/spec/validationFailureAction", "value": "Enforce"}]'

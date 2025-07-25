@@ -26,16 +26,6 @@ This page provides instructions for doing a manual reboot of NCN nodes. There is
 
     Refer to the "Platform Health Checks" section in [Validate CSM Health](../validate_csm_health.md) for an overview of the health checks.
 
-    1. (`ncn-mw#`) If the CSM version is 1.6.0 or lower, then restart the `goss-servers` service on all NCNs to ensure the correct tests are run on each node. This is necessary due to a timing issue that is fixed in CSM 1.6.1.
-
-        > Skip this step if the CSM version is 1.6.1 or above. This step will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
-
-        ```bash
-        ncn_nodes=$(grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | tr -t '\n' ',')
-        ncn_nodes=${ncn_nodes%,}
-        pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
-        ```
-
     1. (`ncn-mw#`) Run the platform health script.
 
         Run this on any master or worker node. The output of the following script will need to be referenced in some of the remaining sub-steps.
