@@ -9,7 +9,7 @@ for details on how worker NCNs are designated to be enabled as iSCSI targets.
 (`ncn-w#`) Run these checks on worker nodes that are enabled as an iSCSI target only in order to verify that it is
  configured correctly.
 
-1. Verify that the SBPS Marshal Agent is running without any errors.
+### Verify that the SBPS Marshal Agent is running without any errors.
 
     ```bash
     systemctl status sbps-marshal
@@ -27,7 +27,7 @@ for details on how worker NCNs are designated to be enabled as iSCSI targets.
                  └─ 2878373 /usr/lib/sbps-marshal/bin/python /usr/lib/sbps-marshal/bin/sbps-marshal
     ```
 
-1. Verify that the images and LUN mappings have been created.
+### Verify that the images and LUN mappings have been created.
 
     Check to see if the `fileio` backing stores exist for `rootfs` images,
     along with corresponding iSCSI `LUNs`. These should have the `rootfs` ID being mapped and network portals created (HSN and NMN).
@@ -76,7 +76,7 @@ for details on how worker NCNs are designated to be enabled as iSCSI targets.
       o- xen-pvscsi ....................................................................................................... [Targets: 0]
     ```
 
-1. Verify that all the DNS SRV and A records are configured for all the intended worker nodes.
+### Verify that all the DNS SRV and A records are configured for all the intended worker nodes.
 
     ```bash
     dig -t SRV +short _sbps-hsn._tcp.odin.hpc.amslabs.hpecorp.net _sbps-nmn._tcp.odin.hpc.amslabs.hpecorp.net
@@ -120,7 +120,7 @@ for details on how worker NCNs are designated to be enabled as iSCSI targets.
     10.252.1.11
     ```
 
-1. Run readiness checks.
+###. Run readiness checks.
 
     After worker node personalization, in order to verify the overall readiness of the iSCSI targets before booting compute nodes or UANs,
     run GOSS tests to do additional verification of the iSCSI targets.
