@@ -183,9 +183,13 @@ When [adding or removing a worker NCN](../node_management/Add_Remove_Replace_NCN
 additional steps may be required. **Before** performing the add or remove procedure for the worker NCN,
 read the section that applies to the current operation and whether or not the `iscsi_sbps` group currently exists:
 
-> If unsure whether or not the group exists, try [Listing the group members](#listing-group-members).
-> If it succeeds, the group exists (and its member list will be shown). If the group does not exist,
-> the command will fail with an error that it cannot find the group.
+> Notes:
+>
+> * If unsure whether or not the group exists, try [Listing the group members](#listing-group-members).
+>     * If it succeeds, then the group exists (and its member list will be shown).
+>     * If the group does not exist, then the command will fail with an error that it cannot find the group.
+> * Both before and after the overall add or remove procedure, administrators may wish to validate the iSCSI configuration.
+>   For details on how to do this, see [Node Personalization Verification](Node_Personalization_Verification.md).
 
 * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsi_sbps-group-does-not-exist)
 * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsi_sbps-group-exists)
