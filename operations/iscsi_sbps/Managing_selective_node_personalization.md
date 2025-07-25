@@ -145,9 +145,12 @@ as part of adding or removing a worker NCN, or on an operational CSM 1.7+ system
 
 ### CSM install
 
-During a CSM install, if the administrator wants to enable this feature, they should [create the `iscsi_worker` HSM group](#creating-the-group) as part of [Configure Administrative Access](../../install/configure_administrative_access.md)
+During a CSM install, if the administrator wants to enable this feature, they should
+[create the `iscsi_worker` HSM group](#creating-the-group) as part of
+[Configure Administrative Access](../../install/configure_administrative_access.md).
 
-The feature will take effect when [Management Node Personalization](../configuration_management/Management_Node_Personalization.md) runs on the NCNs, after [SAT Bootprep](../system_admin_toolkit/usage/SAT_Bootprep.md) has run.
+The feature will take effect when [Management Node Personalization](../configuration_management/Management_Node_Personalization.md)
+runs on the NCNs, after [SAT Bootprep](../system_admin_toolkit/usage/SAT_Bootprep.md) has run.
 
 If the group is not created at this time, and an administrator wishes to enable this feature post-install, additional
 manual steps are required. This is also true if an administrator creates the group during the install, but later wants
