@@ -53,7 +53,7 @@ See [Configure the Cray command line interface](../operations/configure_cray_cli
 The [Baseboard Management Controllers (BMCs)](../glossary.md#baseboard-management-controller-bmc) that control management nodes
 will not have been marked with the `Management` role in the [Hardware State Manager (HSM)](../glossary.md#hardware-state-manager-hsm).
 It is important to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
-as protections actions by the [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas) and
+for protection from actions by the [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas) and
 [Cray Advanced Platform Monitoring and Control (CAPMC)](../glossary.md#cray-advanced-platform-monitoring-and-control-capmc).
 
 **Set BMC `Management` roles now!**
