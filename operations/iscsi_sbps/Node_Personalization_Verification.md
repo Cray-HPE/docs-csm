@@ -1,6 +1,6 @@
 # Node Personalization Verification
 
-Worker node personalization installs SBPS Marshal agent, adds kubernetes labels for the nodes intended to be configured as
+Worker node personalization installs SBPS Marshal agent, adds `kubernetes` labels for the nodes intended to be configured as
 iSCSI targets, creates DNS SRV and A records etc. The same can be verified on iSCSI enabled targets using below steps:
 
 (`ncn-w#`) Run these checks on each worker node, in order to verify that it was configured correctly.

@@ -863,6 +863,6 @@ these backups.
 
 Below are the documents related to iSCSI based boot content projection.
 
-- [iscsi sbps](iscsi_sbps/iscsi_sbps.md)
-- [Managing_selective_node_personalization](iscsi_sbps/Managing_selective_node_personalization.md)
-- [Node_Personalization_Verification](iscsi_sbps/Node_Personalization_Verification.md)
+- [iscsi `sbps`](iscsi_sbps/iscsi_sbps.md)
+- [Managing selective node personalization](iscsi_sbps/Managing_selective_node_personalization.md)
+- [Node Personalization Verification](iscsi_sbps/Node_Personalization_Verification.md)
