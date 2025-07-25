@@ -250,12 +250,12 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
         ```
 
         Sample output for configuring multiple management nodes is:
 
-          ```bash
+          ```text
           Taking snapshot of existing management-23.11.0 configuration to /root/apply_csm_configuration.20240305_173700.vKxhqC backup-management-23.11.0.json
           Setting desired configuration, clearing state, clearing error count, enabling components in CFS
           desiredConfig = "management-23.11.0"
@@ -308,7 +308,7 @@ Refer to that table and any corresponding product documents before continuing to
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-        --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $STORAGE_XNAMES --clear-state
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $STORAGE_XNAMES --clear-state
         ```
 
         Sample output for configuring multiple management nodes is:
@@ -373,13 +373,10 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     ```bash
     WORKER_CANARY=ncn-w001
-    ```
-
-    ```bash
     iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
     ```
 
-1. Verify the canary node booted successfully with the desired image and CFS configuration.
+1. (`ncn-m001#`) Verify that the canary node booted successfully with the desired image and CFS configuration.
 
     ```bash
     XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
@@ -393,7 +390,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout=true
     ```
 
-1. (`ncn-m001#`) Verify the IUF node labels are present on the desired node.
+1. (`ncn-m001#`) Verify that the IUF node labels are present on the desired node.
 
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
@@ -407,20 +404,18 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
-    1. (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
+    - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
 
         ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
         ```
 
-    1. (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
+    - (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes.
+      The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
 
         ```bash
         WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -v $WORKER_CANARY |  awk '{print $1}' | xargs)
         echo $WORKER_NODES
-        ```
-
-        ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
         ```
 
@@ -434,8 +429,10 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     ```bash
     for ncn in $(cray hsm state components list --subrole Worker --type Node \
-      --format json | jq -r .Components[].ID | grep b0n | sort); do cray cfs components describe \
-      $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'; done
+        --format json | jq -r .Components[].ID | grep b0n | sort)
+    do
+        cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
+    done
     ```
 
 Once this step has completed:
@@ -443,14 +440,16 @@ Once this step has completed:
 - Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
 - Per-stage product hooks have executed for the `management-nodes-rollout` stage
 
-Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step, either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade) or
+Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step:
+either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade) or
 [Management-nodes-rollout without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade).
 
 ## 3. Restart `goss-servers` on all NCNs
 
 **`NOTE`** Skip this step if the CSM version is 1.6.1 or above. This step will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
 
-If the CSM version is 1.6.0 or lower, then the `goss-servers` service needs to be restarted on all NCNs. This ensures the correct tests are run on each NCN. This is necessary due to a timing issue that is fixed in CSM 1.6.1.
+If the CSM version is 1.6.0 or lower, then the `goss-servers` service needs to be restarted on all NCNs. This ensures the correct tests are run on each NCN.
+This is necessary due to a timing issue that is fixed in CSM 1.6.1.
 
 (`ncn-m001#`) Restart `goss-servers`.
 
@@ -464,7 +463,8 @@ pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
 
 **`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
-If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Installation Guide for CSM_ for details on how to update NIC firmware on management nodes.
+If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Installation Guide for CSM_
+for details on how to update NIC firmware on management nodes.
 
 After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.
 Follow the [reboot NCNs procedure](../../node_management/Reboot_NCNs.md#ncn-worker-nodes) for all nodes where the firmware was updated.
@@ -477,14 +477,14 @@ Once this step has completed:
 
 ## 5. Next steps
 
-- If performing an initial install or an upgrade of non-CSM products only, return to the
+- If performing an initial install or an upgrade of non-CSM products only, then return to the
   [Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md)
   workflow to continue the install or upgrade.
 
-- If performing an upgrade that includes upgrading CSM and additional products with IUF,
+- If performing an upgrade that includes upgrading CSM and additional products with IUF, then
   return to the [Upgrade CSM and additional products with IUF](upgrade_csm_and_additional_products_with_iuf.md)
   workflow to continue the upgrade.
 
-- If performing an upgrade that includes upgrading only CSM, return to the
+- If performing an upgrade that includes upgrading only CSM, then return to the
   [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.
