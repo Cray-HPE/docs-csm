@@ -31,20 +31,23 @@ See [Configure Keycloak Account](../operations/CSM_product_management/Configure_
 
 ## 2. Configure the Cray command line interface
 
-The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST
-APIs into easily usable commands.
+The `cray` command line interface (CLI) is a framework created to integrate all of the
+system management REST APIs into easily usable commands.
 
-Later procedures in the installation workflow use the `cray` command to interact with multiple services.
-The `cray` CLI configuration needs to be initialized for the Linux account. The Keycloak user who initializes the
-CLI configuration needs to be authorized for administrative actions.
+Later procedures in the installation workflow use the `cray` command to interact with
+multiple services. The `cray` CLI configuration needs to be initialized for the Linux
+account. The Keycloak user who initializes the CLI configuration needs to be authorized for
+administrative actions.
 
 See [Configure the Cray command line interface](../operations/configure_cray_cli.md).
 
 ## 3. Set `Management` role on the BMCs of management nodes
 
-The BMCs that control management nodes will not have been marked with the `Management` role in HSM. It is important
-to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
-as protections for FAS and CAPMC actions.
+The [Baseboard Management Controllers (BMCs)](../glossary.md#baseboard-management-controller-bmc) that control management nodes
+will not have been marked with the `Management` role in the [Hardware State Manager (HSM)](../glossary.md#hardware-state-manager-hsm).
+It is important to mark them with the `Management` role so that they can be easily included in the locking/unlocking operations required
+for protection from actions by the [Firmware Action Service (FAS)](../glossary.md#firmware-action-service-fas) and
+[Cray Advanced Platform Monitoring and Control (CAPMC)](../glossary.md#cray-advanced-platform-monitoring-and-control-capmc).
 
 **Set BMC `Management` roles now!**
 
@@ -77,20 +80,22 @@ For more information about locking and unlocking nodes, see [Lock and Unlock Nod
 
 > **`NOTE`** If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
 
-The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters for
-components in liquid-cooled cabinets. At this point in the install, SCSD should be used to set the
-SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
-down or power up as part of the compute node booting process, it may be necessary to look at the logs
-on the BMC for node power down or node power up.
+The [System Configuration Service (SCSD)](../glossary.md#system-configuration-service-scsd) allows administrators to set
+various BMC and controller parameters for components in liquid-cooled cabinets. At this point in the install, SCSD should
+be used to set the SSH key in the node controllers (BMCs) to enable troubleshooting. If any of the nodes fail to power
+down or power up as part of the compute node booting process, it may be necessary to look at the logs on the BMC for node
+power down or node power up.
 
 See [Configure BMC and Controller Parameters with SCSD](../operations/system_configuration_service/Configure_BMC_and_Controller_Parameters_with_scsd.md).
 
 ## 6. Configure non-compute nodes with CFS
 
-Non-compute Nodes (NCN) need to be configured after booting for administrative access, security, and other
-purposes. The [Configuration Framework Service (CFS)](../operations/configuration_management/Configuration_Management.md)
-is used to apply post-boot configuration in a decoupled, layered manner. Individual software products including
-CSM provide one or more layers of configuration in a process called "NCN personalization".
+Management nodes need to be configured after booting for administrative access, security, and other
+purposes. The [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs)
+is used to apply post-boot configuration in a decoupled, layered manner. Individual software products
+provide one or more layers included in a CFS configuration. The CFS configuration is applied to node
+images (during image customization) and to booted nodes (during node personalization). This includes
+both management nodes and managed nodes.
 
 See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md).
 
