@@ -288,9 +288,6 @@ By default worker node personalization of iSCSI SBPS is done during CSM install/
 It is initiated during bootprep (`management-nodes-rollout`) in order to do worker node personalization
 automatically during boot time.
 
-After the workers have run node personalization, administrators may verify the iSCSI configuration
-using [Node Personalization Verification](Node_Personalization_Verification.md)
-
 ### 2. Run GOSS test suite
 
 In order to verify the readiness of the iSCSI targets before triggering the boot of compute nodes or
