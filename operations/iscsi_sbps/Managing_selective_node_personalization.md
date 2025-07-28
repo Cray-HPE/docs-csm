@@ -344,7 +344,7 @@ for iSCSI can be changed. To do this, use the following procedure:
 1. *Optional:* Verify the iSCSI configuration.
 
     After the CFS node personalization is complete for all of the worker NCNs, administrators may wish to verify the iSCSI configuration.
-    See [Node Personalization Verification](Node_Personalization_Verification.md).
+    See [Goss tests for iSCSI](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md).
 
 ## Manual DNS records update
 
