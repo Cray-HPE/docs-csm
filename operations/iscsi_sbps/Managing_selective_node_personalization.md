@@ -345,7 +345,7 @@ for iSCSI can be changed. To do this, use the following procedure:
 
     After the CFS node personalization is complete for all of the worker NCNs, administrators may wish to verify the iSCSI configuration.
     See [Node Personalization Verification](Node_Personalization_Verification.md).
-   
+
 ## Manual DNS records update
 
 One of the things that the iSCSI Ansible playbook does is to add DNS entries for the workers that are enabled for iSCSI.
