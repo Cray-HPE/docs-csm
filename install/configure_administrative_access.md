@@ -165,7 +165,7 @@ SUCCESS
 
 ## 8. iSCSI SBPS configuration
 
-In CSM 1.6, all the worker nodes were configured and enabled as iSCSI SBPS targets. In CSM 1.7.0, selective
+In CSM 1.6, all the worker nodes were configured and enabled as iSCSI SBPS targets. Starting in CSM 1.7.0, selective
 node personalization is supported. All worker nodes are still **configured** for iSCSI, but selective node
 personalization gives administrators control over which worker nodes are actually enabled as iSCSI SBPS targets.
 The default behavior is still the same as in CSM 1.6, so if no action is taken to use this feature, then all
