@@ -13,8 +13,9 @@ is a boot content projection solution that replaces the Cray
 [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs).
 SBPS projects boot content like `rootfs` and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images.
 SBPS is aimed to offer better reliability, availability, security, ease and speed of deployment and ease of management than CPS/DVS.
-SBPS was introduced in CSM 1.6. In CSM 1.7.0 support is removed for projecting root filesystems and PE images using
-CPS and DVS. Also, in CSM 1.7.0, the iSCSI SBPS selective worker node personalization feature is introduced.
+SBPS was introduced in CSM 1.6. In CSM 1.7.0, support is removed for projecting root filesystems and PE images using
+CPS and DVS. Also in CSM 1.7.0, the iSCSI SBPS [selective worker node personalization](#selective-worker-node-personalization)
+feature is introduced.
 
 The SBPS solution is spread across different components, including:
 
@@ -262,8 +263,8 @@ size=11G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
 
 ### 1. Worker node personalization
 
-Node personalization is the prerequisite step of SBPS solution where we need to first setup/configure worker nodes as iSCSI targets (servers)
-with necessary provisioning, configuration and enable required components. The required RPMs for `targetcli` command / LIO are part of NCN node image.
+Node personalization is the prerequisite step of SBPS solution where worker nodes are configured as iSCSI targets (servers)
+with necessary provisioning. The required RPMs for the `targetcli` command and LIO are part of the NCN node image.
 The SBPS Marshal Agent gets installed during node personalization using CFS.
 
 #### Selective worker node personalization
@@ -279,7 +280,7 @@ The default behavior is still the same as in CSM 1.6, so if no action is taken t
 feature, then all worker nodes will continue to be enabled as iSCSI targets.
 
 For details on iSCSI selective worker node personalization,
-see [Managing selective node personalization](Managing_selective_node_personalization.md).
+see [Managing Selective Node Personalization](Managing_selective_node_personalization.md).
 
 #### Automatic setup with bootprep
 
