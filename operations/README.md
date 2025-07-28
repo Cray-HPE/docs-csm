@@ -861,7 +861,7 @@ these backups.
 
 ## iSCSI SBPS (Scalable Boot Content Projection Service)
 
-Below are the documents related to iSCSI based boot content projection.
+Below are the documents related to iSCSI-based boot content projection.
 
 - [iSCSI SBPS](iscsi_sbps/iscsi_sbps.md)
 - [Managing Selective Node Personalization](iscsi_sbps/Managing_selective_node_personalization.md)
