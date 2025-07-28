@@ -69,6 +69,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
 * [Keycloak Hung During Prerequisites](known_issues/keycloak_hung_during_prerequisites.md)
+* [Kyverno policy management](../operations/kubernetes/Kyverno.md#known-issues)
 
 ## Booting
 
