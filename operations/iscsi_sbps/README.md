@@ -280,7 +280,7 @@ The default behavior is still the same as in CSM 1.6, so if no action is taken t
 feature, then all worker nodes will continue to be enabled as iSCSI targets.
 
 For details on iSCSI selective worker node personalization,
-see [Managing Selective Node Personalization](Managing_selective_node_personalization.md).
+see [Managing Selective Node Personalization](Managing_Selective_Node_Personalization.md).
 
 #### Automatic setup with bootprep
 

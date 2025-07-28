@@ -36,8 +36,8 @@ be enabled as iSCSI targets.
 
 For administrators who do not wish to use this feature, no action is required, and this step can be skipped.
 Otherwise, before proceeding, follow the procedure in the
-[CSM upgrade from 1.6 to 1.7](../../iscsi_sbps/Managing_selective_node_personalization.md#csm-upgrade-from-16-to-17)
-section of [Managing Selective Node Personalization](../../iscsi_sbps/Managing_selective_node_personalization.md).
+[CSM upgrade from 1.6 to 1.7](../../iscsi_sbps/Managing_Selective_Node_Personalization.md#csm-upgrade-from-16-to-17)
+section of [Managing Selective Node Personalization](../../iscsi_sbps/Managing_Selective_Node_Personalization.md).
 
 ### `management-nodes-rollout` overview
 

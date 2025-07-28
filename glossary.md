@@ -600,7 +600,7 @@ using iSCSI. In addition, the HPE [Cray Programming Environment (CPE)](#cray-pro
 Analytics products leverage SBPS to provide content to compute nodes and application nodes (such as [UANs](#user-access-node-uan)).
 CPE and Analytics are provided as separately mounted filesystems that are mounted alongside the root filesystem.
 
-For more information, see [iSCSI SBPS (Scalable Boot Content Projection Service)](operations/iscsi_sbps/iscsi_sbps.md).
+For more information, see [iSCSI SBPS (Scalable Boot Content Projection Service)](operations/iscsi_sbps/README.md).
 
 ## Secrets OPerationS (SOPS)
 
