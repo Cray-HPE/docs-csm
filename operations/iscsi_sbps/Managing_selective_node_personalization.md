@@ -189,7 +189,7 @@ read the section that applies to the current operation and whether or not the `i
 >     * If it succeeds, then the group exists (and its member list will be shown).
 >     * If the group does not exist, then the command will fail with an error that it cannot find the group.
 > * Both before and after the overall add or remove procedure, administrators may wish to validate the iSCSI configuration.
->   For details on how to do this, see [Node Personalization Verification](Node_Personalization_Verification.md).
+>   by running GOSS tests for iSCSI [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md)
 
 * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsi_sbps-group-does-not-exist)
 * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsi_sbps-group-exists)
@@ -345,6 +345,7 @@ for iSCSI can be changed. To do this, use the following procedure:
 
     After the CFS node personalization is complete for all of the worker NCNs, administrators may wish to verify the iSCSI configuration.
     See [Node Personalization Verification](Node_Personalization_Verification.md).
+   
 ## Manual DNS records update
 
 One of the things that the iSCSI Ansible playbook does is to add DNS entries for the workers that are enabled for iSCSI.
