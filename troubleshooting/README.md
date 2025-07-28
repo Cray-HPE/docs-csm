@@ -180,8 +180,8 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Common Vault Cluster Issues](../operations/security_and_authentication/Troubleshoot_Common_Vault_Cluster_Issues.md)
 * [Keycloak User Localization](../operations/security_and_authentication/Keycloak_User_Localization.md)
 * [Troubleshoot Kyverno configuration manually](../operations/security_and_authentication/Troubleshoot_Kyverno_Configuration_manually.md)
-* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
+* [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 
 ## Spire
 
