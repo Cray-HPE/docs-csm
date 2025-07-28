@@ -865,4 +865,3 @@ Below are the documents related to iSCSI based boot content projection.
 
 - [iSCSI SBPS](iscsi_sbps/iscsi_sbps.md)
 - [Managing Selective Node Personalization](iscsi_sbps/Managing_selective_node_personalization.md)
-- [Node Personalization Verification](iscsi_sbps/Node_Personalization_Verification.md)
