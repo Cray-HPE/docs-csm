@@ -82,19 +82,19 @@ spec:
           istio-ingressgateway:
             resources:
               requests:
-                cpu: "50m"
+                cpu: "250m"
           istio-ingressgateway-customer-admin:
             resources:
               requests:
-                cpu: "50m"
+                cpu: "100m"
           istio-ingressgateway-customer-user:
             resources:
               requests:
-                cpu: "50m"
+                cpu: "100m"
           istio-ingressgateway-hmn:
             resources:
               requests:
-                cpu: "50m"
+                cpu: "150m"
       cray-keycloak:
         keycloak:
           resources:
