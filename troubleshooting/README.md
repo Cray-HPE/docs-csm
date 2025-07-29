@@ -68,6 +68,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [IMS Image Job Performance](../operations/image_management/Image_Job_Performance.md)
 * [Keycloak Hung During Prerequisites](known_issues/keycloak_hung_during_prerequisites.md)
+* [`etcd` Pods in CLBO State](known_issues/etcd_pods_in_CLBO_state.md)
 * [Kyverno policy management](../operations/kubernetes/Kyverno.md#known-issues)
 
 ## Booting
@@ -161,6 +162,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
 * [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
 * [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
+* [`etcd` Pods in CLBO State](known_issues/etcd_pods_in_CLBO_state.md)
 
 ## MetalLB
 
