@@ -42,6 +42,7 @@
 | `cray-node-problem-detector` | 0.8.20  |
 | `cray-spire`                 | 1.5.5   |
 | `cray-vault-operator`        | 1.22.5  |
+| `cray-velero`                | 10.0.1  |
 | `helm`                       | 3.18.3  |
 | `istio`                      | 1.26.0  |
 | `kata`                       | 3.17.0  |
