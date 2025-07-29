@@ -2,7 +2,8 @@
 
 ## Issue description
 
-When powering on the management Kubernetes cluster installed with CSM 1.7, or scaling up an `etcd` cluster after being scaled down in CSM 1.7, the `etcd` pods fail to come up and get stuck in the `CrashLoopBackOff` state.
+When powering on the management Kubernetes cluster installed with CSM 1.7, or scaling up an `etcd` cluster after being
+scaled down in CSM 1.7, the `etcd` pods fail to come up and get stuck in the `CrashLoopBackOff` state.
 This happens because the upstream image contains a bug that fails to obtain the member information from the existing `etcd` cluster.
 
 ## Error identification
