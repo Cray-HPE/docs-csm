@@ -150,6 +150,21 @@ used to work with images, or if it can still run compute jobs while building ima
         vi ~/.ssh/authorized_keys
         ```
 
+1. Ensure sufficient volume space is available on the remote build node.
+
+    There are three directories that are used by the remote build node for image builds:
+
+    * `/var/lib/containers`: This is where container images are stored. This must support overlay filesystems.
+    * `/var/tmp`: This directory is used for temporary files during the build process.
+    * `/tmp`: This directory is used to transfer files between the job and the container.
+
+    The faster the access to these directories, the faster the image builds will be. If the remote build node
+    has local disk drives, it is recommended to use those drives for these directories. If the remote build node has
+    high speed network access to a storage system, it is recommended to use that storage system for these directories.
+
+    NOTE: A Lustre filesystem may be used for the `/var/tmp` and `/tmp` directories, but it is not an overlay
+    filesystem and will not work for the `/var/lib/containers` directory.
+
 ### Create a barebones IMS builder image
 
 If there is no existing compute image to boot a node with, one can be created based on the barebones
@@ -405,15 +420,21 @@ it will not be possible to build larger images or multiple images concurrently w
 storage being available to the IMS builder node. This can be achieved by mounting Ceph storage
 directly into the IMS builder node.
 
-Below is a procedure to provide the IMS builder node with additional storage.
+**NOTE: If there is any type of high speed filesystem available on the node, that should be used. The mount described here should only be used if nothing else is available.**
 
-NOTE: The Ceph storage described below has several important characteristics to keep in mind:
+**NOTE**: The Ceph storage described below has several important characteristics to keep in mind:
 
+* The RBD devices work on a low speed network.
+* The zypper repositories are also mounted on Ceph, so there can be extra load on the Ceph storage
+  when building images. When multiple remote jobs are running concurrently, this can lead to performance
+  degradation or in some cases failure of the job.
 * This RBD device is created globally.
 * Each RBD device will still exist after the remote build node is rebooted.
 * Each RBD device must have a unique name, but may be re-used after the node is rebooted.
 * This type of RBD device may only be mounted on one node - one must be created for each remote build node.
 * If the remote build node is rebooted, the RBD device must be manually mounted again.
+
+Below is a procedure to provide the IMS builder node with additional storage.
 
 1. Set an environment variable for the xname of the remote build node.
 
