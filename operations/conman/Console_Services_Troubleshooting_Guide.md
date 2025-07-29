@@ -334,3 +334,30 @@ There are a couple of ways to resolve this situation.
     When the `cray-console-operator` pod resumes operation it will scale the number
     `cray-console-node` pods back up automatically. After all pods are back up and
     ready, the new increased size of the PVC will be visible from within the pods.
+
+    1. Update the customizations.yaml to persist the `pvc` size change.
+
+    Download the customizations.yaml
+
+    ```bash
+    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+    ```
+
+    Edit customizations.yaml to add cray-console-operator cray-service.persistentVolumeClaims.data-claim.resources.requests.storage
+
+    ```yaml
+      cray-console-operator:
+        cray-service:
+          persistentVolumeClaims:
+            data-claim:
+              resources:
+                requests:
+                  storage: 200Gi
+    ````
+
+    Save the changed customizations.yaml
+
+    ```bash
+    kubectl delete secret -n loftsman site-init
+    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+    ```
