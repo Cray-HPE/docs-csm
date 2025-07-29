@@ -24,7 +24,38 @@
 
 ### Base platform component upgrades
 
-* Kata upgraded to version 3.17.0.
+| Platform Component           | Version |
+|------------------------------|---------|
+| `Kubernetes`                 | 1.32.5  |
+| `Kyverno`                    | 1.13.4  |
+| `Strimzi Kafka`              | 0.45.0  |
+| `argo-workflow-controller`   | 3.4.5   |
+| `argo-workflows`             | 3.4.5   |
+| `bitnami-etcd` for clusters  | 3.5.21  |
+| `etcd` on `ncn-mxxx`         | 3.5.18  |
+| `ceph`                       | 17.2.6  |
+| `containerd`                 | 1.7.27  |
+| `coredns`                    | 1.11.3  |
+| `cray-certmanager`           | 1.17.0  |
+| `cray-externaldns`           | 0.15.0  |
+| `cray-metallb`               | 0.14.9  |
+| `cray-node-problem-detector` | 0.8.20  |
+| `cray-spire`                 | 1.5.5   |
+| `cray-vault-operator`        | 1.22.5  |
+| `cray-velero`                | 10.0.1  |
+| `helm`                       | 3.18.3  |
+| `istio`                      | 1.26.0  |
+| `kata`                       | 3.17.0  |
+| `keycloak`                   | 21.1.1  |
+| `kiali`                      | 2.10.0  |
+| `metrics-server`             | 0.6.3   |
+| `nexus`                      | 3.70.4  |
+| `pause`                      | 3.10    |
+| `postgres-operator`          | 1.10.1  |
+| `postgresql`                 | 15.2    |
+| `sealed-secrets`             | 0.28.0  |
+| `spire-intermediate`         | 1.0.1   |
+| `tapms-operator`             | 1.9.1   |
 
 ### Security improvements
 
