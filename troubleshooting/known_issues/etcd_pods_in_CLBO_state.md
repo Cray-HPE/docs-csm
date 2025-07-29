@@ -1,4 +1,4 @@
-# `etcd` pods in CLBO state
+# `etcd` Pods in CLBO State
 
 ## Issue description
 
@@ -24,4 +24,4 @@ etcd 16:14:21.28 ERROR ==> There was no snapshot to restore!
 
 ## Fix description
 
-(`ncn-mw#`) The workaround is to rebuild the unhealthy `etcd` clusters by following [Rebuild Unhealthy etcd Clusters](../../operations/kubernetes/Rebuild_Unhealthy_etcd_Clusters.md).
+The workaround is to rebuild the unhealthy `etcd` clusters by following [Rebuild Unhealthy etcd Clusters](../../operations/kubernetes/Rebuild_Unhealthy_etcd_Clusters.md).
