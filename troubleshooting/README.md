@@ -79,6 +79,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Storage node `cloud-init` fails with 'Timed out waiting for device' error](known_issues/storage_node_cloud_init_fails_with_timed_out.md)
 - [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 - [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
+- [Remove Duplicate Detected Events From the HSM Postgres Database](../operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md)
 
 ## Booting
 
