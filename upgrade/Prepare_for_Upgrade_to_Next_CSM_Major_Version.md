@@ -68,13 +68,13 @@ If there is no maintenance period available, then skip this step until after the
 Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md)
 for details.
 
-### 4. Remove duplicate detected events from the HSM postgres database
+### 4. Remove duplicate detected events from the HSM Postgres database
 
 **Warning:** This process may also take multiple hours to complete.  Once
 the pruning script is started please, do not interrupt it.
 
 This step is recommended prior to upgrade due to the significant amount of
-time it takes pruning to complete.  If not completed prior to upgrade, 
+time it takes pruning to complete.  If not completed prior to upgrade,
 pruning will be performed during the upgrade, significantly extending the
 upgrade time.
 
