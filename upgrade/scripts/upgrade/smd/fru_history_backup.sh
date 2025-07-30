@@ -33,7 +33,7 @@ set -eo pipefail
 SECRET_KEY_REF="hmsdsuser.cray-smd-postgres.credentials"
 
 DB_USER=$(kubectl get secret -n services $SECRET_KEY_REF -o jsonpath='{.data.username}' | base64 -d)
-PGPASSWORD=$(kubectl get secret -n services $SECRET_KEY_REF -o jsonpath='{.data.password}' | base64 -d)
+export PGPASSWORD=$(kubectl get secret -n services $SECRET_KEY_REF -o jsonpath='{.data.password}' | base64 -d)
 
 # Additional postgres connection details that should mirror what is set in
 # the SMD's chart values.yaml file:

@@ -39,7 +39,7 @@ set -eo pipefail
 SECRET_KEY_REF="hmsdsuser.cray-smd-postgres.credentials"
 
 DB_USER=$(kubectl get secret -n services $SECRET_KEY_REF -o jsonpath='{.data.username}' | base64 -d)
-PGPASSWORD=$(kubectl get secret -n services $SECRET_KEY_REF -o jsonpath='{.data.password}' | base64 -d)
+export PGPASSWORD=$(kubectl get secret -n services $SECRET_KEY_REF -o jsonpath='{.data.password}' | base64 -d)
 
 # Additional postgres connection details that should mirror what is set in
 # the SMD's chart values.yaml file:
@@ -55,7 +55,7 @@ if [[ -z ${BACKUP_FILE} ]]; then
   exit 1
 fi
 
-if [[ ! -r "${BACKUP_FILE}" ]]; then
+if [[ ! -r ${BACKUP_FILE} ]]; then
   echo "Error: $BACKUP_FILE does not exist or is not readable" >&2
   exit 1
 fi
@@ -89,4 +89,3 @@ echo "Removing /tmp/$BACKUP_FILE_BASENAME in the postgres leader pod"
 kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "rm /tmp/$BACKUP_FILE_BASENAME"
 
 echo "Restore complete."
-
