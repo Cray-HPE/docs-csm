@@ -52,13 +52,10 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Helm Chart Deploy Timeouts](known_issues/helm_chart_deploy_timeouts.md)
 * [HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [NCN health checks known issues](known_issues/issues_with_ncn_health_checks.md)
-* [`kubectl logs -f` returns no space left on device](known_issues/kubectl_logs_no_space_left_on_device.md)
 * [NCN resource checks known issues](known_issues/ncn_resource_checks.md)
 * [Spire database connection pool configuration in an air*gapped environment](known_issues/spire_database_airgap_configuration.md)
 * [Spire Database Cluster DNS Lookup Failure](known_issues/spire_database_lookup_error.md)
-* [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 * [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md)
-* [Velero Version Mismatch](known_issues/velero_version_mismatch.md)
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [Spire pods stuck in `PodInitializing`](known_issues/spire_pod_initializing.md)
@@ -161,7 +158,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Recover from Postgres WAL Event](../operations/kubernetes/Recover_from_Postgres_WAL_Event.md)
 * [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
 * [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
-* [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 * [`etcd` Pods in CLBO State](known_issues/etcd_pods_in_CLBO_state.md)
 
 ## MetalLB
