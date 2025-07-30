@@ -1,6 +1,7 @@
 # CFS Component With Zero-Length ID
 
-It is possible in some situations for a CFS component to be created with a zero-length string for an `id` field.
+In CSM versions lower than 1.7, it is possible in some situations for a CFS component to be created with a zero-length string for an `id` field.
+In CSM 1.7, the bug that allowed these to be created has been fixed, but such a component could still exist on systems that were upgraded to CSM 1.7.
 Such a component cannot be deleted using the Cray CLI or the CFS API.
 
 ## Symptoms
