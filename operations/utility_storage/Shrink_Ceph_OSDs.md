@@ -85,8 +85,8 @@ This procedure requires administrative privileges.
         **`NOTE`** Be sure to replace the `<CLUSTER_ID>` field in the following command with the actual Ceph cluster ID.
 
         ```bash
-        cd /var/lib/ceph/<cluster-id>
-        rm -rf osd.OSD_ID
+        cd /var/lib/ceph/<CLUSTER_ID>
+        rm -rf osd.<OSD_ID>
         ```
 
 1. Clear the flags that were set earlier in the procedure.
