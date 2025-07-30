@@ -137,7 +137,8 @@
 * Fixed an issue where `cfs-debugger` crashed when `cfs-state-reporter` service status did not include a `since` timestamp.
 * Fixed an issue where the post-upgrade job of `cms-ipxe` would fail if a previously failed `cms-ipxe` upgrade job entry existed.
 * Fixed an issue where, when building an IMS image from a recipe, the job status would not update to `error` when the `zypper` repositories were not available.
-* Fixed an issue where the hardware inventory history table in the HSM/SMD database grew too large due to duplicate "Detected" events.  See [Remove Duplicate Detected Events From the HSM Postgres Database](operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md) for more information.
+* Fixed an issue where the hardware inventory history table in the HSM/SMD database grew too large due to duplicate "Detected" events.
+  * See [Remove Duplicate Detected Events From the HSM Postgres Database](operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md) for more information.
 
 ## Deprecations
 
