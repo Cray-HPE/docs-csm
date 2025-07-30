@@ -16,9 +16,8 @@ issues until they are able to upgrade to a CSM release containing the fix.
 The steps outline here are repeatable and the scripts can be rerun at any
 time should the database continue to grow too large.
 
-As part of the CSM 1.7.0 upgrade (and potentially a future 1.6.3 upgrade),
-these steps will also need to be completed prior to starting the upgrade.
-This requirement has also been stated in the upgrade instructions.
+These steps will also need to be completed prior to starting a CSM 1.6.0
+upgrade. This requirement has also been stated in the upgrade instructions.
 
 ## Prerequisites
 
