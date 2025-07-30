@@ -89,7 +89,7 @@ This requirement has also been stated in the upgrade instructions.
     Using pg_dump to dump the hwinv_hist table...
     Dump complete. Dump file is: smd_hwinv_hist_table_backup-07302025-161001.sql
     ```
-   
+  
     The backup file will be located in the current working directory.
 
 3. __[OPTIONAL]__ This step should not be required unless some sort of
