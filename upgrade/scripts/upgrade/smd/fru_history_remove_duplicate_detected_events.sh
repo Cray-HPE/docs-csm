@@ -41,6 +41,7 @@ SECRET_KEY_REF="hmsdsuser.cray-smd-postgres.credentials"
 
 DB_USER=$(kubectl get secret -n services $SECRET_KEY_REF -o jsonpath='{.data.username}' | base64 -d)
 PGPASSWORD=$(kubectl get secret -n services $SECRET_KEY_REF -o jsonpath='{.data.password}' | base64 -d)
+export PGPASSWORD
 
 # Additional postgres connection details that should mirror what is set in
 # the SMD's chart values.yaml file:
@@ -92,8 +93,8 @@ kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
 "
 
 if [[ $? -ne 0 ]]; then
-	echo "Error creating temporary timestamp index" >&2
-	exit 1
+  echo "Error creating temporary timestamp index" >&2
+  exit 1
 fi
 
 # Run the pruning logic
@@ -123,8 +124,8 @@ kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
 "
 
 if [[ $? -ne 0 ]]; then
-	echo "Error executing SQL command" >&2
-	exit 1
+  echo "Error executing SQL command" >&2
+  exit 1
 fi
 
 # The pruning logic above removed a large part of the hwinv_hist table. This
@@ -152,8 +153,8 @@ kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
 "
 
 if [[ $? -ne 0 ]]; then
-	echo "Error running VACUUM FULL" >&2
-	exit 1
+  echo "Error running VACUUM FULL" >&2
+  exit 1
 fi
 
 # Capture and print sizes after pruning and vacuuming
