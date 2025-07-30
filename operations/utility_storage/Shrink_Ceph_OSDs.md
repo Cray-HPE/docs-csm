@@ -28,7 +28,7 @@ This procedure requires administrative privileges.
 
     1. Change the weight of the OSD being removed to 0.
 
-        The OSD\_ID value should be replaced with the ID of the OSD being removed. For example, if the ID is osd.1, the OSD\_ID value would be 1 in the command below.
+        The OSD\_ID value should be replaced with the ID of the OSD being removed. For example, if the ID is `osd.1`, the OSD\_ID value would be 1 in the command below.
 
         ```bash
         ceph osd reweight osd.OSD_ID 0
@@ -82,9 +82,11 @@ This procedure requires administrative privileges.
 
         The following commands must be run on the storage node\(s\) that held the OSDs being removed.
 
+        **`NOTE`** Be sure to replace the `<cluster-id>` field in the following command with the actual Ceph cluster id.
+
         ```bash
-        umount /var/lib/ceph/osd/ceph-OSD_ID
-        rm -rf /var/lib/ceph/osd/ceph-OSD_ID
+        cd /var/lib/ceph/<cluster-id>
+        rm -rf osd.OSD_ID
         ```
 
 1. Clear the flags that were set earlier in the procedure.
@@ -98,4 +100,3 @@ This procedure requires administrative privileges.
     ```bash
     ceph -s
     ```
-
