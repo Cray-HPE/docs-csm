@@ -66,6 +66,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Keycloak Hung During Prerequisites](known_issues/keycloak_hung_during_prerequisites.md)
 * [`etcd` Pods in CLBO State](known_issues/etcd_pods_in_CLBO_state.md)
 * [Kyverno policy management](../operations/kubernetes/Kyverno.md#known-issues)
+* [PostgreSQL cluster upgrades failing](known_issues/postgres_cluster_upgrade_failure.md)
 
 ## Booting
 
