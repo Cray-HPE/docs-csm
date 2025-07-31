@@ -1,24 +1,24 @@
-# MIT License
+#  MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+#  (C) Copyright 2022, 2025 Hewlett Packard Enterprise Development LP
 #
-# Permission is hereby granted, free of charge, to any person obtaining a
-# copy of this software and associated documentation files (the "Software"),
-# to deal in the Software without restriction, including without limitation
-# the rights to use, copy, modify, merge, publish, distribute, sublicense,
-# and/or sell copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following conditions:
+#  Permission is hereby granted, free of charge, to any person obtaining a
+#  copy of this software and associated documentation files (the "Software"),
+#  to deal in the Software without restriction, including without limitation
+#  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+#  and/or sell copies of the Software, and to permit persons to whom the
+#  Software is furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
+#  The above copyright notice and this permission notice shall be included
+#  in all copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+#  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+#  OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+#  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+#  OTHER DEALINGS IN THE SOFTWARE.
 """Classes for management of SLS Networks and Subnets."""
 from collections import defaultdict
 import ipaddress
@@ -33,18 +33,22 @@ from .Reservations import Reservation
 class Network:
     """Represent a Network from and SLS data structure."""
 
-    def __init__(self, name, network_type, ipv4_address):
+    _ipv6_address = None
+
+    def __init__(self, name, network_type, ipv4_address, ipv6_address = None):
         """Create a Network.
 
         Args:
             name (str): Short name of the network
             network_type (str): Type of the network: ethernet, etc.
             ipv4_address: (str): IPv4 CIDR of the network
+            ipv6_address: (str): IPv6 CIDR of the network
         """
         self._name = name
         self._full_name = ""
         self._ipv4_address = ipaddress.IPv4Interface(ipv4_address)  # IPRanges
-
+        if ipv6_address is not None:
+            self._ipv6_address = ipaddress.IPv6Interface(ipv6_address)  # IPRanges
         self.__type = network_type
         self.__mtu = None
         self.__subnets = defaultdict()
@@ -146,6 +150,27 @@ class Network:
         """
         return self._ipv4_address.network
 
+    def ipv6_address(self, network_address=None):
+        """IPv6 network addressing.
+
+        Args:
+            network_address: IPv6 address of the network for the setter
+
+        Returns:
+            ipv4_address: IPv6 address of the network for the getter
+        """
+        if network_address is not None:
+            self._ipv6_address = ipaddress.IPv6Interface(network_address)
+        return self._ipv6_address
+
+    def ipv6_network(self):
+        """IPv6 network of the CIDR, Ranges, etc.
+
+        Returns:
+            ipv6_address.network: IPv6 network address of the Network.
+        """
+        return self._ipv6_address.network
+
     def mtu(self, network_mtu=None):
         """MTU of the network.
 
@@ -224,6 +249,8 @@ class Network:
                 "Subnets": subnets,
             },
         }
+        if self._ipv6_address:
+            sls["ExtraProperties"]["CIDR6"] = str(self._ipv6_address)
 
         if self.__bgp_asns[0] and self.__bgp_asns[1]:
             sls["ExtraProperties"]["MyASN"] = self.__bgp_asns[0]
@@ -277,7 +304,9 @@ class BicanNetwork(Network):
 class Subnet(Network):
     """Subnets are Networks with extra metadata: DHCP info, IP reservations, etc..."""
 
-    def __init__(self, name, ipv4_address, ipv4_gateway, vlan):
+    __ipv6_gateway = None
+
+    def __init__(self, name, ipv4_address, ipv4_gateway, vlan, ipv6_address = None, ipv6_gateway = None):
         """Create a new Subnet.
 
         Args:
@@ -285,9 +314,13 @@ class Subnet(Network):
             ipv4_address (str): IPv4 CIDR of the subnet
             ipv4_gateway (str): IPv4 address of the network gateway
             vlan (int): VLAN ID of the subnet
+            ipv6_address (str): IPv6 CIDR of the subnet
+            ipv6_gateway (str): IPv6 address of the network gateway
         """
-        super().__init__(name=name, network_type=None, ipv4_address=ipv4_address)
+        super().__init__(name=name, network_type=None, ipv4_address=ipv4_address, ipv6_address=ipv6_address)
         self.__ipv4_gateway = ipaddress.IPv4Address(ipv4_gateway)
+        if ipv6_gateway is not None:
+            self.__ipv6_gateway = ipaddress.IPv6Address(ipv6_gateway)
         self.__vlan = int(vlan)
         self.__ipv4_dhcp_start_address = None
         self.__ipv4_dhcp_end_address = None
@@ -309,7 +342,9 @@ class Subnet(Network):
         sls_subnet = cls(
             name=sls_data.get("Name"),
             ipv4_address=sls_data.get("CIDR"),
+            ipv6_address=sls_data.get("CIDR6"),
             ipv4_gateway=sls_data.get("Gateway"),
+            ipv6_gateway=sls_data.get("Gateway6"),
             vlan=sls_data.get("VlanID"),
         )
 
@@ -357,6 +392,7 @@ class Subnet(Network):
                     reservation.get("Name"): Reservation(
                         name=reservation.get("Name"),
                         ipv4_address=reservation.get("IPAddress"),
+                        ipv6_address=reservation.get("IPAddress6"),
                         aliases=list(reservation.get("Aliases", [])),
                         comment=reservation.get("Comment"),
                     ),
@@ -390,6 +426,19 @@ class Subnet(Network):
         if subnet_ipv4_gateway is not None:
             self.__ipv4_gateway = subnet_ipv4_gateway
         return self.__ipv4_gateway
+
+    def ipv6_gateway(self, subnet_ipv6_gateway=None):
+        """IPv6 Gateway of the subnet.
+
+        Args:
+            subnet_ipv6_gateway (str): IPv6 gateway of the subnet for the setter
+
+        Returns:
+            ipv4_gateway (xxx): IPv6 gateway of the subnet for the getter
+        """
+        if subnet_ipv6_gateway is not None:
+            self.__ipv6_gateway = subnet_ipv6_gateway
+        return self.__ipv6_gateway
 
     def dhcp_start_address(self, subnet_dhcp_start_address=None):
         """IPv4 starting address if DHCP is used in the subnet.
@@ -488,6 +537,11 @@ class Subnet(Network):
             "Gateway": str(self.__ipv4_gateway),
             "VlanID": self.__vlan,
         }
+        if self._ipv6_address:
+            sls.update({"CIDR6": str(self._ipv6_address)})
+
+        if self.__ipv6_gateway:
+            sls.update({"Gateway6": str(self.__ipv6_gateway)})
 
         if self.__ipv4_dhcp_start_address and self.__ipv4_dhcp_end_address:
             dhcp = {

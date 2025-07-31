@@ -1,27 +1,27 @@
 #!/usr/bin/env python3
+
+#  MIT License
 #
-# MIT License
+#  (C) Copyright 2022-2023, 2025 Hewlett Packard Enterprise Development LP
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+#  Permission is hereby granted, free of charge, to any person obtaining a
+#  copy of this software and associated documentation files (the "Software"),
+#  to deal in the Software without restriction, including without limitation
+#  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+#  and/or sell copies of the Software, and to permit persons to whom the
+#  Software is furnished to do so, subject to the following conditions:
 #
-# Permission is hereby granted, free of charge, to any person obtaining a
-# copy of this software and associated documentation files (the "Software"),
-# to deal in the Software without restriction, including without limitation
-# the rights to use, copy, modify, merge, publish, distribute, sublicense,
-# and/or sell copies of the Software, and to permit persons to whom the
-# Software is furnished to do so, subject to the following conditions:
+#  The above copyright notice and this permission notice shall be included
+#  in all copies or substantial portions of the Software.
 #
-# The above copyright notice and this permission notice shall be included
-# in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
-#
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+#  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+#  OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+#  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+#  OTHER DEALINGS IN THE SOFTWARE.
+
 #pylint: disable=missing-docstring, C0301, C0103, C0302
 
 import subprocess
@@ -43,7 +43,7 @@ import urllib3
 
 from sls_utils.Managers import NetworkManager
 from sls_utils.Networks import Subnet as SLSSubnet
-from sls_utils.Reservations import Reservation as IPReservation
+from sls_utils.Reservations import Reservation
 from sls_utils import ipam
 
 # Global variables for service URLs. These get set in main.
@@ -617,7 +617,7 @@ def create_update_etc_hosts_actions(existing_management_ncns, ncn_alias, ncn_xna
 
     # NCN IPs
     for network_name, ip in ncn_ips.items():
-        line = f'{str(ip):15} {ncn_alias}.{network_name.lower()}'
+        line = f'{str(ip.ipv4_address()):15} {ncn_alias}.{network_name.lower()}'
         if network_name == "NMN":
             line += f' {ncn_alias}'
 
@@ -683,7 +683,7 @@ class State:
                     tokens = alias.split('.', 2)
                     network_name = tokens[1].upper()
                     action_log(action, f'Found existing NCN IP address for NCN {self.ncn_alias} in BSS Global Bootparameters: {host_record}')
-                    ncn_ips[network_name] = ip
+                    ncn_ips[network_name] = Reservation(name=self.ncn_alias, ipv4_address=ip, comment=self.ncn_xname)
 
         if bmc_ip is None:
             action_log(action, f'Failed to find existing NCN BMC IP address for {self.bmc_alias} in BSS Global Bootparameters')
@@ -692,7 +692,7 @@ class State:
 
         # Validate each network that has a bootstrap_dhcp subnet that an IP Reservation exists for this NCN
         failed_to_find_ip = False
-        for network_name, ncn_ip in ncn_ips.items():
+        for network_name, ip_reservation in ncn_ips.items():
             network = self.sls_networks[network_name]
 
             if "bootstrap_dhcp" not in network.subnets():
@@ -701,9 +701,11 @@ class State:
 
             reservation_found = False
             for name, reservation in dhcp_bootstrap.reservations().items():
-                if str(ncn_ip) == str(reservation.ipv4_address()):
+                if str(ip_reservation.ipv4_address()) == str(reservation.ipv4_address()):
                     reservation_found = True
-                    action_log(action, f'Removing existing IP Reservation with NCN IP {ncn_ip} in the bootstrap_dhcp subnet of the {network_name} network: {reservation.name()} {reservation.ipv4_address()} {reservation.aliases()} {reservation.comment()}')
+                    action_log(action, f'Removing existing IP Reservation with NCN IP {ip_reservation.ipv4_address()} in the bootstrap_dhcp subnet of the {network_name} network: {reservation.name()} {reservation.ipv4_address()} {reservation.aliases()} {reservation.comment()}')
+                    if reservation.ipv6_address:
+                        ip_reservation.ipv6_address(reservation.ipv6_address())
                     del dhcp_bootstrap.reservations()[name]
                     break
 
@@ -748,7 +750,7 @@ class State:
 
         # Add BMC IP reservation to the HMN network.
         # Example: {"Aliases":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
-        bmc_ip_reservation = IPReservation(self.bmc_xname, bmc_ip, comment=self.bmc_xname, aliases=[self.bmc_alias])
+        bmc_ip_reservation = Reservation(self.bmc_xname, bmc_ip, comment=self.bmc_xname, aliases=[self.bmc_alias])
         action_log(action, f"Temporally adding NCN BMC IP reservation to bootstrap_dhcp subnet in the HMN network: {bmc_ip_reservation.to_sls()}")
 
         self.sls_networks["HMN"].subnets()["bootstrap_dhcp"].reservations().update(
@@ -764,12 +766,13 @@ class State:
         action_log(action, "Allocating NCN IP addresses")
 
         ncn_ips = {}
-        for network_name in ["CAN", "CHN", "CMN", "HMN", "MTL", "NMN"]:
+        for network_name in NETWORKS:
             if network_name not in self.sls_networks:
                 continue
 
             try:
-                ncn_ips[network_name] = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp", self.networks_allowed_in_dhcp_range)
+                new_ip = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp", self.networks_allowed_in_dhcp_range)
+                ncn_ips[network_name] = Reservation(name=self.ncn_alias, ipv4_address=new_ip, comment=self.ncn_xname)
             except (AllocatedIPIsOutsideStaticRange, ExhaustedAvailableIPAddressSpace):
                 print_action(action)
                 sys.exit(1)
@@ -801,7 +804,7 @@ class State:
 
                     # Verify no IP Reservations exist with any NCN IP
                     if sls_network.name() in ncn_ips:
-                        allocated_ip = ncn_ips[network_name]
+                        allocated_ip = ncn_ips[network_name].ipv4_address()
                         if ip_reservation.ipv4_address() == allocated_ip:
                             fail_sls_network_check = True
                             action_log(action, f'Error found allocated NCN IP {allocated_ip} in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
@@ -828,7 +831,7 @@ class State:
         action_log(action, "Network | IP Address")
         action_log(action, "--------|-----------")
         for network in sorted(self.ncn_ips):
-            ip = self.ncn_ips[network]
+            ip = self.ncn_ips[network].ipv4_address()
             action_log(action, f'{network:<8}| {ip}')
 
         action_log(action, "")
@@ -850,7 +853,7 @@ class State:
         print("        Network | IP Address")
         print("        --------|-----------")
         for network in sorted(self.ncn_ips):
-            ip = self.ncn_ips[network]
+            ip = self.ncn_ips[network].ipv4_address()
             print(f'        {network:<8}| {ip}')
 
         print("")
@@ -877,7 +880,7 @@ class State:
                 # Check for if this IP is one of our allocated IPs
                 for network, ip in self.ncn_ips.items():
                     if host_record["ip"] == ip:
-                        action_log(action, f'Error found {network} IP Address {ip} in Global host_records in BSS: {host_record}')
+                        action_log(action, f'Error found {network} IP Address {ip.ipv4_address()} in Global host_records in BSS: {host_record}')
                         fail_host_records = True
 
 
@@ -898,7 +901,7 @@ class State:
                 for network_name, ip in self.ncn_ips.items():
                     # Verify each NCN IP is associated with correct NCN
                     expected_alias = f'{self.ncn_alias}.{network_name.lower()}'
-                    if str(ip) == host_record["ip"]:
+                    if str(ip.ipv4_address()) == host_record["ip"]:
                         expected_aliases = [expected_alias]
                         alternate_aliases = [] # ncn-m001 on the NMN can have an alternate host record for the PIT
                         if network_name == "NMN":
@@ -906,18 +909,18 @@ class State:
                             alternate_aliases = ["pit", "pit.nmn"]
 
                         if expected_aliases == host_record["aliases"] or alternate_aliases == host_record["aliases"]:
-                            action_log(action, f"Pass found existing host_record with the IP address {ip} which contains the expected aliases of {expected_aliases}")
+                            action_log(action, f"Pass found existing host_record with the IP address {ip.ipv4_address()} which contains the expected aliases of {expected_aliases}")
                         else:
                             fail_host_records = True
-                            action_log(action, f'Error existing host_record with IP address {ip} with aliases {host_record["aliases"]}, instead of {expected_aliases}')
+                            action_log(action, f'Error existing host_record with IP address {ip.ipv4_address()} with aliases {host_record["aliases"]}, instead of {expected_aliases}')
 
                     # Verify each NCN alias is associated with the correct IP
                     if expected_alias in host_record["aliases"]:
-                        if str(ip) == host_record["ip"]:
-                            action_log(action, f"Pass found existing host_record for alias {expected_alias} which has the expected IP address of {ip}")
+                        if str(ip.ipv4_address()) == host_record["ip"]:
+                            action_log(action, f"Pass found existing host_record for alias {expected_alias} which has the expected IP address of {ip.ipv4_address()}")
                         else:
                             fail_host_records = True
-                            action_log(action, f'Error existing host_record for alias {expected_alias} has the IP address of {host_record["ip"]}, instead of the expected {ip}')
+                            action_log(action, f'Error existing host_record for alias {expected_alias} has the IP address of {host_record["ip"]}, instead of the expected {ip.ipv4_address()}')
 
 
 
@@ -957,7 +960,7 @@ class State:
 
     def update_sls_networking(self, session: requests.Session):
         # Add IP Reservations for all of the networks that make sense
-        for network_name, ip in self.ncn_ips.items():
+        for network_name, ip_reservation in self.ncn_ips.items():
             sls_network = self.sls_networks[network_name]
             # CAN
             # Master:  {"Aliases":["ncn-m002-can","time-can","time-can.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.134","Name":"ncn-m002"}
@@ -1005,12 +1008,6 @@ class State:
             #   - No reservations
             #   - have IP reservations with the node xname for the reservation name
 
-            # All networks except for the CHN have the NCNs alias as the name for the reservation. The CHN has the node xname.
-            name = self.ncn_alias
-
-            # All NCN types have their xname as the comment for their IP reservation
-            comment = self.ncn_xname
-
             # For all networks except the CHN the following aliases are present
             #   - ncn-{*}-{network}
             #   - time-{network}
@@ -1032,8 +1029,7 @@ class State:
                 aliases.append(self.ncn_xname)
                 aliases.append(f'{self.ncn_alias}.local')
 
-            ip_reservation = IPReservation(name, ip, aliases=aliases, comment=comment)
-
+            ip_reservation.aliases(aliases)
             print(f"Adding NCN IP reservation to bootstrap_dhcp subnet in the {network_name} network")
             print(json.dumps(ip_reservation.to_sls(), indent=2))
 
@@ -1047,7 +1043,7 @@ class State:
             if network_name == "HMN":
                 # Add BMC IP reservation to the HMN network.
                 # Example: {"Aliases":["ncn-s001-mgmt"],"Comment":"x3000c0s13b0","IPAddress":"10.254.1.31","Name":"x3000c0s13b0"}
-                bmc_ip_reservation = IPReservation(self.bmc_xname, self.bmc_ip, comment=self.bmc_xname, aliases=[self.bmc_alias])
+                bmc_ip_reservation = Reservation(self.bmc_xname, self.bmc_ip, comment=self.bmc_xname, aliases=[self.bmc_alias])
                 print("Adding NCN BMC IP reservation to bootstrap_dhcp subnet in the HMN network")
                 print(json.dumps(bmc_ip_reservation.to_sls(), indent=2))
 
@@ -1085,7 +1081,7 @@ class State:
 
             host_record = {
                 "aliases": [f'{self.ncn_alias}.{network_name.lower()}'],
-                "ip": str(ip),
+                "ip": str(ip.ipv4_address()),
             }
 
             if network_name == "NMN":
@@ -1245,9 +1241,9 @@ def allocate_ips_command(session: requests.Session, args, state: State):
 
     # Validate allocated IPs are not in use in the HSM EthernetInterfaces table
     for network, ip in state.ncn_ips.items():
-        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip)
+        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip.ipv4_address())
         if len(found_ethernet_interfaces) == 0:
-            action_log(action, f"Pass {network} IP address {ip} is not currently in use in HSM Ethernet Interfaces")
+            action_log(action, f"Pass {network} IP address {ip.ipv4_address()} is not currently in use in HSM Ethernet Interfaces")
         else:
             # An IP address that has been allocated for the NCN is present in HSM.
             # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely
@@ -1260,7 +1256,7 @@ def allocate_ips_command(session: requests.Session, args, state: State):
                     else:
                         print("Skipping due to dry run!")
                 else:
-                    action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip} in HSM: {found_ie}')
+                    action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip.ipv4_address()} in HSM: {found_ie}')
                     print_action(action)
                     sys.exit(1)
 
@@ -1545,9 +1541,9 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
     # Validate allocated IPs are not in use in the HSM EthernetInterfaces table
     for network, ip in state.ncn_ips.items():
-        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip)
+        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip.ipv4_address())
         if len(found_ethernet_interfaces) == 0:
-            action_log(action, f"Pass {network} IP address {ip} is not currently in use in HSM Ethernet Interfaces")
+            action_log(action, f"Pass {network} IP address {ip.ipv4_address()} is not currently in use in HSM Ethernet Interfaces")
         else:
             # An IP address that has been allocated for the NCN is present in HSM.
             # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely
@@ -1560,7 +1556,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
                     else:
                         print("Skipping due to dry run!")
                 else:
-                    action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip} in HSM: {found_ie}')
+                    action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip.ipv4_address()} in HSM: {found_ie}')
                     print_action(action)
                     sys.exit(1)
 
@@ -1697,7 +1693,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
     ncn_cidrs = {}
     for network_name, ip in state.ncn_ips.items():
         bootstrap_dhcp_subnet = sls_networks[network_name].subnets()["bootstrap_dhcp"]
-        ncn_cidrs[network_name] = f'{ip}/{bootstrap_dhcp_subnet.ipv4_network().prefixlen}'
+        ncn_cidrs[network_name] = f'{ip.ipv4_address()}/{bootstrap_dhcp_subnet.ipv4_network().prefixlen}'
 
     bootparams = copy.deepcopy(donor_bootparameters)
     bootparams["hosts"] = [state.ncn_xname]
@@ -1868,7 +1864,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
             ei["Description"] = "- kea"
             for network in CLOUD_INIT_NETWORKS:
                 if network in state.ncn_ips:
-                    ei["IPAddresses"].append({"IPAddress": str(state.ncn_ips[network])})
+                    ei["IPAddresses"].append({"IPAddress": str(state.ncn_ips[network].ipv4_address())})
 
         print(f"Adding MAC Addresses {mac} to HSM Inventory EthernetInterfaces")
         print(json.dumps(ei, indent=2))
