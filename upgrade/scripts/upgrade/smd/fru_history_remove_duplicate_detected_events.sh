@@ -129,7 +129,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # The pruning logic above removed a large part of the hwinv_hist table. This
-# did not however change the teble and database sizes.  In order to free
+# did not however change the table and database sizes.  In order to free
 # space, a vacuum must be run.  Here are the options:
 #
 #     1. Do nothing
