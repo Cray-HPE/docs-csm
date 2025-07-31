@@ -2,13 +2,15 @@
 
 ## NMN Isolation Overview
 
-NMN Isolation on the management network limits traffic on the Node Management Network to only types and directions required for the operation of CSM and user workloads.  **NMN Isolation is only available on systems with Aruba switches**. The feature consists of three main sub-features:
+NMN Isolation on the management network limits traffic on the Node Management Network to only types and directions required for the operation of CSM and user workloads.
+**NMN Isolation is only available on systems with Aruba switches**. The feature consists of three main sub-features:
 
 - ACLs allowing access to only required CSM services from managed nodes (compute, UAN, etc..)
 - ACLs preventing Mountain compute cabinets (EX) from communicating with each other
 - PVLAN to prevent River managed nodes (compute, UAN, etc...) from communicating with each other
 
-NMN Isolation alleviates the need for most host-based firewalls on management nodes (managers, workers, and storage NCN). The PVLAN sub-feature also removes the need for host-based firewalls on UAN (and other River managed nodes) by limiting access over the NMN.
+NMN Isolation alleviates the need for most host-based firewalls on management nodes (managers, workers, and storage NCN).
+The PVLAN sub-feature also removes the need for host-based firewalls on UAN (and other River managed nodes) by limiting access over the NMN.
 
 NMN Isolation is available in the following commands of CANU via the `--enable-nmn-isolation --enable-pvlan` options:
 
@@ -108,7 +110,7 @@ Two means of upgrade are available:
 - Out-of-band where a console cable, USB or otherwise, is physically connected to each switch during update.  This requires an personnel on the data center floor, but prevents a misconfiguration from locking out the administrator applying the switch changes.
 - In-band upgrade where administrative access to one switch is through other switches.  This method is faster, but can result in a switch lockout and require a console connection from the data center floor.
 
-The following procedure can be used in either in-band or out-of-band upgrades, and minimizes the risks of misconfiguration and lockout by using Aruba checkpoints and configuration rollbacks.
+The following procedure can be used in either in-band or out-of-band upgrades, and minimizes the risks of misconfiguration and lockout by using Aruba checkpoints and configuration `rollbacks`.
 
 Configurations should be deployed in the following order, starting from the periphery of the network and move inward:
 
