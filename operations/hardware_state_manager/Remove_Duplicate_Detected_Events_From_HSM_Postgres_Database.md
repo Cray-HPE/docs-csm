@@ -2,8 +2,7 @@
 
 There is a known bug in the Hardware State Manager (HSM) that results in
 excessive "Detected" events added to the hardware inventory history in the
-HSM Postgres database.  This issue has been resolved in CSM 1.7.0 and may
-be resolved in a future CSM 1.6 release.
+HSM Postgres database.
 
 These duplicate events can accumulate to such a significant volume over a
 period of time on large systems and result in certain operations taking
@@ -11,20 +10,19 @@ significant amounts of time to complete or time out (`eg.` adding or querying
 hardware event history). We have also seen specific HSM CT tests fail due
 to issues associated with testing the hardware event history.
 
-This document is meant to provide relief for systems encountering these
-issues until they are able to upgrade to a CSM release containing the fix.
-The steps outline here are repeatable and the scripts can be rerun at any
-time should the database continue to grow too large.
+Though this issue is resolved in CSM 1.7.0, this document is retained as
+a reference for removing duplicate events prior to the CSM 1.7.0 upgrade.
+The steps in this document must be completed prior to starting the CSM
+1.7.0 upgrade.
 
-These steps will also need to be completed prior to starting the CSM 1.7.0
-upgrade. This requirement has also been stated in the upgrade instructions
+This same material is also present in the CSM 1.5.0 and CSM 1.6.0 docs.
 
 ## Prerequisites
 
 - Healthy HSM Postgres Cluster.
 
   Use `patronictl list` on the HSM Postgres cluster to determine the
-  current state of the cluster, and a healthy cluster will look similar to
+  current state of the cluster. A healthy cluster will look similar to
   the following:
 
   ```bash
@@ -62,16 +60,15 @@ upgrade. This requirement has also been stated in the upgrade instructions
 
 ## Procedure
 
-1. Set an environment variable pointing to the location of scripts we will
-   be using:
+1. Set an environment variable pointing to the location of the scripts we
+   will be using:
 
     ```bash
     export HWINV_SCRIPT_DIR="/usr/share/doc/csm/upgrade/scripts/upgrade/smd/"
     ```
 
 2. Run the `fru_history_backup.sh` script to take a backup of the hardware
-   inventory history table.  Runtime will depend on the size of the of the
-   table.
+   inventory history table.  Runtime will depend on the size of the table.
   
    For large systems we have seen this take up to several hours. Please do
    not interrupt the operation.
@@ -82,7 +79,7 @@ upgrade. This requirement has also been stated in the upgrade instructions
 
     Example output:
 
-    ```bash
+    ```text
     Determining the postgres leader...
     The SMD postgres leader is cray-smd-postgres-2
     Using pg_dump to dump the hwinv_hist table...
