@@ -446,3 +446,16 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
 
     Incase the issue still persists after restarting the Kyverno pods, we recommend to disable the background scanning in the Kyverno policy.
     Set `background` to `false` to disable background scanning in the Kyverno policy
+* Multiple Kyverno admission reports may cause etcd downtime during CSM 1.6 upgrade.
+
+    `Behavior:` Kyverno’s admission controller is configured to emit admission reports on every webhook call. In clusters with heavy workloads, this might cause etcd to experience downtime.
+
+    `Solution:`The end user can disable Kyverno admission reports by editing the `kyverno-admission-controller` deployment.
+
+    ```bash
+        kubectl -n kyverno edit deployment kyverno-admission-controller
+    ```
+
+    Modify the value
+`--admissionReports=true` under `spec.template.spec.containers[0].args` with `--admissionReports=false`, save and exit.
+
