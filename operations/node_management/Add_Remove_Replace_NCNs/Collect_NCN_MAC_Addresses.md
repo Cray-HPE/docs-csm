@@ -47,8 +47,8 @@ See [Check for latest documentation](../../../update_product_stream/README.md#ch
     1. Wait for the updated iPXE binary to be built.
 
         ```bash
-        sleep 30
-        kubectl -n services logs -l app.kubernetes.io/instance=cms-ipxe -f
+        sleep 30 && \
+          kubectl -n services logs -l app.kubernetes.io/instance=cms-ipxe -f
         ```
 
         The following output means that a new iPXE binary has been built:
@@ -67,8 +67,10 @@ See [Check for latest documentation](../../../update_product_stream/README.md#ch
         > `read -s` is used in order to prevent the password from being echoed to the screen or saved in the shell history.
 
         ```bash
-        read -r -s -p "${BMC_IP} root password: " IPMI_PASSWORD
-        export IPMI_PASSWORD
+        read -r -s -p "${BMC_IP} root password: " IPMI_PASSWORD && export IPMI_PASSWORD
+        ```
+
+        ```bash
         ipmitool -I lanplus -U root -E -H "${BMC_IP}" chassis power status
         ```
 
@@ -78,8 +80,13 @@ See [Check for latest documentation](../../../update_product_stream/README.md#ch
 
         ```bash
         BMC_IP=BMC_IP_ADDRESS
-        read -r -s -p "${BMC_IP} root password: " IPMI_PASSWORD
-        export IPMI_PASSWORD
+        ```
+
+        ```bash
+        read -r -s -p "${BMC_IP} root password: " IPMI_PASSWORD && export IPMI_PASSWORD
+        ```
+
+        ```bash
         ipmitool -I lanplus -U root -E -H "${BMC_IP}" sol activate
         ```
 
