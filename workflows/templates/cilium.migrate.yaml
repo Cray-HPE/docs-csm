@@ -63,11 +63,15 @@ spec:
                 value: "{{inputs.parameters.dryRun}}"
               - name: scriptContent
                 value: |
-                  kubectl get node {{inputs.parameters.targetNcn}} || res=$?
+                  export NODE={{inputs.parameters.targetNcn}}
+                  kubectl get node $NODE || res=$?
                   # only delete a ncn that exists in cluster
                   if [[ $res -eq 0 ]]; then
-                    echo "draining {{inputs.parameters.targetNcn}}"
-                    kubectl drain --ignore-daemonsets --delete-emptydir-data {{inputs.parameters.targetNcn}}
+                    echo "draining $NODE"
+                    # https://jira-pro.it.hpe.com:8443/browse/CASMTRIAGE-8374 - cordon and forcibly remove kafka pods before drain
+                    kubectl cordon $NODE
+                    kubectl -n services delete pod --field-selector spec.nodeName=$NODE -l app.kubernetes.io/name=kafka
+                    kubectl drain --ignore-daemonsets --delete-emptydir-data $NODE
                   fi
         - name: archive-weave-multus
           dependencies:
