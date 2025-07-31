@@ -1,4 +1,4 @@
-# PostgreSQL cluster upgrades failing
+# PostgreSQL Cluster Upgrades Failing
 
 ## Description
 
