@@ -1717,7 +1717,6 @@ def ncn_data_command(session: requests.Session, args, state: State):
     # bootparams["cloud-init"]["meta-data"]["shasta-role"] # This will remain the same for the particular node type. ncn-master, ncn-storage, ncn-worker
     bootparams["cloud-init"]["meta-data"]["xname"] = state.ncn_xname
     if "ipam" in bootparams["cloud-init"]["meta-data"]:
-        # This is a CSM 1.2 Specific thing
         bootparams["cloud-init"]["meta-data"]["ipam"] = {}
         for network_name, ip_cidr in ncn_cidrs.items():
             if network_name not in CLOUD_INIT_NETWORKS:
