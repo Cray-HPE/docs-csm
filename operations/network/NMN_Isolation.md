@@ -24,7 +24,8 @@ Details of allowed services and the network changes involved in the NMN Isolatio
 
 ## Enabling NMN Isolation
 
-A network outage window is required to configure NMN Isolation on a system.  NMN Isolation changes are decoupled from other changes to CSM and the network outage window could be prior or after the CSM upgrade.  However, if IPv6 is being enabled as part of a system upgrade, enabling NMN Isolation at the same time as IPv6, and prior to the CSM upgrade is required to avoid multiple network outage windows.
+A network outage window is required to configure NMN Isolation on a system.  NMN Isolation changes are decoupled from other changes to CSM and the network outage window could be prior or after the CSM upgrade.
+However, if IPv6 is being enabled as part of a system upgrade, enabling NMN Isolation at the same time as IPv6, and prior to the CSM upgrade is required to avoid multiple network outage windows.
 
 ### 1. Preparation
 
@@ -70,9 +71,11 @@ All preparation steps can be performed prior to an established window.  Preparat
 
     - Prior to configuration of NMN Isolation, expect the test `SERVICES ACL TEST` to FAIL
     - All other tests should PASS, or be reviewed by the site network engineer
-    - NOTE: Log the running time of the command if it's over 10 minutes
+    - Note: Log the running time of the command if it's over 10 minutes
 
-8. (`ncn-m#`) For a system upgrade, back up the _running switch configurations_. Note that the backup will have passwords removed unless the `--no-sanitize` option is used. Storing sensitive data locally should be carefully considered based on site policy.  Not storing passwords in the switch configuration means recovery procedures will require extra steps to reset and reconfigure passwords.
+8. (`ncn-m#`) For a system upgrade, back up the _running switch configurations_. 
+   Note that the backup will have passwords removed unless the `--no-sanitize` option is used. Storing sensitive data locally should be carefully considered based on site policy.
+   Not storing passwords in the switch configuration means recovery procedures will require extra steps to reset and reconfigure passwords.
 
     ```bash
     canu backup network --sls-file sls.json --folder backup
@@ -86,9 +89,10 @@ All preparation steps can be performed prior to an established window.  Preparat
 
     - The command flags `--enable-nmn-isolation` and `--nmn-pvlan` enable all three NMN isolation features described previously.
     - Details of the changes to the configuration files and optional input parameters to `--nmn-pvlan` are describe in [NMN Isolation Details](#nmn-isolation-details)
-    - Note: While the CANU  will typically not overwrite password or SNMP configurations that are applied to the management switches, there are certain cases where configurations can be over-written or lost. To persist the password settings settings, see [CANU Custom Configuration](management_network/canu/custom_config.md).
+    - Note: While the CANU will typically not overwrite password or SNMP configurations that are applied to the management switches, it is best to preserve these in [CANU Custom Configuration](management_network/canu/custom_config.md).
 
-10. (`ncn-m#`) For an upgrade, analyze the changes required to go from the running configurations to the new configuration. The switch `sw-spine-001` is used in the command below, but the command must be run and analysis performed for each switch on the system.  The list of switches was collected previously.
+10. (`ncn-m#`) For an upgrade, analyze the changes required to go from the running configurations to the new configuration.
+    The switch `sw-spine-001` is used in the command below, but the command must be run and analysis performed for each switch on the system.  The list of switches was collected previously.
 
     ```bash
     canu validate switch config --vendor aruba --running backup/sw-spine-001.cfg --generated generated/sw-spine-001.cfg
@@ -125,7 +129,7 @@ Repeat the following procedure for every switch (pair) in the network. The examp
    - As an _example_ `cat generated/sw-spine-001.cfg` in the current terminal window
    - Scroll to the top of the output
    - Select the the configuration and `Ctrl+C` in Windows or `Cmd+C` in MacOS
-   - NOTE: Some configurations may require the configuration to be copy-and-pasted in sections
+   - Note: Some configurations may require the configuration to be copy-and-pasted in sections
 
 2. (`ncn-m#`) Log in to the switch. As an example:
 
@@ -139,7 +143,8 @@ Repeat the following procedure for every switch (pair) in the network. The examp
     copy running-config startup-config
     ```
 
-4. (`ncn-m#`) Enter switch configuration mode, allow new configurations without questions and set up a safety net with a rollback to the working running configuration in 15 minutes. NOTE: Increase the 15 minute timeout if the preparation `canu test` was over 10 minutes - use the test runtime, plus 10 minutes.
+4. (`ncn-m#`) Enter switch configuration mode, allow new configurations without questions and set up a safety net with a rollback to the working running configuration in 15 minutes.
+    Note: Increase the 15 minute timeout if the preparation `canu test` was over 10 minutes - use the test runtime, plus 10 minutes.
 
     ```console
     configure terminal
@@ -156,7 +161,7 @@ Repeat the following procedure for every switch (pair) in the network. The examp
     ```
 
     - Review the output of the test for the switch - all tests should PASS
-    - Should `canu test` result in exceptions while running or the switch not be accessible, wait for the rollback timeout period of 15 minutes, contact the network administrator for detailed troubleshooting and resolve issues before moving on to other switches on the system.
+    - Should `canu test` result in exceptions while running or the switch not be accessible, wait for the `rollback` timeout period of 15 minutes, resolve all issues before moving on to other switches on the system.
 
 7. (`ncn-m#`) If `canu test` succeeds, confirm the changes and save the configuration.
 
@@ -222,12 +227,17 @@ Managed nodes are limited to access only CSM services on the management nodes. T
     360 deny any any any count
 ```
 
-The new ACL employs a deny-by-default methodology and applies to specific sets of of IPs and subnets defined in multiple `object-group` lists like `NCN` or `NMN_K8S_SERVICE` shown above. The new ACL is applied on both the NMN `vlan 2` and the Managed node `pvlan` (502 by default).
+The new ACL employs a deny-by-default methodology and applies to specific sets of of IPs and subnets defined in multiple `object-group` lists like `NCN` or `NMN_K8S_SERVICE` shown above.
+The new ACL is applied on both the NMN `vlan 2` and the Managed node `pvlan` (502 by default).
 
 ### Mountain Cabinet Node Access Controls
 
-Mountain compute nodes are denied access to each other via new ACLs within the existing `nmn-hmn` ACL and are generated dynamically by CANU for all Mountain cabinets in the SLS configuration file.  These ACLs are applied on CDU switches to most directly control traffic, but also on spine and leaf switches.
+Mountain compute nodes are denied access to each other via new ACLs within the existing `nmn-hmn` ACL and are generated dynamically by CANU for all Mountain cabinets in the SLS configuration file.
+These ACLs are applied on CDU switches to most directly control traffic, but also on spine and leaf switches.
 
 ### River Managed Node Access Controls
 
-To limit access of managed nodes on the NMN (UAN) from each other, Private VLAN was implemented on the NMN.  By default `vlan 502` is used, but a custom VLAN not used anywhere else on the system can be used to override this default with the `--nmn-pvlan <vlan>` option in CANU.  PVLAN limits access between UAN without requiring larger and more impacting subnetting of the NMN and addition of new ACLs.  A PVLAN in `isolated` mode is a lightweight means of separation for UAN.
+To limit access of managed nodes on the NMN (UAN) from each other, Private VLAN was implemented on the NMN.
+By default `vlan 502` is used, but a custom VLAN not used anywhere else on the system can be used to override this default with the `--nmn-pvlan <vlan>` option in CANU.
+PVLAN limits access between UAN without requiring larger and more impacting subnetting of the NMN and addition of new ACLs.
+A PVLAN in `isolated` mode is a lightweight means of separation for UAN.
