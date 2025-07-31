@@ -52,6 +52,9 @@ HSM_URL = None
 SLS_URL = None
 KEA_URL = None
 
+CLOUD_INIT_NETWORKS = ["NMN", "CAN", "CMN", "MTL", "HMN"]
+NETWORKS = CLOUD_INIT_NETWORKS + ["CHN"]
+
 #
 # HTTP Action stuff
 #
@@ -1717,7 +1720,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
         # This is a CSM 1.2 Specific thing
         bootparams["cloud-init"]["meta-data"]["ipam"] = {}
         for network_name, ip_cidr in ncn_cidrs.items():
-            if network_name not in ["CAN", "CMN", "HMN", "MTL", "NMN"]:
+            if network_name not in CLOUD_INIT_NETWORKS:
                 # This network is not managed by cloud-init
                 continue
 
@@ -1864,7 +1867,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
         if interface == "mgmt0":
             ei["Description"] = "- kea"
-            for network in ["NMN", "CAN", "CMN", "MTL", "HMN"]:
+            for network in CLOUD_INIT_NETWORKS:
                 if network in state.ncn_ips:
                     ei["IPAddresses"].append({"IPAddress": str(state.ncn_ips[network])})
 
