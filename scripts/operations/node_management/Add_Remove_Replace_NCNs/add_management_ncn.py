@@ -2051,7 +2051,7 @@ def main():
     if not os.path.exists(log_directory):
         os.makedirs(log_directory)
 
-    # Start the actual process of adding a NCN...
+    # Start the actual process of adding an NCN...
     state = State(
         ncn_xname=args.xname,
         ncn_alias=args.alias,
