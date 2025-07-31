@@ -73,7 +73,7 @@ All preparation steps can be performed prior to an established window.  Preparat
     - All other tests should PASS, or be reviewed by the site network engineer
     - Note: Log the running time of the command if it's over 10 minutes
 
-8. (`ncn-m#`) For a system upgrade, back up the _running switch configurations_. 
+8. (`ncn-m#`) For a system upgrade, back up the _running switch configurations_.
    Note that the backup will have passwords removed unless the `--no-sanitize` option is used. Storing sensitive data locally should be carefully considered based on site policy.
    Not storing passwords in the switch configuration means recovery procedures will require extra steps to reset and reconfigure passwords.
 
@@ -81,7 +81,7 @@ All preparation steps can be performed prior to an established window.  Preparat
     canu backup network --sls-file sls.json --folder backup
     ```
 
-9.  (`ncn-m#`) For new installations and upgrades, generate switch configurations using previously collected information and files, and enable NMN Isolation.
+9. (`ncn-m#`) For new installations and upgrades, generate switch configurations using previously collected information and files, and enable NMN Isolation.
 
     ```bash
     canu generate network config --csm 1.7 -a tds --ccj ccj.json --sls-file sls.json --custom-config custom_config.yaml --folder generated  --enable-nmn-isolation --nmn-pvlan
