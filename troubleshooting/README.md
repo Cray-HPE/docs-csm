@@ -81,7 +81,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 * [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 * `boot_sets` field always required when [Modifying a BOS session template](../operations/boot_orchestration/Manage_a_Session_Template.md#modify-a-session-template)
-* [PostgreSQL cluster upgrades failing](known_issues/postgres_cluster_upgrade_failure.md)
+* [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
 
 ## Booting
 
