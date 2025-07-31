@@ -85,7 +85,7 @@ The following steps use the `cfs-ara-postgres` database as an example.
    Command:
 
    ```bash
-   kubectl -n services patch postgresql cfs-ara-postgres --type=merge --patch '{"spec": {"podAnnotations": {"sidecar.istio.io/inject": "false"}}}'
+   kubectl -n services patch postgresql cfs-ara-postgres --type=merge --patch '{"spec": {"podAnnotations": {"sidecar.istio.io/inject": null}}}'
    ```
 
    The database cluster will once again transition to Updating and then Running.
