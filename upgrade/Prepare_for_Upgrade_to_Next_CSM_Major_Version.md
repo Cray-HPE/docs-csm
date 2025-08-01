@@ -27,11 +27,12 @@ completes its upgrade, then quorum would be lost.
 1. [Start typescript](#1-start-typescript)
 1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
 1. [Export Nexus data](#3-export-nexus-data)
-1. [Adding switch admin password to Vault](#4-adding-switch-admin-password-to-vault)
-1. [Ensure SNMP is configured on the management network switches](#5-ensure-snmp-is-configured-on-the-management-network-switches)
-1. [Running sessions](#6-running-sessions)
-1. [Health validation](#7-health-validation)
-1. [Stop typescript](#8-stop-typescript)
+1. [Remove duplicate detected events from the HSM Postgres database](#4-remove-duplicate-detected-events-from-the-hsm-postgres-database)
+1. [Adding switch admin password to Vault](#5-adding-switch-admin-password-to-vault)
+1. [Ensure SNMP is configured on the management network switches](#6-ensure-snmp-is-configured-on-the-management-network-switches)
+1. [Running sessions](#7-running-sessions)
+1. [Health validation](#8-health-validation)
+1. [Stop typescript](#9-stop-typescript)
 
 ### 1. Start typescript
 
@@ -68,13 +69,26 @@ If there is no maintenance period available, then skip this step until after the
 Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md)
 for details.
 
-### 4. Adding switch admin password to Vault
+### 4. Remove duplicate detected events from the HSM Postgres database
+
+**Warning:** This process may also take multiple hours to complete.  Once
+the pruning script is started please, do not interrupt it.
+
+This step is recommended prior to upgrade due to the significant amount of
+time it takes pruning to complete.  If not completed prior to upgrade,
+pruning will be performed during the upgrade, significantly extending the
+upgrade time.
+
+Reference [Remove Duplicate Detected Events From the HSM Postgres Database](../operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md)
+for instructions on how to complete this step.
+
+### 5. Adding switch admin password to Vault
 
 If it has not been done previously, record in Vault the `admin` user password for the management switches in the system.
 
 See [Adding switch admin password to Vault](../operations/network/management_network/README.md#adding-switch-admin-password-to-vault).
 
-### 5. Ensure SNMP is configured on the management network switches
+### 6. Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
@@ -112,7 +126,7 @@ contains the following relevant information:
 
 Return here after verifying that SNMP is properly configured on the management network switches.
 
-### 6. Running sessions
+### 7. Running sessions
 
 [Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos),
 [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs),
@@ -150,7 +164,7 @@ Return here after verifying that SNMP is properly configured on the management n
    There is currently no method to prevent new sessions from being created as long as the service
    APIs are accessible on the API gateway.
 
-### 7. Health validation
+### 8. Health validation
 
 1. Validate CSM health.
 
@@ -165,6 +179,6 @@ Return here after verifying that SNMP is properly configured on the management n
    If a Lustre file system is being used, then see the ClusterStor documentation for details on how
    to validate Lustre health.
 
-### 8. Stop typescript
+### 9. Stop typescript
 
 For any typescripts that were started during this preparation stage, stop them with the `exit` command.

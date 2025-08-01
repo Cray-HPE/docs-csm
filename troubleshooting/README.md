@@ -80,6 +80,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 - [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 - [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
+- [Remove Duplicate Detected Events From the HSM Postgres Database](../operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md)
 
 ## Booting
 
