@@ -125,6 +125,11 @@ if [ "$(yq4 eval '.spec.kubernetes.services."image-verification-policy"' "${upgr
   ' "$c"
 fi
 
+# rack-resiliency did not exist prior to 1.7. Import rack-resiliency settings from upgrade customizations file during upgrade.
+if [ "$(yq4 eval '.spec.kubernetes.services.rack-resiliency' "$c")" == null ]; then
+  yq4 -i eval ".spec.kubernetes.services[\"rack-resiliency\"] += (load(\"${upgrade_customizations}\") | .spec.kubernetes.services[\"rack-resiliency\"])" "$c"
+fi
+
 # Add entries for Cilium Hubble observability GUI (CASMNET-2194)
 yq4 -i eval '.spec.kubernetes.services.["cray-hubble"].externalHostname = "hubble.cmn.{{ network.dns.external }}"' "$c"
 yq4 -i eval ".spec.proxiedWebAppExternalHostnames.customerManagement |= (. + [\"{{ kubernetes.services['cray-hubble'].externalHostname }}\"] | unique)" "$c"
