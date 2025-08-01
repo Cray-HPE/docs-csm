@@ -27,11 +27,12 @@ completes its upgrade, then quorum would be lost.
 1. [Start typescript](#1-start-typescript)
 1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
 1. [Export Nexus data](#3-export-nexus-data)
-1. [Adding switch admin password to Vault](#4-adding-switch-admin-password-to-vault)
-1. [Ensure SNMP is configured on the management network switches](#5-ensure-snmp-is-configured-on-the-management-network-switches)
-1. [Running sessions](#6-running-sessions)
-1. [Health validation](#7-health-validation)
-1. [Stop typescript](#8-stop-typescript)
+1. [Remove duplicate detected events from the HSM Postgres database](#4-remove-duplicate-detected-events-from-the-hsm-postgres-database)
+1. [Adding switch admin password to Vault](#5-adding-switch-admin-password-to-vault)
+1. [Ensure SNMP is configured on the management network switches](#6-ensure-snmp-is-configured-on-the-management-network-switches)
+1. [Running sessions](#7-running-sessions)
+1. [Health validation](#8-health-validation)
+1. [Stop typescript](#9-stop-typescript)
 
 ### 1. Start typescript
 
