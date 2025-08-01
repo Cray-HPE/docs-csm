@@ -125,8 +125,8 @@ if [ "$(yq4 eval '.spec.kubernetes.services."image-verification-policy"' "${upgr
   ' "$c"
 fi
 
-# rack-resiliency did not have configurable customization prior to 1.7. Import rack-resiliency settings from upgrade customizations file during upgrade.
-if [ "$(yq4 eval '.spec.kubernetes.services[\"rack-resiliency\"]' "$c")" == "null" ]; then
+# rack-resiliency did not exist prior to 1.7. Import rack-resiliency settings from upgrade customizations file during upgrade.
+if [ "$(yq4 eval '.spec.kubernetes.services.rack-resiliency' "$c")" == null ]; then
   yq4 -i eval ".spec.kubernetes.services[\"rack-resiliency\"] += (load(\"${upgrade_customizations}\") | .spec.kubernetes.services[\"rack-resiliency\"])" "$c"
 fi
 
