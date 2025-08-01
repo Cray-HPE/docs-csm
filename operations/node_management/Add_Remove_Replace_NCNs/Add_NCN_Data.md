@@ -10,6 +10,7 @@
   * [Collect MAC addresses from the NCN](#collect-mac-addresses-from-the-ncn)
     * [Swapping/moving an NCN](#swappingmoving-an-ncn)
     * [Adding a new NCN](#adding-a-new-ncn)
+  * [IPv6](#ipv6)
 * [Next step](#next-step)
 
 ## Description
@@ -534,6 +535,103 @@ The NCN MAC addresses need to be collected using the [Collect NCN MAC Addresses]
     Arch = "X86"
     Class = "River"
     ```
+
+### IPv6
+
+This step is only necessary for systems with IPv6 enabled on their CMN and CHN networks.
+
+#### Determine if IPv6 is enabled
+
+1. (`ncn-mw#`) To preview whether IPv6 has been setup on the current system, dump the `CIDR6` values for the CHN and CMN.
+
+   ```bash
+   cray sls networks list --format json | jq -r '.[] | select([.Name] | inside(["CMN","CHN"])) | .ExtraProperties.CIDR6'
+   ```
+
+   * IPv6 is enabled when IPv6 addresses are printed:
+
+   ```text
+   fdf8:413:de2c:201::/64
+   fdf8:413:de2c:200::/64
+   ```
+
+   * IPv6 is **not** enabled when `null` is printed:
+
+   ```text
+   null
+   null
+   ```
+
+1. If the output was `null`, proceed to [Next step](#next-step). Otherwise, proceed to
+  [Add IPv6 data](#add-ipv6-data).
+
+#### Add IPv6 data
+
+1. (`ncn-mw#`) Install CSI.
+
+   ```bash
+   zypper in cray-site-init
+   ```
+
+1. (`ncn-mw#`) Verify CSI is at version 2.0.5 or higher.
+
+   ```bash
+   csi version
+   ```
+
+   The printed output's `Version` field should have a value of "2.0.5" or higher. If it does not, reach out to CSM to obtain a newer version.
+
+   ```text
+   CRAY-Site-Init build signature...
+   Build Commit   : 5a29f83ed020a7e166b79ca811ccd7827abcc85b-heads-v2.0.5
+   Build Time     : 2025-08-01T15:17:31Z
+   Go Version     : go1.24.5
+   Version        : 2.0.5
+   Platform       : linux/amd64
+   ```
+
+1. (`ncn-mw#`) Fetch the current CIDR values.
+
+    ```bash
+    SLS_NETWORKS="$(cray sls networks list --format json)"
+    CMN_CIDR6="$(jq -r -n --argjson sls_networks "$SLS_NETWORKS" '$sls_networks[] | select(.Name=="CMN") | .ExtraProperties.CIDR6')"
+    CMN_GW6="$(jq -r -n --argjson sls_networks "$SLS_NETWORKS" '$sls_networks[] | select(.Name=="CMN") | .ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp").Gateway6')"
+    CHN_CIDR6="$(jq -r -n --argjson sls_networks "$SLS_NETWORKS" '$sls_networks[] | select(.Name=="CHN") | .ExtraProperties.CIDR6')"
+    CHN_GW6="$(jq -r -n --argjson sls_networks "$SLS_NETWORKS" '$sls_networks[] | select(.Name=="CHN") | .ExtraProperties.Subnets[] | select(.Name=="bootstrap_dhcp").Gateway6')"
+    ```
+
+1. (`ncn-mw#`) Perform a dry-run of the IPv6 patch.
+
+   ```bash
+    csi patch csm ipv6 \
+      --chn-cidr6 "$CHN_CIDR6" \
+      --chn-gateway6 "$CHN_GW6" \
+      --cmn-cidr6 "$CMN_CIDR6" \
+      --cmn-gateway6 "$CMN_GW6"
+   ```
+
+   CSI's output will include a directory of changes to be made. Inspect both the output and the files.
+
+1. (`ncn-mw#`) To perform the changes, re-run the same command with the `--commit` flag.
+
+   > ***NOTE*** Both the dry-run and `--commit` run of CSI will create backups of BSS and SLS.
+
+   ```bash
+    csi patch csm ipv6 \
+      --chn-cidr6 "$CHN_CIDR6" \
+      --chn-gateway6 "$CHN_GW6" \
+      --cmn-cidr6 "$CMN_CIDR6" \
+      --cmn-gateway6 "$CMN_GW6" \
+      --commit
+   ```
+
+1. (`ncn-mw#`) Optionally, cleanup and uninstall CSI.
+
+   ```bash
+   zypper remove cray-site-init
+   ```
+
+If everything returned successfully, IPv6 data will exist for the node and the node will configure IPv6 interfaces during its deployment.
 
 ## Next step
 
