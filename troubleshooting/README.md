@@ -132,6 +132,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [HPE iLO dropping event subscriptions and not properly transitioning power state](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [Interpreting HMS Health Check Results](interpreting_hms_health_check_results.md)
 * [Manual BMC SSH Key Setting Process](BMC_SSH_key_manual_fixup.md)
+* [Remove Duplicate Detected Events From the HSM Postgres Database](../operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md)
 * [Running HMS CT Tests Manually](hms_ct_manual_run.md)
 * [SLS Not Working During Node Rebuild](known_issues/SLS_Not_Working_During_Node_Rebuild.md)
 * [Test Failures Due To No Discovered Compute Nodes](known_issues/test_failures_no_discovered_computes_in_hsm.md)
