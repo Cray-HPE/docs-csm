@@ -458,4 +458,3 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
 
     Modify the value
 `--admissionReports=true` under `spec.template.spec.containers[0].args` with `--admissionReports=false`, save and exit.
-
