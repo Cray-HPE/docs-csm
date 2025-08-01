@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2023,2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -69,6 +69,7 @@ Jenkinsfile.github                                       @Cray-HPE/csm-devops
 /operations/power_management                             @Cray-HPE/hardware-management
 /operations/system_layout_service                        @Cray-HPE/hardware-management
 /operations/cani                                         @Cray-HPE/hardware-management
+/upgrade/scripts/upgrade/smd                             @Cray-HPE/hardware-management
 
 # Network Items
 /operations/network/                                     @Cray-HPE/management-network
