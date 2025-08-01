@@ -22,7 +22,7 @@ completes its upgrade, then quorum would be lost.
 1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
 1. [Fix Kafka CRD issue](#3-fix-kafka-crd-issue)
 1. [Export Nexus data](#4-export-nexus-data)
-1. [Remove duplicate detected events from the HSM Postgres database](#5-Remove-duplicate-detected-events-from-the-HSM-Postgres-database)
+1. [Remove duplicate detected events from the HSM Postgres database](#5-remove-duplicate-detected-events-from-the-hsm-postgres-database)
 1. [Adding switch admin password to Vault](#6-adding-switch-admin-password-to-vault)
 1. [Ensure SNMP is configured on the management network switches](#7-ensure-snmp-is-configured-on-the-management-network-switches)
 1. [Running sessions](#8-running-sessions)
