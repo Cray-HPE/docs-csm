@@ -22,11 +22,12 @@ completes its upgrade, then quorum would be lost.
 1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
 1. [Fix Kafka CRD issue](#3-fix-kafka-crd-issue)
 1. [Export Nexus data](#4-export-nexus-data)
-1. [Adding switch admin password to Vault](#5-adding-switch-admin-password-to-vault)
-1. [Ensure SNMP is configured on the management network switches](#6-ensure-snmp-is-configured-on-the-management-network-switches)
-1. [Running sessions](#7-running-sessions)
-1. [Health validation](#8-health-validation)
-1. [Stop typescript](#9-stop-typescript)
+1. [Remove duplicate detected events from the HSM Postgres database](#5-Remove-duplicate-detected-events-from-the-HSM-Postgres-database)
+1. [Adding switch admin password to Vault](#6-adding-switch-admin-password-to-vault)
+1. [Ensure SNMP is configured on the management network switches](#7-ensure-snmp-is-configured-on-the-management-network-switches)
+1. [Running sessions](#8-running-sessions)
+1. [Health validation](#9-health-validation)
+1. [Stop typescript](#10-stop-typescript)
 
 ### 1. Start typescript
 
