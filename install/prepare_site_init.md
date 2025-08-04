@@ -10,6 +10,7 @@ directory which contains important customizations for various products.
     1. [Customize DNS Configuration](#customize-dns-configuration)
     1. [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
     1. [Configure Max Istio Gateway Pods](#configure-max-istio-gateway-pods)
+    1. [Enable Rack Resiliency](#enable-rack-resiliency)
 1. [Encrypt secrets](#4-encrypt-secrets)
 1. [Customer-Specific Customizations](#5-customer-specific-customizations)
 
@@ -452,7 +453,28 @@ the system size.
         "$min_amount"
     done
     ```
+### Enable Rack Resiliency
 
+This section can be skipped if Rack Resiliency feature is not required.
+
+1. (`pit#`) Update the customizations file.
+
+    ```bash
+      yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.enabled' "true"
+    ```
+1. (`pit#`) If site specific prefix for Kubernetes and `Ceph` zones is required:
+
+   For example:
+   
+   ```bash
+      yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "prefix-string"
+      yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "prefix-string"
+    ``` 
+**Note:** Replace `prefix-string` with the site specific string.
+     
 ## 4. Encrypt secrets
 
 1. (`pit#`) Load the `zeromq` container image required by Sealed Secret Generators.
