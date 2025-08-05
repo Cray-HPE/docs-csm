@@ -23,11 +23,12 @@ This page contains general Rack Resiliency troubleshooting topics.
 
 ## Cray CLI
 
-The Cray CLI is used to get information related to multiple components of Rack Resiliency. Use the following command for more information on RR support:
+(ncn-mw#) The Cray CLI is used to interact with multiple components of Rack Resiliency. Use the following command for usage information:
 
 ```bash
-(ncn-mw#) cray rrs --help
+cray rrs --help
 ```
+
 ### Wrong critical service type
 
 If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through Cray CLI then the following error is encountered.
