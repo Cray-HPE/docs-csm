@@ -3,7 +3,7 @@
 This page contains general Rack Resiliency troubleshooting topics.
 
 * [Cray CLI tool](#cray-cli-tool)
-  * [Wrong critical service type](#error-bad-request-invalid-request-body-1-validation-error-for-validatecriticalservicecmstatictype)
+  * [Wrong critical service type](#wrong-critical-service-type)
 * [Resiliency Monitoring Service](#resiliency-monitoring-service-rms)
   * [Steps to view RMS logs](#steps-to-view-rms-logs)
   * [Interpreting RMS logs](#interpreting-rms-logs)
@@ -28,15 +28,20 @@ The Cray CLI is used to get information related to multiple components of Rack R
 ```bash
 (ncn-mw#) cray rrs --help
 ```
+### Wrong critical service type
 
-### Error: Bad Request: Invalid request body: 1 validation error for ValidateCriticalServiceCmStaticType
+If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through Cray CLI then the floowing error is encountered.
 
-If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through Cray CLI then this error is encountered.
+"Error: Bad Request: Invalid request body: 1 validation error for ValidateCriticalServiceCmStaticType"
 
-Example:
+Example command:
 
 ```bash
-ncn-m001:~ # cray rrs criticalservices update --from-file file.json 
+(ncn-mw#) cray rrs criticalservices update --from-file file.json
+```
+Example output:
+
+```text
 Usage: cray rrs criticalservices update [OPTIONS]
 Try 'cray rrs criticalservices update -h' for help.
 
@@ -55,13 +60,13 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 1. Get the `cray-rrs` pod
 
 ```bash
-RRS_POD=$(kubectl get pods -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -o custom-columns=:.metadata.name --no-headers); echo "${RRS_POD}"
+(ncn-mw#) RRS_POD=$(kubectl get pods -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -o custom-columns=:.metadata.name --no-headers); echo "${RRS_POD}"
 ```
 
 2. Check Resiliency Monitoring Logs
 
 ```bash
-kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
+(ncn-mw#) kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
 ```
 
 ### Interpreting RMS logs
@@ -197,7 +202,7 @@ In order to check the health of critical services run the following commands:
 
 Example Output:
 
-```bash
+```text
     [critical_services.namespace]
     [[critical_services.namespace.kube-system]]
     name = "cilium-operator"
@@ -252,7 +257,7 @@ This command returns information on the current state of every critical service.
 
 Example Output:
 
-```bash
+```text
     [critical_service]
     name = "cray-capmc"
     namespace = "services"
@@ -283,6 +288,6 @@ This command returns detailed pod information including pod names, nodes, status
 
 ## Getting details about Resiliency Monitoring Service (RMS)
 
-To know the startup time, last monitoring cycle timestamp, the polling intervals and the configured critical services it is necessary to [view the configmap](ConfigMaps.md#2-veiwing-configmap). This helps to understand the various configuration parameters which control RMS behavior.
+To know the startup time, last monitoring cycle timestamp, the polling intervals and the configured critical services it is necessary to [view the ConfigMap](ConfigMaps.md#2-veiwing-configmap). This helps to understand the various configuration parameters which control RMS behavior.
 
 **Note**: It is recommended not to modify those configuration parameters without consulting HPE support.
