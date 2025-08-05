@@ -1,8 +1,9 @@
 # Setup
 
+Before setting up rack resiliency, enable it using [Enabling rack resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the setup will fail after [Stage 1 - Check enablement](#stage-1---check-enablement).
+
 For setting up rack resiliency the following steps are necessary:
 
-- [Enabling rack resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#1-enabling-rack-resiliency)
 - [Running the ansible playbooks](#running-ansible-playbooks)
   - [Setting up kubernetes zoning](#setting-up-kubernetes-zoning)
     - [Stage 1 - Check enablement](#stage-1---check-enablement)
@@ -16,7 +17,6 @@ For setting up rack resiliency the following steps are necessary:
     - [Stage 3 - Placement Validation](#stage-3---placement-validation-1)
     - [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
     - [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-haproxy-configuration)
-- [Deploying helm charts for Rack Resiliency Service (RRS)](#deploying-helm-charts-for-rack-resiliency-service-rrs)
 
 ### Running ansible playbooks
 
@@ -92,7 +92,3 @@ This ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stag
 ##### Stage 5 - Ceph HAproxy Configuration
 
 This ansible play updates CEPH haproxy configuration with latest information after performing CEPH zoning and also updates ceph.conf on all storage nodes with latest configuration.
-
-### Deploying helm charts for Rack Resiliency Service (RRS)
-
-The RRS (Rack Resiliency Service) Helm chart includes both the RRS and the RMS (Resiliency Monitoring Service). The chart will be deployed automatically during the CSM install or upgrade process, provided that RR is enabled. Otherwise, the chart will not be deployed.
