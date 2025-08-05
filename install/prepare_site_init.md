@@ -460,20 +460,27 @@ This section can be skipped if Rack Resiliency feature is not required.
 1. (`pit#`) Update the customizations file.
 
     ```bash
-      yq write -i ${SITE_INIT}/customizations.yaml \
+    yq write -i ${SITE_INIT}/customizations.yaml \
         'spec.kubernetes.services.rack-resiliency.enabled' "true"
     ```
-1. (`pit#`) If site specific prefix for Kubernetes and `Ceph` zones is required:
 
-   For example:
-   
+1. (`pit#`) Optionally, set a site-specific [Kubernetes zone](../operations/rack_resiliency/Zones.md#zoning-kubernetes-ncns) prefix.
+
+   > In the following command, replace `k8s-prefix-string` with the desired Kubernetes zone prefix.
+
    ```bash
-      yq write -i ${SITE_INIT}/customizations.yaml \
-        'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "prefix-string"
-      yq write -i ${SITE_INIT}/customizations.yaml \
-        'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "prefix-string"
-    ``` 
-**Note:** Replace `prefix-string` with the site specific string.
+    yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "k8s-prefix-string"
+    ```
+
+1. (`pit#`) Optionally, set a site-specific [Ceph zone](../operations/rack_resiliency/Zones.md#zoning-ceph-ncns) prefix.
+
+   > In the following command, replace `ceph-prefix-string` with the desired Ceph zone prefix.
+
+   ```bash
+    yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "ceph-prefix-string"
+    ```
 
 ## 4. Encrypt secrets
 
