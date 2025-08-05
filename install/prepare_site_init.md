@@ -4,14 +4,14 @@ These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
 1. [Background](#1-background)
-1. [Create and Initialize `site-init` Directory](#2-create-and-initialize-site-init-directory)
-1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
-    1. [Setup LDAP configuration](#setup-ldap-configuration)
-    1. [Customize DNS Configuration](#customize-dns-configuration)
-    1. [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
-    1. [Configure Max Istio Gateway Pods](#configure-max-istio-gateway-pods)
+1. [Create and initialize `site-init` directory](#2-create-and-initialize-site-init-directory)
+1. [Create baseline system customizations](#3-create-baseline-system-customizations)
+    - [Setup LDAP configuration](#setup-ldap-configuration)
+    - [Customize DNS configuration](#customize-dns-configuration)
+    - [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
+    - [Configure maximum Istio Gateway pods](#configure-maximum-istio-gateway-pods)
 1. [Encrypt secrets](#4-encrypt-secrets)
-1. [Customer-Specific Customizations](#5-customer-specific-customizations)
+1. [Customer-specific customizations](#5-customer-specific-customizations)
 
 ## 1. Background
 
@@ -49,7 +49,7 @@ installation-centric artifacts, such as:
     "${CSM_PATH}/shasta-cfg/meta/init.sh" "${SITE_INIT}"
     ```
 
-## 3. Create Baseline System Customizations
+## 3. Create baseline system customizations
 
 The following steps update `${SITE_INIT}/customizations.yaml`
 with system-specific customizations.
@@ -418,10 +418,10 @@ information and review the
 [Adding SNMP Credentials to the System](../operations/network/management_network/snmp_exporter_configs.md#adding-snmp-credentials-to-the-system)
 section for links to the relevant procedures.
 
-### Configure Max Istio Gateway Pods
+### Configure maximum Istio Gateway pods
 
 The Istio Gateways have a `Horizontal Pod Autoscaler` configured to allow Kubernetes to grow and shrink the
-deployment as needed due to increased load. This by default is configured to a max of 6 and a minimum of 3
+deployment as needed due to increased load. This by default is configured to a maximum of 6 and a minimum of 3
 pods. On some smaller systems this leads to Kubernetes attempting to start up more pods than available
 worker nodes. This leads to test failures and a pod stuck in the pending state. The minimum and maximum
 should be configured to fit the system.
