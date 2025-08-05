@@ -2,11 +2,11 @@
 
 This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#architecture-overview). 
 
-Before setting up rack resiliency, enable it using [Enabling rack resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the setup will fail after [Stage 1 - Check enablement](#stage-1---check-enablement).
+Before setting up rack resiliency, enable it using [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the setup will fail after [Stage 1 - Check enablement](#stage-1---check-enablement).
 
 For setting up rack resiliency the following steps are necessary:
 
-* [Running the ansible playbooks](#running-ansible-playbooks)
+* [Running the Ansible playbooks](#running-ansible-playbooks)
   * [Setting up Kubernetes zoning](#setting-up-Kubernetes-zoning)
     * [Stage 1 - Check enablement](#stage-1---check-enablement)
     * [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
@@ -20,7 +20,7 @@ For setting up rack resiliency the following steps are necessary:
     * [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
     * [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-HAproxy-configuration)
 
-### Running ansible playbooks
+### Running Ansible playbooks
 
 The Ansible playbooks are executed during the [node personalization](../configuration_management/Management_Node_Personalization.md) phase of **Management Node Rollout** stage of [CSM upgrade](../iuf/workflows/management_rollout.md). There are separate personalizations for master and storage nodes to setup rack resiliency.
 
@@ -32,11 +32,11 @@ The below stages are used to setup the Kubernetes zones and apply the `Kyverno` 
 
 ##### Stage 1 - Check Enablement
 
-This ansible play checks whether rack resiliency is enabled in the `customizations.yaml` file. If it is not enabled then the remaining plays do not run.
+This Ansible play checks whether rack resiliency is enabled in the `customizations.yaml` file. If it is not enabled then the remaining plays do not run.
 
 ##### Stage 2 - Placement Discovery
 
-This ansible play identifies the physical racks and locates the management nodes in it. The [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) is queried for information on all of the management NCNs. This information is used to create a mapping between the [xnames](../../glossary.md#xname) of the management NCNs and the xnames of the racks that contain them.
+This Ansible play identifies the physical racks and locates the management nodes in it. The [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) is queried for information on all of the management NCNs. This information is used to create a mapping between the [xnames](../../glossary.md#xname) of the management NCNs and the xnames of the racks that contain them.
 
 The [System Layout Service (SLS)](../../glossary.md#system-layout-service-sls) is used to map these management node xnames to the corresponding Kubernetes and storage node names. This mapping of rack xnames to Kubernetes and storage node hostnames is stored in the below format as a JSON file to be consumed by the Kubernetes and Ceph zoning modules later.
 
@@ -52,7 +52,7 @@ Example of JSON file containing rack to management NCN hostname mapping (`rr_hw_
 
 ##### Stage 3 - Placement Validation
 
-This ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and validates whether the current placement meets the required criteria for enabling rack resiliency.
+This Ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and validates whether the current placement meets the required criteria for enabling rack resiliency.
 
 ![Management nodes placement validation](../../img/rack-resiliency-2.png)
 
@@ -64,11 +64,11 @@ This module also evaluates if managed nodes are present in the management rack a
 
 ##### Stage 4 - Kubernetes Zoning
 
-This ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies Kubernetes zoning for Master and Worker nodes. To know more about zoning refer to [Zones](Zones.md).
+This Ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies Kubernetes zoning for Master and Worker nodes. To know more about zoning refer to [Zones](Zones.md).
 
 ##### Stage 5 - Apply Kyverno policy
 
-This ansible play applies the `Kyverno` clusterpolicy `insert-labels-topology-constraints`. To know more on `Kyverno` policy refer to [`Kyverno` policy](`Kyverno`.md).
+This Ansible play applies the `Kyverno` clusterpolicy `insert-labels-topology-constraints`. To know more on `Kyverno` policy refer to [`Kyverno` policy](`Kyverno`.md).
 
 #### Setting up ceph zoning
 
@@ -88,8 +88,8 @@ The below stages are used to setup the ceph zones and update Ceph HAproxy config
 
 ##### Stage 4 - Ceph Zoning
 
-This ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies ceph zoning for storage nodes. To know more about zoning refer to [Zones](Zones.md).
+This Ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies ceph zoning for storage nodes. To know more about zoning refer to [Zones](Zones.md).
 
 ##### Stage 5 - Ceph HAproxy Configuration
 
-This ansible play updates Ceph HAproxy configuration with latest information after performing Ceph zoning and also updates ceph.conf on all storage nodes with latest configuration.
+This Ansible play updates Ceph HAproxy configuration with latest information after performing Ceph zoning and also updates ceph.conf on all storage nodes with latest configuration.
