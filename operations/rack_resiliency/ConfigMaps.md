@@ -13,6 +13,10 @@ The ConfigMaps are named as:
 * Stores the monitoring intervals for critical services. This is stored both for ceph services and Kubernetes services.
 
 ### 1.2 Dynamic ConfigMap
+
+This ConfigMap contains information such as status of critical services and zones/nodes and is populated and used 
+by RRS for its internal functionality.
+
 * For each critical service during every monitoring interval following fields are updated:
   * status: Whether the service is configured on the system
   * balanced: Whether the service is spread across the zones
