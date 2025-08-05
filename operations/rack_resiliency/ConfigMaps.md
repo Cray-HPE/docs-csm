@@ -55,4 +55,4 @@ For viewing the data of the Dynamic ConfigMap used by Rack Resiliency service us
 kubectl get cm -n rack-resiliency rrs-mon-dynamic -o jsonpath='{.data}' | jq
 ```
 
-HPE provides a standard set of critical services which are needed for the successful execution of user jobs. However, it possible to add additional critical services to the list. For further information on managing the critical services, refer to [Manage Critical Service](/docs-csm/operations/rack_resiliency/Managed_Critical_Services.md)
+HPE provides a standard set of critical services which are needed for the successful execution of user jobs. However, it possible to add additional critical services to the list. For further information on managing the critical services, refer to [Manage Critical Service](Managed_Critical_Services.md)

@@ -163,7 +163,7 @@ RRS is designed as a singleton pod with two containers- RMS and API along with a
 
 The Resiliency Monitoring Service (RMS) provides the functionality to detect rack or node failures and monitor critical services post the failure. 
   
-Refer for more info on [RMS](monitor_and_ensure_critical_service_availability.md)
+Refer for more info on [RMS](Resiliency_Monitoring_Service.md)
 
 **Rack Resiliency API Service**
 
@@ -182,7 +182,8 @@ Refer [`Kyverno` cluster policy](distribution_of_critical_services_across_zones.
 
 * Interactive interface with Cray CLI
     * The CLI for interfacing with rack resiliency service is part of Cray CLI. A new module (RRS) is added to Cray CLI to support rack resiliency specific commands.
-    * Refer [Rack Resiliency CLI](rrs_CLI_commands.md) for more information on the commands.
+    * Refer [Craycli commands for zones](Zones.md#managing-zones) for more information on the commands related to zones.
+    * Refer [Craycli commands for critical services](Managed_Critical_Services.md#critical-services-operations) for more information on the commands related to critical services.
 
 * API Interface with  RESTful APIs
     * Refer for more info [RRS](../../api/rrs.md) for APIs
@@ -193,22 +194,22 @@ Refer [`Kyverno` cluster policy](distribution_of_critical_services_across_zones.
 
 Rack Resiliency consist of below 4 stages for enabling and configuring:
 
-1. [Enabling Rack Resiliency](enable_setup.md#1-enabling-rack-resiliency)
-2. [Add zones prefixes (Optional)](enable_setup.md#2-to-define-the-kubernetes-and-ceph-zone-prefixes)
-3. [Setup/ configure Rack Resiliency](enable_setup.md#3-setup-configure-rack-resiliency)
-4. [Deployment of RRS (Rack Resiliency Service) Helm chart for monitoring](enable_setup.md#4-deployment-of-rrs-helm-chart-for-monitoring)
+1. [Enabling Rack Resiliency](Enabling_Rack_resiliency.md#1-enabling-rack-resiliency)
+2. [Add zones prefixes (Optional)](Enabling_Rack_resiliency.md#2-to-define-the-kubernetes-and-ceph-zone-prefixes)
+3. [Setup/ configure Rack Resiliency](Enabling_Rack_resiliency.md#3-setup-configure-rack-resiliency)
+4. [Deployment of RRS (Rack Resiliency Service) Helm chart for monitoring](Enabling_Rack_resiliency.md#4-deployment-of-rrs-helm-chart-for-monitoring)
 
 ## 2. Managing critical services
 
 A CSM administrator can decide to add a new service to the list of critical services if it is found to be important for supporting
 user jobs. This service may be a customized service not provided by HPE but installed by the customer.
 
-Critical services can be managed using the Cray CLI or the API. Refer [manage critical services](manage_critical_services.md) for 
+Critical services can be managed using the Cray CLI or the API. Refer [manage critical services](Managed_Critical_Services.md) for 
 complete list of supported operations for critical services.
 
 ## 3. Managing `kyverno` policy 
 
-See [Manage `kyverno` policy](manage_kyverno_policy.md) in order to view, add, delete and modify critical services.
+See [Manage `kyverno` policy](kyverno.md) in order to view, add, delete and modify critical services.
 
 # Troubleshooting
 

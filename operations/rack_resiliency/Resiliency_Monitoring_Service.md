@@ -1,14 +1,14 @@
 # Resiliency Monitoring Service(RMS)
 
-The Resiliency Monitoring Service(RMS) is a part of the [Rack Resiliency Service(RRS)](../rack_resiliency/Rack_Resiliency_Service.md) which runs along with [API service](../../api/rrs.md) inside `cray-rrs` pod.
+The Resiliency Monitoring Service(RMS) is a part of the [Rack Resiliency Service(RRS)](Rack_Resiliency_Service.md) which runs along with [API service](../../api/rrs.md) inside `cray-rrs` pod.
 
 ## RMS overview
 
 The Resiliency Monitoring Service (RMS) continuously monitors the health and availability of CSM critical services and management nodes along with utility storage(ceph). The RMS uses the following components to provide its functionality:
-- [ConfigMaps](/docs-csm/operations/rack_resiliency/ConfigMaps.md)
+- [ConfigMaps](ConfigMaps.md)
 - [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd)
-- [Kubernetes Zones](../rack_resiliency/Zones.md#command-to-view-kubernetes-zones)
-- [Ceph Zones](../rack_resiliency/Zones.md#command-to-view-ceph-zones)
+- [Kubernetes Zones](Zones.md#command-to-view-kubernetes-zones)
+- [Ceph Zones](Zones.md#command-to-view-ceph-zones)
 
 RMS operates using two primary loops:
 
@@ -32,7 +32,7 @@ Triggered upon receiving a notification from HMNFD, this loop performs targeted 
 
 ## RMS and ConfigMaps
 
-RMS reads the [static configmap(rrs-mon-static)](../rack_resiliency/ConfigMaps.md#11-static-configmap) for getting  the list of critical services to monitor. It updates the [dynamic configmap(rrs-mon-dynamic)](../rack_resiliency/ConfigMaps.md#12-dynamic-configmap) at regu;ar intervals to reflect the latest status and balance of critical services along with the zones information.
+RMS reads the [static configmap(rrs-mon-static)](ConfigMaps.md#11-static-configmap) for getting  the list of critical services to monitor. It updates the [dynamic configmap(rrs-mon-dynamic)](ConfigMaps.md#12-dynamic-configmap) at regu;ar intervals to reflect the latest status and balance of critical services along with the zones information.
 
 ## RMS Messages
 
@@ -45,4 +45,4 @@ For example:
 - WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', 'kyverno-cleanup-controller']
 - WARNING in lib_rms - Host ncn-s003 is in - Offline state
 
-For troubleshooting the messages logged by RMS refer to [troubleshooting section](../rack_resiliency/Troubleshooting.md).
+For troubleshooting the messages logged by RMS refer to [troubleshooting section](Troubleshooting.md).
