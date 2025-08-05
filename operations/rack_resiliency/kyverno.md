@@ -1,6 +1,6 @@
 # Distributing critical services across Kubernetes zones
 
-One of the key ways to ensure that CSM critical services survive the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks. To support Kubernetes spread the replicas of the CSM critical services during startup, a new `kyverno` policy by name  `insert-labels-topology-constraints` has been added.
+One of the key ways to ensure CSM critical services availability is that the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks. To support Kubernetes spread the replicas of the CSM critical services during startup, a new `kyverno` policy by name  `insert-labels-topology-constraints` has been added.
 
 This policy applies to all the Deployments and StatefulSets that have been identified as critical services for Rack Resiliency.
 
@@ -73,11 +73,11 @@ The `Kyverno` policy works in four steps as described below:
 
 #### 2.1 Restarting critical services
 
-During deployment of the rack resiliency service,the critical services which are either deployments or StatefulSets are restarted. During restart the policy is implemented by the `Kyverno` policy engine.
+During Deployment of the Rack Resiliency Service,the critical services which are either Deployments or StatefulSets are restarted. During restart the policy is implemented by the `Kyverno` policy engine.
 
 #### 2.2 Adding topology constraint
 
-The policy engine updates the topology constraint to the deployment/ StatefulSets specification of the critical service.
+The policy engine updates the topology constraint to the Deployment/ StatefulSets specification of the critical service.
 
 ```yaml
 spec:
@@ -92,7 +92,7 @@ spec:
             
 #### 2.3 Add a new label as a selector to identify the pods
 
-During restart, the label mentioned in the policy is added to all the pods belonging to the specific critical service deployment or StatefulSets that is being restarted.
+During restart, the label mentioned in the policy is added to all the pods belonging to the specific critical service Deployment or StatefulSets that is being restarted.
 
 For Example, for the StatefulSets `cray-bss-bitnami-etcd` the policy adds the `rrflag` as shown below:
 
@@ -104,6 +104,6 @@ cray-bss-bitnami-etcd-2                     2/2     Running   0               4d
 
 #### 2.4 Spreading pods across zones
 
-When the scheduler launches the pod, using the selector `rrflag` the pods are spread across racks. During the failure of a node or rack, when service replicas are restarted by Kubernetes, the policy helps the replicas being restarted to spread across zones.
+When the scheduler launches the pod, using the selector `rrflag` the pods are spread across racks. During the failure of a NCN node or rack, when service replicas are restarted by Kubernetes, the policy helps the replicas being restarted to spread across zones.
 
 **Note:** The policy has been enabled to allow running replicas on the same rack if other racks are not available because of a failure. This ensures that the number of replicas during a failure remains the same.
