@@ -73,7 +73,7 @@ kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
   ```
 
 * Cause: The node(s) were shutdown or powered off.
-* Effect: This leads to critical service redistribution based on kyverno policy.
+* Effect: This leads to critical service redistribution based on `Kyverno` policy.
 * Recovery: Power on the node(s).
 
 
@@ -84,7 +84,7 @@ kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
   ```
 
 * Cause: The node(s) were shutdown or powered off.
-* Effect: This leads to critical service redistribution based on kyverno policy.
+* Effect: This leads to critical service redistribution based on `Kyverno` policy.
 * Recovery: Power on the node(s).
 
 #### Rack failure
@@ -94,7 +94,7 @@ kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
   ```
 
 * Cause: All the nodes in the rack were shutdown or powered off.
-* Effect: This leads to critical service redistribution based on kyverno policy.
+* Effect: This leads to critical service redistribution based on `Kyverno` policy.
 * Recovery: Power on the all the nodes in the rack.
 
 #### Status of Ceph
@@ -158,7 +158,7 @@ kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
 2025-06-30 07:02:35,851 - WARNING in lib_rms - StatefulSet 'keycloak-postgres' in namespace 'services' is not ready. Only 2 replicas are ready out of 3 desired replicas
 2025-06-30 07:02:36,141 - WARNING in lib_rms - StatefulSet 'slurmdb-pxc' in namespace 'user' is not ready. Only 2 replicas are ready out of 3 desired replicas
 2025-06-30 07:02:36,234 - WARNING in lib_rms - list of partially configured services are - ['cray-capmc', 'cray-console-data-postgres', 'cray-console-node', 'cray-dhcp-kea-postgres', 'cray-hbtd-bitnami-etcd', 'cray-hmnfd-bitnami-etcd', 'cray-keycloak', 'cray-power-control-bitnami-etcd', 'cray-spire-postgres', 'cray-spire-server', 'cray-vault', 'hpe-slingshot-vnid', 'istiod', 'keycloak-postgres', 'slurmdb-pxc']
-2025-06-30 07:02:36,235 - WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', 'kyverno-cleanup-controller', 'kyverno-reports-controller', 'k8s-zone-api', 'kube-multus-ds']
+2025-06-30 07:02:36,235 - WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', '`Kyverno`-cleanup-controller', '`Kyverno`-reports-controller', 'k8s-zone-api', 'kube-multus-ds']
 ```
 
 * Cause: Due to node failure the pod are not spread equally across zones.
