@@ -1,7 +1,7 @@
 # Critical Services
 
-In the context of Rack Resiliency, the term "critical services" refers to those services which RR is monitoring and
-trying to make resilient.
+In the context of Rack Resiliency, the term "critical services" refers to those Kubernetes services which RR is monitoring and
+trying to make resilient. RR supports Kubernetes Deployments and StatefulSets as critical services.
 
 HPE has prepopulated the RR critical services with the set of services necessary for the successful
 execution of user jobs. Note that this does not include all services that could
