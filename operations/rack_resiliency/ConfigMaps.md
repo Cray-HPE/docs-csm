@@ -1,32 +1,34 @@
 # Rack Resiliency ConfigMaps
 
-Rack Resiliency Service uses two ConfigMaps in the rack-resiliency namespace for monitoring and tracking the status of critical services.
+The Rack Resiliency Service uses two Kubernetes ConfigMaps in the `rack-resiliency` namespace for monitoring and tracking the status of critical services.
 
-The ConfigMaps are named as:
-* rrs-mon-static
-* rrs-mon-dynamic
+The two ConfigMaps are named `rrs-mon-static` (also referred to as the static ConfigMap) and
+`rrs-mon-dynamic` (also referred to as the dynamic ConfigMap).
 
-## 1. Functionalities of the ConfigMaps
+## Function of the ConfigMaps
 
-### 1.1 Static ConfigMap:
+### Static ConfigMap
+
 * Stores the name and type of all the critical services to be monitored along with their namespaces.
 * Stores the monitoring intervals for critical services. This is stored both for ceph services and Kubernetes services.
 
-### 1.2 Dynamic ConfigMap
+### Dynamic ConfigMap
 
-This ConfigMap contains information such as status of critical services and zones/nodes and is populated and used 
-by RRS for its internal functionality.
+This ConfigMap contains information such as the status of critical services, zones, and nodes.
+It is populated and used by RRS internally.
 
-* For each critical service during every monitoring interval following fields are updated:
-  * status: Whether the service is configured on the system
-  * balanced: Whether the service is spread across the zones
-* During every monitoring interval zone information is updated for:
-  * Kubernetes: name and status of nodes.
-  * ceph: name and status of nodes and osds.
+During every monitoring interval, the following things are done.
 
-## 2. Viewing ConfigMap
+* For each critical service, the following fields are updated:
+    * `status`: Whether the service is configured on the system.
+    * `balanced`: Whether the service is spread across the zones.
+* Zone information is updated for:
+    * Kubernetes: name and status of nodes.
+    * Ceph: name and status of nodes and OSDs.
 
-### 2.1 Static ConfigMap
+## Viewing ConfigMap
+
+### Static ConfigMap
 
 For viewing the data of the Static ConfigMap used by Rack Resiliency service use the below command:
 
@@ -52,7 +54,7 @@ Truncated example output (the actual output of ConfigMap will be larger):
 }
 ```
 
-### 2.2 Dynamic ConfigMap
+### Dynamic ConfigMap
 
 For viewing the data of the Dynamic ConfigMap used by Rack Resiliency service use the below command:
 
