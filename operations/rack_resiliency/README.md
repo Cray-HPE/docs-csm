@@ -111,7 +111,7 @@ Rack Resiliency uses a 3 step procedure to be set up for monitoring critical ser
 
 1. [Enabling Rack Resiliency and add zone prefixes](../../operations/rack_resiliency/Enabling_Rack_Resiliency.md#enabling-rack-resiliency)
 2. [Setup Rack Resiliency](../../operations/rack_resiliency/Setup.md#running-ansible-playbooks)
-3. [Deploy RRS (Rack Resiliency Service)](Deploy_cray_rrs.md)
+3. [Deploy RRS (Rack Resiliency Service)](cray-rrs_Deployment.md)
 
 ## 2. Managing critical services
 
