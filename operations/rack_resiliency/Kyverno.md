@@ -10,7 +10,7 @@ Some of the CSM critical services already have established the pod affinities to
 
 For more information, see [Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
-### 1. Policy details
+### Policy details
 
 Use the below command to view the policy and know the services for which the policy has been enabled:
 
@@ -67,15 +67,15 @@ spec:
 ...
 ```
 
-### 2. How the `kyverno` policy works
+### How the `kyverno` policy works
 
 The `Kyverno` policy works in four steps as described below:
 
-#### 2.1 Restarting critical services
+#### 1. Restarting critical services
 
 During Deployment of the Rack Resiliency Service, the critical services which are either Deployments or StatefulSets are restarted. During restart the policy is implemented by the `Kyverno` policy engine.
 
-#### 2.2 Adding topology constraint
+#### 2. Adding topology constraint
 
 The policy engine updates the topology constraint to the Deployment/ StatefulSets specification of the critical service.
 
@@ -90,7 +90,7 @@ spec:
     whenUnsatisfiable: ScheduleAnyway
 ```
             
-#### 2.3 Add a new label as a selector to identify the pods
+#### 3. Add a new label as a selector to identify the pods
 
 During restart, the label mentioned in the policy is added to all the pods belonging to the specific critical service Deployment or StatefulSets that is being restarted.
 
@@ -102,7 +102,7 @@ cray-bss-bitnami-etcd-1                     2/2     Running   0               4d
 cray-bss-bitnami-etcd-2                     2/2     Running   0               4d12h   app.kubernetes.io/component=etcd,app.kubernetes.io/instance=cray-hms-bss,app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=cray-bss-bitnami-etcd,app.kubernetes.io/version=3.5.21,apps.kubernetes.io/pod-index=2,controller-revision-hash=cray-bss-bitnami-etcd-855488694f,helm.sh/chart=etcd-11.2.3,rrflag=rr-cray-bss-bitnami-etcd,security.istio.io/tlsMode=istio,service.istio.io/canonical-name=cray-bss-bitnami-etcd,service.istio.io/canonical-revision=3.5.21,statefulset.kubernetes.io/pod-name=cray-bss-bitnami-etcd-2
 ```
 
-#### 2.4 Spreading pods across zones
+#### 4. Spreading pods across zones
 
 When the scheduler launches the pod, using the selector `rrflag` the pods are spread across racks. During the failure of a NCN node or rack, when service replicas are restarted by Kubernetes, the policy helps the replicas being restarted to spread across zones.
 
