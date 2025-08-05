@@ -1157,3 +1157,9 @@ rs232
 S4048-ON
 SmartFabric
 Infiniband
+
+# Rack Resileincy
+enablement
+Enablement
+clusterpolicy
+kyverno
