@@ -20,15 +20,19 @@
 
 ## Overview
 
-The selective iSCSI worker node personalization feature allows administrators to specify which worker NCNs are enabled as
+All worker NCNs are *configured* to be potential iSCSI targets.
+The selective iSCSI worker node personalization feature allows administrators to specify which worker NCNs are *enabled* as
 iSCSI targets. The mechanism by which an administrator specifies this is the `iscsi_worker`
 [component group](../hardware_state_manager/Component_Groups_and_Partitions.md#groups) in the
 [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
 The existence of this group on the system means that selective iSCSI worker node personalization is enabled.
 If the group does not exist, then the feature is disabled, and all worker nodes will be enabled as iSCSI targets.
-While it is technically possible to create this group and leave it empty, this will mean that no worker nodes will be
-enabled as iSCSI targets, which in turn will mean that no managed nodes will be able to boot. Therefore CSM generally
-treats it as an error if the HSM group exists but it contains no worker nodes.
+
+While it is technically possible to create this group and leave it empty, this would mean that no worker nodes would be
+enabled as iSCSI targets, which in turn would mean that no managed nodes would be able to boot. Therefore CSM
+treats it as an error if the HSM group exists but contains no worker nodes.
+
+Any members of the group that are not worker nodes are ignored and have no effect on iSCSI enablement.
 
 The [Group commands](#group-commands) section goes over the commands used to create, remove, or modify the group.
 The [Procedures](#procedures) section discusses the different contexts in which this may be done, and any additional
@@ -51,6 +55,8 @@ For more in-depth information on managing HSM groups in general, see
 
 (`ncn-mw#`) Create the `iscsi_worker` group.
 
+> The `description` field is not required to be specified; it has no operational effect.
+
 ```bash
 cray hsm groups create --label iscsi_worker --description "iscsi node personalization" --members-ids x3000c0s5b0n0,x3001c0s35b0n0
 ```
@@ -67,7 +73,7 @@ created with the correct members, see [Listing group members](#listing-group-mem
 
 ### Adding a worker to the group
 
-(`ncn-mw#`) Add one more worker node to the `iscsi_worker` group.
+(`ncn-mw#`) Add an additional worker node to the `iscsi_worker` group.
 
 > Note: Each command may only add a single worker.
 
@@ -131,8 +137,8 @@ message = "deleted 1 entry"
 ## Procedures
 
 The procedures vary for enabling or disabling this feature, or modifying the set of worker nodes that are enabled as iSCSI
-targets. It depends on whether this is being done during a fresh install of CSM, an upgrade from CSM 1.6 to CSM 1.7,
-as part of adding or removing a worker NCN, or on an operational CSM 1.7+ system.
+targets. It depends on whether this is being done during a fresh install of CSM, during an upgrade from CSM 1.6 to CSM 1.7,
+as part of adding or removing a worker NCN, or as a procedure on an operational CSM 1.7+ system.
 
 * [CSM install](#csm-install)
 * [CSM upgrade from 1.6 to 1.7](#csm-upgrade-from-16-to-17)
@@ -146,8 +152,9 @@ as part of adding or removing a worker NCN, or on an operational CSM 1.7+ system
 ### CSM install
 
 During a CSM install, if the administrator wants to enable this feature, they should
-[create the `iscsi_worker` HSM group](#creating-the-group) as part of
-[Configure Administrative Access](../../install/configure_administrative_access.md)
+[create the `iscsi_worker` HSM group](#creating-the-group) as part of the
+[iSCSI SBPS configuration](../../install/configure_administrative_access.md#8-iscsi-sbps-configuration)
+step in the [Configure Administrative Access](../../install/configure_administrative_access.md) procedure.
 
 The feature will take effect when
 [Management Node Personalization](../configuration_management/Management_Node_Personalization.md)
@@ -189,7 +196,7 @@ read the section that applies to the current operation and whether or not the `i
 >     * If it succeeds, then the group exists (and its member list will be shown).
 >     * If the group does not exist, then the command will fail with an error that it cannot find the group.
 > * Both before and after the overall add or remove procedure, administrators may wish to validate the iSCSI configuration.
->   by running [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md).
+>   See [iSCSI SBPS Verification](iSCSI_SBPS_Verification.md).
 
 * [Adding worker NCN when `iscsi_sbps` group does not exist](#adding-worker-ncn-when-iscsi_sbps-group-does-not-exist)
 * [Adding worker NCN when `iscsi_sbps` group exists](#adding-worker-ncn-when-iscsi_sbps-group-exists)
@@ -344,7 +351,7 @@ for iSCSI can be changed. To do this, use the following procedure:
 1. *Optional:* Verify the iSCSI configuration.
 
     After the CFS node personalization is complete for all of the worker NCNs, administrators may wish to verify the iSCSI configuration.
-    See [Goss tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md).
+    See [iSCSI SBPS Verification](iSCSI_SBPS_Verification.md).
 
 ## Manual DNS records update
 
