@@ -58,16 +58,19 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 
 ### Steps to view RMS logs
 
-1. Get the `cray-rrs` pod
+1. (`ncn-mw#`) Get the `cray-rrs` pod name.
 
 ```bash
-(ncn-mw#) RRS_POD=$(kubectl get pods -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -o custom-columns=:.metadata.name --no-headers); echo "${RRS_POD}"
+RRS_POD=$(kubectl get pods -n rack-resiliency \
+  -l app.kubernetes.io/instance=cray-rrs \
+  -o custom-columns=:.metadata.name \
+  --no-headers); echo "${RRS_POD}"
 ```
 
-2. Check Resiliency Monitoring Logs
+1. (`ncn-mw#`) View its RMS container logs.
 
 ```bash
-(ncn-mw#) kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
+kubectl logs "${RRS_POD}" -c cray-rrs-rms -n rack-resiliency
 ```
 
 ### Interpreting RMS logs
