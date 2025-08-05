@@ -56,7 +56,9 @@ Example output:
 secret/site-init configured
 ```
 
-**NOTE**: Rack Resiliency `enabled` flag should be set to `true` for enablement to work, if it set to any other value like '1' or 'yes' it will be considered as `false`.
+**NOTE**: If the Rack Resiliency `enabled` flag is not present in `customizations.yaml`, or if it is set to a value that the
+[Ansible `bool` filter](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/bool_filter.html)
+does not recognize as true, then it will be interpreted as false.
 
 **Important Notes:**
 
