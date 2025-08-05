@@ -16,7 +16,7 @@ This page contains general Rack Resiliency troubleshooting topics.
       * [Status of service](#status-of-service)
       * [Service not found](#service-not-found)
       * [Unable to register for notification](#unable-to-register-for-notification)
-* [Critical Services Healthcheck](#critical-services-healthcheck)
+* [Critical Services `Healthcheck`](#critical-services-healthcheck)
   * [List the status of all the critical services](#1-list-the-status-of-all-the-critical-services)
   * [Get detailed status for a specific critical service](#2-get-detailed-status-for-a-specific-critical-service)
 * [Getting details about Resiliency Monitoring Service (RMS)](#getting-details-about-resiliency-monitoring-service-rms)
@@ -30,9 +30,9 @@ The Cray CLI is used to get information related to multiple components of Rack R
 ```
 ### Wrong critical service type
 
-If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through Cray CLI then the floowing error is encountered.
+If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through Cray CLI then the following error is encountered.
 
-"Error: Bad Request: Invalid request body: 1 validation error for ValidateCriticalServiceCmStaticType"
+"Error: Bad Request: Invalid request body: 1 validation error for `ValidateCriticalServiceCmStaticType`"
 
 Example command:
 
@@ -142,7 +142,7 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 
 * Cause: Due to node failure the pod are not spread equally across zones.
 * Effect: This leads to danger of losing multiple replicas if another node failure happens.
-* Recovery: Ensure sufficient resources(cpu and memory) are available in each zone so that pods can be equally distributed.
+* Recovery: Ensure sufficient resources(CPU and memory) are available in each zone so that pods can be equally distributed.
 
 ##### Status of service
 
@@ -168,7 +168,7 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 
 * Cause: Due to node failure the pod are not spread equally across zones.
 * Effect: This leads to danger of losing multiple replicas if another node failure happens.
-* Recovery: Ensure sufficient resources(cpu and memory) are available in each zone so that pods can be equally distributed and to make statefulset configured, it need to be rollout restarted.
+* Recovery: Ensure sufficient resources(CPU and memory) are available in each zone so that pods can be equally distributed and to make StatefulSet configured, it need to be rollout restarted.
 
 ##### Service not found
 
@@ -190,7 +190,7 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 * Effect: This leads to RMS not receiving notifications from HMNFD.
 * Recovery: Ensure HMNFD service is running.
 
-## Critical Services Healthcheck
+## Critical Services `Healthcheck`
 
 In order to check the health of critical services run the following commands:
 
