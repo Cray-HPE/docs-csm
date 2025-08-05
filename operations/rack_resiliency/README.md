@@ -1,22 +1,22 @@
 # Rack Resiliency (RR)
 
 * [Introduction](#introduction)
-* [Key Terminology](#key-terminology)
-* [Architecture Overview](#architecture-overview)
+* [Key terminology](#key-terminology)
+* [Architecture overview](#architecture-overview)
 * [Components of Rack Resiliency](#components-of-rack-resiliency)
     * [Critical Services](README.md#1-critical-services)
     * [ConfigMaps](README.md#2-configmaps)
     * [`Kyverno` Policy](README.md#3-`Kyverno`-policy)
     * [Rack Resiliency Service (RRS)](README.md#4-rack-resiliency-service-rrs)
         * [Resiliency Monitoring Service (RMS)](#resiliency-monitoring-service-rms)
-        * [Rack Resiliency API Service](#rack-resiliency-api-service)
-* [Rack Resiliency Management Tools](#rack-resiliency-management-tools)
-    * [Interactive interface with Cray CLI](#interactive-interface-with-cray-cli)
-    * [API Interface with  RESTful APIs](#api-interface-with-restful-apis)
-* [Rack Resiliency Management Tasks](#rack-resiliency-management-tasks)
-    * [Enable and Configure Rack Resiliency](README.md#1-enable-and-configure-rack-resiliency)
+        * [Rack Resiliency API service](#rack-resiliency-api-service)
+* [Rack Resiliency management tools](#rack-resiliency-management-tools)
+    * [Cray CLI](#cray-cli)
+    * [RESTful API](#restful-api)
+* [Rack Resiliency management tasks](#rack-resiliency-management-tasks)
+    * [Enable and configure Rack Resiliency](README.md#1-enable-and-configure-rack-resiliency)
     * [Managing Critical Services](README.md#2-managing-critical-services)
-    * [Managing `Kyverno` Policy](README.md#3-managing-`Kyverno`-policy)
+    * [Managing `Kyverno` policy](README.md#3-managing-`Kyverno`-policy)
 * [Troubleshooting](#troubleshooting)
 
 # Introduction
@@ -29,7 +29,7 @@ To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which
 - This feature is disabled by default. 
 - This feature does not address routine maintenance scenario.
 
-# Key Terminology
+# Key terminology
 
 * Rack: A standardized structure designed to house and organize computer servers and other hardware like network switches. Each HPE Cray Supercomputing EX system rack houses `NCNs` and `Non-NCNs` along with slingshot switches. This is also referred to as cabinets.
 * [Zone](Zones.md): A zone represents a logical failure domain. It is common for Kubernetes clusters to span multiple zones for increased availability.
@@ -42,7 +42,7 @@ To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which
   management services running on Kubernetes, as well as for telemetry data coming from the compute nodes.
 * [Critical services](Critical_Services.md): Critical services are those services that are critical to execution of user jobs. These services are monitored by [Rack Resiliency Service](Rack_Resiliency_Service.md).
 
-# Architecture Overview
+# Architecture overview
 
 ![Rack Resiliency solution overview](../../img/rack-resiliency-1.png)
 
@@ -85,26 +85,27 @@ The Resiliency Monitoring Service (RMS) provides the functionality to detect rac
   
 Refer for more info on [RMS](Resiliency_Monitoring_Service.md)
 
-### [Rack Resiliency API Service](../../api/rrs.md)
+### [Rack Resiliency API service](../../api/rrs.md)
 
 The Rack Resiliency Service (RRS) provides APIs to manage zones and critical services. The API service is a separate container in `cray-rrs` pod and serves as the backend for `rrs` module of Cray CLI. Refer [API](../../api/rrs.md) for more information.
 
 To get complete information on the components and functionalities of RRS [refer here](Rack_Resiliency_Service.md).
 
-# Rack Resiliency Management Tools
+# Rack Resiliency management tools
 
-## Interactive interface with Cray CLI
+## Cray CLI
 
 * The CLI for interfacing with rack resiliency service is part of Cray CLI. A new module (RRS) is added to Cray CLI to support rack resiliency specific commands.
 * Refer [Cray CLI commands for zones](Zones.md#managing-zones) for more information on the commands related to zones.
 * Refer [Cray CLI commands for critical services](Manage_Critical_Services.md#critical-services-operations) for more information on the commands related to critical services.
 * Refer [Cray CLI commands for critical services healthchecks](Troubleshooting.md#critical-services-healthcheck).
 
-## API Interface with RESTful APIs
+## RESTful API
 
-The RESTful APIs provided by API service is used by the Cray CLI and also can be accessed via tools like `wget` or `curl`. Refer  [here](../../api/rrs.md) for more information on using RRS APIs.
-  
-# Rack Resiliency Management Tasks
+The RRS RESTful API is used by the Cray CLI and also can be accessed using tools like `curl`.
+See [Rack Resiliency Service v1](../../api/rrs.md) for more information.
+
+# Rack Resiliency management tasks
 
 ## 1. Getting started with Rack Resiliency
 
