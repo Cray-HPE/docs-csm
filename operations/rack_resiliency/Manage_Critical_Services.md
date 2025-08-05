@@ -1,7 +1,7 @@
 # Manage Critical Services
 
 This page contains the procedures to list, add, delete and modify the critical services:
-- Using craycli
+- Using Cray CLI
 - By editing configmap
 
 The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR keeps its list of critical services. The API/CLI commands to add services end up adding the new services to this ConfigMap. But because the API/CLI does not support edits or deletes, those can only be accomplished by directly editing the ConfigMap.
@@ -22,16 +22,16 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
 
 ### Critical services operations
 
-* [List critical service using craycli](#list-critical-services-using-craycli)
+* [List critical service using Cray CLI](#list-critical-services-using-cray-cli)
 * [List critical service by viewing configmap](#list-critical-services-by-viewing-configmap)
-* [Adding a critical service using craycli](#adding-a-critical-service-using-craycli)
+* [Adding a critical service using Cray CLI](#adding-a-critical-service-using-cray-cli)
 * [Adding a critical service from configmap](#adding-a-critical-service-using-configmap)
 * [Delete a critical service](#delete-the-critical-service-using-configmap)
 * [Modify a critical service](#modify-the-critical-service-using-configmap)
 * [Add critical service(s) to Kyverno clusterpolicy](#add-critical-services-to-kyverno-clusterpolicy)
 * [Delete critical services(s) from Kyverno clusterpolicy](#delete-critical-services-from-the-kyverno-clusterpolicy)
 
-## List critical services using craycli
+## List critical services using Cray CLI
 
 * List all critical services grouped by namespace:
 
@@ -123,7 +123,7 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
     }
     ```
 
-## Adding a critical service using craycli
+## Adding a critical service using Cray CLI
 
 * Create a new JSON file with critical services configuration:
 
@@ -484,11 +484,11 @@ In this example, the administrator wishes to modify the `coredns` critical servi
 
 ## Add critical service(s) to Kyverno `clusterpolicy`
 
-The below instructions should be followed only after adding the critical service(s) using [craycli](#adding-a-critical-service-using-craycli) or by [editing the configmap](#adding-a-critical-service-using-configmap).
+The below instructions should be followed only after adding the critical service(s) using [Cray CLI](#adding-a-critical-service-using-cray-cli) or by [editing the configmap](#adding-a-critical-service-using-configmap).
 
 If the service(s) are not added refer to:
-- [Using craycli](#adding-a-critical-service-using-craycli)
-- [By editing configmap](#adding-a-critical-service-using-configmap)
+* [Using Cray CLI](#adding-a-critical-service-using-cray-cli)
+* [By editing configmap](#adding-a-critical-service-using-configmap)
 
 ### 1. Verify that the critical services is present in the Kubernetes cluster
 
@@ -521,7 +521,7 @@ kubectl get clusterpolicy insert-labels-topology-constraints -o yaml |grep \<nam
 The below instructions should be followed only after deleting the critical service(s) by [editing the configmap](#delete-the-critical-service-using-configmap).
 
 If the service(s) are not deleted refer to:
-- [By editing configmap](#delete-the-critical-service-using-configmap)
+* [By editing configmap](#delete-the-critical-service-using-configmap)
 
 ### 1. Verify that the critical services is present in the Kyverno `clusterpolicy`
 

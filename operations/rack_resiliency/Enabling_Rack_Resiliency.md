@@ -1,14 +1,14 @@
 # Enabling Rack Resiliency
 
-By default the Rack Resiliency feature is disabled. Based on whether CSM is freshly installed or getting upgraded to a new version, the below steps to enable rack resiliency changes.
+As mentioned in the [Architecture Overview](README.md#architecture-overview), enabling Rack Resiliency is first stage for setting up rack resiliency. By default the Rack Resiliency feature is disabled. Based on whether CSM is getting freshly installed or upgraded to a new version, the steps to enable rack resiliency changes.
 
 ## Case 1: Fresh install
 
-Follow the steps mentioned in this [page](../../install/prepare_site_init.md#3-create-baseline-system-customizations) to enable rack resiliency and add the prefixes for kubernetes and ceph zones.
+Follow the steps mentioned in this [page](../../install/prepare_site_init.md#enable-rack-resiliency) to enable rack resiliency and add the prefixes for kubernetes and ceph zones.
 
 ## Case 2: Upgrade
 
-To enable rack resiliency during upgrade with iuf, use the prcedure below, before the **Management Node Rollout**
+To enable rack resiliency during upgrade with iuf, use the procedure below, before the **Management Node Rollout**
 stage of [CSM upgrade](../iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md).
 
 ### Steps to enable rack resiliency and add zone prefixes
@@ -48,7 +48,7 @@ Example output:
 secret/site-init configured
 ```
 
-**NOTE**: Rack Resiliency `enabled` flag should be set to `true` for enblement to work, if it set to any other value like '1' or 'yes' it will be considered as `false`.
+**NOTE**: Rack Resiliency `enabled` flag should be set to `true` for enablement to work, if it set to any other value like '1' or 'yes' it will be considered as `false`.
 
 **Important Notes:**
 

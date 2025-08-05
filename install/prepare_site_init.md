@@ -453,6 +453,28 @@ the system size.
     done
     ```
 
+### Enable Rack Resiliency
+
+This section can be skipped if Rack Resiliency feature is not required.
+
+1. (`pit#`) Update the customizations file.
+
+    ```bash
+      yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.enabled' "true"
+    ```
+1. (`pit#`) If site specific prefix for Kubernetes and `Ceph` zones is required:
+
+   For example:
+   
+   ```bash
+      yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "prefix-string"
+      yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "prefix-string"
+    ``` 
+**Note:** Replace `prefix-string` with the site specific string.
+
 ## 4. Encrypt secrets
 
 1. (`pit#`) Load the `zeromq` container image required by Sealed Secret Generators.

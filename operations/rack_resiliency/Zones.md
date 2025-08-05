@@ -1,15 +1,15 @@
 # Zones
 
 Rack Resiliency defines a logical grouping of master, worker and storage nodes(ncns) in a single rack as a zone. The racks which supports only non-ncns, do not fall in the category of Rack Resiliency zones. During the setup of Rack Resiliency, it is validated that any zone should include the following minimal hardware:
-- 1 Kubernetes Master node
-- 1 Kubernetes Worker node
-- 1 Ceph Storage node
+* 1 Kubernetes Master node
+* 1 Kubernetes Worker node
+* 1 Ceph Storage node
 
 The above minimal hardware constitutes management failure domains(`MFDs`). The zoning is done to ensure `MFDs` are configured based on their physical placement in the racks.
 
 Rack Resiliency supports two type of zones:
-- Kubernetes Zone, which helps to split replicas of critical services across racks.
-- Ceph Zone, which helps to split utility storage across racks (Ceph uses the concept of buckets to isolate storage. However, rack resiliency uses the term zone to refer to the buckets spread across racks for consistency)
+* Kubernetes Zone, which helps to split replicas of critical services across racks.
+* Ceph Zone, which helps to split utility storage across racks (Ceph uses the concept of buckets to isolate storage. However, rack resiliency uses the term zone to refer to the buckets spread across racks for consistency)
 
 For knowing more about kubernetes zoning, refer to [k8s documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) and for knowing more about ceph zoning, refer to [ceph documentaion](https://docs.ceph.com/en/reef/architecture/)
 
@@ -61,7 +61,7 @@ To view ceph zones use the below command:
 
 ## Managing Zones
 
-To view and get details about the rack resiliency zones use the below craycli commands:
+To view and get details about the rack resiliency zones use the below Cray CLI commands:
 
 * List all configured zones:
 

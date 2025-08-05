@@ -5,18 +5,16 @@
 * [Objective of Rack Resiliency](#objective-of-rack-resiliency)
     * [Key Features](#key-features)
 * [Architecture Overview](#architecture-overview)
-    * [Management plane placement discovery and placement validation](management_plane_discovery_and_validation.md)
-    * [Spreading of NCNs across Kubernetes zones, and spreading storage nodes across Ceph zones](spreading_NCNs_across_k8s_and_ceph_zones.md)
-    * [Distribution of critical services across zones](distribution_of_critical_services_across_zones.md)
-    * [Monitoring failures and ensuring critical services are available across zones](monitor_and_ensure_critical_service_availability.md)
 * [Components of Rack Resiliency](#components-of-rack-resiliency)
     * [Critical Services](README.md#1-critical-services)
     * [ConfigMaps](README.md#2-configmaps)
     * [Kyverno Policy](README.md#3-kyverno-policy)
     * [Rack Resiliency Service (RRS)](README.md#4-rack-resiliency-service-rrs)
+        * [Resiliency Monitoring Service (RMS)](#resiliency-monitoring-service-rms)
+        * [Rack Resiliency API Service](#rack-resiliency-api-service)
 * [Rack Resiliency Management Tools](#rack-resiliency-management-tools)
     * [Interactive interface with Cray CLI](#interactive-interface-with-cray-cli)
-    * [API Interface with  RESTful APIs](#api-interface-with--restful-apis)
+    * [API Interface with  RESTful APIs](#api-interface-with-restful-apis)
 * [Rack Resiliency Management Tasks](#rack-resiliency-management-tasks)
     * [Enable and Configure Rack Resiliency](README.md#1-enable-and-configure-rack-resiliency)
     * [Managing Critical Services](README.md#2-managing-critical-services)
@@ -59,7 +57,7 @@ To enable CSM to tolerate failure of racks and prevent a system-wide outage, whe
 * Efficient zoning of kubernetes nodes along with ceph nodes to provide tolerance for single rack failure
 * Identification and segregation of [critical services](Critical_Services.md) essential for user jobs
 * Policy based distribution of critical services across [MPFD](#key-terminology)
-* Continous monitoring of critical services and generation of alerts post failures of nodes or rack.
+* Continuous monitoring of critical services and generation of alerts post failures of nodes or rack.
 
 # Architecture Overview
 
@@ -67,20 +65,20 @@ To enable CSM to tolerate failure of racks and prevent a system-wide outage, whe
 
 The Rack Resiliency solution is implemented in multiple stages. These stages are:
 
-[Stage 1 - Enablement](Enabling_Rack_Resiliency.md)
-[Stage 2 - Placement Discovery](Setup.md#stage-2---placement-discovery)
-[Stage 3 - Placement Validation](Setup.md#stage-3---placement-validation)
-[Stage 4 - Kubernetes Zoning](Setup.md#stage-4---kubernetes-zoning)
-[Stage 5 - Ceph Zoning]((Setup.md#stage-4---ceph-zoning))
-[Stage 6 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
-[Stage 7 - Deploy Rack Resiliency Service](#deploying-helm-charts-for-rack-resiliency-service-rrs)
-[Stage 8 - Continous Monitoring](Resiliency_Monitoring_Service.md)
+* [Stage 1 - Feature Enablement](Enabling_Rack_Resiliency.md)
+* [Stage 2 - Placement Discovery](Setup.md#stage-2---placement-discovery)
+* [Stage 3 - Placement Validation](Setup.md#stage-3---placement-validation)
+* [Stage 4 - Kubernetes Zoning](Setup.md#stage-4---kubernetes-zoning)
+* [Stage 5 - Ceph Zoning]((Setup.md#stage-4---ceph-zoning))
+* [Stage 6 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
+* [Stage 7 - Deploy Rack Resiliency Service](#deploying-helm-charts-for-rack-resiliency-service-rrs)
+* [Stage 8 - Continuous Monitoring](Resiliency_Monitoring_Service.md)
 
 # Components of Rack Resiliency
 
 ## 1. Critical Services
 
-Rack Resiliency monitors specific CSM Services for continous availability. These services are called critical services. For further details refer to [Critical Servies](Critical_Services.md)
+Rack Resiliency monitors specific CSM Services for continuous availability. These services are called critical services. For further details refer to [Critical Services](Critical_Services.md)
 
 ## 2. ConfigMaps
 
@@ -98,30 +96,30 @@ Refer [`Kyverno` cluster policy](distribution_of_critical_services_across_zones.
  
 RRS is designed as a singleton pod(`cray-rrs`) with two containers - cray-rrs-rms and cray-rrs-api along with two init containers named cray-rrs-check and cray-rrs-init
 
-**Resiliency Monitoring Service (RMS)**
+### [Resiliency Monitoring Service (RMS)](Resiliency_Monitoring_Service.md)
 
 The Resiliency Monitoring Service (RMS) provides the functionality to detect rack or node failures and monitor critical services post the failure. 
   
 Refer for more info on [RMS](Resiliency_Monitoring_Service.md)
 
-**Rack Resiliency API Service**
+### [Rack Resiliency API Service](../../api/rrs.md)
 
-The Rack Resiliency Service (RRS) provides APIs to access and manage zones data and critical services information within Kubernetes and Ceph clusters. 
-It supports zone discovery, status checks, and critical service registration. RRS is used by the Cray `rrs` CLI to power high-availability, fault-tolerant operations.
+The Rack Resiliency Service (RRS) provides APIs to manage zones and critical services. The API service is a separate container in `cray-rrs` pod and serves as the backend for `rrs` module of Cray CLI. Refer [API](../../api/rrs.md) for more information.
 
-Refer [API](../../api/rrs.md) for more info.
-
-Refer for more information on [RRS](Rack_Resiliency_Service.md)
+To get complete information on the components and functionalities of RRS [refer here](Rack_Resiliency_Service.md).
 
 # Rack Resiliency Management Tools
 
 ## Interactive interface with Cray CLI
-    * The CLI for interfacing with rack resiliency service is part of Cray CLI. A new module (RRS) is added to Cray CLI to support rack resiliency specific commands.
-    * Refer [Craycli commands for zones](Zones.md#managing-zones) for more information on the commands related to zones.
-    * Refer [Craycli commands for critical services](Managed_Critical_Services.md#critical-services-operations) for more information on the commands related to critical services.
 
-## API Interface with  RESTful APIs
-    * Refer for more info [RRS](../../api/rrs.md) for APIs
+* The CLI for interfacing with rack resiliency service is part of Cray CLI. A new module (RRS) is added to Cray CLI to support rack resiliency specific commands.
+* Refer [Cray CLI commands for zones](Zones.md#managing-zones) for more information on the commands related to zones.
+* Refer [Cray CLI commands for critical services](Manage_Critical_Services.md#critical-services-operations) for more information on the commands related to critical services.
+* Refer [Cray CLI commands for critical services healthchecks](Troubleshooting.md#critical-services-healthcheck).
+
+## API Interface with RESTful APIs
+
+The RESTful APIs provided by API service is used by the Cray CLI and also can be accessed via tools like `wget` or `curl`. Refer  [here](../../api/rrs.md) for more information on using RRS APIs.
   
 # Rack Resiliency Management Tasks
 
@@ -135,11 +133,11 @@ Rack Resiliency uses a 3 step procedure to be set up for monitoring critical ser
 
 ### Deploying helm charts for Rack Resiliency Service (RRS)
 
-The RRS (Rack Resiliency Service) Helm chart includes both the RRS and the RMS (Resiliency Monitoring Service). The chart will be deployed automatically during the CSM install or upgrade process, provided that RR is enabled. Otherwise, the chart will not be deployed.
+This is the Stage 7 as mentioned in the [Architecture Overview](README.md#architecture-overview). The RRS (Rack Resiliency Service) Helm chart includes both the API and the RMS (Resiliency Monitoring Service) along with two init containers. The chart is deployed automatically during the CSM install or upgrade process, provided RR is enabled. Otherwise, the chart will not be deployed.
 
 ## 2. Managing critical services
 
-During the execution of RRS there maybe a need to manage critical services, which may need administrator intervention. This can be done using the Cray CLI or the API. Refer [manage critical services](Managed_Critical_Services.md) for complete list of supported operations.
+During the execution of RRS there maybe a need to manage critical services, which may need administrator intervention. This can be done using the Cray CLI or the API. Refer [manage critical services](Manage_Critical_Services.md) for complete list of supported operations.
 
 ## 3. Managing `kyverno` policy 
 

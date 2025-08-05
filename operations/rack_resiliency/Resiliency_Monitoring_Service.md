@@ -32,17 +32,17 @@ Triggered upon receiving a notification from HMNFD, this loop performs targeted 
 
 ## RMS and ConfigMaps
 
-RMS reads the [static configmap(rrs-mon-static)](ConfigMaps.md#11-static-configmap) for getting  the list of critical services to monitor. It updates the [dynamic configmap(rrs-mon-dynamic)](ConfigMaps.md#12-dynamic-configmap) at regu;ar intervals to reflect the latest status and balance of critical services along with the zones information.
+RMS reads the [static configmap(rrs-mon-static)](ConfigMaps.md#11-static-configmap) for getting  the list of critical services to monitor. It updates the [dynamic configmap(rrs-mon-dynamic)](ConfigMaps.md#12-dynamic-configmap) at regular intervals to reflect the latest status and balance of critical services along with the zones information.
 
 ## RMS Messages
 
 RMS emits log messages at different severities during the monitoring cycle.
 For example:
-- INFO in lib_rms - CEPH is healthy
-- WARNING in rms - Components '['x3000c0s5b0n0', 'x3000c0s2b0n0']' are changed to Standby state.
-- ERROR in rms - Failed to retrieve HSM data
-- WARNING in lib_rms - list of imbalanced services are - ['istiod']
-- WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', 'kyverno-cleanup-controller']
-- WARNING in lib_rms - Host ncn-s003 is in - Offline state
+* INFO in lib_rms - CEPH is healthy
+* WARNING in rms - Components '['x3000c0s5b0n0', 'x3000c0s2b0n0']' are changed to Standby state.
+* ERROR in rms - Failed to retrieve HSM data
+* WARNING in lib_rms - list of imbalanced services are - ['istiod']
+* WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', 'kyverno-cleanup-controller']
+* WARNING in lib_rms - Host ncn-s003 is in - Offline state
 
 For troubleshooting the messages logged by RMS refer to [troubleshooting section](Troubleshooting.md).

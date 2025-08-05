@@ -2,28 +2,28 @@
 
 This page contains general Rack Resiliency troubleshooting topics.
 
-- [Craycli tool](#craycli-tool)
-  - [Wrong critical service type](#error-bad-request-invalid-request-body-1-validation-error-for-validatecriticalservicecmstatictype)
-- [Resiliency Monitoring Service](#resiliency-monitoring-service-rms)
-  - [Steps to view RMS logs](#steps-to-view-rms-logs)
-  - [Interpreting RMS logs](#interpreting-rms-logs)
-    - [State change notification from HMNFD](#state-change-notification-from-hmnfd)
-    - [Node failure](#node-failure)
-    - [Rack failure](#rack-failure)
-    - [Status of Ceph](#status-of-ceph)
-    - [Critical services events](#critical-services-events)
-      - [Imbalance of services](#imbalance-of-services)
-      - [Status of service](#status-of-service)
-      - [Service not found](#service-not-found)
-      - [Unable to register for notification](#unable-to-register-for-notification)
-- [Critical Services Healthcheck](#critical-services-healthcheck)
-  - [List the status of all the critical services](#1-list-the-status-of-all-the-critical-services)
-  - [Get detailed status for a specific critical service](#2-get-detailed-status-for-a-specific-critical-service)
-- [Getting details about Resiliency Monitoring Service (RMS)](#getting-details-about-resiliency-monitoring-service-rms)
+* [Cray CLI tool](#cray-cli-tool)
+  * [Wrong critical service type](#error-bad-request-invalid-request-body-1-validation-error-for-validatecriticalservicecmstatictype)
+* [Resiliency Monitoring Service](#resiliency-monitoring-service-rms)
+  * [Steps to view RMS logs](#steps-to-view-rms-logs)
+  * [Interpreting RMS logs](#interpreting-rms-logs)
+    * [State change notification from HMNFD](#state-change-notification-from-hmnfd)
+    * [Node failure](#node-failure)
+    * [Rack failure](#rack-failure)
+    * [Status of Ceph](#status-of-ceph)
+    * [Critical services events](#critical-services-events)
+      * [Imbalance of services](#imbalance-of-services)
+      * [Status of service](#status-of-service)
+      * [Service not found](#service-not-found)
+      * [Unable to register for notification](#unable-to-register-for-notification)
+* [Critical Services Healthcheck](#critical-services-healthcheck)
+  * [List the status of all the critical services](#1-list-the-status-of-all-the-critical-services)
+  * [Get detailed status for a specific critical service](#2-get-detailed-status-for-a-specific-critical-service)
+* [Getting details about Resiliency Monitoring Service (RMS)](#getting-details-about-resiliency-monitoring-service-rms)
 
-## Craycli tool
+## Cray CLI tool
 
-The craycli is used to get information related to multiple components of Rack Resiliency. Use the following command for more information on RR support:
+The Cray CLI is used to get information related to multiple components of Rack Resiliency. Use the following command for more information on RR support:
 
 ```bash
 (ncn-mw#) cray rrs --help
@@ -31,7 +31,7 @@ The craycli is used to get information related to multiple components of Rack Re
 
 ### Error: Bad Request: Invalid request body: 1 validation error for ValidateCriticalServiceCmStaticType
 
-If a new critical service of type other than 'Deployment' or 'StatfulSet' is added through craycli then this error is encountered.
+If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through Cray CLI then this error is encountered.
 
 Example:
 
@@ -73,7 +73,7 @@ kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
   ```
 
 Cause: The node(s) were shutdown or powered off.
-Effect: This leads to critical service redistiribution based on kyverno policy.
+Effect: This leads to critical service redistribution based on kyverno policy.
 Recovery: Power on the node(s).
 
 
@@ -84,7 +84,7 @@ Recovery: Power on the node(s).
   ```
 
 Cause: The node(s) were shutdown or powered off.
-Effect: This leads to critical service redistiribution based on kyverno policy.
+Effect: This leads to critical service redistribution based on kyverno policy.
 Recovery: Power on the node(s).
 
 #### Rack failure
@@ -94,7 +94,7 @@ Recovery: Power on the node(s).
   ```
 
 Cause: All the nodes in the rack were shutdown or powered off.
-Effect: This leads to critical service redistiribution based on kyverno policy.
+Effect: This leads to critical service redistribution based on kyverno policy.
 Recovery: Power on the all the nodes in the rack.
 
 #### Status of Ceph
@@ -124,7 +124,7 @@ Recovery: Power on the all the nodes in the rack.
   ```
 
 Cause: The storage node was shutdown or powered off.
-Effect: This leads to ceph storage becoming unhealty.
+Effect: This leads to ceph storage becoming unhealthy.
 Recovery: Power on the node and wait for ceph to restore.
 
 #### Critical services events
@@ -135,7 +135,7 @@ Recovery: Power on the node and wait for ceph to restore.
 2025-06-30 07:02:36,235 - WARNING in lib_rms - list of imbalanced services are - ['istiod']
 ```
 
-Cause: Due to node failiure the pod are not spread equally across zones.
+Cause: Due to node failure the pod are not spread equally across zones.
 Effect: This leads to danger of losing multiple replicas if another node failure happens.
 Recovery: Ensure sufficient resources(cpu and memory) are available in each zone so that pods can be equally distributed.
 
@@ -161,7 +161,7 @@ Recovery: Ensure sufficient resources(cpu and memory) are available in each zone
 2025-06-30 07:02:36,235 - WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', 'kyverno-cleanup-controller', 'kyverno-reports-controller', 'k8s-zone-api', 'kube-multus-ds']
 ```
 
-Cause: Due to node failiure the pod are not spread equally across zones.
+Cause: Due to node failure the pod are not spread equally across zones.
 Effect: This leads to danger of losing multiple replicas if another node failure happens.
 Recovery: Ensure sufficient resources(cpu and memory) are available in each zone so that pods can be equally distributed and to make statefulset configured, it need to be rollout restarted.
 
@@ -171,7 +171,7 @@ Recovery: Ensure sufficient resources(cpu and memory) are available in each zone
 2025-06-30 07:02:36,233 - ERROR in lib_rms - Error fetching StatefulSet kube-multus-ds: Not Found
 ```
 
-Cause: Wrong service is added to critical service list or the service is not yet conficured on system.
+Cause: Wrong service is added to critical service list or the service is not yet configured on system.
 Effect: This leads RMS to monitor unknown service.
 Recovery: Delete or modify the critical service.
 
@@ -182,12 +182,12 @@ Recovery: Delete or modify the critical service.
 ```
 
 Cause: The storage node was shutdown or powered off.
-Effect: This leads to ceph storage becoming unhealty.
+Effect: This leads to ceph storage becoming unhealthy.
 Recovery: Power on the node and wait for ceph to restore.
 
 ## Critical Services Healthcheck
 
-In order to check the health of critical services run the following commnands:
+In order to check the health of critical services run the following commands:
 
 ### 1. List the status of all the critical services
 
