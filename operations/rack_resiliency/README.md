@@ -31,7 +31,9 @@ To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which
 
 # Key terminology
 
-* Rack: A standardized structure designed to house and organize computer servers and other hardware like network switches. Each HPE Cray Supercomputing EX system rack houses `NCNs` and `Non-NCNs` along with slingshot switches. This is also referred to as cabinets.
+* Rack: A standardized physical structure designed to house and organize computer servers and other hardware like
+   network switches. Each HPE Cray Supercomputing EX system rack houses NCNs and non-NCNs, along with
+   Slingshot switches. Racks are also referred to as cabinets.
 * [Zone](Zones.md): A zone represents a logical failure domain. It is common for Kubernetes clusters to span multiple zones for increased availability.
 * Failure Domain: Failure domains are zones which includes infrastructure that provides availability for CSM services.
 * MPFD: Management Plane Failure Domain
