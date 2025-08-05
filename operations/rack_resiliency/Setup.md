@@ -24,8 +24,6 @@ For setting up rack resiliency the following steps are necessary:
 
 The Ansible playbooks are executed during the [node personalization](../configuration_management/Management_Node_Personalization.md) phase of **Management Node Rollout** stage of [CSM upgrade](../iuf/workflows/management_rollout.md). There are separate personalizations for master and storage nodes to setup rack resiliency.
 
-**NOTE:** The [HPC CSM Software Recipe](https://github.hpe.com/hpe/hpc-csm-software-recipe/blob/main/vcs/bootprep/management-bootprep.yaml) includes a CFS layer for rack resiliency from CSM 1.7.0
-
 #### Setting up Kubernetes zoning
 
 The below stages are used to setup the Kubernetes zones and apply the `Kyverno` policy required for RRS using Ansible plays:
