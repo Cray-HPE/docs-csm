@@ -512,18 +512,6 @@ kubectl rollout restart statefulset -n \<namespace\> \<service-name\>
 
 The below instructions should be followed only after deleting the critical services by [editing the ConfigMap](#delete-the-critical-service-using-ConfigMap).
 
-### 1. Verify that the critical services is present in the Kyverno `clusterpolicy`
-
-First ensure that the critical service is already present as part of the Kyverno `clusterpolicy` using the below
-command:
-
-```bash
-(`ncn-mw#`) kubectl get clusterpolicy insert-labels-topology-constraints -o yaml |grep \<name-of-the-critical-service\>
-```
-
-If the service is configured, proceed to the next step.
-
-### 2. Delete the critical services from the Kyverno `clusterpolicy`
 
 Edit the Kyverno `clusterpolicy` using the below command: 
 
