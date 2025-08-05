@@ -79,6 +79,10 @@
 
 ## Noteworthy changes
 
+* Kyverno image verification policy is being shipped in `Enforce` mode. Container images that are unsigned will not be deployed.
+  For more information on the policy, how to add exceptions, and how to allow third party signing keys, see
+  [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
+
 ## Test
 
 * Modified `adjust k8s_nodes_ready_check.sh` to not fail when a node is in `Ready,SchedulingDisabled` state
