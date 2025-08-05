@@ -73,9 +73,10 @@ Refer for more information on [ConfigMaps](ConfigMaps.md)
 
 ## 3. `Kyverno` policy
 
-One of the key ways to ensure that CSM critical services survive the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks. 
+One of the ways that Rack Resiliency ensures that CSM critical services survive the failure of nodes or a single rack is to
+spread the replicas of these services across multiple zones and racks.
 
-Refer [`Kyverno` cluster policy](distribution_of_critical_services_across_zones.md#`Kyverno`-cluster-policy) for more info.
+See [`Kyverno` cluster policy](distribution_of_critical_services_across_zones.md#`Kyverno`-cluster-policy) for more information.
 
 ## 4. [Rack Resiliency Service](Rack_Resiliency_Service.md) (RRS)
 
