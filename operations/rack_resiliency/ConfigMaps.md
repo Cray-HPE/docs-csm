@@ -30,11 +30,12 @@ During every monitoring interval, the following things are done.
 
 ### Static ConfigMap
 
-For viewing the data of the Static ConfigMap used by Rack Resiliency service use the below command:
+(`ncn-mw#`) View the data of the Static ConfigMap used by the Rack Resiliency service.
 
 ```bash
 kubectl get cm -n rack-resiliency rrs-mon-static -o jsonpath='{.data}' | jq
 ```
+
 Truncated example output (the actual output of ConfigMap will be larger):
 
 ```json
