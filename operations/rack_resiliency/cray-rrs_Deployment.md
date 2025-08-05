@@ -1,10 +1,10 @@
-# Deploying helm charts for Rack Resiliency Service (RRS)
+# `cray-rrs` Deployment
 
-The RRS (Rack Resiliency Service) Helm chart includes both the API and the RMS (Resiliency Monitoring Service) along
-with two `init` containers. The chart is deployed in the `rack-resiliency` namespace automatically during the CSM install
+`cray-rrs` is the name of the RRS (Rack Resiliency Service) Helm chart. The chart includes both the API and the RMS (Resiliency Monitoring Service),
+along with two `init` containers. The chart is deployed in the `rack-resiliency` namespace automatically during the CSM install
 or upgrade process.
 
-## Service details
+## Containers
 
 The service includes the following containers:
 
