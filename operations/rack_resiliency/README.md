@@ -53,7 +53,7 @@ The Rack Resiliency solution is implemented in multiple stages. These stages are
 * [Stage 3 - Placement Validation](Setup.md#stage-3---placement-validation)
 * [Stage 4 - Kubernetes Zoning](Setup.md#stage-4---kubernetes-zoning)
 * [Stage 5 - Ceph Zoning]((Setup.md#stage-4---ceph-zoning))
-* [Stage 6 - Apply `Kyverno` policy](#stage-5---apply-`Kyverno`-policy)
+* [Stage 6 - Apply `Kyverno` policy](#stage-5---apply-Kyverno-policy)
 * [Stage 7 - Continuous Monitoring](Resiliency_Monitoring_Service.md)
 
 # Components of Rack Resiliency
@@ -109,8 +109,8 @@ The RESTful APIs provided by API service is used by the Cray CLI and also can be
 
 Rack Resiliency uses a 3 step procedure to be set up for monitoring critical services:
 
-1. [Enabling Rack Resiliency and add zone prefixes](Enabling_Rack_resiliency.md#update-customization-yaml-file)
-2. [Setup Rack Resiliency](Setup.md#running-ansible-playbooks)
+1. [Enabling Rack Resiliency and add zone prefixes](../../operations/rack_resiliency/Enabling_Rack_Resiliency.md#enabling-rack-resiliency)
+2. [Setup Rack Resiliency](../../operations/rack_resiliency/Setup.md#running-ansible-playbooks)
 3. [Deploy RRS (Rack Resiliency Service)](Deploy_cray_rrs.md)
 
 ## 2. Managing critical services
