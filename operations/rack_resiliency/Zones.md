@@ -11,7 +11,7 @@ Rack Resiliency supports two type of zones:
 * Kubernetes Zone, which helps to split replicas of critical services across racks.
 * Ceph Zone, which helps to split utility storage across racks (Ceph uses the concept of buckets to isolate storage. However, Rack Resiliency uses the term zone to refer to the buckets spread across racks for consistency)
 
-For knowing more about kubernetes zoning, refer to [k8s documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) and for knowing more about ceph zoning, refer to [Ceph documentation](https://docs.ceph.com/en/reef/architecture/)
+For knowing more about Kubernetes zoning, refer to [Kubernetes documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) and for knowing more about ceph zoning, refer to [Ceph documentation](https://docs.ceph.com/en/reef/architecture/)
 
 ## Zoning Kubernetes NCNs
 
@@ -19,9 +19,9 @@ The Kubernetes topology zoning can be used to apply labels to the racks and node
 
 The node is labeled with the key `topology.kubernetes.io/zone=<zone-id>`, where `<zone-id>` is of the form `Rack-1`, `Rack-2`, and so on. These labels can be used to identify all the management nodes which belong to the same zone and is used to schedule the critical services across the zones.
 
-### Command to view kubernetes zones
+### Command to view Kubernetes zones
 
-To view kubernetes zones use the below command:
+To view Kubernetes zones use the below command:
 ```bash
 (ncn-mw#) kubectl get nodes -L topology.kubernetes.io/zone
 ```
