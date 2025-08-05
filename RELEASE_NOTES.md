@@ -79,6 +79,10 @@
 
 ## Noteworthy changes
 
+* Kyverno image verification policy is being shipped in `Enforce` mode. Container images that are `unsigned` will not be deployed.
+  Please refer the [Kyverno documentation](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above) regarding the policy,
+  how to add exceptions and allow third party signing keys.
+
 ## Test
 
 * Modified `adjust k8s_nodes_ready_check.sh` to not fail when a node is in `Ready,SchedulingDisabled` state
@@ -97,9 +101,6 @@
 * Added [CFS](glossary.md#configuration-framework-service-cfs) node personalization to the barebones image boot test.
     * This tests is part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
     * For more information, see [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md).
-* Kyverno image verification policy is being shipped in `Enforce` mode. Container images that are `unsigned` will not be deployed.
-  Please refer the [Kyverno documentation](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above) regarding the policy,
-  how to add exceptions and allow third party signing keys.
 
 ## Bug fixes
 
