@@ -1,6 +1,8 @@
 # Enabling Rack Resiliency
 
-As mentioned in the [Architecture Overview](README.md#architecture-overview), enabling Rack Resiliency is first stage for setting up rack resiliency. By default the Rack Resiliency feature is disabled. Based on whether CSM is getting freshly installed or upgraded to a new version, use the below steps to enable rack resiliency.
+As mentioned in the [Architecture overview](README.md#architecture-overview), enabling Rack Resiliency is the
+first stage for setting up rack resiliency. By default the Rack Resiliency feature is disabled. Based on whether CSM
+is getting freshly installed or upgraded to a new version, use the below steps to enable Rack Resiliency.
 
 ## Case 1: Fresh install
 
