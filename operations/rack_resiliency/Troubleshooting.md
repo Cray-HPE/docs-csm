@@ -31,15 +31,15 @@ cray rrs --help
 
 ### Wrong critical service type
 
-If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through Cray CLI then the following error is encountered.
+If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through the Cray CLI,
+then an error is encountered.
 
-"Error: Bad Request: Invalid request body: 1 validation error for `ValidateCriticalServiceCmStaticType`"
-
-Example command:
+(`ncn-mw#`) For example:
 
 ```bash
-(ncn-mw#) cray rrs criticalservices update --from-file file.json
+cray rrs criticalservices update --from-file file.json
 ```
+
 Example output:
 
 ```text
