@@ -140,9 +140,11 @@ With Kubernetes 1.32 and `kubeadm.k8s.io/vbeta4`, the Kubernetes certificate val
 
 If you wish to keep the certificate validity period at 3 years, you can skip this section and jump to the [Renew All Certificates](#renew-all-certificates) section.
 
-To adjust the validity period before renewing certificates, modify the `certificateValidityPeriod` value in the `/etc/kubernetes/kubeadmcfg.yaml` configuration file. The field value follows Go's time.Duration values format, with hours (h) being the longest supported unit.
+To adjust the validity period before renewing certificates, modify the `certificateValidityPeriod` value in the `/etc/kubernetes/kubeadmcfg.yaml` configuration file.
 
-For example, the value for 5 years (365 days * 24 hours * 5 years) is `43800h`.
+The `certificateValidityPeriod` field value follows Go's `time.Duration` values format, with hours being the longest supported unit.
+
+For example, the value for 5 years is `43800h`.
 
 Run the following steps on each master node.
 
