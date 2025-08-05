@@ -4,12 +4,12 @@ These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
 1. [Background](#1-background)
-1. [Create and Initialize `site-init` Directory](#2-create-and-initialize-site-init-directory)
-1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
-    1. [Setup LDAP configuration](#setup-ldap-configuration)
-    1. [End of LDAP configuration](#end-of-ldap-configuration)
-1. [Customer-Specific Customizations](#4-customer-specific-customizations)
-1. [Version Control `site-init` files](#5-version-control-site-init-files)
+1. [Create and initialize `site-init` directory](#2-create-and-initialize-site-init-directory)
+1. [Create baseline system customizations](#3-create-baseline-system-customizations)
+    - [Setup LDAP configuration](#setup-ldap-configuration)
+    - [End of LDAP configuration](#end-of-ldap-configuration)
+1. [Customer-specific customizations](#4-customer-specific-customizations)
+1. [Version control `site-init` files](#5-version-control-site-init-files)
     1. [Push to a remote repository](#51-push-to-a-remote-repository)
 
 ## 1. Background
@@ -44,7 +44,7 @@ installation-centric artifacts, such as:
     pit# "${CSM_PATH}/shasta-cfg/meta/init.sh" "${SITE_INIT}"
     ```
 
-### 3. Create Baseline System Customizations
+## 3. Create baseline system customizations
 
 The following steps update `${SITE_INIT}/customizations.yaml`
 with system-specific customizations.
@@ -141,7 +141,7 @@ with system-specific customizations.
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
-#### Setup LDAP configuration
+### Setup LDAP configuration
 
 > **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuation) if there is no LDAP configuration at this time. If LDAP should be enabled later,
 > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
@@ -311,7 +311,7 @@ with system-specific customizations.
        pit# yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
 
-#### End of LDAP configuration
+### End of LDAP configuration
 
 1. Configure the Unbound DNS resolver (if needed).
 
@@ -450,7 +450,7 @@ applying a customer-specific customization used in a prior version, be sure the
 change still makes sense. It is common for options to change as new features are
 introduced and bugs are fixed.
 
-## 5. Version Control `site-init` Files
+## 5. Version control `site-init` files
 
 Setup `site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
@@ -492,7 +492,7 @@ baseline configuration during initial system installation.
     pit# git commit -m "Baseline configuration for $(${CSM_PATH}/lib/version.sh)"
     ```
 
-### 5.1 Push to a Remote Repository
+### 5.1 Push to a remote repository
 
 It is **strongly recommended** that the `site-init` repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
