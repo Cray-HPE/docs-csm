@@ -1,8 +1,15 @@
 # Critical Services
 
-Critical services are defined as those services that are critical to execution of user jobs. These services are critical because the user plane / jobs require a timely response from these critical services for continued operations. Therefore, in the context of a rack failure, it is crucial that such critical services have replicas and resiliency across racks. This is the set of services that Rack Resiliency is trying to make resilient.
+In the context of Rack Resiliency, the term "critical services" refers to those services which RR is monitoring and
+trying to make resilient.
 
-HPE provides a standard set of critical services which are needed for the successful execution of user jobs. 
-However, it possible to add additional critical services to the list. For further information on managing the critical services, refer to [Manage Critical Service](Manage_Critical_Services.md)
+HPE has prepopulated the RR critical services with the set of services necessary for the successful
+execution of user jobs. Note that this does not include all services that could
+reasonably be considered critical to the system overall. For example, the
+[Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) and the
+[Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) are both necessary for
+booting compute nodes. However, because they are not necessary for executing user jobs, they are not
+included in the default RR critical services list. It possible to add additional critical services to the list. For further information on managing the critical services, refer to [Manage Critical Service](Manage_Critical_Services.md).
 
-The Resiliency Monitoring Service and the API service monitor and manage the critical services using a set of configmaps. For more details on the configmaps and its attributes refer to [ConfigMaps](ConfigMaps.md).
+Internally, the RR API service and the [Resiliency Monitoring Service](Resiliency_Monitoring_Service.md)
+manage the critical services using a set of Kubernetes ConfigMaps. For more details, see [ConfigMaps](ConfigMaps.md).
