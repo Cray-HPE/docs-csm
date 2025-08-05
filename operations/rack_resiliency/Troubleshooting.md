@@ -1,27 +1,27 @@
-# Troubleshooting Rack Resiliency(RR)
+# Troubleshooting Rack Resiliency
 
 This page contains general Rack Resiliency troubleshooting topics.
 
-* [Cray CLI tool](#cray-cli-tool)
-  * [Wrong critical service type](#wrong-critical-service-type)
+* [Cray CLI](#cray-cli)
+    * [Wrong critical service type](#wrong-critical-service-type)
 * [Resiliency Monitoring Service](#resiliency-monitoring-service-rms)
-  * [Steps to view RMS logs](#steps-to-view-rms-logs)
-  * [Interpreting RMS logs](#interpreting-rms-logs)
-    * [State change notification from HMNFD](#state-change-notification-from-hmnfd)
-    * [Node failure](#node-failure)
-    * [Rack failure](#rack-failure)
-    * [Status of Ceph](#status-of-ceph)
-    * [Critical services events](#critical-services-events)
-      * [Imbalance of services](#imbalance-of-services)
-      * [Status of service](#status-of-service)
-      * [Service not found](#service-not-found)
-      * [Unable to register for notification](#unable-to-register-for-notification)
-* [Critical Services `Healthcheck`](#critical-services-healthcheck)
-  * [List the status of all the critical services](#1-list-the-status-of-all-the-critical-services)
-  * [Get detailed status for a specific critical service](#2-get-detailed-status-for-a-specific-critical-service)
-* [Getting details about Resiliency Monitoring Service (RMS)](#getting-details-about-resiliency-monitoring-service-rms)
+    * [Steps to view RMS logs](#steps-to-view-rms-logs)
+    * [Interpreting RMS logs](#interpreting-rms-logs)
+        * [State change notification from HMNFD](#state-change-notification-from-hmnfd)
+        * [Node failure](#node-failure)
+        * [Rack failure](#rack-failure)
+        * [Status of Ceph](#status-of-ceph)
+        * [Critical services events](#critical-services-events)
+            * [Imbalance of services](#imbalance-of-services)
+            * [Status of service](#status-of-service)
+            * [Service not found](#service-not-found)
+            * [Unable to register for notification](#unable-to-register-for-notification)
+    * [Getting details about RMS](#getting-details-about-rms)
+* [Critical services health check](#critical-services-health-check)
+    * [List status of critical services](#list-status-of-critical-services)
+    * [Detailed status for a service](#detailed-status-for-a-critical-service)
 
-## Cray CLI tool
+## Cray CLI
 
 The Cray CLI is used to get information related to multiple components of Rack Resiliency. Use the following command for more information on RR support:
 
@@ -190,104 +190,109 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 * Effect: This leads to RMS not receiving notifications from HMNFD.
 * Recovery: Ensure HMNFD service is running.
 
-## Critical Services `Healthcheck`
-
-In order to check the health of critical services run the following commands:
-
-### 1. List the status of all the critical services
-
-```bash
-  (`ncn-mw#`) cray rrs criticalservices status list
-```
-
-Example Output:
-
-```text
-    [critical_services.namespace]
-    [[critical_services.namespace.kube-system]]
-    name = "cilium-operator"
-    type = "Deployment"
-    status = "Configured"
-    balanced = "true"
-
-    [[critical_services.namespace.kube-system]]
-    name = "coredns"
-    type = "Deployment"
-    status = "Configured"
-    balanced = "true"
-
-    [[critical_services.namespace.kube-system]]
-    name = "sealed-secrets"
-    type = "Deployment"
-    status = "Configured"
-    balanced = "true"
-
-    [[critical_services.namespace.dvs]]
-    name = "cray-activemq-artemis-operator-controller-manager"
-    type = "Deployment"
-    status = "Configured"
-    balanced = "true"
-
-    [[critical_services.namespace.dvs]]
-    name = "cray-dvs-mqtt-ss"
-    type = "StatefulSet"
-    status = "PartiallyConfigured"
-    balanced = "true"
-
-    [[critical_services.namespace.services]]
-    name = "cray-capmc"
-    type = "Deployment"
-    status = "Configured"
-    balanced = "true"
-
-    [[critical_services.namespace.services]]
-    name = "cray-console-data"
-    type = "Deployment"
-    status = "Configured"
-    balanced = "true"
-```
-
-This command returns information on the current state of every critical service. Specifically, for each service, it returns its status (e.g., balanced, no pods found) and the distribution of its pods across zones and nodes.
-
-### 2. Get detailed status for a specific critical service
-
-```bash
-    (`ncn-mw#`) cray rrs criticalservices status describe <critical-service-name>
-```
-
-Example Output:
-
-```text
-    [critical_service]
-    name = "cray-capmc"
-    namespace = "services"
-    type = "Deployment"
-    status = "Configured"
-    balanced = "true"
-    configured_instances = 3
-    currently_running_instances = 3
-    [[critical_service.pods]]
-    name = "cray-capmc-5cf667b54c-6xsm5"
-    status = "Running"
-    node = "ncn-w004"
-    zone = "x3000"
-
-    [[critical_service.pods]]
-    name = "cray-capmc-5cf667b54c-hpwxb"
-    status = "Running"
-    node = "ncn-w002"
-    zone = "x3001"
-
-    [[critical_service.pods]]
-    name = "cray-capmc-5cf667b54c-pww8p"
-    status = "Running"
-    node = "ncn-w003"
-    zone = "x3002"
-```
-This command returns detailed pod information including pod names, nodes, statuses, and zones.
-
-## Getting details about Resiliency Monitoring Service (RMS)
+### Getting details about RMS
 
 To know the startup time, last monitoring cycle timestamp, the polling intervals and the configured critical services it is necessary to [view the ConfigMap](ConfigMaps.md#2-veiwing-configmap). This helps to understand the various configuration parameters which control RMS behavior.
 
 **Note**: It is recommended not to modify those configuration parameters without consulting HPE support.
+
+## Critical services health check
+
+See the following sections for information on how to check the health of critical services.
+
+### List status of critical services
+
+(`ncn-mw#`) List the critical services using the CLI.
+
+```bash
+cray rrs criticalservices status list --format toml
+```
+
+Example output:
+
+```text
+[critical_services.namespace]
+[[critical_services.namespace.kube-system]]
+name = "cilium-operator"
+type = "Deployment"
+status = "Configured"
+balanced = "true"
+
+[[critical_services.namespace.kube-system]]
+name = "coredns"
+type = "Deployment"
+status = "Configured"
+balanced = "true"
+
+[[critical_services.namespace.kube-system]]
+name = "sealed-secrets"
+type = "Deployment"
+status = "Configured"
+balanced = "true"
+
+[[critical_services.namespace.dvs]]
+name = "cray-activemq-artemis-operator-controller-manager"
+type = "Deployment"
+status = "Configured"
+balanced = "true"
+
+[[critical_services.namespace.dvs]]
+name = "cray-dvs-mqtt-ss"
+type = "StatefulSet"
+status = "PartiallyConfigured"
+balanced = "true"
+
+[[critical_services.namespace.services]]
+name = "cray-capmc"
+type = "Deployment"
+status = "Configured"
+balanced = "true"
+
+[[critical_services.namespace.services]]
+name = "cray-console-data"
+type = "Deployment"
+status = "Configured"
+balanced = "true"
+```
+
+This command returns information on the current state of every critical service. Specifically, for each service, it returns its status (e.g., balanced, no pods found) and the distribution of its pods across zones and nodes.
+
+### Detailed status for a critical service
+
+(`ncn-mw#`) Get detailed status for a specific critical service using the CLI.
+
+```bash
+cray rrs criticalservices status describe <critical-service-name> --format toml
+```
+
+Example output:
+
+```toml
+[critical_service]
+name = "cray-capmc"
+namespace = "services"
+type = "Deployment"
+status = "Configured"
+balanced = "true"
+configured_instances = 3
+currently_running_instances = 3
+[[critical_service.pods]]
+name = "cray-capmc-5cf667b54c-6xsm5"
+status = "Running"
+node = "ncn-w004"
+zone = "x3000"
+
+[[critical_service.pods]]
+name = "cray-capmc-5cf667b54c-hpwxb"
+status = "Running"
+node = "ncn-w002"
+zone = "x3001"
+
+[[critical_service.pods]]
+name = "cray-capmc-5cf667b54c-pww8p"
+status = "Running"
+node = "ncn-w003"
+zone = "x3002"
+```
+
+This command returns detailed pod information including pod names, nodes, statuses, and zones.
