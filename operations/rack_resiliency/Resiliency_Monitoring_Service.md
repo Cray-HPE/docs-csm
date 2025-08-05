@@ -4,11 +4,11 @@ The Resiliency Monitoring Service(RMS) is a part of the [Rack Resiliency Service
 
 ## RMS overview
 
-The Resiliency Monitoring Service (RMS) continuously monitors the health and availability of CSM critical services and management nodes along with utility storage(ceph). The RMS uses the following components to provide its functionality:
+The Resiliency Monitoring Service (RMS) continuously monitors the health and availability of CSM critical services and management nodes along with utility storage(Ceph). The RMS uses the following components to provide its functionality:
 - [ConfigMaps](ConfigMaps.md)
 - [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd)
-- [Kubernetes Zones](Zones.md#command-to-view-kubernetes-zones)
-- [Ceph Zones](Zones.md#command-to-view-ceph-zones)
+- [Kubernetes Zones](Zones.md#command-to-view-Kubernetes-zones)
+- [Ceph Zones](Zones.md#command-to-view-Ceph-zones)
 
 RMS operates using two primary loops:
 
@@ -18,7 +18,7 @@ This loop ensures the monitoring infrastructure is properly initialized and main
 
 * Starts the internal application server to receive notifications from HMNFD.
 * Verifies and maintains active subscriptions to HMNFD.
-* Periodically updates the status of critical services and zones(kubernetes and ceph) when no active monitoring events are in progress.
+* Periodically updates the status of critical services and zones(Kubernetes and Ceph) when no active monitoring events are in progress.
 
 ### 2. RMS monitoring loop
 
@@ -45,4 +45,4 @@ For example:
 * WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', 'kyverno-cleanup-controller']
 * WARNING in lib_rms - Host ncn-s003 is in - Offline state
 
-For troubleshooting the messages logged by RMS refer to [troubleshooting section](Troubleshooting.md).
+For troubleshooting the messages logged by RMS refer to [Troubleshooting section](Troubleshooting.md).

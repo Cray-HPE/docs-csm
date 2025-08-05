@@ -58,7 +58,7 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 RRS_POD=$(kubectl get pods -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -o custom-columns=:.metadata.name --no-headers); echo "${RRS_POD}"
 ```
 
-2. Check Resiliency Monitoring Logs – Failure Scenarios & Indicators for the RMS container
+2. Check Resiliency Monitoring Logs
 
 ```bash
 kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
@@ -72,9 +72,9 @@ kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
   2025-06-26 12:49:59,725 - INFO in rms - Notification received from HMNFD 2025-06-26 12:49:59,725 - WARNING in rms - Components '['x3000c0s11b0n0']' are changed to Off state.
   ```
 
-Cause: The node(s) were shutdown or powered off.
-Effect: This leads to critical service redistribution based on kyverno policy.
-Recovery: Power on the node(s).
+* Cause: The node(s) were shutdown or powered off.
+* Effect: This leads to critical service redistribution based on kyverno policy.
+* Recovery: Power on the node(s).
 
 
 #### Node failure
@@ -83,9 +83,9 @@ Recovery: Power on the node(s).
   2025-06-26 12:49:59,997 - INFO in rms - Some nodes in rack x3000 are down. Failed nodes: ['x3000c0s11b0n0']
   ```
 
-Cause: The node(s) were shutdown or powered off.
-Effect: This leads to critical service redistribution based on kyverno policy.
-Recovery: Power on the node(s).
+* Cause: The node(s) were shutdown or powered off.
+* Effect: This leads to critical service redistribution based on kyverno policy.
+* Recovery: Power on the node(s).
 
 #### Rack failure
 
@@ -93,9 +93,9 @@ Recovery: Power on the node(s).
   2025-06-26 12:49:59,997 - INFO in rms - All the nodes in the rack x3000 are not healthy - RACK FAILURE
   ```
 
-Cause: All the nodes in the rack were shutdown or powered off.
-Effect: This leads to critical service redistribution based on kyverno policy.
-Recovery: Power on the all the nodes in the rack.
+* Cause: All the nodes in the rack were shutdown or powered off.
+* Effect: This leads to critical service redistribution based on kyverno policy.
+* Recovery: Power on the all the nodes in the rack.
 
 #### Status of Ceph
 
@@ -123,9 +123,9 @@ Recovery: Power on the all the nodes in the rack.
   2025-06-26 12:51:06,342 - WARNING in lib_rms - Service rgw.site1 running on ncn-s002 is in host is offline state
   ```
 
-Cause: The storage node was shutdown or powered off.
-Effect: This leads to ceph storage becoming unhealthy.
-Recovery: Power on the node and wait for ceph to restore.
+* Cause: The storage node was shutdown or powered off.
+* Effect: This leads to ceph storage becoming unhealthy.
+* Recovery: Power on the node and wait for ceph to restore.
 
 #### Critical services events
 
@@ -135,9 +135,9 @@ Recovery: Power on the node and wait for ceph to restore.
 2025-06-30 07:02:36,235 - WARNING in lib_rms - list of imbalanced services are - ['istiod']
 ```
 
-Cause: Due to node failure the pod are not spread equally across zones.
-Effect: This leads to danger of losing multiple replicas if another node failure happens.
-Recovery: Ensure sufficient resources(cpu and memory) are available in each zone so that pods can be equally distributed.
+* Cause: Due to node failure the pod are not spread equally across zones.
+* Effect: This leads to danger of losing multiple replicas if another node failure happens.
+* Recovery: Ensure sufficient resources(cpu and memory) are available in each zone so that pods can be equally distributed.
 
 ##### Status of service
 
@@ -161,9 +161,9 @@ Recovery: Ensure sufficient resources(cpu and memory) are available in each zone
 2025-06-30 07:02:36,235 - WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', 'kyverno-cleanup-controller', 'kyverno-reports-controller', 'k8s-zone-api', 'kube-multus-ds']
 ```
 
-Cause: Due to node failure the pod are not spread equally across zones.
-Effect: This leads to danger of losing multiple replicas if another node failure happens.
-Recovery: Ensure sufficient resources(cpu and memory) are available in each zone so that pods can be equally distributed and to make statefulset configured, it need to be rollout restarted.
+* Cause: Due to node failure the pod are not spread equally across zones.
+* Effect: This leads to danger of losing multiple replicas if another node failure happens.
+* Recovery: Ensure sufficient resources(cpu and memory) are available in each zone so that pods can be equally distributed and to make statefulset configured, it need to be rollout restarted.
 
 ##### Service not found
 
@@ -171,9 +171,9 @@ Recovery: Ensure sufficient resources(cpu and memory) are available in each zone
 2025-06-30 07:02:36,233 - ERROR in lib_rms - Error fetching StatefulSet kube-multus-ds: Not Found
 ```
 
-Cause: Wrong service is added to critical service list or the service is not yet configured on system.
-Effect: This leads RMS to monitor unknown service.
-Recovery: Delete or modify the critical service.
+* Cause: Wrong service is added to critical service list or the service is not yet configured on system.
+* Effect: This leads RMS to monitor unknown service.
+* Recovery: Delete or modify the critical service.
 
 #### Unable to register for notification
 
@@ -181,9 +181,9 @@ Recovery: Delete or modify the critical service.
 [2025-05-26 11:49:25,744] ERROR in rms: Attempt 1 : Failed to fetch subscription list from hmnfd. Error: 503 Server Error: Service Unavailable for url: https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions
 ```
 
-Cause: The storage node was shutdown or powered off.
-Effect: This leads to ceph storage becoming unhealthy.
-Recovery: Power on the node and wait for ceph to restore.
+* Cause: The HMNFD service is nor running.
+* Effect: This leads to RMS not receiving notifications from HMNFD.
+* Recovery: Ensure HMNFD service is running.
 
 ## Critical Services Healthcheck
 
@@ -243,8 +243,7 @@ Example Output:
     balanced = "true"
 ```
 
-    This command returns information on the current state of every critical service. Specifically, for each service, it
-    returns its status (e.g., balanced, no pods found) and the distribution of its pods across zones and nodes.
+This command returns information on the current state of every critical service. Specifically, for each service, it returns its status (e.g., balanced, no pods found) and the distribution of its pods across zones and nodes.
 
 ### 2. Get detailed status for a specific critical service
 

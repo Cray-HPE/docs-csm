@@ -7,33 +7,32 @@ Before setting up rack resiliency, enable it using [Enabling rack resiliency in 
 For setting up rack resiliency the following steps are necessary:
 
 * [Running the ansible playbooks](#running-ansible-playbooks)
-  * [Setting up kubernetes zoning](#setting-up-kubernetes-zoning)
+  * [Setting up Kubernetes zoning](#setting-up-Kubernetes-zoning)
     * [Stage 1 - Check enablement](#stage-1---check-enablement)
     * [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
     * [Stage 3 - Placement Validation](#stage-3---placement-validation)
-    * [Stage 4 - Kubernetes Zoning](#stage-4---kubernetes-zoning)
-    * [Stage 5 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
+    * [Stage 4 - Kubernetes Zoning](#stage-4---Kubernetes-zoning)
+    * [Stage 5 - Apply Kyverno policy](#stage-5---apply-`Kyverno`-policy)
   * [Setting up ceph zoning](#setting-up-ceph-zoning)
     * [Stage 1 - Check enablement](#stage-1---check-enablement-1)
     * [Stage 2 - Placement Discovery](#stage-2---placement-discovery-1)
     * [Stage 3 - Placement Validation](#stage-3---placement-validation-1)
     * [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
-    * [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-haproxy-configuration)
+    * [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-HAproxy-configuration)
 
 ### Running ansible playbooks
 
-The Ansible playbooks are executed during the [node personalization](../configuration_management/ma) phase of **Management Node Rollout**
-stage of [CSM upgrade](../iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md). There are separate personalizations for master and storage nodes to setup rack resiliency.
+The Ansible playbooks are executed during the [node personalization](../configuration_management/Management_Node_Personalization.md) phase of **Management Node Rollout** stage of [CSM upgrade](../iuf/workflows/management_rollout.md). There are separate personalizations for master and storage nodes to setup rack resiliency.
 
 **NOTE:** The [HPC CSM Software Recipe](https://github.hpe.com/hpe/hpc-csm-software-recipe/blob/main/vcs/bootprep/management-bootprep.yaml) includes a CFS layer for rack resiliency from CSM 1.7.0
 
-#### Setting up kubernetes zoning
+#### Setting up Kubernetes zoning
 
-The below stages are used to setup the kubernetes zones and apply the kyverno policy required for RRS using Ansible plays:
+The below stages are used to setup the Kubernetes zones and apply the `Kyverno` policy required for RRS using Ansible plays:
 
-##### Stage 1 - Check enablement
+##### Stage 1 - Check Enablement
 
-This ansible play checks whether rack resiliency is enabled in the `customizations.yaml` file. If it is not enabled then the remaining playbooks do not run.
+This ansible play checks whether rack resiliency is enabled in the `customizations.yaml` file. If it is not enabled then the remaining plays do not run.
 
 ##### Stage 2 - Placement Discovery
 
@@ -65,32 +64,32 @@ This module also evaluates if managed nodes are present in the management rack a
 
 ##### Stage 4 - Kubernetes Zoning
 
-This ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies kubernetes zoning for Master and Worker nodes.
+This ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies Kubernetes zoning for Master and Worker nodes. To know more about zoning refer to [Zones](Zones.md).
 
 ##### Stage 5 - Apply Kyverno policy
 
-This ansible play applies the kyverno clusterpolicy `insert-labels-topology-constraints`. To know more on kyverno policy refer to [kyverno policy](kyverno.md).
+This ansible play applies the `Kyverno` clusterpolicy `insert-labels-topology-constraints`. To know more on `Kyverno` policy refer to [`Kyverno` policy](`Kyverno`.md).
 
 #### Setting up ceph zoning
 
-The below stages are used to setup the ceph zones and update CEPH haproxy configuration required for RRS using Ansible plays: 
+The below stages are used to setup the ceph zones and update Ceph HAproxy configuration required for RRS using Ansible plays: 
 
-##### Stage 1 - Check enablement
+##### Stage 1 - Check Enablement
 
-[Refer to](#stage-1---check-enablement)
+[Refer to Check enablement](#stage-1---check-enablement)
 
 ##### Stage 2 - Placement Discovery
 
-[Refer to](#stage-2---placement-discovery)
+[Refer to Placement Discovery](#stage-2---placement-discovery)
 
 ##### Stage 3 - Placement Validation
 
-[Refer to](#stage-3---placement-validation)
+[Refer to Placement Validation](#stage-3---placement-validation)
 
 ##### Stage 4 - Ceph Zoning
 
-This ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies ceph zoning for storage nodes.
+This ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies ceph zoning for storage nodes. To know more about zoning refer to [Zones](Zones.md).
 
 ##### Stage 5 - Ceph HAproxy Configuration
 
-This ansible play updates CEPH haproxy configuration with latest information after performing CEPH zoning and also updates ceph.conf on all storage nodes with latest configuration.
+This ansible play updates Ceph HAproxy configuration with latest information after performing Ceph zoning and also updates ceph.conf on all storage nodes with latest configuration.

@@ -1,6 +1,6 @@
 # Zones
 
-Rack Resiliency defines a logical grouping of master, worker and storage nodes(ncns) in a single rack as a zone. The racks which supports only non-ncns, do not fall in the category of Rack Resiliency zones. During the setup of Rack Resiliency, it is validated that any zone should include the following minimal hardware:
+Rack Resiliency defines a logical grouping of master, worker and storage nodes(NCNs) in a single rack as a zone. The racks which supports only non-NCNs, do not fall in the category of Rack Resiliency zones. During the setup of Rack Resiliency, it is validated that any zone should include the following minimal hardware:
 * 1 Kubernetes Master node
 * 1 Kubernetes Worker node
 * 1 Ceph Storage node
@@ -101,7 +101,7 @@ To view and get details about the rack resiliency zones use the below Cray CLI c
 * Get detailed information about a specific zone:
 
     ```bash
-    (`ncn-mw#`) cray rrs zones describe <zone-name>
+    (`ncn-mw#`) cray rrs zones describe <zone-id>
     ```
 
   Example Output:

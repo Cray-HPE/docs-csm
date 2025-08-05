@@ -1,15 +1,13 @@
 # Distributing critical services across Kubernetes zones
 
-One of the key ways to ensure that CSM critical services survive the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks.
-To support Kubernetes spread the replicas of the CSM critical services during startup, a new `kyverno` policy by name  `insert-labels-topology-constraints` has been added.
+One of the key ways to ensure that CSM critical services survive the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks. To support Kubernetes spread the replicas of the CSM critical services during startup, a new `kyverno` policy by name  `insert-labels-topology-constraints` has been added.
 
 This policy applies to all the Deployments and StatefulSets that have been identified as critical services for Rack Resiliency.
 
 ## `Kyverno` cluster policy
 
-Some of the CSM critical services already have established the pod affinities to spread the replicas across nodes. Because the nodes which are picked by 
-the Kubernetes scheduler can be on the same rack, it is necessary to include a topology constraint for these services; this helps the Kubernetes scheduler 
-distribute the replicas across zones. This is achieved using the feature with a new `kyverno` cluster policy with the name `insert-labels-topology-constraints` added.
+Some of the CSM critical services already have established the pod affinities to spread the replicas across nodes. Because the nodes which are picked by the Kubernetes scheduler can be on the same rack, it is necessary to include a topology constraint for these services; this helps the Kubernetes scheduler distribute the replicas across zones. This is achieved using the feature with a new `kyverno` cluster policy with the name `insert-labels-topology-constraints` added.
+
 For more information, see [Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
 ### 1. Policy details
@@ -75,8 +73,7 @@ The `Kyverno` policy works in four steps as described below:
 
 #### 2.1 Restarting critical services
 
-During deployment of the rack resiliency service,the critical services which are either deployments or StatefulSets are restarted. During restart the policy is implemented
-by the `Kyverno` policy engine.
+During deployment of the rack resiliency service,the critical services which are either deployments or StatefulSets are restarted. During restart the policy is implemented by the `Kyverno` policy engine.
 
 #### 2.2 Adding topology constraint
 

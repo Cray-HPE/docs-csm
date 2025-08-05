@@ -2,7 +2,7 @@
 
 This page contains the procedures to list, add, delete and modify the critical services:
 - Using Cray CLI
-- By editing configmap
+- By editing ConfigMap
 
 The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR keeps its list of critical services. The API/CLI commands to add services end up adding the new services to this ConfigMap. But because the API/CLI does not support edits or deletes, those can only be accomplished by directly editing the ConfigMap.
 
@@ -23,13 +23,13 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
 ### Critical services operations
 
 * [List critical service using Cray CLI](#list-critical-services-using-cray-cli)
-* [List critical service by viewing configmap](#list-critical-services-by-viewing-configmap)
+* [List critical service by viewing ConfigMap](#list-critical-services-by-viewing-ConfigMap)
 * [Adding a critical service using Cray CLI](#adding-a-critical-service-using-cray-cli)
-* [Adding a critical service from configmap](#adding-a-critical-service-using-configmap)
-* [Delete a critical service](#delete-the-critical-service-using-configmap)
-* [Modify a critical service](#modify-the-critical-service-using-configmap)
+* [Adding a critical service using ConfigMap](#adding-a-critical-service-using-ConfigMap)
+* [Delete a critical service](#delete-the-critical-service-using-ConfigMap)
+* [Modify a critical service](#modify-the-critical-service-using-ConfigMap)
 * [Add critical service(s) to Kyverno clusterpolicy](#add-critical-services-to-kyverno-clusterpolicy)
-* [Delete critical services(s) from Kyverno clusterpolicy](#delete-critical-services-from-the-kyverno-clusterpolicy)
+* [Delete critical service(s) from Kyverno clusterpolicy](#delete-critical-services-from-the-kyverno-clusterpolicy)
 
 ## List critical services using Cray CLI
 
@@ -40,8 +40,7 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
     ```
 
   Example Output:
-    ```bash
-    ncn-m001:~ # cray rrs criticalservices list
+    ```text
     [critical_services.namespace]
     [[critical_services.namespace.kube-system]]
     name = "cilium-operator"
@@ -79,8 +78,7 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
     ```
 
   Example Output:
-    ```bash
-    ncn-m001:~ # cray rrs criticalservices describe cray-capmc
+    ```text
     [critical_service]
     name = "cray-capmc"
     namespace = "services"
@@ -90,16 +88,16 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
 
     This command returns information such as configured instances, currently running instances, namespace, and type.
 
-## List critical services by viewing configmap
+## List critical services by viewing ConfigMap
 
-* For viewing the list of critical services directly from the configmap use the below command:
+* For viewing the list of critical services directly from the ConfigMap use the below command:
 
     ```bash
     (`ncn-mw#`) kubectl get cm rrs-mon-static -n rack-resiliency -o jsonpath='{.data.critical-service-config\.json}' | jq
     ```
 
   Truncated example output (the actual output of ConfigMap will be larger):
-    ```json
+    ```text
     {
         "critical_services": {
             "cilium-operator": {
@@ -150,8 +148,7 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
     ```
 
   Example Output:
-    ```bash
-    ncn-m001:~ # cray rrs criticalservices update --from-file new-critical-services.json
+    ```text
     Update = "Successful"
     Successfully_Added_Services = [ "kube-proxy",]
     Already_Existing_Services = [ "coredns",]
@@ -163,7 +160,7 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
 
 * After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
 
-## Adding a critical service using configmap
+## Adding a critical service using ConfigMap
 
 Verify that the list of critical services is present in the ConfigMap
 
@@ -176,14 +173,14 @@ Verify that the list of critical services is present in the ConfigMap
 Start by editing the ConfigMap:
 
 ```bash
-(`ncn-mw#`) kubectl edit configmap rrs-mon-static -n rack-resiliency
+(`ncn-mw#`) kubectl edit ConfigMap rrs-mon-static -n rack-resiliency
 ```
 
 Once inside the editor, look for the `critical-service-config.json` field under the `data` section.
 
 Example output:
 
-```yaml
+```text
 apiVersion: v1
 data:
   ceph_monitoring_polling_interval: "60"
@@ -215,7 +212,7 @@ data:
         "cray-ceph-csi-rbd-provisioner": {
           "namespace": "ceph-rbd",
           "type": "Deployment"
-        },
+        }
     ...
 ```
 
@@ -246,7 +243,7 @@ In this example, the administrator wishes to add the `coredns` critical service.
 "coredns": {
     "namespace": "kube-system",
     "type": "Deployment"
-},
+}
 ```
 
 After adding the entry, the list will look like:
@@ -265,7 +262,7 @@ After adding the entry, the list will look like:
         "cray-ceph-csi-rbd-provisioner": {
             "namespace": "ceph-rbd",
             "type": "Deployment"
-        },
+        }
     }
 }
 ```
@@ -285,14 +282,14 @@ Verify that the list of critical services is present in the ConfigMap
 Start by editing the ConfigMap:
 
 ```bash
-(`ncn-mw#`) kubectl edit configmap rrs-mon-static -n rack-resiliency
+(`ncn-mw#`) kubectl edit ConfigMap rrs-mon-static -n rack-resiliency
 ```
 
 Once inside the editor, look for the `critical-service-config.json` field under the `data` section.
 
 Example output:
 
-```yaml
+```text
 apiVersion: v1
 data:
   ceph_monitoring_polling_interval: "60"
@@ -348,7 +345,7 @@ For this example, this is the initial critical services list in the ConfigMap:
         "cray-ceph-csi-rbd-provisioner": {
             "namespace": "ceph-rbd",
             "type": "Deployment"
-        },
+        }
     }
 }
 ```
@@ -359,7 +356,7 @@ In this example, the administrator wishes to delete the `coredns` critical servi
 "coredns": {
     "namespace": "kube-system",
     "type": "Deployment"
-},
+}
 ```
 
 After deleting the entry, the list will look like:
@@ -374,7 +371,7 @@ After deleting the entry, the list will look like:
         "cray-ceph-csi-rbd-provisioner": {
             "namespace": "ceph-rbd",
             "type": "Deployment"
-        },
+        }
     }
 }
 ```
@@ -393,14 +390,14 @@ Verify that the list of critical services is present in the ConfigMap
 Start by editing the ConfigMap:
 
 ```bash
-(`ncn-mw#`) kubectl edit configmap rrs-mon-static -n rack-resiliency
+(`ncn-mw#`) kubectl edit ConfigMap rrs-mon-static -n rack-resiliency
 ```
 
 Once inside the editor, look for the `critical-service-config.json` field under the `data` section.
 
 Example output:
 
-```yaml
+```text
 apiVersion: v1
 data:
   ceph_monitoring_polling_interval: "60"
@@ -442,7 +439,7 @@ Example of modifying a service:
 
 For this example, this is the initial critical services list in the ConfigMap:
 
-```yaml
+```json
 {
     "critical_services": {
         "cilium-operator": {
@@ -456,14 +453,14 @@ For this example, this is the initial critical services list in the ConfigMap:
         "cray-ceph-csi-rbd-provisioner": {
             "namespace": "ceph-rbd",
             "type": "Deployment"
-        },
+        }
     }
 }
 ```
 
 In this example, the administrator wishes to modify the `coredns` critical service. After modifying save the changes.
 
-```yaml
+```json
 {
     "critical_services": {
         "cilium-operator": {
@@ -477,18 +474,18 @@ In this example, the administrator wishes to modify the `coredns` critical servi
         "cray-ceph-csi-rbd-provisioner": {
             "namespace": "ceph-rbd",
             "type": "Deployment"
-        },
+        }
     }
 }
 ```
 
 ## Add critical service(s) to Kyverno `clusterpolicy`
 
-The below instructions should be followed only after adding the critical service(s) using [Cray CLI](#adding-a-critical-service-using-cray-cli) or by [editing the configmap](#adding-a-critical-service-using-configmap).
+The below instructions should be followed only after adding the critical service(s) using [Cray CLI](#adding-a-critical-service-using-cray-cli) or by [editing the ConfigMap](#adding-a-critical-service-using-ConfigMap).
 
 If the service(s) are not added refer to:
 * [Using Cray CLI](#adding-a-critical-service-using-cray-cli)
-* [By editing configmap](#adding-a-critical-service-using-configmap)
+* [By editing ConfigMap](#adding-a-critical-service-using-ConfigMap)
 
 ### 1. Verify that the critical services is present in the Kubernetes cluster
 
@@ -497,7 +494,7 @@ If the service(s) are not added refer to:
 ```
 
 In the above command, replace <name-of-the-critical-service> with the name of critical service to be verified 
-and <name-of-the-service> with the correct namespace in which its configured.
+and <namespace-of-the-service> with the correct namespace in which its configured.
 
 If the service is configured, proceed to the next step.
 
@@ -516,12 +513,28 @@ Save the `clusterpolicy` and verify the new entry by using the below command and
 kubectl get clusterpolicy insert-labels-topology-constraints -o yaml |grep \<name-of-the-critical-service\>
 ```
 
+### 3. Do a rollout restart
+
+Rollout restart the critical service by using the command below:
+
+* If the service is a `deployment` use:
+
+```bash
+kubectl rollout restart deployment -n \<namespace\> \<service-name\>
+```
+
+* If the service is a `statefulset` use:
+
+```bash
+kubectl rollout restart statefulset -n \<namespace\> \<service-name\>
+```
+
 ## Delete critical service(s) from the Kyverno `clusterpolicy`
 
-The below instructions should be followed only after deleting the critical service(s) by [editing the configmap](#delete-the-critical-service-using-configmap).
+The below instructions should be followed only after deleting the critical service(s) by [editing the ConfigMap](#delete-the-critical-service-using-ConfigMap).
 
 If the service(s) are not deleted refer to:
-* [By editing configmap](#delete-the-critical-service-using-configmap)
+* [By editing ConfigMap](#delete-the-critical-service-using-ConfigMap)
 
 ### 1. Verify that the critical services is present in the Kyverno `clusterpolicy`
 
