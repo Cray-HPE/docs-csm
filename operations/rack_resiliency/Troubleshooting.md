@@ -52,7 +52,7 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 
 ### Steps to view RMS logs
 
-1. List the pods in the `rack-resiliency` namespace to identify the name of the `cray-rrs` pod
+1. Get the `cray-rrs` pod
 
 ```bash
 RRS_POD=$(kubectl get pods -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -o custom-columns=:.metadata.name --no-headers); echo "${RRS_POD}"
@@ -124,8 +124,8 @@ kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
   ```
 
 * Cause: The storage node was shutdown or powered off.
-* Effect: This leads to ceph storage becoming unhealthy.
-* Recovery: Power on the node and wait for ceph to restore.
+* Effect: This leads to Ceph storage becoming unhealthy.
+* Recovery: Power on the node and wait for Ceph to restore.
 
 #### Critical services events
 
@@ -198,7 +198,6 @@ In order to check the health of critical services run the following commands:
 Example Output:
 
 ```bash
-    ncn-m001:~ # cray rrs criticalservices status list
     [critical_services.namespace]
     [[critical_services.namespace.kube-system]]
     name = "cilium-operator"
@@ -254,7 +253,6 @@ This command returns information on the current state of every critical service.
 Example Output:
 
 ```bash
-    ncn-m001:~ # cray rrs criticalservices status describe cray-capmc
     [critical_service]
     name = "cray-capmc"
     namespace = "services"

@@ -9,7 +9,7 @@ The above minimal hardware constitutes management failure domains(`MFDs`). The z
 
 Rack Resiliency supports two type of zones:
 * Kubernetes Zone, which helps to split replicas of critical services across racks.
-* Ceph Zone, which helps to split utility storage across racks (Ceph uses the concept of buckets to isolate storage. However, rack resiliency uses the term zone to refer to the buckets spread across racks for consistency)
+* Ceph Zone, which helps to split utility storage across racks (Ceph uses the concept of buckets to isolate storage. However, Rack Resiliency uses the term zone to refer to the buckets spread across racks for consistency)
 
 For knowing more about kubernetes zoning, refer to [k8s documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) and for knowing more about ceph zoning, refer to [ceph documentaion](https://docs.ceph.com/en/reef/architecture/)
 
@@ -24,6 +24,19 @@ The node is labeled with the key `topology.kubernetes.io/zone=<zone-id>`, where 
 To view kubernetes zones use the below command:
 ```bash
 (ncn-mw#) kubectl get nodes -L topology.kubernetes.io/zone
+```
+
+Example Output:
+
+```text
+NAME       STATUS   ROLES           AGE   VERSION   ZONE
+ncn-m001   Ready    control-plane   21d   v1.32.5   x3000
+ncn-m002   Ready    control-plane   20d   v1.32.5   x3001
+ncn-m003   Ready    control-plane   20d   v1.32.5   x3002
+ncn-w001   Ready    <none>          20d   v1.32.5   x3000
+ncn-w002   Ready    <none>          20d   v1.32.5   x3001
+ncn-w003   Ready    <none>          20d   v1.32.5   x3002
+ncn-w004   Ready    <none>          20d   v1.32.5   x3000
 ```
 
 ## Zoning Ceph NCNs
@@ -55,13 +68,22 @@ To enhance Rack Resiliency, the new solution distributes the Ceph services acros
 ### Command to view ceph zones
 
 To view ceph zones use the below command:
+
 ```bash
 (ncn-mw#) ceph osd tree | grep rack
 ```
 
+Example Output:
+
+```text
+ -9         13.97278      rack x3000                                  
+-11         13.97278      rack x3001                                  
+-13         13.97278      rack x3002
+```
+
 ## Managing Zones
 
-To view and get details about the rack resiliency zones use the below Cray CLI commands:
+To view and get details about the Rack Resiliency zones use the below Cray CLI commands:
 
 * List all configured zones:
 
@@ -71,7 +93,6 @@ To view and get details about the rack resiliency zones use the below Cray CLI c
 
   Example Output:
     ```bash
-    ncn-m001:~ # cray rrs zones list
     [[Zones]]
     Zone_Name = "x3000"
 
@@ -106,7 +127,6 @@ To view and get details about the rack resiliency zones use the below Cray CLI c
 
   Example Output:
     ```bash
-    ncn-m001:~ # cray rrs zones describe x3000
     Zone_Name = "x3000"
 
     [Management_Master]
