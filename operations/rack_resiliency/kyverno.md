@@ -1,6 +1,6 @@
 # Distributing critical services across Kubernetes zones
 
-One of the key ways to ensure CSM critical services availability is that the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks. To support Kubernetes spread the replicas of the CSM critical services during startup, a new `kyverno` policy by name  `insert-labels-topology-constraints` has been added.
+One of the key ways to ensure CSM critical services availability is that the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks. To support Kubernetes in spreading the replicas of the CSM critical services during startup, a new `kyverno` policy by name  `insert-labels-topology-constraints` has been added.
 
 This policy applies to all the Deployments and StatefulSets that have been identified as critical services for Rack Resiliency.
 
@@ -73,7 +73,7 @@ The `Kyverno` policy works in four steps as described below:
 
 #### 2.1 Restarting critical services
 
-During Deployment of the Rack Resiliency Service,the critical services which are either Deployments or StatefulSets are restarted. During restart the policy is implemented by the `Kyverno` policy engine.
+During Deployment of the Rack Resiliency Service, the critical services which are either Deployments or StatefulSets are restarted. During restart the policy is implemented by the `Kyverno` policy engine.
 
 #### 2.2 Adding topology constraint
 
