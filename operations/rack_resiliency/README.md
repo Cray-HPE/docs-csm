@@ -26,8 +26,8 @@ HPE Cray Supercomputing EX systems are designed to maintain high availability (H
 To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services due to a single rack failure. This feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
 
 **NOTE**: 
-- This feature is disabled by default. 
-- This feature does not address routine maintenance scenario.
+* This feature is disabled by default. 
+* This feature does not address routine maintenance scenarios.
 
 # Key terminology
 
