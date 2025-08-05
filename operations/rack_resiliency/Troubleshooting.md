@@ -4,8 +4,8 @@ This page contains general Rack Resiliency troubleshooting topics.
 
 - [Craycli tool](#craycli-tool)
   - [Wrong critical service type](#error-bad-request-invalid-request-body-1-validation-error-for-validatecriticalservicecmstatictype)
-- [Rack Resiliency Service](#resiliency-monitoring-service-rms)
-  - [Procedure](#procedure)
+- [Resiliency Monitoring Service](#resiliency-monitoring-service-rms)
+  - [Steps to view RMS logs](#steps-to-view-rms-logs)
   - [Interpreting RMS logs](#interpreting-rms-logs)
     - [State change notification from HMNFD](#state-change-notification-from-hmnfd)
     - [Node failure](#node-failure)
@@ -16,6 +16,10 @@ This page contains general Rack Resiliency troubleshooting topics.
       - [Status of service](#status-of-service)
       - [Service not found](#service-not-found)
       - [Unable to register for notification](#unable-to-register-for-notification)
+- [Critical Services Healthcheck](#critical-services-healthcheck)
+  - [List the status of all the critical services](#1-list-the-status-of-all-the-critical-services)
+  - [Get detailed status for a specific critical service](#2-get-detailed-status-for-a-specific-critical-service)
+- [Getting details about Resiliency Monitoring Service (RMS)](#getting-details-about-resiliency-monitoring-service-rms)
 
 ## Craycli tool
 
@@ -30,6 +34,7 @@ The craycli is used to get information related to multiple components of Rack Re
 If a new critical service of type other than 'Deployment' or 'StatfulSet' is added through craycli then this error is encountered.
 
 Example:
+
 ```bash
 ncn-m001:~ # cray rrs criticalservices update --from-file file.json 
 Usage: cray rrs criticalservices update [OPTIONS]
@@ -45,7 +50,7 @@ critical_service_cm_static_type.critical_services.kube-proxy.type
 
 To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod running in the `rack-resiliency` namespace. Follow the steps below:
 
-### Procedure
+### Steps to view RMS logs
 
 1. List the pods in the `rack-resiliency` namespace to identify the name of the `cray-rrs` pod
 
@@ -66,6 +71,7 @@ kubectl logs $RRS_POD -c cray-rrs-rms -n rack-resiliency
   ```text
   2025-06-26 12:49:59,725 - INFO in rms - Notification received from HMNFD 2025-06-26 12:49:59,725 - WARNING in rms - Components '['x3000c0s11b0n0']' are changed to Off state.
   ```
+
 Cause: The node(s) were shutdown or powered off.
 Effect: This leads to critical service redistiribution based on kyverno policy.
 Recovery: Power on the node(s).
@@ -76,6 +82,7 @@ Recovery: Power on the node(s).
   ```text
   2025-06-26 12:49:59,997 - INFO in rms - Some nodes in rack x3000 are down. Failed nodes: ['x3000c0s11b0n0']
   ```
+
 Cause: The node(s) were shutdown or powered off.
 Effect: This leads to critical service redistiribution based on kyverno policy.
 Recovery: Power on the node(s).
@@ -85,6 +92,7 @@ Recovery: Power on the node(s).
   ```text
   2025-06-26 12:49:59,997 - INFO in rms - All the nodes in the rack x3000 are not healthy - RACK FAILURE
   ```
+
 Cause: All the nodes in the rack were shutdown or powered off.
 Effect: This leads to critical service redistiribution based on kyverno policy.
 Recovery: Power on the all the nodes in the rack.
@@ -114,6 +122,7 @@ Recovery: Power on the all the nodes in the rack.
   2025-06-26 12:51:06,342 - WARNING in lib_rms - Service prometheus running on ncn-s002 is in host is offline state
   2025-06-26 12:51:06,342 - WARNING in lib_rms - Service rgw.site1 running on ncn-s002 is in host is offline state
   ```
+
 Cause: The storage node was shutdown or powered off.
 Effect: This leads to ceph storage becoming unhealty.
 Recovery: Power on the node and wait for ceph to restore.
@@ -150,7 +159,6 @@ Recovery: Ensure sufficient resources(cpu and memory) are available in each zone
 2025-06-30 07:02:36,141 - WARNING in lib_rms - StatefulSet 'slurmdb-pxc' in namespace 'user' is not ready. Only 2 replicas are ready out of 3 desired replicas
 2025-06-30 07:02:36,234 - WARNING in lib_rms - list of partially configured services are - ['cray-capmc', 'cray-console-data-postgres', 'cray-console-node', 'cray-dhcp-kea-postgres', 'cray-hbtd-bitnami-etcd', 'cray-hmnfd-bitnami-etcd', 'cray-keycloak', 'cray-power-control-bitnami-etcd', 'cray-spire-postgres', 'cray-spire-server', 'cray-vault', 'hpe-slingshot-vnid', 'istiod', 'keycloak-postgres', 'slurmdb-pxc']
 2025-06-30 07:02:36,235 - WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', 'kyverno-cleanup-controller', 'kyverno-reports-controller', 'k8s-zone-api', 'kube-multus-ds']
-
 ```
 
 Cause: Due to node failiure the pod are not spread equally across zones.
@@ -176,3 +184,108 @@ Recovery: Delete or modify the critical service.
 Cause: The storage node was shutdown or powered off.
 Effect: This leads to ceph storage becoming unhealty.
 Recovery: Power on the node and wait for ceph to restore.
+
+## Critical Services Healthcheck
+
+In order to check the health of critical services run the following commnands:
+
+### 1. List the status of all the critical services
+
+```bash
+  (`ncn-mw#`) cray rrs criticalservices status list
+```
+
+Example Output:
+
+```bash
+    ncn-m001:~ # cray rrs criticalservices status list
+    [critical_services.namespace]
+    [[critical_services.namespace.kube-system]]
+    name = "cilium-operator"
+    type = "Deployment"
+    status = "Configured"
+    balanced = "true"
+
+    [[critical_services.namespace.kube-system]]
+    name = "coredns"
+    type = "Deployment"
+    status = "Configured"
+    balanced = "true"
+
+    [[critical_services.namespace.kube-system]]
+    name = "sealed-secrets"
+    type = "Deployment"
+    status = "Configured"
+    balanced = "true"
+
+    [[critical_services.namespace.dvs]]
+    name = "cray-activemq-artemis-operator-controller-manager"
+    type = "Deployment"
+    status = "Configured"
+    balanced = "true"
+
+    [[critical_services.namespace.dvs]]
+    name = "cray-dvs-mqtt-ss"
+    type = "StatefulSet"
+    status = "PartiallyConfigured"
+    balanced = "true"
+
+    [[critical_services.namespace.services]]
+    name = "cray-capmc"
+    type = "Deployment"
+    status = "Configured"
+    balanced = "true"
+
+    [[critical_services.namespace.services]]
+    name = "cray-console-data"
+    type = "Deployment"
+    status = "Configured"
+    balanced = "true"
+```
+
+    This command returns information on the current state of every critical service. Specifically, for each service, it
+    returns its status (e.g., balanced, no pods found) and the distribution of its pods across zones and nodes.
+
+### 2. Get detailed status for a specific critical service
+
+```bash
+    (`ncn-mw#`) cray rrs criticalservices status describe <critical-service-name>
+```
+
+Example Output:
+
+```bash
+    ncn-m001:~ # cray rrs criticalservices status describe cray-capmc
+    [critical_service]
+    name = "cray-capmc"
+    namespace = "services"
+    type = "Deployment"
+    status = "Configured"
+    balanced = "true"
+    configured_instances = 3
+    currently_running_instances = 3
+    [[critical_service.pods]]
+    name = "cray-capmc-5cf667b54c-6xsm5"
+    status = "Running"
+    node = "ncn-w004"
+    zone = "x3000"
+
+    [[critical_service.pods]]
+    name = "cray-capmc-5cf667b54c-hpwxb"
+    status = "Running"
+    node = "ncn-w002"
+    zone = "x3001"
+
+    [[critical_service.pods]]
+    name = "cray-capmc-5cf667b54c-pww8p"
+    status = "Running"
+    node = "ncn-w003"
+    zone = "x3002"
+```
+This command returns detailed pod information including pod names, nodes, statuses, and zones.
+
+## Getting details about Resiliency Monitoring Service (RMS)
+
+To know the startup time, last monitoring cycle timestamp, the polling intervals and the configured critical services it is necessary to [view the configmap](ConfigMaps.md#2-veiwing-configmap). This helps to understand the various configuration parameters which control RMS behavior.
+
+**Note**: It is recommended not to modify those configuration parameters without consulting HPE support.

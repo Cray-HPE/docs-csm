@@ -214,4 +214,4 @@ See [Manage `kyverno` policy](kyverno.md) in order to view, add, delete and modi
 # Troubleshooting
 
 For verifying the enablement of Rack Resiliency and troubleshooting node failures, rack failure, or status of critical services 
-and Ceph, see [Troubleshooting](troubleshooting.md).
+and Ceph, see [Troubleshooting](Troubleshooting.md).
