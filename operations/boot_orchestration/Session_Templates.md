@@ -151,7 +151,7 @@ The `rootfs` is the root file system.
 
 In the case of the [Cray Operating System (COS)](../../glossary.md#cray-operating-system-cos) image, the `rootfs_provider` may be:
 
-* HPE's [iSCSI SBPS (Scalable Boot Content Projection Service)](../iscsi_sbps/iscsi_sbps.md)
+* HPE's [iSCSI SBPS (Scalable Boot Content Projection Service)](../iscsi_sbps/README.md)
 * (deprecated) HPE's [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps), which uses HPE's
   [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) to deliver the content
 

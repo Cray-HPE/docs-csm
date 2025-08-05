@@ -531,6 +531,7 @@ dropdown
 dryrun
 eBGP
 eC
+enablement
 etcd
 ex2500
 exascale
@@ -1031,6 +1032,13 @@ etag
 etag
 etags
 
+- operations/iscsi_sbps/iSCSI_SBPS_Metrics.md
+IOPs
+LUNs
+
+- operations/iscsi_sbps/iSCSI_SBPS_Verification.md
+LUNs
+
 - operations/iuf/IUF.md
 cray-product-catalog
 sessionid
@@ -1147,12 +1155,6 @@ kubectl
 o
 session_name
 yaml
-
-- operations/configuration_management/iSCSI_SBPS_Node_Personalization.md
-enablement
-LUNs
-fileio
-iscsi-sbps-targets-config
 
 - troubleshooting/debugging_with_hms_pprof_images.md
 mutexes

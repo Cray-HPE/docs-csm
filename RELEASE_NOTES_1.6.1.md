@@ -163,9 +163,6 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 * `cfs-api` pods in CLBO state during CSM install.
     * When installing CSM 1.6, `cray-shared-kafka-kafka-` pods in the services namespace fail to come up which results in `cfs-api` pods in CLBO state.
     * A workaround is presented in [CFS API pods in CLBO](troubleshooting/known_issues/cfs-api_pods_in_CLBO_state.md).
-* `istio-proxy` containers fail with too many open files.
-    * This may happen when any pod with `istio injection` enabled is started.
-    * A workaround is presented in [Istio-Proxy failing with too many open files](troubleshooting/known_issues/Istio-Proxy_failing_with_too_many_open_files.md)
 * [Install and Upgrade Framework (IUF)](glossary.md#install-and-upgrade-framework-iuf) does not run the next stage for an activity
     * During CSM upgrade, IUF reports that multiple sessions are in progress for an activity.
     * A workaround is presented in [IUF does not run the next stage for an activity](troubleshooting/known_issues/iuf_unable_to_run_next_stage.md)
