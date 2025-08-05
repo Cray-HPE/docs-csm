@@ -16,31 +16,32 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
 #### Additional guidelines
 
 * Always maintain valid JSON syntax
-* Ensure there's no trailing comma after the last service entry
+* Ensure there is no trailing comma after the last service entry
 * Save and exit the editor to apply changes
 * The changes take effect immediately - no restart required
 
 ### Critical services operations
 
-* [List critical service using Cray CLI](#list-critical-services-using-cray-cli)
-* [List critical service by viewing ConfigMap](#list-critical-services-by-viewing-ConfigMap)
-* [Adding a critical service using Cray CLI](#adding-a-critical-service-using-cray-cli)
-* [Adding a critical service using ConfigMap](#adding-a-critical-service-using-ConfigMap)
-* [Delete a critical service](#delete-the-critical-service-using-ConfigMap)
-* [Modify a critical service](#modify-the-critical-service-using-ConfigMap)
-* [Add critical service(s) to Kyverno clusterpolicy](#add-critical-services-to-kyverno-clusterpolicy)
-* [Delete critical service(s) from Kyverno clusterpolicy](#delete-critical-services-from-the-kyverno-clusterpolicy)
+* [List critical services using CLI](#list-critical-services-using-cli)
+* [List critical services by viewing ConfigMap](#list-critical-services-by-viewing-ConfigMap)
+* [Add critical service using CLI](#add-critical-service-using-cli)
+* [Add critical service using ConfigMap](#add-critical-service-using-ConfigMap)
+* [Delete critical service using ConfigMap](#delete-critical-service-using-ConfigMap)
+* [Modify critical service using ConfigMap](#modify-critical-service-using-ConfigMap)
+* [Add critical services to Kyverno clusterpolicy](#add-critical-services-to-kyverno-clusterpolicy)
+* [Delete critical services from Kyverno clusterpolicy](#delete-critical-services-from-kyverno-clusterpolicy)
 
-## List critical services using Cray CLI
+## List critical services using CLI
 
-* List all critical services grouped by namespace:
+* (`ncn-mw#`) List all critical services grouped by namespace.
 
     ```bash
-    (`ncn-mw#`) cray rrs criticalservices list
+    cray rrs criticalservices list --format toml
     ```
 
-  Example Output:
-    ```text
+    Example output:
+
+    ```toml
     [critical_services.namespace]
     [[critical_services.namespace.kube-system]]
     name = "cilium-operator"
@@ -121,7 +122,7 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
     }
     ```
 
-## Adding a critical service using Cray CLI
+## Add critical service using CLI
 
 * Create a new JSON file with critical services configuration:
 
@@ -160,13 +161,7 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
 
 * After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
 
-## Adding a critical service using ConfigMap
-
-Verify that the list of critical services is present in the ConfigMap
-
-```bash
-(`ncn-mw#`) kubectl get cm -n rack-resiliency rrs-mon-static -o jsonpath='{.data}' | jq -r '."critical-service-config.json"'
-```
+## Add critical service using ConfigMap
 
 ### 1 Edit the ConfigMap
 
@@ -269,13 +264,7 @@ After adding the entry, the list will look like:
 
 After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
 
-## Delete the critical service using ConfigMap
-
-Verify that the list of critical services is present in the ConfigMap
-
-```bash
-(`ncn-mw#`) kubectl get cm -n rack-resiliency rrs-mon-static -o jsonpath='{.data}' | jq -r '."critical-service-config.json"'
-```
+## Delete critical service using ConfigMap
 
 ### 1 Edit the ConfigMap
 
@@ -377,13 +366,7 @@ After deleting the entry, the list will look like:
 ```
 After this proceed to delete critical service(s) from [kyverno `clusterpolicy`](#delete-critical-services-from-the-kyverno-clusterpolicy)
 
-## Modify the critical service using ConfigMap
-
-Verify that the list of critical services is present in the ConfigMap
-
-```bash
-(`ncn-mw#`) kubectl get cm -n rack-resiliency rrs-mon-static -o jsonpath='{.data}' | jq -r '."critical-service-config.json"'
-```
+## Modify critical service using ConfigMap
 
 #### 1. Edit the ConfigMap
 
@@ -479,13 +462,9 @@ In this example, the administrator wishes to modify the `coredns` critical servi
 }
 ```
 
-## Add critical service(s) to Kyverno `clusterpolicy`
+## Add critical services to Kyverno `clusterpolicy`
 
-The below instructions should be followed only after adding the critical service(s) using [Cray CLI](#adding-a-critical-service-using-cray-cli) or by [editing the ConfigMap](#adding-a-critical-service-using-ConfigMap).
-
-If the service(s) are not added refer to:
-* [Using Cray CLI](#adding-a-critical-service-using-cray-cli)
-* [By editing ConfigMap](#adding-a-critical-service-using-ConfigMap)
+The below instructions should be followed only after adding the critical services using [Cray CLI](#adding-a-critical-service-using-cray-cli) or by [editing the ConfigMap](#adding-a-critical-service-using-ConfigMap).
 
 ### 1. Verify that the critical services is present in the Kubernetes cluster
 
@@ -529,12 +508,9 @@ kubectl rollout restart deployment -n \<namespace\> \<service-name\>
 kubectl rollout restart statefulset -n \<namespace\> \<service-name\>
 ```
 
-## Delete critical service(s) from the Kyverno `clusterpolicy`
+## Delete critical services from the Kyverno `clusterpolicy`
 
-The below instructions should be followed only after deleting the critical service(s) by [editing the ConfigMap](#delete-the-critical-service-using-ConfigMap).
-
-If the service(s) are not deleted refer to:
-* [By editing ConfigMap](#delete-the-critical-service-using-ConfigMap)
+The below instructions should be followed only after deleting the critical services by [editing the ConfigMap](#delete-the-critical-service-using-ConfigMap).
 
 ### 1. Verify that the critical services is present in the Kyverno `clusterpolicy`
 
