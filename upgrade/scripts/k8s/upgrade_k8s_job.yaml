@@ -42,7 +42,9 @@ spec:
         args:
         - |
           ssh -i /myssh/id_rsa -o StrictHostKeyChecking=no \
-              -o UserKnownHostsFile=/dev/null root@ncn-m001 "/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_k8s_steps.sh"
+              -o UserKnownHostsFile=/dev/null root@ncn-m001 \
+              "ts=\$(date +'%Y-%m-%d_%H-%M-%S'); \
+               /usr/share/doc/csm/upgrade/scripts/k8s/upgrade_k8s_steps.sh >> /root/upgrade_k8s_output_\$ts.log 2>&1"
         volumeMounts:
         - mountPath: /myssh
           name: ssh

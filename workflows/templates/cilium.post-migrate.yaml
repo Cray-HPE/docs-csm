@@ -51,6 +51,22 @@ spec:
                   fi
                   kubectl get netpol -A
                   rm -f /tmp/netpol-out.yaml
+        - name: enable-strimzi-netpol-management
+          dependencies:
+            - restore-network-policies
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  echo "Enabling Strimzi Operator NetworkPolicy management"
+                  kubectl -n operators set env deployment/strimzi-cluster-operator STRIMZI_NETWORK_POLICY_GENERATION-
+                  echo "Waiting for Strimzi Operator to restart"
+                  kubectl -n operators rollout status deployment strimzi-cluster-operator
         - name: update-multus-configmap
           templateRef:
             name: ssh-template
@@ -68,6 +84,7 @@ spec:
           dependencies:
             - restore-network-policies
             - update-multus-configmap
+            - enable-strimzi-netpol-management
           templateRef:
             name: ssh-template
             template: shell-script
