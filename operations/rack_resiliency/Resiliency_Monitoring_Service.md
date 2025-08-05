@@ -5,10 +5,10 @@ The Resiliency Monitoring Service(RMS) is a part of the [Rack Resiliency Service
 ## RMS overview
 
 The Resiliency Monitoring Service (RMS) continuously monitors the health and availability of CSM critical services and management nodes along with utility storage(Ceph). The RMS uses the following components to provide its functionality:
-- [ConfigMaps](ConfigMaps.md)
-- [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd)
-- [Kubernetes Zones](Zones.md#command-to-view-Kubernetes-zones)
-- [Ceph Zones](Zones.md#command-to-view-Ceph-zones)
+* [ConfigMaps](ConfigMaps.md)
+* [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd)
+* [Kubernetes Zones](Zones.md#command-to-view-Kubernetes-zones)
+* [Ceph Zones](Zones.md#command-to-view-Ceph-zones)
 
 RMS operates using two primary loops:
 

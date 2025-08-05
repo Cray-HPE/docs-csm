@@ -26,13 +26,13 @@ vi /tmp/customizations.yaml
 ```
 
 **`NOTE`**  
-- Adding zone prefixes is optional. No prefixes are added by default.
-- The prefix can be limited to 1-1000 characters long (but no restrictions on the type of characters)
+* Adding zone prefixes is optional. No prefixes are added by default.
+* The prefix can be limited to 1-1000 characters long (but no restrictions on the type of characters)
 
 Edit the `customizations.yaml`: 
 
-- Update the `spec.services.rack-resiliency.enabled` flag from `false` to `true`.
-- Update the `spec.services.k8s_zone_prefix` and `spec.services.ceph_zone_prefix` sections with the required Kubernetes and ceph zone prefix.
+* Update the `spec.services.rack-resiliency.enabled` flag from `false` to `true`.
+* Update the `spec.services.k8s_zone_prefix` and `spec.services.ceph_zone_prefix` sections with the required Kubernetes and ceph zone prefix.
 
 Save and close the `customizations.yaml`.
 
