@@ -15,6 +15,7 @@ Procedures for Certificate Renewal:
 - [File Locations](#file-locations)
 - [Check Certificates](#check-certificates)
 - [Backup Existing Certificates](#backup-existing-certificates)
+- [Modify Certificate Validity Period](#modify-certificate-validity-period)
 - [Renew All Certificates](#renew-all-certificates)
 - [Renew Etcd Certificate](#renew-etcd-certificate)
 - [Update Client Secrets](#update-client-secrets)
@@ -131,6 +132,42 @@ Client (master and worker nodes):
     ncn-w003: /var/lib/kubelet/pki/kubelet.crt
 
     [...]
+    ```
+
+## Modify Certificate Validity Period
+
+With Kubernetes 1.32 and `kubeadm.k8s.io/vbeta4`, the Kubernetes certificate validity period, or expiry, can be configured in the `/etc/kubernetes/kubeadmcfg.yaml` file. In CSM 1.7, the default certificate validity period is `26280h` or **3 years**.
+
+If you wish to keep the certificate validity period at 3 years, you can skip this section and jump to the [Renew All Certificates](#renew-all-certificates) section.
+
+To adjust the validity period before renewing certificates, modify the `certificateValidityPeriod` value in the `/etc/kubernetes/kubeadmcfg.yaml` configuration file. The field value follows Go's time.Duration values format, with hours (h) being the longest supported unit.
+
+For example, the value for 5 years (365 days * 24 hours * 5 years) is `43800h`.
+
+Run the following steps on each master node.
+
+1. Make copy of `/etc/kubernetes/kubeadmcfg.yaml`.
+
+    ```bash
+    cp /etc/kubernetes/kubeadmcfg.yaml /etc/kubernetes/kubeadmcfg.yaml.bak
+    ```
+
+1. Edit the `certificateValidityPeriod` value.
+
+    ```bash
+    yq4 eval -i -P '.certificateValidityPeriod = "43800h"' "/etc/kubernetes/kubeadmcfg.yaml"
+    ```
+
+1. Check `certificateValidityPeriod` value.
+
+    ```bash
+    cat /etc/kubernetes/kubeadmcfg.yaml | grep certificateValidityPeriod
+    ```
+
+    Example output:
+
+    ```text
+    certificateValidityPeriod: 43800h
     ```
 
 ## Renew All Certificates
