@@ -41,7 +41,7 @@ Truncated example output (the actual output of ConfigMap will be larger):
   "ceph_monitoring_total_time": "600",
   "ceph_pre_monitoring_delay": "60",
   "critical-service-config.json":
-    ....
+    "<...omitted from example output...>",
   "default_message_level": "debug",
   "k8s_monitoring_polling_interval": "60",
   "k8s_monitoring_total_time": "600",
