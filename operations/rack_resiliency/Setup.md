@@ -12,7 +12,7 @@ For setting up rack resiliency the following steps are necessary:
     * [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
     * [Stage 3 - Placement Validation](#stage-3---placement-validation)
     * [Stage 4 - Kubernetes Zoning](#stage-4---Kubernetes-zoning)
-    * [Stage 5 - Apply Kyverno policy](#stage-5---apply-`Kyverno`-policy)
+    * [Stage 5 - Apply Kyverno policy](#stage-5---apply-Kyverno-policy)
   * [Setting up ceph zoning](#setting-up-ceph-zoning)
     * [Stage 1 - Check enablement](#stage-1---check-enablement-1)
     * [Stage 2 - Placement Discovery](#stage-2---placement-discovery-1)
@@ -68,7 +68,7 @@ This Ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stag
 
 ##### Stage 5 - Apply Kyverno policy
 
-This Ansible play applies the `Kyverno` clusterpolicy `insert-labels-topology-constraints`. To know more on `Kyverno` policy refer to [`Kyverno` policy](`Kyverno`.md).
+This Ansible play applies the `Kyverno` clusterpolicy `insert-labels-topology-constraints`. To know more on `Kyverno` policy refer to [`Kyverno` policy](Kyverno.md).
 
 #### Setting up ceph zoning
 
