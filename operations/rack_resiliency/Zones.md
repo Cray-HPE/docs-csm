@@ -17,7 +17,7 @@ For knowing more about Kubernetes zoning, refer to [Kubernetes documentation](ht
 
 The Kubernetes topology zoning can be used to apply labels to the racks and nodes in order to create management failure domains (`MFDs`).
 
-The node is labeled with the key `topology.kubernetes.io/zone=<zone-id>`, where `<zone-id>` is of the form `Rack-1`, `Rack-2`, and so on. These labels can be used to identify all the management nodes which belong to the same zone and is used to schedule the critical services across the zones.
+The node is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where `<zone-id>` is of the form `Rack-1`, `Rack-2`, and so on. These labels can be used to identify all the management nodes which belong to the same zone and is used to schedule the critical services across the zones.
 
 ### Command to view Kubernetes zones
 
