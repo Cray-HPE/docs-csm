@@ -80,7 +80,8 @@
 ## Noteworthy changes
 
 * The default Kubernetes certificate validity period increased from 1 year to 3 years.
-  For more details on the certificate validity period and how to modify it, see [Modify Certificate Validity Period](operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#modify-certificate-validity-period)
+  For more details on the certificate validity period and how to modify it, see
+  [Modify certificate validity period](operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#modify-certificate-validity-period).
 
 ## Test
 
