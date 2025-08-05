@@ -76,7 +76,8 @@ Refer [`Kyverno` cluster policy](distribution_of_critical_services_across_zones.
 
 ## 4. [Rack Resiliency Service](Rack_Resiliency_Service.md) (RRS)
 
-RRS is a new service introduced as part of CSM 1.7.0 to monitor critical services and provide alerts during node or rack failures. This is designed as a singleton pod(`cray-rrs`) with two containers - `cray-rrs-rms` and `cray-rrs-api` along with two init containers named `cray-rrs-check` and `cray-rrs-init`.
+RRS is a new service introduced as part of CSM 1.7.0 to monitor critical services and provide alerts during node or rack
+failures. This is designed as a singleton pod (`cray-rrs`). See [`cray-rrs` Deployment](cray-rrs_Deployment.md) for more details.
 
 ### [Resiliency Monitoring Service (RMS)](Resiliency_Monitoring_Service.md)
 
@@ -111,7 +112,7 @@ Rack Resiliency uses a 3 step procedure to be set up for monitoring critical ser
 
 1. [Enabling Rack Resiliency and add zone prefixes](../../operations/rack_resiliency/Enabling_Rack_Resiliency.md#enabling-rack-resiliency)
 2. [Setup Rack Resiliency](../../operations/rack_resiliency/Setup.md#running-ansible-playbooks)
-3. [Deploy RRS (Rack Resiliency Service)](cray-rrs_Deployment.md)
+3. [`cray-rrs` Deployment](cray-rrs_Deployment.md)
 
 ## 2. Managing critical services
 
