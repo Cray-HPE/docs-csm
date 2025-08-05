@@ -6,7 +6,8 @@ is getting freshly installed or upgraded to a new version, use the below steps t
 
 ## Case 1: Fresh install
 
-Follow the steps mentioned in [Prepare Site Init](../../install/prepare_site_init.md#enable-rack-resiliency) to enable rack resiliency and add the prefixes for Kubernetes and ceph zones.
+Follow the steps in [Prepare Site Init](../../install/prepare_site_init.md#enable-rack-resiliency) to enable
+Rack Resiliency and optionally add prefixes for Kubernetes and Ceph zones.
 
 ## Case 2: Upgrade
 
