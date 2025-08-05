@@ -11,7 +11,7 @@ Rack Resiliency supports two type of zones:
 * Kubernetes Zone, which helps to split replicas of critical services across racks.
 * Ceph Zone, which helps to split utility storage across racks (Ceph uses the concept of buckets to isolate storage. However, Rack Resiliency uses the term zone to refer to the buckets spread across racks for consistency)
 
-For knowing more about kubernetes zoning, refer to [k8s documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) and for knowing more about ceph zoning, refer to [ceph documentaion](https://docs.ceph.com/en/reef/architecture/)
+For knowing more about kubernetes zoning, refer to [k8s documentation](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) and for knowing more about ceph zoning, refer to [Ceph documentation](https://docs.ceph.com/en/reef/architecture/)
 
 ## Zoning Kubernetes NCNs
 
