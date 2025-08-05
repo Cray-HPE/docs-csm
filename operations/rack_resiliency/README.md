@@ -42,7 +42,8 @@ To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which
   and other user-defined topology domains. This can help to achieve high availability as well as efficient resource utilization.
 * Ceph is the utility storage platform that is used to enable pods to store persistent data. It is deployed to provide block, object, and file storage to the
   management services running on Kubernetes, as well as for telemetry data coming from the compute nodes.
-* [Critical Services](Critical_Services.md): In the context of Rack Resiliency, critical services are those services that are critical to execution of user jobs. These services are monitored by the [Rack Resiliency Service](Rack_Resiliency_Service.md).
+* [Critical Services](Critical_Services.md): In the context of Rack Resiliency, critical services are those services that are critical to execution of user jobs.
+   These services are monitored by the [Rack Resiliency Service](Rack_Resiliency_Service.md).
 
 # Architecture overview
 
