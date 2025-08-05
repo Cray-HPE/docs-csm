@@ -4,14 +4,14 @@ As mentioned in the [Architecture Overview](README.md#architecture-overview), en
 
 ## Case 1: Fresh install
 
-Follow the steps mentioned in this [Prepare Site Init](../../install/prepare_site_init.md#enable-rack-resiliency) to enable rack resiliency and add the prefixes for Kubernetes and ceph zones.
+Follow the steps mentioned in [Prepare Site Init](../../install/prepare_site_init.md#enable-rack-resiliency) to enable rack resiliency and add the prefixes for Kubernetes and ceph zones.
 
 ## Case 2: Upgrade
 
-To enable rack resiliency during upgrade with iuf, use the procedure below, before the **Management Node Rollout**
+To enable Rack Resiliency during upgrade with IUF, use the procedure below, before the **Management Node Rollout**
 stage of [CSM upgrade](../iuf/workflows/management_rollout.md).
 
-### Steps to enable rack resiliency and add zone prefixes
+### Steps to enable Rack Resiliency and add zone prefixes
 
 #### Retrieve the `customizations.yaml` file
 
