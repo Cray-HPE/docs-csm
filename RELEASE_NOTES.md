@@ -25,7 +25,7 @@ changes it includes.
 ## Features
 
 * iSCSI
-    * See [iSCSI SBPS](operations/iscsi_sbps/iscsi_sbps.md) for
+    * See [iSCSI SBPS](operations/iscsi_sbps/README.md) for
       details on iSCSI based boot content projection for `rootfs` and `PE` images.
 * [Multi-Tenancy](operations/multi-tenancy/Overview.md)
 * Bonded [High Speed Network (HSN)](glossary.md#high-speed-network-hsn) interfaces supporting [Slingshot](glossary.md#slingshot) resiliency

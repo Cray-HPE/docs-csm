@@ -82,6 +82,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 * `boot_sets` field always required when [Modifying a BOS session template](../operations/boot_orchestration/Manage_a_Session_Template.md#modify-a-session-template)
 * [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
+* [iSCSI NMN DNS A Records Missing](known_issues/iSCSI_NMN_DNS_A_Records_Missing.md)
 
 ## Booting
 
@@ -101,6 +102,8 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Issues Related to Trivial File Transfer Protocol (TFTP)](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Related_to_Trivial_File_Transfer_Protocol_TFTP.md)
 * [Troubleshooting Using Kubernetes](../operations/boot_orchestration/Troubleshoot_Compute_Node_Boot_Issues_Using_Kubernetes.md)
 * [Log File Locations and Ports Used](../operations/boot_orchestration/Log_File_Locations_and_Ports_Used_in_Compute_Node_Boot_Troubleshooting.md)
+* [iSCSI SBPS Verification](../operations/iscsi_sbps/iSCSI_SBPS_Verification.md)
+* [iSCSI NMN DNS A Records Missing](known_issues/iSCSI_NMN_DNS_A_Records_Missing.md)
 
 ## Configuration management
 
@@ -167,6 +170,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Troubleshoot Issues with Large Images](../operations/image_management/Troubleshoot_Large_Image.md)
 * [Troubleshoot Remote Build Node](../operations/image_management/Troubleshoot_Remote_Build_Node.md)
 * [Troubleshoot Interactions with zypper](../operations/image_management/Troubleshoot_zypper_interaction.md)
+* [iSCSI SBPS Verification](../operations/iscsi_sbps/iSCSI_SBPS_Verification.md)
 
 ## Kubernetes
 

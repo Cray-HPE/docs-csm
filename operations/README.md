@@ -40,6 +40,7 @@ The following administrative topics can be found in this guide:
 - [Install and Upgrade Framework (IUF)](#install-and-upgrade-framework-iuf)
 - [Backup and recovery](#backup-and-recovery)
 - [Multi-tenancy](#multi-tenancy)
+- [iSCSI SBPS (Scalable Boot Content Projection Service)](#iscsi-sbps-scalable-boot-content-projection-service)
 
 ## CSM product management
 
@@ -865,3 +866,12 @@ these backups.
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
 - [Global Tenant Hooks](multi-tenancy/GlobalTenantHooks.md)
 - [Example Workflow](multi-tenancy/ExampleWorkflow.md)
+
+## iSCSI SBPS (Scalable Boot Content Projection Service)
+
+Below are the documents related to iSCSI-based boot content projection.
+
+- [iSCSI SBPS](iscsi_sbps/README.md)
+- [iSCSI SBPS Verification](iscsi_sbps/iSCSI_SBPS_Verification.md)
+- [iSCSI SBPS Metrics](iscsi_sbps/iSCSI_SBPS_Metrics.md)
+- [iSCSI SBPS Worker Node Personalization](configuration_management/iSCSI_SBPS_Node_Personalization.md)
