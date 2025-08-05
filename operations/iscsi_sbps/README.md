@@ -81,181 +81,10 @@ discovery from an initiator node during its boot.
 
 ![iSCSI SBPS workflow](../../img/SBPS_flow_diagram.jpg)
 
-(`ncn-w#`) Example output snippet of `targetcli ls` command on worker node where iSCSI LUNS are created for the images scanned:
-
-```bash
-targetcli ls
-```
-
-```text
-o- / ......................................................................................................................... [...]
-  o- backstores .............................................................................................................. [...]
-  | o- block .................................................................................................. [Storage Objects: 0]
-  | o- fileio ................................................................................................ [Storage Objects: 28]
-  | | o- 0331b9aaef49840 ......... [/var/lib/cps-local/boot-images/PE/CPE-amd.x86_64-24.03.squashfs (122.2MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 0f3847fd8e25624 ....... [/var/lib/cps-local/boot-images/PE/CPE-intel.x86_64-24.03.squashfs (114.8MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 1373e69e2028baa ......... [/var/lib/cps-local/boot-images/PE/CPE-amd.x86_64-24.11.squashfs (503.4MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 2babe2c96d6f900 ......... [/var/lib/cps-local/boot-images/PE/CPE-base.aarch64-23.12.squashfs (1.9GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 380840014ffe295  [/var/lib/cps-local/boot-images/f731d8d5-0fed-41d7-996e-6a0d19b6ff6d/rootfs (10.8GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 719593b460753ac ........ [/var/lib/cps-local/boot-images/PE/CPE-aocc.x86_64-24.11.squashfs (131.6MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 76e638d3bfc3107 ...... [/var/lib/cps-local/boot-images/PE/CPE-nvidia.aarch64-23.12.squashfs (64.0KiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 7c0bba5c5301c97  [/var/lib/cps-local/boot-images/5b43428e-4381-4f39-9335-6dababb76d86/rootfs (2.9GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 7cccd5c7adc8cc6 ....... [/var/lib/cps-local/boot-images/PE/CPE-intel.x86_64-23.12.squashfs (114.4MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 818ff2c161855b6 ........ [/var/lib/cps-local/boot-images/PE/CPE-aocc.x86_64-24.03.squashfs (117.9MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 85801b9e9c9cea7 ......... [/var/lib/cps-local/boot-images/PE/CPE-base.aarch64-24.03.squashfs (2.0GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 8edfc76b6dae21f ...... [/var/lib/cps-local/boot-images/PE/CPE-nvidia.x86_64-24.03.squashfs (134.1MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 953aa229aafffa6 ....... [/var/lib/cps-local/boot-images/PE/CPE-intel.x86_64-24.11.squashfs (128.6MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 979b7868c15ee00 ...... [/var/lib/cps-local/boot-images/PE/CPE-nvidia.x86_64-23.12.squashfs (123.2MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 9de1fe8a016602f ......... [/var/lib/cps-local/boot-images/PE/CPE-base.aarch64-24.07.squashfs (2.0GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- 9f7ee65eadd1d3c ..... [/var/lib/cps-local/boot-images/PE/CPE-nvidia.aarch64-24.07.squashfs (272.3MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- a50dd52157e1636 ......... [/var/lib/cps-local/boot-images/PE/CPE-amd.x86_64-23.12.squashfs (121.9MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- a6db212e5a329fa .......... [/var/lib/cps-local/boot-images/PE/CPE-base.x86_64-24.03.squashfs (2.4GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- aac0f352b7a30d6 ....... [/var/lib/cps-local/boot-images/PE/CPE-intel.x86_64-24.07.squashfs (110.1MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- b91b33a9f98a0be ........ [/var/lib/cps-local/boot-images/PE/CPE-aocc.x86_64-24.07.squashfs (113.2MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- c1d98cf92b0647f ........ [/var/lib/cps-local/boot-images/PE/CPE-aocc.x86_64-23.12.squashfs (117.9MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- cfaa140ac182849 ...... [/var/lib/cps-local/boot-images/PE/CPE-nvidia.x86_64-24.07.squashfs (333.5MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- d265658496338c0 ......... [/var/lib/cps-local/boot-images/PE/CPE-amd.x86_64-24.07.squashfs (298.2MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- d797313856f7502 .......... [/var/lib/cps-local/boot-images/PE/CPE-base.x86_64-24.07.squashfs (2.4GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- da65cccd2e89d0c ...... [/var/lib/cps-local/boot-images/PE/CPE-nvidia.x86_64-24.11.squashfs (555.7MiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- de4cc04e7dacfb9 .......... [/var/lib/cps-local/boot-images/PE/CPE-base.x86_64-24.11.squashfs (7.7GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- e41757ef248d642 .......... [/var/lib/cps-local/boot-images/PE/CPE-base.x86_64-23.12.squashfs (2.4GiB) write-thru activated]
-  | | | o- alua ................................................................................................... [ALUA Groups: 1]
-  | | |   o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | | o- e837346fddf2004 ...... [/var/lib/cps-local/boot-images/PE/CPE-nvidia.aarch64-24.03.squashfs (92.5MiB) write-thru activated]
-  | |   o- alua ................................................................................................... [ALUA Groups: 1]
-  | |     o- default_tg_pt_gp ....................................................................... [ALUA state: Active/optimized]
-  | o- pscsi .................................................................................................. [Storage Objects: 0]
-  | o- ramdisk ................................................................................................ [Storage Objects: 0]
-  o- iscsi ............................................................................................................ [Targets: 1]
-  | o- iqn.2023-06.csm.iscsi:ncn-w002 .................................................................................... [TPGs: 1]
-  |   o- tpg1 .................................................................................................. [gen-acls, no-auth]
-  |     o- acls .......................................................................................................... [ACLs: 0]
-  |     o- luns ......................................................................................................... [LUNs: 28]
-  |     | o- lun0 .... [fileio/a50dd52157e1636 (/var/lib/cps-local/boot-images/PE/CPE-amd.x86_64-23.12.squashfs) (default_tg_pt_gp)]
-  |     | o- lun1 .... [fileio/0331b9aaef49840 (/var/lib/cps-local/boot-images/PE/CPE-amd.x86_64-24.03.squashfs) (default_tg_pt_gp)]
-  |     | o- lun2 .... [fileio/d265658496338c0 (/var/lib/cps-local/boot-images/PE/CPE-amd.x86_64-24.07.squashfs) (default_tg_pt_gp)]
-  |     | o- lun3 .... [fileio/1373e69e2028baa (/var/lib/cps-local/boot-images/PE/CPE-amd.x86_64-24.11.squashfs) (default_tg_pt_gp)]
-  |     | o- lun4 ... [fileio/c1d98cf92b0647f (/var/lib/cps-local/boot-images/PE/CPE-aocc.x86_64-23.12.squashfs) (default_tg_pt_gp)]
-  |     | o- lun5 ... [fileio/818ff2c161855b6 (/var/lib/cps-local/boot-images/PE/CPE-aocc.x86_64-24.03.squashfs) (default_tg_pt_gp)]
-  |     | o- lun6 ... [fileio/b91b33a9f98a0be (/var/lib/cps-local/boot-images/PE/CPE-aocc.x86_64-24.07.squashfs) (default_tg_pt_gp)]
-  |     | o- lun7 ... [fileio/719593b460753ac (/var/lib/cps-local/boot-images/PE/CPE-aocc.x86_64-24.11.squashfs) (default_tg_pt_gp)]
-  |     | o- lun8 .. [fileio/2babe2c96d6f900 (/var/lib/cps-local/boot-images/PE/CPE-base.aarch64-23.12.squashfs) (default_tg_pt_gp)]
-  |     | o- lun9 .. [fileio/85801b9e9c9cea7 (/var/lib/cps-local/boot-images/PE/CPE-base.aarch64-24.03.squashfs) (default_tg_pt_gp)]
-  |     | o- lun10 . [fileio/9de1fe8a016602f (/var/lib/cps-local/boot-images/PE/CPE-base.aarch64-24.07.squashfs) (default_tg_pt_gp)]
-  |     | o- lun11 .. [fileio/e41757ef248d642 (/var/lib/cps-local/boot-images/PE/CPE-base.x86_64-23.12.squashfs) (default_tg_pt_gp)]
-  |     | o- lun12 .. [fileio/a6db212e5a329fa (/var/lib/cps-local/boot-images/PE/CPE-base.x86_64-24.03.squashfs) (default_tg_pt_gp)]
-  |     | o- lun13 .. [fileio/d797313856f7502 (/var/lib/cps-local/boot-images/PE/CPE-base.x86_64-24.07.squashfs) (default_tg_pt_gp)]
-  |     | o- lun14 .. [fileio/de4cc04e7dacfb9 (/var/lib/cps-local/boot-images/PE/CPE-base.x86_64-24.11.squashfs) (default_tg_pt_gp)]
-  |     | o- lun15 . [fileio/7cccd5c7adc8cc6 (/var/lib/cps-local/boot-images/PE/CPE-intel.x86_64-23.12.squashfs) (default_tg_pt_gp)]
-  |     | o- lun16 . [fileio/0f3847fd8e25624 (/var/lib/cps-local/boot-images/PE/CPE-intel.x86_64-24.03.squashfs) (default_tg_pt_gp)]
-  |     | o- lun17 . [fileio/aac0f352b7a30d6 (/var/lib/cps-local/boot-images/PE/CPE-intel.x86_64-24.07.squashfs) (default_tg_pt_gp)]
-  |     | o- lun18 . [fileio/953aa229aafffa6 (/var/lib/cps-local/boot-images/PE/CPE-intel.x86_64-24.11.squashfs) (default_tg_pt_gp)]
-  |     | o- lun19  [fileio/76e638d3bfc3107 (/var/lib/cps-local/boot-images/PE/CPE-nvidia.aarch64-23.12.squashfs) (default_tg_pt_gp)]
-  |     | o- lun20  [fileio/e837346fddf2004 (/var/lib/cps-local/boot-images/PE/CPE-nvidia.aarch64-24.03.squashfs) (default_tg_pt_gp)]
-  |     | o- lun21  [fileio/9f7ee65eadd1d3c (/var/lib/cps-local/boot-images/PE/CPE-nvidia.aarch64-24.07.squashfs) (default_tg_pt_gp)]
-  |     | o- lun22  [fileio/979b7868c15ee00 (/var/lib/cps-local/boot-images/PE/CPE-nvidia.x86_64-23.12.squashfs) (default_tg_pt_gp)]
-  |     | o- lun23  [fileio/8edfc76b6dae21f (/var/lib/cps-local/boot-images/PE/CPE-nvidia.x86_64-24.03.squashfs) (default_tg_pt_gp)]
-  |     | o- lun24  [fileio/cfaa140ac182849 (/var/lib/cps-local/boot-images/PE/CPE-nvidia.x86_64-24.07.squashfs) (default_tg_pt_gp)]
-  |     | o- lun25  [fileio/da65cccd2e89d0c (/var/lib/cps-local/boot-images/PE/CPE-nvidia.x86_64-24.11.squashfs) (default_tg_pt_gp)]
-  |     | o- lun26  [fileio/7c0bba5c5301c97 (/var/lib/cps-local/boot-images/5b43428e-4381-4f39-9335-6dababb76d86/rootfs) (default_tg_pt_gp)]
-  |     | o- lun27  [fileio/380840014ffe295 (/var/lib/cps-local/boot-images/f731d8d5-0fed-41d7-996e-6a0d19b6ff6d/rootfs) (default_tg_pt_gp)]
-  |     o- portals .................................................................................................... [Portals: 3]
-  |       o- 10.102.104.28:3260 ............................................................................................... [OK]
-  |       o- 10.150.0.4:3260 .................................................................................................. [OK]
-  |       o- 10.252.1.13:3260 ................................................................................................. [OK]
-  o- loopback ......................................................................................................... [Targets: 0]
-  o- vhost ............................................................................................................ [Targets: 0]
-  o- xen-pvscsi ....................................................................................................... [Targets: 0]
-```
-
-The above `targetcli ls` command output shows the following:
-
-* Four `fileio` backing store are created for two `rootfs` images
-* Two iSCSI `LUNs` are created which have the `rootfs` image ID being mapped
-* 26 `PE` or `squashfs` `fileio` backing store are created
-* 26 iSCSI `LUNs` created which have the `PE` or `squashfs` image ID being mapped
-* These iSCSI `LUNs` are ready for projection
-
-(`nid#`) Sample initiator node snippet after the projection:
-
-```bash
-multipath -ll
-```
-
-```text
-11218.831779 | /etc/multipath.conf line 10: ignoring deprecated option "disable_changed_wwids", using built-in value: "yes"
-PE_CPE-base.x86_64-24.11.squashfs (36001405de4cc04e7dacfb9ada0a6b4cc) dm-0 LIO-ORG,de4cc04e7dacfb9
-size=7.7G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
-`-+- policy='round-robin 0' prio=50 status=active
-  |- 1:0:0:14 sdo  8:224  active ready running
-  |- 2:0:0:14 sdaq 66:160 active ready running
-  |- 3:0:0:14 sdbs 68:96  active ready running
-  `- 4:0:0:14 sdcu 70:32  active ready running
-f731d8d5-0fed-41d7-996e-6a0d19b6ff6d_rootfs (36001405380840014ffe295091e8689db) dm-24 LIO-ORG,380840014ffe295
-size=11G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
-`-+- policy='round-robin 0' prio=50 status=active
-  |- 1:0:0:27 sdab 65:176 active ready running
-  |- 2:0:0:27 sdbd 67:112 active ready running
-  |- 3:0:0:27 sdcf 69:48  active ready running
-  `- 4:0:0:27 sddh 70:240 active ready running
-```
-
 ## Steps to achieve SBPS
 
 1. [Worker node personalization](#1-worker-node-personalization)
-1. [Run GOSS test suite](#2-run-goss-test-suite)
+1. [Validate configuration](#2-validate-configuration)
 1. [Create BOS session template](#3-create-bos-session-template)
 1. [IMS image tagging](#4-ims-image-tagging)
 1. [Boot compute nodes or UANs](#5-boot-compute-nodes-or-uans)
@@ -289,17 +118,14 @@ By default worker node personalization of iSCSI SBPS is done during CSM install/
 It is initiated during bootprep (`management-nodes-rollout`) in order to do worker node personalization
 automatically during boot time.
 
-### 2. Run GOSS test suite
+### 2. Validate configuration
 
 In order to verify the readiness of the iSCSI targets before triggering the boot of compute nodes or
-UANs, it is important to run GOSS tests as sanity checks on iSCSI targets.
-
-Refer to [GOSS tests for SBPS](https://github.com/Cray-HPE/sbps-marshal/blob/main/GOSS_tests_for_sbps.md)
-for the details.
+UANs, the iSCSI configuration should be validated. See [iSCSI SBPS Verification](iSCSI_SBPS_Verification.md).
 
 ### 3. Create BOS session template
 
-Once the node personalization is done and GOSS tests are run successfully, create BOS Session Template with SBPS boot parameters.
+Once the node personalization is done and the configuration has been validated, then create BOS Session Templates with SBPS boot parameters.
 
 There are two ways to create BOS session template:
 
@@ -448,7 +274,7 @@ It is necessary to open the console for each node separately.
 In order to monitor iSCSI SBPS target statistics, one may monitor metrics series like aggregate LUN read rate, read rate per LUN, throughput
 statistics on LIO portal network endpoints, and so on.
 
-Refer to [iSCSI Metrics](https://github.com/Cray-HPE/sbps-marshal/blob/main/iscsi_metrics.md) for details.
+Refer to [iSCSI Metrics](iSCSI_SBPS_Metrics.md) for details.
 
 ## Glossary
 
