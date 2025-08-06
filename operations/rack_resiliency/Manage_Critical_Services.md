@@ -251,7 +251,7 @@ For this example, this is the initial critical services list in the ConfigMap:
 }
 ```
 
-In this example, the administrator wishes to add the `coredns` critical service. To do this, they remove the following three lines:
+In this example, the administrator wishes to add the `coredns` critical service. To do this, they add the following three lines:
 
 ```json
 "coredns": {
@@ -280,6 +280,8 @@ After adding the entry, the list will look like:
     }
 }
 ```
+
+Save the file after editing.
 
 After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
 
@@ -387,9 +389,16 @@ After deleting the entry, the list will look like:
 }
 ```
 
+Save the file after editing.
+
 After this proceed to delete critical service(s) from [kyverno `clusterpolicy`](#delete-critical-services-from-the-kyverno-clusterpolicy)
 
 ## Modify critical service using ConfigMap
+
+The administrator can modify the following attributes of critical service using the below procedure:
+- Name of service
+- Type of service (Deployment/ StatefulSet)
+- Namespace of service
 
 ### 1. Edit the ConfigMap to modify service
 
@@ -484,6 +493,8 @@ In this example, the administrator wishes to modify the `coredns` critical servi
     }
 }
 ```
+
+Save the file after editing.
 
 ## Add critical services to Kyverno `clusterpolicy`
 
