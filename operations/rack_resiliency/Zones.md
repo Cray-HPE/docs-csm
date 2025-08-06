@@ -1,7 +1,7 @@
 # Zones
 
-Rack Resiliency defines a logical grouping of Kubernetes master, Kubernetes worker and Ceph storage nodes(NCNs) in a **single rack** as a management plane failure domain(MPFD). The racks which supports only non-NCNs, do not fall in the category of Rack Resiliency MPFD. During the setup of Rack Resiliency, it is validated 
-that any MPFD should include the following minimal hardware:
+Rack Resiliency defines a logical grouping of Kubernetes master, Kubernetes worker and Ceph storage nodes(NCNs) in a **single rack** as a management plane failure domain(MPFD).
+The racks which supports only non-NCNs, do not fall in the category of Rack Resiliency MPFD. During the setup of Rack Resiliency, it is validated that any MPFD should include the following minimal hardware:
 
 - 1 Kubernetes Master node
 - 1 Kubernetes Worker node
@@ -13,6 +13,7 @@ To map MPFD to Kubernetes and Ceph, Rack Resiliency uses the following methodolo
 - For Ceph, Rack Resiliency uses the [concepts of buckets](https://docs.ceph.com/en/reef/architecture/) built with CRUSH algorithm to implement zoning for storage nodes.
 
 **Note:**
+
 - Ceph is hierarchical storage based on hierarchy of “buckets”. Rack Resiliency uses the bucket called **rack** on top of the **host** bucket to
   create the MPFD for storage nodes.
 
@@ -45,6 +46,7 @@ ncn-w004   Ready    <none>          20d   v1.32.5   x3000
 ```
 
 **Note:**
+
 - zone-id for each Kubernetes zone can be optionally prefixed with a site-init specific string.
 - For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
 - By default, zone-id is decided based on the xname (1-5 chars) of the Kubernetes node.
@@ -59,7 +61,9 @@ Ceph provides the CRUSH map algorithm which helps to segregate the storage nodes
 
 ![Hierarchy of CRUSH "buckets" (rack, host, osd) before and after CEPH Zoning](../../img/Ceph-Zone.png)
 
-Currently CSM has **host** as the top of [hierarchy of bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/) of Ceph. To implement MPFD domains for storage nodes, the new bucket **rack** is introduced on top of the hierarchy. As shown in the above diagram, storage nodes get added to a **rack** bucket based on their physical location in the rack. Refer to [placement discovery](Setup.md#stage-2---placement-discovery) for details on how physical placement of storage nodes is discovered.
+Currently CSM has **host** as the top of [hierarchy of bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/) of Ceph.
+To implement MPFD domains for storage nodes, the new bucket **rack** is introduced on top of the hierarchy. As shown in the above diagram, storage nodes get added to a **rack** bucket based on their physical location in the rack.
+Refer to [placement discovery](Setup.md#stage-2---placement-discovery) for details on how physical placement of storage nodes is discovered.
 More than one storage node can be added to the same bucket.
 
 Rack Resiliency preconfigures rack buckets as well as adds the storage nodes to them. Refer to [Ceph zoning](Setup.md#stage-4---ceph-zoning) for details on how the nodes discovered during placement discovery are grouped in rack buckets.
@@ -70,9 +74,8 @@ The current Ceph setup on CSM deploys three sets of Ceph services (Monitors, Man
 This approach, however, does not support Rack Resiliency, as the services are statically assigned to specific nodes.
 
 To enhance Rack Resiliency, this solution distributes the Ceph services across multiple racks.
-The storage nodes assigned to each service is selected using a round-robin distribution strategy across the rack buckets, ensuring a balanced and 
-fault-tolerant configuration. Also, the number of Ceph Monitor services deployed will be either 3 or 5, depending on the total number 
-of storage nodes and their distribution across rack buckets. 
+The storage nodes assigned to each service is selected using a round-robin distribution strategy across the rack buckets, ensuring a balanced and fault-tolerant configuration.
+Also, the number of Ceph Monitor services deployed will be either 3 or 5, depending on the total number of storage nodes and their distribution across rack buckets. 
 The above process ensures that the Ceph cluster remains operational in the event of a rack failure.
 
 For details on how Ceph services are zoned refer to [Ceph service zoning](Setup.md#stage-4---ceph-zoning).
@@ -94,6 +97,7 @@ Example Output:
 ```
 
 **Note:**
+
 - zone-id for each Ceph zone can be optionally prefixed with a site-init specific string.
 - For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
 - By default, zone-id is decided based on the xname (1-5 chars) of the Ceph node.

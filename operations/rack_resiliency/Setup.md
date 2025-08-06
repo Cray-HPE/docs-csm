@@ -97,7 +97,8 @@ The below stages are used to setup the ceph zones and update Ceph HAproxy config
 
 #### Stage 4 - Ceph Zoning
 
-This Ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies ceph zoning for storage nodes. Along with creating zones for Ceph storage nodes, zones for the Ceph services are also created. To know more about zoning refer to [Zones](Zones.md).
+This Ansible play uses the discovery results (`rr_hw_discovery.json`) from [Stage 2 - Placement Discovery](#stage-2---placement-discovery) and applies ceph zoning for storage nodes.
+Along with creating zones for Ceph storage nodes, zones for the Ceph services are also created. To know more about zoning refer to [Zones](Zones.md).
 
 #### Stage 5 - Ceph HAproxy Configuration
 
