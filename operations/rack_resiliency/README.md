@@ -6,7 +6,7 @@
 - [Components of Rack Resiliency](#components-of-rack-resiliency)
     - [Critical Services](README.md#1-critical-services)
     - [ConfigMaps](README.md#2-configmaps)
-    - [`Kyverno` Policy](README.md#3-`Kyverno`-policy)
+    - [`Kyverno` Policy](README.md#3-Kyverno-policy)
     - [Rack Resiliency Service (RRS)](README.md#4-rack-resiliency-service-rrs)
         - [Resiliency Monitoring Service (RMS)](#resiliency-monitoring-service-rms)
         - [Rack Resiliency API service](#rack-resiliency-api-service)
