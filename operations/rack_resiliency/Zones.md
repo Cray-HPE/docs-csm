@@ -1,17 +1,17 @@
 # Zones
 
-Rack Resiliency defines a logical grouping of Kubernetes master, Kubernetes worker and Ceph storage nodes(NCNs) in a **single rack** as a management plane failure domain(MPFD).
-The racks which supports only non-NCNs, do not fall in the category of Rack Resiliency MPFD. During the setup of Rack Resiliency, it is validated that any MPFD should include the following minimal hardware:
+Rack Resiliency defines a logical grouping of Kubernetes master, Kubernetes worker and Ceph Storage nodes (NCNs) in a **single rack** as a management plane failure domain (MPFD).
+The racks which support only non-NCNs, do not fall in the category of Rack Resiliency MPFD. During the setup of Rack Resiliency, it is validated that any MPFD should include the following minimal hardware:
 
 - 1 Kubernetes Master node
 - 1 Kubernetes Worker node
 - 1 Ceph Storage node
 
-A **zone** in Rack Resiliency solution is a representation of a management plane failure domain.
+A **zone** in the Rack Resiliency solution is a representation of a management plane failure domain.
 
 To map zones to Kubernetes and Ceph, Rack Resiliency uses the following methodologies:
 
-- For Kubernetes, Rack Resiliency uses the concept of [topology spread constraint](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) to implement zoning for Master and Worker nodes.
+- For Kubernetes, Rack Resiliency uses the concept of [topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) to implement zoning for Master and Worker nodes.
 - For Ceph, Rack Resiliency uses the [concepts of buckets](https://docs.ceph.com/en/reef/architecture/) built with CRUSH algorithm to implement zoning for storage nodes.
 
 **Note:**
@@ -52,25 +52,25 @@ ncn-w004   Ready    <none>          20d   v1.32.5   x3000
 - For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
 - By default, zone-id is decided based on the xname (1-5 chars) of the Kubernetes node.
 
-## Setting up zones for Ceph nodes
+## Setting up zones for Ceph Storage nodes
 
 Similar to Kubernetes topology spread constraints (for Master and Worker), Ceph zoning is required on Storage nodes (Utility storage nodes) for creating zones.
 
 The objective of Ceph zoning is to make sure Ceph data gets replicated at rack level across Storage nodes, so that there is no data loss in case of a rack failure.
 Ceph provides the CRUSH map algorithm which helps to segregate the storage nodes across zones. Using a combination of CRUSH rules and bucket types (hosts, racks, rows, etc.), the data can be replicated across zones.
 
-## 1 Creating Ceph zones with CRUSH
+### Creating Ceph zones with CRUSH
 
 ![Hierarchy of CRUSH "buckets" (rack, host, osd) before and after CEPH Zoning](../../img/Ceph-Zone.png)
 
-Currently CSM has **host** as the top of [hierarchy of bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/) of Ceph.
-To implement MPFD domains for storage nodes, the new bucket **rack** is introduced on top of the hierarchy. As shown in the above diagram, storage nodes get added to a **rack** bucket based on their physical location in the rack.
+Currently CSM has **host** as the top of [hierarchy of buckets](https://docs.ceph.com/en/latest/rados/operations/crush-map/) of Ceph.
+To implement Management Plane Failure Domains for storage nodes, the new bucket **rack** is introduced on top of the hierarchy. As shown in the above diagram, storage nodes get added to a **rack** bucket based on their physical location in the rack.
 Refer to [placement discovery](Setup.md#stage-2---placement-discovery) for details on how physical placement of storage nodes is discovered.
 More than one storage node can be added to the same bucket.
 
 Rack Resiliency preconfigures rack buckets as well as adds the storage nodes to them. Refer to [Ceph zoning](Setup.md#stage-4---ceph-zoning) for details on how the nodes discovered during placement discovery are grouped in rack buckets.
 
-## 2 Ceph service zoning
+### Ceph service zoning
 
 The current Ceph setup on CSM deploys three sets of Ceph services (Monitors, Managers, and MDS) on the nodes `ncn-s001`, `ncn-s002`, and `ncn-s003` in a hard-coded configuration.
 This approach, however, does not support Rack Resiliency, as the services are statically assigned to specific nodes.
