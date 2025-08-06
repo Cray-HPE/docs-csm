@@ -15,12 +15,12 @@ But because the API/CLI does not support edits or deletes, those can only be acc
 - Similarly, services with the same name but different types (e.g., StatefulSet and Deployment) are also not supported.
 - Avoid using API or CLI to add critical services while following the deletion or modification procedures outlined on this page.
 
-## Additional guidelines
+## Additional guidelines for adding critical services with Cray CLI
 
 - Always maintain valid JSON syntax
 - Ensure there is no trailing comma after the last service entry
 - Save and exit the editor to apply changes
-- The changes take effect immediately - no restart required
+- The changes take effect immediately - no restart of `cray-rrs` is required
 
 ## Critical services operations
 
