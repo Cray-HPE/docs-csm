@@ -6,7 +6,7 @@ is getting freshly installed or upgraded to a new version, use the below steps t
 
 **NOTE:** 
 * Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an upgrade from CSM 1.6 to CSM 1.7. 
-* Rack Resiliency can not be disabled after it was enabled during the install or upgrade.
+* Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
 
 ## Case 1: Fresh install
 
