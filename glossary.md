@@ -65,6 +65,7 @@ Glossary of terms used in CSM documentation.
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack Resiliency](operations/rack_resiliency/README.md)
+* [Rack Resiliency Service(RRS)](#rack-resiliency-service)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
 * [River Cabinet](#river-cabinet)
@@ -579,7 +580,7 @@ due to a single rack failure. This feature prevents system-wide outages, allowin
 
 Please refer to [Rack Resiliency](operations/rack_resiliency/README.md#rack-resiliency-rr) for more info.
 
-## Rack Resiliency Service(RRS)
+## Rack Resiliency Service
 
 RRS has been introduced as a part of CSM 1.7.0 to to monitor critical services and provide alerts during node or rack failures.
 
