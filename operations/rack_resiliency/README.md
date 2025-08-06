@@ -73,7 +73,8 @@ Rack Resiliency monitors specific CSM Services for continuous availability. Thes
 
 ### 2. ConfigMaps
 
-Rack Resiliency(RR) uses ConfigMaps to store details about the critical services. They are also used to provide the configuration parameters for [Resiliency Monitoring Service](Resiliency_Monitoring_Service.md).
+Rack Resiliency(RR) uses ConfigMaps to store details about the critical services. They are also used to provide the configuration parameters for the
+[Resiliency Monitoring Service](Resiliency_Monitoring_Service.md).
 
 Refer for more information on [ConfigMaps](ConfigMaps.md)
 
