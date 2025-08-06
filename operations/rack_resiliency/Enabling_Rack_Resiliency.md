@@ -4,8 +4,9 @@ As mentioned in the [Architecture overview](README.md#architecture-overview), en
 first stage for setting up Rack Resiliency. By default the Rack Resiliency feature is disabled. Based on whether CSM
 is getting freshly installed or upgraded to a new version, use the below steps to enable Rack Resiliency.
 
-**NOTE:** 
-* Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an upgrade from CSM 1.6 to CSM 1.7. 
+**NOTE:**
+
+* Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an upgrade from CSM 1.6 to CSM 1.7.
 * Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
 
 ## Case 1: Fresh install
@@ -34,14 +35,14 @@ vi /tmp/customizations.yaml
 
 **`NOTE`**
 
-- If site specific identities are needed for zones, zones prefixes for Kuberenets and Ceph can be configured.
-- Adding zone prefixes is optional. No prefixes are added by default.
-- The prefix can be limited to 1-1000 characters long (but no restrictions on the type of characters)
+* If site specific identities are needed for zones, zones prefixes for Kuberenets and Ceph can be configured.
+* Adding zone prefixes is optional. No prefixes are added by default.
+* The prefix can be limited to 1-1000 characters long (but no restrictions on the type of characters)
 
 Edit the `customizations.yaml`:
 
-- Update the `spec.services.rack-resiliency.enabled` flag from `false` to `true`.
-- Update the `spec.services.k8s_zone_prefix` and `spec.services.ceph_zone_prefix` sections with the required Kubernetes and ceph zone prefix.
+* Update the `spec.services.rack-resiliency.enabled` flag from `false` to `true`.
+* Update the `spec.services.k8s_zone_prefix` and `spec.services.ceph_zone_prefix` sections with the required Kubernetes and ceph zone prefix.
 
 Save and close the `customizations.yaml`.
 
@@ -68,8 +69,8 @@ does not recognize as true, then it will be interpreted as false.
 
 **Important Notes:**
 
-- If the prefixes is defined, then the zones will be created in the format of `k8s_zone_prefix + rack_id` and `ceph_zone_prefix + rack_id`.
-    - If the `spec.services.k8s_zone_prefix` has a value of `test-system` and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `test-system-x3000`.
-    - If the `spec.services.ceph_zone_prefix` has a value of `test-storage-system` and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `test-storage-system-x3000`.
-- If the `spec.services.k8s_zone_prefix` has no value defined and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `x3000`.
-- If the `spec.services.ceph_zone_prefix` has no value defined and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `x3000`.
+* If the prefixes is defined, then the zones will be created in the format of `k8s_zone_prefix + rack_id` and `ceph_zone_prefix + rack_id`.
+    * If the `spec.services.k8s_zone_prefix` has a value of `test-system` and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `test-system-x3000`.
+    * If the `spec.services.ceph_zone_prefix` has a value of `test-storage-system` and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `test-storage-system-x3000`.
+* If the `spec.services.k8s_zone_prefix` has no value defined and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `x3000`.
+* If the `spec.services.ceph_zone_prefix` has no value defined and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `x3000`.

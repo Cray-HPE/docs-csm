@@ -133,46 +133,47 @@ But because the API/CLI does not support edits or deletes, those can only be acc
 ```bash
 (`ncn-mw#`) kubectl get deployment/statefulset <name-of-the-critical-service> -n <namespace-of-the-service>
 ```
+
 In the above command, replace \<name-of-the-critical-service\> with the name of critical service to be verified
 and \<namespace-of-the-service\> with the correct namespace in which its configured.
 
 If the service is configured, proceed to the next step.
 
-### 2. Create a new JSON file with critical services configuration:
+### 2. Create a new JSON file with critical services configuration
 
-    ```bash
-    (`ncn-mw#`) cray rrs criticalservices update --from-file <file-path>
-    ```
+```bash
+  (`ncn-mw#`) cray rrs criticalservices update --from-file <file-path>
+```
 
-    The file must be a text file containing a JSON representation of the critical services configuration.
-    For example:
+The file must be a text file containing a JSON representation of the critical services configuration.
+For example:
 
-    ```json
-    {
-        "critical_services": {
-            "coredns": {
-                "namespace": "kube-system",
-                "type": "Deployment"
-            },
-            "kube-proxy": {
-                "namespace": "kube-system",
-                "type": "StatefulSet"
-            }
-        }
-    }
-    ```
+```json
+  {
+      "critical_services": {
+          "coredns": {
+              "namespace": "kube-system",
+              "type": "Deployment"
+          },
+          "kube-proxy": {
+              "namespace": "kube-system",
+              "type": "StatefulSet"
+          }
+      }
+  }
+```
 
-    Example Output:
+Example Output:
 
-    ```text
-    Update = "Successful"
-    Successfully_Added_Services = [ "kube-proxy",]
-    Already_Existing_Services = [ "coredns",]
-    ```
+```text
+Update = "Successful"
+Successfully_Added_Services = [ "kube-proxy",]
+Already_Existing_Services = [ "coredns",]
+```
 
-    This allows an administrator to specify multiple services in the same command.
-    For complete details on the required format of the critical services configuration, see the
-    [`CriticalServiceCmStaticType`](../../api/rrs.md#schemacriticalservicecmstatictype) schema.
+This allows an administrator to specify multiple services in thsame command.
+For complete details on the required format of the criticaservices configuration, see the
+[`CriticalServiceCmStaticType`](../../api/rrmd#schemacriticalservicecmstatictype) schema.
 
 - After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
 
