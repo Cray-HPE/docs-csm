@@ -396,6 +396,7 @@ After this proceed to delete critical service(s) from [kyverno `clusterpolicy`](
 ## Modify critical service using ConfigMap
 
 The administrator can modify the following attributes of critical service using the below procedure:
+
 - Name of service
 - Type of service (Deployment/ StatefulSet)
 - Namespace of service
