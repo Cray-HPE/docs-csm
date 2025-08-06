@@ -15,6 +15,7 @@ Procedures for certificate renewal:
 - [File locations](#file-locations)
 - [Check certificates](#check-certificates)
 - [Backup existing certificates](#backup-existing-certificates)
+- [Modify certificate validity period](#modify-certificate-validity-period)
 - [Renew all certificates](#renew-all-certificates)
 - [Renew Etcd certificate](#renew-etcd-certificate)
 - [Update client secrets](#update-client-secrets)
@@ -131,6 +132,47 @@ Client (master and worker nodes):
     ncn-w003: /var/lib/kubelet/pki/kubelet.crt
 
     [...]
+    ```
+
+## Modify certificate validity period
+
+With Kubernetes 1.32 and `kubeadm.k8s.io/vbeta4`, the Kubernetes certificate validity period, or expiry, can be configured in the `/etc/kubernetes/kubeadmcfg.yaml` file. In CSM 1.7, the default certificate validity period is `26280h` or **3 years**.
+
+Administrators who wish to keep the certificate validity period at 3 years should skip this section and jump to
+[Renew all certificates](#renew-all-certificates).
+
+To adjust the validity period before renewing certificates, modify the `certificateValidityPeriod` value in the `/etc/kubernetes/kubeadmcfg.yaml` configuration file.
+
+The `certificateValidityPeriod` field value follows Go's `time.Duration` values format, with hours being the longest supported unit.
+
+For example, the value for 5 years is `43800h`.
+
+Run the following steps on each master node.
+
+1. (`ncn-m#`) Make copy of `/etc/kubernetes/kubeadmcfg.yaml`.
+
+    ```bash
+    cp -v /etc/kubernetes/kubeadmcfg.yaml /etc/kubernetes/kubeadmcfg.yaml.bak
+    ```
+
+1. (`ncn-m#`) Edit the `certificateValidityPeriod` value.
+
+   > Modify the following example command to replace `43800h` with the desired value.
+
+    ```bash
+    yq4 eval -i -P '.certificateValidityPeriod = "43800h"' "/etc/kubernetes/kubeadmcfg.yaml"
+    ```
+
+1. (`ncn-m#`) Check the `certificateValidityPeriod` value.
+
+    ```bash
+    cat /etc/kubernetes/kubeadmcfg.yaml | grep certificateValidityPeriod
+    ```
+
+    Example output:
+
+    ```text
+    certificateValidityPeriod: 43800h
     ```
 
 ## Renew all certificates

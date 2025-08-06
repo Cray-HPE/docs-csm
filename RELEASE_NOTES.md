@@ -80,6 +80,9 @@
 
 ## Noteworthy changes
 
+* The default Kubernetes certificate validity period increased from 1 year to 3 years.
+  For more details on the certificate validity period and how to modify it, see
+  [Modify certificate validity period](operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#modify-certificate-validity-period).
 * Kyverno image verification policy is being shipped in `Enforce` mode. Container images that are unsigned will not be deployed.
   For more information on the policy, how to add exceptions, and how to allow third party signing keys, see
   [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
