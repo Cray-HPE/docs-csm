@@ -19,18 +19,22 @@
     - [Managing `Kyverno` policy](README.md#3-managing-`Kyverno`-policy)
 - [Troubleshooting](#troubleshooting)
 
-# Introduction
+## Introduction
 
-HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services, even if management nodes fail. However, rack-level failures can cause service disruptions if management nodes are concentrated within a single rack. This can result in the loss of HA quorum. Additionally, incorrect physical placement or software configuration of storage nodes can cause utility storage service disruptions due to rack-level failures.
+HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services, even if management nodes fail.
+However, rack-level failures can cause service disruptions if management nodes are concentrated within a single rack.
+This can result in the loss of HA quorum. Additionally, incorrect physical placement or software configuration of storage nodes
+can cause utility storage service disruptions due to rack-level failures.
 
-To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services due to a single rack failure. This feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
+To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services due to a single rack failure.T
+his feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
 
 **NOTE**:
 
 - Rack Resiliency is disabled by default.
 - This feature does not address routine maintenance scenarios.
 
-# Key terminology
+## Key terminology
 
 - Rack: A standardized physical structure designed to house and organize computer servers and other hardware like
   network switches. Each HPE Cray Supercomputing EX system rack houses NCNs and non-NCNs, along with
@@ -46,7 +50,7 @@ To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which
 - [Critical Services](Critical_Services.md): In the context of Rack Resiliency, critical services are those services that are critical to execution of user jobs.
   These services are monitored by the [Rack Resiliency Service](Rack_Resiliency_Service.md).
 
-# Architecture overview
+## Architecture overview
 
 ![Rack Resiliency solution overview](../../img/rack-resiliency-1.png)
 
@@ -57,62 +61,62 @@ The Rack Resiliency solution is implemented in multiple stages. These stages are
 - [Stage 3 - Placement Validation](Setup.md#stage-3---placement-validation)
 - [Stage 4 - Kubernetes Zoning](Setup.md#stage-4---kubernetes-zoning)
 - [Stage 5 - Ceph Zoning](Setup.md#stage-4---ceph-zoning)
-- [Stage 6 - Apply `Kyverno` policy](#stage-5---apply-Kyverno-policy)
+- [Stage 6 - Apply `Kyverno` policy](Setup.md#stage-5---apply-kyverno-policy)
 - [Stage 7 - Continuous Monitoring](Resiliency_Monitoring_Service.md)
 
-# Components of Rack Resiliency
+## Components of Rack Resiliency
 
-## 1. Critical Services
+### 1. Critical Services
 
 Rack Resiliency monitors specific CSM Services for continuous availability. These services are called critical services. For further details refer to [Critical Services](Critical_Services.md)
 
-## 2. ConfigMaps
+### 2. ConfigMaps
 
 Rack Resiliency(RR) uses ConfigMaps to store details about the critical services. They are also used to provide the configuration parameters for [Resiliency Monitoring Service](Resiliency_Monitoring_Service.md).
 
 Refer for more information on [ConfigMaps](ConfigMaps.md)
 
-## 3. `Kyverno` policy
+### 3. `Kyverno` policy
 
 One of the ways that Rack Resiliency ensures that CSM critical services survive the failure of nodes or a single rack is to
 spread the replicas of these services across multiple zones and racks.
 
 See [`Kyverno` cluster policy](Kyverno.md#Kyverno-cluster-policy) for more information.
 
-## 4. [Rack Resiliency Service](Rack_Resiliency_Service.md) (RRS)
+### 4. [Rack Resiliency Service](Rack_Resiliency_Service.md) (RRS)
 
 RRS is a new service introduced as part of CSM 1.7.0 to monitor critical services and provide alerts during node or rack
 failures. This is designed as a singleton pod (`cray-rrs`). See [`cray-rrs` Deployment](cray-rrs_Deployment.md) for more details.
 
-### [Resiliency Monitoring Service (RMS)](Resiliency_Monitoring_Service.md)
+#### [Resiliency Monitoring Service (RMS)](Resiliency_Monitoring_Service.md)
 
 The Resiliency Monitoring Service (RMS) provides the functionality to detect rack or node failures and monitor critical services post the failure.
 
 Refer for more info on [RMS](Resiliency_Monitoring_Service.md)
 
-### [Rack Resiliency API service](../../api/rrs.md)
+#### [Rack Resiliency API service](../../api/rrs.md)
 
 The Rack Resiliency Service (RRS) provides APIs to manage zones and critical services. The API service is a separate container in `cray-rrs` pod and serves as the backend for `rrs` module of Cray CLI. Refer [API](../../api/rrs.md) for more information.
 
 To get complete information on the components and functionalities of RRS [refer here](Rack_Resiliency_Service.md).
 
-# Rack Resiliency management tools
+## Rack Resiliency management tools
 
-## Cray CLI
+### Cray CLI
 
 - The CLI for interfacing with rack resiliency service is part of Cray CLI. A new module (RRS) is added to Cray CLI to support rack resiliency specific commands.
 - Refer [Cray CLI commands for zones](Zones.md#managing-zones) for more information on the commands related to zones.
 - Refer [Cray CLI commands for critical services](Manage_Critical_Services.md#critical-services-operations) for more information on the commands related to critical services.
 - Refer [Cray CLI commands for critical services healthchecks](Troubleshooting.md#critical-services-healthcheck).
 
-## RESTful API
+### RESTful API
 
 The RRS RESTful API is used by the Cray CLI and also can be accessed using tools like `curl`.
 See [Rack Resiliency Service v1](../../api/rrs.md) for more information.
 
-# Rack Resiliency management tasks
+## Rack Resiliency management tasks
 
-## 1. Getting started with Rack Resiliency
+### 1. Getting started with Rack Resiliency
 
 Rack Resiliency uses a 3 step procedure to be set up for monitoring critical services:
 
@@ -120,14 +124,14 @@ Rack Resiliency uses a 3 step procedure to be set up for monitoring critical ser
 2. [Setup Rack Resiliency](../../operations/rack_resiliency/Setup.md#running-ansible-playbooks)
 3. [`cray-rrs` Deployment](cray-rrs_Deployment.md)
 
-## 2. Managing critical services
+### 2. Managing critical services
 
 During the execution of RRS there maybe a need to manage critical services, which may need administrator intervention. This can be done using the Cray CLI or the API. Refer [Manage Critical Services](Manage_Critical_Services.md) for complete list of supported operations.
 
-## 3. Managing `Kyverno` policy
+### 3. Managing `Kyverno` policy
 
 While managing critical services the `Kyverno` policy also needs to be managed. Refer [Manage `Kyverno` policy](Manage_Critical_Services.md#add-critical-services-to-`Kyverno`-clusterpolicy) for complete list of supported operations.
 
-# Troubleshooting
+## Troubleshooting
 
 There are scenarios which need administrator interference. For complete list of scenarios related to different components of Rack Resiliency refer to [Troubleshooting](Troubleshooting.md).
