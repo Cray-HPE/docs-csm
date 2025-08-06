@@ -11,20 +11,20 @@ For setting up rack resiliency the following stages are executed by the Ansible 
 > Before setting up rack resiliency, enable it using
 > [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency),
 > without which the following setup will be skipped after
-> [Stage 1 - Verify Rack Resiliency enablement](#stage-1---verify-rack-resiliency-enablement).
+> [Stage 1 - Verify enablement](#stage-1---verify-enablement).
 
 - [Preparation](#preparation)
     - [Stage 1 - Verify enablement](#stage-1---verify-enablement)
     - [Stage 2 - Placement discovery](#stage-2---placement-discovery)
     - [Stage 3 - Placement validation](#stage-3---placement-validation)
-- [Kubernetes](#kubernetes)
+- [Kubernetes-setup](#kubernetes-setup)
     - [Stage 4 - Kubernetes zoning](#stage-4---kubernetes-zoning)
     - [Stage 5 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
-- [Ceph](#ceph)
+- [Ceph-setup](#ceph-setup)
     - [Stage 4 - Ceph zoning](#stage-4---ceph-zoning)
     - [Stage 5 - Ceph HAproxy configuration](#stage-5---ceph-haproxy-configuration)
 
-## Zoning preparation
+## Preparation
 
 The below stages are preparatory steps to setup Kubernetes and Ceph for Rack Resiliency.
 

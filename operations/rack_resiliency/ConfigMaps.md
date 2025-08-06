@@ -60,8 +60,7 @@ Truncated example output (the actual output of ConfigMap will be larger):
         "namespace": "kube-system",
         "type": "Deployment"
       },
-		...
-
+      "...<output truncated>...",
       "sshot-net-operator": {
         "namespace": "sshot-net-operator",
         "type": "Deployment"

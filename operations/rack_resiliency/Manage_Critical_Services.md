@@ -44,7 +44,6 @@ kubectl get <deployment-or-statefulset> <name-of-the-critical-service> -n <names
 
 The command will give a "not found" error message if the service is not present in the cluster.
 
-
 ## Add, view, edit, or delete RR critical services
 
 Any changes made take effect immediately - no restart of `cray-rrs` is required.
@@ -224,7 +223,6 @@ Truncated example output (the actual output of ConfigMap will be larger):
     1. Add additional service entries to the `critical-service-config.json` field under the
        `data` section.
 
-
     1. Save and close the editor, to apply the changes to the ConfigMap.
 
 1. Add the critical services to the Kyverno cluster policy.
@@ -235,7 +233,6 @@ Truncated example output (the actual output of ConfigMap will be larger):
 
 > Do not delete or modify the critical services added by HPE. Nothing will prevent an administrator
 > from doing this, but it is not supported.
-
 
 1. Verify that the critical services is present in the Kubernetes cluster.
 
@@ -251,7 +248,6 @@ Truncated example output (the actual output of ConfigMap will be larger):
 
     1. Remove service entries from the `critical-service-config.json` field under the
        `data` section.
-
 
     1. Save and close the editor, to apply the changes to the ConfigMap.
 
@@ -333,7 +329,7 @@ This procedure is only necessary after adding critical services to RR.
         kubectl rollout restart statefulset -n <namespace> <service-name>
         ```
 
-### Remove services from the Kyverno policy
+### Remove services from Kyverno policy
 
 This procedure is only necessary after removing critical services from RR.
 
