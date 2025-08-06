@@ -2,7 +2,7 @@
 
 This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#architecture-overview).
 
-Before setting up rack resiliency, enable it using [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the setup will fail after [Stage 1 - Check enablement](#stage-1---check-enablement).
+Before setting up rack resiliency, enable it using [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the setup will be skipped after [Stage 1 - Check enablement](#stage-1---check-enablement).
 
 For setting up rack resiliency the following steps are necessary:
 
