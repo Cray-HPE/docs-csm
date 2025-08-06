@@ -21,14 +21,12 @@ During every monitoring interval, the following things are done:
 
 - For each critical service, the following fields are updated:
     - `status`: Configured/ Unconfigured/ Partiallyconfigured
-      **Note:**
         - Configured: All pods are running.
         - Unconfigured: No pods running.
         - Partiallyconfigured: Few pods running.
     - `balanced`: true/ false
-      **Note:**
-          - true: service is spread across zones.
-          - false: service is not spread across zones (multiple replicas are in same zone).
+        - true: service is spread across zones.
+        - false: service is not spread across zones (multiple replicas are in same zone).
     - Zone information is updated for:
         - Kubernetes: name and status of nodes.
         - Ceph: name and status of nodes and OSDs.
