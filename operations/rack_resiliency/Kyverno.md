@@ -24,7 +24,7 @@ Example output:
 kind: ClusterPolicy
 metadata:
   annotations:
-...
+  ...
 spec:
   admission: true
   background: true
@@ -45,7 +45,7 @@ spec:
           - cray-activemq-artemis-operator-controller-manager
           - cray-dvs-mqtt-ss
           - cray-hmnfd-bitnami-etcd
-...
+          ...
     mutate:
       patchStrategicMerge:
         spec:
@@ -64,7 +64,7 @@ spec:
     name: insert-rack-res-label
     skipBackgroundRequests: true
   validationFailureAction: Audit
-...
+  ...
 ```
 
 ### How the `kyverno` policy works

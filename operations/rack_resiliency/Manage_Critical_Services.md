@@ -94,7 +94,7 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
 * For viewing the list of critical services directly from the ConfigMap use the below command:
 
     ```bash
-    (`ncn-mw#`) kubectl get cm rrs-mon-static -n rack-resiliency -o jsonpath='{.data.critical-service-config\.json}' | jq
+    (`ncn-mw#`) kubectl get cm rrs-mon-static -n rack-resiliency -o jsonpath='{.data.critical-service-config.json}' | jq
     ```
 
   Truncated example output (the actual output of ConfigMap will be larger):
@@ -469,11 +469,11 @@ The below instructions should be followed only after adding the critical service
 ### 1. Verify that the critical services is present in the Kubernetes cluster
 
 ```bash
-(`ncn-mw#`) kubectl get deployment/statefulset \<name-of-the-critical-service\> -n \<namespace-of-the-service\>
+(`ncn-mw#`) kubectl get deployment/statefulset <name-of-the-critical-service> -n <namespace-of-the-service>
 ```
 
-In the above command, replace <name-of-the-critical-service> with the name of critical service to be verified 
-and <namespace-of-the-service> with the correct namespace in which its configured.
+In the above command, replace \<name-of-the-critical-service\> with the name of critical service to be verified 
+and \<namespace-of-the-service\> with the correct namespace in which its configured.
 
 If the service is configured, proceed to the next step.
 
@@ -489,7 +489,7 @@ Under `spec.rules.match.any.resources.name` add a new entry with the name of cri
 Save the `clusterpolicy` and verify the new entry by using the below command and searching for the new entry:
 
 ```bash
-kubectl get clusterpolicy insert-labels-topology-constraints -o yaml |grep \<name-of-the-critical-service\>
+kubectl get clusterpolicy insert-labels-topology-constraints -o yaml |grep <name-of-the-critical-service>
 ```
 
 ### 3. Do a rollout restart
@@ -499,13 +499,13 @@ Rollout restart the critical service by using the command below:
 * If the service is a `deployment` use:
 
 ```bash
-kubectl rollout restart deployment -n \<namespace\> \<service-name\>
+kubectl rollout restart deployment -n <namespace> <service-name>
 ```
 
 * If the service is a `statefulset` use:
 
 ```bash
-kubectl rollout restart statefulset -n \<namespace\> \<service-name\>
+kubectl rollout restart statefulset -n <namespace> <service-name>
 ```
 
 ## Delete critical services from the Kyverno `clusterpolicy`
@@ -524,7 +524,7 @@ Save the `clusterpolicy` and verify the new entry has been deleted by using the 
 searching for the deleted entry:
 
 ```bash
-(`ncn-mw#`) kubectl get clusterpolicy insert-labels-topology-constraints -o yaml |grep \<name-of-the-critical-service\>
+(`ncn-mw#`) kubectl get clusterpolicy insert-labels-topology-constraints -o yaml |grep <name-of-the-critical-service>
 ```
 
 The command should not return any value.
