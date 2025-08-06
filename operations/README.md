@@ -401,7 +401,7 @@ rack-level failures can cause service disruptions if management nodes are concen
 CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services 
 due to a single rack failure. This feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
 
-Please refer to [Rack Resiliency](../rack_resiliency/README.md#rack-resiliency-rr).
+Please refer to [Rack Resiliency](rack_resiliency/README.md#rack-resiliency-rr).
 
 ## ConMan
 
