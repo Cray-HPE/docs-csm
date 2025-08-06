@@ -64,6 +64,7 @@ Glossary of terms used in CSM documentation.
     * [RemoteISO](#remoteiso)
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
+* [Rack Resiliency](operations/rack_resiliency/README.md)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
 * [River Cabinet](#river-cabinet)
@@ -567,6 +568,22 @@ a reboot of a RemoteISO will lose all data/information from the running session.
 
 The rack-mounted [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu) (MCDU-4U) pumps liquid coolant through the
 Liquid-Cooled TDS cabinet coolant manifolds.
+
+## Rack Resiliency
+
+HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services, even if management nodes fail. However, 
+rack-level failures can cause service disruptions if management nodes are concentrated within a single rack. This can result in the loss of HA quorum. 
+
+CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services 
+due to a single rack failure. This feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
+
+Please refer to [Rack Resiliency](operations/rack_resiliency/README.md#rack-resiliency-rr) for more info.
+
+## Rack Resiliency Service(RRS)
+
+RRS has been introduced as a part of CSM 1.7.0 to to monitor critical services and provide alerts during node or rack failures.
+
+Please refer to [Rack Resileincy Servie](operations/rack_resiliency/Rack_Resiliency_Service.md#rack-resiliency-service-rrs) for more info.
 
 ## Rack System Compute Cabinet
 
