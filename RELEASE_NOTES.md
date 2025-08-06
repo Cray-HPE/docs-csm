@@ -61,6 +61,7 @@
 
 * Spire node attestation can now be setup to use TPM chips on supported platforms, see [Enable TPM node attestation with Spire](operations/spire/Enable_TPM_node_attestation.md) for more information.
 * The old version of the Spire server was removed to fully transition to the newer version of Spire.
+* Updated all HMS services to point to latest upstream image and Go module dependencies.  This resolved all currently known point-in-time CVE issues in HMS services.
 
 ### Customer-requested enhancements
 
@@ -79,9 +80,13 @@
 
 ## Noteworthy changes
 
+* The default Kubernetes certificate validity period increased from 1 year to 3 years.
+  For more details on the certificate validity period and how to modify it, see
+  [Modify certificate validity period](operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md#modify-certificate-validity-period).
 * Kyverno image verification policy is being shipped in `Enforce` mode. Container images that are unsigned will not be deployed.
   For more information on the policy, how to add exceptions, and how to allow third party signing keys, see
   [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
+* `PProf` debug support has been added to all remaining HMS services.  See [Debugging With HMS `PProf` Images](troubleshooting/debugging_with_hms_pprof_images.md) for more information.
 
 ## Test
 
@@ -101,6 +106,7 @@
 * Added [CFS](glossary.md#configuration-framework-service-cfs) node personalization to the barebones image boot test.
     * This tests is part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
     * For more information, see [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md).
+* Various updates to HMS services to prevent false positive failures in CT tests
 
 ## Bug fixes
 
@@ -143,6 +149,7 @@
 * Fixed an issue where, when building an IMS image from a recipe, the job status would not update to `error` when the `zypper` repositories were not available.
 * Fixed an issue where the hardware inventory history table in the HSM/SMD database grew too large due to duplicate "Detected" events.
     * See [Remove Duplicate Detected Events From the HSM Postgres Database](operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md) for more information.
+* Fixed an issue in [PCS](glossary.md#power-control-service-pcs) where the supported power transitions on Gigabyte BMCs can go missing.
 
 ## Deprecations
 

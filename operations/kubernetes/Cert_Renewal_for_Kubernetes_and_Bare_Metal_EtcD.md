@@ -10,16 +10,17 @@ This document will help walk through the process of renewing the certificates.
 - The node referenced in this document as `ncn-m` is the master node selected to renew the certificates on.
 - This document is based off a base hardware configuration of three master nodes and three worker nodes. Utility storage nodes are not mentioned because they are not running Kubernetes. Make sure to update any commands that run on multiple nodes accordingly.
 
-Procedures for Certificate Renewal:
+Procedures for certificate renewal:
 
-- [File Locations](#file-locations)
-- [Check Certificates](#check-certificates)
-- [Backup Existing Certificates](#backup-existing-certificates)
-- [Renew All Certificates](#renew-all-certificates)
-- [Renew Etcd Certificate](#renew-etcd-certificate)
-- [Update Client Secrets](#update-client-secrets)
+- [File locations](#file-locations)
+- [Check certificates](#check-certificates)
+- [Backup existing certificates](#backup-existing-certificates)
+- [Modify certificate validity period](#modify-certificate-validity-period)
+- [Renew all certificates](#renew-all-certificates)
+- [Renew Etcd certificate](#renew-etcd-certificate)
+- [Update client secrets](#update-client-secrets)
 
-## File Locations
+## File locations
 
 **IMPORTANT:** Master nodes will have certificates for both Kubernetes services and the Kubernetes client. Workers will only have the certificates for the Kubernetes client.
 
@@ -59,11 +60,11 @@ Client (master and worker nodes):
 /var/lib/kubelet/pki/kubelet.key
 ```
 
-## Check Certificates
+## Check certificates
 
 1. Log into a master node.
 
-1. Check the expiration of the certificates.
+1. (`ncn-m#`) Check the expiration of the certificates.
 
     ```bash
     kubeadm certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
@@ -92,9 +93,9 @@ Client (master and worker nodes):
     front-proxy-ca          Sep 02, 2030 15:21 UTC   8y              no
     ```
 
-## Backup Existing Certificates
+## Backup existing certificates
 
-1. Backup existing certificates on master nodes:
+1. (`ncn#`) Backup existing certificates on master nodes:
 
     ```bash
     pdsh -w ncn-m00[1-3] tar cvf /root/cert_backup.tar /etc/kubernetes/pki/ /var/lib/kubelet/pki/
@@ -113,7 +114,7 @@ Client (master and worker nodes):
     [...]
     ```
 
-1. Backup existing certificates on worker nodes:
+1. (`ncn#`) Backup existing certificates on worker nodes:
 
     **IMPORTANT:** The range of nodes below should reflect the size of the environment. This should run on every worker node.
 
@@ -133,11 +134,52 @@ Client (master and worker nodes):
     [...]
     ```
 
-## Renew All Certificates
+## Modify certificate validity period
+
+With Kubernetes 1.32 and `kubeadm.k8s.io/vbeta4`, the Kubernetes certificate validity period, or expiry, can be configured in the `/etc/kubernetes/kubeadmcfg.yaml` file. In CSM 1.7, the default certificate validity period is `26280h` or **3 years**.
+
+Administrators who wish to keep the certificate validity period at 3 years should skip this section and jump to
+[Renew all certificates](#renew-all-certificates).
+
+To adjust the validity period before renewing certificates, modify the `certificateValidityPeriod` value in the `/etc/kubernetes/kubeadmcfg.yaml` configuration file.
+
+The `certificateValidityPeriod` field value follows Go's `time.Duration` values format, with hours being the longest supported unit.
+
+For example, the value for 5 years is `43800h`.
 
 Run the following steps on each master node.
 
-1. Renew the certificates.
+1. (`ncn-m#`) Make copy of `/etc/kubernetes/kubeadmcfg.yaml`.
+
+    ```bash
+    cp -v /etc/kubernetes/kubeadmcfg.yaml /etc/kubernetes/kubeadmcfg.yaml.bak
+    ```
+
+1. (`ncn-m#`) Edit the `certificateValidityPeriod` value.
+
+   > Modify the following example command to replace `43800h` with the desired value.
+
+    ```bash
+    yq4 eval -i -P '.certificateValidityPeriod = "43800h"' "/etc/kubernetes/kubeadmcfg.yaml"
+    ```
+
+1. (`ncn-m#`) Check the `certificateValidityPeriod` value.
+
+    ```bash
+    cat /etc/kubernetes/kubeadmcfg.yaml | grep certificateValidityPeriod
+    ```
+
+    Example output:
+
+    ```text
+    certificateValidityPeriod: 43800h
+    ```
+
+## Renew all certificates
+
+Run the following steps on each master node.
+
+1. (`ncn-m#`) Renew the certificates.
 
     ```bash
     kubeadm certs renew all --config /etc/kubernetes/kubeadmcfg.yaml
@@ -159,7 +201,7 @@ Run the following steps on each master node.
     certificate embedded in the kubeconfig file for the scheduler manager to use renewed
     ```
 
-1. Check the new expiration.
+1. (`ncn-m#`) Check the new expiration.
 
     ```bash
     kubeadm certs check-expiration --config /etc/kubernetes/kubeadmcfg.yaml
@@ -187,7 +229,7 @@ Run the following steps on each master node.
     front-proxy-ca          Sep 02, 2030 15:21 UTC   8y              no
     ```
 
-1. Check to see if only some of the certificates were updated.
+1. (`ncn-m#`) Check to see if only some of the certificates were updated.
 
     ```bash
     ls -l /etc/kubernetes/pki
@@ -245,9 +287,9 @@ Run the following steps on each master node.
 
       This means we can ignore the fact that our `ca.crt/key, front-proxy-ca.crt/key, and etcd ca.crt/key were not updated.`
 
-1. Check the expiration of the certificates files that do not have a current date and are of the `.crt` or `.pem` format. See [File Locations](#file-locations) for the list of files.
+1. (`ncn-m#`) Check the expiration of the certificates files that do not have a current date and are of the `.crt` or `.pem` format. See [File locations](#file-locations) for the list of files.
 
-   ***This task is for each master node and below example checks each certificate in [File Locations](#file-locations).***
+   ***This task is for each master node and below example checks each certificate in [File locations](#file-locations).***
 
    ```bash
    for i in $(ls /etc/kubernetes/pki/*.crt;ls /etc/kubernetes/pki/etcd/*.crt;ls /var/lib/kubelet/pki/kubelet-client-current.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done
@@ -286,7 +328,7 @@ Run the following steps on each master node.
 
 Repeat the steps in this section on the next master node, until they have been performed on every master node.
 
-1. Restart `etcd`.
+1. (`ncn-m#`) Restart `etcd`.
 
    Once the steps to renew the needed certificates have been completed on all the master nodes, log into each master node one at a time and run the following:
 
@@ -296,7 +338,7 @@ Repeat the steps in this section on the next master node, until they have been p
 
 Repeat the above step on every master node.
 
-1. Restart `kubelet` for all Kubernetes nodes.
+1. (`ncn#`) Restart `kubelet` for all Kubernetes nodes.
 
    **IMPORTANT:** The following example will need to be adjusted to reflect the correct amount of master and worker nodes in the environment being used.
 
@@ -304,7 +346,7 @@ Repeat the above step on every master node.
    pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] systemctl restart kubelet.service
    ```
 
-1. Fix `kubectl` command access on the first master node `ncn-m001`.
+1. (`ncn-m001#`) Fix `kubectl` command access on the first master node `ncn-m001`.
 
    **`NOTE`** The following command will only respond with `Unauthorized` if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
 
@@ -344,7 +386,7 @@ Repeat the above step on every master node.
       ncn-w003   Ready    <none>   370d   v1.18.6
       ```
 
-1. Distribute the client certificate to the rest of the cluster.
+1. (`ncn-m001#`) Distribute the client certificate to the rest of the cluster.
 
    **`NOTE`** There may be errors when copying files. The target may or may not exist depending on the version of CSM.
 
@@ -363,11 +405,11 @@ Repeat the above step on every master node.
    pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] openssl x509 -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
    ```
 
-### Regenerate `kubelet` `.pem` Certificates
+### Regenerate `kubelet` `.pem` certificates
 
 **`NOTE`** This section is typically not necessary unless your `kubelet` client certificate expired (see above section).
 
-1. Backup certificates for `kubelet` on each master and worker node:
+1. (`ncn#`) Backup certificates for `kubelet` on each master and worker node:
 
    **IMPORTANT:** The following example will need to be adjusted to reflect the correct number of master and worker nodes in the environment being used.
 
@@ -376,13 +418,13 @@ Repeat the above step on every master node.
                /root/kubelet_certs.tar /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/
    ```
 
-2. Log into the master node that has the `kubeadm` configuration file to generate new `kubelet.conf` files.
+1. Log into the master node that has the `kubeadm` configuration file to generate new `kubelet.conf` files.
 
-   1. Find the master node with the `/etc/cray/kubernetes/kubeadmin.yaml` file.
+   1. (`ncn#`) Find the master node with the `/etc/cray/kubernetes/kubeadmin.yaml` file.
 
       ```bash
-      ncn# MASTERNODE=$(for node in ncn-m00{1..3}; do ssh root@$node test -f /etc/cray/kubernetes/kubeadm.yaml && echo $node && break; done)
-      ncn# echo $MASTERNODE
+      MASTERNODE=$(for node in ncn-m00{1..3}; do ssh root@$node test -f /etc/cray/kubernetes/kubeadm.yaml && echo $node && break; done)
+      echo $MASTERNODE
       ```
 
       Example output:
@@ -391,22 +433,22 @@ Repeat the above step on every master node.
       ncn-m002
       ```
 
-   1. Log into the master
+   1. (`ncn#`) Log into the master
 
       ```bash
-      ncn# ssh $MASTERNODE
+      ssh $MASTERNODE
       ```
 
-   1. Generate a new `kubelet.conf` file in the `/root/` directory.
+   1. (`ncn-m#`) Generate a new `kubelet.conf` file in the `/root/` directory.
 
       ```bash
-      ncn-m# for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm kubeconfig user --org system:nodes \
+      for node in $(kubectl get nodes -o json|jq -r '.items[].metadata.name'); do kubeadm kubeconfig user --org system:nodes \
                                --client-name system:node:$node --config /etc/cray/kubernetes/kubeadm.yaml | sed "/WARNING/d" > /root/$node.kubelet.conf; done
       ```
 
       There should be a new `kubelet.conf` file per node running Kubernetes.
 
-3. Copy each file to the corresponding node shown in the filename.
+1. (`ncn-m#`) Copy each file to the corresponding node shown in the filename.
 
    **`NOTE`** Update the below command with the appropriate number of master and worker nodes.
 
@@ -414,7 +456,7 @@ Repeat the above step on every master node.
    for node in ncn-m00{1..3} ncn-w00{1..3}; do scp /root/$node.kubelet.conf $node:/etc/kubernetes/; done
    ```
 
-4. Log into each node one at a time and run the following commands:
+1. (`ncn#`) Log into each node one at a time and run the following commands:
 
    ```bash
    systemctl stop kubelet.service &&
@@ -424,9 +466,9 @@ Repeat the above step on every master node.
         kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/ && echo OK
    ```
 
-5. Check the expiration of the `kubelet` certificate files. See [File Locations](#file-locations) for the list of files.
+1. (`ncn#`) Check the expiration of the `kubelet` certificate files. See [File locations](#file-locations) for the list of files.
 
-   **This task is for each master and worker node. The example checks each `kubelet` certificate in [File Locations](#file-locations).**
+   **This task is for each master and worker node. The example checks each `kubelet` certificate in [File locations](#file-locations).**
    **`NOTE`** As long as the `kubelet-client-current.pem` certificate is current, expiration dates for other `kubelet` certificates can be ignored.
 
    ```bash
@@ -444,7 +486,7 @@ Repeat the above step on every master node.
    notAfter=Sep 22 18:32:30 2022 GMT
    ```
 
-6. Perform a rolling reboot of master nodes.
+1. Perform a rolling reboot of master nodes.
 
    **IMPORTANT:** Make sure the current time on the master node to be rebooted falls within the validity period of its `kubelet` client certificate before rebooting it. Pay attention to the time zone difference when checking it:
 
@@ -456,9 +498,9 @@ Repeat the above step on every master node.
 
    **IMPORTANT:** Verify pods are running on the master node that was rebooted before proceeding to the next node.
 
-7. Perform a rolling reboot of worker nodes.
+1. Perform a rolling reboot of worker nodes.
 
-   **IMPORTANT:** Make sure the current time on the worker node to be rebooted falls within the validity period of its `kubelet` client certificate before rebooting it. Pay attention to the time zone difference when checking it:
+   **IMPORTANT:** (`ncn-w#`) Make sure the current time on the worker node to be rebooted falls within the validity period of its `kubelet` client certificate before rebooting it. Pay attention to the time zone difference when checking it:
 
    ```bash
    date; openssl x509 -startdate -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
@@ -466,28 +508,28 @@ Repeat the above step on every master node.
 
    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) process.
 
-## Renew Etcd Certificate
+## Renew Etcd certificate
 
 If [Check Certificates](#check-certificates) indicates that only the `apiserver-etcd-client` need to be renewed, then the following can be used to renew just that one certificate.
 The full [Renew All Certificates](#renew-all-certificates) procedure will also renew this certificate.
 
 Run the following steps on each master node.
 
-1. Renew the Etcd certificate.
+(`ncn-m#`) Renew the Etcd certificate.
 
-    ```bash
-    kubeadm certs renew apiserver-etcd-client --config /etc/kubernetes/kubeadmcfg.yaml
-    systemctl restart etcd.service
-    systemctl restart kubelet.service
-    ```
+```bash
+kubeadm certs renew apiserver-etcd-client --config /etc/kubernetes/kubeadmcfg.yaml
+systemctl restart etcd.service
+systemctl restart kubelet.service
+```
 
-## Update Client Secrets
+## Update client secrets
 
 The client secrets can be updated independently from the Kubernetes certs.
 
 Run the following steps from a master node.
 
-1. Update the client certificate for `kube-etcdbackup`.
+1. (`ncn-mw#`) Update the client certificate for `kube-etcdbackup`.
 
    1. Update the `kube-etcdbackup-etcd` secret.
 
@@ -524,7 +566,7 @@ Run the following steps from a master node.
       kube-etcdbackup-1652201400-czh5p   0/1     Completed   0          107s
       ```
 
-1. Update the client certificate for `etcd-client`.
+1. (`ncn-mw#`) Update the client certificate for `etcd-client`.
 
    1. Update the `etcd-client-cert` secret.
 
