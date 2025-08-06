@@ -1,12 +1,15 @@
 # Distributing critical services across Kubernetes zones
 
-One of the key ways to ensure CSM critical services availability is that the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks. To support Kubernetes in spreading the replicas of the CSM critical services during startup, a new `kyverno` policy by name  `insert-labels-topology-constraints` has been added.
+One of the key ways to ensure CSM critical services availability is that the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks.
+To support Kubernetes in spreading the replicas of the CSM critical services during startup, a new `kyverno` policy by name `insert-labels-topology-constraints` has been added.
 
 This policy applies to all the Deployments and StatefulSets that have been identified as critical services for Rack Resiliency.
 
 ## `Kyverno` cluster policy
 
-Some of the CSM critical services already have established the pod affinities to spread the replicas across nodes. Because the nodes which are picked by the Kubernetes scheduler can be on the same rack, it is necessary to include a topology constraint for these services; this helps the Kubernetes scheduler distribute the replicas across zones. This is achieved using the feature with a new `kyverno` cluster policy with the name `insert-labels-topology-constraints` added.
+Some of the CSM critical services already have established the pod affinities to spread the replicas across nodes. Because the nodes which are picked by the Kubernetes scheduler can be on the same rack,
+it is necessary to include a topology constraint for these services; this helps the Kubernetes scheduler distribute the replicas across zones. This is achieved using the feature with a new `kyverno` cluster policy with the name
+`insert-labels-topology-constraints` added.
 
 For more information, see [Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
@@ -81,15 +84,15 @@ The policy engine updates the topology constraint to the Deployment/ StatefulSet
 
 ```yaml
 spec:
-  +(topologySpreadConstraints):
-  - labelSelector:
-      matchLabels:
-        rrflag: rr-{{ request.object.metadata.name }}
-    maxSkew: 1
-    topologyKey: topology.kubernetes.io/zone
-    whenUnsatisfiable: ScheduleAnyway
+    +(topologySpreadConstraints):
+        - labelSelector:
+              matchLabels:
+                  rrflag: rr-{{ request.object.metadata.name }}
+          maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
 ```
-            
+
 #### 3. Add a new label as a selector to identify the pods
 
 During restart, the label mentioned in the policy is added to all the pods belonging to the specific critical service Deployment or StatefulSets that is being restarted.

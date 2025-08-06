@@ -2,24 +2,24 @@
 
 This page contains general Rack Resiliency troubleshooting topics.
 
-* [Cray CLI](#cray-cli)
-    * [Wrong critical service type](#wrong-critical-service-type)
-* [Resiliency Monitoring Service](#resiliency-monitoring-service-rms)
-    * [Steps to view RMS logs](#steps-to-view-rms-logs)
-    * [Interpreting RMS logs](#interpreting-rms-logs)
-        * [State change notification from HMNFD](#state-change-notification-from-hmnfd)
-        * [Node failure](#node-failure)
-        * [Rack failure](#rack-failure)
-        * [Status of Ceph](#status-of-ceph)
-        * [Critical services events](#critical-services-events)
-            * [Imbalance of services](#imbalance-of-services)
-            * [Status of service](#status-of-service)
-            * [Service not found](#service-not-found)
-            * [Unable to register for notification](#unable-to-register-for-notification)
-    * [Getting details about RMS](#getting-details-about-rms)
-* [Critical services health check](#critical-services-health-check)
-    * [List status of critical services](#list-status-of-critical-services)
-    * [Detailed status for a service](#detailed-status-for-a-critical-service)
+- [Cray CLI](#cray-cli)
+    - [Wrong critical service type](#wrong-critical-service-type)
+- [Resiliency Monitoring Service](#resiliency-monitoring-service-rms)
+    - [Steps to view RMS logs](#steps-to-view-rms-logs)
+    - [Interpreting RMS logs](#interpreting-rms-logs)
+        - [State change notification from HMNFD](#state-change-notification-from-hmnfd)
+        - [Node failure](#node-failure)
+        - [Rack failure](#rack-failure)
+        - [Status of Ceph](#status-of-ceph)
+        - [Critical services events](#critical-services-events)
+            - [Imbalance of services](#imbalance-of-services)
+            - [Status of service](#status-of-service)
+            - [Service not found](#service-not-found)
+            - [Unable to register for notification](#unable-to-register-for-notification)
+    - [Getting details about RMS](#getting-details-about-rms)
+- [Critical services health check](#critical-services-health-check)
+    - [List status of critical services](#list-status-of-critical-services)
+    - [Detailed status for a service](#detailed-status-for-a-critical-service)
 
 ## Cray CLI
 
@@ -77,64 +77,63 @@ kubectl logs "${RRS_POD}" -c cray-rrs-rms -n rack-resiliency
 
 #### State change notification from HMNFD
 
-  ```text
-  2025-06-26 12:49:59,725 - INFO in rms - Notification received from HMNFD 2025-06-26 12:49:59,725 - WARNING in rms - Components '['x3000c0s11b0n0']' are changed to Off state.
-  ```
+```text
+2025-06-26 12:49:59,725 - INFO in rms - Notification received from HMNFD 2025-06-26 12:49:59,725 - WARNING in rms - Components '['x3000c0s11b0n0']' are changed to Off state.
+```
 
-* Cause: The node(s) were shutdown or powered off.
-* Effect: This leads to critical service redistribution based on `Kyverno` policy.
-* Recovery: Power on the node(s).
-
+- Cause: The node(s) were shutdown or powered off.
+- Effect: This leads to critical service redistribution based on `Kyverno` policy.
+- Recovery: Power on the node(s).
 
 #### Node failure
 
-  ```text
-  2025-06-26 12:49:59,997 - INFO in rms - Some nodes in rack x3000 are down. Failed nodes: ['x3000c0s11b0n0']
-  ```
+```text
+2025-06-26 12:49:59,997 - INFO in rms - Some nodes in rack x3000 are down. Failed nodes: ['x3000c0s11b0n0']
+```
 
-* Cause: The node(s) were shutdown or powered off.
-* Effect: This leads to critical service redistribution based on `Kyverno` policy.
-* Recovery: Power on the node(s).
+- Cause: The node(s) were shutdown or powered off.
+- Effect: This leads to critical service redistribution based on `Kyverno` policy.
+- Recovery: Power on the node(s).
 
 #### Rack failure
 
-  ```text
-  2025-06-26 12:49:59,997 - INFO in rms - All the nodes in the rack x3000 are not healthy - RACK FAILURE
-  ```
+```text
+2025-06-26 12:49:59,997 - INFO in rms - All the nodes in the rack x3000 are not healthy - RACK FAILURE
+```
 
-* Cause: All the nodes in the rack were shutdown or powered off.
-* Effect: This leads to critical service redistribution based on `Kyverno` policy.
-* Recovery: Power on the all the nodes in the rack.
+- Cause: All the nodes in the rack were shutdown or powered off.
+- Effect: This leads to critical service redistribution based on `Kyverno` policy.
+- Recovery: Power on the all the nodes in the rack.
 
 #### Status of Ceph
 
-  ```text
-  ...
-  2025-06-26 12:51:03,661 - WARNING in lib_rms - 1 out of 3 ceph nodes are not healthy
-  2025-06-26 12:51:05,069 - WARNING in lib_rms - CEPH is not healthy with health status as HEALTH_WARN
-  2025-06-26 12:51:05,069 - WARNING in lib_rms - CEPH PGs are in degraded state, but recovery is not happening
-  2025-06-26 12:51:06,341 - WARNING in lib_rms - Service alertmanager running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,341 - WARNING in lib_rms - Service crash running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,341 - WARNING in lib_rms - Service mds.admin-tools running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service mds.cephfs running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service mgr running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service mon running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service node-exporter running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service prometheus running on ncn-s002 is in host is offline state
-  2025-06-26 12:51:06,342 - WARNING in lib_rms - Service rgw.site1 running on ncn-s002 is in host is offline state
-  ```
+```text
+...
+2025-06-26 12:51:03,661 - WARNING in lib_rms - 1 out of 3 ceph nodes are not healthy
+2025-06-26 12:51:05,069 - WARNING in lib_rms - CEPH is not healthy with health status as HEALTH_WARN
+2025-06-26 12:51:05,069 - WARNING in lib_rms - CEPH PGs are in degraded state, but recovery is not happening
+2025-06-26 12:51:06,341 - WARNING in lib_rms - Service alertmanager running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,341 - WARNING in lib_rms - Service crash running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,341 - WARNING in lib_rms - Service mds.admin-tools running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service mds.cephfs running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service mgr running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service mon running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service node-exporter running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service osd.all-available-devices running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service prometheus running on ncn-s002 is in host is offline state
+2025-06-26 12:51:06,342 - WARNING in lib_rms - Service rgw.site1 running on ncn-s002 is in host is offline state
+```
 
-* Cause: The storage node was shutdown or powered off.
-* Effect: This leads to Ceph storage becoming unhealthy.
-* Recovery: Power on the node and wait for Ceph to restore.
+- Cause: The storage node was shutdown or powered off.
+- Effect: This leads to Ceph storage becoming unhealthy.
+- Recovery: Power on the node and wait for Ceph to restore.
 
 #### Critical services events
 
@@ -144,9 +143,9 @@ kubectl logs "${RRS_POD}" -c cray-rrs-rms -n rack-resiliency
 2025-06-30 07:02:36,235 - WARNING in lib_rms - list of imbalanced services are - ['istiod']
 ```
 
-* Cause: Due to node failure the pod are not spread equally across zones.
-* Effect: This leads to danger of losing multiple replicas if another node failure happens.
-* Recovery: Ensure sufficient resources(CPU and memory) are available in each zone so that pods can be equally distributed.
+- Cause: Due to node failure the pod are not spread equally across zones.
+- Effect: This leads to danger of losing multiple replicas if another node failure happens.
+- Recovery: Ensure sufficient resources(CPU and memory) are available in each zone so that pods can be equally distributed.
 
 ##### Status of service
 
@@ -170,9 +169,9 @@ kubectl logs "${RRS_POD}" -c cray-rrs-rms -n rack-resiliency
 2025-06-30 07:02:36,235 - WARNING in lib_rms - list of unconfigured services are - ['cilium-operator', 'cray-dvs-mqtt-ss', '`Kyverno`-cleanup-controller', '`Kyverno`-reports-controller', 'k8s-zone-api', 'kube-multus-ds']
 ```
 
-* Cause: Due to node failure the pod are not spread equally across zones.
-* Effect: This leads to danger of losing multiple replicas if another node failure happens.
-* Recovery: Ensure sufficient resources(CPU and memory) are available in each zone so that pods can be equally distributed and to make StatefulSet configured, it need to be rollout restarted.
+- Cause: Due to node failure the pod are not spread equally across zones.
+- Effect: This leads to danger of losing multiple replicas if another node failure happens.
+- Recovery: Ensure sufficient resources(CPU and memory) are available in each zone so that pods can be equally distributed and to make StatefulSet configured, it need to be rollout restarted.
 
 ##### Service not found
 
@@ -180,9 +179,9 @@ kubectl logs "${RRS_POD}" -c cray-rrs-rms -n rack-resiliency
 2025-06-30 07:02:36,233 - ERROR in lib_rms - Error fetching StatefulSet kube-multus-ds: Not Found
 ```
 
-* Cause: Wrong service is added to critical service list or the service is not yet configured on system.
-* Effect: This leads RMS to monitor unknown service.
-* Recovery: Delete or modify the critical service.
+- Cause: Wrong service is added to critical service list or the service is not yet configured on system.
+- Effect: This leads RMS to monitor unknown service.
+- Recovery: Delete or modify the critical service.
 
 #### Unable to register for notification
 
@@ -190,9 +189,9 @@ kubectl logs "${RRS_POD}" -c cray-rrs-rms -n rack-resiliency
 [2025-05-26 11:49:25,744] ERROR in rms: Attempt 1 : Failed to fetch subscription list from hmnfd. Error: 503 Server Error: Service Unavailable for url: https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions
 ```
 
-* Cause: The HMNFD service is nor running.
-* Effect: This leads to RMS not receiving notifications from HMNFD.
-* Recovery: Ensure HMNFD service is running.
+- Cause: The HMNFD service is nor running.
+- Effect: This leads to RMS not receiving notifications from HMNFD.
+- Recovery: Ensure HMNFD service is running.
 
 ### Getting details about RMS
 

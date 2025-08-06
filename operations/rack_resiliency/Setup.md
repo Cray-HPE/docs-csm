@@ -1,24 +1,24 @@
 # Setup
 
-This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#architecture-overview). 
+This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#architecture-overview).
 
 Before setting up rack resiliency, enable it using [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the setup will fail after [Stage 1 - Check enablement](#stage-1---check-enablement).
 
 For setting up rack resiliency the following steps are necessary:
 
-* [Running the Ansible playbooks](#running-ansible-playbooks)
-  * [Setting up Kubernetes zoning](#setting-up-Kubernetes-zoning)
-    * [Stage 1 - Check enablement](#stage-1---check-enablement)
-    * [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
-    * [Stage 3 - Placement Validation](#stage-3---placement-validation)
-    * [Stage 4 - Kubernetes Zoning](#stage-4---Kubernetes-zoning)
-    * [Stage 5 - Apply Kyverno policy](#stage-5---apply-Kyverno-policy)
-  * [Setting up ceph zoning](#setting-up-ceph-zoning)
-    * [Stage 1 - Check enablement](#stage-1---check-enablement-1)
-    * [Stage 2 - Placement Discovery](#stage-2---placement-discovery-1)
-    * [Stage 3 - Placement Validation](#stage-3---placement-validation-1)
-    * [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
-    * [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-HAproxy-configuration)
+- [Running the Ansible playbooks](#running-ansible-playbooks)
+    - [Setting up Kubernetes zoning](#setting-up-Kubernetes-zoning)
+        - [Stage 1 - Check enablement](#stage-1---check-enablement)
+        - [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
+        - [Stage 3 - Placement Validation](#stage-3---placement-validation)
+        - [Stage 4 - Kubernetes Zoning](#stage-4---Kubernetes-zoning)
+        - [Stage 5 - Apply Kyverno policy](#stage-5---apply-Kyverno-policy)
+    - [Setting up ceph zoning](#setting-up-ceph-zoning)
+        - [Stage 1 - Check enablement](#stage-1---check-enablement-1)
+        - [Stage 2 - Placement Discovery](#stage-2---placement-discovery-1)
+        - [Stage 3 - Placement Validation](#stage-3---placement-validation-1)
+        - [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
+        - [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-HAproxy-configuration)
 
 ### Running Ansible playbooks
 
@@ -42,9 +42,16 @@ Example of JSON file containing rack to management NCN hostname mapping (`rr_hw_
 
 ```json
 {
-  "x3000": ["ncn-m001", "ncn-w001", "ncn-w004", "ncn-w007", "ncn-s001"],
-  "x3001": ["ncn-m002", "ncn-w002", "ncn-w006", "ncn-w005", "ncn-w008", "ncn-s003"],
-  "x3002": ["ncn-m003", "ncn-w003", "ncn-w009", "ncn-s002", "ncn-s004"]
+    "x3000": ["ncn-m001", "ncn-w001", "ncn-w004", "ncn-w007", "ncn-s001"],
+    "x3001": [
+        "ncn-m002",
+        "ncn-w002",
+        "ncn-w006",
+        "ncn-w005",
+        "ncn-w008",
+        "ncn-s003"
+    ],
+    "x3002": ["ncn-m003", "ncn-w003", "ncn-w009", "ncn-s002", "ncn-s004"]
 }
 ```
 
@@ -70,7 +77,7 @@ This Ansible play applies the `Kyverno` clusterpolicy `insert-labels-topology-co
 
 #### Setting up ceph zoning
 
-The below stages are used to setup the ceph zones and update Ceph HAproxy configuration required for RRS using Ansible plays: 
+The below stages are used to setup the ceph zones and update Ceph HAproxy configuration required for RRS using Ansible plays:
 
 ##### Stage 1 - Check Enablement
 
