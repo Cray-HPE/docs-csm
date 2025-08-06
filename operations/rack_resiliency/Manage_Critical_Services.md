@@ -171,8 +171,8 @@ Successfully_Added_Services = [ "kube-proxy",]
 Already_Existing_Services = [ "coredns",]
 ```
 
-This allows an administrator to specify multiple services in thsame command.
-For complete details on the required format of the criticaservices configuration, see the
+This allows an administrator to specify multiple services in the same command.
+For complete details on the required format of the critical services configuration, see the
 [`CriticalServiceCmStaticType`](../../api/rrs.md#schemacriticalservicecmstatictype) schema.
 
 - After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
@@ -180,7 +180,7 @@ For complete details on the required format of the criticaservices configuration
 ## Add critical service using ConfigMap
 
 Before editing the ConfigMap, follow the [instructions](Manage_Critical_Services.md#1-verify-that-the-critical-services-is-present-in-the-kubernetes-cluster) mentioned
-to check whether the service is configured on the Kubernetes cluster. Proceed to next step if the servie configured.
+to check whether the service is configured on the Kubernetes cluster. Proceed to next step if the service configured.
 
 ### 1 Edit the ConfigMap
 
@@ -286,7 +286,7 @@ After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-
 ## Delete critical service using ConfigMap
 
 Before editing the ConfigMap, follow the [instructions](Manage_Critical_Services.md#1-verify-that-the-critical-services-is-present-in-the-kubernetes-cluster) mentioned
-to check whether the service is configured on the Kubernetes cluster. Proceed to next step if the servie configured.
+to check whether the service is configured on the Kubernetes cluster. Proceed to next step if the service configured.
 
 ### 1. Edit the ConfigMap
 
