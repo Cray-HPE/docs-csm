@@ -33,7 +33,8 @@ Triggered upon receiving a notification from HMNFD, this loop performs targeted 
 
 ## RMS and ConfigMaps
 
-RMS reads the [static ConfigMap(`rrs-mon-static`)](ConfigMaps.md#1-static-configmap) for getting the list of critical services to monitor. It updates the [dynamic ConfigMap(`rrs-mon-dynamic`)](ConfigMaps.md#2-dynamic-configmap) at regular intervals to reflect the latest status and balance of critical services along with the zones information.
+RMS reads the [static ConfigMap(`rrs-mon-static`)](ConfigMaps.md#1-static-configmap) for getting the list of critical services to monitor.
+It updates the [dynamic ConfigMap(`rrs-mon-dynamic`)](ConfigMaps.md#2-dynamic-configmap) at regular intervals to reflect the latest status and balance of critical services along with the zones information.
 
 ## RMS Messages
 

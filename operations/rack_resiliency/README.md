@@ -26,8 +26,8 @@ However, rack-level failures can cause service disruptions if management nodes a
 This can result in the loss of HA quorum. Additionally, incorrect physical placement or software configuration of storage nodes
 can cause utility storage service disruptions due to rack-level failures.
 
-To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services due to a single rack failure.T
-his feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
+To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services due to a single rack failure.
+This feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
 
 **NOTE**:
 
@@ -126,7 +126,8 @@ Rack Resiliency uses a 3 step procedure to be set up for monitoring critical ser
 
 ### 2. Managing critical services
 
-During the execution of RRS there maybe a need to manage critical services, which may need administrator intervention. This can be done using the Cray CLI or the API. Refer [Manage Critical Services](Manage_Critical_Services.md) for complete list of supported operations.
+During the execution of RRS there maybe a need to manage critical services, which may need administrator intervention. This can be done using the Cray CLI or the API.
+Refer [Manage Critical Services](Manage_Critical_Services.md) for complete list of supported operations.
 
 ### 3. Managing `Kyverno` policy
 
