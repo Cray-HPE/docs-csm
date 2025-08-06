@@ -31,8 +31,9 @@ This feature prevents system-wide outages, allowing for successful execution of 
 
 **NOTE**:
 
-- Rack Resiliency is disabled by default.
-- This feature does not address routine maintenance scenarios.
+* Rack Resiliency is disabled by default.
+* Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an upgrade from CSM 1.6 to CSM 1.7.
+* Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
 
 ## Key terminology
 
