@@ -41,6 +41,11 @@ vmstorage
 vmalert
 vmselect
 victoria
+clusterpolicy
+kyverno
+healthchecks
+ceph.conf
+prepopulated
 
 1.0.x
 1.2.x
