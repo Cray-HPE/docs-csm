@@ -55,7 +55,7 @@ The Rack Resiliency solution is implemented in multiple stages. These stages are
 * [Stage 2 - Placement Discovery](Setup.md#stage-2---placement-discovery)
 * [Stage 3 - Placement Validation](Setup.md#stage-3---placement-validation)
 * [Stage 4 - Kubernetes Zoning](Setup.md#stage-4---kubernetes-zoning)
-* [Stage 5 - Ceph Zoning]((Setup.md#stage-4---ceph-zoning))
+* [Stage 5 - Ceph Zoning](Setup.md#stage-4---ceph-zoning)
 * [Stage 6 - Apply `Kyverno` policy](#stage-5---apply-Kyverno-policy)
 * [Stage 7 - Continuous Monitoring](Resiliency_Monitoring_Service.md)
 
@@ -76,7 +76,7 @@ Refer for more information on [ConfigMaps](ConfigMaps.md)
 One of the ways that Rack Resiliency ensures that CSM critical services survive the failure of nodes or a single rack is to
 spread the replicas of these services across multiple zones and racks.
 
-See [`Kyverno` cluster policy](distribution_of_critical_services_across_zones.md#`Kyverno`-cluster-policy) for more information.
+See [`Kyverno` cluster policy](Kyverno.md#Kyverno-cluster-policy) for more information.
 
 ## 4. [Rack Resiliency Service](Rack_Resiliency_Service.md) (RRS)
 
