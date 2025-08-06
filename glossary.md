@@ -64,7 +64,7 @@ Glossary of terms used in CSM documentation.
     * [RemoteISO](#remoteiso)
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
-* [Rack Resiliency](operations/rack_resiliency/README.md)
+* [Rack Resiliency](#rack-resiliency)
 * [Rack Resiliency Service(RRS)](#rack-resiliency-service)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
