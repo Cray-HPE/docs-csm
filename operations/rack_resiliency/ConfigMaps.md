@@ -45,17 +45,38 @@ Truncated example output (the actual output of ConfigMap will be larger):
 
 ```json
 {
-    "ceph_monitoring_polling_interval": "60",
-    "ceph_monitoring_total_time": "600",
-    "ceph_pre_monitoring_delay": "60",
-    "critical-service-config.json": "<...omitted from example output...>",
-    "default_message_level": "debug",
-    "k8s_monitoring_polling_interval": "60",
-    "k8s_monitoring_total_time": "600",
-    "k8s_pre_monitoring_delay": "40",
-    "last_updated_timestamp": "",
-    "log_dir": "/var/log/rr",
-    "unit_of_time": "seconds"
+  "ceph_monitoring_polling_interval": "60",
+  "ceph_monitoring_total_time": "600",
+  "ceph_pre_monitoring_delay": "60",
+  "critical-service-config.json": {
+    "critical_services": {
+      "cilium-operator": {
+        "namespace": "kube-system",
+        "type": "Deployment"
+      },
+      "coredns": {
+        "namespace": "kube-system",
+        "type": "Deployment"
+      },
+		...
+
+      "sshot-net-operator": {
+        "namespace": "sshot-net-operator",
+        "type": "Deployment"
+      },
+      "kube-proxy": {
+        "namespace": "kube-system",
+        "type": "StatefulSet"
+      }
+    }
+  },
+  "default_message_level": "debug",
+  "k8s_monitoring_polling_interval": "60",
+  "k8s_monitoring_total_time": "600",
+  "k8s_pre_monitoring_delay": "40",
+  "last_updated_timestamp": "2025-08-04T04:15:29.527818Z",
+  "log_dir": "/var/log/rr",
+  "unit_of_time": "seconds"
 }
 ```
 
