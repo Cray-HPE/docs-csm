@@ -32,7 +32,7 @@ Once this step has completed:
 In CSM 1.6, all the worker nodes are configured and enabled as iSCSI SBPS targets. Starting in CSM 1.7.0, selective worker node
 personalization is supported. All worker nodes are still **configured** for iSCSI, but selective node personalization
 gives administrators control over which worker nodes are actually enabled as iSCSI SBPS targets. The default behavior
-is still the same as in CSM 1.6, so if no action is taken to use this feature, then all worker nodes will continue to and 
+is still the same as in CSM 1.6, so if no action is taken to use this feature, then all worker nodes will continue to and
 be enabled as iSCSI targets.
 
 For administrators who do not wish to use this feature, no action is required, and this step can be skipped.
@@ -49,6 +49,7 @@ This section can be skipped if Rack Resiliency feature is not required.
 ```bash
 kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > /tmp/customizations.yaml
 ```
+
 ##### Update the `customizations.yaml` file
 
 ```bash
@@ -57,14 +58,14 @@ vi /tmp/customizations.yaml
 
 **`NOTE`**
 
-* If site specific identities are needed for zones, zones prefixes for Kubernetes and Ceph can be configured.
-* Adding zone prefixes is optional. No prefixes are added by default.
-* The prefix can be limited to 1-1000 characters long (but no restrictions on the type of characters)
+- If site specific identities are needed for zones, zones prefixes for Kubernetes and Ceph can be configured.
+- Adding zone prefixes is optional. No prefixes are added by default.
+- The prefix can be limited to 1-1000 characters long (but no restrictions on the type of characters)
 
 Edit the `customizations.yaml`:
 
-* Update the `spec.services.rack-resiliency.enabled` flag from `false` to `true`.
-* Update the `spec.services.k8s_zone_prefix` and `spec.services.ceph_zone_prefix` sections with the required Kubernetes and ceph zone prefix.
+- Update the `spec.services.rack-resiliency.enabled` flag from `false` to `true`.
+- Update the `spec.services.k8s_zone_prefix` and `spec.services.ceph_zone_prefix` sections with the required Kubernetes and ceph zone prefix.
 
 Save and close the `customizations.yaml`.
 
@@ -73,6 +74,7 @@ Update the `site-init` secret in the Kubernetes cluster.
 ```bash
 CUSTOMIZATIONS="$(base64 < "/tmp/customizations.yaml" | tr -d '\n')"
 ```
+
 ```bash
 kubectl get secrets -n loftsman site-init -o json \
 >     | jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" | kubectl apply -f -
@@ -90,12 +92,12 @@ does not recognize as true, then it will be interpreted as false.
 
 **Important Notes:**
 
-* If the prefixes is defined, then the zones will be created in the format of `k8s_zone_prefix + rack_id` and `ceph_zone_prefix + rack_id`.
-    * If the `spec.services.k8s_zone_prefix` has a value of `test-system` and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `test-system-x3000`.
-    * If the `spec.services.ceph_zone_prefix` has a value of `test-storage-system` and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `test-storage-system-x3000`.
-* If the `spec.services.k8s_zone_prefix` has no value defined and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `x3000`.
-* If the `spec.services.ceph_zone_prefix` has no value defined and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `x3000`.
-* 
+- If the prefixes is defined, then the zones will be created in the format of `k8s_zone_prefix + rack_id` and `ceph_zone_prefix + rack_id`.
+  - If the `spec.services.k8s_zone_prefix` has a value of `test-system` and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `test-system-x3000`.
+  - If the `spec.services.ceph_zone_prefix` has a value of `test-storage-system` and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `test-storage-system-x3000`.
+- If the `spec.services.k8s_zone_prefix` has no value defined and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `x3000`.
+- If the `spec.services.ceph_zone_prefix` has no value defined and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `x3000`.
+
 ### `management-nodes-rollout` overview
 
 This section describes how to update software on management nodes. It describes how to test a new image and CFS configuration on a single node first to ensure they work as expected before rolling the changes out to the other management
