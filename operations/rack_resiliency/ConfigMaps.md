@@ -28,7 +28,7 @@ During every monitoring interval, the following things are done.
 
 ## Viewing ConfigMap
 
-### Static ConfigMap
+### 1. Static ConfigMap
 
 (`ncn-mw#`) View the data of the Static ConfigMap used by the Rack Resiliency service.
 
@@ -55,7 +55,7 @@ Truncated example output (the actual output of ConfigMap will be larger):
 }
 ```
 
-### Dynamic ConfigMap
+### 2. Dynamic ConfigMap
 
 For viewing the data of the Dynamic ConfigMap used by Rack Resiliency service use the below command:
 
@@ -130,4 +130,5 @@ Truncated example output (the actual output of ConfigMap will be larger):
 }
 ```
 
-HPE provides a standard set of critical services which are needed for the successful execution of user jobs. However, it possible to add additional critical services to the list. For further information on managing the critical services, refer to [Manage Critical Service](Manage_Critical_Services.md)
+HPE provides a standard set of critical services which are needed for the successful execution of user jobs. However, it possible to add additional critical services to the list. For further information on managing the critical services, 
+refer to [Manage Critical Service](Manage_Critical_Services.md)
