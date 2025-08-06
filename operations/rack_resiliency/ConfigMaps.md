@@ -17,14 +17,21 @@ The two ConfigMaps are named `rrs-mon-static` (also referred to as the static Co
 This ConfigMap contains information such as the status of critical services, zones, and nodes.
 It is populated and used by RRS internally.
 
-During every monitoring interval, the following things are done.
+During every monitoring interval, the following things are done:
 
 - For each critical service, the following fields are updated:
-    - `status`: Whether the service is configured on the system.
-    - `balanced`: Whether the service is spread across the zones.
-- Zone information is updated for:
-    - Kubernetes: name and status of nodes.
-    - Ceph: name and status of nodes and OSDs.
+    - `status`: Configured/ Unconfigured/ Partiallyconfigured
+      **Note:**
+        - Configured: All pods are running.
+        - Unconfigured: No pods running.
+        - Partiallyconfigured: Few pods running.
+    - `balanced`: true/ false
+      **Note:**
+          - true: service is spread across zones.
+          - false: service is not spread across zones (multiple replicas are in same zone).
+    - Zone information is updated for:
+        - Kubernetes: name and status of nodes.
+        - Ceph: name and status of nodes and OSDs.
 
 ## Viewing ConfigMap
 
