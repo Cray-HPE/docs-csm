@@ -4,13 +4,13 @@ These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
 1. [Background](#1-background)
-1. [Create and Initialize `site-init` Directory](#2-create-and-initialize-site-init-directory)
-1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
-    1. [Setup LDAP configuration](#setup-ldap-configuration)
-    1. [Customize DNS Configuration](#customize-dns-configuration)
-    1. [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
+1. [Create and initialize `site-init` directory](#2-create-and-initialize-site-init-directory)
+1. [Create baseline system customizations](#3-create-baseline-system-customizations)
+    - [Setup LDAP configuration](#setup-ldap-configuration)
+    - [Customize DNS configuration](#customize-dns-configuration)
+    - [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
 1. [Encrypt secrets](#4-encrypt-secrets)
-1. [Customer-Specific Customizations](#5-customer-specific-customizations)
+1. [Customer-specific customizations](#5-customer-specific-customizations)
 
 ## 1. Background
 
@@ -48,7 +48,7 @@ installation-centric artifacts, such as:
     "${CSM_PATH}/shasta-cfg/meta/init.sh" "${SITE_INIT}"
     ```
 
-## 3. Create Baseline System Customizations
+## 3. Create baseline system customizations
 
 The following steps update `${SITE_INIT}/customizations.yaml`
 with system-specific customizations.
