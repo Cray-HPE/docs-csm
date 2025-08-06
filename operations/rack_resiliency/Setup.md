@@ -2,34 +2,33 @@
 
 This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#architecture-overview).
 
-Before setting up rack resiliency, enable it using [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the setup will be skipped after [Stage 1 - Check enablement](#stage-1---check-enablement).
+Before setting up rack resiliency, enable it using [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the following setup will be skipped after [Stage 1 - Check enablement](#stage-1---check-enablement).
 
-For setting up rack resiliency the following steps are necessary:
+## Rack Resiliency setup with Ansible playbooks
 
-- [Running the Ansible playbooks](#running-ansible-playbooks)
-    - [Preparatory steps for zoning](#preparatory-steps-for-zoning)
-        - [Stage 1 - Check enablement](#stage-1---check-enablement)
-        - [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
-        - [Stage 3 - Placement Validation](#stage-3---placement-validation)
-    - [Setting up Kubernetes zoning](#setting-up-kubernetes-zoning)
-        - [Stage 4 - Kubernetes Zoning](#stage-4---kubernetes-zoning)
-        - [Stage 5 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
-    - [Setting up ceph zoning](#setting-up-ceph-zoning)
-        - [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
-        - [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-haproxy-configuration)
-
-## Running Ansible playbooks
-
-The Ansible playbooks are executed during the [node personalization](../configuration_management/Management_Node_Personalization.md) phase of **Management Node Rollout** stage of [CSM upgrade](../iuf/workflows/management_rollout.md).
+Rack Resiliency is setup using the Ansible playbooks which are executed during the [node personalization](../configuration_management/Management_Node_Personalization.md) phase of **Management Node Rollout** stage of [CSM upgrade](../iuf/workflows/management_rollout.md).
 There are separate personalizations for master and storage nodes to setup rack resiliency.
 
-### Preparatory steps for zoning
+For setting up rack resiliency the following stages are executed by the Ansible playbooks:
+
+  - [Preparatory stages for zoning](#preparatory-stages-for-zoning)
+      - [Stage 1 - Verify Rack Resiliency enablement](#verify-rack-resiliency-enablement)
+      - [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
+      - [Stage 3 - Placement Validation](#stage-3---placement-validation)
+  - [Setting up Kubernetes zoning](#setting-up-kubernetes-zoning)
+      - [Stage 4 - Kubernetes Zoning](#stage-4---kubernetes-zoning)
+      - [Stage 5 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
+  - [Setting up ceph zoning](#setting-up-ceph-zoning)
+      - [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
+      - [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-haproxy-configuration)
+
+### Preparatory stages for zoning
 
 The below stages are preparatory steps to setup Kubernetes and Ceph zones required for RRS, using Ansible plays:
 
-#### Stage 1 - Check Enablement
+#### Stage 1 - Verify Rack Resiliency enablement
 
-This Ansible play checks whether rack resiliency is enabled in the `customizations.yaml` file. If it is not enabled then the remaining plays do not run.
+This Ansible play verifies that rack resiliency is enabled in the `customizations.yaml` file. If it is not enabled then the remaining plays are skipped.
 
 #### Stage 2 - Placement Discovery
 
