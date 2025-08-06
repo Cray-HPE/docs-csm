@@ -83,7 +83,7 @@
 * Kyverno image verification policy is being shipped in `Enforce` mode. Container images that are unsigned will not be deployed.
   For more information on the policy, how to add exceptions, and how to allow third party signing keys, see
   [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
-* `PProf` debug support has been added to all remaining HMS services.  See [Debugging With HMS PProf Images](troubleshooting/debugging_with_hms_pprof_images.md) for more information.
+* `PProf` debug support has been added to all remaining HMS services.  See [Debugging With HMS `PProf` Images](troubleshooting/debugging_with_hms_pprof_images.md) for more information.
 
 ## Test
 
@@ -146,8 +146,8 @@
 * Fixed an issue where, when building an IMS image from a recipe, the job status would not update to `error` when the `zypper` repositories were not available.
 * Fixed an issue where the hardware inventory history table in the HSM/SMD database grew too large due to duplicate "Detected" events.
     * See [Remove Duplicate Detected Events From the HSM Postgres Database](operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md) for more information.
-
 * Fixed an issue in [PCS](glossary.md#power-control-service-pcs) where the supported power transitions on Gigabyte BMCs can go missing.
+
 ## Deprecations
 
 For more details and a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
