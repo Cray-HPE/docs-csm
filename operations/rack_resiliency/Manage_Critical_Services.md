@@ -182,7 +182,7 @@ For complete details on the required format of the critical services configurati
 Before editing the ConfigMap, follow the [instructions](Manage_Critical_Services.md#1-verify-that-the-critical-services-is-present-in-the-kubernetes-cluster) mentioned
 to check whether the service is configured on the Kubernetes cluster. Proceed to next step if the service configured.
 
-### 1 Edit the ConfigMap
+### 1. Edit the ConfigMap to add service
 
 Start by editing the ConfigMap:
 
@@ -230,7 +230,7 @@ data:
     ...
 ```
 
-### 2 Add the entire critical service block, including the trailing comma
+### 2. Add the entire critical service block, including the trailing comma
 
 Example of adding a critical service:
 
@@ -288,7 +288,7 @@ After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-
 Before editing the ConfigMap, follow the [instructions](Manage_Critical_Services.md#1-verify-that-the-critical-services-is-present-in-the-kubernetes-cluster) mentioned
 to check whether the service is configured on the Kubernetes cluster. Proceed to next step if the service configured.
 
-### 1. Edit the ConfigMap
+### 1. Edit the ConfigMap to delete service
 
 Start by editing the ConfigMap:
 
@@ -391,7 +391,7 @@ After this proceed to delete critical service(s) from [kyverno `clusterpolicy`](
 
 ## Modify critical service using ConfigMap
 
-### 1. Edit the ConfigMap
+### 1. Edit the ConfigMap to modify service
 
 Start by editing the ConfigMap:
 
