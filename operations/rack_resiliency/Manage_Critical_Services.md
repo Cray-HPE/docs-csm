@@ -128,7 +128,17 @@ But because the API/CLI does not support edits or deletes, those can only be acc
 
 ## Add critical service using CLI
 
-- Create a new JSON file with critical services configuration:
+### 1. Verify that the critical services is present in the Kubernetes cluster
+
+```bash
+(`ncn-mw#`) kubectl get deployment/statefulset <name-of-the-critical-service> -n <namespace-of-the-service>
+```
+In the above command, replace \<name-of-the-critical-service\> with the name of critical service to be verified
+and \<namespace-of-the-service\> with the correct namespace in which its configured.
+
+If the service is configured, proceed to the next step.
+
+### 2. Create a new JSON file with critical services configuration:
 
     ```bash
     (`ncn-mw#`) cray rrs criticalservices update --from-file <file-path>
@@ -167,6 +177,9 @@ But because the API/CLI does not support edits or deletes, those can only be acc
 - After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
 
 ## Add critical service using ConfigMap
+
+Before editing the ConfigMap, follow the [instructions](Manage_Critical_Services.md#1-verify-that-the-critical-services-is-present-in-the-kubernetes-cluster) mentioned
+to check whether the service is configured on the Kubernetes cluster. Proceed to next step if the servie configured.
 
 ### 1 Edit the ConfigMap
 
@@ -270,6 +283,9 @@ After adding the entry, the list will look like:
 After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
 
 ## Delete critical service using ConfigMap
+
+Before editing the ConfigMap, follow the [instructions](Manage_Critical_Services.md#1-verify-that-the-critical-services-is-present-in-the-kubernetes-cluster) mentioned
+to check whether the service is configured on the Kubernetes cluster. Proceed to next step if the servie configured.
 
 ### 1. Edit the ConfigMap
 
