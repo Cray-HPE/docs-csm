@@ -39,7 +39,9 @@ This feature prevents system-wide outages, allowing for successful execution of 
 
 - Rack: A standardized physical structure designed to house and organize computer servers and other hardware like
   network switches. Each HPE Cray Supercomputing EX system rack houses NCNs and non-NCNs, along with
-  Slingshot switches. Racks are also referred to as cabinets. In Ceph storage, a rack is an hierarchical [bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/)
+  Slingshot switches. Racks are also referred to as cabinets. 
+  
+  In Ceph storage, however, a rack represents a logical, hierarchical [bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/) in the CRUSH map. Ceph racks group together hosts or nodes that are physically located in the same physical rack.
 - Placement: Physical arrangement of nodes across racks.
 - Failure Domain: Failure domains are minimum infrastructure that provides high availability for CSM services.
 - Management Plane Failure Domain(MPFD): This constitutes one or more racks that have management nodes that make up the CSM management plane
