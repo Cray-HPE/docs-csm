@@ -5,7 +5,7 @@ This page contains the procedures to list, add, delete and modify the critical s
 - Using Cray CLI
 - By editing ConfigMap
 
-The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR keeps its list of critical services. The API/CLI commands to add services end up adding the new services to this ConfigMap. 
+The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR keeps its list of critical services. The API/CLI commands to add services end up adding the new services to this ConfigMap.
 But because the API/CLI does not support edits or deletes, those can only be accomplished by directly editing the ConfigMap.
 
 **NOTE**:
@@ -27,9 +27,9 @@ But because the API/CLI does not support edits or deletes, those can only be acc
 - [List critical services using CLI](#list-critical-services-using-cli)
 - [List critical services by viewing ConfigMap](#list-critical-services-by-viewing-configmap)
 - [Add critical service using CLI](#add-critical-service-using-cli)
-- [Add critical service using ConfigMap](#add-critical-service-using-ConfigMap)
-- [Delete critical service using ConfigMap](#delete-critical-service-using-ConfigMap)
-- [Modify critical service using ConfigMap](#modify-critical-service-using-ConfigMap)
+- [Add critical service using ConfigMap](#add-critical-service-using-configmap)
+- [Delete critical service using ConfigMap](#delete-critical-service-using-configmap)
+- [Modify critical service using ConfigMap](#modify-critical-service-using-configmap)
 - [Add critical services to Kyverno clusterpolicy](#add-critical-services-to-kyverno-clusterpolicy)
 - [Delete critical services from Kyverno clusterpolicy](#delete-critical-services-from-the-kyverno-clusterpolicy)
 
@@ -374,7 +374,7 @@ After this proceed to delete critical service(s) from [kyverno `clusterpolicy`](
 
 ## Modify critical service using ConfigMap
 
-#### 1. Edit the ConfigMap
+### 1. Edit the ConfigMap
 
 Start by editing the ConfigMap:
 
@@ -422,7 +422,7 @@ data:
     ...
 ```
 
-#### 2. Modify the desired field(s) in service block
+### 2. Modify the desired field(s) in service block
 
 Example of modifying a service:
 
