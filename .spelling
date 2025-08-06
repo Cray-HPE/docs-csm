@@ -167,6 +167,8 @@ Ceph
 CephFS
 Cephadm
 Cert-manager
+CIDR
+CIDRs
 CloudWatch
 ClusterStor
 ConMan
@@ -436,6 +438,7 @@ V1.19.9
 V1.2.0
 V1.20.13
 V1.3.0
+V1.6
 V1.7
 V1.8
 V15.2.15
