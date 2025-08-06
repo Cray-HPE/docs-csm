@@ -57,7 +57,7 @@ Ceph provides the CRUSH map algorithm which helps to segregate the storage nodes
 
 ## 1 Creating Ceph zones with CRUSH
 
-<TODO: add the diagram form HLD>
+![Hierarchy of CRUSH "buckets" (rack, host, osd) before and after CEPH Zoning](../../img/Ceph-Zone.png)
 
 Currently CSM has **host** as the top of [hierarchy of bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/) of Ceph. To implement MPFD domains for storage nodes, the new bucket **rack** is introduced on top of the hierarchy. As shown in the above diagram, storage nodes get added to a **rack** bucket based on their physical location in the rack. Refer to [placement discovery](Setup.md#stage-2---placement-discovery) for details on how physical placement of storage nodes is discovered.
 More than one storage node can be added to the same bucket.
