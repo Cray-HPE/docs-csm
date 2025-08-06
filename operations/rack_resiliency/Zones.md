@@ -75,7 +75,7 @@ This approach, however, does not support Rack Resiliency, as the services are st
 
 To enhance Rack Resiliency, this solution distributes the Ceph services across multiple racks.
 The storage nodes assigned to each service is selected using a round-robin distribution strategy across the rack buckets, ensuring a balanced and fault-tolerant configuration.
-Also, the number of Ceph Monitor services deployed will be either 3 or 5, depending on the total number of storage nodes and their distribution across rack buckets. 
+Also, the number of Ceph Monitor services deployed will be either 3 or 5, depending on the total number of storage nodes and their distribution across rack buckets.
 The above process ensures that the Ceph cluster remains operational in the event of a rack failure.
 
 For details on how Ceph services are zoned refer to [Ceph service zoning](Setup.md#stage-4---ceph-zoning).
