@@ -195,7 +195,8 @@ kubectl logs "${RRS_POD}" -c cray-rrs-rms -n rack-resiliency
 
 ### Getting details about RMS
 
-To know the startup time, last monitoring cycle timestamp, the polling intervals and the configured critical services it is necessary to [view the ConfigMap](ConfigMaps.md#2-veiwing-configmap). This helps to understand the various configuration parameters which control RMS behavior.
+To know the startup time, last monitoring cycle timestamp, the polling intervals and the configured critical services it is necessary to [view the ConfigMap](ConfigMaps.md#2-veiwing-configmap).
+This helps to understand the various configuration parameters which control RMS behavior.
 
 **Note**: It is recommended not to modify those configuration parameters without consulting HPE support.
 

@@ -1,6 +1,7 @@
 # Zones
 
-Rack Resiliency defines a logical grouping of master, worker and storage nodes(NCNs) in a single rack as a zone. The racks which supports only non-NCNs, do not fall in the category of Rack Resiliency zones. During the setup of Rack Resiliency, it is validated that any zone should include the following minimal hardware:
+Rack Resiliency defines a logical grouping of master, worker and storage nodes(NCNs) in a single rack as a zone. The racks which supports only non-NCNs, do not fall in the category of Rack Resiliency zones.
+During the setup of Rack Resiliency, it is validated that any zone should include the following minimal hardware:
 
 - 1 Kubernetes Master node
 - 1 Kubernetes Worker node
@@ -19,7 +20,8 @@ For knowing more about Kubernetes zoning, refer to [Kubernetes documentation](ht
 
 The Kubernetes topology zoning can be used to apply labels to the racks and nodes in order to create management failure domains (`MFDs`).
 
-The node is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where `<zone-id>` is of the form `Rack-1`, `Rack-2`, and so on. These labels can be used to identify all the management nodes which belong to the same zone and is used to schedule the critical services across the zones.
+The node is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where `<zone-id>` is of the form `Rack-1`, `Rack-2`, and so on.
+These labels can be used to identify all the management nodes which belong to the same zone and is used to schedule the critical services across the zones.
 
 ### Command to view Kubernetes zones
 
@@ -66,7 +68,10 @@ Along with Ceph data zoning, Ceph services also need to be zoned.
 The current Ceph setup on CSM deploys three sets of Ceph services (Monitors, Managers, and MDS) on the nodes `ncn-s001`, `ncn-s002`, and `ncn-s003` in a hard-coded configuration.
 This approach, however, does not support Rack Resiliency, as the services are statically assigned to specific nodes.
 
-To enhance Rack Resiliency, the new solution distributes the Ceph services across multiple racks. The storage nodes assigned to each service will be selected using a round-robin distribution strategy across the racks, ensuring a balanced and fault-tolerant configuration. Also, the number of Ceph Monitor services deployed will be either 3 or 5, depending on the total number of storage nodes and their distribution across racks. The above process ensures that the Ceph cluster remains operational in the event of a rack failure.
+To enhance Rack Resiliency, the new solution distributes the Ceph services across multiple racks.
+The storage nodes assigned to each service will be selected using a round-robin distribution strategy across the racks, ensuring a balanced and fault-tolerant configuration.
+Also, the number of Ceph Monitor services deployed will be either 3 or 5, depending on the total number of storage nodes and their distribution across racks.
+The above process ensures that the Ceph cluster remains operational in the event of a rack failure.
 
 ### Command to view ceph zones
 
