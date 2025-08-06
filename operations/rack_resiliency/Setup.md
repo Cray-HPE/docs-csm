@@ -2,7 +2,7 @@
 
 This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#architecture-overview).
 
-Before setting up rack resiliency, enable it using [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the following setup will be skipped after [Stage 1 - Check enablement](#stage-1---check-enablement).
+Before setting up rack resiliency, enable it using [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency) without which the following setup will be skipped after [Stage 1 - Verify Rack Resiliency enablement](#stage-1---verify-rack-resiliency-enablement).
 
 ## Rack Resiliency setup with Ansible playbooks
 
@@ -12,7 +12,7 @@ There are separate personalizations for master and storage nodes to setup rack r
 For setting up rack resiliency the following stages are executed by the Ansible playbooks:
 
   - [Preparatory stages for zoning](#preparatory-stages-for-zoning)
-      - [Stage 1 - Verify Rack Resiliency enablement](#verify-rack-resiliency-enablement)
+      - [Stage 1 - Verify Rack Resiliency enablement](#stage-1---verify-rack-resiliency-enablement)
       - [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
       - [Stage 3 - Placement Validation](#stage-3---placement-validation)
   - [Setting up Kubernetes zoning](#setting-up-kubernetes-zoning)
