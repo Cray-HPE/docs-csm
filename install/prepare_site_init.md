@@ -1,14 +1,14 @@
-# Prepare Site Init
+# Prepare `site-init`
 
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
 1. [Background](#1-background)
-1. [Create and Initialize Site-Init Directory](#2-create-and-initialize-site-init-directory)
-1. [Create Baseline System Customizations](#3-create-baseline-system-customizations)
-    1. [Setup LDAP configuration](#setup-ldap-configuration)
-    1. [End of LDAP configuration](#end-of-ldap-configuration)
-1. [Customer-Specific Customizations](#4-customer-specific-customizations)
+1. [Create and initialize `site-init` directory](#2-create-and-initialize-site-init-directory)
+1. [Create baseline system customizations](#3-create-baseline-system-customizations)
+    - [Setup LDAP configuration](#setup-ldap-configuration)
+    - [End of LDAP configuration](#end-of-ldap-configuration)
+1. [Customer-specific customizations](#4-customer-specific-customizations)
 
 ## 1. Background
 
@@ -20,7 +20,7 @@ installation-centric artifacts, such as:
 - Sealed Secret Generate Blocks -- a form of plain-text input that renders to a Sealed Secret
 - Helm chart value overrides that are merged into Loftsman manifests by product stream installers
 
-## 2. Create and initialize Site-Init directory
+## 2. Create and initialize `site-init` directory
 
 > **`NOTE`** If the pre-installation is resuming here, ensure the environment variables have been properly set
 > by following [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
@@ -46,7 +46,7 @@ installation-centric artifacts, such as:
     "${CSM_PATH}/shasta-cfg/meta/init.sh" "${SITE_INIT}"
     ```
 
-### 3. Create Baseline System Customizations
+## 3. Create baseline system customizations
 
 The following steps update `${SITE_INIT}/customizations.yaml`
 with system-specific customizations.
@@ -144,7 +144,7 @@ with system-specific customizations.
 
     > **`IMPORTANT`** The CA may not be modified after install.
 
-#### Setup LDAP configuration
+### Setup LDAP configuration
 
 > **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
 > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
@@ -321,7 +321,7 @@ with system-specific customizations.
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
 
-#### End of LDAP configuration
+### End of LDAP configuration
 
 1. (`pit#`) Configure the Unbound DNS resolver (if needed).
 
