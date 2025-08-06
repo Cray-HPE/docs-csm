@@ -70,7 +70,7 @@ fault-tolerant configuration. Also, the number of Ceph Monitor services deployed
 of storage nodes and their distribution across rack buckets. 
 The above process ensures that the Ceph cluster remains operational in the event of a rack failure.
 
-For further details refer to [Ceph service zoning](Setup.md#stage-4---ceph-zoning)
+For details on how Ceph services are zoned refer to [Ceph service zoning](Setup.md#stage-4---ceph-zoning).
 
 ### Command to view ceph zones
 
