@@ -9,8 +9,8 @@ that any MPFD should include the following minimal hardware:
 
 To map MPFD to Kubernetes and Ceph, Rack Resiliency uses the following methodologies:
 
-- For Kubernetes, Rack Resiliency uses the concept of [topology spread constraint] (https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) to implement zoning for Master and Worker nodes.
-- For Ceph, Rack Resileincy uses the [concepts of buckets](https://docs.ceph.com/en/reef/architecture/) built with CRUSH alogorithm to implement zoning for storage nodes.
+- For Kubernetes, Rack Resiliency uses the concept of [topology spread constraint](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) to implement zoning for Master and Worker nodes.
+- For Ceph, Rack Resiliency uses the [concepts of buckets](https://docs.ceph.com/en/reef/architecture/) built with CRUSH algorithm to implement zoning for storage nodes.
 
 **Note:**
 - Ceph is hierarchical storage based on hierarchy of “buckets”. Rack Resiliency uses the bucket called **rack** on top of the **host** bucket to
@@ -57,7 +57,7 @@ Ceph provides the CRUSH map algorithm which helps to segregate the storage nodes
 Currently CSM has **host** as the top of [hierarchy of bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/) of Ceph. To implement MPFD domains for storage nodes, the new bucket **rack** is introduced on top of the hierarchy. As shown in the above diagram, storage nodes get added to a **rack** bucket based on their physical location in the rack. Refer to [placement discovery](Setup.md#stage-2---placement-discovery) for details on how physical placement of storage nodes is discovered.
 More than one storage node can be added to the same bucket.
 
-Rack Resiliency preconfigures rack buckets as well as adds the storage nodes to them. Refer to [Ceph zoning](Setup.md#stage-4---ceph-zoning) for details on how the nodes discovered during placment discovery are grouped in rack buckets.
+Rack Resiliency preconfigures rack buckets as well as adds the storage nodes to them. Refer to [Ceph zoning](Setup.md#stage-4---ceph-zoning) for details on how the nodes discovered during placement discovery are grouped in rack buckets.
 
 ## 2 Ceph service zoning
 
@@ -100,7 +100,7 @@ To view and get details about the Rack Resiliency zones use the below Cray CLI c
 
     Example Output:
 
-    ```bash
+    ```text
     [[Zones]]
     Zone_Name = "x3000"
 
@@ -135,7 +135,7 @@ To view and get details about the Rack Resiliency zones use the below Cray CLI c
 
     Example Output:
 
-    ```bash
+    ```text
     Zone_Name = "x3000"
 
     [Management_Master]
