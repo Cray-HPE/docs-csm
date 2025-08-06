@@ -16,7 +16,7 @@ To map zones to Kubernetes and Ceph, Rack Resiliency uses the following methodol
 
 **Note:**
 
-- Ceph is hierarchical storage based on hierarchy of “buckets”. Rack Resiliency uses the bucket called **rack** on top of the **host** bucket to create the zones for storage nodes.
+- Ceph is hierarchical storage based on hierarchy of **buckets**. Rack Resiliency uses the bucket called **rack** on top of the **host** bucket to create the zones for storage nodes.
 
 ## Setting up zones for Kubernetes nodes
 
