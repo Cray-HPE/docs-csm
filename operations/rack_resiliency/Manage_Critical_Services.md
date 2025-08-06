@@ -488,18 +488,7 @@ In this example, the administrator wishes to modify the `coredns` critical servi
 
 The below instructions should be followed only after adding the critical services using [Cray CLI](#add-critical-service-using-cli) or by [editing the ConfigMap](#add-critical-service-using-configmap).
 
-### 1. Verify that the critical services is present in the Kubernetes cluster
-
-```bash
-(`ncn-mw#`) kubectl get deployment/statefulset <name-of-the-critical-service> -n <namespace-of-the-service>
-```
-
-In the above command, replace \<name-of-the-critical-service\> with the name of critical service to be verified
-and \<namespace-of-the-service\> with the correct namespace in which its configured.
-
-If the service is configured, proceed to the next step.
-
-### 2. Add the critical services to the Kyverno `clusterpolicy`
+### 1. Add the critical services to the Kyverno `clusterpolicy`
 
 Edit the Kyverno `clusterpolicy` using the below command:
 
@@ -514,7 +503,7 @@ Save the `clusterpolicy` and verify the new entry by using the below command and
 kubectl get clusterpolicy insert-labels-topology-constraints -o yaml |grep <name-of-the-critical-service>
 ```
 
-### 3. Do a rollout restart
+### 2. Do a rollout restart
 
 Rollout restart the critical service by using the command below:
 
