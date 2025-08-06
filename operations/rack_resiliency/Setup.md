@@ -2,10 +2,11 @@
 
 This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#architecture-overview).
 
-Rack Resiliency is setup using the Ansible rolebooks which are executed during the [node personalization](../configuration_management/Management_Node_Personalization.md) phase of **Management Node Rollout** stage of [CSM upgrade](../iuf/workflows/management_rollout.md).
+Rack Resiliency is setup using an Ansible playbook. This playbook is executed during
+[Management Node Personalization](../configuration_management/Management_Node_Personalization.md).
 There are separate personalizations for master and storage nodes to setup rack resiliency.
 
-For setting up rack resiliency the following stages are executed by the Ansible rolebooks:
+For setting up rack resiliency the following stages are executed by the Ansible playbook:
 
 > Before setting up rack resiliency, enable it using
 > [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency),
@@ -99,7 +100,7 @@ For more information, see [Kyverno policy](Kyverno.md).
 
 The below stages are used to setup the Ceph zones and update Ceph HAproxy configuration.
 
-### Stage 4 - Ceph coning
+### Stage 4 - Ceph zoning
 
 This Ansible role uses the discovery results (`rr_hw_discovery.json`) from
 [Stage 2 - Placement discovery](#stage-2---placement-discovery) and applies Ceph zoning for
