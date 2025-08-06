@@ -5,7 +5,8 @@ This page contains the procedures to list, add, delete and modify the critical s
 - Using Cray CLI
 - By editing ConfigMap
 
-The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR keeps its list of critical services. The API/CLI commands to add services end up adding the new services to this ConfigMap. But because the API/CLI does not support edits or deletes, those can only be accomplished by directly editing the ConfigMap.
+The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR keeps its list of critical services. The API/CLI commands to add services end up adding the new services to this ConfigMap. 
+But because the API/CLI does not support edits or deletes, those can only be accomplished by directly editing the ConfigMap.
 
 **NOTE**:
 
@@ -14,23 +15,23 @@ The ConfigMap `rrs-mon-static` in the `rack-resiliency` namespace is where RR ke
 - Similarly, services with the same name but different types (e.g., StatefulSet and Deployment) are also not supported.
 - Avoid using API or CLI to add critical services while following the deletion or modification procedures outlined on this page.
 
-#### Additional guidelines
+## Additional guidelines
 
 - Always maintain valid JSON syntax
 - Ensure there is no trailing comma after the last service entry
 - Save and exit the editor to apply changes
 - The changes take effect immediately - no restart required
 
-### Critical services operations
+## Critical services operations
 
 - [List critical services using CLI](#list-critical-services-using-cli)
-- [List critical services by viewing ConfigMap](#list-critical-services-by-viewing-ConfigMap)
+- [List critical services by viewing ConfigMap](#list-critical-services-by-viewing-configmap)
 - [Add critical service using CLI](#add-critical-service-using-cli)
 - [Add critical service using ConfigMap](#add-critical-service-using-ConfigMap)
 - [Delete critical service using ConfigMap](#delete-critical-service-using-ConfigMap)
 - [Modify critical service using ConfigMap](#modify-critical-service-using-ConfigMap)
 - [Add critical services to Kyverno clusterpolicy](#add-critical-services-to-kyverno-clusterpolicy)
-- [Delete critical services from Kyverno clusterpolicy](#delete-critical-services-from-kyverno-clusterpolicy)
+- [Delete critical services from Kyverno clusterpolicy](#delete-critical-services-from-the-kyverno-clusterpolicy)
 
 ## List critical services using CLI
 
@@ -270,7 +271,7 @@ After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-
 
 ## Delete critical service using ConfigMap
 
-### 1 Edit the ConfigMap
+### 1. Edit the ConfigMap
 
 Start by editing the ConfigMap:
 
@@ -318,7 +319,7 @@ data:
     ...
 ```
 
-### 2 Remove the entire critical service block, including the trailing comma
+### 2. Remove the entire critical service block, including the trailing comma
 
 Example of removing a critical service:
 
@@ -421,7 +422,7 @@ data:
     ...
 ```
 
-#### 2 Modify the desired field(s) in service block
+#### 2. Modify the desired field(s) in service block
 
 Example of modifying a service:
 
@@ -469,7 +470,7 @@ In this example, the administrator wishes to modify the `coredns` critical servi
 
 ## Add critical services to Kyverno `clusterpolicy`
 
-The below instructions should be followed only after adding the critical services using [Cray CLI](#adding-a-critical-service-using-cray-cli) or by [editing the ConfigMap](#adding-a-critical-service-using-ConfigMap).
+The below instructions should be followed only after adding the critical services using [Cray CLI](#add-critical-service-using-cli) or by [editing the ConfigMap](#add-critical-service-using-configmap).
 
 ### 1. Verify that the critical services is present in the Kubernetes cluster
 
@@ -515,7 +516,7 @@ kubectl rollout restart statefulset -n <namespace> <service-name>
 
 ## Delete critical services from the Kyverno `clusterpolicy`
 
-The below instructions should be followed only after deleting the critical services by [editing the ConfigMap](#delete-the-critical-service-using-ConfigMap).
+The below instructions should be followed only after deleting the critical services by [editing the ConfigMap](#delete-critical-service-using-configmap).
 
 Edit the Kyverno `clusterpolicy` using the below command:
 
