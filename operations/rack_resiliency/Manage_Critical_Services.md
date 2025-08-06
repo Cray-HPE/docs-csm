@@ -173,7 +173,7 @@ Already_Existing_Services = [ "coredns",]
 
 This allows an administrator to specify multiple services in thsame command.
 For complete details on the required format of the criticaservices configuration, see the
-[`CriticalServiceCmStaticType`](../../api/rrmd#schemacriticalservicecmstatictype) schema.
+[`CriticalServiceCmStaticType`](../../api/rrs.md#schemacriticalservicecmstatictype) schema.
 
 - After this proceed to add critical service(s) to [kyverno `clusterpolicy`](#add-critical-services-to-kyverno-clusterpolicy)
 
