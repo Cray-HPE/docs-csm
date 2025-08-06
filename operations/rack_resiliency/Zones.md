@@ -45,7 +45,6 @@ ncn-w004   Ready    <none>          20d   v1.32.5   x3000
 ```
 
 **Note:**
-- If site specific identities are needed for zones, zones prefixes for Kuberenets and Ceph can be configured.
 - zone-id for each Kubernetes zone can be optionally prefixed with a site-init specific string.
 - For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
 - By default, zone-id is decided based on the xname (1-5 chars) of the Kubernetes node.
