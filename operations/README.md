@@ -19,6 +19,8 @@ The following administrative topics can be found in this guide:
 - [Security and authentication](#security-and-authentication)
 - [Resiliency](#resiliency)
 - [Rack Resiliency](#rack-resiliency)
+- [Rack Resiliency Service](rack_resiliency/Rack_Resiliency_Service.md#rack-resiliency-service-rrs)
+- [Rack Resiliency API](../api/rrs.md)
 - [ConMan](#conman)
 - [Utility storage](#utility-storage)
 - [System management health](#system-management-health)
