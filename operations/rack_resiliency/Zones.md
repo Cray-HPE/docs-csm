@@ -20,7 +20,7 @@ To map MPFD to Kubernetes and Ceph, Rack Resiliency uses the following methodolo
 
 The Kubernetes [topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) can be used to apply labels to nodes in order to create management plane failure domains (`MPFDs`).
 
-Each node in every MPFD is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where `<zone-id>` is of the form `Rack-1`, `Rack-2`, and so on.
+Each node in every MPFD is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where `<zone-id>` is of the form `x3000`, `x3001`, and so on.
 These labels can be used to identify all the management nodes which belong to the same MPFD (Kubernetes zone) and is used to schedule the critical services across the zones.
 
 ### Command to view Kubernetes zones
@@ -43,6 +43,11 @@ ncn-w002   Ready    <none>          20d   v1.32.5   x3001
 ncn-w003   Ready    <none>          20d   v1.32.5   x3002
 ncn-w004   Ready    <none>          20d   v1.32.5   x3000
 ```
+
+**Note:**
+- zone-id for each Kubernetes zone can be optionally prefixed with a site-init specific string.
+- For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
+- By default, zone-id is decided based on the xname (1-5 chars) of the Kubernetes node.
 
 ## Setting up MPFD for Ceph nodes
 
@@ -88,6 +93,11 @@ Example Output:
 -13         13.97278      rack x3002
 ```
 
+**Note:**
+- zone-id for each Ceph zone can be optionally prefixed with a site-init specific string.
+- For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
+- By default, zone-id is decided based on the xname (1-5 chars) of the Ceph node.
+  
 ## Managing Zones
 
 To view and get details about the Rack Resiliency zones use the below Cray CLI commands:
