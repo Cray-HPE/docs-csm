@@ -583,7 +583,7 @@ Please refer to [Rack Resiliency](operations/rack_resiliency/README.md#rack-resi
 
 RRS has been introduced as a part of CSM 1.7.0 to to monitor critical services and provide alerts during node or rack failures.
 
-Please refer to [Rack Resileincy Servie](operations/rack_resiliency/Rack_Resiliency_Service.md#rack-resiliency-service-rrs) for more info.
+Please refer to [Rack Resiliency Service](operations/rack_resiliency/Rack_Resiliency_Service.md#rack-resiliency-service-rrs) for more info.
 
 ## Rack System Compute Cabinet
 

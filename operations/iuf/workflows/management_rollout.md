@@ -93,8 +93,8 @@ does not recognize as true, then it will be interpreted as false.
 **Important Notes:**
 
 - If the prefixes is defined, then the zones will be created in the format of `k8s_zone_prefix + rack_id` and `ceph_zone_prefix + rack_id`.
-  - If the `spec.services.k8s_zone_prefix` has a value of `test-system` and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `test-system-x3000`.
-  - If the `spec.services.ceph_zone_prefix` has a value of `test-storage-system` and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `test-storage-system-x3000`.
+    - If the `spec.services.k8s_zone_prefix` has a value of `test-system` and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `test-system-x3000`.
+    - If the `spec.services.ceph_zone_prefix` has a value of `test-storage-system` and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `test-storage-system-x3000`.
 - If the `spec.services.k8s_zone_prefix` has no value defined and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `x3000`.
 - If the `spec.services.ceph_zone_prefix` has no value defined and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `x3000`.
 
