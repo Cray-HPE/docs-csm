@@ -39,13 +39,13 @@ This feature prevents system-wide outages, allowing for successful execution of 
 
 - Rack: A standardized physical structure designed to house and organize computer servers and other hardware like
   network switches. Each HPE Cray Supercomputing EX system rack houses NCNs and non-NCNs, along with
-  Slingshot switches. Racks are also referred to as cabinets.
-- [Zone](Zones.md): A zone represents a logical failure domain. It is common for Kubernetes clusters to span multiple zones for increased availability.
-- Failure Domain: Failure domains are zones which includes infrastructure that provides availability for CSM services.
-- MPFD: Management Plane Failure Domain
-- Placement: Arrangement of Management Nodes across racks. Note that zone awareness primitives in Kubernetes refer to this as "topology".
-- Kubernetes topology zones: You can use topology spread constraints to control how pods are spread across cluster among failure-domains such as regions, zones, nodes,
-  and other user-defined topology domains. This can help to achieve high availability as well as efficient resource utilization.
+  Slingshot switches. Racks are also referred to as cabinets. In Ceph storage, a rack is an hierarchical [bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/)
+- Placement: Physical arrangement of nodes across racks.
+- Failure Domain: Failure domains are minimum infrastructure that provides high availability for CSM services.
+- Management Plane Failure Domain(MPFD): This constitutes one or more racks that have management nodes that make up the CSM management plane
+  (i.e. failure domain of racks that are running the management plane).
+- [Zone](Zones.md): A zone in Rack Resiliency solution is a representation of a logical failure domain.
+- Kubernetes zone: A zone in Kubernetes is an isolated failure domain.
 - Ceph is the utility storage platform that is used to enable pods to store persistent data. It is deployed to provide block, object, and file storage to the
   management services running on Kubernetes, as well as for telemetry data coming from the compute nodes.
 - [Critical Services](Critical_Services.md): In the context of Rack Resiliency, critical services are those services that are critical to execution of user jobs.
