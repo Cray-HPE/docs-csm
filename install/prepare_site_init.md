@@ -1,28 +1,24 @@
-# Prepare `Site Init`
+# Prepare `site-init`
 
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
 
-   **Note:** There are two media available to bootstrap the PIT node--the RemoteISO or a bootable USB device. Both of those can use this procedure. The only difference in this procedure is that the RemoteISO method will execute these commands on the `PIT`
-   node with command prompt `pit#` while the USB method could be done on any Linux system with the command prompt `linux#`. This procedure works for both methods, but has the command prompt of `linux#`, even though it would normally be `pit#` for the
-   RemoteISO method.
+**Note:** There are two media available to bootstrap the PIT node--the RemoteISO or a bootable USB device. Both of those can use this procedure. The only difference in this procedure is that the RemoteISO method will execute these commands on the `PIT`
+node with command prompt `pit#` while the USB method could be done on any Linux system with the command prompt `linux#`. This procedure works for both methods, but has the command prompt of `linux#`, even though it would normally be `pit#` for the
+RemoteISO method.
 
-## Topics
-
-   1. [Background](#background)
-   1. [Create and Initialize `Site Init` Directory](#create-and-initialize-site-init-directory)
-   1. [Create Baseline System Customizations](#create-baseline-system-customizations)
-   1. [Generate Sealed Secrets](#generate-sealed-secrets)
-   1. [Version Control `Site Init` Files](#version-control-site-init-files)
-      1. [Push to a Remote Repository](#push-to-a-remote-repository)
-   1. [Patch `cloud-init` with the CA](#patch-cloud-init-with-the-ca)
-   1. [Customer-Specific Customizations](#customer-specific-customizations)
-
-## Details
+1. [Background](#1-background)
+1. [Create and initialize `site-init` directory](#2-create-and-initialize-site-init-directory)
+1. [Create baseline system customizations](#3-create-baseline-system-customizations)
+1. [Generate sealed secrets](#4-generate-sealed-secrets)
+1. [Version control `site-init` files](#5-version-control-site-init-files)
+    1. [Push to a remote repository](#51-push-to-a-remote-repository)
+1. [Patch `cloud-init` with the CA](#6-patch-cloud-init-with-the-ca)
+1. [Customer-specific customizations](#7-customer-specific-customizations)
 
 <a name="background"></a>
 
-### 1. Background
+## 1. Background
 
 The `shasta-cfg` directory included in CSM includes relatively static,
 installation-centric artifacts such as:
@@ -34,7 +30,7 @@ installation-centric artifacts such as:
 
 <a name="create-and-initialize-site-init-directory"></a>
 
-### 2. Create and Initialize `Site Init` Directory
+## 2. Create and initialize `site-init` directory
 
 1. Create directory `/mnt/pitdata/prep/site-init`.
 
@@ -70,7 +66,7 @@ cloned
 
 <a name="create-baseline-system-customizations"></a>
 
-### 3. Create Baseline System Customizations
+## 3. Create baseline system customizations
 
 The following steps update `/mnt/pitdata/prep/site-init/customizations.yaml`
 with system-specific customizations.
@@ -433,7 +429,7 @@ with system-specific customizations.
 
 <a name="generate-sealed-secrets"></a>
 
-### 4. Generate Sealed Secrets
+## 4. Generate sealed secrets
 
 Secrets are stored in `customizations.yaml` as `SealedSecret` resources (i.e.,
 encrypted secrets) which are deployed by specific charts and decrypted by the
@@ -512,7 +508,7 @@ encrypted.
 
 <a name="version-control-site-init-files"></a>
 
-### 5. Version Control `Site-Init` Files
+## 5. Version control `site-init` files
 
 Setup `/mnt/pitdata/prep/site-init` as a Git repository in order to manage the
 baseline configuration during initial system installation.
@@ -554,7 +550,7 @@ baseline configuration during initial system installation.
 
 <a name="push-to-a-remote-repository"></a>
 
-#### 5.1 Push to a Remote Repository
+### 5.1 Push to a remote repository
 
 It is **strongly recommended** that the `site-init` repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
@@ -562,7 +558,7 @@ off-cluster. Add a remote repository and push the baseline configuration on
 
 <a name="patch-cloud-init-with-the-ca"></a>
 
-### 6. Patch `cloud-init` with the CA
+## 6. Patch `cloud-init` with the CA
 
 **`NOTE`** Only execute this procedure if you booted from the remote ISO using procedure
 [Bootstrap LiveCD Remote ISO](bootstrap_livecd_remote_iso.md)).
@@ -593,7 +589,7 @@ Using `csi` on a generated `site-init` directory:
 
 <a name="customer-specific-customizations"></a>
 
-### 7. Customer-Specific Customizations
+## 7. Customer-specific customizations
 
 Customer-specific customizations are any changes on top of the baseline
 configuration to satisfy customer-specific requirements. It is recommended that
