@@ -14,9 +14,9 @@
     - [Cray CLI](#cray-cli)
     - [RESTful API](#restful-api)
 - [Rack Resiliency management tasks](#rack-resiliency-management-tasks)
-    - [Enable and configure Rack Resiliency](README.md#1-enable-and-configure-rack-resiliency)
+    - [Enable and configure Rack Resiliency](README.md#1-getting-started-with-rack-resiliency)
     - [Managing Critical Services](README.md#2-managing-critical-services)
-    - [Managing `Kyverno` policy](README.md#3-managing-`Kyverno`-policy)
+    - [Managing `Kyverno` policy](README.md#3-managing-Kyverno-policy)
 - [Troubleshooting](#troubleshooting)
 
 ## Introduction
@@ -125,7 +125,7 @@ See [Rack Resiliency Service v1](../../api/rrs.md) for more information.
 Rack Resiliency uses a 3 step procedure to be set up for monitoring critical services:
 
 1. [Enabling Rack Resiliency and add zone prefixes](../../operations/rack_resiliency/Enabling_Rack_Resiliency.md#enabling-rack-resiliency)
-2. [Setup Rack Resiliency](../../operations/rack_resiliency/Setup.md#running-ansible-playbooks)
+2. [Setup Rack Resiliency](../../operations/rack_resiliency/Setup.md#setup)
 3. [`cray-rrs` Deployment](cray-rrs_Deployment.md)
 
 ### 2. Managing critical services
@@ -135,7 +135,7 @@ Refer [Manage Critical Services](Manage_Critical_Services.md) for complete list 
 
 ### 3. Managing `Kyverno` policy
 
-While managing critical services the `Kyverno` policy also needs to be managed. Refer [Manage `Kyverno` policy](Manage_Critical_Services.md#add-critical-services-to-`Kyverno`-clusterpolicy) for complete list of supported operations.
+While managing critical services the `Kyverno` policy also needs to be managed. Refer [Manage `Kyverno` policy](Manage_Critical_Services.md#add-critical-services-to-Kyverno-clusterpolicy) for complete list of supported operations.
 
 ## Troubleshooting
 
