@@ -7,22 +7,23 @@ The racks which supports only non-NCNs, do not fall in the category of Rack Resi
 - 1 Kubernetes Worker node
 - 1 Ceph Storage node
 
-To map MPFD to Kubernetes and Ceph, Rack Resiliency uses the following methodologies:
+A **zone** in Rack Resiliency solution is a representation of a management plane failure domain.
+
+To map zones to Kubernetes and Ceph, Rack Resiliency uses the following methodologies:
 
 - For Kubernetes, Rack Resiliency uses the concept of [topology spread constraint](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) to implement zoning for Master and Worker nodes.
 - For Ceph, Rack Resiliency uses the [concepts of buckets](https://docs.ceph.com/en/reef/architecture/) built with CRUSH algorithm to implement zoning for storage nodes.
 
 **Note:**
 
-- Ceph is hierarchical storage based on hierarchy of “buckets”. Rack Resiliency uses the bucket called **rack** on top of the **host** bucket to
-  create the MPFD for storage nodes.
+- Ceph is hierarchical storage based on hierarchy of “buckets”. Rack Resiliency uses the bucket called **rack** on top of the **host** bucket to create the zones for storage nodes.
 
-## Setting up MPFD for Kubernetes nodes
+## Setting up zones for Kubernetes nodes
 
-The Kubernetes [topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) can be used to apply labels to nodes in order to create management plane failure domains (`MPFDs`).
+The Kubernetes [topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) can be used to apply labels to nodes in order to create zones.
 
-Each node in every MPFD is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where `<zone-id>` is of the form `x3000`, `x3001`, and so on.
-These labels can be used to identify all the management nodes which belong to the same MPFD (Kubernetes zone) and is used to schedule the critical services across the zones.
+Each node in every zone is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where `<zone-id>` is of the form `x3000`, `x3001`, and so on.
+These labels can be used to identify all the management nodes which belong to the same zone (Kubernetes zone) and is used to schedule the critical services across the zones.
 
 ### Command to view Kubernetes zones
 
@@ -51,10 +52,11 @@ ncn-w004   Ready    <none>          20d   v1.32.5   x3000
 - For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
 - By default, zone-id is decided based on the xname (1-5 chars) of the Kubernetes node.
 
-## Setting up MPFD for Ceph nodes
+## Setting up zones for Ceph nodes
 
-Similar to Kubernetes topology spread constraints (for Master and Worker), Ceph zoning is required on Storage nodes (Utility storage nodes) for creating management plane failure domains (`MPFD`).
-The objective of Ceph zoning is to make sure Ceph data gets replicated at rack level across Storage nodes, so that there is no data loss occurs in case of a rack failure.
+Similar to Kubernetes topology spread constraints (for Master and Worker), Ceph zoning is required on Storage nodes (Utility storage nodes) for creating zones.
+
+The objective of Ceph zoning is to make sure Ceph data gets replicated at rack level across Storage nodes, so that there is no data loss in case of a rack failure.
 Ceph provides the CRUSH map algorithm which helps to segregate the storage nodes across zones. Using a combination of CRUSH rules and bucket types (hosts, racks, rows, etc.), the data can be replicated across zones.
 
 ## 1 Creating Ceph zones with CRUSH
