@@ -571,10 +571,10 @@ Liquid-Cooled TDS cabinet coolant manifolds.
 
 ## Rack Resiliency
 
-HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services, even if management nodes fail. However, 
-rack-level failures can cause service disruptions if management nodes are concentrated within a single rack. This can result in the loss of HA quorum. 
+HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services, even if management nodes fail. However,
+rack-level failures can cause service disruptions if management nodes are concentrated within a single rack. This can result in the loss of HA quorum.
 
-CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services 
+CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services
 due to a single rack failure. This feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
 
 Please refer to [Rack Resiliency](operations/rack_resiliency/README.md#rack-resiliency-rr) for more info.
