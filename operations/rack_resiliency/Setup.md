@@ -11,16 +11,16 @@ There are separate personalizations for master and storage nodes to setup rack r
 
 For setting up rack resiliency the following stages are executed by the Ansible playbooks:
 
-  - [Preparatory stages for zoning](#preparatory-stages-for-zoning)
-      - [Stage 1 - Verify Rack Resiliency enablement](#stage-1---verify-rack-resiliency-enablement)
-      - [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
-      - [Stage 3 - Placement Validation](#stage-3---placement-validation)
-  - [Setting up Kubernetes zoning](#setting-up-kubernetes-zoning)
-      - [Stage 4 - Kubernetes Zoning](#stage-4---kubernetes-zoning)
-      - [Stage 5 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
-  - [Setting up ceph zoning](#setting-up-ceph-zoning)
-      - [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
-      - [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-haproxy-configuration)
+- [Preparatory stages for zoning](#preparatory-stages-for-zoning)
+    - [Stage 1 - Verify Rack Resiliency enablement](#stage-1---verify-rack-resiliency-enablement)
+    - [Stage 2 - Placement Discovery](#stage-2---placement-discovery)
+    - [Stage 3 - Placement Validation](#stage-3---placement-validation)
+- [Setting up Kubernetes zoning](#setting-up-kubernetes-zoning)
+    - [Stage 4 - Kubernetes Zoning](#stage-4---kubernetes-zoning)
+    - [Stage 5 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
+- [Setting up ceph zoning](#setting-up-ceph-zoning)
+    - [Stage 4 - Ceph Zoning](#stage-4---ceph-zoning)
+    - [Stage 5 - Ceph HAproxy Configuration](#stage-5---ceph-haproxy-configuration)
 
 ### Preparatory stages for zoning
 
