@@ -166,6 +166,7 @@ For a full list of known issues, see [Known issues](troubleshooting/README.md#kn
 ### All Resolved Issues
 
 ### Networking
+
 ```text
 CASMNET-2086 Update default bootprep file to include UAN layer to configure the CHN on compute nodes
 CASMNET-2090 CANU | in SCHD.py strip parent value if incorrect
@@ -214,6 +215,7 @@ CASMNET-2355 IPv6 addressing support for fresh installs and existing deployments
 ```
 
 ### IUF
+
 ```text
 CASMAUTO-92 Create the IUF suite for CT integration: suite of selected testcases
 CASM-3864 As a System Admin, I do want to clean up files in /tmp directory from nodes in iuf/nls workflows
@@ -223,6 +225,7 @@ CASM-5623 Provide default path for --site-vars in iuf-cli
 ```
 
 ### Rack Resiliency
+
 ```text
 CASM-4886 As a developer, I need to develop a method to monitor k8s/ CSM critical services part of RR monitoring service
 CASM-4887 As a developer, I need to develop a method to monitor imbalance of utility storage (Ceph) part of RR monitoring service
@@ -257,11 +260,11 @@ CASM-5663 As a developer, I need to make RR CLI (frontend) to be part of CSM 1.7
 ```
 
 ### Cray SAT
+
 ```text
 CRAYSAT-1517 LANL-tycho sat slscheck fails to report on mismatches for components in CDU cabinets
 CRAYSAT-1584 Add HSM lock status to output of "sat status"
 CRAYSAT-1603 Develop automated functional tests for SAT based on avocado
-CRAYSAT-1604 Add configurable retries to API requests in SAT
 CRAYSAT-1604 Add configurable retries to API requests in SAT
 CRAYSAT-1619 Prompt individually for each image that already exists in sat bootprep
 CRAYSAT-1652 Include skipped items in sat bootprep report
@@ -300,6 +303,7 @@ CRAYSAT-2005 Improve coverage of skip/overwrite behavior in "sat bootprep" funct
 ```
 
 ### Security and Kyverno Policies
+
 ```text
 CASMSEC-495 kyverno-policies needs updates for deprecations.
 CASMSEC-512 Security:Kyverno baseline policy violations for different CSM components
@@ -341,6 +345,7 @@ CASMSEC-579 starlord: kyverno policy violations during post-install-check
 ```
 
 ### Upgrades
+
 ```text
 CASM-5240 Upgrade external-dns for 1.7
 CASM-5241 Upgrade vault-operator for CSM 1.7
@@ -376,6 +381,7 @@ MTL-2577 node-images package sweep + kernel upgrade
 ```
 
 ### DOCS
+
 ```text
 CASM-5635 DOCS: Add management-rollout-strategy  Rolling Reboot of NCNs(worker,storage) (currently a manual process)
 CASM-5636 DOCS: jq unable to process the large output
@@ -426,7 +432,6 @@ CASMHMS-6501 Document scaling/resource improvements in CSM 1.7.0 release notes
 CASMINST-5657 DOCS: As a system admin, I want common WorkflowTemplate to sync secret to Argo namespace
 CASMINST-6893 DOCS: Weave troubleshooting
 CASMINST-6939 DOCS: Audit procedure does not update cloud-init data correctly
-CASMINST-6939 DOCS: Audit procedure does not update cloud-init data correctly
 CASMINST-7102 DOCS: IUF master node upgrade backup fails if node has been removed from cluster
 CASMINST-7110 DOCS: Fix IUF diagram for CSM upgrade
 CASMINST-7138 DOCS: Prepare for upgrade procedures should link to previous release
@@ -460,7 +465,6 @@ CASMINST-7360 DOCS: DBG message becomes elements in sets array during rebuild-wo
 CASMINST-7361 DOCS: Fix typo in Python script message
 CASMINST-7370 DOCS: API docs generator does not fail on inaccessible URL
 CASMINST-7404 DOCS: Linting
-CASMMON-468 DOCS: update-customizations.sh breaks customizations template for 1.6 > 1.6 and 1.6 > 1.7 upgrades
 CASMMON-468 DOCS: update-customizations.sh breaks customizations template for 1.6 > 1.6 and 1.6 > 1.7 upgrades
 CASMMON-545 DOCS: Improve Redfish exporter docs for CSM-1.7
 CASMMON-546 DOCS: Document newly added Cilium monitoring for CSM-1.7
@@ -582,6 +586,7 @@ USS-4483 Update Cray-HPE/docs-csm to remove cos-prechecks-for-worker-reboots.yam
 ```
 
 ### CASM
+
 ```text
 CASM-4572 Add an argo workflow for the Rolling Reboot of NCNs (currently a manual process)
 CASM-4888 Provide a method to detect the MPFD (Management Plane Failure Domain) failure
@@ -593,7 +598,6 @@ CASM-5055 As a developer, I need to create md doc for k8s and ceph zoning for ma
 CASM-5058 As a developer I need to develop a script for discovery of racks and corresponding management nodes placement.
 CASM-5059 As a developer, I need to create md doc for management nodes (Master, Worker and Storage) placement discovery
 CASM-5061 As a developer, I need to develop an algo for management nodes (M/ W/ S) placement validation across physical racks
-CASM-5069 As a developer I need to create a script to apply CEPH zoning to storage nodes
 CASM-5069 As a developer I need to create a script to apply CEPH zoning to storage nodes
 CASM-5070 As a developer I need to automate CEPH zoning by integrating zoning scripts in CFS plays
 CASM-5074 As a developer, I need to create md doc for adding the K8s and Ceph zone prefixes
@@ -617,8 +621,8 @@ CASM-5591 As a developer, I need to create md doc for Cray CLI(backend)
 ```
 
 ### CASMCMS
+
 ```text
-CASMCMS-7866 Check cray-bos-db pod permissions
 CASMCMS-7866 Check cray-bos-db pod permissions
 CASMCMS-7902 BOS session setup operator fails with an OOM error when loading large files
 CASMCMS-7979 cfs-hwsync-agent logs that it discovers components before registering them
@@ -634,8 +638,6 @@ CASMCMS-8942 Add "update many CFS components" option to Cray CLI
 CASMCMS-8965 CAST-35696 BOS v2 should report the error instead of just 400 Bad Request
 CASMCMS-9024 Load DST signing keys from K8S secret for image recipe builds
 CASMCMS-9036 Remove sshd from cray-cfs-operator image
-CASMCMS-9085 Console MT - Add api endpoints for interactive and log console access
-CASMCMS-9085 Console MT - Add api endpoints for interactive and log console access
 CASMCMS-9085 Console MT - Add api endpoints for interactive and log console access
 CASMCMS-9086 Console MT - Make console api tenant aware.
 CASMCMS-9149 Cray-bos: switch to HorizontalPodAutoscaler autoscaling/v2
@@ -761,6 +763,7 @@ CASMCMS-9479 Investigate duplicates docker.io/library/redis: BOS / CFS
 ```
 
 ### CASMCVT
+
 ```text
 CASMCVT-295 CVT: Add new collection details for Tracebility
 CASMCVT-296 Support for reporting in the JSON format
@@ -771,6 +774,7 @@ CASMCVT-301 update all scripts with short args as i/p
 ```
 
 ### CASMDIAG
+
 ```text
 CASMDIAG-1626 Non-root container Investigation
 CASMDIAG-1627 Diags Framework Investigation : Syschecker
@@ -779,12 +783,9 @@ CASMDIAG-1700 CVT rpm in 1.7.0 showing old rpm ( 1.6.3)
 ```
 
 ### CASMHMS
+
 ```text
 CASMHMS-5678 Update all HMS go module and base Alpine image dependencies (early catch-all before breaking up)
-CASMHMS-5678 Update all HMS go module and base Alpine image dependencies (early catch-all before breaking up)
-CASMHMS-5678 Update all HMS go module and base Alpine image dependencies (early catch-all before breaking up)
-CASMHMS-5678 Update all HMS go module and base Alpine image dependencies (early catch-all before breaking up)
-CASMHMS-6257 hmcollector-poll needs to be restarted after BMC update
 CASMHMS-6257 hmcollector-poll needs to be restarted after BMC update
 CASMHMS-6285 Update cray-hms-rts chart for New JobConditionType SuccessCriteriaMet
 CASMHMS-6291 Fill SMD with enough fake data to cause PCS to poll for power status on fake nodes.
@@ -821,9 +822,6 @@ CASMHMS-6417 HMNFD: Update module and base Alpine image dependencies
 CASMHMS-6418 SCSD: Update module and base Alpine image dependencies
 CASMHMS-6437 Heartbeat client reports "failed: Success" at LANL
 CASMHMS-6438 OCHAMI BSS: Merge OCHAMI changes into CSM on a test branch
-CASMHMS-6438 OCHAMI BSS: Merge OCHAMI changes into CSM on a test branch
-CASMHMS-6439 OCHAMI BSS: Get unit tests working in BSS OCHAMI on CSM sync branch
-CASMHMS-6439 OCHAMI BSS: Get unit tests working in BSS OCHAMI on CSM sync branch
 CASMHMS-6439 OCHAMI BSS: Get unit tests working in BSS OCHAMI on CSM sync branch
 CASMHMS-6477 RTS: Panic in InitForXName()
 CASMHMS-6482 hms-base: Improve scaling and fix resource leaks
@@ -848,6 +846,7 @@ CASMHMS-6568 CAST-38383: Prevent redundant "Detected" events in hardware invento
 ```
 
 ### CASMINST
+
 ```text
 CASMINST-3816 manually copying large files into s3fs cache directory prevents prune from pruning them
 CASMINST-6734 As a System Admin, I do not want to pass SW_ADMIN_PASSWORD  as a parameter to IUF/NLS workflows as goss test do not require it
@@ -876,6 +875,7 @@ CASMINST-7382 ODIN: multiple products pre-hooks failed during post-install-servi
 ```
 
 ### CASMMON
+
 ```text
 CASMMON-469 delete SMa postgres VMscrapeserive  for SMA
 CASMMON-475 seeing errors in the log systmgmt-health-redfish-exporter after configuring E100-smart-data
@@ -899,8 +899,8 @@ CASMMON-548 UAN image creation is failing during prepare images
 ```
 
 ### CASMPET
+
 ```text
-CASMPET-6096 weave.yaml contains two copies
 CASMPET-6096 weave.yaml contains two copies
 CASMPET-6217 LUMI telemetry & ceph performance config and tuning
 CASMPET-6561 Fix CVE's in artifactory.algol60.net/csm-docker/stable/docker.io/bitnami/kube-state-metrics:v2.8.0
@@ -950,7 +950,6 @@ CASMPET-7351 As a developer, I want to enable provision LIO services to preferre
 CASMPET-7358 Include Argo Workflow CLI in the NCN image
 CASMPET-7359 Make Kubernetes certificate expiry configurable
 CASMPET-7361 node-images: Need etcd 3.5.18-0 image for k8s 1.32 install
-CASMPET-7363 Remove manifest reference to spire and update the upgrade.sh
 CASMPET-7363 Remove manifest reference to spire and update the upgrade.sh
 CASMPET-7369 Make sonar-sync requests and limits customizable
 CASMPET-7371 node-images: PSP is not supported in K8s 1.25+
@@ -1007,6 +1006,7 @@ CASMPET-7633 etcd_health_status check produces false positive result
 ```
 
 ### CASMSMF
+
 ```text
 CASMSMF-8335 Can SMA use of cm cli migrate to SMA release
 CASMSMF-8435 Understand HPCM Grafana alerting framework
@@ -1025,6 +1025,7 @@ CASMSMF-8558 SMA VictoriaMetrics monitoring
 ```
 
 ### CASMTRIAGE
+
 ```text
 CASMTRIAGE-5354 vShasta:  goss-platform-ca-in-bundle test times out
 CASMTRIAGE-7072 mug: cmsdev vcs test failing during fresh install
@@ -1106,11 +1107,13 @@ CASMTRIAGE-8540 craycli version is different on AARCH64 nodes than x86_86 nodes
 ```
 
 ### CAST
+
 ```text
 CAST-35972 CSM 1.3.1 ncn-personalization playbook bugs
 ```
 
 ### MTL
+
 ```text
 MTL-2397 Add psmisc rpm to worker and master node images
 MTL-2460 ProLiant DL325 Gen10 Plus - network issue at reboot
@@ -1138,7 +1141,8 @@ MTL-2584 Package sweep for SLE-15-SP6 -- CSM 1.7
 ```
 
 ### USS
+
 ```text
-USS-3710 SUSE Provided RPM tool 'SOPS' Not functional on master/worker nodes
 USS-959 Sign container images released with USS
+USS-3710 SUSE Provided RPM tool 'SOPS' Not functional on master/worker nodes
 ```
