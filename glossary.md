@@ -65,9 +65,10 @@ Glossary of terms used in CSM documentation.
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack Resiliency](#rack-resiliency)
-* [Rack Resiliency Service(RRS)](#rack-resiliency-service)
+* [Rack Resiliency Service (RRS)](#rack-resiliency-service-rrs)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
+* [Resiliency Monitoring Service (RMS)](#resiliency-monitoring-service-rms)
 * [River Cabinet](#river-cabinet)
 * [Rosetta ASIC](#rosetta-asic)
 * [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps)
@@ -572,19 +573,15 @@ Liquid-Cooled TDS cabinet coolant manifolds.
 
 ## Rack Resiliency
 
-HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services, even if management nodes fail. However,
-rack-level failures can cause service disruptions if management nodes are concentrated within a single rack. This can result in the loss of HA quorum.
+The Rack Resiliency feature provides additional layers of resiliency in the event of a failure of a physical rack in the system.
 
-CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services
-due to a single rack failure. This feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
+For more information, see [Rack Resiliency](operations/rack_resiliency/README.md).
 
-Please refer to [Rack Resiliency](operations/rack_resiliency/README.md#rack-resiliency-rr) for more info.
+## Rack Resiliency Service (RRS)
 
-## Rack Resiliency Service
+One of the components of the [Rack Resiliency](#rack-resiliency) feature.
 
-RRS has been introduced as a part of CSM 1.7.0 to to monitor critical services and provide alerts during node or rack failures.
-
-Please refer to [Rack Resiliency Service](operations/rack_resiliency/Rack_Resiliency_Service.md#rack-resiliency-service-rrs) for more info.
+For more information, see [Rack Resiliency Service](operations/rack_resiliency/Rack_Resiliency_Service.md).
 
 ## Rack System Compute Cabinet
 
@@ -595,6 +592,12 @@ and [SMNet](#system-management-network-smnet) ToR switches.
 
 The Redfish Translation Service (RTS) aids in management of any hardware components which are not managed by
 Redfish, such as a ServerTech [PDU](#power-distribution-unit-pdu) in a [River cabinet](#river-cabinet).
+
+## Resiliency Monitoring Service (RMS)
+
+One of the components of the [Rack Resiliency](#rack-resiliency) feature.
+
+For more information, see [Resiliency Monitoring Service](operations/rack_resiliency/Resiliency_Monitoring_Service.md).
 
 ## River Cabinet
 

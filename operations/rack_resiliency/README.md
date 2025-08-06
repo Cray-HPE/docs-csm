@@ -6,7 +6,7 @@
 - [Components of Rack Resiliency](#components-of-rack-resiliency)
     - [Critical Services](README.md#1-critical-services)
     - [ConfigMaps](README.md#2-configmaps)
-    - [`Kyverno` Policy](README.md#3-Kyverno-policy)
+    - [Kyverno Policy](README.md#3-Kyverno-policy)
     - [Rack Resiliency Service (RRS)](README.md#4-rack-resiliency-service-rrs)
         - [Resiliency Monitoring Service (RMS)](#resiliency-monitoring-service-rms)
         - [Rack Resiliency API service](#rack-resiliency-api-service)
@@ -16,7 +16,7 @@
 - [Rack Resiliency management tasks](#rack-resiliency-management-tasks)
     - [Enable and configure Rack Resiliency](README.md#1-getting-started-with-rack-resiliency)
     - [Managing Critical Services](README.md#2-managing-critical-services)
-    - [Managing `Kyverno` policy](README.md#3-managing-Kyverno-policy)
+    - [Managing Kyverno policy](README.md#3-managing-Kyverno-policy)
 - [Troubleshooting](#troubleshooting)
 
 ## Introduction
@@ -59,13 +59,13 @@ This feature prevents system-wide outages, allowing for successful execution of 
 
 The Rack Resiliency solution is implemented in multiple stages. These stages are:
 
-- [Stage 1 - Feature Enablement](Enabling_Rack_Resiliency.md)
-- [Stage 2 - Placement Discovery](Setup.md#stage-2---placement-discovery)
-- [Stage 3 - Placement Validation](Setup.md#stage-3---placement-validation)
-- [Stage 4 - Kubernetes Zoning](Setup.md#stage-4---kubernetes-zoning)
-- [Stage 5 - Ceph Zoning](Setup.md#stage-4---ceph-zoning)
-- [Stage 6 - Apply `Kyverno` policy](Setup.md#stage-5---apply-kyverno-policy)
-- [Stage 7 - Continuous Monitoring](Resiliency_Monitoring_Service.md)
+- [Stage 1 - Feature enablement](Enabling_Rack_Resiliency.md)
+- [Stage 2 - Placement discovery](Setup.md#stage-2---placement-discovery)
+- [Stage 3 - Placement validation](Setup.md#stage-3---placement-validation)
+- [Stage 4 - Kubernetes zoning](Setup.md#stage-4---kubernetes-zoning)
+- [Stage 5 - Ceph zoning](Setup.md#stage-4---ceph-zoning)
+- [Stage 6 - Apply Kyverno policy](Setup.md#stage-5---apply-kyverno-policy)
+- [Stage 7 - Continuous monitoring](Resiliency_Monitoring_Service.md)
 
 ## Components of Rack Resiliency
 
@@ -80,12 +80,12 @@ Rack Resiliency(RR) uses ConfigMaps to store details about the critical services
 
 Refer for more information on [ConfigMaps](ConfigMaps.md)
 
-### 3. `Kyverno` policy
+### 3. Kyverno policy
 
 One of the ways that Rack Resiliency ensures that CSM critical services survive the failure of nodes or a single rack is to
 spread the replicas of these services across multiple zones and racks.
 
-See [`Kyverno` cluster policy](Kyverno.md#Kyverno-cluster-policy) for more information.
+See [Kyverno cluster policy](Kyverno.md) for more information.
 
 ### 4. [Rack Resiliency Service](Rack_Resiliency_Service.md) (RRS)
 
@@ -109,9 +109,9 @@ To get complete information on the components and functionalities of RRS [refer 
 ### Cray CLI
 
 - The CLI for interfacing with rack resiliency service is part of Cray CLI. A new module (RRS) is added to Cray CLI to support rack resiliency specific commands.
-- Refer [Cray CLI commands for zones](Zones.md#managing-zones) for more information on the commands related to zones.
-- Refer [Cray CLI commands for critical services](Manage_Critical_Services.md#critical-services-operations) for more information on the commands related to critical services.
-- Refer [Cray CLI commands for critical services healthchecks](Troubleshooting.md#critical-services-healthcheck).
+- See [Managing zones](Zones.md#managing-zones) for more information on the commands related to zones.
+- See [Managing Critical Services](Manage_Critical_Services.md) for more information on the commands related to critical services.
+- See [Critical services health check](Troubleshooting.md#critical-services-health-check).
 
 ### RESTful API
 
@@ -131,11 +131,11 @@ Rack Resiliency uses a 3 step procedure to be set up for monitoring critical ser
 ### 2. Managing critical services
 
 During the execution of RRS there maybe a need to manage critical services, which may need administrator intervention. This can be done using the Cray CLI or the API.
-Refer [Manage Critical Services](Manage_Critical_Services.md) for complete list of supported operations.
+See [Manage Critical Services](Manage_Critical_Services.md) for complete list of supported operations.
 
-### 3. Managing `Kyverno` policy
+### 3. Managing Kyverno policy
 
-While managing critical services the `Kyverno` policy also needs to be managed. Refer [Manage `Kyverno` policy](Manage_Critical_Services.md#add-critical-services-to-Kyverno-clusterpolicy) for complete list of supported operations.
+While managing critical services the Kyverno policy also needs to be managed. For more details, see [Manage Critical Services](Manage_Critical_Services.md).
 
 ## Troubleshooting
 

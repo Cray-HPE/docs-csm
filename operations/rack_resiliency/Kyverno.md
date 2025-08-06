@@ -1,21 +1,23 @@
-# Distributing critical services across Kubernetes zones
+# Kyverno
 
-One of the key ways to ensure CSM critical services availability is that the failure of nodes or a single rack is to spread the replicas of these services across multiple zones and racks.
-To support Kubernetes in spreading the replicas of the CSM critical services during service startup, a new `kyverno` policy by name `insert-labels-topology-constraints` has been added.
+One of the key ways to ensure CSM critical services availability is that the failure of nodes or a
+single rack is to spread the replicas of these services across multiple zones and racks.
 
-This policy applies to all the Deployments and StatefulSets that have been identified as critical services for Rack Resiliency.
+Some of the CSM critical services already have established the pod affinities to spread the replicas
+across nodes. Because the nodes which are picked by the Kubernetes scheduler can be on the same rack,
+it is necessary to include a topology constraint for these services; this helps the Kubernetes
+scheduler distribute the replicas across zones. This is achieved using the feature with a new Kyverno
+cluster policy with the name `insert-labels-topology-constraints` added.
 
-## `Kyverno` cluster policy
+This policy applies to all the Deployments and StatefulSets that have been identified as critical
+services for Rack Resiliency.
 
-Some of the CSM critical services already have established the pod affinities to spread the replicas across nodes. Because the nodes which are picked by the Kubernetes scheduler can be on the same rack,
-it is necessary to include a topology constraint for these services; this helps the Kubernetes scheduler distribute the replicas across zones. This is achieved using the feature with a new `kyverno` cluster policy with the name
-`insert-labels-topology-constraints` added.
+For more information on Kubernetes topology constraints, see
+[Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
-For more information, see [Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
+## Policy details
 
-### Policy details
-
-Use the below command to view the policy and know the services for which the policy has been enabled:
+(`ncn-mw#`) View the policy and see the services for which the policy has been enabled.
 
 ```bash
 kubectl get clusterpolicy insert-labels-topology-constraints -o yaml
@@ -70,17 +72,18 @@ spec:
   ...
 ```
 
-### How the `kyverno` policy works
+## How the policy works
 
-The `Kyverno` policy works in four steps as described below:
+### 1. Restart critical services
 
-#### 1. Restarting critical services
+During Deployment of the Rack Resiliency Service, the critical services which are either
+Deployments or StatefulSets are restarted. During restart the policy is implemented by
+the Kyverno policy engine.
 
-During Deployment of the Rack Resiliency Service, the critical services which are either Deployments or StatefulSets are restarted. During restart the policy is implemented by the `Kyverno` policy engine.
+### 2. Add topology constraints
 
-#### 2. Adding topology constraint
-
-The policy engine updates the topology constraint to the Deployment/ StatefulSets specification of the critical service.
+The policy engine updates the topology constraint to the Deployment or StatefulSet
+specifications of the critical services.
 
 ```yaml
 spec:
@@ -93,11 +96,13 @@ spec:
           whenUnsatisfiable: ScheduleAnyway
 ```
 
-#### 3. Add a new label as a selector to identify the pods
+### 3. Add label
 
-During restart, the label mentioned in the policy is added to all the pods belonging to the specific critical service Deployment or StatefulSets that is being restarted.
+During restart, the label mentioned in the policy is added to all the pods belonging to the
+specific critical service Deployment or StatefulSet that is being restarted.
 
-For Example, for the StatefulSets `cray-bss-bitnami-etcd` the policy adds the `rrflag` as shown below:
+For example, for the StatefulSet `cray-bss-bitnami-etcd`, the policy adds the `rrflag` as
+shown below:
 
 ```text
 cray-bss-bitnami-etcd-0                     2/2     Running   0               4d12h   app.kubernetes.io/component=etcd,app.kubernetes.io/instance=cray-hms-bss,app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=cray-bss-bitnami-etcd,app.kubernetes.io/version=3.5.21,apps.kubernetes.io/pod-index=0,controller-revision-hash=cray-bss-bitnami-etcd-855488694f,helm.sh/chart=etcd-11.2.3,rrflag=rr-cray-bss-bitnami-etcd,security.istio.io/tlsMode=istio,service.istio.io/canonical-name=cray-bss-bitnami-etcd,service.istio.io/canonical-revision=3.5.21,statefulset.kubernetes.io/pod-name=cray-bss-bitnami-etcd-0
@@ -105,8 +110,12 @@ cray-bss-bitnami-etcd-1                     2/2     Running   0               4d
 cray-bss-bitnami-etcd-2                     2/2     Running   0               4d12h   app.kubernetes.io/component=etcd,app.kubernetes.io/instance=cray-hms-bss,app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=cray-bss-bitnami-etcd,app.kubernetes.io/version=3.5.21,apps.kubernetes.io/pod-index=2,controller-revision-hash=cray-bss-bitnami-etcd-855488694f,helm.sh/chart=etcd-11.2.3,rrflag=rr-cray-bss-bitnami-etcd,security.istio.io/tlsMode=istio,service.istio.io/canonical-name=cray-bss-bitnami-etcd,service.istio.io/canonical-revision=3.5.21,statefulset.kubernetes.io/pod-name=cray-bss-bitnami-etcd-2
 ```
 
-#### 4. Spreading pods across zones
+### 4. Spreading pods across zones
 
-When the scheduler launches the pod, using the selector `rrflag` the pods are spread across racks. During the failure of a NCN node or rack, when service replicas are restarted by Kubernetes, the policy helps the replicas being restarted to spread across zones.
+When the scheduler launches the pod, using the selector `rrflag` the pods are spread across
+racks. During the failure of a NCN node or rack, when service replicas are restarted by Kubernetes,
+the policy helps the replicas being restarted to spread across zones.
 
-**Note:** The policy has been enabled to allow running replicas on the same rack if other racks are not available because of a failure. This ensures that the number of replicas during a failure remains the same.
+**Note:** The policy has been enabled to allow running replicas on the same rack if other racks
+are not available because of a failure. This ensures that the number of replicas during a failure
+remains the same.
