@@ -80,7 +80,7 @@ customization job. Use the following procedure to detect the issue.
    ssh -p $IMS_SSH_PORT root@$IMS_SSH_HOST
    ```
 
-1. (`ncn-mw#`) connect to the remote node where the job is running:
+1. (`ncn-mw#`) Connect to the remote node where the job is running.
 
    > If the remote node is not reachable, then skip ahead to the [Resolution](#resolution) section.
 
