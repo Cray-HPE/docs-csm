@@ -77,18 +77,17 @@ customization job. Use the following procedure to detect the issue.
 
 1. (`ncn-mw#`) Attempt to SSH into the `sshd` container of the job.
 
-   > Perform the following substitutions in the command:
-   >
-   > - Replace `<IMS_SSH_HOST>` with the value of the
-   >    `ssh_containers[0].connection_info.customer_access.host` field in the job details.
-   > - Replace `<IMS_SSH_PORT>` with the value of the
-   >   `ssh_containers[0].connection_info.customer_access.port` field in the job details.
+   > - Ensure that the user running this command has the SSH private key that
+   >   is associated with the IMS SSH public key in the `public_key_id` field of the job details.
+   > - Perform the following substitutions in the command:
+   >     - Replace `<IMS_SSH_HOST>` with the value of the
+   >       `ssh_containers[0].connection_info.customer_access.host` field in the job details.
+   >     - Replace `<IMS_SSH_PORT>` with the value of the
+   >       `ssh_containers[0].connection_info.customer_access.port` field in the job details.
 
    ```bash
    ssh -p <IMS_SSH_PORT> root@<IMS_SSH_HOST>
    ```
-
-  Note: Ensure the user has the correct `ssh` private key for the IMS job.
   
 1. Confirm that the SSH attempt resulted in a connection failure.
    If that is not the case, then the procedure documented here is not applicable.
