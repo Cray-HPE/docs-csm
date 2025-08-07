@@ -6,7 +6,7 @@ An IMS image customization job on a remote node can get stuck in the `waiting_on
 This can occur during `image customization` if any of the following things happen:
 
 - The remote node reboots or crashes
-- The IMS job container is killed or stopped.
+- The IMS job container on the remote build node is killed or stopped.
 
 ## Error identification
 
@@ -82,7 +82,8 @@ customization job. Use the following procedure to detect the issue.
 
 1. (`ncn-mw#`) Connect to the remote node where the job is running.
 
-   > If the remote node is not reachable, then skip ahead to the [Resolution](#resolution) section.
+   > - The name of the remote build node can be found in the `remote_build_node` field of the job details.
+   > - If the remote node is not reachable, then skip ahead to the [Resolution](#resolution) section.
 
    ```bash
    ssh <remote_build_node xname>
@@ -102,14 +103,13 @@ customization job. Use the following procedure to detect the issue.
 
 ## Resolution
 
-In this case the `ims` job needs to be removed. Follow these steps:
+(`ncn-mw#`) In order to resolve the problem, delete the IMS job.
 
-1. (`ncn-mw#`) Remove the `ims` image customization job using `cray` CLI:
+> In the following command, replace `<IMS_JOB_ID>` with the actual IMS job ID.
 
-   ```bash
-   IMS_JOB_ID=<Job ID>
-   cray ims jobs delete $IMS_JOB_ID
-   ```
+ ```bash
+cray ims jobs delete <IMS_JOB_ID>
+```
 
-once the job is deleted a new image customization job can be created using following
-[IMS Image Customization](../../operations/image_management/Customize_an_Image_Root_Using_IMS.md)
+After the job is deleted, a new image customization job can be created. See
+[Customize an Image Root Using IMS](../../operations/image_management/Customize_an_Image_Root_Using_IMS.md).
