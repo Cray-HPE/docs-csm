@@ -1095,7 +1095,7 @@ s3fs
 lockout-tagout
 
 - operations/rack_resiliency/Zones.md
-- MPFDs
+MPFDs
 
 - operations/README.md
 Alerta
