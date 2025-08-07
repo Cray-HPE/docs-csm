@@ -58,6 +58,9 @@ Any changes made take effect immediately - no restart of `cray-rrs` is required.
   not supported.
 - Avoid using the API or CLI to add critical services while following the deletion or modification
   procedures outlined on this page.
+- Any modifications to critical services may take up to 10 minutes to be reflected in API and CLI
+  responses and to begin being monitored by the
+  [Resiliency Monitoring Service (RMS)](Resiliency_Monitoring_Service.md).
 
 ### List services using CLI
 
