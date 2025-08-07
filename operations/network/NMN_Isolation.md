@@ -5,9 +5,9 @@
 NMN Isolation on the management network limits traffic on the Node Management Network to only types and directions required for the operation of CSM and user workloads.
 **NMN Isolation is only available on systems with Aruba switches**. The feature consists of three main sub-features:
 
-- ACLs allowing access to only required CSM services from managed nodes (compute, UAN, etc..)
+- ACLs allowing access to only required CSM services from managed nodes (compute, UAN, an so on)
 - ACLs preventing Mountain compute cabinets (EX) from communicating with each other
-- PVLAN to prevent River managed nodes (compute, UAN, etc...) from communicating with each other
+- PVLAN to prevent River managed nodes (compute, UAN, and so on) from communicating with each other
 
 NMN Isolation alleviates the need for most host-based firewalls on management nodes (managers, workers, and storage NCN).
 The PVLAN sub-feature also removes the need for host-based firewalls on UAN (and other River managed nodes) by limiting access over the NMN.
