@@ -1158,3 +1158,7 @@ yaml
 
 - troubleshooting/debugging_with_hms_pprof_images.md
 mutexes
+
+- operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md
+FRUID
+FRUIDs

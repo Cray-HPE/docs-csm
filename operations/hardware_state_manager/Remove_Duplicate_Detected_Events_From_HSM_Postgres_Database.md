@@ -17,9 +17,16 @@ The steps outlined here are repeatable and the scripts can be rerun at any
 time should the database continue to grow too large.
 
 The steps in this document must be also be completed immediately prior to
-starting either a CSM 1.6.0 or a CSM 1.7.0 upgrade.
+starting an upgrade from CSM 1.5 to CSM 1.6 or from CSM 1.6 to CSM 1.7.
 
-This same material is also present in the CSM 1.5.0 docs.
+This same material is also present in the CSM 1.5 documentation.
+
+Unfortunately, because of the nature of this bug and the capabilities of the
+pruning script, the history of FRUIDs associated with CPUs and GPUs within a
+node may not be fully accurate in systems running CSM releases prior to CSM
+1.7. After the system is upgraded to CSM 1.7, the FRUID associations with
+CPUs and GPUs within a node will be fully accurate from that point on.  No
+other component types were affected by this bug.
 
 ## Prerequisites
 
