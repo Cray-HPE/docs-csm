@@ -81,6 +81,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 - [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
 - [Remove Duplicate Detected Events From the HSM Postgres Database](../operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md)
+- [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 
 ## Booting
 
@@ -148,6 +149,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 - [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
 - [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
+- [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 - [Troubleshoot Issues with Large Images](../operations/image_management/Troubleshoot_Large_Image.md)
 - [Troubleshoot Remote Build Node](../operations/image_management/Troubleshoot_Remote_Build_Node.md)
 - [Troubleshoot Interactions with zypper](../operations/image_management/Troubleshoot_zypper_interaction.md)
