@@ -114,7 +114,7 @@ Rack Resiliency Service. The RRS CLI has subcommands for the following:
 
 ### RRS API
 
-The RRS RESTful API is used by the [RRS CLI](#cli) and also can be accessed using tools like `curl`.
+The RRS RESTful API is used by the [RRS CLI](#rrs-cli) and also can be accessed using tools like `curl`.
 See [Rack Resiliency Service v1](../../api/rrs.md) for more information.
 
 ## Architecture

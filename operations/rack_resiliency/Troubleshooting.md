@@ -18,8 +18,6 @@ This page contains general Rack Resiliency troubleshooting topics.
             - [Unable to register for notification](#unable-to-register-for-notification)
     - [Getting details about RMS](#getting-details-about-rms)
 - [Critical services health check](#critical-services-health-check)
-    - [List status of critical services](#list-status-of-critical-services)
-    - [Detailed status for a service](#detailed-status-for-a-critical-service)
 
 ## Cray CLI
 

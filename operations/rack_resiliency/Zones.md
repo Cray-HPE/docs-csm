@@ -31,8 +31,8 @@ the associated [physical rack](README.md#physical-racks) (which will be the same
 of the xnames of the associated NCNs. For example, `x3000` or `x3001`.
 
 When first [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md), administrators can optionally specify
-prefixes to be used for Kubernetes zone names, Ceph zone names, or both. These prefixes will be prepende
-to the default zone names described above, separated by a `-` character (e.g. `myprefix-x3002`).
+prefixes to be used for Kubernetes zone names, Ceph zone names, or both. These prefixes will be prepended
+to the default zone names described above, separated by a dash (`-`) character (e.g. `myprefix-x3002`).
 
 **NOTE:** Prefixes can only be specified during the initial enablement process. They cannot be
 changed, removed, or set later.
@@ -60,7 +60,7 @@ In addition, zone prefixes must obey the following restrictions:
 
 - Minimum of 1 character long
 - Must begin and end with a lowercase alphanumeric character (i.e. `a-z0-9`)
-- Only other legal characters are dahs (`-`) and dot (`.`)
+- Only other legal characters are dash (`-`) and dot (`.`)
 - The resulting zone name must be valid both as a Ceph bucket name and as a Kubernetes label value
     - See [Bucket Operations](https://docs.ceph.com/en/latest/radosgw/s3/bucketops/)
       for details on legal Ceph bucket names.
@@ -80,12 +80,12 @@ to implement zoning of master and worker NCNs.
 The Kubernetes topology spread constraints are used to apply labels to nodes, in order to create Kubernetes zones.
 
 Each node in every zone is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where
-`<zone-id>` is the Kubernetes [zone name](#zone-name). These labels can be used to identify all the management
+`<zone-id>` is the Kubernetes [zone name](#zone-names). These labels can be used to identify all the management
 nodes which belong to the same Kubernetes zone, and are used to schedule the critical services across the zones.
 
 ### Viewing Kubernetes zones
 
-(ncn-mw#) View Kubernetes zones.
+`(ncn-mw#)` View Kubernetes zones.
 
 ```bash
 kubectl get nodes -L topology.kubernetes.io/zone
@@ -124,7 +124,7 @@ bucket types (`host`, `rack`, `row`, etc.), the data is replicated across zones.
 In the absence of Rack Resiliency, CSM has `host` as the top of the hierarchy of Ceph buckets.
 To implement Ceph zones for storage nodes, the new bucket `rack` is introduced on top of the hierarchy.
 As shown in the above diagram, storage nodes get added to a `rack` bucket based on their physical
-location. The name of the `rack` buckets is its Ceph [zone name](#zone-name).
+location. The name of the `rack` buckets is its Ceph [zone name](#zone-names).
 
 See [Placement discovery](Setup_of_Rack_Resiliency.md#placement-discovery) for details on how physical
 placement of storage nodes is discovered.

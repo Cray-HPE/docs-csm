@@ -1094,6 +1094,9 @@ s3fs
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout
 
+- operations/rack_resiliency/Zones.md
+- MPFDs
+
 - operations/README.md
 Alerta
 

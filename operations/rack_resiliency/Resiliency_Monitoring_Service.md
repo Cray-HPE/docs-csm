@@ -11,8 +11,9 @@
 ## Overview
 
 The Resiliency Monitoring Service (RMS) is a part of the
-[Rack Resiliency Service (RRS)](Rack_Resiliency_Service.md).
-RMS runs along with the [RR API service](../../api/rrs.md) inside the `cray-rrs` pod.
+[Rack Resiliency Service (RRS)](README.md#rack-resiliency-service-rrs).
+RMS runs along with the [RR API service](../../api/rrs.md) inside the
+[`cray-rrs`](cray-rrs_Deployment.md) pod.
 
 The RMS continuously monitors the health and availability of critical services,
 management nodes, and Ceph utility storage. The RMS uses the following components to

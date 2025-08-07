@@ -1,6 +1,6 @@
 # Setup of Rack Resiliency
 
-The configuration of Rack Resiliency happens as part of 
+The configuration of Rack Resiliency happens as part of
 [Management Node Personalization](../configuration_management/Management_Node_Personalization.md).
 Specifically, the setup is done by the `rack_resiliency_for_mgmt_nodes.yml` Ansible playbook in the
 `csm-config-management` [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs)
@@ -63,7 +63,13 @@ Example of JSON file containing rack to management NCN hostname mapping (`rr_hw_
 
 ```json
 {
-    "x3000": ["ncn-m001", "ncn-w001", "ncn-w004", "ncn-w007", "ncn-s001"],
+    "x3000": [
+        "ncn-m001",
+        "ncn-w001",
+        "ncn-w004",
+        "ncn-w007",
+        "ncn-s001"
+    ],
     "x3001": [
         "ncn-m002",
         "ncn-w002",
@@ -72,7 +78,13 @@ Example of JSON file containing rack to management NCN hostname mapping (`rr_hw_
         "ncn-w008",
         "ncn-s003"
     ],
-    "x3002": ["ncn-m003", "ncn-w003", "ncn-w009", "ncn-s002", "ncn-s004"]
+    "x3002": [
+        "ncn-m003",
+        "ncn-w003",
+        "ncn-w009",
+        "ncn-s002",
+        "ncn-s004"
+    ]
 }
 ```
 
