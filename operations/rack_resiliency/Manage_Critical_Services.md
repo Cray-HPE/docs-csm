@@ -12,7 +12,7 @@ accomplished by directly editing the static ConfigMap. For more details on the R
 see [ConfigMaps](ConfigMaps.md).
 
 Any change made to the RR critical services must be made both in RR itself and in the
-[Kyverno policy](Kyverno.md).
+[Kyverno Policy](Kyverno_Policy.md).
 
 - [Check for service in cluster](#check-for-service-in-cluster)
 - [Add, view, edit, or delete RR critical services](#add-view-edit-or-delete-rr-critical-services)

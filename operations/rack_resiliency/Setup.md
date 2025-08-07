@@ -82,7 +82,7 @@ not included in this process.
 
 ## Kubernetes setup
 
-The below stages are used to setup Kubernetes zones and apply the [Kyverno policy](Kyverno.md).
+The below stages are used to setup Kubernetes zones and apply the [Kyverno Policy](Kyverno_Policy.md).
 
 ### Stage 4 - Kubernetes zoning
 
@@ -93,7 +93,7 @@ Master and Worker nodes. For more information on zoning, see [Zones](Zones.md).
 ### Stage 5 - Apply Kyverno policy
 
 This Ansible role applies the Kyverno cluster policy `insert-labels-topology-constraints`.
-For more information, see [Kyverno policy](Kyverno.md).
+For more information, see [Kyverno Policy](Kyverno_Policy.md).
 
 ## Ceph setup
 

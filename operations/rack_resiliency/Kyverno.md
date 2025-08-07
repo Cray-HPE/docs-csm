@@ -1,4 +1,4 @@
-# Kyverno
+# Kyverno Policy
 
 One of the key ways to ensure CSM critical services availability is that the failure of nodes or a
 single rack is to spread the replicas of these services across multiple zones and racks.
