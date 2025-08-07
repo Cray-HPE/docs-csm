@@ -19,7 +19,7 @@ time should the database continue to grow too large.
 The steps in this document must be also be completed immediately prior to
 starting either a CSM 1.6.0 or a CSM 1.7.0 upgrade.
 
-This same material is also present in the CSM 1.5.0 docs.
+This same material is also present in the CSM 1.5 documentation.
 
 Unfortunately, due to the nature of this bug and capabilities of the pruning
 script, the history of FRUIDs associated to CPUs and GPUs prior to the CSM
