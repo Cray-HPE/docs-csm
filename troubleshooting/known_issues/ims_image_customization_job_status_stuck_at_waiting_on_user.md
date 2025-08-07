@@ -88,14 +88,17 @@ customization job. Use the following procedure to detect the issue.
    ssh <remote_build_node xname>
    ```
 
-1. (`ncn-mw#`) Check if `ims` job container exists on the remote node:
+1. (`cn#`) Check if IMS job container exists on the remote node.
+
+   > In the following command, replace `<IMS_JOB_ID>` with the actual IMS job ID.
 
    ```bash
-   IMS_JOB_ID=<Job ID>
-   podman ps | grep $IMS_JOB_ID
+   podman ps | grep <IMS_JOB_ID>
    ```
 
-   You will notice that either `ims` job container does not exist or is in `exited` state.
+1, If the IMS job container either does not exist or is in an `exited` state, then proceed to [Resolution](#resolution),
+
+   If that is not the case, then the procedure documented here is not applicable.
 
 ## Resolution
 
