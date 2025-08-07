@@ -2,7 +2,7 @@
 
 ## Issue description
 
-IMS image customization job on remote node can get stuck in the "waiting_on_user" state indefinitely.
+An IMS image customization job on a remote node can get stuck in the `waiting_on_user` state indefinitely.
 This can occur if during `image customization` remote node gets rebooted, crashes or IMS JOB container is killed/stopped.
 
 ## Error identification
