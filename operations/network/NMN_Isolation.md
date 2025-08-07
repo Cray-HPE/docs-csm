@@ -182,7 +182,7 @@ As noted previously, NMN Isolation consists of three sub-features.  These are li
 
 ![NMN Isolation Overview](../../img/network/management_network/nmn_isolation_overview.png)
 
-Each component is described in more detail below.
+Each component is described in more detail in the following sections.
 
 ### Management Node Access Controls
 
