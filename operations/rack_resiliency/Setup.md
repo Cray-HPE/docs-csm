@@ -4,7 +4,6 @@ This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#arch
 
 Rack Resiliency is setup using an Ansible playbook. This playbook is executed during
 [Management Node Personalization](../configuration_management/Management_Node_Personalization.md).
-There are separate personalizations for master and storage nodes to setup rack resiliency.
 
 For setting up rack resiliency the following stages are executed by the Ansible playbook:
 
