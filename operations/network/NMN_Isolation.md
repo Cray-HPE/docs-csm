@@ -2,7 +2,7 @@
 
 ## NMN Isolation Overview
 
-NMN Isolation on the management network limits traffic on the Node Management Network to only types and directions required for the operation of CSM and user workloads.
+NMN Isolation on the management network limits traffic on the NMN to only types and directions required for the operation of CSM and user workloads.
 **NMN Isolation is only available on systems with Aruba switches**. The feature consists of three main sub-features:
 
 - ACLs allowing access to only required CSM services from managed nodes (compute, UAN, an so on)
