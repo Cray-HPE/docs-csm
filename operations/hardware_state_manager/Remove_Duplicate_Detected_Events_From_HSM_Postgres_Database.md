@@ -21,12 +21,11 @@ starting either a CSM 1.6.0 or a CSM 1.7.0 upgrade.
 
 This same material is also present in the CSM 1.5 documentation.
 
-Unfortunately, due to the nature of this bug and capabilities of the pruning
+Unfortunately, because to the nature of this bug and the capabilities of the pruning
 script, the history of FRUIDs associated to CPUs and GPUs prior to the CSM
-1.7.0 release may not be fully accurate.  Once your system is upgraded to CSM
-1.7.0, the accuracy of FRUIDs associated with CPUs and GPUs will be fully
-restored from that point in time and into the future.  No other component
-types were affected by this bug.
+1.7.0 release may not be fully accurate. After the system is upgraded to CSM
+1.7, the FRUIDs associations with CPUs and GPUs will be fully accurate from that point on.
+No other component types were affected by this bug.
 
 ## Prerequisites
 
