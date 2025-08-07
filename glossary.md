@@ -579,9 +579,9 @@ For more information, see [Rack Resiliency](operations/rack_resiliency/README.md
 
 ## Rack Resiliency Service (RRS)
 
-One of the components of the [Rack Resiliency](#rack-resiliency) feature.
+The implementation in CSM of the [Rack Resiliency](#rack-resiliency) feature.
 
-For more information, see [Rack Resiliency Service](operations/rack_resiliency/Rack_Resiliency_Service.md).
+For more information, see [Rack Resiliency Service](operations/rack_resiliency/README.md#rack-resiliency-service-rrs).
 
 ## Rack System Compute Cabinet
 
@@ -595,7 +595,7 @@ Redfish, such as a ServerTech [PDU](#power-distribution-unit-pdu) in a [River ca
 
 ## Resiliency Monitoring Service (RMS)
 
-One of the components of the [Rack Resiliency](#rack-resiliency) feature.
+One of the components of the [Rack Resiliency Service (RRS)](#rack-resiliency-service-rrs).
 
 For more information, see [Resiliency Monitoring Service](operations/rack_resiliency/Resiliency_Monitoring_Service.md).
 

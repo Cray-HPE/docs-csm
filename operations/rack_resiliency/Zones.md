@@ -1,39 +1,97 @@
 # Zones
 
-For CSM 1.7.0, Rack Resiliency defines a logical grouping of Kubernetes master, Kubernetes worker and Ceph Storage nodes (NCNs) in a **single rack** as a management plane failure domain (MPFD).
-The racks which support only non-NCNs, do not fall in the category of Rack Resiliency MPFD. During the setup of Rack Resiliency, it is validated that any MPFD should include the following minimal hardware:
+- [Overview](#overview)
+- [Zone names](#zone-names)
+    - [Zone name prefix reasons](#zone-name-prefix-reasons)
+    - [Zone name prefix restrictions](#zone-name-prefix-restrictions)
+- [Kubernetes zones](#kubernetes-zones)
+    - [Viewing Kubernetes zones](#viewing-kubernetes-zones)
+- [Ceph zones](#ceph-zones)
+    - [Ceph service zoning](#ceph-service-zoning)
+    - [Viewing Ceph zones](#viewing-ceph-zones)
+- [Managing zones](#managing-zones)
+    - [Listing zones](#listing-zones)
+    - [Describing a zone](#describing-a-zone)
 
-- 1 Kubernetes Master node
-- 1 Kubernetes Worker node
-- 1 Ceph Storage node
+## Overview
 
-A **zone** in the Rack Resiliency solution is a representation of a management plane failure domain.
+A **zone** in the Rack Resiliency solution is [Failure domain](README.md#failure-domain). Specifically, it is
+a representation of a Management Plane Failure Domain (MPFD). In general for CSM, a MPFD constitutes one or more
+racks that contain CSM management nodes. Managed nodes are not considered in MPFDs.
 
-To map zones to Kubernetes and Ceph, Rack Resiliency uses the following methodologies:
+In Rack Resiliency, if placement validation is successful, then a MPFD will always consist of a single rack. That
+rack will contain, at minimum, 1 Kubernetes master NCN, 1 Kubernetes worker NCN, and 1 Ceph storage NCN.
 
-- For Kubernetes, Rack Resiliency uses the concept of [topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) to implement zoning for Master and Worker nodes.
-- For Ceph, Rack Resiliency uses the [concepts of buckets](https://docs.ceph.com/en/reef/architecture/) built with CRUSH algorithm to implement zoning for storage nodes.
+Rack Resiliency maps its zones into both the Kubernetes cluster and Ceph cluster.
 
-**Note:**
+## Zone names
 
-- Ceph is hierarchical storage based on hierarchy of **buckets**. Rack Resiliency uses the bucket called **rack** on top of the **host** bucket to create the zones for storage nodes.
+By default, Rack Resiliency zone names will be the component name ([xname](../../glossary.md#xname)) of
+the associated [physical rack](README.md#physical-racks) (which will be the same as the first 5 characters
+of the xnames of the associated NCNs. For example, `x3000` or `x3001`.
 
-## Setting up zones for Kubernetes nodes
+When first [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md), administrators can optionally specify
+prefixes to be used for Kubernetes zone names, Ceph zone names, or both. These prefixes will be prepende
+to the default zone names described above, separated by a `-` character (e.g. `myprefix-x3002`).
 
-The Kubernetes [topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) can be used to apply labels to nodes in order to create zones.
+**NOTE:** Prefixes can only be specified during the initial enablement process. They cannot be
+changed, removed, or set later.
 
-Each node in every zone is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where `<zone-id>` is of the form `x3000`, `x3001`, and so on.
-These labels can be used to identify all the management nodes which belong to the same zone (Kubernetes zone) and is used to schedule the critical services across the zones.
+### Zone name prefix reasons
 
-### Command to view Kubernetes zones
+One reason an administrator may wish to do this is because xnames are not unique across different CSM
+systems. Because of this, an administrator may wish to use a system-specific identifier as a zone prefix,
+to differentiate between zones on different systems.
 
-To view Kubernetes zones use the below command:
+For Ceph zones specifically, an administrator may need to do this if their Ceph cluster already has
+any bucket whose name would collide with the default zone names (Ceph bucket names are required to
+be unique, and as part of zoning, Ceph buckets are created for each zone).
+
+### Zone name prefix restrictions
+
+Zone name prefixes are not required. If a non-empty zone name prefix is specified, then it must
+conform to some restrictions.
+
+Zone names overall are required to be between no longer than 63 characters. Because the base zone names
+are always 5 characters long, and accounting for the `-` separator, this means that zone prefix names
+must be no more than 57 characters long.
+
+In addition, zone prefixes must obey the following restrictions:
+
+- Minimum of 1 character long
+- Must begin and end with a lowercase alphanumeric character (i.e. `a-z0-9`)
+- Only other legal characters are dahs (`-`) and dot (`.`)
+- The resulting zone name must be valid both as a Ceph bucket name and as a Kubernetes label value
+    - See [Bucket Operations](https://docs.ceph.com/en/latest/radosgw/s3/bucketops/)
+      for details on legal Ceph bucket names.
+    - See [Syntax and character set](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set)
+      for details on legal Kubernetes label values.
+
+**NOTE**: These restrictions are not checked or enforced. If they are not followed, then any
+failures are most likely to be encountered during
+[Setup of Rack Resiliency](Setup_of_Rack_Resiliency.md).
+
+## Kubernetes zones
+
+For Kubernetes, Rack Resiliency uses the concept of
+[topology spread constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/)
+to implement zoning of master and worker NCNs.
+
+The Kubernetes topology spread constraints are used to apply labels to nodes, in order to create Kubernetes zones.
+
+Each node in every zone is labeled with the key `topology.kubernetes.io/zone` and value `<zone-id>`, where
+`<zone-id>` is the Kubernetes [zone name](#zone-name). These labels can be used to identify all the management
+nodes which belong to the same Kubernetes zone, and are used to schedule the critical services across the zones.
+
+### Viewing Kubernetes zones
+
+(ncn-mw#) View Kubernetes zones.
 
 ```bash
-(ncn-mw#) kubectl get nodes -L topology.kubernetes.io/zone
+kubectl get nodes -L topology.kubernetes.io/zone
 ```
 
-Example Output:
+Example output:
 
 ```text
 NAME       STATUS   ROLES           AGE   VERSION   ZONE
@@ -46,51 +104,65 @@ ncn-w003   Ready    <none>          20d   v1.32.5   x3002
 ncn-w004   Ready    <none>          20d   v1.32.5   x3000
 ```
 
-**Note:**
+## Ceph zones
 
-- zone-id for each Kubernetes zone can be optionally prefixed with a site-init specific string.
-- For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
-- By default, zone-id is decided based on the xname (1-5 chars) of the Kubernetes node.
+Ceph is the utility storage platform that is used to enable pods to store persistent data. It is
+deployed to provide block, object, and file storage to the management services running on Kubernetes,
+as well as for telemetry data coming from the compute nodes.
 
-## Setting up zones for Ceph Storage nodes
+For Ceph, Rack Resiliency uses the [concept of buckets](https://docs.ceph.com/en/reef/architecture/)
+built with the [CRUSH](https://docs.ceph.com/en/latest/rados/operations/crush-map/) algorithm to
+implement zoning for storage nodes.
 
-Similar to Kubernetes topology spread constraints (for Master and Worker), Ceph zoning is required on Storage nodes (Utility storage nodes) for creating zones.
+The objective of Ceph zoning is to make sure Ceph data gets replicated at the zone level across
+storage nodes, so that there is no data loss in case of a rack failure. Ceph provides the CRUSH map
+algorithm, which helps to segregate the data across zones. Using a combination of CRUSH rules and
+bucket types (`host`, `rack`, `row`, etc.), the data is replicated across zones.
 
-The objective of Ceph zoning is to make sure Ceph data gets replicated at rack level across Storage nodes, so that there is no data loss in case of a rack failure.
-Ceph provides the CRUSH map algorithm which helps to segregate the storage nodes across zones. Using a combination of CRUSH rules and bucket types (hosts, racks, rows, etc.), the data can be replicated across zones.
+![Hierarchy of CRUSH buckets (`rack`, `host`, `osd`) before and after Ceph zoning](../../img/Ceph-Zone.png)
 
-### Creating Ceph zones with CRUSH
+In the absence of Rack Resiliency, CSM has `host` as the top of the hierarchy of Ceph buckets.
+To implement Ceph zones for storage nodes, the new bucket `rack` is introduced on top of the hierarchy.
+As shown in the above diagram, storage nodes get added to a `rack` bucket based on their physical
+location. The name of the `rack` buckets is its Ceph [zone name](#zone-name).
 
-![Hierarchy of CRUSH "buckets" (rack, host, osd) before and after CEPH Zoning](../../img/Ceph-Zone.png)
+See [placement discovery](Setup.md#stage-2---placement-discovery) for details on how physical placement of
+storage nodes is discovered.
 
-Currently CSM has **host** as the top of [hierarchy of buckets](https://docs.ceph.com/en/latest/rados/operations/crush-map/) of Ceph.
-To implement Management Plane Failure Domains for storage nodes, the new bucket **rack** is introduced on top of the hierarchy. As shown in the above diagram, storage nodes get added to a **rack** bucket based on their physical location in the rack.
-Refer to [placement discovery](Setup.md#stage-2---placement-discovery) for details on how physical placement of storage nodes is discovered.
 More than one storage node can be added to the same bucket.
 
-Rack Resiliency preconfigures rack buckets as well as adds the storage nodes to them. Refer to [Ceph zoning](Setup.md#stage-4---ceph-zoning) for details on how the nodes discovered during placement discovery are grouped in rack buckets.
+Rack Resiliency preconfigures `rack` buckets and adds the storage nodes to them.
+See [Ceph zoning](Setup.md#stage-4---ceph-zoning) for details on how the nodes discovered during placement
+discovery are grouped in `rack` buckets.
 
 ### Ceph service zoning
 
-The current Ceph setup on CSM deploys three sets of Ceph services (Monitors, Managers, and MDS) on the nodes `ncn-s001`, `ncn-s002`, and `ncn-s003` in a hard-coded configuration.
-This approach, however, does not support Rack Resiliency, as the services are statically assigned to specific nodes.
+The current Ceph setup on CSM deploys three sets of Ceph services (Monitors, Managers, and MDS) on the
+nodes `ncn-s001`, `ncn-s002`, and `ncn-s003` in a hard-coded configuration.
+This approach, however, does not support Rack Resiliency, as the services are statically assigned to
+specific nodes.
 
-To enhance Rack Resiliency, this solution distributes the Ceph services across multiple racks.
-The storage nodes assigned to each service is selected using a round-robin distribution strategy across the rack buckets, ensuring a balanced and fault-tolerant configuration.
-Also, the number of Ceph Monitor services deployed will be either 3 or 5, depending on the total number of storage nodes and their distribution across rack buckets.
-The above process ensures that the Ceph cluster remains operational in the event of a rack failure.
+The Rack Resiliency solution distributes the Ceph services across multiple zones.
+The storage nodes assigned to each service are selected using a round-robin distribution strategy across
+the zones (i.e. `rack` buckets), ensuring a balanced and fault-tolerant configuration.
 
-For details on how Ceph services are zoned refer to [Ceph service zoning](Setup.md#stage-4---ceph-zoning).
+The number of Ceph Monitor services deployed will be either 3 or 5, depending on the total number of storage
+nodes and their distribution across `rack` buckets.
 
-### Command to view ceph zones
+The above process ensures that the Ceph cluster remains operational in the event of a
+[physical rack](README.md#physical-racks) failure.
 
-To view ceph zones use the below command:
+For details on how Ceph services are zoned, see [Ceph service zoning](Setup.md#stage-4---ceph-zoning).
+
+### Viewing Ceph zones
+
+(`ncn-msw#`) View Ceph zones.
 
 ```bash
-(ncn-mw#) ceph osd tree | grep rack
+ceph osd tree | grep rack
 ```
 
-Example Output:
+Example output:
 
 ```text
  -9         13.97278      rack x3000
@@ -98,90 +170,86 @@ Example Output:
 -13         13.97278      rack x3002
 ```
 
-**Note:**
+## Managing zones
 
-- zone-id for each Ceph zone can be optionally prefixed with a site-init specific string.
-- For more information on adding prefix refer to [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md#enabling-rack-resiliency).
-- By default, zone-id is decided based on the xname (1-5 chars) of the Ceph node.
-  
-## Managing Zones
+### Listing zones
 
-To view and get details about the Rack Resiliency zones use the below Cray CLI commands:
+(`ncn-mw#`) List all configured zones.
 
-- List all configured zones:
+```bash
+cray rrs zones list --format toml
+```
 
-    ```bash
-    (`ncn-mw#`) cray rrs zones list
-    ```
+Example output:
 
-    Example Output:
+```toml
+[[Zones]]
+Zone_Name = "x3000"
 
-    ```text
-    [[Zones]]
-    Zone_Name = "x3000"
+[Zones.Kubernetes_Topology_Zone]
+Management_Master_Nodes = [ "ncn-m001",]
+Management_Worker_Nodes = [ "ncn-w001", "ncn-w004",]
+[Zones.CEPH_Zone]
+Management_Storage_Nodes = [ "ncn-s001",]
+[[Zones]]
+Zone_Name = "x3001"
 
-    [Zones.Kubernetes_Topology_Zone]
-    Management_Master_Nodes = [ "ncn-m001",]
-    Management_Worker_Nodes = [ "ncn-w001", "ncn-w004",]
-    [Zones.CEPH_Zone]
-    Management_Storage_Nodes = [ "ncn-s001",]
-    [[Zones]]
-    Zone_Name = "x3001"
+[Zones.Kubernetes_Topology_Zone]
+Management_Master_Nodes = [ "ncn-m002",]
+Management_Worker_Nodes = [ "ncn-w002",]
+[Zones.CEPH_Zone]
+Management_Storage_Nodes = [ "ncn-s003",]
+[[Zones]]
+Zone_Name = "x3002"
 
-    [Zones.Kubernetes_Topology_Zone]
-    Management_Master_Nodes = [ "ncn-m002",]
-    Management_Worker_Nodes = [ "ncn-w002",]
-    [Zones.CEPH_Zone]
-    Management_Storage_Nodes = [ "ncn-s003",]
-    [[Zones]]
-    Zone_Name = "x3002"
+[Zones.Kubernetes_Topology_Zone]
+Management_Master_Nodes = [ "ncn-m003",]
+Management_Worker_Nodes = [ "ncn-w003",]
+[Zones.CEPH_Zone]
+Management_Storage_Nodes = [ "ncn-s002",]
+```
 
-    [Zones.Kubernetes_Topology_Zone]
-    Management_Master_Nodes = [ "ncn-m003",]
-    Management_Worker_Nodes = [ "ncn-w003",]
-    [Zones.CEPH_Zone]
-    Management_Storage_Nodes = [ "ncn-s002",]
-    ```
+### Describing a zone
 
-- Get detailed information about a specific zone:
+(`ncn-mw#`) Get detailed information about a specific zone.
 
-    ```bash
-    (`ncn-mw#`) cray rrs zones describe <zone-id>
-    ```
+```bash
+cray rrs zones describe <zone-id> --format toml
+```
 
-    Example Output:
+Example output:
 
-    ```text
-    Zone_Name = "x3000"
+```toml
+Zone_Name = "x3000"
 
-    [Management_Master]
-    Count = 1
-    Type = "Kubernetes_Topology_Zone"
-    [[Management_Master.Nodes]]
-    name = "ncn-m001"
-    status = "Ready"
+[Management_Master]
+Count = 1
+Type = "Kubernetes_Topology_Zone"
+[[Management_Master.Nodes]]
+name = "ncn-m001"
+status = "Ready"
 
-    [Management_Worker]
-    Count = 2
-    Type = "Kubernetes_Topology_Zone"
-    [[Management_Worker.Nodes]]
-    name = "ncn-w001"
-    status = "Ready"
+[Management_Worker]
+Count = 2
+Type = "Kubernetes_Topology_Zone"
+[[Management_Worker.Nodes]]
+name = "ncn-w001"
+status = "Ready"
 
-    [[Management_Worker.Nodes]]
-    name = "ncn-w004"
-    status = "Ready"
+[[Management_Worker.Nodes]]
+name = "ncn-w004"
+status = "Ready"
 
-    [Management_Storage]
-    Count = 1
-    Type = "CEPH_Zone"
-    [[Management_Storage.Nodes]]
-    name = "ncn-s001"
-    status = "Ready"
+[Management_Storage]
+Count = 1
+Type = "CEPH_Zone"
+[[Management_Storage.Nodes]]
+name = "ncn-s001"
+status = "Ready"
 
-    [Management_Storage.Nodes.osds]
-    up = [ "osd.1", "osd.4", "osd.7", "osd.10", "osd.13", "osd.16", "osd.20", "osd.23",]
-    ```
+[Management_Storage.Nodes.osds]
+up = [ "osd.1", "osd.4", "osd.7", "osd.10", "osd.13", "osd.16", "osd.20", "osd.23",]
+```
 
-    This command returns detailed information about the zone, including the Kubernetes and storage NCNs that
-    belong to it, along with their statuses.
+This command returns detailed information about the zone, including the Kubernetes and storage NCNs that
+belong to it, along with their statuses.

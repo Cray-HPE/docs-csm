@@ -18,9 +18,7 @@ The following administrative topics can be found in this guide:
 - [Package repository management](#package-repository-management)
 - [Security and authentication](#security-and-authentication)
 - [Resiliency](#resiliency)
-- [Rack Resiliency](#rack-resiliency)
-- [Rack Resiliency Service](rack_resiliency/Rack_Resiliency_Service.md#rack-resiliency-service-rrs)
-- [Rack Resiliency API](../api/rrs.md)
+    - [Rack Resiliency](#rack-resiliency)
 - [ConMan](#conman)
 - [Utility storage](#utility-storage)
 - [System management health](#system-management-health)
@@ -397,13 +395,26 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 
 ### Rack Resiliency
 
-HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services, even if management nodes fail. However,
-rack-level failures can cause service disruptions if management nodes are concentrated within a single rack. This can result in the loss of HA quorum.
+HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services,
+even if management nodes fail. However, rack-level failures can cause service disruptions if management
+nodes are concentrated within a single rack. This can result in the loss of HA quorum.
 
-CSM 1.7.0 introduces the Rack Resiliency feature, which provides management rack level resiliency to maintain HA of critical management services
-due to a single rack failure. This feature prevents system-wide outages, allowing for successful execution of user jobs or scheduling new ones.
+The Rack Resiliency feature provides rack-level resiliency to maintain HA of critical management
+services due to a single rack failure. This feature prevents system-wide outages, allowing for
+successful scheduling and execution of user jobs.
 
-Please refer to [Rack Resiliency](rack_resiliency/README.md#rack-resiliency-rr).
+- [Rack Resiliency](rack_resiliency/README.md)
+- [Enabling Rack Resiliency](rack_resiliency/Enabling_Rack_Resiliency.md)
+- [Manage Critical Services](rack_resiliency/Manage_Critical_Services.md)
+- [Critical Services](rack_resiliency/Critical_Services.md)
+- [Zones](rack_resiliency/Zones.md)
+- [Kyverno Policy](rack_resiliency/Kyverno_Policy.md)
+- [Resiliency Monitoring Service](rack_resiliency/Resiliency_Monitoring_Service.md)
+- [ConfigMaps](rack_resiliency/ConfigMaps.md)
+- [Setup of Rack Resiliency](rack_resiliency/Setup_of_Rack_Resiliency.md)
+- [`cray-rrs` Deployment](rack_resiliency/cray-rrs_Deployment.md)
+- [Troubleshooting](rack_resiliency/Troubleshooting.md)
+- [Rack Resiliency API](../api/rrs.md)
 
 ## ConMan
 

@@ -5,7 +5,7 @@ This section updates the software running on management NCNs.
 - [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
 - [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
     - [Selective iSCSI worker node personalization](#selective-iscsi-worker-node-personalization)
-    - [Enabling Rack Resiliency](#enabling-rack-resiliency-and-add-zone-prefixes)
+    - [Rack Resiliency](#rack-resiliency)
     - [`management-nodes-rollout` overview](#management-nodes-rollout-overview)
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
     - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
@@ -40,68 +40,93 @@ Otherwise, before proceeding, follow the procedure in the
 [CSM upgrade from 1.6 to 1.7](../../iscsi_sbps/Managing_Selective_Node_Personalization.md#csm-upgrade-from-16-to-17)
 section of [Managing Selective Node Personalization](../../iscsi_sbps/Managing_Selective_Node_Personalization.md).
 
-### Enabling Rack Resiliency and add zone prefixes
+### Rack Resiliency
 
-This section can be skipped if Rack Resiliency feature is not required.
+> If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
 
-#### Retrieve the `customizations.yaml` file
+Rack Resiliency is new in CSM 1.7. It is disabled by default and it
+**cannot change between enabled and disabled later**. Administrators are advised to
+take time to determine whether or not they wish to use this feature. See
+[Rack Resiliency](../../rack_resiliency/README.md) for details.
 
-```bash
-kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > /tmp/customizations.yaml
-```
+If an administrator does not wish to enable the Rack Resiliency feature, then the
+rest of this section can be skipped. Otherwise, follow these steps to enable
+(and optionally customize) Rack Resiliency.
 
-##### Update the `customizations.yaml` file
+1. (`ncn-m001#`) Retrieve the `customizations.yaml` file.
 
-```bash
-vi /tmp/customizations.yaml
-```
+    ```bash
+    TMPDIR=$(mktemp -d -p ~) &&
+    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' \
+        | base64 -d > "${TMPDIR}/customizations.yaml" \
+        && echo "${TMPDIR}/customizations.yaml"
+    ```
 
-**`NOTE`**
+    Example output:
 
-- If site specific identities are needed for zones, zones prefixes for Kubernetes and Ceph can be configured.
-- Adding zone prefixes is optional. No prefixes are added by default.
-- Valid prefix value:
-    - Prefix can be limited to 1-50 characters long.
-    - Prefix cannot be formatted as IP address.
-    - Prefix unless empty, must begin and end with an alphanumeric character `[a-z0-9]`.
-    - Prefix could contain dashes `-`, dots `.` and alphanumerics in between.
-- Prefixes once set cannot be modified later.
+    ```text
+    /root/tmp.iM4FrDrJEJ/customizations.yaml
+    ```
 
-Edit the `customizations.yaml`:
+1. (`ncn-m001#`) Enable the feature in `customizations.yaml`.
 
-- Update the `spec.services.rack-resiliency.enabled` flag from `false` to `true`.
-- Update the `spec.services.k8s_zone_prefix` and `spec.services.ceph_zone_prefix` sections with the required Kubernetes and ceph zone prefix.
+    ```bash
+    yq write -i "${TMPDIR}/customizations.yaml" \
+        'spec.kubernetes.services.rack-resiliency.enabled' "true"
+    ```
 
-Save and close the `customizations.yaml`.
+1. (`ncn-m001#`) Optionally, set custom zone name prefixes.
 
-Update the `site-init` secret in the Kubernetes cluster.
+    See [Zone names](../../rack_resiliency/Zones.md#zone-names) for details
+    on reasons for doing this and restrictions on names. This is optional; prefixes are not
+    required. However, **prefixes cannot be changed, set, or removed later**.
 
-```bash
-CUSTOMIZATIONS="$(base64 < "/tmp/customizations.yaml" | tr -d '\n')"
-```
+    1. Optionally, set a site-specific [Kubernetes zone](../../rack_resiliency/Zones.md#kubernetes-zones) prefix.
 
-```bash
-kubectl get secrets -n loftsman site-init -o json \
->     | jq ".data.\"customizations.yaml\" |= \"$CUSTOMIZATIONS\"" | kubectl apply -f -
-```
+        > In the following command, replace `k8s-prefix-string` with the desired Kubernetes zone prefix.
 
-Example output:
+        ```bash
+        yq write -i "${TMPDIR}/customizations.yaml" \
+            'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "k8s-prefix-string"
+        ```
 
-```text
-secret/site-init configured
-```
+    1. Optionally, set a site-specific [Ceph zone](../../rack_resiliency/Zones.md#ceph-zones) prefix.
 
-**NOTE**: If the Rack Resiliency `enabled` flag is not present in `customizations.yaml`, or if it is set to a value that the
-[Ansible `bool` filter](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/bool_filter.html)
-does not recognize as true, then it will be interpreted as false.
+        > In the following command, replace `ceph-prefix-string` with the desired Ceph zone prefix.
 
-**Important Notes:**
+        ```bash
+        yq write -i "${TMPDIR}/customizations.yaml" \
+            'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "ceph-prefix-string"
+        ```
 
-- If the prefixes is defined, then the zones will be created in the format of `k8s_zone_prefix + rack_id` and `ceph_zone_prefix + rack_id`.
-    - If the `spec.services.k8s_zone_prefix` has a value of `test-system` and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `test-system-x3000`.
-    - If the `spec.services.ceph_zone_prefix` has a value of `test-storage-system` and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `test-storage-system-x3000`.
-- If the `spec.services.k8s_zone_prefix` has no value defined and the rack-id is `x3000`, then the Kubernetes zones will be created with the labels of value `x3000`.
-- If the `spec.services.ceph_zone_prefix` has no value defined and the rack-id is `x3000`, then the Ceph zones will be created with the labels of value `x3000`.
+1. (`ncn-m001#`) Update the `site-init` secret in the Kubernetes cluster.
+
+    ```bash
+    kubectl delete secret -n loftsman site-init \
+        && kubectl create secret -n loftsman generic site-init \
+            --from-file="${TMPDIR}/customizations.yaml"
+    ```
+
+    Expected output:
+
+    ```text
+    secret/site-init created
+    ```
+
+1. (`ncn-m001#`) Confirm that the fields are set to the desired values.
+
+    ```bash
+    kubectl get secrets -n loftsman site-init \
+        -o jsonpath='{.data.customizations\.yaml}' \
+        | base64 -d | yq r - 'spec.kubernetes.services.rack-resiliency'
+    ```
+
+    Example output (in a case where only the Ceph zone prefix was set):
+
+    ```yaml
+    enabled: true
+    ceph_zone_prefix: my-ceph-prefix
+    ```
 
 ### `management-nodes-rollout` overview
 

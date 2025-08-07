@@ -456,43 +456,45 @@ the system size.
 
 ### Enable Rack Resiliency
 
-This section can be skipped if Rack Resiliency feature is not required.
+Rack Resiliency is new in CSM 1.7. It is disabled by default and it
+**cannot change between enabled and disabled later**. Administrators are advised to
+take time to determine whether or not they wish to use this feature. See
+[Rack Resiliency](../operations/rack_resiliency/README.md) for details.
 
-1. (`pit#`) Update the customizations file.
+If an administrator does not wish to enable the Rack Resiliency feature, then the
+rest of this section can be skipped. Otherwise, follow these steps to enable
+(and optionally customize) Rack Resiliency.
+
+1. (`pit#`) Enable the feature in `customizations.yaml`.
 
     ```bash
     yq write -i ${SITE_INIT}/customizations.yaml \
         'spec.kubernetes.services.rack-resiliency.enabled' "true"
     ```
 
-1. (`pit#`) Optionally, set a site-specific [Kubernetes zone](../operations/rack_resiliency/Zones.md#zoning-kubernetes-ncns) prefix.
+1. (`pit#`) Optionally, set custom zone name prefixes.
 
-   > In the following command, replace `k8s-prefix-string` with the desired Kubernetes zone prefix.
+    See [Zone names](../operations/rack_resiliency/Zones.md#zone-names) for details
+    on reasons for doing this and restrictions on names. This is optional; prefixes are not
+    required. However, **prefixes cannot be changed, set, or removed later**.
 
-   ```bash
-    yq write -i ${SITE_INIT}/customizations.yaml \
-        'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "k8s-prefix-string"
-    ```
+    1. Optionally, set a site-specific [Kubernetes zone](../operations/rack_resiliency/Zones.md#kubernetes-zones) prefix.
 
-1. (`pit#`) Optionally, set a site-specific [Ceph zone](../operations/rack_resiliency/Zones.md#zoning-ceph-ncns) prefix.
+        > In the following command, replace `k8s-prefix-string` with the desired Kubernetes zone prefix.
 
-   > In the following command, replace `ceph-prefix-string` with the desired Ceph zone prefix.
+        ```bash
+        yq write -i ${SITE_INIT}/customizations.yaml \
+            'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "k8s-prefix-string"
+        ```
 
-   ```bash
-    yq write -i ${SITE_INIT}/customizations.yaml \
-        'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "ceph-prefix-string"
-    ```
+    1. Optionally, set a site-specific [Ceph zone](../operations/rack_resiliency/Zones.md#ceph-zones) prefix.
 
-**`NOTE`**
+        > In the following command, replace `ceph-prefix-string` with the desired Ceph zone prefix.
 
-- If site specific identities are needed for zones, zones prefixes for Kubernetes and Ceph can be configured.
-- Adding zone prefixes is optional. No prefixes are added by default.
-- Valid prefix value:
-    - Prefix can be limited to 1-50 characters long.
-    - Prefix cannot be formatted as IP address.
-    - Prefix unless empty, must begin and end with an alphanumeric character `[a-z0-9]`.
-    - Prefix could contain dashes `-`, dots `.` and alphanumerics in between.
-- Prefixes once set cannot be modified later.
+        ```bash
+        yq write -i ${SITE_INIT}/customizations.yaml \
+            'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "ceph-prefix-string"
+        ```
 
 ## 4. Encrypt secrets
 
