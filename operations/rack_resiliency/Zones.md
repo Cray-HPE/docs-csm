@@ -126,14 +126,14 @@ To implement Ceph zones for storage nodes, the new bucket `rack` is introduced o
 As shown in the above diagram, storage nodes get added to a `rack` bucket based on their physical
 location. The name of the `rack` buckets is its Ceph [zone name](#zone-name).
 
-See [placement discovery](Setup.md#stage-2---placement-discovery) for details on how physical placement of
-storage nodes is discovered.
+See [Placement discovery](Setup_of_Rack_Resiliency.md#placement-discovery) for details on how physical
+placement of storage nodes is discovered.
 
 More than one storage node can be added to the same bucket.
 
 Rack Resiliency preconfigures `rack` buckets and adds the storage nodes to them.
-See [Ceph zoning](Setup.md#stage-4---ceph-zoning) for details on how the nodes discovered during placement
-discovery are grouped in `rack` buckets.
+During [Ceph zoning](Setup_of_Rack_Resiliency.md#ceph-zoning), the nodes discovered
+during placement discovery are grouped in `rack` buckets.
 
 ### Ceph service zoning
 
@@ -152,7 +152,7 @@ nodes and their distribution across `rack` buckets.
 The above process ensures that the Ceph cluster remains operational in the event of a
 [physical rack](README.md#physical-racks) failure.
 
-For details on how Ceph services are zoned, see [Ceph service zoning](Setup.md#stage-4---ceph-zoning).
+The Ceph services are zoned during [Ceph zoning](Setup_of_Rack_Resiliency.md#ceph-zoning).
 
 ### Viewing Ceph zones
 

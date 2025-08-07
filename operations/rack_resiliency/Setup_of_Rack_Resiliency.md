@@ -1,38 +1,52 @@
-# Setup
+# Setup of Rack Resiliency
 
-This page describes Stage 2 to Stage 6 of [Architecture Overview](README.md#architecture-overview).
-
-Rack Resiliency is setup using an Ansible playbook. This playbook is executed during
+The configuration of Rack Resiliency happens as part of 
 [Management Node Personalization](../configuration_management/Management_Node_Personalization.md).
+Specifically, the setup is done by the `rack_resiliency_for_mgmt_nodes.yml` Ansible playbook in the
+`csm-config-management` [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs)
+repository.
 
-For setting up rack resiliency the following stages are executed by the Ansible playbook:
+If Rack Resiliency is not enabled, then this playbook will do nothing.
+See [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md) for details on
+how it is enabled.
 
-> Before setting up rack resiliency, enable it using
-> [Enable Rack Resiliency in `customizations.yaml`](Enabling_Rack_Resiliency.md#enabling-rack-resiliency),
-> without which the following setup will be skipped after
-> [Stage 1 - Verify enablement](#stage-1---verify-enablement).
+## Setup flows
 
-- [Preparation](#preparation)
-    - [Stage 1 - Verify enablement](#stage-1---verify-enablement)
-    - [Stage 2 - Placement discovery](#stage-2---placement-discovery)
-    - [Stage 3 - Placement validation](#stage-3---placement-validation)
-- [Kubernetes-setup](#kubernetes-setup)
-    - [Stage 4 - Kubernetes zoning](#stage-4---kubernetes-zoning)
-    - [Stage 5 - Apply Kyverno policy](#stage-5---apply-kyverno-policy)
-- [Ceph-setup](#ceph-setup)
-    - [Stage 4 - Ceph zoning](#stage-4---ceph-zoning)
-    - [Stage 5 - Ceph HAproxy configuration](#stage-5---ceph-haproxy-configuration)
+There are two setup flows -- one for setting up Kubernetes, and one for setting up Ceph.
+There are some shared preparation steps, but the actual configuration steps differ.
+
+### Common preparation flow
+
+| *Stage*                                       | *Ansible role*                           |
+| --------------------------------------------- | ---------------------------------------- |
+| [Verify enablement](#verify-enablement)       | `csm.rr.check_enablement`                |
+| [Placement discovery](#placement-discovery)   | `csm.rr.mgmt_nodes_placement_discovery`  |
+| [Placement validation](#placement-validation) | `csm.rr.mgmt_nodes_placement_validation` |
+
+### Kubernetes setup flow
+
+| *Stage*                                       | *Ansible role*               |
+| --------------------------------------------- | ---------------------------- |
+| [Kubernetes zoning](#kubernetes-zoning)       | `csm.rr.k8s_topology_zoning` |
+| [Apply Kyverno policy](#apply-kyverno-policy) | `csm.rr.kyverno_policy`      |
+
+### Ceph setup flow
+
+| *Stage*                                                   | *Ansible role*        |
+| --------------------------------------------------------- | --------------------- |
+| [Ceph zoning](#ceph-zoning)                               | `csm.rr.ceph_zoning`  |
+| [Ceph HAproxy configuration](#ceph-haproxy-configuration) | `csm.rr.ceph_haproxy` |
 
 ## Preparation
 
 The below stages are preparatory steps to setup Kubernetes and Ceph for Rack Resiliency.
 
-### Stage 1 - Verify enablement
+### Verify enablement
 
 This Ansible role verifies that Rack Resiliency is enabled in `customizations.yaml`.
 If it is not enabled, then the RR setup is skipped.
 
-### Stage 2 - Placement discovery
+### Placement discovery
 
 This Ansible role identifies the physical racks and locates the management nodes in it.
 The [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) is queried
@@ -62,10 +76,10 @@ Example of JSON file containing rack to management NCN hostname mapping (`rr_hw_
 }
 ```
 
-### Stage 3 - Placement validation
+### Placement validation
 
 This Ansible role uses the discovery results (`rr_hw_discovery.json`) from
-[Stage 2 - Placement discovery](#stage-2---placement-discovery) and validates whether the current
+[Placement discovery](#placement-discovery) and validates whether the current
 placement meets the required criteria for enabling rack resiliency.
 
 ![Management nodes placement validation](../../img/rack-resiliency-2.png)
@@ -84,13 +98,13 @@ not included in this process.
 
 The below stages are used to setup Kubernetes zones and apply the [Kyverno Policy](Kyverno_Policy.md).
 
-### Stage 4 - Kubernetes zoning
+### Kubernetes zoning
 
 This Ansible role uses the discovery results (`rr_hw_discovery.json`) from
-[Stage 2 - Placement discovery](#stage-2---placement-discovery) and applies Kubernetes zoning for
-Master and Worker nodes. For more information on zoning, see [Zones](Zones.md).
+[Placement discovery](#placement-discovery) and applies Kubernetes zoning for
+master and worker nodes. For more information, see [Kubernetes zones](Zones.md#kubernetes-zones).
 
-### Stage 5 - Apply Kyverno policy
+### Apply Kyverno policy
 
 This Ansible role applies the Kyverno cluster policy `insert-labels-topology-constraints`.
 For more information, see [Kyverno Policy](Kyverno_Policy.md).
@@ -99,14 +113,14 @@ For more information, see [Kyverno Policy](Kyverno_Policy.md).
 
 The below stages are used to setup the Ceph zones and update Ceph HAproxy configuration.
 
-### Stage 4 - Ceph zoning
+### Ceph zoning
 
 This Ansible role uses the discovery results (`rr_hw_discovery.json`) from
-[Stage 2 - Placement discovery](#stage-2---placement-discovery) and applies Ceph zoning for
+[Placement discovery](#placement-discovery) and applies Ceph zoning for
 storage nodes. Along with creating zones for Ceph storage nodes, zones for the Ceph services are
-also created. To know more about zoning refer to [Zones](Zones.md).
+also created. For more information, see [Ceph zones](Zones.md#ceph-zones).
 
-### Stage 5 - Ceph HAproxy configuration
+### Ceph HAproxy configuration
 
 This Ansible role updates Ceph HAproxy configuration with latest information after performing
 Ceph zoning. It also updates `ceph.conf` with latest configuration, on all storage nodes.
