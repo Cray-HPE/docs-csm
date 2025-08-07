@@ -482,14 +482,15 @@ This section can be skipped if Rack Resiliency feature is not required.
     yq write -i ${SITE_INIT}/customizations.yaml \
         'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "ceph-prefix-string"
     ```
+
 **`NOTE`**
 
 - If site specific identities are needed for zones, zones prefixes for Kubernetes and Ceph can be configured.
 - Adding zone prefixes is optional. No prefixes are added by default.
 - Valid prefix value:
     - Prefix can be limited to 1-50 characters long.
-    - Prefix unless empty, must begin and end with an alphanumeric character ([a-z0-9A-Z]).
-    - Prefix could contain dashes (-), underscores (_), dots (.), and alphanumerics in between.
+    - Prefix unless empty, must begin and end with an alphanumeric character `[a-z0-9A-Z`).
+    - Prefix could contain dashes `-`, underscores `_`, dots (.), and alphanumerics in between.
 - Prefixes once set cannot be modified later.
 
 ## 4. Encrypt secrets
