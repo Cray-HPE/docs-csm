@@ -82,11 +82,11 @@ customization job. Use the following procedure to detect the issue.
 
 1. (`ncn-mw#`) connect to the remote node where the job is running:
 
+   > If the remote node is not reachable, then skip ahead to the [Resolution](#resolution) section.
+
    ```bash
    ssh <remote_build_node xname>
    ```
-
-if the remote node is not reachable then skip the next step and go to the [resolution](#resolution) section.
 
 1. (`ncn-mw#`) Check if `ims` job container exists on the remote node:
 
