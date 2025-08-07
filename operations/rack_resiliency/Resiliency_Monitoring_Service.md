@@ -66,7 +66,7 @@ there will be a longer delay before the RMS notices them; it may take up to 10 m
 changes to be reflected in the Rack Resiliency API and CLI responses.
 
 The same delay is a factor when an administrator makes changes to the critical services
-list (see [Manage Critical Services](#manage-critical-services)). It may take up to 10 minutes
+list (see [Manage Critical Services](Manage_Critical_Services.md)). It may take up to 10 minutes
 before the RMS reads in the updated critical services data.
 
 ## ConfigMaps
@@ -85,14 +85,14 @@ RMS emits log messages at different severities during the monitoring cycle.
 
 For example:
 
-| *Log level* | *Source file* | *Example message content*                                                                    |
-| ----------- | ------------- | -------------------------------------------------------------------------------------------- |
-| `INFO`      | `lib_rms`     | Ceph is healthy                                                                              |
-| `WARNING`   | `rms`         | List of component xnames changed to `Standby` state                                          |
-| `ERROR`     | `rms`         | Failed to retrieve data from the [Hardware State Manager (HSM)](#hardware-state-manager-hsm) |
-| `WARNING`   | `lib_rms`     | List of imbalanced services                                                                  |
-| `WARNING`   | `lib_rms`     | List of unconfigured services                                                                |
-| `WARNING`   | `lib_rms`     | Ceph host (e.g. `ncn-s003`) is in `Offline` state                                            |
+| *Log level* | *Source file* | *Example message content*                                                                                     |
+| ----------- | ------------- | ------------------------------------------------------------------------------------------------------------- |
+| `INFO`      | `lib_rms`     | Ceph is healthy                                                                                               |
+| `WARNING`   | `rms`         | List of component xnames changed to `Standby` state                                                           |
+| `ERROR`     | `rms`         | Failed to retrieve data from the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) |
+| `WARNING`   | `lib_rms`     | List of imbalanced services                                                                                   |
+| `WARNING`   | `lib_rms`     | List of unconfigured services                                                                                 |
+| `WARNING`   | `lib_rms`     | Ceph host (e.g. `ncn-s003`) is in `Offline` state                                                             |
 
 For details on troubleshooting RMS, including details on how to view and interpret the RMS logs,
 see the [Resiliency Monitoring Service](#resiliency-monitoring-service-rms) section of the
