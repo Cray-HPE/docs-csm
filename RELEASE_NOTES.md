@@ -228,6 +228,13 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * Spire node attestation can now be setup to use TPM chips on supported platforms, see [Enable TPM node attestation with Spire](operations/spire/Enable_TPM_node_attestation.md) for more information.
 * The old version of the Spire server was removed to fully transition to the newer version of Spire.
 * Updated all HMS services to point to latest upstream image and Go module dependencies.  This resolved all currently known point-in-time CVE issues in HMS services.
+* Pod Security Policies (PSP) have been removed and replaced by Pod Security Standards (PSS) Baseline practices in enforced mode using Kyverno policies.
+  For details and exceptions, refer to the [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md)
+* Container image signature verification is enforced by Kyverno policies to enhance supply chain security, while the policy remains flexible to allow customers to use their own signed containers.
+  (Ex: adding keys, exclude certain resources etc). For details and exceptions, refer to the [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md)
+* Platform components are upgraded to address critical and high vulnerabilities.
+* Kyverno is upgraded from 1.10.7 version to 1.13.4 version to address CVEs and have additional features.
+  For details, refer to ther [Changelog](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md)
 
 ### Customer-requested enhancements
 
@@ -244,6 +251,8 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 
 ### Documentation enhancements
 
+* Updated `Kyverno` documentation.
+  
 ## Noteworthy changes
 
 * The default Kubernetes certificate validity period increased from 1 year to 3 years.
@@ -256,6 +265,7 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * The `Weave` Container Networking Interface (CNI) has been deprecated in favor of Cilium.
     * A fresh install of CSM 1.7 will use Cilium by default.
     * Upgrading from CSM 1.6 to 1.7 will migrate the CNI from Weave to Cilium. See [Upgrade CSM and additional products with IUF](operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) for more information.
+
 
 ## Test
 
