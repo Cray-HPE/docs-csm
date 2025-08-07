@@ -3,23 +3,27 @@
 ## Issue description
 
 An IMS image customization job on a remote node can get stuck in the `waiting_on_user` state indefinitely.
-This can occur if during `image customization` remote node gets rebooted, crashes or IMS JOB container is killed/stopped.
+This can occur during `image customization` if any of the following things happen:
+
+- The remote node reboots or crashes
+- The IMS job container is killed or stopped.
 
 ## Error identification
 
-The issue can be identified by noticing the failure to ssh into `sshd` container of IMS image customization job. here are
-the steps to identify the issue:
+A symptom of this problem is a failure when attempting to SSH into the `sshd` container of the IMS image
+customization job. Use the following procedure to detect the issue.
 
-1. (`ncn-mw#`) Get the details of the image customization job:
+1. (`ncn-mw#`) Get the details of the image customization job,
+
+   > In the following command, substitute the actual IMS job ID being checked.
 
    ```bash
-   IMS_JOB_ID=<Job ID>
-   cray ims jobs describe $IMS_JOB_ID --format json
+   cray ims jobs describe <IMS_JOB_ID> --format json
    ```
 
-  Job details will show the job status as "waiting_on_user". here is sample output:
+  Example output:
   
-  ```text
+  ```json
   {
   "arch": "x86_64",
   "artifact_id": "458478da-79bc-49cd-ba33-8c189f7b45e5",
@@ -63,6 +67,10 @@ the steps to identify the issue:
   "status": "waiting_on_user"
   }
   ```
+
+1. Confirm that the job details show the job status as `waiting_on_user`.
+
+   If that is not the case, then the procedure documented here is not applicable.
 
 1. (`ncn-mw#`) Attempt to ssh into the `sshd` container of the job and notice the connection failure:
 
