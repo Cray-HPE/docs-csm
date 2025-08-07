@@ -1,4 +1,4 @@
-# IMS Image Customization Job Status Stuck at "waiting_on_user"
+# IMS Image Customization Job Status Stuck at `waiting_on_user`
 
 ## Issue description
 
@@ -61,7 +61,7 @@ customization job. Use the following procedure to detect the issue.
       },
       "jail": false,
       "name": "sat-0fda73ef-4ab0-46d2-9e36-9aad6406bb50",
-      "status": "pending"[README.md](../README.md)
+      "status": "pending"
     }
   ],
   "status": "waiting_on_user"
@@ -72,7 +72,7 @@ customization job. Use the following procedure to detect the issue.
 
    If that is not the case, then the procedure documented here is not applicable.
 
-1. (`ncn-mw#`) Attempt to ssh into the `sshd` container of the job and notice the connection failure:
+1. (`ncn-mw#`) Attempt to `ssh` into the `sshd` container of the job and notice the connection failure:
 
     ```bash
    IMS_SSH_HOST=<ssh_containers[0].connection_info.customer_access.host from above output>
