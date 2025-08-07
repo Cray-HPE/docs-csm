@@ -80,7 +80,7 @@ steps one, three, and four.
    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-1. (`ncn-m#`) Reinstall the `cray-keycloak` Helm chart using the [Redeploying a Chart](../../.././operations/CSM_product_management/Redeploying_a_Chart.md) procedure.
+1. (`ncn-m#`) Reinstall the `cray-keycloak` Helm chart using the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.md) procedure.
 
    - Name of chart to be redeployed: `cray-keycloak`
    - Base name of manifest: `platform`
