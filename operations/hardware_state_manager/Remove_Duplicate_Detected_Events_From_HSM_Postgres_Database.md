@@ -12,17 +12,18 @@ to issues associated with testing the hardware event history.
 
 Though this issue is resolved in CSM 1.7.0, this document is retained as
 a reference for removing duplicate events prior to the CSM 1.7.0 upgrade.
-The steps in this document must be completed prior to starting the CSM
-1.7.0 upgrade.  If your system is running CSM 1.7.0 or later, you should
-no longer perform the actions in this document.
+The steps in this document must be completed prior to starting an upgrade
+from CSM 1.6 to CSM 1.7.  The actions in this document are not required on
+systems running CSM 1.7.0 or later.
 
 This same material is also present in the CSM 1.5.0 and CSM 1.6.0 docs.
 
-Unfortunately, because to the nature of this bug and the capabilities of the pruning
-script, the history of FRUIDs associated to CPUs and GPUs prior to the CSM
-1.7.0 release may not be fully accurate. After the system is upgraded to CSM
-1.7, the FRUIDs associations with CPUs and GPUs will be fully accurate from that point on.
-No other component types were affected by this bug.
+Unfortunately, because of the nature of this bug and the capabilities of the
+pruning script, the history of FRUIDs associated with CPUs and GPUs within a
+node may not be fully accurate in systems running CSM releases prior to CSM
+1.7. After the system is upgraded to CSM 1.7, the FRUID associations with
+CPUs and GPUs within a node will be fully accurate from that point on.  No
+other component types were affected by this bug.
 
 ## Prerequisites
 
