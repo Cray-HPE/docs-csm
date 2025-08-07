@@ -21,6 +21,13 @@ starting either a CSM 1.6.0 or a CSM 1.7.0 upgrade.
 
 This same material is also present in the CSM 1.5.0 docs.
 
+Unfortunately, due to the nature of this bug and capabilities of the pruning
+script, the history of FRUIDs associated to CPUs and GPUs prior to the CSM
+1.7.0 release may not be fully accurate.  Once your system is upgraded to CSM
+1.7.0, the accuracy of FRUIDs associated with CPUs and GPUs will be fully
+restored from that point in time and into the future.  No other component
+types were affected by this bug.
+
 ## Prerequisites
 
 - Healthy HSM Postgres Cluster.
