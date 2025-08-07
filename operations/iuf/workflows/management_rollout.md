@@ -62,8 +62,9 @@ vi /tmp/customizations.yaml
 - Adding zone prefixes is optional. No prefixes are added by default.
 - Valid prefix value:
     - Prefix can be limited to 1-50 characters long.
-    - Prefix unless empty, must begin and end with an alphanumeric character `[a-z0-9A-Z]`.
-    - Prefix could contain dashes `-`, underscores `_`, dots `.`, and alphanumerics in between.
+    - Prefix cannot be formatted as IP address.
+    - Prefix unless empty, must begin and end with an alphanumeric character `[a-z0-9]`.
+    - Prefix could contain dashes `-`, dots `.` and alphanumerics in between.
 - Prefixes once set cannot be modified later.
 
 Edit the `customizations.yaml`:
