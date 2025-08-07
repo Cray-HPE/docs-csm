@@ -266,7 +266,6 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
     * A fresh install of CSM 1.7 will use Cilium by default.
     * Upgrading from CSM 1.6 to 1.7 will migrate the CNI from Weave to Cilium. See [Upgrade CSM and additional products with IUF](operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) for more information.
 
-
 ## Test
 
 * Modified `adjust k8s_nodes_ready_check.sh` to not fail when a node is in `Ready,SchedulingDisabled` state
@@ -276,15 +275,15 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * Added retry logic to `goss-postgresql-syncfailed.yaml` to prevent intermittent false positives
 * Added retry logic to `postgres_clusters_running.sh to prevent` intermittent false positives
 * Added tests to the Software Management Services (SMS) health checks:
-    * Added [BOS](glossary.md#boot-orchestration-service-bos) create/update/delete (CRUD) tests for session templates and sessions.
-    * Added [CFS](glossary.md#configuration-framework-service-cfs) CRUD tests for configurations and sources.
-    * Added [IMS](glossary.md#image-management-service-ims) CRUD tests for images, recipes, and public keys.
-    * These tests are part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
-    * For more information on the SMS health checks, see
+  * Added [BOS](glossary.md#boot-orchestration-service-bos) create/update/delete (CRUD) tests for session templates and sessions.
+  * Added [CFS](glossary.md#configuration-framework-service-cfs) CRUD tests for configurations and sources.
+  * Added [IMS](glossary.md#image-management-service-ims) CRUD tests for images, recipes, and public keys.
+  * These tests are part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
+  * For more information on the SMS health checks, see
       [Software Management Services health checks](troubleshooting/known_issues/sms_health_check.md#software-management-services-health-checks).
 * Added [CFS](glossary.md#configuration-framework-service-cfs) node personalization to the barebones image boot test.
-    * This tests is part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
-    * For more information, see [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md).
+  * This tests is part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
+  * For more information, see [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md).
 * Various updates to HMS services to prevent false positive failures in CT tests
 
 ## Bug fixes
@@ -306,17 +305,17 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
   `OOMKilled` and failed liveness and/or readiness probes.  These
   changes also improved the responsiveness and scalability of these
   services.
-    * In the CSM 1.7.0 release, additional resource leaks in these same services were found and resolved.
-    * Additionally, similar resource leaks were found and resolved in the following HMS services:
-      [BSS](glossary.md#boot-script-service-bss),
-      [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc),
-      River Discovery,
-      [HBTD](glossary.md#heartbeat-tracker-daemon-hbtd),
-      [MEDS](glossary.md#mountain-endpoint-discovery-service-meds),
-      [RTS](glossary.md#redfish-translation-service-rts),
-      [HMNFD](glossary.md#hardware-management-notification-fanout-daemon-hmnfd),
-      [SCSD](glossary.md#system-configuration-service-scsd),
-      [SLS](glossary.md#system-layout-service-sls)
+  * In the CSM 1.7.0 release, additional resource leaks in these same services were found and resolved.
+  * Additionally, similar resource leaks were found and resolved in the following HMS services:
+    [BSS](glossary.md#boot-script-service-bss),
+    [CAPMC](glossary.md#cray-advanced-platform-monitoring-and-control-capmc),
+    River Discovery,
+    [HBTD](glossary.md#heartbeat-tracker-daemon-hbtd),
+    [MEDS](glossary.md#mountain-endpoint-discovery-service-meds),
+    [RTS](glossary.md#redfish-translation-service-rts),
+    [HMNFD](glossary.md#hardware-management-notification-fanout-daemon-hmnfd),
+    [SCSD](glossary.md#system-configuration-service-scsd),
+    [SLS](glossary.md#system-layout-service-sls)
 * A bug was fixed in the `hmcollector-poll` service so that event subscriptions are no longer lost after updating Paradise BMC firmware.  The service no longer needs to be restarted after performing firmware updates.
 * Fixed an issue where a soft deleted IMS recipe was always assigned the architecture `x86_64`, regardless of the architecture of the recipe that was deleted.
 * Fixed an issue where a soft deleted IMS recipe was always assigned `require_dkms=true`, regardless of the value of the recipe that was deleted.
@@ -327,7 +326,7 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * Fixed an issue where the post-upgrade job of `cms-ipxe` would fail if a previously failed `cms-ipxe` upgrade job entry existed.
 * Fixed an issue where, when building an IMS image from a recipe, the job status would not update to `error` when the `zypper` repositories were not available.
 * Fixed an issue where the hardware inventory history table in the HSM/SMD database grew too large due to duplicate "Detected" events.
-    * See [Remove Duplicate Detected Events From the HSM Postgres Database](operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md) for more information.
+  * See [Remove Duplicate Detected Events From the HSM Postgres Database](operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md) for more information.
 * Fixed an issue in [PCS](glossary.md#power-control-service-pcs) where the supported power transitions on Gigabyte BMCs can go missing.
 
 ## Deprecations
@@ -338,10 +337,10 @@ For more details and a list of all deprecated CSM features, see [Deprecations](i
 
 * Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](glossary.md#content-projection-service-cps) and the
   [Data Virtualization Service (DVS)](glossary.md#data-virtualization-service-dvs).
-    * This projection is now done using the [Scalable Boot Projection Service](glossary.md#scalable-boot-projection-service-sbps).
+  * This projection is now done using the [Scalable Boot Projection Service](glossary.md#scalable-boot-projection-service-sbps).
 * Top-level Ansible playbooks `ncn-master.yaml`, `ncn-storage.yaml`, and `ncn-worker.yaml` in `csm-config-management` repository in the
   [Version Control Service (VCS)](glossary.md#version-control-service-vcs).
-    * These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
+  * These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
 * Experimental `disable_components_on_completion` [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
   [option](operations/boot_orchestration/Options.md).
 
