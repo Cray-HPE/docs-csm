@@ -365,6 +365,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
     - [Keycloak User Management with `kcadm.sh`](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
     - [Keycloak User Localization](security_and_authentication/Keycloak_User_Localization.md)
     - [Create a Backup of the Keycloak Postgres Database](security_and_authentication/Create_a_Backup_of_the_Keycloak_Postgres_Database.md)
+    - [Keycloak IPv6 Support](security_and_authentication/keycloak_ipv6_support.md)
 - [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
     - [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
     - [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
