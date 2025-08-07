@@ -5,7 +5,7 @@
 An IMS image customization job on a remote node can get stuck in the `waiting_on_user` state indefinitely.
 This can occur during `image customization` if any of the following things happen:
 
-- The remote node reboots or crashes
+- The remote node reboots or crashes.
 - The IMS job container on the remote build node is killed or stopped.
 
 ## Error identification
@@ -78,7 +78,7 @@ customization job. Use the following procedure to detect the issue.
 1. (`ncn-mw#`) Attempt to SSH into the `sshd` container of the job.
 
    > Perform the following substitutions in the command:
-   > 
+   >
    > - Replace `<IMS_SSH_HOST>` with the value of the
    >    `ssh_containers[0].connection_info.customer_access.host` field in the job details.
    > - Replace `<IMS_SSH_PORT>` with the value of the
@@ -88,6 +88,8 @@ customization job. Use the following procedure to detect the issue.
    ssh -p <IMS_SSH_PORT> root@<IMS_SSH_HOST>
    ```
 
+  Note: Ensure the user has the correct `ssh` private key for the IMS job.
+  
 1. Confirm that the SSH attempt resulted in a connection failure.
    If that is not the case, then the procedure documented here is not applicable.
 
@@ -108,7 +110,7 @@ customization job. Use the following procedure to detect the issue.
    podman ps | grep <IMS_JOB_ID>
    ```
 
-1, If the IMS job container either does not exist or is in an `exited` state, then proceed to [Resolution](#resolution),
+1. If the IMS job container either does not exist or is in an `exited` state, then proceed to [Resolution](#resolution),
 
    If that is not the case, then the procedure documented here is not applicable.
 
