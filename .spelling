@@ -970,6 +970,9 @@ Xcvr
 vlan
 VSX-pair
 vsx-pair
+waiting_on_user
+ssh 
+
 
 # Per-file spelling exceptions. Please keep this section sorted in order by filepath, to help make it easier to
 # see if a file already is listed.
