@@ -60,8 +60,8 @@ All preparation steps can be performed prior to an established window.  Preparat
 
 6. (`ncn-m#`) Retrieve the SLS file from the system in JSON format. If IPv6 features are to be enabled on the system, then ensure SLS has been updated with IPv6 data prior to retrieving SLS.
 
-    - For an upgrade this can be retrieved via `cray sls dumpstate list --format json > sls.json`
-    - For a new installation this is output from `csi config init` in the file `sls_input_file.json`
+    - For an upgrade, this can be retrieved via `cray sls dumpstate list --format json > sls.json`
+    - For a new installation, this is output from `csi config init` in the file `sls_input_file.json`
 
 7. (`ncn-m#`) For a system upgrade, analyze the current network state.
 
