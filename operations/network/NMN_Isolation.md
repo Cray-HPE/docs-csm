@@ -1,4 +1,4 @@
-# NMN Isolation
+# Node Management Network (NMN) Isolation
 
 ## NMN Isolation Overview
 
