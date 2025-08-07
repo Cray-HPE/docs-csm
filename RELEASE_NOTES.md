@@ -234,7 +234,7 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
   the policy remains flexible to allow sites to use their own signed containers.
   For details and exceptions, see [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
 * Platform components are upgraded to address critical and high vulnerabilities.
-* Kyverno is upgraded from 1.10.7 version to 1.13.4 version because version 1.13.4 addresses CVEs and has additional features.
+* Kyverno version is upgraded from 1.10.7 to 1.13.4; version 1.13.4 addresses CVEs and has additional features.
   For details, see the [Kyverno Changelog](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md)
 
 ### Customer-requested enhancements
