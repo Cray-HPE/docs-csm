@@ -60,7 +60,11 @@ vi /tmp/customizations.yaml
 
 - If site specific identities are needed for zones, zones prefixes for Kubernetes and Ceph can be configured.
 - Adding zone prefixes is optional. No prefixes are added by default.
-- The prefix can be limited to 1-1000 characters long (but no restrictions on the type of characters)
+- Valid prefix value:
+    - Prefix can be limited to 1-50 characters long.
+    - Prefix unless empty, must begin and end with an alphanumeric character ([a-z0-9A-Z]).
+    - Prefix could contain dashes (-), underscores (_), dots (.), and alphanumerics in between.
+- Prefixes once set cannot be modified later.
 
 Edit the `customizations.yaml`:
 

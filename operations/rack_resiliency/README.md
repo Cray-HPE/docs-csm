@@ -44,8 +44,7 @@ This feature prevents system-wide outages, allowing for successful execution of 
   In Ceph storage, however, a rack represents a logical, hierarchical [bucket](https://docs.ceph.com/en/latest/rados/operations/crush-map/) in the CRUSH map. Ceph racks group together hosts or nodes that are physically located in the same physical rack.
 - Placement: Physical arrangement of nodes across racks.
 - Failure Domain: Failure domains are minimum infrastructure that provides high availability for CSM services.
-- Management Plane Failure Domain(MPFD): This constitutes one or more racks that have management nodes that make up the CSM management plane
-  (i.e. failure domain of racks that are running the management plane).
+- Management Plane Failure Domain(MPFD): This constitutes one or more racks that have management nodes that make up the CSM management plane. In CSM 1.7.0, Rack Resiliency defines MPFD with a single rack.
 - [Zone](Zones.md): A zone in Rack Resiliency solution is a representation of a logical failure domain.
 - Kubernetes zone: A zone in Kubernetes is an isolated failure domain.
 - Ceph is the utility storage platform that is used to enable pods to store persistent data. It is deployed to provide block, object, and file storage to the

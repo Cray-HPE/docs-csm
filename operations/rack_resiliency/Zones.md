@@ -1,6 +1,6 @@
 # Zones
 
-Rack Resiliency defines a logical grouping of Kubernetes master, Kubernetes worker and Ceph Storage nodes (NCNs) in a **single rack** as a management plane failure domain (MPFD).
+For CSM 1.7.0, Rack Resiliency defines a logical grouping of Kubernetes master, Kubernetes worker and Ceph Storage nodes (NCNs) in a **single rack** as a management plane failure domain (MPFD).
 The racks which support only non-NCNs, do not fall in the category of Rack Resiliency MPFD. During the setup of Rack Resiliency, it is validated that any MPFD should include the following minimal hardware:
 
 - 1 Kubernetes Master node
