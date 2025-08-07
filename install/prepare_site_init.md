@@ -445,10 +445,10 @@ the system size.
     ```bash
     for gw in "" -customer-admin -customer-user -hmn; do
       yq write -i ${SITE_INIT}/customizations.yaml \
-        'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMax' \
+        "spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMax" \
         "$max_amount"
       yq write -i ${SITE_INIT}/customizations.yaml \
-        'spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMin' \
+        "spec.kubernetes.services.cray-istio-ingress.deployments.istio-ingressgateway${gw}.autoscaleMin" \
         "$min_amount"
     done
     ```
