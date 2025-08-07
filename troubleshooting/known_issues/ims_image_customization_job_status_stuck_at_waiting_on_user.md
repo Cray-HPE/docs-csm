@@ -68,18 +68,21 @@ customization job. Use the following procedure to detect the issue.
   }
   ```
 
-1. Confirm that the job details show the job status as `waiting_on_user` and running on a remote node..
+1. Confirm that the job details fit the symptoms of this issue.
 
-   If that is not the case, then the procedure documented here is not applicable.
+   - The job `status` field is `waiting_on_user`
+   - The `remote_build_node` field is set, indicating the job is running on a remote build node.
+
+   If either of these is not the case, then the procedure documented here is not applicable.
 
 1. (`ncn-mw#`) Attempt to SSH into the `sshd` container of the job.
 
-   Perform the following substitutions in the command:
-
-   - Replace `<IMS_SSH_HOST>` with the value of the
-     `ssh_containers[0].connection_info.customer_access.host` field in the job details.
-   - Replace `<IMS_SSH_POST>` with the value of the
-     `ssh_containers[0].connection_info.customer_access.port` field in the job details.
+   > Perform the following substitutions in the command:
+   > 
+   > - Replace `<IMS_SSH_HOST>` with the value of the
+   >    `ssh_containers[0].connection_info.customer_access.host` field in the job details.
+   > - Replace `<IMS_SSH_PORT>` with the value of the
+   >   `ssh_containers[0].connection_info.customer_access.port` field in the job details.
 
    ```bash
    ssh -p <IMS_SSH_PORT> root@<IMS_SSH_HOST>
