@@ -40,37 +40,37 @@ During every monitoring interval, the following things are done:
 (`ncn-mw#`) View the data of the Static ConfigMap used by the Rack Resiliency service.
 
 ```bash
-kubectl get cm -n rack-resiliency rrs-mon-static -o jsonpath='{.data}' | jq
+kubectl get cm -n rack-resiliency rrs-mon-static -o jsonpath='{.data}' | jq | sed 's/\\n/\n/g'| sed 's/\\//g'
 ```
 
 Truncated example output (the actual output of ConfigMap will be larger):
 
-```json
+```text
 {
   "ceph_monitoring_polling_interval": "60",
   "ceph_monitoring_total_time": "600",
   "ceph_pre_monitoring_delay": "60",
-  "critical-service-config.json": {
-    "critical_services": {
-      "cilium-operator": {
-        "namespace": "kube-system",
-        "type": "Deployment"
-      },
-      "coredns": {
-        "namespace": "kube-system",
-        "type": "Deployment"
-      },
-      "...<output truncated>...",
-      "sshot-net-operator": {
-        "namespace": "sshot-net-operator",
-        "type": "Deployment"
-      },
-      "kube-proxy": {
-        "namespace": "kube-system",
-        "type": "StatefulSet"
-      }
+  "critical-service-config.json": "{
+  "critical_services": {
+    "cilium-operator": {
+      "namespace": "kube-system",
+      "type": "Deployment"
+    },
+    "coredns": {
+      "namespace": "kube-system",
+      "type": "Deployment"
+    },
+    "...<output truncated>...",
+    "cray-capmc": {
+      "namespace": "services",
+      "type": "Deployment"
+    },
+    "kube-proxy": {
+      "namespace": "kube-system",
+      "type": "StatefulSet"
     }
-  },
+  }
+}",
   "default_message_level": "debug",
   "k8s_monitoring_polling_interval": "60",
   "k8s_monitoring_total_time": "600",
@@ -86,73 +86,82 @@ Truncated example output (the actual output of ConfigMap will be larger):
 For viewing the data of the Dynamic ConfigMap used by Rack Resiliency service use the below command:
 
 ```bash
-kubectl get cm -n rack-resiliency rrs-mon-dynamic -o jsonpath='{.data}' | jq
+kubectl get cm -n rack-resiliency rrs-mon-dynamic -o jsonpath='{.data}' | jq | sed 's/\\n/\n/g'| sed 's/\\//g'
 ```
 
 Truncated example output (the actual output of ConfigMap will be larger):
 
 ```text
 {
-  "critical-service-config.json": {
-    "critical_services": {
-      "cilium-operator": {
-        "namespace": "kube-system",
-        "type": "Deployment",
-        "status": "Configured",
-        "balanced": "true"
-      },
-      "cray-capmc": {
-        "namespace": "services",
-        "type": "Deployment",
-        "status": "Configured",
-        "balanced": "true"
-      },
-      "cray-ceph-csi-cephfs-provisioner": {
-        "namespace": "ceph-cephfs",
-        "type": "Deployment",
-        "status": "Configured",
-        "balanced": "true"
-      },
-      "cray-ceph-csi-rbd-provisioner": {
-        "namespace": "ceph-rbd",
-        "type": "Deployment",
-        "status": "Configured",
-        "balanced": "false"
-      },
-    ...
-    dynamic-data.yaml: |
-    cray_rrs_pod:
-      node: ncn-w005
-      rack: x3000c0s8b0n0
-      zone: x3001
-    state:
-      ceph_monitoring: ''
-      k8s_monitoring: ''
-      rms_state: Waiting
-    timestamps:
-      end_timestamp_ceph_monitoring: ''
-      end_timestamp_k8s_monitoring: ''
-      init_timestamp: '2025-08-04T17:19:33Z'
-      last_update_timestamp: '2025-08-05T12:37:04Z'
-      start_timestamp_api: ''
-      start_timestamp_ceph_monitoring: ''
-      start_timestamp_k8s_monitoring: ''
-      start_timestamp_rms: '2025-08-04T17:19:58Z'
-    zone:
-      ceph_zones:
-        x3000: []
-        x3001: []
-        x3002: []
-      k8s_zones:
-        x3000:
-        - name: ncn-m001
-          status: Ready
-        - name: ncn-w001
-          status: Ready
-        - name: ncn-w004
-          status: Ready
+  "critical-service-config.json": "{
+  "critical_services": {
+    "cilium-operator": {
+      "namespace": "kube-system",
+      "type": "Deployment",
+      "status": "Configured",
+      "balanced": "true"
+    },
+    "coredns": {
+      "namespace": "kube-system",
+      "type": "Deployment",
+      "status": "Configured",
+      "balanced": "true"
+    },
+    "...<output truncated>...",
+    "cray-activemq-artemis-operator-controller-manager": {
+      "namespace": "dvs",
+      "type": "Deployment",
+      "status": "Configured",
+      "balanced": "true"
+    },
+    "kube-proxy": {
+      "namespace": "kube-system",
+      "type": "StatefulSet",
+      "status": "Unconfigured",
+      "balanced": "NA"
     }
   }
+}",
+  "dynamic-data.yaml": "cray_rrs_pod:
+  node: ncn-w004
+  rack: x3000c0s31b0n0
+  zone: x3000
+state:
+  ceph_monitoring: ''
+  k8s_monitoring: ''
+  rms_state: Waiting
+timestamps:
+  end_timestamp_ceph_monitoring: ''
+  end_timestamp_k8s_monitoring: ''
+  init_timestamp: '2025-08-04T04:17:17Z'
+  last_update_timestamp: '2025-08-07T02:56:28Z'
+  start_timestamp_api: ''
+  start_timestamp_ceph_monitoring: ''
+  start_timestamp_k8s_monitoring: ''
+  start_timestamp_rms: '2025-08-04T04:17:25Z'
+zone:
+  ceph_zones:
+    x3000:
+    - name: ncn-s001
+      osds:
+      - name: osd.1
+        status: up
+      - name: osd.4
+        status: up
+      - name: osd.7
+        status: up
+      - name: osd.10
+        status: up
+  "...<output truncated>...",
+  k8s_zones:
+    x3000:
+    - name: ncn-m001
+      status: Ready
+    - name: ncn-w001
+      status: Ready
+    - name: ncn-w004
+      status: Ready
+"
 }
 ```
 
