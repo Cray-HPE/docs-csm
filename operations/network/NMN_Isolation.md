@@ -71,7 +71,7 @@ All preparation steps can be performed prior to an established window.  Preparat
 
     - Prior to configuration of NMN Isolation, expect the test `SERVICES ACL TEST` to FAIL
     - All other tests should PASS, or be reviewed by the site network engineer
-    - Note: Log the running time of the command if it's over 10 minutes
+    - Note: Log the running time of the command if it is over 10 minutes
 
 8. (`ncn-m#`) For a system upgrade, back up the _running switch configurations_.
    Note that the backup will have passwords removed unless the `--no-sanitize` option is used. Storing sensitive data locally should be carefully considered based on site policy.
