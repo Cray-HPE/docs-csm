@@ -46,7 +46,10 @@ The command will give a "not found" error message if the service is not present 
 
 ## Add, view, edit, or delete RR critical services
 
-Any changes made take effect immediately - no restart of `cray-rrs` is required.
+When performing any of these operations, no restart of `cray-rrs` is required in order
+for the changes to take effect. However, there may be a delay before the changes are
+picked up by the [Resiliency Monitoring Service (RMS)](Resiliency_Monitoring_Service.md).
+For more details, see [Timing](Resiliency_Monitoring_Service.md#timing).
 
 ### Caution
 
@@ -58,9 +61,6 @@ Any changes made take effect immediately - no restart of `cray-rrs` is required.
   not supported.
 - Avoid using the API or CLI to add critical services while following the deletion or modification
   procedures outlined on this page.
-- Any modifications to critical services may take up to 10 minutes to be reflected in API and CLI
-  responses and to begin being monitored by the
-  [Resiliency Monitoring Service (RMS)](Resiliency_Monitoring_Service.md).
 
 ### List services using CLI
 
