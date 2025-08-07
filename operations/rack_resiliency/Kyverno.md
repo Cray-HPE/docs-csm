@@ -6,13 +6,13 @@ single rack is to spread the replicas of these services across multiple zones an
 Some of the CSM critical services already have established the pod affinities to spread the replicas
 across nodes. Because the nodes which are picked by the Kubernetes scheduler can be on the same rack,
 it is necessary to include a topology constraint for these services; this helps the Kubernetes
-scheduler distribute the replicas across zones. This is achieved using the feature with a new Kyverno
+scheduler distribute the replicas across zones. This is achieved using the Kubernetes feature "Topology Spread Constraints" within a new Kyverno
 cluster policy with the name `insert-labels-topology-constraints` added.
 
 This policy applies to all the Deployments and StatefulSets that have been identified as critical
 services for Rack Resiliency.
 
-For more information on Kubernetes topology constraints, see
+For more information on Kubernetes topology spread constraints, see
 [Topology Spread Constraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/).
 
 ## Policy details
