@@ -460,14 +460,14 @@ steps one, three, and four.
           rangeEnd: 2001:db8:100:200::210
    ```
 
-1. (`ncn-m#`) Update the `site-init` secret in the `loftsman` namespace.
+1. (`ncn-mw#`) Update the `site-init` secret in the `loftsman` namespace.
 
    ```bash
    kubectl delete secret -n loftsman site-init
    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
 
-1. (`ncn-m#`) Reinstall the `cray-dns-unbound` Helm chart using the [Redeploying a Chart](../../.././operations/CSM_product_management/Redeploying_a_Chart.md) procedure.
+1. (`ncn-mw#`) Reinstall the `cray-dns-unbound` Helm chart using the [Redeploying a Chart](../../.././operations/CSM_product_management/Redeploying_a_Chart.md) procedure.
 
    - Name of chart to be redeployed: `cray-dns-unbound`
    - Base name of manifest: `core-services`
