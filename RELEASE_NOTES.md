@@ -4,10 +4,6 @@
 
 ## New
 
-### Monitoring
-
-### Networking
-
 ### Miscellaneous functionality
 
 * Console logs and interaction is now available and tenant aware through the `cray` CLI, see [console](operations/conman/ConMan.md#console) for more information.
@@ -15,10 +11,6 @@
   See [Managing many components](operations/configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components) for more information.
   Support is added for `v2` and `v3` API versions.
 * Recipe builds using kiwi-ng now include the signing keys contained in the `hpe-signing-key` secret, which allows for the verification of the recipe build artifacts.
-
-### New hardware support
-
-### New software support
 
 ### Automation improvements
 
@@ -80,11 +72,9 @@
   any nodes that are locked in the [Hardware State Manager (HSM)](glossary.md#hardware-state-manager-hsm) are removed from the session.
   For more information, see [BOS sessions and HSM locks](operations/boot_orchestration/Sessions.md#bos-sessions-and-hsm-locks).
 
-### Documentation enhancements
-
 ## Noteworthy changes
 
-## Test
+### Test
 
 * Modified `adjust k8s_nodes_ready_check.sh` to not fail when a node is in `Ready,SchedulingDisabled` state
 * Modified `velero_backups_check.sh` to not fail if a newer, successful backup exists
@@ -103,7 +93,7 @@
     * This tests is part of the procedure to [Validate CSM Health](operations/validate_csm_health.md).
     * For more information, see [Barebones Image Boot Test](troubleshooting/cms_barebones_image_boot.md).
 
-## Bug fixes
+### Bug fixes
 
 * The [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
   [`session-setup` operator](operations/boot_orchestration/BOS_Services.md#session-setup) now ignores invalid
