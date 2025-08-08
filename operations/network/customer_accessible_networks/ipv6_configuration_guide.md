@@ -4,6 +4,8 @@
     - [SLS changes](#sls-changes)
     - [BSS changes](#bss-changes)
 - [Enablement](#enablement)
+    - [Enabling IPv6 during CSM install](#enabling-ipv6-during-csm-install)
+    - [Enabling IPv6 during CSM upgrade](#enabling-ipv6-during-csm-upgrade)
 - [Network configuration](#network-configuration)
 - [Configure services](#configure-services)
     - [Domain Name System (DNS)](#domain-name-system-dns)
@@ -31,9 +33,10 @@ This functionality is limited in scope:
 
 ### SLS changes
 
-The CMN and CAN networks in SLS have `CIDR6`, `Gateway6`, and `IPAddress6` fields added to avoid overlap with existing IPv4 data.
+The CMN and CAN networks in the [System Layout Service (SLS)](../../../glossary.md#system-layout-service-sls)
+have `CIDR6`, `Gateway6`, and `IPAddress6` fields added to avoid overlap with existing IPv4 data.
 
-Example output:
+Example:
 
 ```json
 {
@@ -72,9 +75,11 @@ Example output:
 
 ### BSS changes
 
-The `cloud-init` metadata for each NCN has `ip6` and `gateway6` fields added so that IPv6 can be configured when NCNs are rebuilt.
+In the [Boot Script Service (BSS)](../../../glossary.md#boot-script-service-bss),
+the `cloud-init` metadata for each NCN has `ip6` and `gateway6` fields added.
+This allows IPv6 to be configured when NCNs are rebuilt.
 
-Example output:
+Example:
 
 ```json
 {
@@ -119,29 +124,70 @@ Example output:
 
 IPv6 support can be enabled in two different ways.
 
-- Fresh install of CSM
+- [Enabling IPv6 during CSM install](#enabling-ipv6-during-csm-install)
+- [Enabling IPv6 during CSM upgrade](#enabling-ipv6-during-csm-upgrade)
 
-   New command line options were added to the Cray Site Initializer tool (`csi`).
+## Enabling IPv6 during CSM install
 
-   | Option         | Description                                           |
-   |----------------|-------------------------------------------------------|
-   | `chn-gateway6` | IPv6 Gateway for NCNs on the CHN                      |
-   | `chn-cidr6`    | Overall IPv6 CIDR for all Customer High-Speed subnets |
-   | `cmn-gateway6` | Overall IPv6 CIDR for all Customer Management subnets |
-   | `cmn-cidr6`    | IPv6 Gateway for NCNs on the CMN                      |
+IPv6 can be enabled as part of a fresh install of CSM.
 
-   These options can be used during a fresh install to configure IPv6. See [`cray-site-init` updates](../../../RELEASE_NOTES.md#cray-site-init-updates) for more information.
+### 1. Enable IPv6 during install
 
-- During an upgrade of CSM
+During the install, if an administrator wishes to enable IPv6, this must be done during the
+[Create system configuration](../../../install/pre-installation.md#3-create-system-configuration)
+procedure.
 
-   A new patch subcommand as been added to `csi`. The `csi patch csm ipv6` command takes the `chn-gateway6`, `chn-cidr6`, `cmn-gateway6`, and `cmn-cidr6` arguments and updates SLS and BSS with IPv6 data.
+New command line options were added to the Cray Site Initializer tool (`csi`).
 
-   This command defaults to a dry run and writes all proposed BSS and SLS changes along with backups of the original data to a timestamped directory in the current working directory unless overridden with the `-b|--backup-dir` option.
+| Option         | Description                                           |
+|----------------|-------------------------------------------------------|
+| `chn-gateway6` | IPv6 Gateway for NCNs on the CHN                      |
+| `chn-cidr6`    | Overall IPv6 CIDR for all Customer High-Speed subnets |
+| `cmn-gateway6` | Overall IPv6 CIDR for all Customer Management subnets |
+| `cmn-cidr6`    | IPv6 Gateway for NCNs on the CMN                      |
 
-   The `--commit` option will apply the proposed changes to BSS and SLS. This should be done before the management rollout stage of the [Upgrade CSM and additional products with IUF](../../iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) procedure
-   to ensure that the NCNs are rebuilt with IPv6 support enabled.
+These options can be used during a fresh install to configure IPv6. See
+[`cray-site-init` updates](../../../RELEASE_NOTES.md#cray-site-init-updates)
+for more information.
 
-   See [`cray-site-init` updates](../../../RELEASE_NOTES.md#csi-patch-csm-ipv6) for a detailed description of the `csi patch csm ipv6` options.
+### 2. Configure services for IPv6 during install
+
+During the install, administrators may optionally configure some services for IPv6:
+the [Domain Name System (DNS)](#domain-name-system-dns) and [Keycloak](#keycloak).
+This is done during the [Prepare `site-init`](../../../install/prepare_site_init.md)
+procedure.
+
+## Enabling IPv6 during CSM upgrade
+
+IPv6 can be enabled as part of an upgrade from CSM 1.6 to CSM 1.7.
+It cannot be enabled as part of a CSM 1.7 to CSM 1.7 patch upgrade.
+
+### 1. Enable IPv6 during upgrade
+
+During the upgrade, if an administrator wishes to enable IPv6, this must be done during at the beginning of the
+[Execute the IUF `management-nodes-rollout` stage](../../iuf/workflows/management_rollout.md#2-execute-the-iuf-management-nodes-rollout-stage).
+This ensures that the NCNs are rebuilt with IPv6 support enabled.
+
+A new patch subcommand as been added to `csi`. The `csi patch csm ipv6` command takes the
+`chn-gateway6`, `chn-cidr6`, `cmn-gateway6`, and `cmn-cidr6` arguments described in
+[Enabling IPv6 during CSM install](#enabling-ipv6-during-csm-install). It uses that
+information to update SLS and BSS with the IPv6 data.
+
+This command defaults to a dry run and writes all proposed BSS and SLS changes, along with
+backups of the original data. By default this backup is to a timestamped directory in the
+current working directory. This behavior can be overridden with the `-b|--backup-dir` option.
+
+The `--commit` option will apply the proposed changes to BSS and SLS.
+
+See [`cray-site-init` updates](../../../RELEASE_NOTES.md#csi-patch-csm-ipv6) for a detailed description of the `csi patch csm ipv6` options.
+
+### 2. Configure services for IPv6 during upgrade
+
+During the upgrade, administrators may optionally configure some services for IPv6:
+the [Domain Name System (DNS)](#domain-name-system-dns) and [Keycloak](#keycloak).
+This is also done at the beginning of the
+[Execute the IUF `management-nodes-rollout` stage](../../iuf/workflows/management_rollout.md#2-execute-the-iuf-management-nodes-rollout-stage),
+after the previous step is completed.
 
 ## Network configuration
 

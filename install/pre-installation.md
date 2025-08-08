@@ -11,8 +11,13 @@ The page walks a user through setting up the Cray LiveCD with the intention of i
     1. [Exit the console and log in with SSH](#16-exit-the-console-and-log-in-with-ssh)
 1. [Download and extract the CSM tarball](#2-download-and-extract-the-csm-tarball)
 1. [Create system configuration](#3-create-system-configuration)
+    1. [Customize `system_config.yaml`](#31-customize-system_configyaml)
+    1. [Create the system configuration](#32-create-the-system-configuration)
+    1. [Generate system configuration](#33-generate-system-configuration)
+        1. [Run `cray-site-init`](#331-run-cray-site-init)
+        1. [Prepare `site-init`](#332-prepare-site-init)
 1. [Initialize the LiveCD](#4-initialize-the-livecd)
-1. [Import the CSM Tarball](#5-import-the-csm-tarball)
+1. [Import the CSM tarball](#5-import-the-csm-tarball)
 1. [Validate the LiveCD](#6-validate-the-livecd)
 1. [Next topic](#next-topic)
 
@@ -375,7 +380,7 @@ These variables will need to be set for many procedures within the CSM installat
     = PIT Identification = COPY/CUT END =========================================
    ```
 
-## 2. Download and extract the CSM Tarball
+## 2. Download and extract the CSM tarball
 
 1. Download and install the latest documentation and scripts RPMs, see [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation).
 
@@ -545,20 +550,26 @@ This section provides directions for system discovery and generating system conf
    >
    > - For a short description of each key in the file, run `csi config init --help`.
    > - For more description of these settings and the default values, see
-       >   [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
-       >   [CSM Overview](../introduction/csm_overview.md).
+   >   [Default IP Address Ranges](../introduction/csm_overview.md#2-default-ip-address-ranges) and the other topics in
+   >   [CSM Overview](../introduction/csm_overview.md).
    > - To enable or disable audit logging, refer to [Audit Logs](../operations/security_and_authentication/Audit_Logs.md)
-       >   for more information.
+   >   for more information.
    > - If the system is using a `cabinets.yaml` file, be sure to update the `cabinets-yaml` field with `'cabinets.yaml'` as its value.
    > - If the system will use the Customer High Speed Network (CHN) and has edge switches add `edge` to the `bgp-peer-types` list.
+   > - Optional IPv6 support is added in CSM 1.7. If the system will have IPv6 enabled, be sure to update the `cmn-cidr6`, `chn-cidr6`,
+   >   `cmn-gateway6`, and `chn-gateway6` fields with appropriate values. There are additional configuration steps related to
+   >   IPv6 in the upcoming [Prepare `site-init`](#332-prepare-site-init) procedure. For more information, see
+   >   [IPv6 Configuration Guide](../operations/network/customer_accessible_networs/ipv6_configuration_guide.md).
 
    ```bash
    vim system_config.yaml
    ```
 
-### 3.2. Create the system configuration using one of the following options
+### 3.2. Create the system configuration
 
 Re-installations may skip this section and jump to [3.3. Generate system configuration](#33-generate-system-configuration).
+
+Create the system configuration using one of the following options:
 
 - [Create System Configuration Using Cluster Discovery Service](create_system_configuration_using_cluster_discovery_service.md): This is a dynamic discovery process, the system and its connections are dynamically discovered and compared
 with the SHCD to create the system configuration files. This method is highly recommended for the new installations.
@@ -567,7 +578,7 @@ with the SHCD to create the system configuration files. This method is highly re
 
 ### 3.3. Generate system configuration
 
-#### 3.2.1. Run `cray-site-init`
+#### 3.3.1. Run `cray-site-init`
 
 This stage will take an initial pass at validating the `system_config.yaml` file, and generating a `customizations.yaml` file
 necessary for [prepare site init](#322-prepare-site-init).
@@ -586,11 +597,11 @@ necessary for [prepare site init](#322-prepare-site-init).
    csi config init
    ```
 
-#### 3.2.2. Prepare Site Init
+#### 3.3.2. Prepare `site-init`
 
 This step will generate CA certificates, LDAP configuration, and other site customizations for the CSM installation.
 
-Follow the [Prepare Site Init](prepare_site_init.md) procedure and then return for [initialize the LiveCD](#4-initialize-the-livecd).
+Follow the [Prepare `site-init`](prepare_site_init.md) procedure and then return for [initialize the LiveCD](#4-initialize-the-livecd).
 
 ## 4. Initialize the LiveCD
 
@@ -627,7 +638,7 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure and then return f
    cd $HOME && /root/bin/set-sqfs-links.sh
    ```
 
-## 5. Import the CSM Tarball
+## 5. Import the CSM tarball
 
 The following steps require [create system configuration](#3-create-system-configuration) to have completed
 successfully.

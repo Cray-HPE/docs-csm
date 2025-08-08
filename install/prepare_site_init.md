@@ -1,4 +1,4 @@
-# Prepare `site init`
+# Prepare `site-init`
 
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
@@ -334,9 +334,12 @@ with system-specific customizations.
 
     1. (Optional) Configure IPv6 support for the `cray-keycloak` service.
 
-       See the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#keycloak) for more information.
+       > **Important** This step will only work if the required IPv6 fields were configured in the earlier
+       > [Customize `system_config.yaml`](#31-customize-system_configyaml) step.
 
-       > **Important** Do not perform this step without first configuring the `cmn-cidr6`, `chn-cidr6`, `cmn-gateway6`, and `chn-gateway6` settings in `system_config.yaml`
+       See [Keycloak](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#keycloak) in the
+       [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md)
+       for more information.
 
 ### Customize DNS configuration
 
@@ -405,9 +408,12 @@ with system-specific customizations.
 
     1. (Optional) Configure IPv6 support for the `cray-dns-unbound` service.
 
-       See the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#domain-name-system-dns) for more information.
+       > **Important** This step will only work if the required IPv6 fields were configured in the earlier
+       > [Customize `system_config.yaml`](#31-customize-system_configyaml) step.
 
-       > **Important** Do not perform this step without first configuring the `cmn-cidr6`, `chn-cidr6`, `cmn-gateway6`, and `chn-gateway6` settings in `system_config.yaml`
+       See [Domain Name System (DNS)](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#domain-name-system-dns)
+       in the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md)
+       for more information.
 
     See the following documentation regarding known issues when operating with no upstream DNS server.
     - [Spire Database Cluster DNS Lookup Failure](../troubleshooting/known_issues/spire_database_lookup_error.md)
