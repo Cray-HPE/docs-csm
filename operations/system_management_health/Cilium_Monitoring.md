@@ -8,6 +8,13 @@ as well as the networking infrastructure.
 
 Three new dashboards have been created for monitoring Cilium and Hubble. These are as follows:
 
-- Cilium Agent Metrics - Visualizes the metrics exposed by cilium-agent. cilium-agent runs on each node and accepts configuration describing network policies, visibility and other monitoring requirements from Kubernetes.
-- Cilium Hubble Metrics - Visualizes the metrics exposed by Hubble. Hubble is integrated into cilium-agent and retrieves the visibility from Cilium.
-- Cilium Policy Verdicts - Visualizes the Network Policy application in a Cilium cluster. It displays the outcome(connection forwarded or dropped) of applying the network policies.
+- Cilium Agent Metrics - Visualizes the metrics exposed by cilium-agent. cilium-agent runs on each node
+  and accepts configuration describing network policies, visibility and other monitoring requirements
+  from Kubernetes.
+- Cilium Hubble Metrics - Visualizes the metrics exposed by Hubble. Hubble is integrated into `cilium-agent`
+  and retrieves the visibility from Cilium.
+- Cilium Policy Verdicts - Visualizes the Network Policy application in a Cilium cluster. It displays the
+  outcome(connection forwarded or dropped) of applying the network policies.
+
+For information on troubleshooting Cilium and troubleshooting *using* Cilium, see
+[Cilium Network Troubleshooting Runbook](../../troubleshooting/Cilium_Network_Troubleshooting_Runbook.md).

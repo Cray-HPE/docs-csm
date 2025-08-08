@@ -162,6 +162,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Restore Postgres](../operations/kubernetes/Restore_Postgres.md)
 * [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
 * [`etcd` Pods in CLBO State](known_issues/etcd_pods_in_CLBO_state.md)
+* [Cilium Network Troubleshooting Runbook](Cilium_Network_Troubleshooting_Runbook.md)
 
 ## MetalLB
 
