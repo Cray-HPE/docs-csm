@@ -421,7 +421,7 @@ The values used for `ipv6.gateway` and `ipv6.subnet` should match those used for
 within the subnet declared in `ipv6.subnet`. The number of IP addresses in this range should equal either the desired number of `cray-dns-unbound` replicas or the number of NCN
 worker nodes. If Keycloak has also been configured to use IPv6, then this range *must not* overlap with the range used there.
 
-Prerequisites:
+### IPv6 Prerequisites
 
 - CSM must have been configured to support IPv6 on the CMN. See the [IPv6 Configuration Guide](../customer_accessible_networks/ipv6_configuration_guide.md) for more information.
 
