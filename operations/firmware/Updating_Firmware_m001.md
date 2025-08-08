@@ -159,7 +159,7 @@ The following information is needed:
      Using the task number (596 in the above example), check the state of the task:
 
      ```bash
-    curl -sk -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}/redfish/v1/TaskService/Tasks/596 | jq .TaskState
+     curl -sk -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}/redfish/v1/TaskService/Tasks/596 | jq .TaskState
      ```
 
      State should be "Running" until BIOS update is finished.
