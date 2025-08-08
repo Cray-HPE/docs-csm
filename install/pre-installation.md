@@ -559,7 +559,7 @@ This section provides directions for system discovery and generating system conf
    > - Optional IPv6 support is added in CSM 1.7. If the system will have IPv6 enabled, be sure to update the `cmn-cidr6`, `chn-cidr6`,
    >   `cmn-gateway6`, and `chn-gateway6` fields with appropriate values. There are additional configuration steps related to
    >   IPv6 in the upcoming [Prepare `site-init`](#332-prepare-site-init) procedure. For more information, see
-   >   [IPv6 Configuration Guide](../operations/network/customer_accessible_networs/ipv6_configuration_guide.md).
+   >   [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md).
 
    ```bash
    vim system_config.yaml
