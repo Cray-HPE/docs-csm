@@ -110,6 +110,21 @@ else
   echo "====> ${state_name} has been completed"
 fi
 
+state_name="RE-APPLY_CRAY_DNS_UNBOUND_JOB"
+#shellcheck disable=SC2046
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    helm -n services get all cray-dns-unbound | yq4 'select(.kind=="Job")' \
+      | grep -v MANIFEST | kubectl -n services apply -f -
+  } >> ${LOG_FILE} 2>&1
+  #shellcheck disable=SC2046
+  record_state ${state_name} $(hostname)
+else
+  echo "====> ${state_name} has been completed"
+fi
+
 state_name="CSM_SERVICE_UPGRADE"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
