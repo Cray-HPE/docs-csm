@@ -18,6 +18,7 @@ The following administrative topics can be found in this guide:
 - [Package repository management](#package-repository-management)
 - [Security and authentication](#security-and-authentication)
 - [Resiliency](#resiliency)
+    - [Rack Resiliency](#rack-resiliency)
 - [ConMan](#conman)
 - [Utility storage](#utility-storage)
 - [System management health](#system-management-health)
@@ -366,6 +367,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
     - [Keycloak User Management with `kcadm.sh`](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
     - [Keycloak User Localization](security_and_authentication/Keycloak_User_Localization.md)
     - [Create a Backup of the Keycloak Postgres Database](security_and_authentication/Create_a_Backup_of_the_Keycloak_Postgres_Database.md)
+    - [Keycloak IPv6 Support](security_and_authentication/keycloak_ipv6_support.md)
 - [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
     - [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
     - [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
@@ -392,6 +394,29 @@ HPE Cray EX systems are designed so that system management services \(SMS\) are 
 - [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md)
 - [Recreate `StatefulSet` Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
 - [Resiliency Testing Procedure](resiliency/Resiliency_Testing_Procedure.md)
+
+### Rack Resiliency
+
+HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical services,
+even if management nodes fail. However, rack-level failures can cause service disruptions if management
+nodes are concentrated within a single rack. This can result in the loss of HA quorum.
+
+The Rack Resiliency feature provides rack-level resiliency to maintain HA of critical management
+services due to a single rack failure. This feature prevents system-wide outages, allowing for
+successful scheduling and execution of user jobs.
+
+- [Rack Resiliency](rack_resiliency/README.md)
+- [Enabling Rack Resiliency](rack_resiliency/Enabling_Rack_Resiliency.md)
+- [Manage Critical Services](rack_resiliency/Manage_Critical_Services.md)
+- [Critical Services](rack_resiliency/Critical_Services.md)
+- [Zones](rack_resiliency/Zones.md)
+- [Kyverno Policy](rack_resiliency/Kyverno_Policy.md)
+- [Resiliency Monitoring Service](rack_resiliency/Resiliency_Monitoring_Service.md)
+- [ConfigMaps](rack_resiliency/ConfigMaps.md)
+- [Setup of Rack Resiliency](rack_resiliency/Setup_of_Rack_Resiliency.md)
+- [`cray-rrs` Deployment](rack_resiliency/cray-rrs_Deployment.md)
+- [Troubleshooting](rack_resiliency/Troubleshooting.md)
+- [Rack Resiliency API](../api/rrs.md)
 
 ## ConMan
 
@@ -636,6 +661,7 @@ Overview of the several different networks supported by the HPE Cray EX system.
 - [Create a CSM Configuration Upgrade Plan](network/Create_a_CSM_Configuration_Upgrade_Plan.md)
 - [Gateway Testing](network/Gateway_Testing.md)
 - [Cilium Network Troubleshooting Runbook](../troubleshooting/Cilium_Network_Troubleshooting_Runbook.md)
+- [NMN Isolation](network/NMN_Isolation.md)
 
 ### Management network
 
@@ -660,6 +686,7 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 - [BI-CAN Aruba/Arista Configuration](network/customer_accessible_networks/bi-can_arista_aruba_config.md)
 - [MetalLB Peering with Arista Edge Router](network/customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
+- [IPv6 Configuration Guide](network/customer_accessible_networks/ipv6_configuration_guide.md)
 - [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 - [CMN known issues](../troubleshooting/README.md#customer-management-network-cmn)
 
@@ -867,6 +894,5 @@ these backups.
 Below are the documents related to iSCSI-based boot content projection.
 
 - [iSCSI SBPS](iscsi_sbps/README.md)
-- [Managing Selective Node Personalization](iscsi_sbps/Managing_Selective_Node_Personalization.md)
 - [iSCSI SBPS Verification](iscsi_sbps/iSCSI_SBPS_Verification.md)
 - [iSCSI SBPS Metrics](iscsi_sbps/iSCSI_SBPS_Metrics.md)
