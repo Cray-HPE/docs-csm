@@ -12,6 +12,13 @@
     * This feature **can only be enabled during an upgrade from CSM 1.6 to CSM 1.7 or an install of CSM 1.7**.
     * See [Enabling Rack Resiliency](operations/rack_resiliency/Enabling_Rack_Resiliency.md) for more details.
 
+### iSCSI SBPS
+
+* The [iSCSI SBPS feature](operations/iscsi_sbps/README.md) is enhanced to allow administrators
+  to select which worker NCNs are enabled as iSCSI targets. This is a change from CSM 1.6, where
+  all worker NCNs are enabled as iSCSI targets. For more information, see
+  [Managing Selective Node Personalization](operations/iscsi_sbps/Managing_Selective_Node_Personalization.md).
+
 ### Monitoring
 
 ### Networking
@@ -221,12 +228,21 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 | `sealed-secrets`             | 0.28.0  |
 | `spire-intermediate`         | 1.0.1   |
 | `tapms-operator`             | 1.9.1   |
+| `Cilium`                     | 1.16.5  |
 
 ### Security improvements
 
 * Spire node attestation can now be setup to use TPM chips on supported platforms, see [Enable TPM node attestation with Spire](operations/spire/Enable_TPM_node_attestation.md) for more information.
 * The old version of the Spire server was removed to fully transition to the newer version of Spire.
 * Updated all HMS services to point to latest upstream image and Go module dependencies.  This resolved all currently known point-in-time CVE issues in HMS services.
+* Pod Security Policies (PSP) have been removed. Pod Security Standards (PSS) Baseline policies are now enforced using Kyverno.
+  For details and exceptions, see [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
+* Container image signature verification is enforced by Kyverno policies to enhance supply chain security;
+  the policy remains flexible to allow sites to use their own signed containers.
+  For details and exceptions, see [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
+* Platform components are upgraded to address critical and high vulnerabilities.
+* Kyverno version is upgraded from 1.10.7 to 1.13.4; version 1.13.4 addresses CVEs and has additional features.
+  For details, see the [Kyverno Changelog](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md)
 
 ### Customer-requested enhancements
 
@@ -243,6 +259,8 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 
 ### Documentation enhancements
 
+* Updated Kyverno documentation.
+  
 ## Noteworthy changes
 
 * The default Kubernetes certificate validity period increased from 1 year to 3 years.
@@ -252,6 +270,9 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
   For more information on the policy, how to add exceptions, and how to allow third party signing keys, see
   [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
 * `PProf` debug support has been added to all remaining HMS services.  See [Debugging With HMS `PProf` Images](troubleshooting/debugging_with_hms_pprof_images.md) for more information.
+* The `Weave` Container Networking Interface (CNI) has been deprecated in favor of Cilium.
+    * A fresh install of CSM 1.7 will use Cilium by default.
+    * Upgrading from CSM 1.6 to 1.7 will migrate the CNI from Weave to Cilium. See [Upgrade CSM and additional products with IUF](operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) for more information.
 
 ## Test
 
