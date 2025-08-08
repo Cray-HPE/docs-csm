@@ -438,7 +438,7 @@ steps one, three, and four.
    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
    ```
 
-1. (`ncn-m#`) Update the `spec.kubernetes.services.cray-dns-unbound` path in `customizations.yaml` with the IPv6 configuration.
+1. (`ncn-mw#`) Update the `spec.kubernetes.services.cray-dns-unbound` path in `customizations.yaml` with the IPv6 configuration.
 
    If required, update `network.netstaticips.system_to_site_lookups` at the top of the file or add an additional DNS server to the `forwardZones` list.
 
