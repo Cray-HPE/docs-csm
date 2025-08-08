@@ -185,7 +185,7 @@ If performing a fresh install simply add the IP address or hostname to `ntp-serv
 ### Secure Shell (SSH)
 
 - NCNs and management network switches.
-    - No special configuration is required beyond ensuring BSS has been updated and CANU generated IPv6 enabled switch configuration has been deployed.
+    - No special configuration is required beyond ensuring BSS has been updated and a CANU generated IPv6 enabled switch configuration has been deployed.
 - UAN and other Application nodes.
     - IPv6 addresses are assigned in SLS for UAN nodes in the CHN network. The `uan_can_setup` option must be enabled in the `uss-config-management` VCS repo in order to apply this configuration to the node.
       Please refer to the HPE Cray Supercomputing User Services Software (USS) for more information.
