@@ -152,10 +152,12 @@ for more information.
 
 ### 2. Configure services for IPv6 during install
 
-During the install, administrators may optionally configure some services for IPv6:
-the [Domain Name System (DNS)](#domain-name-system-dns) and [Keycloak](#keycloak).
-This is done during the [Prepare `site-init`](../../../install/prepare_site_init.md)
+During the install, administrators may optionally configure some services for IPv6
+during the [Prepare `site-init`](../../../install/prepare_site_init.md)
 procedure.
+
+- For details on configuring DNS for IPv6, see [Domain Name System (DNS)](#domain-name-system-dns).
+- For details on configuring Keycloak for IPv6, see [Keycloak](#keycloak).
 
 ## Enabling IPv6 during CSM upgrade
 
@@ -183,11 +185,13 @@ See [`cray-site-init` updates](../../../RELEASE_NOTES.md#csi-patch-csm-ipv6) for
 
 ### 2. Configure services for IPv6 during upgrade
 
-During the upgrade, administrators may optionally configure some services for IPv6:
-the [Domain Name System (DNS)](#domain-name-system-dns) and [Keycloak](#keycloak).
+During the upgrade, administrators may optionally configure some services for IPv6.
 This is also done at the beginning of the
 [Execute the IUF `management-nodes-rollout` stage](../../iuf/workflows/management_rollout.md#2-execute-the-iuf-management-nodes-rollout-stage),
-after the previous step is completed.
+after IPv6 has been enabled.
+
+- For details on configuring DNS for IPv6, see [Domain Name System (DNS)](#domain-name-system-dns).
+- For details on configuring Keycloak for IPv6, see [Keycloak](#keycloak).
 
 ## Network configuration
 
