@@ -14,7 +14,7 @@
 
 ## Background
 
-CSM 1.7 adds support for IPv6 on the Customer Management Network (CMN), and Customer High Speed Network (CHN).
+CSM 1.7 adds support for IPv6 on the Customer Management Network (CMN), and Customer High-Speed Network (CHN).
 
 This functionality is limited in scope:
 
