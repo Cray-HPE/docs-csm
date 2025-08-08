@@ -157,5 +157,6 @@ See the [Cilium and Hubble Monitoring](../operations/system_management_health/Ci
     Aug  7 21:40:50.084: sysmgmt-health/vmagent-vms-1-5d5dddd445-q9znc:60136 (ID:3549) <> dvs/cray-dvs-mqtt-ss-0:15020 (ID:50714) Policy denied DROPPED (TCP Flags: SYN)
     Aug  7 21:40:50.091: sysmgmt-health/vmagent-vms-1-5d5dddd445-jp7gf:58510 (ID:3549) <> dvs/cray-dvs-mqtt-ss-0:15020 (ID:50714) policy-verdict:none INGRESS DENIED (TCP Flags: SYN)
     ```
+
 For more information on using the Hubble CLI, see the
 [Hubble CLI documentation](https://docs.cilium.io/en/stable/observability/hubble/hubble-cli/).
