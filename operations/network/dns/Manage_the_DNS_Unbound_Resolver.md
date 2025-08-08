@@ -425,6 +425,8 @@ worker nodes. If Keycloak has also been configured to use IPv6, then this range 
 
 - CSM must have been configured to support IPv6 on the CMN. See the [IPv6 Configuration Guide](../customer_accessible_networks/ipv6_configuration_guide.md) for more information.
 
+### IPv6 Procedure
+
 **NOTE:** This procedure assumes that CSM has already been installed and a running system is being modified. If the system is undergoing a fresh install then simply update `${SITE_INIT}/customizations.yaml` with the desired values and skip
 steps one, three, and four.
 
