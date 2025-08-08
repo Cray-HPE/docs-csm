@@ -217,9 +217,7 @@ CASMNET-2355 IPv6 addressing support for fresh installs and existing deployments
 ### IUF
 
 ```text
-CASMAUTO-92 Create the IUF suite for CT integration: suite of selected testcases
 CASM-3864 As a System Admin, I do want to clean up files in /tmp directory from nodes in iuf/nls workflows
-CASM-5052 As a developer, I need to hook CFS ansible plays (placement discovery, validation and zoning) into IUF workflows (Upgrade)
 CASM-5599 While getting workflows status in IUF , skip workflows with Unknown status
 CASM-5623 Provide default path for --site-vars in iuf-cli
 ```
