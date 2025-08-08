@@ -1,20 +1,19 @@
 # IPv6 Configuration Guide
 
-- [IPv6 Configuration Guide](#ipv6-configuration-guide)
-    - [Background](#background)
-        - [SLS Changes](#sls-changes)
-        - [BSS Changes](#bss-changes)
-    - [Enablement](#enablement)
-    - [Network Configuration](#network-configuration)
-    - [Configure Services](#configure-services)
-        - [Domain Name System (DNS)](#domain-name-system-dns)
-        - [Keycloak](#keycloak)
-        - [Network Time Protocol (NTP)](#network-time-protocol-ntp)
-        - [Secure Shell (SSH)](#secure-shell-ssh)
+- [Background](#background)
+    - [SLS changes](#sls-changes)
+    - [BSS changes](#bss-changes)
+- [Enablement](#enablement)
+- [Network configuration](#network-configuration)
+- [Configure services](#configure-services)
+    - [Domain Name System (DNS)](#domain-name-system-dns)
+    - [Keycloak](#keycloak)
+    - [Network Time Protocol (NTP)](#network-time-protocol-ntp)
+    - [Secure Shell (SSH)](#secure-shell-ssh)
 
 ## Background
 
-CSM 1.7 adds support for IPv6 on the Customer Management Network (CMN), and Customer High-Speed Network (CHN).
+CSM 1.7.0 adds support for IPv6 on the Customer Management Network (CMN), and Customer High-Speed Network (CHN).
 
 This functionality is limited in scope:
 
@@ -30,7 +29,7 @@ This functionality is limited in scope:
 - The `cray-dns-unbound` service can be configured to access a site DNS server using IPv6 over the CMN.
 - The `cray-keycloak` service can be configured to access an LDAP server using IPv6 over the CMN.
 
-### SLS Changes
+### SLS changes
 
 The CMN and CAN networks in SLS have `CIDR6`, `Gateway6`, and `IPAddress6` fields added to avoid overlap with existing IPv4 data.
 
@@ -71,7 +70,7 @@ Example output:
 }
 ```
 
-### BSS Changes
+### BSS changes
 
 The `cloud-init` metadata for each NCN has `ip6` and `gateway6` fields added so that IPv6 can be configured when NCNs are rebuilt.
 
@@ -126,7 +125,7 @@ Example output:
 
 IPv6 support can be enabled in two different ways.
 
-1. Fresh install of CSM
+- Fresh install of CSM
 
    New command line options were added to the Cray Site Initializer tool (`csi`).
 
@@ -139,7 +138,7 @@ IPv6 support can be enabled in two different ways.
 
    These options can be used during a fresh install to configure IPv6. See [`cray-site-init` updates](../../../RELEASE_NOTES.md#cray-site-init-updates) for more information.
 
-1. During an upgrade of CSM
+- During an upgrade of CSM
 
    A new patch subcommand as been added to `csi`. The `csi patch csm ipv6` command takes the `chn-gateway6`, `chn-cidr6`, `cmn-gateway6`, and `cmn-cidr6` arguments and updates SLS and BSS with IPv6 data.
 
@@ -150,18 +149,19 @@ IPv6 support can be enabled in two different ways.
 
    See [`cray-site-init` updates](../../../RELEASE_NOTES.md#csi-patch-csm-ipv6) for a detailed description of the `csi patch csm ipv6` options.
 
-## Network Configuration
+## Network configuration
 
 The CSM Automatic Network Utility (CANU) will automatically generate configuration with IPv6 support enabled when supplied an SLS file with IPv6 entries.
 
-Please refer to the [CSM Automatic Network Utility](../management_network/canu/index.md) documentation for more information on network configuration generation and validation.
+See the [CSM Automatic Network Utility](../management_network/canu/index.md) documentation for more information on network configuration generation and validation.
 
 CANU only generates the networking configuration required by CSM, it does not configure any routes out of the spine switches to site networks.
 External connectivity can configured by means of a CANU custom configuration file.
 There are many ways in which external connectivity can be achieved and discussing these options is beyond the scope of this document.
-Please see [Connect to the CMN and CAN](./Connect_to_the_CMN_CAN.md) for some suggestions and consult your networking team to design the best solution for your site.
+See [Connect to the CMN and CAN](./Connect_to_the_CMN_CAN.md) for some suggestions. Administrators are encouraged to consult their site networking team, in order
+to design the best solution for the site.
 
-## Configure Services
+## Configure services
 
 Several CSM services can be configured to use IPv6.
 
@@ -175,7 +175,7 @@ The `cray-dns-unbound` service can be configured to access a site DNS server usi
 
 The `cray-keycloak` service can be configured to access an LDAP server using IPv6. See [Keycloak IPv6 Support](../../security_and_authentication/keycloak_ipv6_support.md) for more information.
 
-If using LDAP over SSL then the IPv6 address or hostname used must be present as a Subject Alternative Name in the LDAP server certificate otherwise access will fail due to certificate verification issues.
+If using LDAP over SSL, then the IPv6 address or hostname used must be present as a Subject Alternative Name in the LDAP server certificate, otherwise access will fail because of certificate verification issues.
 
 ### Network Time Protocol (NTP)
 
@@ -188,4 +188,4 @@ If performing a fresh install simply add the IP address or hostname to `ntp-serv
     - No special configuration is required beyond ensuring BSS has been updated and a CANU generated IPv6 enabled switch configuration has been deployed.
 - UAN and other Application nodes.
     - IPv6 addresses are assigned in SLS for UAN nodes in the CHN network. The `uan_can_setup` option must be enabled in the `uss-config-management` VCS repo in order to apply this configuration to the node.
-      Please refer to the HPE Cray Supercomputing User Services Software (USS) for more information.
+      See the HPE Cray Supercomputing User Services Software (USS) for more information.
