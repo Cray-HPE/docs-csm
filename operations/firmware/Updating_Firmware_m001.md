@@ -8,11 +8,11 @@ Retrieve the model name and firmware image required to update an HPE or Gigabyte
 > - The commands in the procedure must be run on `ncn-m001`.
 
 - [Prerequisites](#prerequisites)
-- [Setup](#Setup)
+- [Setup](#setup)
 - [Flash the firmware](#flash-the-firmware)
     - [Flash Gigabyte `ncn-m001`](#flash-gigabyte-ncn-m001)
     - [Flash HPE `ncn-m001` using web interface](#flash-hpe-ncn-m001-using-web-interface)
-    - [Flash HPE `ncn-m001` using ilorest](#flash-hpe-ncn-m001-using-ilorest)
+    - [Flash HPE `ncn-m001` using `ilorest`](#flash-hpe-ncn-m001-using-ilorest)
 
 ## Prerequisites
 
@@ -26,14 +26,14 @@ The following information is needed:
 
 ## Setup
 
-1. (`ncn-m001#`) Set variables for USERNAME and BMC_PASSWORD
+1. (`ncn-m001#`) Set variables for `USERNAME` and `BMC_PASSWORD`
 
     ```bash
     USERNAME=root
     read -r -s -p "NCN BMC ${USERNAME} password: " BMC_PASSWORD
     ```
 
-1. (`ncn-m001#`) Get the IP address of ncn-m001's BMC (on the external/campus network)
+1. (`ncn-m001#`) Get the IP address of `ncn-m001's` BMC (on the external/campus network)
 
     ```bash
     BMC_ADDRESS=$(ipmitool lan print | grep "IP Address  " | cut -f2 -d: | sed 's/ //g')
@@ -51,6 +51,7 @@ The following information is needed:
     ```
 
 - For Gigabyte nodes:
+
     ```bash
     MODEL=$(curl -k -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}ipaddressOfBMC/redfish/v1/Systems/Self | jq -r .Model)
     echo $MODEL
@@ -68,11 +69,11 @@ The following information is needed:
     Locate the images in the returned output for the `ncn-m001` firmware and/or BIOS.
     Make sure to select the correct firmware/BIOS version as several versions may be installed in FAS.
     - For HPE nodes:
-      - iLO firmware will be `ilo5_xxx.bin` or `ilo6_xxx.bin`
-      - BIOS wil be a `.signed.flash` file
+        - iLO firmware will be `ilo5_xxx.bin` or `ilo6_xxx.bin`
+        - BIOS wil be a `.signed.flash` file
     - For Gigabyte nodes:
-      - BMC firmware will be `rom.ima_enc`
-      - BIOS will be `image.RBU`
+        - BMC firmware will be `rom.ima_enc`
+        - BIOS will be `image.RBU`
 
     Look for the returned `s3URL`. For example:
 
@@ -93,8 +94,8 @@ The following information is needed:
 
 - [Flash Gigabyte `ncn-m001`](#flash-gigabyte-ncn-m001)
 - HPE nodes can be updated using two different methods
-  - [Flash HPE `ncn-m001` using web interface](#flash-hpe-ncn-m001-using-web-interface)
-  - [Flash HPE `ncn-m001` using ilorest](#flash-hpe-ncn-m001-using-ilorest)
+    - [Flash HPE `ncn-m001` using web interface](#flash-hpe-ncn-m001-using-web-interface)
+    - [Flash HPE `ncn-m001` using `ilorest`](#flash-hpe-ncn-m001-using-ilorest)
 
 ### Flash Gigabyte `ncn-m001`
 
@@ -190,15 +191,15 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
 
     > After updating System ROM (BIOS), `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
 
-### Flash HPE `ncn-m001` using ilorest
+### Flash HPE `ncn-m001` using `ilorest`
 
-1. (`ncn-m001#`) Install ilorest rpm on ncn-m001.
+1. (`ncn-m001#`) Install `ilorest` rpm on `ncn-m001`.
 
     ```bash
     zypper install ilorest
     ```
 
-1. {`ncn-m001#`) Check firmware versions before making changes on ncn-m001.
+1. {`ncn-m001#`) Check firmware versions before making changes on `ncn-m001`.
 
     ```bash
     ilorest serverinfo  |grep "Firmware:" -A3
@@ -208,21 +209,21 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
     System ROM : A43 v3.60 (01/21/2025)
     ```
 
-1. {`ncn-m001#`) Update BIOS on ncn-m001 using the downloaded System Rom file.
+1. {`ncn-m001#`) Update BIOS on `ncn-m001` using the downloaded System ROM file.
 
     ```bash
     ilorest uploadcomp --component=A43_3.70_03_21_2025.signed.flash --update_target
     sleep 90
     ```
 
-1. {`ncn-m001#`) Update BMC on ncn-m001 using the downloaded iLO file.
+1. {`ncn-m001#`) Update BMC on `ncn-m001` using the downloaded iLO file.
 
     ```bash
     ilorest uploadcomp --component=ilo5_311.bin --forceupload --update_target
     sleep 60
     ```
 
-1. {`ncn-m001#`) Using ipmitool, login to the ncn-m001 console, using the correct user, password, and BMC IP address so that you can watch the console log as the node boots
+1. {`ncn-m001#`) Using `ipmitool`, login to the `ncn-m001` console, using the correct user, password, and BMC IP address so that you can watch the console log as the node boots
 
     ```bash
     ipmitool -I lanplus -U $USERNAME -P $BMC_PASSWORD -H $BMC_ADDRESS sol activate
@@ -230,7 +231,7 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
     Password:
     ```
 
-1. {`ncn-m001#`) Reboot ncn-m001. Do not accidentally issue this command on another node!
+1. {`ncn-m001#`) Reboot `ncn-m001`. Do not accidentally issue this command on another node!
 
     ```bash
     shutdown -r now
