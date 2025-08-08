@@ -228,6 +228,14 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * Spire node attestation can now be setup to use TPM chips on supported platforms, see [Enable TPM node attestation with Spire](operations/spire/Enable_TPM_node_attestation.md) for more information.
 * The old version of the Spire server was removed to fully transition to the newer version of Spire.
 * Updated all HMS services to point to latest upstream image and Go module dependencies.  This resolved all currently known point-in-time CVE issues in HMS services.
+* Pod Security Policies (PSP) have been removed. Pod Security Standards (PSS) Baseline policies are now enforced using Kyverno.
+  For details and exceptions, see [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
+* Container image signature verification is enforced by Kyverno policies to enhance supply chain security;
+  the policy remains flexible to allow sites to use their own signed containers.
+  For details and exceptions, see [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
+* Platform components are upgraded to address critical and high vulnerabilities.
+* Kyverno version is upgraded from 1.10.7 to 1.13.4; version 1.13.4 addresses CVEs and has additional features.
+  For details, see the [Kyverno Changelog](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md)
 
 ### Customer-requested enhancements
 
@@ -244,6 +252,8 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 
 ### Documentation enhancements
 
+* Updated Kyverno documentation.
+  
 ## Noteworthy changes
 
 * The default Kubernetes certificate validity period increased from 1 year to 3 years.
