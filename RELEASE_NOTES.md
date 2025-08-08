@@ -24,7 +24,6 @@
 
 * IUF now supports customized images and CFS configurations for rebuilding nodes during the 'management-nodes-rollout' stage.
   See [`management-nodes-rollout`](operations/iuf/workflows/management_rollout.md#note-for-csm-v170) for further information.
-
 * IUF can now reboot worker and storage NCNs without rebuilding them. See
   [Reboot NCNs with IUF](operations/node_management/Reboot_NCNs_iuf.md) for more information.
 
