@@ -1,13 +1,13 @@
 # Cilium Network Troubleshooting Runbook
 
+CSM uses Cilium Container Network Interface (CNI) plugin, responsible for assigning IP addresses to pods and establishing network connectivity within and between Kubernetes nodes.
+This runbook provides guidance on how to troubleshoot Cilium-related issues in a CSM environment.
+
 1. [Check Cilium Status](#check-cilium-status)
 2. [Inspect Cilium Logs](#inspect-cilium-logs)
 3. [Cilium Monitoring](#cilium-monitoring)
 4. [Troubleshooting using Hubble](#troubleshooting-using-hubble)
 
-## Background
-
-CSM uses Cilium Container Network Interface (CNI) plugin, responsible for assigning IP addresses to pods and establishing network connectivity within and between Kubernetes nodes.
 
 ## Check Cilium Status
 
@@ -55,6 +55,7 @@ If any errors or warnings are observed, investigate further by checking the logs
 ## Inspect Cilium Logs
 
 To get node specific status exec into the cilium pod by performing the following steps.
+
 (ncn-mw#) On any Kubernetes NCN run:
 ```bash
  kubectl -n kube-system get pod -l k8s-app=cilium -o wide
