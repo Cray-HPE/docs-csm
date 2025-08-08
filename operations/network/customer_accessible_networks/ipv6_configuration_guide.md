@@ -63,8 +63,11 @@ Example output:
             "IPAddress": "10.102.193.2",
             "IPAddress6": "2001:db8:100:200::2",
             "Name": "sw-spine-001"
-          },
-...
+          }
+        ]
+      }
+  }
+}
 ```
 
 ### BSS Changes
@@ -111,8 +114,9 @@ Example output:
             "parent_device": "bond0",
             "vlanid": 2
           }
-        },
-...
+        }
+      }
+    }
 ```
 
 ## Enablement
