@@ -419,7 +419,7 @@ The following `cray-dns-unbound` Helm chart values must be set to enable IPv6 su
 
 The values used for `ipv6.gateway` and `ipv6.subnet` should match those used for the Customer Management Network (CMN). The `ipv6.rangeStart` and `ipv6.rangeEnd` values should describe an unused range
 within the subnet declared in `ipv6.subnet`. The number of IP addresses in this range should equal either the desired number of `cray-dns-unbound` replicas or the number of NCN
-worker nodes. If Keycloak has also been configured to use IPv6, this range *must not* overlap with the range used there.
+worker nodes. If Keycloak has also been configured to use IPv6, then this range *must not* overlap with the range used there.
 
 Prerequisites:
 
