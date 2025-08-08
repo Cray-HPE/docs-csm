@@ -12,6 +12,7 @@ This instance is accessible only within the HPE Cray EX system.
 - [Increase the number of Unbound pods](#increase-the-number-of-unbound-pods)
 - [Change which HSN NIC is used for the node alias](#change-which-hsn-nic-is-used-for-the-node-alias)
 - [Create custom DNS records](#create-custom-dns-records)
+- [IPv6 support](#ipv6-support)
 
 ## Check the status of the `cray-dns-unbound` pods
 
@@ -400,3 +401,73 @@ local-data: "_slurm-host._tcp.local. 3600 IN SRV 0 100 6818 slurmctld-service.lo
 ```
 
 If the `cray-dns-unbound` Helm chart is reinstalled then the records can be restored by following this procedure again.
+
+## IPv6 support
+
+The `cray-dns-unbound` service can be configured to access an external DNS server using IPv6. CSM does not deploy Kubernetes in dual stack mode so this is achieved
+by using a network attachment definition to allow the `cray-dns-unbound` pods direct access to an IPv6 network.
+
+The following `cray-dns-unbound` Helm chart values must be set to enable IPv6 support.
+
+| Property          | Default value | Description                                                                                                 |
+| ----------------- | ------------- | ----------------------------------------------------------------------------------------------------------- |
+| `ipv6.enabled`    | false         | Enable/Disable IPv6 support                                                                                 |
+| `ipv6.gateway`    | None          | The default gateway to use for IPv6 traffic. Must be set if `ipv6.enabled=true`                             |
+| `ipv6.subnet`     | None          | The IPv6 subnet to use in CIDR form. Must be set if `ipv6.enabled=true`                                     |
+| `ipv6.rangeStart` | None          | Start address of an IPv6 address pool to be used for `cray-dns-unbound`. Must be set if `ipv6.enabled=true` |
+| `ipv6.rangeEnd`   | None          | End address of an IPv6 address pool to be used for `cray-dns-unbound`. Must be set if `ipv6.enabled=true`   |
+
+The values used for `ipv6.gateway` and `ipv6.subnet` should match those used for the Customer Management Network (CMN). The `ipv6.rangeStart` and `ipv6.rangeEnd` values should describe an unused range
+within the subnet declared in `ipv6.subnet`. The number of IP addresses in this range should equal either the desired number of `cray-dns-unbound` replicas or the number of NCN
+worker nodes. If Keycloak has also been configured to use IPv6, then this range *must not* overlap with the range used there.
+
+### IPv6 Prerequisites
+
+- CSM must have been configured to support IPv6 on the CMN. See the [IPv6 Configuration Guide](../customer_accessible_networks/ipv6_configuration_guide.md) for more information.
+
+### IPv6 Procedure
+
+**NOTE:** This procedure assumes that CSM has already been installed and a running system is being modified. If the system
+is undergoing a fresh install, then simply update `${SITE_INIT}/customizations.yaml` with the desired values as part of the
+[Prepare Site Init](../../../install/prepare_site_init.md) procedure, and then skip
+steps one, three, and four.
+
+1. (`ncn-mw#`) Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
+
+   ```bash
+   kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
+   ```
+
+1. (`ncn-mw#`) Update the `spec.kubernetes.services.cray-dns-unbound` path in `customizations.yaml` with the IPv6 configuration.
+
+   If required, update `network.netstaticips.system_to_site_lookups` at the top of the file or add an additional DNS server to the `forwardZones` list.
+
+   Example configuration:
+
+   ```yaml
+      cray-dns-unbound:
+        domain_name: '{{ network.dns.external }}'
+        forwardZones:
+        - name: .
+          forwardIps:
+          - '{{ network.netstaticips.system_to_site_lookups }}'
+          - 2001:db8:100:200:4000
+        ipv6:
+          enabled: true
+          gateway: 2001:db8:100:200::1
+          subnet: 2001:db8:100:200::/64
+          rangeStart: 2001:db8:100:200::200
+          rangeEnd: 2001:db8:100:200::210
+   ```
+
+1. (`ncn-mw#`) Update the `site-init` secret in the `loftsman` namespace.
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+1. (`ncn-mw#`) Reinstall the `cray-dns-unbound` Helm chart using the [Redeploying a Chart](../../.././operations/CSM_product_management/Redeploying_a_Chart.md) procedure.
+
+   - Name of chart to be redeployed: `cray-dns-unbound`
+   - Base name of manifest: `core-services`

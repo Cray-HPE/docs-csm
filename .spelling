@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2023 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -671,8 +671,16 @@ pre-NCN
 pre-uprade
 preboot
 prebuilt
+preconfigure
+preconfigured
+preconfigures
+preconfiguring
 preempted
 preemptively
+prepopulate
+prepopulated
+prepopulates
+prepopulating
 provisioners
 PXEboot
 qemu-user-static
@@ -1085,6 +1093,9 @@ s3fs
 
 - operations/power_management/Power_Off_Compute_and_IO_Cabinets.md
 lockout-tagout
+
+- operations/rack_resiliency/Zones.md
+MPFDs
 
 - operations/README.md
 Alerta

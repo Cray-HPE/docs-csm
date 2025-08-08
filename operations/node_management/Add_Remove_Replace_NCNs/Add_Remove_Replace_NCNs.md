@@ -28,9 +28,6 @@ All activities required for site maintenance are complete.
 
 The latest CSM documentation has been installed on the master nodes. See [Check for Latest Documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
-**IMPORTANT**: Before beginning a procedure to add or remove a worker NCN, see
-[Adding or removing worker NCN](../../iscsi_sbps/Managing_Selective_Node_Personalization.md#adding-or-removing-worker-ncn).
-
 1. (`ncn-m#`) Run `ncn_add_pre-req.py` to adjust the network.
 
    ```bash
