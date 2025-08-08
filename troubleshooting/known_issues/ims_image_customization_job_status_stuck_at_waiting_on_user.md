@@ -13,7 +13,7 @@ This can occur during `image customization` if any of the following things happe
 A symptom of this problem is a failure when attempting to SSH into the `sshd` container of the IMS image
 customization job. Use the following procedure to detect the issue.
 
-1. (`ncn-mw#`) Get the details of the image customization job,
+1. (`ncn-mw#`) Get the details of the image customization job.
 
    > In the following command, substitute the actual IMS job ID being checked.
 
@@ -70,7 +70,7 @@ customization job. Use the following procedure to detect the issue.
 
 1. Confirm that the job details fit the symptoms of this issue.
 
-   - The job `status` field is `waiting_on_user`
+   - The job `status` field is `waiting_on_user`.
    - The `remote_build_node` field is set, indicating the job is running on a remote build node.
 
    If either of these is not the case, then the procedure documented here is not applicable.
