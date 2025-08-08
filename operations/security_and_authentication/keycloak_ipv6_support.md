@@ -3,7 +3,7 @@
 ## IPv6 support
 
 The `cray-keycloak` service can be configured to access an external LDAP server using IPv6. CSM does not deploy Kubernetes in dual stack mode so this is achieved
-by using a network attachment definition to allow the `cray-keycloak` Pods direct access to an IPv6 network.
+by using a network attachment definition to allow the `cray-keycloak` pods direct access to an IPv6 network.
 
 The following `cray-keycloak` Helm chart values must be set to enable IPv6 support.
 
