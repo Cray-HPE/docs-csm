@@ -17,6 +17,7 @@ This document provides links to troubleshooting information for services and fun
 * [Kubernetes](#kubernetes)
 * [MetalLB](#metallb)
 * [Node management](#node-management)
+* [Rack Resiliency](#rack-resiliency)
 * [Security and authentication](#security-and-authentication)
 * [Spire](#spire)
 * [Utility storage](#utility-storage)
@@ -182,6 +183,10 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Troubleshoot Kyverno configuration manually](../operations/security_and_authentication/Troubleshoot_Kyverno_Configuration_manually.md)
 * [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+
+## Rack Resiliency
+
+Please refer to [Rack Resiliency Troubleshooting](../operations/rack_resiliency/Troubleshooting.md#troubleshooting-rack-resiliency)
 
 ## Spire
 

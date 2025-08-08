@@ -10,6 +10,7 @@ directory which contains important customizations for various products.
     - [Customize DNS configuration](#customize-dns-configuration)
     - [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
     - [Configure maximum Istio Gateway pods](#configure-maximum-istio-gateway-pods)
+    - [Enable Rack Resiliency](#enable-rack-resiliency)
 1. [Encrypt secrets](#4-encrypt-secrets)
 1. [Customer-specific customizations](#5-customer-specific-customizations)
 
@@ -452,6 +453,48 @@ the system size.
         "$min_amount"
     done
     ```
+
+### Enable Rack Resiliency
+
+Rack Resiliency is new in CSM 1.7. It is disabled by default and it
+**cannot change between enabled and disabled later**. Administrators are advised to
+take time to determine whether or not they wish to use this feature. See
+[Rack Resiliency](../operations/rack_resiliency/README.md) for details.
+
+If an administrator does not wish to enable the Rack Resiliency feature, then the
+rest of this section can be skipped. Otherwise, follow these steps to enable
+(and optionally customize) Rack Resiliency.
+
+1. (`pit#`) Enable the feature in `customizations.yaml`.
+
+    ```bash
+    yq write -i ${SITE_INIT}/customizations.yaml \
+        'spec.kubernetes.services.rack-resiliency.enabled' "true"
+    ```
+
+1. (`pit#`) Optionally, set custom zone name prefixes.
+
+    See [Zone names](../operations/rack_resiliency/Zones.md#zone-names) for details
+    on reasons for doing this and restrictions on names. This is optional; prefixes are not
+    required. However, **prefixes cannot be changed, set, or removed later**.
+
+    1. Optionally, set a site-specific [Kubernetes zone](../operations/rack_resiliency/Zones.md#kubernetes-zones) prefix.
+
+        > In the following command, replace `k8s-prefix-string` with the desired Kubernetes zone prefix.
+
+        ```bash
+        yq write -i ${SITE_INIT}/customizations.yaml \
+            'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "k8s-prefix-string"
+        ```
+
+    1. Optionally, set a site-specific [Ceph zone](../operations/rack_resiliency/Zones.md#ceph-zones) prefix.
+
+        > In the following command, replace `ceph-prefix-string` with the desired Ceph zone prefix.
+
+        ```bash
+        yq write -i ${SITE_INIT}/customizations.yaml \
+            'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "ceph-prefix-string"
+        ```
 
 ## 4. Encrypt secrets
 

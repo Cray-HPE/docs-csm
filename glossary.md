@@ -64,8 +64,11 @@ Glossary of terms used in CSM documentation.
     * [RemoteISO](#remoteiso)
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
+* [Rack Resiliency](#rack-resiliency)
+* [Rack Resiliency Service (RRS)](#rack-resiliency-service-rrs)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
+* [Resiliency Monitoring Service (RMS)](#resiliency-monitoring-service-rms)
 * [River Cabinet](#river-cabinet)
 * [Rosetta ASIC](#rosetta-asic)
 * [Scalable Boot Projection Service (SBPS)](#scalable-boot-projection-service-sbps)
@@ -568,6 +571,18 @@ a reboot of a RemoteISO will lose all data/information from the running session.
 The rack-mounted [Coolant Distribution Unit (CDU)](#coolant-distribution-unit-cdu) (MCDU-4U) pumps liquid coolant through the
 Liquid-Cooled TDS cabinet coolant manifolds.
 
+## Rack Resiliency
+
+The Rack Resiliency feature provides additional layers of resiliency in the event of a failure of a physical rack in the system.
+
+For more information, see [Rack Resiliency](operations/rack_resiliency/README.md).
+
+## Rack Resiliency Service (RRS)
+
+The implementation in CSM of the [Rack Resiliency](#rack-resiliency) feature.
+
+For more information, see [Rack Resiliency Service](operations/rack_resiliency/README.md#rack-resiliency-service-rrs).
+
 ## Rack System Compute Cabinet
 
 Air-Cooled compute cabinets house a cluster of [compute nodes](#compute-node-cn), [Slingshot ToR switches](#slingshot-top-of-rack-tor-switch),
@@ -577,6 +592,12 @@ and [SMNet](#system-management-network-smnet) ToR switches.
 
 The Redfish Translation Service (RTS) aids in management of any hardware components which are not managed by
 Redfish, such as a ServerTech [PDU](#power-distribution-unit-pdu) in a [River cabinet](#river-cabinet).
+
+## Resiliency Monitoring Service (RMS)
+
+One of the components of the [Rack Resiliency Service (RRS)](#rack-resiliency-service-rrs).
+
+For more information, see [Resiliency Monitoring Service](operations/rack_resiliency/Resiliency_Monitoring_Service.md).
 
 ## River Cabinet
 
