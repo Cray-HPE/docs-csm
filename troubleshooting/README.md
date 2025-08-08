@@ -68,6 +68,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [`etcd` Pods in CLBO State](known_issues/etcd_pods_in_CLBO_state.md)
 * [Kyverno policy management](../operations/kubernetes/Kyverno.md#known-issues)
 * [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
+* [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 
 ## Booting
 
@@ -145,6 +146,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Image Job Performance](../operations/image_management/Image_Job_Performance.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
+* [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 * [Troubleshoot Issues with Large Images](../operations/image_management/Troubleshoot_Large_Image.md)
 * [Troubleshoot Remote Build Node](../operations/image_management/Troubleshoot_Remote_Build_Node.md)
 * [Troubleshoot Interactions with zypper](../operations/image_management/Troubleshoot_zypper_interaction.md)
