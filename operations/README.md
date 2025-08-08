@@ -657,6 +657,7 @@ Overview of the several different networks supported by the HPE Cray EX system.
 - [Connect to Switch over USB-Serial Cable](network/Connect_to_Switch_Over_USB_Serial_Cable.md)
 - [Create a CSM Configuration Upgrade Plan](network/Create_a_CSM_Configuration_Upgrade_Plan.md)
 - [Gateway Testing](network/Gateway_Testing.md)
+- [NMN Isolation](network/NMN_Isolation.md)
 
 ### Management network
 
