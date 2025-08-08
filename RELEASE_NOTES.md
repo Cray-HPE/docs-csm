@@ -14,9 +14,10 @@
 
 ### iSCSI SBPS
 
-* The [iSCSI SBPS feature](operations/iscsi_sbps/README.md) is now enhanced to select specific worker nodes for node personalization
-for enabling iSCSI targets. In CSM 1.6 this feature enables all the worker nodes  as iSCSI targets by default.
-See [Managing Selective Node Personalization](operations/iscsi_sbps/Managing_Selective_Node_Personalization.md) for more details.
+* The [iSCSI SBPS feature](operations/iscsi_sbps/README.md) is enhanced to allow administrators
+  to select which worker NCNs are enabled as iSCSI targets. This is a change from CSM 1.6, where
+  all worker NCNs are enabled as iSCSI targets. For more information, see
+  [Managing Selective Node Personalization](operations/iscsi_sbps/Managing_Selective_Node_Personalization.md).
 
 ### Monitoring
 
