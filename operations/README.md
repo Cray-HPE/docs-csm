@@ -302,6 +302,7 @@ As a result, the system's micro-services are modular, resilient, and can be upda
 - [Fix `Failed to start etcd` on Master NCN](kubernetes/Fix_Failed_to_start_etcd_on_Master.md)
 - [Kubernetes and Bare Metal EtcD Certificate Renewal](kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md)
 - [Kubernetes known issues](../troubleshooting/README.md#kubernetes)
+- [Cilium Network Troubleshooting Runbook](../troubleshooting/Cilium_Network_Troubleshooting_Runbook.md)
 
 ## Package repository management
 
@@ -499,6 +500,7 @@ confident that a lack of issues indicates the system is operating normally.
 - [`grok-exporter` errors during installation](system_management_health/Grok-Exporter_Error.md)
 - [Troubleshoot Prometheus Alerts](system_management_health/Troubleshoot_Prometheus_Alerts.md)
 - [Configure UAN Node Exporter](system_management_health/uan_node_exporter_configs.md)
+- [Cilium Network Troubleshooting Runbook](../troubleshooting/Cilium_Network_Troubleshooting_Runbook.md)
 
 ## System Layout Service (SLS)
 
@@ -658,6 +660,7 @@ Overview of the several different networks supported by the HPE Cray EX system.
 - [Connect to Switch over USB-Serial Cable](network/Connect_to_Switch_Over_USB_Serial_Cable.md)
 - [Create a CSM Configuration Upgrade Plan](network/Create_a_CSM_Configuration_Upgrade_Plan.md)
 - [Gateway Testing](network/Gateway_Testing.md)
+- [Cilium Network Troubleshooting Runbook](../troubleshooting/Cilium_Network_Troubleshooting_Runbook.md)
 - [NMN Isolation](network/NMN_Isolation.md)
 
 ### Management network
