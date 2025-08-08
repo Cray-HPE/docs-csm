@@ -42,7 +42,7 @@ The following information is needed:
 
 1. (`ncn-m001#`) Find the model name
 
-- For HPE Systems:
+- For HPE nodes:
 
     ```bash
     MODEL=$(curl -k -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}/redfish/v1/Systems/1 | jq -r .Model)
@@ -50,7 +50,7 @@ The following information is needed:
     export BMC_PASSWORD USERNAME BMC_ADDRESS MODEL
     ```
 
-- For Gigabyte Systems:
+- For Gigabyte nodes:
     ```bash
     MODEL=$(curl -k -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}ipaddressOfBMC/redfish/v1/Systems/Self | jq -r .Model)
     echo $MODEL
@@ -67,10 +67,10 @@ The following information is needed:
 
     Locate the images in the returned output for the `ncn-m001` firmware and/or BIOS.
     Make sure to select the correct firmware/BIOS version as several versions may be installed in FAS.
-    - For HPE systems:
+    - For HPE nodes:
       - iLO firmware will be `ilo5_xxx.bin` or `ilo6_xxx.bin`
       - BIOS wil be a `.signed.flash` file
-    - For Gigabyte systems:
+    - For Gigabyte nodes:
       - BMC firmware will be `rom.ima_enc`
       - BIOS will be `image.RBU`
 
@@ -92,7 +92,7 @@ The following information is needed:
 ## Flash the firmware
 
 - [Flash Gigabyte `ncn-m001`](#flash-gigabyte-ncn-m001)
-- HPE Systems can be updated using two different methods
+- HPE nodes can be updated using two different methods
   - [Flash HPE `ncn-m001` using web interface](#flash-hpe-ncn-m001-using-web-interface)
   - [Flash HPE `ncn-m001` using ilorest](#flash-hpe-ncn-m001-using-ilorest)
 
@@ -208,7 +208,7 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
     System ROM : A43 v3.60 (01/21/2025)
     ```
 
-1. {`ncn-m001#`) Update BIOS on ncn-m001 using the downloaded SystemRom file.
+1. {`ncn-m001#`) Update BIOS on ncn-m001 using the downloaded System Rom file.
 
     ```bash
     ilorest uploadcomp --component=A43_3.70_03_21_2025.signed.flash --update_target
