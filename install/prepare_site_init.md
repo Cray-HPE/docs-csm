@@ -331,6 +331,7 @@ with system-specific customizations.
        ```bash
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
+
     1. (Optional) Configure IPv6 support for the `cray-keycloak` service.
 
        See the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#keycloak) for more information.
