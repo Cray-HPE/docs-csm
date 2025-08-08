@@ -26,69 +26,70 @@ The following information is needed:
 
 ## Setup
 
-1. (`ncn-m001#`) Set variables for `USERNAME` and `BMC_PASSWORD`
+1. (`ncn-m001#`) Set variables for `USERNAME` and `BMC_PASSWORD`.
 
     ```bash
     USERNAME=root
     read -r -s -p "NCN BMC ${USERNAME} password: " BMC_PASSWORD
     ```
 
-1. (`ncn-m001#`) Get the IP address of `ncn-m001's` BMC (on the external/campus network)
+1. (`ncn-m001#`) Get the IP address of `ncn-m001's` BMC (on the external/campus network).
 
     ```bash
     BMC_ADDRESS=$(ipmitool lan print | grep "IP Address  " | cut -f2 -d: | sed 's/ //g')
     echo $BMC_ADDRESS
     ```
 
-1. (`ncn-m001#`) Find the model name
+1. (`ncn-m001#`) Find the model name.
 
-- For HPE nodes:
-
-    ```bash
-    MODEL=$(curl -k -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}/redfish/v1/Systems/1 | jq -r .Model)
-    echo $MODEL
-    export BMC_PASSWORD USERNAME BMC_ADDRESS MODEL
-    ```
-
-- For Gigabyte nodes:
-
-    ```bash
-    MODEL=$(curl -k -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}ipaddressOfBMC/redfish/v1/Systems/Self | jq -r .Model)
-    echo $MODEL
-    export BMC_PASSWORD USERNAME BMC_ADDRESS MODEL
-    ```
-
-1. Get the firmware images
-
-- (`ncn-m001#`) View a list of images stored in FAS that are ready to be flashed.
-
-    ```bash
-    cray fas images list --format json | jq '.[] | .[] | select(.models | index($ENV.MODEL))'
-    ```
-
-    Locate the images in the returned output for the `ncn-m001` firmware and/or BIOS.
-    Make sure to select the correct firmware/BIOS version as several versions may be installed in FAS.
     - For HPE nodes:
-        - iLO firmware will be `ilo5_xxx.bin` or `ilo6_xxx.bin`
-        - BIOS wil be a `.signed.flash` file
+
+        ```bash
+        MODEL=$(curl -k -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}/redfish/v1/Systems/1 | jq -r .Model)
+        echo $MODEL
+        export BMC_PASSWORD USERNAME BMC_ADDRESS MODEL
+        ```
+
     - For Gigabyte nodes:
-        - BMC firmware will be `rom.ima_enc`
-        - BIOS will be `image.RBU`
 
-    Look for the returned `s3URL`. For example:
+        ```bash
+        MODEL=$(curl -k -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}ipaddressOfBMC/redfish/v1/Systems/Self | jq -r .Model)
+        echo $MODEL
+        export BMC_PASSWORD USERNAME BMC_ADDRESS MODEL
+        ```
 
-    ```text
-    "s3URL": "s3:/fw-update/4e5f569a603311eb96b582a8e219a16d/image.RBU"
-    ```
+1. (`ncn-m001#`) Get the firmware images.
 
-- (`ncn-m001#`) Get the firmware images using the `s3URL` path from the previous step.
+    1. View a list of images stored in FAS that are ready to be flashed.
 
-    In the following example command, `4e5f569a603311eb96b582a8e219a16d/image.RBU` is the path in the `s3URL`,
-    and the image will be saved to the file `image.RBU` in the current directory.
+        ```bash
+        cray fas images list --format json | jq '.[] | .[] | select(.models | index($ENV.MODEL))'
+        ```
 
-    ```bash
-    cray artifacts get fw-update 4e5f569a603311eb96b582a8e219a16d/image.RBU image.RBU
-    ```
+        Locate the images in the returned output for the `ncn-m001` firmware and/or BIOS.
+        Make sure to select the correct firmware/BIOS version as several versions may be installed in FAS.
+
+        - For HPE nodes:
+            - iLO firmware will be `ilo5_xxx.bin` or `ilo6_xxx.bin`
+            - BIOS wil be a `.signed.flash` file
+        - For Gigabyte nodes:
+            - BMC firmware will be `rom.ima_enc`
+            - BIOS will be `image.RBU`
+
+        Look for the returned `s3URL`. For example:
+
+        ```text
+        "s3URL": "s3:/fw-update/4e5f569a603311eb96b582a8e219a16d/image.RBU"
+        ```
+
+    1. Get the firmware images using the `s3URL` path from the previous step.
+
+        In the following example command, `4e5f569a603311eb96b582a8e219a16d/image.RBU` is the path in the `s3URL`,
+        and the image will be saved to the file `image.RBU` in the current directory.
+
+        ```bash
+        cray artifacts get fw-update 4e5f569a603311eb96b582a8e219a16d/image.RBU image.RBU
+        ```
 
 ## Flash the firmware
 
@@ -117,14 +118,14 @@ The following information is needed:
         -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BMC"}'
     ```
 
-    Wait for the BMC to update and reboot
+1. (`ncn-m001#`) Wait for the BMC to update and reboot.
 
     ```bash
     sleep 200
     ping ${BMC_ADDRESS}
     ```
 
-    When the `ping` returns that the node has rebooted, check that the firmware version is at the expected value:
+1. (`ncn-m001#`) After the reboot completes, check that the firmware version is at the expected value.
 
     ```bash
     curl -k -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}/redfish/v1/UpdateService/FirmwareInventory/BMC
@@ -132,7 +133,7 @@ The following information is needed:
 
 1. (`ncn-m001#`) Update BIOS.
 
-    Be sure to substitute the correct values for the following strings in the example command:
+    Be sure to substitute the correct values for the following strings in the example command.
 
     - `ipaddressOfM001` = IP address of `ncn-m001` node
     - `filename` = Filename of the downloaded image
@@ -142,31 +143,37 @@ The following information is needed:
         -d '{"ImageURI":"http://ipaddressOfM001:8770/filename", "TransferProtocol":"HTTP", "UpdateComponent":"BIOS"}'
     ```
 
-    This will return a json packet simular to:
+    Example output:
 
      ```json
      {"@odata.type":"#UpdateService.v1_5_0.UpdateService","Messages":[{"@odata.type":"#Message.v1_0_7.Message","Message":"A new task /redfish/v1/TaskService/Tasks/596 was created.","MessageArgs":["/redfish/v1/TaskService/Tasks/596"],"MessageId":"Task.1.0.New","Resolution":"None","Severity":"OK"},{"@odata.type":"#Message.v1_0_7.Message","Message":"Device is prepareing flash firmware for action SimpleUpdate.","MessageArgs":["SimpleUpdate"],"MessageId":"UpdateService.1.0.PrepareUpdate","Resolution":"None","Severity":"OK"}]}
      ```
 
+1. Verify successful update.
+
      When updating the Gigabyte BIOS, the BIOS version number will not change until the node is rebooted.
      To verify a successful update, check the task that was created.
-     Using the return json packet, find the line:
 
-     ```text
-     "A new task /redfish/v1/TaskService/Tasks/596 was created."  
-     ```
+     1. Using the return json packet, find the line resembling the following.
 
-     Using the task number (596 in the above example), check the state of the task:
+         ```text
+         "A new task /redfish/v1/TaskService/Tasks/596 was created."  
+         ```
 
-     ```bash
-     curl -sk -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}/redfish/v1/TaskService/Tasks/596 | jq .TaskState
-     ```
+     1. (`ncn-m001#`) Using the task number (`596` in the above example), check the state of the task.
 
-     State should be "Running" until BIOS update is finished.
-     Once finished, the state will be "Completed".
-     If you receive a state other than "Running" or "Completed", check the task for other messages.
+         ```bash
+         curl -sk -u ${USERNAME}:${BMC_PASSWORD} https://${BMC_ADDRESS}/redfish/v1/TaskService/Tasks/596 | jq .TaskState
+         ```
 
-    > After updating BIOS, `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
+     The state should be `Running` until the BIOS update is finished.
+     Once finished, the state will be `Completed`.
+     If a state other than `Running` or `Completed` is shown, then check the task for other messages.
+
+1. Reboot `ncn-m001`.
+
+    After updating BIOS, `ncn-m001` must be rebooted.
+    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
 
 ### Flash HPE `ncn-m001` using web interface
 
@@ -189,7 +196,10 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
     1. Click `"Confirm TPM override"`.
     1. Click `"Flash"`.
 
-    > After updating System ROM (BIOS), `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
+1. Reboot `ncn-m001`.
+
+    After updating System ROM (BIOS), `ncn-m001` must be rebooted.
+    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
 
 ### Flash HPE `ncn-m001` using `ilorest`
 
@@ -228,26 +238,37 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
     sleep 60
     ```
 
-1. {`ncn-m001#`) Using `ipmitool`, login to the `ncn-m001` console, using the correct user, password, and BMC IP address so that you can watch the console log as the node boots
+1. Reboot `ncn-m001`.
 
-    ```bash
-    ipmitool -I lanplus -U $USERNAME -P $BMC_PASSWORD -H $BMC_ADDRESS sol activate
-    ```
+    1. (`linux/win/mac#`) Open a console to `ncn-m001` and log in as `root`.
 
-    Example console:
+        > - **IMPORTANT**: Do not open the console from `ncn-m001` itself, or in a terminal that connected through `ncn-m001`.
+        > - Update the example command to specify the correct user, password, and BMC IP address.
 
-    ```console
-    ncn-m001 login: root
-    Password:
-    ```
+        ```bash
+        ipmitool -I lanplus -U <BMC_USERNAME> -P <BMC_PASSWORD> -H <BMC_ADDRESS> sol activate
+        ```
 
-1. {`ncn-m001#`) Reboot `ncn-m001`. Do not accidentally issue this command on another node!
+        Example console:
 
-    ```bash
-    shutdown -r now
-    ```
+        ```console
+        ncn-m001 login: root
+        Password:
+        ```
 
-1. {`ncn-m001#`) Once the node is back up check firmware versions.
+    1. {`ncn-m001#`) Reboot `ncn-m001`.
+
+        **IMPORTANT** Do not accidentally issue this command on another node!
+
+        ```bash
+        shutdown -r now
+        ```
+
+    1. Watch the console until `ncn-m001` reboots and is back up.
+
+        The console can be closed at this point. It is no longer needed for this procedure.
+
+1. {`ncn-m001#`) Check firmware versions.
 
     ```bash
     ilorest serverinfo  |grep "Firmware:" -A3
