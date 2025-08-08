@@ -432,7 +432,7 @@ is undergoing a fresh install, then simply update `${SITE_INIT}/customizations.y
 [Prepare Site Init](../../../install/prepare_site_init.md) procedure, and then skip
 steps one, three, and four.
 
-1. (`ncn-m#`) Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
+1. (`ncn-mw#`) Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
 
    ```bash
    kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
