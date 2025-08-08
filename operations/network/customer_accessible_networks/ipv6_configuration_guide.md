@@ -93,25 +93,19 @@ Example output:
         },
         "hmn": {
           "gateway": "10.254.0.1",
-          "gateway6": "fdf8:413:de2c:200::1",
           "ip": "10.254.1.17/17",
-          "ip6": "fdf8:413:de2c:200::108/64",
           "parent_device": "bond0",
           "vlanid": 4
         },
         "mtl": {
           "gateway": "10.1.0.1",
-          "gateway6": "fdf8:413:de2c:200::1",
           "ip": "10.1.1.8/16",
-          "ip6": "fdf8:413:de2c:200::108/64",
           "parent_device": "bond0",
           "vlanid": 0
         },
         "nmn": {
           "gateway": "10.252.0.1",
-          "gateway6": "fdf8:413:de2c:200::1",
           "ip": "10.252.1.10/17",
-          "ip6": "fdf8:413:de2c:200::108/64",
           "parent_device": "bond0",
           "vlanid": 2
         }
