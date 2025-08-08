@@ -194,6 +194,11 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 
 ### Automation improvements
 
+* IUF now supports customized images and CFS configurations for rebuilding nodes during the 'management-nodes-rollout' stage.
+  See [`management-nodes-rollout`](operations/iuf/workflows/management_rollout.md#note-for-csm-v170) for further information.
+* IUF can now reboot worker and storage NCNs without rebuilding them. See
+  [Reboot NCNs with IUF](operations/node_management/Reboot_NCNs_iuf.md) for more information.
+
 ### Base platform component upgrades
 
 | Platform Component           | Version |
@@ -260,7 +265,7 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 ### Documentation enhancements
 
 * Updated Kyverno documentation.
-  
+
 ## Noteworthy changes
 
 * The default Kubernetes certificate validity period increased from 1 year to 3 years.
@@ -363,7 +368,7 @@ For a full list of known issues, see [Known issues](troubleshooting/README.md#kn
 
 ### Security vulnerability exceptions in CSM 1.7
 
-### All Resolved Issues
+## All resolved issues
 
 ### Networking
 
@@ -417,9 +422,7 @@ CASMNET-2355 IPv6 addressing support for fresh installs and existing deployments
 ### IUF
 
 ```text
-CASMAUTO-92 Create the IUF suite for CT integration: suite of selected testcases
 CASM-3864 As a System Admin, I do want to clean up files in /tmp directory from nodes in iuf/nls workflows
-CASM-5052 As a developer, I need to hook CFS ansible plays (placement discovery, validation and zoning) into IUF workflows (Upgrade)
 CASM-5599 While getting workflows status in IUF , skip workflows with Unknown status
 CASM-5623 Provide default path for --site-vars in iuf-cli
 ```
@@ -716,7 +719,6 @@ CASMTRIAGE-8097 DOCS: cray-uas-mgr still installed in CSM 1.6.1
 CASMTRIAGE-8203 DOCS: Baldar : NCN heathchecks fails with cray-spire
 CASMTRIAGE-8204 DOCS: Secret not getting created for tapms tenant
 CASMTRIAGE-8276 DOCS: IUF hotfix for cray-nexus-setup broke upgrades for 1.6.0/1.6.1/1.6.2
-CASMTRIAGE-8281 DOCS: wasp : iuf failing at process media stage
 CASMTRIAGE-8286 DOCS: wasp: hung during spire request-ncn-join-token rollout in prerequisites.sh
 CASMTRIAGE-8292 DOCS: wasp: rollout of keycloak hung during prerequisites.sh
 CASMTRIAGE-8295 DOCS: Wasp - Etcd failures due to PSP related issues.
@@ -737,7 +739,6 @@ CASMTRIAGE-8448 DOCS: platform-utils at 1.8.2-1.noarch instead of 1.8.3-1.noarch
 CASMTRIAGE-8451 DOCS: vShasta: cilium migration fails, Kyverno blocks Argo pod
 CASMTRIAGE-8466 DOCS: management rollout of ncn-m001 error
 CASMTRIAGE-8473 DOCS: vShasta: cilium migration step delete-cilium-node-config is not idempotent
-CASMTRIAGE-8483 DOCS: CSM 1.7, IUF reboot behavior
 CASMUSER-2660 FEATURE:: Setup HSN macvlan/ipvlan by default and deprecate WLM script and docs
 CRAYSAT-1903 DOCS: BOS sessions list command in doc should be modified to give only Running sessions
 CRAYSAT-1906 DOCS: Remove "sat bootsys shutdown --stage capture-state" command from shutdown procedure
@@ -989,7 +990,6 @@ CASMHMS-6568 CAST-38383: Prevent redundant "Detected" events in hardware invento
 ```text
 CASMINST-3816 manually copying large files into s3fs cache directory prevents prune from pruning them
 CASMINST-6734 As a System Admin, I do not want to pass SW_ADMIN_PASSWORD  as a parameter to IUF/NLS workflows as goss test do not require it
-CASMINST-6734 As a System Admin, I do not want to pass SW_ADMIN_PASSWORD  as a parameter to IUF/NLS workflows as goss test do not require it
 CASMINST-6900 Complete a Comparison of CSM V1.4.x and CSM V1.5.x/1.6.x Node Resource Usage
 CASMINST-7104 As a Sys Admin, I want to pass image and CFS config for management nodes in management-nodes-rollout stage
 CASMINST-7114 TESTS: rgw_endpoint_check throwing python error
@@ -1205,9 +1205,7 @@ CASMTRIAGE-8101 cray-console-node unable to connect to Olympus nodes/improper SS
 CASMTRIAGE-8117 spire jwks test can fail if more than one token returns
 CASMTRIAGE-8133 monitoring_check.sh does not look for VictoriaMetrics services
 CASMTRIAGE-8135 TESTS: IMS: cmsdev failed during post-install health check
-CASMTRIAGE-8146 wasp: iuf failing during remove-previous-done-files
 CASMTRIAGE-8151 Tyr cray-hms-firmware-action-test-functional fails api/1-non-disruptive/test_actions.tavern.yaml
-CASMTRIAGE-8159 IUF hostPath mounts are blocked on wasp
 CASMTRIAGE-8160 Wasp: management node image customization stuck on Waiting for `Inventory in CFS`.
 CASMTRIAGE-8161 ims-utils: setting up certs failing with `update-ca-certificates: command not found`
 CASMTRIAGE-8171 on #tyr, worker node moved to hung state, ncn-w004
@@ -1226,7 +1224,6 @@ CASMTRIAGE-8308 Failed to create image of remote-build-node
 CASMTRIAGE-8333 starlord: compute node cfs configuration failing during CPE configuration
 CASMTRIAGE-8342 Management node rollout failed with can not be run unsupported strategy
 CASMTRIAGE-8343 iscsi_sbps_sanity.sh tried to get hostname from non-existent pod
-CASMTRIAGE-8345 ncn-s003 reboot using iuf
 CASMTRIAGE-8353 Slurm layer is failing during cfs configuration of compute node
 CASMTRIAGE-8382 Patroni DCS failsafe mode is still disabled when it should be enabled
 CASMTRIAGE-8388 drax: nexus-docker-upload failing for multiple products during deliver-product
@@ -1240,6 +1237,7 @@ CASMTRIAGE-8456 vShasta: cilium migration fails, Argo pod kills itself
 CASMTRIAGE-8458 autotriage: 49 failures in CSM-1.7.0-beta.1 detected on: vinland
 CASMTRIAGE-8461 vShasta: cleanup live images fails
 CASMTRIAGE-8470 slurm-backup pod blocked by kyverno check-image policy on odin
+CASMTRIAGE-8508 Rack Resiliency: Criticalservices balanced is not shown correctly by RMS
 CASMTRIAGE-8500 vShasta: IUF deploy-product stage fails after ncn-m001 kubelet restart and 15 minutes wait
 CASMTRIAGE-8540 craycli version is different on AARCH64 nodes than x86_86 nodes
 ```
