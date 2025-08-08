@@ -1,4 +1,4 @@
-# Prepare `site init`
+# Prepare `site-init`
 
 These procedures guide administrators through setting up the `site-init`
 directory which contains important customizations for various products.
@@ -332,6 +332,15 @@ with system-specific customizations.
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
 
+    1. (Optional) Configure IPv6 support for the `cray-keycloak` service.
+
+       > **Important** This step will only work if the required IPv6 fields were configured in the earlier
+       > [Customize `system_config.yaml`](pre-installation.md#31-customize-system_configyaml) step.
+
+       See [Keycloak](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#keycloak) in the
+       [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md)
+       for more information.
+
 ### Customize DNS configuration
 
 1. (`pit#`) Configure the Unbound DNS resolver (if needed).
@@ -396,6 +405,15 @@ with system-specific customizations.
             forwardIps:
               - "10.92.100.85"
         ```
+
+    1. (Optional) Configure IPv6 support for the `cray-dns-unbound` service.
+
+       > **Important** This step will only work if the required IPv6 fields were configured in the earlier
+       > [Customize `system_config.yaml`](pre-installation.md#31-customize-system_configyaml) step.
+
+       See [Domain Name System (DNS)](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#domain-name-system-dns)
+       in the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md)
+       for more information.
 
     See the following documentation regarding known issues when operating with no upstream DNS server.
     - [Spire Database Cluster DNS Lookup Failure](../troubleshooting/known_issues/spire_database_lookup_error.md)

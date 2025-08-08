@@ -270,6 +270,7 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
   For more information on the policy, how to add exceptions, and how to allow third party signing keys, see
   [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
 * `PProf` debug support has been added to all remaining HMS services.  See [Debugging With HMS `PProf` Images](troubleshooting/debugging_with_hms_pprof_images.md) for more information.
+* IPv6 support on Customer Accessible Networks. See the [IPv6 Configuration Guide](operations/network/customer_accessible_networks/ipv6_configuration_guide.md) for more information.
 * The `Weave` Container Networking Interface (CNI) has been deprecated in favor of Cilium.
     * A fresh install of CSM 1.7 will use Cilium by default.
     * Upgrading from CSM 1.6 to 1.7 will migrate the CNI from Weave to Cilium. See [Upgrade CSM and additional products with IUF](operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) for more information.

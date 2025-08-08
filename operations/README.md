@@ -366,6 +366,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
     - [Keycloak User Management with `kcadm.sh`](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
     - [Keycloak User Localization](security_and_authentication/Keycloak_User_Localization.md)
     - [Create a Backup of the Keycloak Postgres Database](security_and_authentication/Create_a_Backup_of_the_Keycloak_Postgres_Database.md)
+    - [Keycloak IPv6 Support](security_and_authentication/keycloak_ipv6_support.md)
 - [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
     - [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
     - [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
@@ -682,6 +683,7 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 - [BI-CAN Aruba/Arista Configuration](network/customer_accessible_networks/bi-can_arista_aruba_config.md)
 - [MetalLB Peering with Arista Edge Router](network/customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
+- [IPv6 Configuration Guide](network/customer_accessible_networks/ipv6_configuration_guide.md)
 - [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 - [CMN known issues](../troubleshooting/README.md#customer-management-network-cmn)
 
