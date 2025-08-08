@@ -128,7 +128,7 @@ IPv6 support can be enabled in two different ways.
 
 1. Fresh install of CSM
 
-   New command line options were added to the Cray Site Init tool (`csi`).
+   New command line options were added to the Cray Site Initializer tool (`csi`).
 
    | Option         | Description                                           |
    |----------------|-------------------------------------------------------|
@@ -146,7 +146,7 @@ IPv6 support can be enabled in two different ways.
    This command defaults to a dry run and writes all proposed BSS and SLS changes along with backups of the original data to a timestamped directory in the current working directory unless overridden with the `-b|--backup-dir` option.
 
    The `--commit` option will apply the proposed changes to BSS and SLS. This should be done before the management rollout stage of the [Upgrade CSM and additional products with IUF](../../iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) procedure
-   to ensure that the NCNs are rebuild with IPv6 support enabled.
+   to ensure that the NCNs are rebuilt with IPv6 support enabled.
 
    See [`cray-site-init` updates](../../../RELEASE_NOTES.md#csi-patch-csm-ipv6) for a detailed description of the `csi patch csm ipv6` options.
 
