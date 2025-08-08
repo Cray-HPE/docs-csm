@@ -331,6 +331,11 @@ with system-specific customizations.
        ```bash
        yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
+    1. (Optional) Configure IPv6 support for the `cray-keycloak` service.
+
+       See the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#keycloak) for more information.
+
+       > **Important** Do not perform this step without first configuring the `cmn-cidr6`, `chn-cidr6`, `cmn-gateway6`, and `chn-gateway6` settings in `system_config.yaml`
 
 ### Customize DNS configuration
 
@@ -396,6 +401,12 @@ with system-specific customizations.
             forwardIps:
               - "10.92.100.85"
         ```
+
+    1. (Optional) Configure IPv6 support for the `cray-dns-unbound` service.
+
+       See the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#domain-name-system-dns) for more information.
+
+       > **Important** Do not perform this step without first configuring the `cmn-cidr6`, `chn-cidr6`, `cmn-gateway6`, and `chn-gateway6` settings in `system_config.yaml`
 
     See the following documentation regarding known issues when operating with no upstream DNS server.
     - [Spire Database Cluster DNS Lookup Failure](../troubleshooting/known_issues/spire_database_lookup_error.md)
