@@ -22,9 +22,11 @@
 
 ### Automation improvements
 
-* IUF now supports customized images and CFS configuration for rebuilding nodes during 'management-nodes-rollout' stage. See [management-nodes-rollout](operations/iuf/workflows/management_rollout.md#note-for-csm-v170) for further information.
+* IUF now supports customized images and CFS configurations for rebuilding nodes during the 'management-nodes-rollout' stage.
+  See [`management-nodes-rollout`](operations/iuf/workflows/management_rollout.md#note-for-csm-v170) for further information.
 
-* IUF can now reboot NCNs worker and storage nodes without rebuild. Please refer to the [Reboot NCNs with IUF](operations/node_management/Reboot_NCNs_iuf.md).
+* IUF can now reboot worker and storage NCNs without rebuilding them. See
+  [Reboot NCNs with IUF](operations/node_management/Reboot_NCNs_iuf.md) for more information.
 
 ### Base platform component upgrades
 
@@ -167,7 +169,7 @@ For a full list of known issues, see [Known issues](troubleshooting/README.md#kn
 
 ### Security vulnerability exceptions in CSM 1.7
 
-### All Resolved Issues
+## All resolved issues
 
 ### Networking
 
