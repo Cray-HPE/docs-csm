@@ -227,41 +227,6 @@ CASM-5599 While getting workflows status in IUF , skip workflows with Unknown st
 CASM-5623 Provide default path for --site-vars in iuf-cli
 ```
 
-### Rack Resiliency
-
-```text
-CASM-4886 As a developer, I need to develop a method to monitor k8s/ CSM critical services part of RR monitoring service
-CASM-4887 As a developer, I need to develop a method to monitor imbalance of utility storage (Ceph) part of RR monitoring service
-CASM-5246 As a developer, I need to investigate and develop a method to enable/ disable RR feature with site configuration
-CASM-5311 As a developer, I need to develop a method to deploy RR based on the enable/ disable flag (in Customizations)
-CASM-5341 As a developer, I need to develop cray cli command (front-end) for listing RR critical services (k8s and CSM)
-CASM-5342 As a developer, I need to develop cray cli command (front-end) for describing RR critical services (k8s and CSM)
-CASM-5343 As a developer, I need to develop cray cli command (front-end) for updating RR critical services (k8s and CSM)
-CASM-5344 As a developer, I need to develop RR Service API (back-end) for listing k8s topology zones and Ceph zones
-CASM-5345 As a developer, I need to develop RR Service API (back-end) for describing k8s topology zones and Ceph zones
-CASM-5346 As a developer, I need to develop RR Service API (back-end) for listing RR critical services (k8s and CSM)
-CASM-5347 As a developer, I need to develop RR Service API (back-end) for describing RR critical services (k8s and CSM)
-CASM-5348 As a developer, I need to develop RR Service API (back-end) for updating critical services (k8s and CSM)
-CASM-5503 As a developer, I need to develop an Init container for RRS
-CASM-5507 As a developer, I need to develop a new RR craycli status list command (front-end)
-CASM-5508 As a developer, I need to develop a new RR craycli status describe command (front-end)
-CASM-5509 As a developer, I need to develop a new RR craycli status list command (back-end)
-CASM-5510 As a developer, I need to develop a new RR craycli status describe command (back-end)
-CASM-5537 As a developer, I need to develop logging mechanism for RRS
-CASM-5545 As a developer, I need develop deployment method for RRS API
-CASM-5574 As a developer, I need to develop RRS k8s POD with all the RRS artifacts (api, init and rms containers) to build and deploy
-CASM-5602 As a developer, I need to develop RRS helm chart with all the RRS artifacts to build and deploy
-CASM-5603  As a developer, I need to make RRS to be part of CSM 1.7.0 release line
-CASM-5604 As a developer, I need to make RR CFS plays to be part of CSM 1.7.0 release line
-CASM-5605 As a developer, I need to make RR CLI (frontend) to be part of CSM 1.7.0 release line
-CASM-5626 RR CFS Ansible plays: Need to address mentioned review comments
-CASM-5628 Rack Resiliency: Need to address PR comments w.r.t RR critical services
-CASM-5647 Add RRS API spec URI to manifest
-CASM-5656 CEPH zoning is failing while testing integrated solution of RR with latest changes
-CASM-5661 RR Ansible play only checks for RR enablement sometimes
-CASM-5663 As a developer, I need to make RR CLI (frontend) to be part of CSM 1.7.0 release line with the fixes
-```
-
 ### Cray SAT
 
 ```text
@@ -590,35 +555,9 @@ USS-4483 Update Cray-HPE/docs-csm to remove cos-prechecks-for-worker-reboots.yam
 
 ```text
 CASM-4572 Add an argo workflow for the Rolling Reboot of NCNs (currently a manual process)
-CASM-4888 Provide a method to detect the MPFD (Management Plane Failure Domain) failure
-CASM-4890 Provide a method to detect any failed rack coming back online
 CASM-5037 Setting Kyverno policies for replacing Kubernetes PSP
-CASM-5048 As a developer I need to develop a script for K8s Zoning (master and worker management nodes)
-CASM-5051 As a developer, I need to develop CFS ansible plays for placement discovery, placement validation and k8s zoning
-CASM-5055 As a developer, I need to create md doc for k8s and ceph zoning for management nodes
-CASM-5058 As a developer I need to develop a script for discovery of racks and corresponding management nodes placement.
-CASM-5059 As a developer, I need to create md doc for management nodes (Master, Worker and Storage) placement discovery
-CASM-5061 As a developer, I need to develop an algo for management nodes (M/ W/ S) placement validation across physical racks
-CASM-5069 As a developer I need to create a script to apply CEPH zoning to storage nodes
-CASM-5070 As a developer I need to automate CEPH zoning by integrating zoning scripts in CFS plays
-CASM-5074 As a developer, I need to create md doc for adding the K8s and Ceph zone prefixes
-CASM-5077 As a developer, I need to develop a method to identify and report rack failure as part of rack resiliency monitor service
-CASM-5078 As a developer, I need to create ConfigMap for critical k8s and CSM services
-CASM-5080 As a developer, I need to provide resiliency to CEPH services
-CASM-5082 As a developer, I need to develop a method to list k8s zones from cray cli
-CASM-5087 As a developer, I need to create md doc for Cray CLI (front-end)
-CASM-5245 As a developer, I need to develop mutating webhook for zone-based scheduling
 CASM-5264 Incorrect variable being used in Warning statement
 CASM-5267 Avoid infinite loop while uploading artifacts with cray-nexus-setup image
-CASM-5312 As a developer, I need to provide a method to update in HA proxy when CEPH services config changes
-CASM-5339 As a developer, I need to develop cray cli command (front-end) for listing k8s topology zones and Ceph zones
-CASM-5340 As a developer, I need to develop cray cli command (front-end) for describing k8s topology zones and Ceph zones
-CASM-5502 Customization of zone names (k8s and CEPH)
-CASM-5504 As a developer, I need to develop an RMS container
-CASM-5534 As a developer, I need to define CI Unit test cases for frontend
-CASM-5535 As a developer, I need to define CI Unit test cases for backend
-CASM-5536 As a developer, I need to define Readiness and liveness probe for API server
-CASM-5591 As a developer, I need to create md doc for Cray CLI(backend)
 ```
 
 ### CASMCMS
@@ -1099,6 +1038,7 @@ CASMTRIAGE-8458 autotriage: 49 failures in CSM-1.7.0-beta.1 detected on: vinland
 CASMTRIAGE-8461 vShasta: cleanup live images fails
 CASMTRIAGE-8470 slurm-backup pod blocked by kyverno check-image policy on odin
 CASMTRIAGE-8508 Rack Resiliency: Criticalservices balanced is not shown correctly by RMS
+CASMTRIAGE-8500 vShasta: IUF deploy-product stage fails after ncn-m001 kubelet restart and 15 minutes wait
 CASMTRIAGE-8540 craycli version is different on AARCH64 nodes than x86_86 nodes
 ```
 
