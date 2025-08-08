@@ -427,7 +427,9 @@ worker nodes. If Keycloak has also been configured to use IPv6, then this range 
 
 ### IPv6 Procedure
 
-**NOTE:** This procedure assumes that CSM has already been installed and a running system is being modified. If the system is undergoing a fresh install then simply update `${SITE_INIT}/customizations.yaml` with the desired values and skip
+**NOTE:** This procedure assumes that CSM has already been installed and a running system is being modified. If the system
+is undergoing a fresh install, then simply update `${SITE_INIT}/customizations.yaml` with the desired values as part of the
+[Prepare Site Init](../../../install/prepare_site_init.md) procedure, and then skip
 steps one, three, and four.
 
 1. (`ncn-m#`) Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
