@@ -423,7 +423,7 @@ worker nodes. If Keycloak has also been configured to use IPv6, this range *must
 
 Prerequisites:
 
-- CSM must have been configured to support IPv6 on the CMN (TODO: Add link)
+- CSM must have been configured to support IPv6 on the CMN. See the [IPv6 Configuration Guide](../customer_accessible_networks/ipv6_configuration_guide.md) for more information.
 
 **NOTE:** This procedure assumes that CSM has already been installed and a running system is being modified. If the system is undergoing a fresh install then simply update `${SITE_INIT}/customizations.yaml` with the desired values and skip
 steps one, three, and four.
@@ -436,7 +436,7 @@ steps one, three, and four.
 
 1. (`ncn-m#`) Update the `spec.kubernetes.services.cray-dns-unbound` path in `customizations.yaml` with the IPv6 configuration.
 
-   If required update `network.netstaticips.system_to_site_lookups` at the top of the file or add an additional DNS server to the `forwardZones` list.
+   If required, update `network.netstaticips.system_to_site_lookups` at the top of the file or add an additional DNS server to the `forwardZones` list.
 
    Example configuration:
 
