@@ -154,7 +154,7 @@ The following information is needed:
      When updating the Gigabyte BIOS, the BIOS version number will not change until the node is rebooted.
      To verify a successful update, check the task that was created.
 
-     1. Using the return json packet, find the line resembling the following.
+     1. In the JSON response from the previous step, find the text that resembles the following.
 
          ```text
          "A new task /redfish/v1/TaskService/Tasks/596 was created."  
