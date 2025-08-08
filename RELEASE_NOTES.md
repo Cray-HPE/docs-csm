@@ -1,6 +1,54 @@
 # Cray System Management (CSM) - Release Notes
 
-[CSM](glossary.md#cray-system-management-csm) 1.7 contains many changes spanning bug fixes, new feature development, and documentation improvements. This page lists some of the highlights.
+* [New](#new)
+* [Resiliency](#resiliency)
+* [iSCSI SBPS](#iscsi-sbps)
+* [Monitoring](#monitoring)
+* [Miscellaneous functionality](#miscellaneous-functionality)
+* [`cray-site-init` updates](#cray-site-init-updates)
+    * [Main Feature](#main-feature)
+        * [`csi patch csm ipv6`](#csi-patch-csm-ipv6)
+            * [Removing/Undoing IPv6](#removingundoing-ipv6)
+            * [Scoping](#scoping)
+        * [System administrator changes](#system-administrator-changes)
+    * [Flag changes](#flag-changes)
+    * [New sub-commands](#new-sub-commands)
+    * [Removed sub-commands](#removed-sub-commands)
+    * [Behavior changes](#behavior-changes)
+    * [Bugfixes](#bugfixes)
+* [New hardware support](#new-hardware-support)
+* [New software support](#new-software-support)
+* [Automation improvements](#automation-improvements)
+* [Base platform component upgrades](#base-platform-component-upgrades)
+* [Security improvements](#security-improvements)
+* [Customer-requested enhancements](#customer-requested-enhancements)
+* [Documentation enhancements](#documentation-enhancements)
+* [Noteworthy changes](#noteworthy-changes)
+* [Test](#test)
+* [Bug fixes](#bug-fixes)
+* [Deprecations](#deprecations)
+* [Removals](#removals)
+* [Known issues](#known-issues)
+* [Security vulnerability exceptions in CSM 1.7](#security-vulnerability-exceptions-in-csm-17)
+* [Resolved CASTs](#resolved-casts)
+* [All resolved issues](#all-resolved-issues)
+* [Networking](#networking)
+* [IUF](#iuf)
+* [Cray SAT](#cray-sat)
+* [Security and Kyverno Policies](#security-and-kyverno-policies)
+* [Upgrades](#upgrades)
+* [DOCS](#docs)
+* [CASM](#casm)
+* [CASMCMS](#casmcms)
+* [CASMCVT](#casmcvt)
+* [CASMDIAG](#casmdiag)
+* [CASMHMS](#casmhms)
+* [CASMINST](#casminst)
+* [CASMMON](#casmmon)
+* [CASMPET](#casmpet)
+* [CASMSMF](#casmsmf)
+* [MTL](#mtl)
+* [USS](#uss)
 
 ## New
 
@@ -20,8 +68,6 @@
   [Managing Selective Node Personalization](operations/iscsi_sbps/Managing_Selective_Node_Personalization.md).
 
 ### Monitoring
-
-### Networking
 
 ### Miscellaneous functionality
 
@@ -368,6 +414,46 @@ For a full list of known issues, see [Known issues](troubleshooting/README.md#kn
 
 ### Security vulnerability exceptions in CSM 1.7
 
+## Resolved CASTs
+
+```text
+CAST-30585 x1101c7s2b0n0 - Timeout at power state 60 . Hex: 3c . Flagged fields: warm_reset_cap rst_reset
+CAST-30601 JT: Timeout at power state 60
+CAST-30837 JT: BIOS-nC communication error
+CAST-30883 JT: NCs unresponsive after chassis power cycle
+CAST-30991 JT: chassis does not sense CDU after reboot
+CAST-31057 JT: CMM FW will not allow power on of slots
+CAST-31074 JT: CMM FW will not power on
+CAST-31122 NCAR - GPU Power resource has detected a fatal fault
+CAST-31168 JT: i2c bus lockup on CMM
+CAST-31404 RFE: Ability to update SLES on NCNs rapidly
+CAST-32054 CSI: The csi software doesn't check if network definitions overlap
+CAST-32609 CSM 1.3.1 ncn-lifecycle-rebuild fails on cordoned nodes
+CAST-34566 IUF appears to be unable to issue rolling reboot of NCNs without first installing a product stream
+CAST-35696 BOS v2 should report the error instead of just 400 Bad Request
+CAST-35972 CSM 1.3.1 ncn-personalization playbook bugs
+CAST-36230 ProLiant DL325 Gen10 Plus - network issue at reboot
+CAST-36628 csm-1.5.1: test "Validate token key ID exists in cray-spire jwks" fails
+CAST-36695 Opaque whitelist files found in ansible repos
+CAST-36707 CSM - DHCP troubleshooting doc
+CAST-36720 csm-1.5.1: How to install patched images on ncn ceph nodes?
+CAST-36727 Need SLES updates for CSM-1.5 CR 24.8.0 recipe
+CAST-36834 csm 1.5.1 [Alvarez - TDS]: update to ncn-m001 stalls while waiting for cloud-init
+CAST-36852 Update Gitea to version 1.19+
+CAST-37040 CSCS - IMS image delete changes arch value to x86_64
+CAST-37291 USS 1.1 pxc-operator deployment configures a cluster wide mutating webhook which breaks pre-existing PXC
+CAST-37335 CSM-1.5 cray-power-control istio-proxy memory leak
+CAST-37470 Security vulnerabilities in cipher used by cray-oauth2-proxie.  Please disable  3DES and TLS1.2 support
+CAST-37617 [RZ] CSM 1.5.2 Installation: Post-PIT-swing failures in service externalIPs
+CAST-37722 most compute nodes not doing cfs
+CAST-37761 [VE] Gitea random password generation includes a /
+CAST-37771 DNS NMN entries not created during CSM 1.6 install
+CAST-38312 iuf management rollout - reboot doesn't work
+CAST-38336 iuf management rollout fails if the list of nodes is "too long"???
+CAST-38373 GOSS test failure for HSM
+CAST-38383 Clean hardware inventory history
+```
+
 ## All resolved issues
 
 ### Networking
@@ -413,6 +499,8 @@ CASMNET-2334 CANU: Create tests scripts for CSM 1.5 and above
 CASMNET-2338 Define list of services available on management nodes
 CASMNET-2339 CANU: Fix json schema checks for SLS VlanRange
 CASMNET-2341 Develop ACLs for services between Management and Managed nodes
+CASMNET-2343 Fix CVE's in artifactory.algol60.net/csm-docker/stable/quay.io/cilium/hubble-ui:v0.13.1
+CASMNET-2345 DOCS: IPv6 support -Add/Remove node procedures
 CASMNET-2349 canu test fails with IPv6 data in SLS
 CASMNET-2350 cani - Add support for IPv6 enabled SLS schema
 CASMNET-2353 CANU: Release NMN Isolation and IPv6 to CSM
@@ -510,6 +598,8 @@ CASMSEC-574 Exceptions to be modified for ceph-csi-cephfs-nodeplugin and ceph-cs
 CASMSEC-576 vShasta: 1.7.0-alpha.23 install fails, kyverno blocks new hostPath in velero 1.16.1
 CASMSEC-577 Errors displayed after csm only upgrade
 CASMSEC-579 starlord: kyverno policy violations during post-install-check
+CASMSEC-584 DOCS: Add additional documentation support in Kyverno for using image signatures
+CASMSEC-590 DOCS: Point kyverno document under noteworthy-changes in the docs-CSM release notes
 ```
 
 ### Upgrades
@@ -758,11 +848,21 @@ CASM-4572 Add an argo workflow for the Rolling Reboot of NCNs (currently a manua
 CASM-5037 Setting Kyverno policies for replacing Kubernetes PSP
 CASM-5264 Incorrect variable being used in Warning statement
 CASM-5267 Avoid infinite loop while uploading artifacts with cray-nexus-setup image
+CASM-5499 As a developer, I need to add conditional enablement of RRS (Rack Resiliency Service)
+CASM-5664 Policy exception for upgrade-k8s-job
+CASM-5671 Rack resiliency Ansible should not default to assuming it is enabled
+CASM-5672 Rack resiliency Ansible should skip storage steps if placement validation fails
+CASM-5673 Improvements in csm-config
+CASM-5675 The length of zone name to be fixed.
 ```
 
 ### CASMCMS
 
 ```text
+CASMHMS-6578 CAST-38383: Clean redundant "Detected" events from hardware inventory history
+CASMHMS-6583 bump HMS chart versions to pick up new etcd-base chart 1.3.1
+CASMHMS-6588 DOCS: Misc final docs changes for CSM 1.7.0
+CASMHMS-6589 DOCS: Followup doc changes to CPU/GPU events
 CASMCMS-7866 Check cray-bos-db pod permissions
 CASMCMS-7902 BOS session setup operator fails with an OOM error when loading large files
 CASMCMS-7979 cfs-hwsync-agent logs that it discovers components before registering them
@@ -1011,6 +1111,20 @@ CASMINST-7371 ARGO_DEADLINE too short and terminating workflow step before it co
 CASMINST-7373 deploy-product-onexit hook gives up following the log for argo pod and exits
 CASMINST-7376 cilium migration is removed from IUF, but post-install check is still there
 CASMINST-7382 ODIN: multiple products pre-hooks failed during post-install-service-check due to Kyverno Violations
+CASMINST-7208 Input Validation: csi config init should error out when network CIDRs overlap
+CASMINST-7281 DOCS: Known Issue - CFS_Component_With_Zero_Length_ID.md
+CASMINST-7308 DOCS: kubectl_logs_no_space_left_on_device.md
+CASMINST-7315 DOCS: postgres_database_recovery.md
+CASMINST-7316 DOCS: product_catalog_upgrade_error.md
+CASMINST-7324 DOCS: velero_version_mismatch.md
+CASMINST-7395 New flags from CASMNET-2355 appear in system_config.yaml
+CASMINST-7396 vshasta data.json merge fails
+CASMINST-7398 extraneous log messages during csi config init
+CASMINST-7408 "new reservation" count is incorrect
+CASMINST-7409 Fix bugs from CASMNET-2345 testing
+CASMINST-7411 DOCS: k8s-upgrade-job logs are lost when job pod deleted
+CASMINST-7429 DOCS: Linting
+CASMINST-7430 DOCS: csm 1.7 cray-site-init release notes
 ```
 
 ### CASMMON
@@ -1035,6 +1149,8 @@ CASMMON-542 cray-sysmgmt-health upgrade fails
 CASMMON-544 Some of the panels in Node Exporter Full dashboard has No Data
 CASMMON-547 Remove sma-cli-util RPM from csm
 CASMMON-548 UAN image creation is failing during prepare images
+CASMMON-552 Review usage of cray-canu/canu-test:1.6.36 image and fix CVE's
+
 ```
 
 ### CASMPET
@@ -1142,6 +1258,18 @@ CASMPET-7624 iSCSI csm-config playbook should explicitly check for empty HSM gro
 CASMPET-7625 iSCSI csm-config apply_labels role should run inside CFS pod
 CASMPET-7626 TESTS: Create Goss test to detect bad iSCSI HSM group
 CASMPET-7633 etcd_health_status check produces false positive result
+CASMPET-7483 DOCS: CSM 1.7.0 release notes: Platform component upgrades
+CASMPET-7619 DOCS: Create operational procedure for changing iSCSI workers
+CASMPET-7620 DOCS: Update CSM install docs with iSCSI worker step
+CASMPET-7621 DOCS: Update CSM upgrade docs with iSCSI worker step
+CASMPET-7630 DOCS: iSCSI HSM group procedure has errors
+CASMPET-7631 DOCS: Update add/remove worker procedures for iSCSI feature
+CASMPET-7632 DOCS: Remove/move iSCSI_SBPS_Node_Personalization.md
+CASMPET-7640 DOCS: Create/restore iSCSI verification procedures
+CASMPET-7643 DOCS: Assist with CAST-38579
+CASMPET-7644 Remove Kubernetes 1.24.17 from CSM 1.7
+CASMPET-7646 Update comments in the -v1.24.yaml
+CASMPET-7651 DOCS: Add default k8s cert expiry increased to 3 years to RELEASE_NOTES
 ```
 
 ### CASMSMF
@@ -1161,91 +1289,6 @@ CASMSMF-8528 Correct SMA Redfish Dashboard
 CASMSMF-8539 Fix Pod sma/opensearch-bootstrap-0 violates PodSecurity "baseline:latest" error
 CASMSMF-8548 SMA Dashboard Bugs
 CASMSMF-8558 SMA VictoriaMetrics monitoring
-```
-
-### CASMTRIAGE
-
-```text
-CASMTRIAGE-5354 vShasta:  goss-platform-ca-in-bundle test times out
-CASMTRIAGE-7072 mug: cmsdev vcs test failing during fresh install
-CASMTRIAGE-7391 m003 rollout using IUF kept failing before boot
-CASMTRIAGE-7409 sporadic immediate kernel panic at boot
-CASMTRIAGE-7510 Tyr: Cannot access Paradise BMCs
-CASMTRIAGE-7550 Tenant webhook creation failing on odin
-CASMTRIAGE-7682 Tyr:  March product set - ARM image fails to customize with CFS.
-CASMTRIAGE-7690 csm-1.6.1-rc.2 is naming CX4 NICs on Gigabyte systems eth0 and eth1 during fresh install
-CASMTRIAGE-7692 adjust run_hms_ct_tests.sh to avoid false positives?
-CASMTRIAGE-7715 log files permissions changed manually remain unchanged
-CASMTRIAGE-7780 check_key_id_in_jwks.sh can fail or pass inconsistently during CT
-CASMTRIAGE-7790 management-node-rollout - failed with "Still waiting for workflow start"
-CASMTRIAGE-7801 starlord: cray-console unstable
-CASMTRIAGE-7807 prodmgr deleted images that were in use on lemondrop
-CASMTRIAGE-7823 Install Pipeline -  management-nodes-rollout failed with 503
-CASMTRIAGE-7868 wasp: IUF rollout of ncn-m001 does not work
-CASMTRIAGE-7898 wasp: Validate token key ID exists in cray-spire jwks test failure
-CASMTRIAGE-7899 wasp: IMS job started by barebones boot test is failing
-CASMTRIAGE-7901 sbps-marshall is not projecting any images from IMS due to a 403 error (spire issue)
-CASMTRIAGE-7905 wasp: cray-activemq-artemis-operator in CLBO on CSM 1.7
-CASMTRIAGE-7910 sbps-marshall is not projecting any images from IMS  due to a 403 error (marshall issue)
-CASMTRIAGE-7917 WASP: "csi automate ncn kubernetes" is failing to delete node
-CASMTRIAGE-7919 multi-tenancy automation: the following xname(s) do not have type Node and role Compute
-CASMTRIAGE-7927 WASP: Hard-coded CSI version in portainer image breaks management-node-rollout
-CASMTRIAGE-7937 seeing "Could not read data from db" message in iscsid service on compute node
-CASMTRIAGE-7946 ceph-service-status.sh displays no status / service unit name
-CASMTRIAGE-8000 Improve access to baremetal compute images
-CASMTRIAGE-8002 autotriage: 5 failures in CSM-1.6.1-rc.7 detected on: gamora
-CASMTRIAGE-8006 wasp: missing python module simplejson
-CASMTRIAGE-8020 Unhandled exception AttributeError, err='float' object has no attribute 'split'
-CASMTRIAGE-8027 upgrade to CSM 1.6.0 failed hsm test: Query the ComponentEndpoints collection
-CASMTRIAGE-8032 CSM 1.6 upgrade doc updates switch firmware at wrong point (Baldar ESR 2025 upgrade)
-CASMTRIAGE-8042 Goss Tests to report errors of SBPS
-CASMTRIAGE-8074 nexus-export.sh hangs while nexus-backup pod in ImagePullBackOff
-CASMTRIAGE-8079 Remove ethernet NIC regex matches in ComponentEndpoints CT test
-CASMTRIAGE-8101 cray-console-node unable to connect to Olympus nodes/improper SSH key file permission
-CASMTRIAGE-8117 spire jwks test can fail if more than one token returns
-CASMTRIAGE-8133 monitoring_check.sh does not look for VictoriaMetrics services
-CASMTRIAGE-8135 TESTS: IMS: cmsdev failed during post-install health check
-CASMTRIAGE-8151 Tyr cray-hms-firmware-action-test-functional fails api/1-non-disruptive/test_actions.tavern.yaml
-CASMTRIAGE-8160 Wasp: management node image customization stuck on Waiting for `Inventory in CFS`.
-CASMTRIAGE-8161 ims-utils: setting up certs failing with `update-ca-certificates: command not found`
-CASMTRIAGE-8171 on #tyr, worker node moved to hung state, ncn-w004
-CASMTRIAGE-8177 BSS on mug having problems due to etcd and cray-service upgrades
-CASMTRIAGE-8181 cmsdev test cfs fails intermittently in the pipeline, but passes on manual execution
-CASMTRIAGE-8192 Lemondrop NMD spire token TTL is invalid
-CASMTRIAGE-8205 Lemondrop: "deliver-product" failed during uss-1.4.0-80 update/install
-CASMTRIAGE-8214 exceeded the number of allow attempts waiting for hostnames to resolve
-CASMTRIAGE-8220 ncn-healthcheck-master-single reference page error
-CASMTRIAGE-8224 autotriage: 1 failures in CSM-1.5.2 detected on: groot
-CASMTRIAGE-8239 two worker nodes are getting loaded with incorrect image after management nodes rollout
-CASMTRIAGE-8244 surtur: Problem with the cray-kafka-operator install due to retry.
-CASMTRIAGE-8290 Starlord : 1.7.0 PIT mode not allowing blank password at initial login.
-CASMTRIAGE-8296 wasp: Healthcheck test failure during upgrade
-CASMTRIAGE-8308 Failed to create image of remote-build-node
-CASMTRIAGE-8333 starlord: compute node cfs configuration failing during CPE configuration
-CASMTRIAGE-8342 Management node rollout failed with can not be run unsupported strategy
-CASMTRIAGE-8343 iscsi_sbps_sanity.sh tried to get hostname from non-existent pod
-CASMTRIAGE-8353 Slurm layer is failing during cfs configuration of compute node
-CASMTRIAGE-8382 Patroni DCS failsafe mode is still disabled when it should be enabled
-CASMTRIAGE-8388 drax: nexus-docker-upload failing for multiple products during deliver-product
-CASMTRIAGE-8390 csm-sbpsutils is missing install command for "src/compat-cpsmount.sh" in spec file
-CASMTRIAGE-8417 vShasta: k8s UPGRADE_CONTROL_PLANE gets stuck evicting cray-dns-unbound pod
-CASMTRIAGE-8428 UAN cfs configuration is failing druing CSM+Products upgrade
-CASMTRIAGE-8437 ODIN> Upgrade CSM-1.7, storage rollout has ERRORS & Unable to start upgrade of CSM applications and services
-CASMTRIAGE-8447 k8s_nexus_can_pull pull test uses wrong image
-CASMTRIAGE-8452 vShasta: cilium_migration.sh script loops forever if worklow is in status Error
-CASMTRIAGE-8456 vShasta: cilium migration fails, Argo pod kills itself
-CASMTRIAGE-8458 autotriage: 49 failures in CSM-1.7.0-beta.1 detected on: vinland
-CASMTRIAGE-8461 vShasta: cleanup live images fails
-CASMTRIAGE-8470 slurm-backup pod blocked by kyverno check-image policy on odin
-CASMTRIAGE-8508 Rack Resiliency: Criticalservices balanced is not shown correctly by RMS
-CASMTRIAGE-8500 vShasta: IUF deploy-product stage fails after ncn-m001 kubelet restart and 15 minutes wait
-CASMTRIAGE-8540 craycli version is different on AARCH64 nodes than x86_86 nodes
-```
-
-### CAST
-
-```text
-CAST-35972 CSM 1.3.1 ncn-personalization playbook bugs
 ```
 
 ### MTL
