@@ -193,7 +193,7 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
 
 ### Flash HPE `ncn-m001` using `ilorest`
 
-1. (`ncn-m001#`) Install `ilorest` rpm on `ncn-m001`.
+1. (`ncn-m001#`) Install `ilorest` RPM on `ncn-m001`.
 
     ```bash
     zypper install ilorest
