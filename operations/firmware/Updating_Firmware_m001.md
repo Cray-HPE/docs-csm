@@ -203,6 +203,11 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
 
     ```bash
     ilorest serverinfo  |grep "Firmware:" -A3
+    ```
+
+    Example output:
+
+    ```text
     Firmware: 
     ------------------------------------------------
     iLO 5 : 3.02 Feb 22 2024
@@ -227,6 +232,11 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
 
     ```bash
     ipmitool -I lanplus -U $USERNAME -P $BMC_PASSWORD -H $BMC_ADDRESS sol activate
+    ```
+
+    Example console:
+
+    ```console
     ncn-m001 login: root
     Password:
     ```
@@ -241,6 +251,11 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
 
     ```bash
     ilorest serverinfo  |grep "Firmware:" -A3
+    ```
+
+    Example output:
+
+    ```text
     Firmware: 
     ------------------------------------------------
     iLO 5 : 3.11 Feb 25 2025
