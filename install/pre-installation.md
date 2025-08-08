@@ -581,7 +581,7 @@ with the SHCD to create the system configuration files. This method is highly re
 #### 3.3.1. Run `cray-site-init`
 
 This stage will take an initial pass at validating the `system_config.yaml` file, and generating a `customizations.yaml` file
-necessary for [prepare site init](#322-prepare-site-init).
+necessary for [Prepare `site-init`](#332-prepare-site-init).
 
 1. (`pit#`) Change into the `prep` directory.
 

@@ -142,11 +142,11 @@ rest of this section can be skipped. Otherwise, follow these steps to enable
 
 > If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
 
-Optional IPv6 support is added in CSM 1.7. For more information, see 
-[IPv6 Configuration Guide](../../network/customer_accessible_networs/ipv6_configuration_guide.md).
+Optional IPv6 support is added in CSM 1.7. For more information, see
+[IPv6 Configuration Guide](../../network/customer_accessible_networks/ipv6_configuration_guide.md).
 
 If IPv6 support is not needed on the system, then skip the rest of this section. Otherwise, follow the procedures in
-[Enabling IPv6 during CSM upgrade](../../network/customer_accessible_networs/ipv6_configuration_guide.md#enabling-ipv6-during-csm-upgrade).
+[Enabling IPv6 during CSM upgrade](../../network/customer_accessible_networks/ipv6_configuration_guide.md#enabling-ipv6-during-csm-upgrade).
 
 ### `management-nodes-rollout` overview
 

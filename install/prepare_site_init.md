@@ -335,7 +335,7 @@ with system-specific customizations.
     1. (Optional) Configure IPv6 support for the `cray-keycloak` service.
 
        > **Important** This step will only work if the required IPv6 fields were configured in the earlier
-       > [Customize `system_config.yaml`](#31-customize-system_configyaml) step.
+       > [Customize `system_config.yaml`](pre-installation.md#31-customize-system_configyaml) step.
 
        See [Keycloak](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#keycloak) in the
        [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md)
@@ -409,7 +409,7 @@ with system-specific customizations.
     1. (Optional) Configure IPv6 support for the `cray-dns-unbound` service.
 
        > **Important** This step will only work if the required IPv6 fields were configured in the earlier
-       > [Customize `system_config.yaml`](#31-customize-system_configyaml) step.
+       > [Customize `system_config.yaml`](pre-installation.md#31-customize-system_configyaml) step.
 
        See [Domain Name System (DNS)](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md#domain-name-system-dns)
        in the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md)
