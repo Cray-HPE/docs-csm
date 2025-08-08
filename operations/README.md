@@ -682,6 +682,7 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 - [BI-CAN Aruba/Arista Configuration](network/customer_accessible_networks/bi-can_arista_aruba_config.md)
 - [MetalLB Peering with Arista Edge Router](network/customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - [CAN/CMN with Dual-Spine Configuration](network/customer_accessible_networks/Dual_Spine_Configuration.md)
+- [IPv6 Configuration Guide](network/customer_accessible_networks/ipv6_configuration_guide.md)
 - [Troubleshoot CMN Issues](network/customer_accessible_networks/Troubleshoot_CMN_Issues.md)
 - [CMN known issues](../troubleshooting/README.md#customer-management-network-cmn)
 
