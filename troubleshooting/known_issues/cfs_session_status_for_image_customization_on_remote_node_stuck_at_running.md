@@ -23,7 +23,7 @@ Follow these steps to view the `inventory` container log.
     > In the following command, replace `<CFS_SESSION_NAME>` with the actual CFS session name being checked.
 
     ```bash
-    cray cfs sessions describe $CFS_SESSION_NAME --format json | jq '.status.session.job'
+    cray cfs sessions describe <CFS_SESSION_NAME> --format json | jq '.status.session.job'
     ```
 
     Example output:
