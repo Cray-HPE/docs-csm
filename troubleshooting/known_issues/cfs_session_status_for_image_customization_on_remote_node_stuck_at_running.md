@@ -48,7 +48,7 @@ Follow these steps to view the `inventory` container log.
     pod/cfs-f7e04dbf-542b-4f22-8c66-537744684db8-4l6wv
     ```
 
-1. (`ncn-mw#`) Get the `inventory` container's log of CFS pod running in `K8s` cluster,
+1. (`ncn-mw#`) Get the log of the CFS session pod's `inventory` container.
 
     > - Perform the following substitutions in the command:
     >     - Replace `<CFS_POD>` with the value of previous command.
@@ -74,20 +74,20 @@ Follow these steps to view the `inventory` container log.
     2025-08-08 15:54:40,753 - INFO    - cray.cfs.inventory.image - Error while waiting for SSH to be available: Error reading SSH protocol banner[Errno 104] Connection reset by peer. Retrying..
     ```
 
-    In the above output following line contains the details about `Image ID` and `IMS Job ID` needed for error identification.
+    In the above output following line contains the details about IMS image ID and IMS job ID needed for error identification in the next step.
 
     ```text
     2025-08-08 15:54:28,704 - INFO    - cray.cfs.inventory.image - IMS status=fetching_image for IMS image='15bacab2-053b-41d6-a7e6-8561cec1bade' job='15b7479d-e5f2-405f-971c-405c1fac1152'. Elapsed time=260s
     ```
 
-1. See [Error identification](ims_image_customization_job_status_stuck_at_waiting_on_user.md#error-identification) and verify the symptom matches
- as described in issue description.
+1. Determine whether or not this known issue is the cause of the problem.
 
-Note: Do not follow the resolution of the known issue linked above.
+    Follow the [Error identification](ims_image_customization_job_status_stuck_at_waiting_on_user.md#error-identification) procedure and
+    verify that the symptom matches, but do not follow the resolution steps in the linked page.
 
-1. If the IMS job container on the `remote node` either does not exist or is in an `exited` state, then proceed to [Resolution](#resolution).
+1. If the IMS job container on the remote node either does not exist or is in an `exited` state, then proceed to [Resolution](#resolution).
 
-   If that is not the case, then the procedure documented here is not applicable.
+    If that is not the case, then the procedure documented here is not applicable.
 
 ## Resolution
 
