@@ -93,11 +93,11 @@ Note: Do not follow the resolution of the known issue linked above.
 
 (`ncn-mw#`) In order to resolve the problem, delete the CFS session.
 
-    > In the following command, replace `<CFS_SESSION_NAME>` with the actual CFS session name.
+> In the following command, replace `<CFS_SESSION_NAME>` with the actual CFS session name.
 
-    ```bash
-    cray cfs sessions delete <CFS_SESSION_NAME>
-    ```
+```bash
+cray cfs sessions delete <CFS_SESSION_NAME>
+```
 
 After the CFS session is deleted, a new CFS session for image customization can be created. See
 [Create CFS Session For Image Customization](../../operations/configuration_management/Create_an_Image_Customization_CFS_Session.md).
