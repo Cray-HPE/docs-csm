@@ -3,7 +3,7 @@
 ## Issue description
 
 A CFS session for image customization job on a remote node can get stuck in the `running` state indefinitely.
-This can occur during `image customization` if any of the following things happen:
+This can occur during image customization if any of the following things happen:
 
 - The remote node reboots or crashes.
 - The IMS job container on the remote build node is killed or stopped.
