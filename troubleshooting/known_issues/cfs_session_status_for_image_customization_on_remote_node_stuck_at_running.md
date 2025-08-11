@@ -114,18 +114,18 @@ Example output:
 2025-08-08 15:54:40,753 - INFO    - cray.cfs.inventory.image - Error while waiting for SSH to be available: Error reading SSH protocol banner[Errno 104] Connection reset by peer. Retrying..
 ```
 
-In the above output following line contains the details about `Image ID` and `IMS Job ID` needed for `Error identification`.
+In the above output following line contains the details about `Image ID` and `IMS Job ID` needed for error identification.
 
 ```text
 2025-08-08 15:54:28,704 - INFO    - cray.cfs.inventory.image - IMS status=fetching_image for IMS image='15bacab2-053b-41d6-a7e6-8561cec1bade' job='15b7479d-e5f2-405f-971c-405c1fac1152'. Elapsed time=260s
 ```
 
-1. Please refer `Error identification` section of [IMS Image Customization Job Stuck](../known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md#error-identification) and verify the symptom matches
+1. See [Error identification](ims_image_customization_job_status_stuck_at_waiting_on_user.md#error-identification) and verify the symptom matches
  as described in issue description.
 
-Note: Do not follow the `Resolution` of the known issue referred above.
+Note: Do not follow the resolution of the known issue linked above.
 
-1. If the IMS job container either does not exist or is in an `exited` state, then proceed to [Resolution](#resolution),
+1. If the IMS job container either does not exist or is in an `exited` state, then proceed to [Resolution](#resolution).
 
    If that is not the case, then the procedure documented here is not applicable.
 
