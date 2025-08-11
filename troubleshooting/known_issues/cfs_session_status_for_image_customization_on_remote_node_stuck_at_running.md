@@ -51,7 +51,7 @@ Follow these steps to view the `inventory` container log.
 1. (`ncn-mw#`) Get the log of the CFS session pod's `inventory` container.
 
     > - Perform the following substitutions in the command:
-    >     - Replace `<CFS_POD>` with the value of previous command.
+    >     - Replace `<CFS_POD>` with the output of the command in the previous step.
 
     ```bash
     kubectl logs -f <CFS_POD> -n services -c inventory
