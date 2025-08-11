@@ -1,4 +1,4 @@
-# CFS Session for Image Customization on remote node Status Stuck at `running`
+# CFS Session for Image Customization on Remote Node Status Stuck at `running`
 
 ## Issue description
 
@@ -10,17 +10,17 @@ This can occur during `image customization` if any of the following things happe
 
 ## Error identification
 
-A symptom of this problem is following error in `inventory` container's log of CFS pod.
+A symptom of this problem is the following error in the `inventory` container log in the CFS session pod.
 
 ```text
 2025-08-08 15:44:52,299 - INFO    - cray.cfs.inventory.image - Error while waiting for SSH to be available: Error reading SSH protocol banner[Errno 104] Connection reset by peer. Retrying..
 ```
 
- Follow the steps to view `inventory` container log
+Follow these steps to view the `inventory` container log.
 
-1. (`ncn-mw#`) Get the details of the CFS session,
+1. (`ncn-mw#`) Get the details of the CFS session.
 
-   > In the following command, substitute the actual CFS Session Name being checked.
+   > In the following command, replace `<CFS_SESSION_NAME>` with the actual CFS session name being checked.
 
    ```bash
    cray cfs sessions describe <CFS_SESSION_NAME> --format json
@@ -72,7 +72,7 @@ A symptom of this problem is following error in `inventory` container's log of C
 }
   ```
 
-1. (`ncn-mw#`) Get the `CFS` pod running in `K8s` cluster,
+1. (`ncn-mw#`) Get the name of the CFS pod running in the `services` namespace.
 
    > - Perform the following substitutions in the command:
    >     - Replace `<CFS_SESSIONS_JOB_ID>` with the value of the
@@ -133,7 +133,7 @@ Note: Do not follow the resolution of the known issue linked above.
 
 (`ncn-mw#`) In order to resolve the problem, delete the CFS session.
 
-> In the following command, replace `<CFS_SESSION_NAME>` with the actual CFS session ID.
+> In the following command, replace `<CFS_SESSION_NAME>` with the actual CFS session name.
 
  ```bash
 cray cfs sessions delete <CFS_SESSION_NAME>
