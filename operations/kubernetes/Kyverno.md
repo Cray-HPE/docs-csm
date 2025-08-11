@@ -1,8 +1,15 @@
 # Kyverno policy management
 
+* [Mutation](#mutation)
+  * [Example mutation policy](#example-mutation-policy)
+* [Validation](#validation)
+  * [Example validation policy](#example-validation-policy)
+* [Known issues](#known-issues)
+
 [Kyverno](https://kyverno.io/) is a policy engine designed specifically for Kubernetes.
 
-Kyverno allows cluster administrators to manage environment-specific configurations (independently of workload configurations) and enforce configuration best practices for their clusters.
+Kyverno allows cluster administrators to manage environment-specific configurations (independently of workload configurations)
+and enforce configuration best practices for their clusters.
 
 Kyverno can be used to scan existing workloads for best practices, or it can be used to enforce best practices by blocking or mutating API requests.
 
