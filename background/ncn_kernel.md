@@ -5,84 +5,94 @@ This page provides information on the Linux kernel in the non-compute nodes (NCN
 * [Locks](#locks)
 * [Module blacklisting](#module-blacklisting)
 * [Parameters](#parameters)
-  * [`biosdevname`](#biosdevname)
-  * [`ifname`](#ifname)
-  * [`ip`](#ip)
-  * [`psi`](#psi)
-  * [`pcie_ports`](#pcie_ports)
-  * [`transparent_hugepage`](#transparent_hugepage)
-  * [`console`](#console)
-  * [`iommu`](#iommu)
-  * [`metal.server`](#metalserver)
-  * [`metal.no-wipe`](#metalno-wipe)
-  * [`ds`](#ds)
-  * [`rootfallback`](#rootfallback)
-  * [`initrd`](#initrd)
-  * [`root`](#root)
-  * [`rd.live.ram`](#rdliveram)
-  * [`rd.writable.fsimg`](#rdwritablefsimg)
-  * [`rd.skipfsck`](#rdskipfsck)
-  * [`rd.live.squashimg`](#rdlivesquashimg)
-  * [`rd.live.overlay`](#rdliveoverlay)
-  * [`rd.live.overlay.thin`](#rdliveoverlaythin)
-  * [`rd.live.overlay.overlayfs`](#rdliveoverlayoverlayfs)
-  * [`rd.luks`](#rdluks)
-  * [`rd.luks.crypttab`](#rdlukscrypttab)
-  * [`rd.lvm.conf`](#rdlvmconf)
-  * [`rd.lvm`](#rdlvm)
-  * [`rd.auto`](#rdauto)
-  * [`rd.md`](#rdmd)
-  * [`rd.dm`](#rddm)
-  * [`rd.neednet`](#rdneednet)
-  * [`rd.peerdns`](#rdpeerdns)
-  * [`rd.md.waitclean`](#rdmdwaitclean)
-  * [`rd.multipath`](#rdmultipath)
-  * [`rd.md.conf`](#rdmdconf)
-  * [`rd.bootif`](#rdbootif)
-  * [`hostname`](#hostname)
-  * [`rd.net.timeout.carrier`](#rdnettimeoutcarrier)
-  * [`rd.net.timeout.ifup`](#rdnettimeoutifup)
-  * [`rd.net.timeout.iflink`](#rdnettimeoutiflink)
-  * [`rd.net.dhcp.retry`](#rdnetdhcpretry)
-  * [`rd.net.timeout.ipv6auto`](#rdnettimeoutipv6auto)
-  * [`rd.net.timeout.ipv6dad`](#rdnettimeoutipv6dad)
-  * [`append`](#append)
-  * [`nosplash`](#nosplash)
-  * [`quiet`](#quiet)
-  * [`crashkernel`](#crashkernel)
-  * [`log_buf_len`](#log_buf_len)
-  * [`split_lock_detect`](#split_lock_detect)
-  * [`rd.retry`](#rdretry)
-  * [`rd.shell`](#rdshell)
-  * [`xname`](#xname)
+    * [`biosdevname`](#biosdevname)
+    * [`ifname`](#ifname)
+    * [`ip`](#ip)
+    * [`psi`](#psi)
+    * [`pcie_ports`](#pcie_ports)
+    * [`transparent_hugepage`](#transparent_hugepage)
+    * [`console`](#console)
+    * [`iommu`](#iommu)
+    * [`metal.server`](#metalserver)
+    * [`metal.no-wipe`](#metalno-wipe)
+    * [`ds`](#ds)
+    * [`rootfallback`](#rootfallback)
+    * [`initrd`](#initrd)
+    * [`root`](#root)
+    * [`rd.live.ram`](#rdliveram)
+    * [`rd.writable.fsimg`](#rdwritablefsimg)
+    * [`rd.skipfsck`](#rdskipfsck)
+    * [`rd.live.squashimg`](#rdlivesquashimg)
+    * [`rd.live.overlay`](#rdliveoverlay)
+    * [`rd.live.overlay.thin`](#rdliveoverlaythin)
+    * [`rd.live.overlay.overlayfs`](#rdliveoverlayoverlayfs)
+    * [`rd.luks`](#rdluks)
+    * [`rd.luks.crypttab`](#rdlukscrypttab)
+    * [`rd.lvm.conf`](#rdlvmconf)
+    * [`rd.lvm`](#rdlvm)
+    * [`rd.auto`](#rdauto)
+    * [`rd.md`](#rdmd)
+    * [`rd.dm`](#rddm)
+    * [`rd.neednet`](#rdneednet)
+    * [`rd.peerdns`](#rdpeerdns)
+    * [`rd.md.waitclean`](#rdmdwaitclean)
+    * [`rd.multipath`](#rdmultipath)
+    * [`rd.md.conf`](#rdmdconf)
+    * [`rd.bootif`](#rdbootif)
+    * [`hostname`](#hostname)
+    * [`rd.net.timeout.carrier`](#rdnettimeoutcarrier)
+    * [`rd.net.timeout.ifup`](#rdnettimeoutifup)
+    * [`rd.net.timeout.iflink`](#rdnettimeoutiflink)
+    * [`rd.net.dhcp.retry`](#rdnetdhcpretry)
+    * [`rd.net.timeout.ipv6auto`](#rdnettimeoutipv6auto)
+    * [`rd.net.timeout.ipv6dad`](#rdnettimeoutipv6dad)
+    * [`append`](#append)
+    * [`nosplash`](#nosplash)
+    * [`quiet`](#quiet)
+    * [`crashkernel`](#crashkernel)
+    * [`log_buf_len`](#log_buf_len)
+    * [`split_lock_detect`](#split_lock_detect)
+    * [`rd.retry`](#rdretry)
+    * [`rd.shell`](#rdshell)
+    * [`xname`](#xname)
 * [Versioning](#versioning)
 
 ## Locks
 
-The Kernel version is controlled by the `kernel-default` package, and this package is locked.
-Locking
-this package prevents accidental updates.
+The kernel version is controlled by the `kernel-default` package, and this package is locked.
+Locking this package prevents accidental updates.
 
-To view the locks, run `zypper locks`.
+(`ncn#`) View locks:
 
-To remove the lock, run `zypper removelock kernel-default`.
+```bash
+zypper locks
+```
 
-To add set the lock, run `zypper addlock kernel-default`.
+(`ncn#`) Remove the kernel lock:
+
+```bash
+zypper removelock kernel-default
+```
+
+(`ncn#`) Set the kernel lock:
+
+```bash
+zypper addlock kernel-default
+```
 
 ## Module blacklisting
 
 The following kernel modules are blacklisted from loading on the NCNs:
 
-* `rpcrdma` due to conflicts with slingshot.
+* `rpcrdma` because of conflicts with Slingshot.
 
 ## Parameters
 
-Below are a list of kernel parameters used on an NCN, each will denote its default values. If more
+Below are a list of kernel parameters used on an NCN. Each will denote its default values. If more
 than one default value is listed, that means the parameter itself is listed on the command line
 multiple times.
 
 e.g. `console` is listed on the command line twice, once to enable `tty0` and again
-
 to enable serial devices with `ttyS0,115200`.
 
 Parameters are viewable in four places:
@@ -90,11 +100,10 @@ Parameters are viewable in four places:
 * `/proc/cmdline` on any booted Linux server will denote the currently *active* parameters.
 * `/metal/recovery/boot/grub2/grub.cfg` will contain boot parameters for disk boots.
 * `/var/www/ncn-*/script.ipxe` contains boot parameters for PXE boots from the PIT.
-* Cray-BSS contains boot parameters for PXE boots from CSM runtime.
+* BSS contains boot parameters for PXE boots from CSM runtime.
 
-For custom kernel parameters for resizing partitions or controlling other behaviors from CSM:
-Metal's
-dracut, see the following pages:
+For custom kernel parameters for resizing partitions or controlling other behaviors from
+`dracut`, see the following pages:
 
 * [`dracut-metal-mdsquash`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#kernel-parameters)
 * [`dracut-metal-dmk8s`](https://github.com/Cray-HPE/dracut-metal-dmk8s/blob/main/README.md#customizable-parameters)
@@ -102,7 +111,7 @@ dracut, see the following pages:
 
 ### `biosdevname`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -114,7 +123,7 @@ See [Consistent Network Device Naming Using `biosdevname`][1] for more informati
 
 ### `ifname`
 
-|      NCN Type      | Default Value(s)      |
+|      NCN Type      | Default Values        |
 |:------------------:|:----------------------|
 |        All         | `mgmt0:<mac address>` |
 |        All         | `mgmt1:<mac address>` |
@@ -132,46 +141,43 @@ a name.
   and will only exist if more than 2 ports are detected in the PCI bus.
 * `hsn*` interfaces are used for the high-speed network (HSN) and will only exist on nodes with
   detectable PCIe cards classified for HSN use.
-* `lan*` interfaces are used for connections to customer LAN(s) and will only exist if unclassified
-  onboard or PCIe NICs are detected. LANs are cleared for use on Kubernetes masters,
+* `lan*` interfaces are used for connections to customer LANs and will only exist if unclassified
+  onboard or PCIe NICs are detected. LANs are cleared for use on Kubernetes masters;
   `lan*` interfaces should only be utilized on those nodes.
 
 > ***NOTE*** The MAC address will be filled in by `metal-iPXE` during boots from the PIT, or by Cray
-> BSS during boots
-> in runtime.
+> BSS during boots in runtime.
 
-For more information, see [dracut command line's network parameter definition][13] and the
-[NCN Networking page](ncn_networking.md).
+For more information, see [`dracut` command line's network parameter definition][13] and
+[NCN Networking](ncn_networking.md).
 
 ### `ip`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |   `mgmt0:dhcp`   |
 |   All    |    `*:auto6`     |
 
-This parameter hard codes the DHCP request to go over `mgmt0` during boot. The IP received from the
+This parameter hard codes the DHCP request to go over `mgmt0` during boot. The IP address received from the
 `DHCPREQUEST` will be used to download the NCN image to a local disk when the NCN boots.
 
-This parameter also sets `auto6` for any other interface, this is a workaround to ensure the
-initramFS
-acknowledges the given interface. In CSM 0.9 and 1.0 despite having `ifname` set, `udev` rules were
+This parameter also sets `auto6` for any other interface; this is a workaround to ensure that the
+initramFS acknowledges the given interface. In CSM 0.9 and 1.0, despite having `ifname` set, `udev` rules were
 not created for devices unless they had a corresponding `ip` parameter set. The `auto6` value was
-the
-safest value to set here that did not disrupt the state of the NCN.
+the safest value to set here that did not disrupt the state of the NCN.
 
-> ***NOTE*** When an NCN boots using a disk this parameter is not set (`ip` is removed), disk boots
+> ***NOTE*** When an NCN boots using a disk this parameter is not set (`ip` is removed); disk boots
 > will use the already stored image found in the SquashFS storage.
 
-For more information, see [dracut command line's network parameter definition][13].
+For more information, see [`dracut` command line's network parameter definition][13].
 
 ### `psi`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
-This parameter enables pressure stall information from the kernel.
+(`ncn#`) This parameter enables pressure stall information from the kernel.
 
 ```bash
 cat /proc/pressure/{cpu,io,memory}
@@ -192,7 +198,7 @@ full avg10=0.00 avg60=0.00 avg300=0.00 total=0
 
 ### `pcie_ports`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |     `native`     |
 
@@ -200,7 +206,7 @@ Ensures that Linux uses native AER and DPC services.
 
 ### `transparent_hugepage`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |     `never`      |
 
@@ -212,14 +218,14 @@ CSM does not want these to be used at all, and disables them by setting this par
 
 ### `console`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:-----------------|
 |   All    | `tty0`           |
 |   All    | `ttyS0,115200`   |
 
 ### `iommu`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `pt`       |
 
@@ -237,7 +243,7 @@ for host-only devices (e.g. devices created via SR-IOV).
 This parameter's value tells the initramFS where to download the kernel, `initrd`, and SquashFS
 from.
 
-| NCN Type | Default Value(s)                                            | Context         |
+| NCN Type | Default Values                                              | Context         |
 |:--------:|:------------------------------------------------------------|:----------------|
 |   All    | `http://pit/<hostname>`                                     | `/proc/cmdline` |
 |   All    | `http://rgw-vip.nmn/$K8S_IMS_IMAGE_ID/rootfs?<auth-token>`  | `/proc/cmdline` |
@@ -256,7 +262,7 @@ a pre-signed authorization token.
 
 ### `metal.no-wipe`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 |   All    |       `1`        |
@@ -277,7 +283,7 @@ definition of `metal.wipe-delay`][4].
 
 ### `ds`
 
-| NCN Type | Default Value(s)                                 |
+| NCN Type | Default Values                                   |
 |:--------:|:-------------------------------------------------|
 |   All    | `nocloud-net;s=http://10.1.1.2:8888/;h=ncn-m002` |
 |   All    | `nocloud-net;s=http://10.92.100.81:8888/`        |
@@ -291,7 +297,7 @@ see [`cloud-init`'s data sources `NoCloud` page][6].
 
 ### `rootfallback`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    | `LABEL=BOOTRAID` |
 
@@ -305,7 +311,7 @@ For more information, see [dracut command line's standard parameter definition][
 
 ### `initrd`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:-----------------|
 |   All    | `initrd.img.xz`  |
 |   All    | `initrd`         |
@@ -317,7 +323,7 @@ For more information, see [the Linux kernel user's administrator's guide][5].
 
 ### `root`
 
-| NCN Type |   Default Value(s)    |
+| NCN Type |   Default Values      |
 |:--------:|:---------------------:|
 |   All    | `live:LABEL=SQFSRAID` |
 
@@ -331,7 +337,7 @@ For more information, see [dracut command line's standard parameter definition][
 
 ### `rd.live.ram`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -342,7 +348,7 @@ For more information, see [dracut command line's booting live images definitions
 
 ### `rd.writable.fsimg`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -354,7 +360,7 @@ For more information, see [dracut command line's booting live images definitions
 
 ### `rd.skipfsck`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -365,7 +371,7 @@ For more information, see [dracut command line's standard parameter definition][
 
 ### `rd.live.squashimg`
 
-| NCN Type |   Default Value(s)    |
+| NCN Type |   Default Values      |
 |:--------:|:---------------------:|
 |   All    | `filesystem.squashfs` |
 
@@ -373,7 +379,7 @@ For more information, see [dracut command line's booting live images definitions
 
 ### `rd.live.dir`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:-----------------|
 |   All    | `unset`          |
 |   All    | `$CSM_RELEASE`   |
@@ -382,7 +388,7 @@ For more information, see [dracut command line's booting live images definitions
 
 ### `rd.live.overlay`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    | `LABEL=ROOTRAID` |
 
@@ -390,7 +396,7 @@ For more information, see [dracut command line's booting live images definitions
 
 ### `rd.live.overlay.thin`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -398,7 +404,7 @@ For more information, see [dracut command line's booting live images definitions
 
 ### `rd.live.overlay.overlayfs`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -406,7 +412,7 @@ For more information, see [dracut command line's booting live images definitions
 
 ### `rd.live.overlay.reset`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -414,7 +420,7 @@ For more information, see [dracut command line's booting live images definitions
 
 ### `rd.luks`
 
-|      NCN Type      | Default Value(s) |
+|      NCN Type      | Default Values   |
 |:------------------:|:----------------:|
 | Kubernetes Masters |     `exists`     |
 | Kubernetes Workers |       `0`        |
@@ -428,7 +434,7 @@ When this parameter exists it assumes the value of `1` and enables LUKS usage.
 
 ### `rd.luks.crypttab`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -437,7 +443,7 @@ For more information, see [dracut command line's definition of LUKS parameters][
 
 ### `rd.lvm.conf`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -446,7 +452,7 @@ For more information, see [dracut command line's definition of LVM parameters][1
 
 ### `rd.lvm`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -457,7 +463,7 @@ For more information, see [dracut command line's definition of LVM parameters][1
 
 ### `rd.auto`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -469,7 +475,7 @@ For more information, see [dracut command line's standard definition][7].
 
 ### `rd.md`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -477,7 +483,7 @@ This parameter enables or disables `mdraid` in the initramFS.
 
 ### `rd.dm`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -487,7 +493,7 @@ This parameter enables or disables `dmraid` in the initramFS.
 
 ### `rd.neednet`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -500,7 +506,7 @@ Whether or not the network is necessary for boot.
 
 ### `rd.peerdns`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -513,7 +519,7 @@ Whether or not DNS should be resolved from peers.
 
 ### `rd.md.waitclean`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -524,7 +530,7 @@ Whether RAID must be clean/synced before use.
 
 ### `rd.multipath`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -534,7 +540,7 @@ Whether or not `multipath` is used in the initramFS and in the booted OS.
 
 ### `rd.md.conf`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -546,7 +552,7 @@ Whether or not `mdraid` should acknowledge any `md.conf` available in the initra
 
 ### `rd.bootif`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -557,7 +563,7 @@ This sets the boot interface.
 
 ### `hostname`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |    `<varies>`    |
 
@@ -565,7 +571,7 @@ Sets the hostname for the node within the initramFS.
 
 ### `rd.net.timeout.carrier`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    | `120` (seconds)  |
 
@@ -573,7 +579,7 @@ The amount of time dracut will wait for a carrier to come up on a requested devi
 
 ### `rd.net.timeout.ifup`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    | `120` (seconds)  |
 
@@ -581,7 +587,7 @@ The amount of time dracut will wait for an interface to establish connectivity i
 
 ### `rd.net.timeout.iflink`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    | `120` (seconds)  |
 
@@ -589,7 +595,7 @@ The amount of time dracut will wait for an interface to establish a link-up.
 
 ### `rd.net.dhcp.retry`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |  `5` (attempts)  |
 
@@ -600,7 +606,7 @@ How many times DHCP will be attempted before dracut gives up.
 
 ### `rd.net.timeout.ipv6auto`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -609,7 +615,7 @@ information.
 
 ### `rd.net.timeout.ipv6dad`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `0`        |
 
@@ -618,7 +624,7 @@ information.
 
 ### `append`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |     `exists`     |
 
@@ -629,7 +635,7 @@ Deprecated/not-used.
 
 ### `nosplash`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |     `exists`     |
 
@@ -637,7 +643,7 @@ Disables splash screens, if they are present anywhere.
 
 ### `quiet`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |     `exists`     |
 
@@ -647,7 +653,7 @@ Minimize the output from the initramFS to only `stderr`.
 
 ### `crashkernel`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |      `360M`      |
 
@@ -657,7 +663,7 @@ This must be larger than the size of the `kdump` `initrd` located in `/boot`.
 
 ### `log_buf_len`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `1`        |
 
@@ -665,7 +671,7 @@ Size of the kernel's internal log buffer by powers of 2.
 
 ### `split_lock_detect`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |      `off`       |
 
@@ -678,7 +684,7 @@ to the kernel command line. See [this ticket][24] for more detail.
 
 ### `rd.retry`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |       `10`       |
 
@@ -688,7 +694,7 @@ of dracut.
 
 ### `rd.shell`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |     `exists`     |
 
@@ -697,7 +703,7 @@ administrator to investigate and/or provide triage information.
 
 ### `xname`
 
-| NCN Type | Default Value(s) |
+| NCN Type | Default Values   |
 |:--------:|:----------------:|
 |   All    |    `<varies>`    |
 
@@ -707,25 +713,25 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 
 | CSM Release               | Kernel Version                                 | Kernel Change Rationale                                                         |
 |:--------------------------|:-----------------------------------------------|---------------------------------------------------------------------------------|
-| CSM 0.9.0 (Shasta v1.4.0) | 5.3.18-24.49.2                                 | Initial                                                                         |
-| CSM 0.9.2 (Shasta v1.4.1) | 5.3.18-24.49.2                                 |                                                                                 |
-| CSM 0.9.3 (Shasta v1.4.2) | 5.3.18-24.49.2                                 |                                                                                 |
-| CSM 0.9.3                 | 5.3.18-24.**75.3**                             | Proactive update                                                                |
-| CSM 0.9.4                 | 5.3.18-24.75.3                                 |                                                                                 |
-| CSM 0.9.5                 | 5.3.18-24.75.3                                 |                                                                                 |
-| CSM 0.9.6                 | 5.3.18-24.75.3                                 |                                                                                 |
-| CSM 1.0.0                 | 5.3.18-24.75.3                                 |                                                                                 |
-| CSM 1.0.1 (Shasta v1.5.0) | 5.3.18-24.75.3                                 |                                                                                 |
-| CSM 1.0.10                | 5.3.18-24.75.3                                 |                                                                                 |
-| CSM 1.0.11                | 5.3.18-24.**99.1**                             | [`CVE-2021-4034`][21]                                                           |
-| CSM 1.2.0                 | 5.3.18-**150300.59.43.1**                      | [`CVE-2022-0185`][22]                                                           |
-| CSM 1.2.1                 | 5.3.18-150300.59.43.1                          | [`CVE-2022-0185`][22]                                                           |
-| CSM 1.2.2                 | 5.3.18-150300.59.43.1                          |                                                                                 |
-| CSM 1.3.0                 | 5.3.18-150300.59.**87.1**                      | [`CVE-2022-33981`][23]                                                          |
-| CSM 1.3.1                 | 5.3.18-150300.59.87.1                          |                                                                                 |
-| CSM 1.4.0                 | 5.**14.21-150400.24.38.1.25440.1.PTF.1204911** | SLES-15-SP4 upgrade and SUSE patch (case #00502283)                             |
-| CSM 1.5                   | 5.14.21-**150500.55.39.1.27360.1.PTF.1215587** | SLES-15-SP5 bond bug (SUSE case #00703657) and qlogic fix (SUSE case #00707151) |
-| CSM 1.6                   | **6.4.0-150600.23.17.1**                       | SLES-15-SP6                                                                     |
+| CSM 0.9.0 (Shasta v1.4.0) | `5.3.18-24.49.2`                               | Initial                                                                         |
+| CSM 0.9.2 (Shasta v1.4.1) | `5.3.18-24.49.2`                               |                                                                                 |
+| CSM 0.9.3 (Shasta v1.4.2) | `5.3.18-24.49.2`                               |                                                                                 |
+| CSM 0.9.3                 | `5.3.18-24.75.3`                               | Proactive update                                                                |
+| CSM 0.9.4                 | `5.3.18-24.75.3`                               |                                                                                 |
+| CSM 0.9.5                 | `5.3.18-24.75.3`                               |                                                                                 |
+| CSM 0.9.6                 | `5.3.18-24.75.3`                               |                                                                                 |
+| CSM 1.0.0                 | `5.3.18-24.75.3`                               |                                                                                 |
+| CSM 1.0.1 (Shasta v1.5.0) | `5.3.18-24.75.3`                               |                                                                                 |
+| CSM 1.0.10                | `5.3.18-24.75.3`                               |                                                                                 |
+| CSM 1.0.11                | `5.3.18-24.99.1`                               | [`CVE-2021-4034`][21]                                                           |
+| CSM 1.2.0                 | `5.3.18-150300.59.43.1`                        | [`CVE-2022-0185`][22]                                                           |
+| CSM 1.2.1                 | `5.3.18-150300.59.43.1`                        | [`CVE-2022-0185`][22]                                                           |
+| CSM 1.2.2                 | `5.3.18-150300.59.43.1`                        |                                                                                 |
+| CSM 1.3.0                 | `5.3.18-150300.59.87.1`                        | [`CVE-2022-33981`][23]                                                          |
+| CSM 1.3.1                 | `5.3.18-150300.59.87.1`                        |                                                                                 |
+| CSM 1.4.0                 | `5.14.21-150400.24.38.1.25440.1.PTF.1204911`   | SLES-15-SP4 upgrade and SUSE patch (case #00502283)                             |
+| CSM 1.5                   | `5.14.21-150500.55.39.1.27360.1.PTF.1215587`   | SLES-15-SP5 bond bug (SUSE case #00703657) and QLogic fix (SUSE case #00707151) |
+| CSM 1.6                   | `6.4.0-150600.23.17.1`                         | SLES-15-SP6                                                                     |
 
 [1]:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
 
