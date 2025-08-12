@@ -234,6 +234,14 @@ def main():
     if not (rr_enabled() and is_cluster_policy_applied("insert-labels-topology-constraints")):
         print("Either Rack Resiliency is not enabled or ClusterPolicy 'insert-labels-topology-constraints' not found. Skipping restart.")
         sys.exit(0)
+
+    # Check if RR is enabled and if the cluster policy is applied
+    if rr_enabled() and not is_cluster_policy_applied("insert-labels-topology-constraints"):
+      print("Rack Resiliency is enabled but ClusterPolicy 'insert-labels-topology-constraints' is not applied.")
+      sys.exit(1)
+    elif not rr_enabled() or not is_cluster_policy_applied("insert-labels-topology-constraints"):
+      print("Either Rack Resiliency is not enabled or ClusterPolicy 'insert-labels-topology-constraints' not found. Skipping restart.")
+      sys.exit(0)
        
     # Load critical services
     config = load_configmap("rrs-mon-static", "rack-resiliency")
