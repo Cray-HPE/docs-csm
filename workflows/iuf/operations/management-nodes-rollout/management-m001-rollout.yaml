@@ -115,6 +115,8 @@ spec:
                       ls -d \
                           /root/apply_csm_configuration.* \
                           /root/csm_upgrade.* \
+                          /etc/motd \
+                          /root/.bashrc \
                           /root/output.log 2>/dev/null |
                       sed 's_^/__' |
                       xargs tar -C / -czvf "/root/${BACKUP_TARFILE}"
