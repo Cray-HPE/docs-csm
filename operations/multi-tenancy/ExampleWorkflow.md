@@ -2,22 +2,22 @@
 
 * [Overview](#overview)
 * [Configuration](#configuration)
-    * [Tenant Configuration](#tenant-configuration)
-        * [Tenant Names](#tenant-names)
+    * [Tenant configuration](#tenant-configuration)
+        * [Tenant names](#tenant-names)
         * [Tenant API version](#tenant-api-version)
-    * [`SlurmCluster` Configuration](#slurmcluster-configuration)
-        * [`SlurmCluster` Names](#slurmcluster-names)
-        * [`SlurmCluster` IP Addresses](#slurmcluster-ip-addresses)
+    * [`SlurmCluster` configuration](#slurmcluster-configuration)
+        * [`SlurmCluster` names](#slurmcluster-names)
+        * [`SlurmCluster` IP addresses](#slurmcluster-ip-addresses)
         * [`SlurmCluster` API version](#slurmcluster-api-version)
-        * [`SlurmCluster` Configurable Values](#slurmcluster-configurable-values)
-        * [`SlurmCluster` Version Numbers](#slurmcluster-version-numbers)
+        * [`SlurmCluster` configurable values](#slurmcluster-configurable-values)
+        * [`SlurmCluster` version numbers](#slurmcluster-version-numbers)
     * [`SlurmCluster` Slurm configuration](#slurmcluster-slurm-configuration)
-        * [`SlurmCluster` Slingshot VNI Allocation](#slurmcluster-slingshot-vni-allocation)
-        * [`SlurmCluster` Partitions and Nodes](#slurmcluster-partitions-and-nodes)
-        * [`SlurmCluster` Secrets (for `nonroot` users)](#slurmcluster-secrets-for-nonroot-users)
-    * [USS Configuration](#uss-configuration)
+        * [`SlurmCluster` Slingshot VNI allocation](#slurmcluster-slingshot-vni-allocation)
+        * [`SlurmCluster` partitions and nodes](#slurmcluster-partitions-and-nodes)
+        * [`SlurmCluster` secrets (for `nonroot` users)](#slurmcluster-secrets-for-nonroot-users)
+    * [USS configuration](#uss-configuration)
 * [Updates](#updates)
-* [Step-by-Step Guide](#step-by-step-guide)
+* [Step-by-step guide](#step-by-step-guide)
     * [Create and apply tenant configuration file](#create-and-apply-tenant-configuration-file)
     * [Create and apply the `SlurmCluster` configuration file](#create-and-apply-the-slurmcluster-configuration-file)
     * [Edit and apply Slurm configuration file](#edit-and-apply-slurm-configuration-file)
@@ -25,8 +25,8 @@
     * [Configure USS group variables](#configure-uss-group-variables)
     * [Create BOS session template](#create-bos-session-template)
     * [Create CFS configuration](#create-cfs-configuration)
-    * [Boot and Run](#boot-and-run)
-* [Status and Troubleshooting](#status-and-troubleshooting)
+    * [Boot and run](#boot-and-run)
+* [Status and troubleshooting](#status-and-troubleshooting)
     * [Tenant command examples](#tenant-command-examples)
     * [`SlurmCluster` command examples](#slurmcluster-command-examples)
     * [HSM command examples](#hsm-command-examples)
@@ -64,14 +64,14 @@ Here are the steps required:
 
 This section provides additional information on the configuration necessary to fully setup a tenant.
 
-### Tenant Configuration
+### Tenant configuration
 
 Tenants are created and configured by creating a tenant custom resource definition in the form of a `yaml` file.
-For more information see [Create A Tenant](./Create_a_Tenant.md)
+For more information see [Creating a Tenant](Create_a_Tenant.md).
 
 For the purposes of this guide, the tenant configuration settings are made in each tenant's configuration file, e.g. `devten01a.yaml`.
 
-#### Tenant Names
+#### Tenant names
 
 * Choose your naming convention for each system and tenant
 * Example:
@@ -103,18 +103,18 @@ For the purposes of this guide, the tenant configuration settings are made in ea
         - x1000c0s0b0n0
     ```
 
-#### Tenant API Version
+#### Tenant API version
 
 * Tenant `apiVersion` should use the latest available in the CSM release, e.g. `v1alpha3` for CSM 1.6
 
-### `SlurmCluster` Configuration
+### `SlurmCluster` configuration
 
 These configuration settings are made:
 
 * In each `SlurmCluster's` configuration file, e.g. `devcls01a.yaml`
 * In each `SlurmCluster's` `/etc/slurm/slurm.conf` file (in each `slurmctld` pod)
 
-#### `SlurmCluster` Names
+#### `SlurmCluster` names
 
 * Choose your naming convention for each system and `SlurmCluster`
 * Example:
@@ -134,7 +134,7 @@ These configuration settings are made:
     hsmGroup: devten01a
     ```
 
-#### `SlurmCluster` IP Addresses
+#### `SlurmCluster` IP addresses
 
 **`IMPORTANT`** Each High-Speed Network (HSN) IP address must be unique, within all the `SlurmClusters` on any one system.
 
@@ -151,12 +151,12 @@ These configuration settings are made:
 
 * `SlurmCluster` `apiVersion` must match Slurm release (for example `v1alpha1`)
 
-#### `SlurmCluster` Configurable Values
+#### `SlurmCluster` configurable values
 
 * Settings for `cpu` and `memory` and `initialDelaySeconds` are shown in the example file `devcls01a.yaml`, below
 * These settings were provided by the WLM team, who should be consulted for any changes
 
-#### `SlurmCluster` Version Numbers
+#### `SlurmCluster` version numbers
 
 * Version numbers are shown in the example file `devcls01a.yaml`, below
 * The version numbers must match the versions of these products on the system
@@ -175,7 +175,7 @@ These configuration settings are made:
 
 These configuration settings are made in each `SlurmCluster's` `/etc/slurm/slurm.conf` file (in each `slurmctld` pod)
 
-#### `SlurmCluster` Slingshot VNI Allocation
+#### `SlurmCluster` Slingshot VNI allocation
 
 **`IMPORTANT`** Each block of HPE Slingshot `VNIs` on the High-Speed Network (HSN) must not overlap with other blocks on the same system.
 
@@ -202,7 +202,7 @@ These configuration settings are made in each `SlurmCluster's` `/etc/slurm/slurm
         * `SwitchType=switch/hpe_slingshot`
         * `SwitchParameters=vnis=57354-65535`
 
-#### `SlurmCluster` Partitions and Nodes
+#### `SlurmCluster` partitions and nodes
 
 The general advice to tailor the compute node configuration for each tenant is to look at the `slurm.conf` for the primary (`user` namespace) Slurm instance.
 Borrow the `NodeSet`, `PartitionName`, and `NodeName` directives that apply to each tenant.
@@ -217,13 +217,13 @@ Borrow the `NodeSet`, `PartitionName`, and `NodeName` directives that apply to e
     NodeName=nid[001002-001003] Sockets=2 CoresPerSocket=64 ThreadsPerCore=2 RealMemory=456704 Feature=Compute
     ```
 
-#### `SlurmCluster` Secrets (for `nonroot` users)
+#### `SlurmCluster` secrets (for `nonroot` users)
 
 These configuration settings are made in each `SlurmCluster's` `/etc/sssd/sssd.conf` file (in each `slurmctld` pod)
 You should not need to create or edit the `sssd.conf` file.
 Simply clone that file from the primary `SlurmCluster` (`user` namespace) to each tenant namespace.
 
-### USS Configuration
+### USS configuration
 
 These changes are made to the `uss-config-management` git repo.
 Tenants are disambiguated by their HSM group name (for example `hsmgrouplabel` `"devten01a"` in `devten01a.yaml`, and `hsmGroup` `"devten01a"` in `devcls01a.yaml`).
@@ -265,7 +265,7 @@ For example, if a new version of Slurm is installed on the system, the tenant
 can update to the new Slurm version by setting new container versions in the
 `SlurmCluster` file and applying the changes.
 
-## Step-by-Step Guide
+## Step-by-step guide
 
 Legend for these examples:
 
@@ -274,7 +274,7 @@ Legend for these examples:
 
 ### Create and apply tenant configuration file
 
-Filename:  `devten01a.yaml`
+Filename: `devten01a.yaml`
 
 1. (`ncn-mw#`) Make sure tenant name is not already in use:
 
@@ -312,7 +312,7 @@ Repeat this step as needed for additional tenants.
 
 ### Create and apply the `SlurmCluster` configuration file
 
-Filename:  `devcls01a.yaml`
+Filename: `devcls01a.yaml`
 
 1. (`ncn-mw#`) Make sure cluster name is not already in use:
 
@@ -338,8 +338,8 @@ Repeat this step as needed for additional `SlurmClusters`.
 
 ### Edit and apply Slurm configuration file
 
-``SlurmCluster``:  `devcls01a`
-Filename:  `/etc/slurm/slurm.conf`
+`SlurmCluster`: `devcls01a`
+Filename: `/etc/slurm/slurm.conf`
 
 1. (`ncn-mw#`) Get the running configuration:
 
@@ -388,8 +388,8 @@ Repeat this step as needed for additional `SlurmClusters`.
 
 ### Edit Slurm configuration file `sssd.conf`
 
-`SlurmCluster`:  `devcls01a`
-Filename:  `/etc/sssd/sssd.conf`
+`SlurmCluster`: `devcls01a`
+Filename: `/etc/sssd/sssd.conf`
 
 1. (`ncn-mw#`) Get the `user` namespace `sssd.conf` so it can be cloned:
 
@@ -431,7 +431,7 @@ Repeat this step as needed for additional `SlurmClusters`.
 
 ### Configure USS group variables
 
-Filename:  `group_vars/devten01a/slurm.yml`
+Filename: `group_vars/devten01a/slurm.yml`
 
 1. (`ncn-mw#`) Clone the USS repository:
 
@@ -488,10 +488,10 @@ Filename:  `group_vars/devten01a/slurm.yml`
 
 ### Create BOS session template
 
-Note that you will need one template for each node type (UAN,Compute) and architecture (X86,ARM) in the tenants.
-You can use a single BOS session template for many tenants of the same node type and architecture.
+Note that one template is needed for each node type (UAN, Compute) and architecture (X86, ARM) in the tenants.
+A single BOS session template may be used for many tenants of the same node type and architecture.
 
-1. (`ncn-mw#`) Look up the name of the default template(s) for tenants (for example X86 Compute) and save as JSON file(s):
+1. (`ncn-mw#`) Look up the name of the default template(s) for tenants (for example X86 Compute) and save as JSON files:
 
     ```bash
     cray bos sessiontemplates describe --format json ssi-compute-cr_2024.x86_64-cr_2024_1 > ssi-compute-cr_2024.x86_64-cr_2024_1.json
@@ -517,8 +517,8 @@ Repeat this step as needed for different node types and architectures.
 
 ### Create CFS configuration
 
-Note that you will need one configuration for each node type (UAN,Compute) in the tenant.
-You can use a single BOS session template for many tenants of the same node type and architecture.
+Note that one configuration is needed for each node type (UAN, Compute) in the tenant.
+A single CFS configuration may be used for many tenants of the same node type.
 
 1. (`ncn-mw#`) Save the default configuration as a JSON file:
 
@@ -535,7 +535,8 @@ You can use a single BOS session template for many tenants of the same node type
 * Edit the new copy:
     * Delete lines starting with `lastUpdated`:
     * Delete the last instance in the file of name: and remove the comma from the preceding line
-    * Be SURE to replace the commit ID for each JSON block that refers to `uss-config-management.git`; you will use the commit ID from "git log" command in the earlier step that created the USS `group_vars` file
+    * Be SURE to replace the commit ID for each JSON block that refers to `uss-config-management.git`;
+      use the commit ID from "git log" command in the earlier step that created the USS `group_vars` file
 
 1. (`ncn-mw#`) Upload the new configuration, specifying the filename and the name of the new configuration:
 
@@ -543,13 +544,15 @@ You can use a single BOS session template for many tenants of the same node type
     cray cfs configurations update --file ssi-compute-cr_2024-cr_2024_1-tenants.json ssi-compute-cr_2024-cr_2024_1-tenants
     ```
 
-Repeat this step as needed for different node types and architectures.
+Repeat this step as needed for different node types.
 
-### Boot and Run
+### Boot and run
 
 * BOS and CFS:
-    * You will need one or more BOS session template(s) for your tenant, see above
-    * The BOS session template(s) refer to CFS configuration(s), see above
+    * One or more BOS session templates are required for the tenant.
+      See [Create BOS session template](#create-bos-session-template) for details.
+    * The BOS session templates must refer to CFS configurations.
+      See [Create CFS configuration](#create-cfs-configuration) for details.
 
 1. (`ncn-mw#`) Boot Compute nodes for a node architecture in tenant:
 
@@ -572,7 +575,7 @@ After CFS completes, login to either a tenant UAN (if available), or tenant Comp
     srun -N2 ./all2all
     ```
 
-## Status and Troubleshooting
+## Status and troubleshooting
 
 ### Tenant command examples
 
@@ -633,17 +636,17 @@ After CFS completes, login to either a tenant UAN (if available), or tenant Comp
 
 ### HNS command example
 
-* (`ncn-mw#`) All tenants:
+(`ncn-mw#`) All tenants:
 
-    ```bash
-    kubectl hns tree tenants
-    ```
+```bash
+kubectl hns tree tenants
+```
 
 ## Upgrade all tenants after a Slurm upgrade
 
 This procedure is required for each tenant, after Slurm has been upgraded on the system (for example, after using IUF to upgrade products).
 
-You will need the configuration file that you used to create each tenant's `SlurmCluster`.
+The configuration used to create each tenant's `SlurmCluster` is required.
 For this Slurm upgrade, there is no need to change the `SlurmCluster` name; the only change is to the Slurm version inside each tenant.
 
 > * `SlurmCluster`: `devcls01a`
@@ -681,7 +684,7 @@ For this Slurm upgrade, there is no need to change the `SlurmCluster` name; the 
     kubectl apply -f devcls01a.yaml
     ```
 
-* (`ncn-mw#`) Wait for all pods to return to Running state:
+* (`ncn-mw#`) Wait for all pods to return to `Running` state:
 
     ```bash
     kubectl get pods -A |grep vcluster
@@ -693,143 +696,143 @@ Repeat this step as needed for additional `SlurmClusters`.
 
 ### Appendix A - `Development` tenant
 
-* This is filename `devten01.yaml`; complete file is shown.
+This is filename `devten01.yaml`; complete file is shown.
 
-    ```yaml
-    apiVersion: tapms.hpe.com/v1alpha3
-    kind: Tenant
-    metadata:
-      name: vcluster-devten01a
-    spec:
-      childnamespaces:
-      - slurm
-      - user
-      tenantname: vcluster-devten01a
-      tenanthooks: []
-      tenantresources:
-      - enforceexclusivehsmgroups: true
-        hsmgrouplabel: devten01a
-        type: compute
-        xnames:
-        - x9000c1s0b1n0
-        - x9000c1s0b1n1
-      - enforceexclusivehsmgroups: true
-        hsmgrouplabel: devten01a
-        type: application
-        xnames:
-        - x3000c0s29b0n0
-    ```
+```yaml
+apiVersion: tapms.hpe.com/v1alpha3
+kind: Tenant
+metadata:
+  name: vcluster-devten01a
+spec:
+  childnamespaces:
+  - slurm
+  - user
+  tenantname: vcluster-devten01a
+  tenanthooks: []
+  tenantresources:
+  - enforceexclusivehsmgroups: true
+    hsmgrouplabel: devten01a
+    type: compute
+    xnames:
+    - x9000c1s0b1n0
+    - x9000c1s0b1n1
+  - enforceexclusivehsmgroups: true
+    hsmgrouplabel: devten01a
+    type: application
+    xnames:
+    - x3000c0s29b0n0
+```
 
 ### Appendix B - `Development` `SlurmCluster`
 
 **`IMPORTANT`** The values for `cpu` and `memory` and `initialDelaySeconds` are recommended by the WLM team.
 
-* This is filename `devcls01a.yaml`; complete file is shown.
+This is filename `devcls01a.yaml`; complete file is shown.
 
-    ```yaml
-    apiVersion: "wlm.hpe.com/v1alpha1"
-    kind: SlurmCluster
-    metadata:
-      name: devcls01a
-      namespace: vcluster-devcls01a-slurm
-    spec:
-      tapmsTenantName: vcluster-devcls01a
-      tapmsTenantVersion: v1alpha3
-      slurmctld:
-        image: cray/cray-slurmctld:1.6.1
-        ip: 10.150.124.100
-        host: devcls01a-slurmctld
-        backupIP: 10.150.124.101
-        backupHost: devcls01a-slurmctld-backup
-        livenessProbe:
-          enabled: true
-          initialDelaySeconds: 120
-          periodSeconds: 60
-          timeoutSeconds: 60
-      slurmdbd:
-        image: cray/cray-slurmdbd:1.6.1
-        ip: 10.150.124.102
-        host: devcls01a-slurmdbd
-        backupIP: 10.150.124.103
-        backupHost: devcls01a-slurmdbd-backup
-        livenessProbe:
-          enabled: true
-          initialDelaySeconds: 43200
-          periodSeconds: 30
-          timeoutSeconds: 5
-      munge:
-        image: cray/munge-munge:1.5.0
-      sssd:
-        image: cray/cray-sssd:1.4.0
-      config:
-        image: cray/cray-slurm-config:1.3.0
-        hsmGroup: devcls01a
-      pxc:
-        enabled: true
-        image:
-          repository: cray/cray-pxc
-          tag: 1.3.0
-        initImage:
-          repository: cray/cray-pxc-operator
-          tag: 1.3.0
-        configuration: |
-          [mysqld]
-          innodb_log_file_size=4G
-          innodb_lock_wait_timeout=900
-          wsrep_trx_fragment_size=1G
-          wsrep_trx_fragment_unit=bytes
-          log_error_suppression_list=MY-013360
-        data:
-          storageClassName: k8s-block-replicated
-          accessModes:
-            - ReadWriteOnce
-          storage: 1Ti
-        livenessProbe:
-          initialDelaySeconds: 300
-          periodSeconds: 10
-          timeoutSeconds: 5
-        resources:
-          requests:
-            cpu: "500m"
-            memory: 4Gi
-          limits:
-            cpu: "8"
-            memory: 32Gi
-        backup:
-          image:
-            repository: cray/cray-pxc-backup
-            tag: 1.3.0
-          data:
-            storageClassName: k8s-block-replicated
-            accessModes:
-              - ReadWriteOnce
-            storage: 512Gi
-          # Backup daily at 9:10PM (does not conflict with other CSM DB backups)
-          schedule: "10 21 * * *"
-          keep: 3
-          resources:
-            requests:
-              cpu: "500m"
-              memory: 4Gi
-            limits:
-              cpu: "8"
-              memory: 16Gi
-        haproxy:
-          image:
-            repository: cray/cray-pxc-haproxy
-            tag: 1.3.0
-          resources:
-            requests:
-              cpu: "500m"
-              memory: 128Mi
-            limits:
-              cpu: "16"
-              memory: 512Mi
-    ```
+```yaml
+apiVersion: "wlm.hpe.com/v1alpha1"
+kind: SlurmCluster
+metadata:
+  name: devcls01a
+  namespace: vcluster-devcls01a-slurm
+spec:
+  tapmsTenantName: vcluster-devcls01a
+  tapmsTenantVersion: v1alpha3
+  slurmctld:
+    image: cray/cray-slurmctld:1.6.1
+    ip: 10.150.124.100
+    host: devcls01a-slurmctld
+    backupIP: 10.150.124.101
+    backupHost: devcls01a-slurmctld-backup
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 120
+      periodSeconds: 60
+      timeoutSeconds: 60
+  slurmdbd:
+    image: cray/cray-slurmdbd:1.6.1
+    ip: 10.150.124.102
+    host: devcls01a-slurmdbd
+    backupIP: 10.150.124.103
+    backupHost: devcls01a-slurmdbd-backup
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 43200
+      periodSeconds: 30
+      timeoutSeconds: 5
+  munge:
+    image: cray/munge-munge:1.5.0
+  sssd:
+    image: cray/cray-sssd:1.4.0
+  config:
+    image: cray/cray-slurm-config:1.3.0
+    hsmGroup: devcls01a
+  pxc:
+    enabled: true
+    image:
+      repository: cray/cray-pxc
+      tag: 1.3.0
+    initImage:
+      repository: cray/cray-pxc-operator
+      tag: 1.3.0
+    configuration: |
+      [mysqld]
+      innodb_log_file_size=4G
+      innodb_lock_wait_timeout=900
+      wsrep_trx_fragment_size=1G
+      wsrep_trx_fragment_unit=bytes
+      log_error_suppression_list=MY-013360
+    data:
+      storageClassName: k8s-block-replicated
+      accessModes:
+        - ReadWriteOnce
+      storage: 1Ti
+    livenessProbe:
+      initialDelaySeconds: 300
+      periodSeconds: 10
+      timeoutSeconds: 5
+    resources:
+      requests:
+        cpu: "500m"
+        memory: 4Gi
+      limits:
+        cpu: "8"
+        memory: 32Gi
+    backup:
+      image:
+        repository: cray/cray-pxc-backup
+        tag: 1.3.0
+      data:
+        storageClassName: k8s-block-replicated
+        accessModes:
+          - ReadWriteOnce
+        storage: 512Gi
+      # Backup daily at 9:10PM (does not conflict with other CSM DB backups)
+      schedule: "10 21 * * *"
+      keep: 3
+      resources:
+        requests:
+          cpu: "500m"
+          memory: 4Gi
+        limits:
+          cpu: "8"
+          memory: 16Gi
+    haproxy:
+      image:
+        repository: cray/cray-pxc-haproxy
+        tag: 1.3.0
+      resources:
+        requests:
+          cpu: "500m"
+          memory: 128Mi
+        limits:
+          cpu: "16"
+          memory: 512Mi
+```
 
 ### Appendix C - Slurm configuration
 
-First, you are responsible for divvying up the HPE Slingshot VNI space among the primary `SlurmCluster` ('user' namespace) and any tenant `SlurmClusters`.
+Administrators are responsible for divvying up the HPE Slingshot VNI space among the primary `SlurmCluster` (`user` namespace) and any tenant `SlurmClusters`.
 Start with the primary `SlurmCluster`, and then configure each tenant.
 Here is an example for primary and one tenant:
 
@@ -870,10 +873,10 @@ In this example on `Development`, we have two X86 Compute nodes (1002 and 1003),
 
 ### Appendix D - USS group variables
 
-* This is file `group_vars/devten01a/slurm.yml`; complete file is shown.
+This is file `group_vars/devten01a/slurm.yml`; complete file is shown.
 
-    ``` yaml
-    munge_vault_path: secret/slurm/vcluster-devten01a-slurm/devcls01a/munge
-    slurm_conf_url: https://rgw-vip.local/wlm/vcluster-devten05-slurm/devcls01a/
-    slurmd_options: "--conf-server 10.156.124.104,10.156.124.105"
-    ```
+``` yaml
+munge_vault_path: secret/slurm/vcluster-devten01a-slurm/devcls01a/munge
+slurm_conf_url: https://rgw-vip.local/wlm/vcluster-devten05-slurm/devcls01a/
+slurmd_options: "--conf-server 10.156.124.104,10.156.124.105"
+```

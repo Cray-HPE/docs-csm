@@ -1,4 +1,4 @@
-# Deploy product
+# Deploy Product
 
 1. [Execute the IUF `deploy-product` stage](#1-execute-the-iuf-deploy-product-stage)
 1. [Next steps](#2-next-steps)
