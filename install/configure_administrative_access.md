@@ -180,7 +180,7 @@ will generate the full CFS configuration including additional CSM layers and all
     For example:
 
     ```bash
-    CSM_RELEASE="1.6.0"
+    CSM_RELEASE="1.7.0"
     ```
 
 1. (`ncn-mw#`) Run the `apply_csm_configuration.sh` script.

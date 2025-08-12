@@ -1,6 +1,6 @@
 # Upgrade CSM and additional products with IUF
 
-**Note: The CSM upgrade to CSM 1.6 is done with IUF.**
+**Note: The CSM upgrade to CSM 1.7 is done with IUF.**
 
 This procedure is used when performing an upgrade of Cray System Management (CSM) along with
 additional HPE Cray EX software products at the same time. This procedure would be used when
@@ -30,7 +30,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 ![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_upgrade_csm_and_addl_products_with_iuf_07082025.png)
 
 1. Read the _Important Notes_ section of the
-   [CSM 1.5.0 or later to 1.6.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
+   [CSM 1.6.0 or later to 1.7.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation.
 
 1. [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.6/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md)

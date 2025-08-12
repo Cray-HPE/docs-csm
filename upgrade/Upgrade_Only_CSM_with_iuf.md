@@ -7,14 +7,14 @@ using IUF.
 
 ## Description
 
-The upgrade from CSM 1.5 to CSM 1.6 uses the IUF framework. The CSM upgrade steps are run automatically, either directly through IUF stages or by running a hook at the beginning or end of an IUF stage.
+The upgrade from CSM 1.6 to CSM 1.7 uses the IUF framework. The CSM upgrade steps are run automatically, either directly through IUF stages or by running a hook at the beginning or end of an IUF stage.
 The hooks that are run for the CSM upgrade are described in the [description of CSM upgrade hooks](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md#description-of-csm-upgrade-hooks)
 section of the [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) page.
 
 ## Upgrade Procedure
 
 1. Read the _Important Notes_ section of the
-   [CSM 1.5.0 or later to 1.6.0 Upgrade Process](Upgrade_Management_Nodes_and_CSM_Services.md)
+   [CSM 1.6.0 or later to 1.7.0 Upgrade Process](Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation.
 
 1. [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.6/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md)

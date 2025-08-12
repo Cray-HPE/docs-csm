@@ -96,7 +96,7 @@ The following steps describe how to use the Configuration Framework Service (CFS
    > **`NOTE`** Update `CSM_RELEASE` for the version being used.
 
    ```bash
-   export CSM_RELEASE=1.6.0
+   export CSM_RELEASE=1.7.0
    export IMPORT_BRANCH=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq4 ".[\"${CSM_RELEASE}\"].configuration.import_branch") && echo "${IMPORT_BRANCH}"
    ```
 

@@ -105,7 +105,7 @@ For the purposes of this guide, the tenant configuration settings are made in ea
 
 #### Tenant API Version
 
-* Tenant `apiVersion` should use the latest available in the CSM release, e.g. `v1alpha3` for CSM 1.6
+* Tenant `apiVersion` should use the latest available in the CSM release, e.g. `v1alpha3` for CSM 1.7
 
 ### `SlurmCluster` Configuration
 
