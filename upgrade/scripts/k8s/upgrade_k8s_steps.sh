@@ -120,9 +120,9 @@ else
 fi
 
 if [[ -f "$DONE_DIR/rr_cs_rollout_restart.done" ]]; then
-  echo "INFO RR Critical service rollout restart completed, skipping."
+  echo "INFO Rack Resiliency Critical services rollout restart completed, skipping."
 else
-  # For each CS in static ConfigMap, perform rollout restart of the critical services
+  # For each CS in static ConfigMap, perform rollout restart of the critical service
   python3 rr_critical_service_restart.py
   if [[ $? -eq 0 ]]; then
     echo "INFO Successfully completed critical services rollout restart"

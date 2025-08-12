@@ -31,7 +31,7 @@ import yaml
 import json
 import subprocess
 import sys
-import tempfile
+import base64
 import os
 
 def load_configmap(name, namespace):
@@ -63,6 +63,8 @@ def rollout_restart_critical_services(critical_services):
     Perform a rollout restart for each critical service defined in the static ConfigMap.
     Args:
         critical_services (dict): Dictionary of services with their type and namespace.
+    Returns:
+        int: 0 if successful, 1 if any service restart failed.
     """
     for name, details in critical_services.items():
         resource_type = details["type"].lower()
@@ -101,7 +103,24 @@ def rollout_restart_critical_services(critical_services):
     return 0
 
 def set_rollout_complete(configmap_name, namespace):
-    patch_data = '{"data":{"rollout_complete":"true"}}'
+    """
+    Set the "rollout_complete" field to "true" in the specified ConfigMap.
+    Args:
+        configmap_name (str): Name of the ConfigMap to update.
+        namespace (str): Kubernetes namespace of the ConfigMap.
+    """
+    cm_data = load_configmap("rrs-mon-dynamic", "rack-resiliency")
+    dynamic_data_str = cm_data["data"]["dynamic-data.yaml"]
+    dynamic_data = yaml.safe_load(dynamic_data_str)
+    dynamic_data["state"]["rollout_complete"] = True
+    updated_dynamic_data_str = yaml.safe_dump(dynamic_data)
+    patch_data = {
+        "data": {
+            "dynamic-data.yaml": updated_dynamic_data_str
+        }
+    }
+    patch_data = json.dumps(patch_data)
+
     command = [
         "kubectl", "patch", "configmap", configmap_name,
         "-n", namespace,
@@ -116,8 +135,71 @@ def set_rollout_complete(configmap_name, namespace):
         print(f"Error: {e}")
         sys.exit(1)
 
-def main():
 
+def rr_enabled():
+    """
+    Check if Rack Resiliency is enabled or not.
+    Returns:
+        bool: True if RR is enabled, False otherwise.
+    """
+    namespace = "loftsman"
+    secret_name = "site-init"
+
+    kubectl_cmd = ["kubectl", "-n", namespace, "get", "secret", secret_name, "-o", "json"]
+    kubectl_output = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
+
+    # Parse JSON output
+    secret_data = json.loads(kubectl_output.stdout)
+
+    # Extract and decode the base64 data
+    encoded_yaml = secret_data["data"]["customizations.yaml"]
+    decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
+
+    # Define the key path
+    key_path = "spec.kubernetes.services.rack-resiliency.enabled"
+
+    # Run yq command to extract the value
+    yq_cmd = ["yq", "r", decoded_yaml, key_path]
+    result = subprocess.run(yq_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
+
+    # Extract and clean the output
+    enabled = result.stdout.strip()
+    if any(enabled is tvalue for tvalue in [1, 1.0, True]):
+        return True
+    if not isinstance(enabled, str):
+        return False
+    return enabled.lower() in {"true", "t", "yes", "y", "on", "1"}
+
+
+def is_cluster_policy_applied(policy_name):
+    """
+    Check if a specific ClusterPolicy is applied in the Kubernetes cluster.
+    Args:
+        policy_name (str): Name of the ClusterPolicy to check.
+        Returns:
+        bool: True if the ClusterPolicy is applied, False otherwise.
+    """
+    try:
+        subprocess.run(
+            ["kubectl", "get", "clusterpolicy", policy_name],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
+def main():
+    """
+    Main function to execute the rollout restart of critical services.
+    """
+    # Check if RR is enabled and if the cluster policy is applied
+    if not (rr_enabled() and is_cluster_policy_applied("insert-labels-topology-constraints")):
+        print("Either Rack Resiliency is not enabled or ClusterPolicy 'insert-labels-topology-constraints' not found. Skipping restart.")
+        sys.exit(0)
+       
     # Load critical services
     config = load_configmap("rrs-mon-static", "rack-resiliency")
     try:
@@ -126,9 +208,6 @@ def main():
     except KeyError as e:
         print(f"Missing expected key in ConfigMap: {e}")
         sys.exit(1)
-
-    # Extract critical services names
-    service_names = list(critical_services.keys())
 
     if rollout_restart_critical_services(critical_services) == 0:
         print(f"RR critical services rollout restart successful.")
