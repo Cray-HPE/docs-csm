@@ -1,4 +1,4 @@
-# Management rollout
+# Management Rollout
 
 This section updates the software running on management NCNs.
 

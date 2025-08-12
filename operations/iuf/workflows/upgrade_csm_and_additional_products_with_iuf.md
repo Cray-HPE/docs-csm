@@ -1,4 +1,4 @@
-# Upgrade CSM and additional products with IUF
+# Upgrade CSM and Additional Products with IUF
 
 **Note: The CSM upgrade to CSM 1.7 is done with IUF.**
 
@@ -8,7 +8,7 @@ upgrading from one HPC CSM Software Recipe release to another.
 
 This procedure is _not_ used to perform an initial install or upgrade of HPE Cray EX software products
 when CSM itself is not being upgraded. See
-[Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md) for that procedure.
+[Install or Upgrade Additional Products with IUF](install_or_upgrade_additional_products_with_iuf.md) for that procedure.
 
 This procedure streamlines the rollout of new images to management nodes. These images are based
 on the new images provided by the CSM product and customized by the additional HPE Cray EX software
@@ -25,12 +25,12 @@ The upgrade workflow comprises the following procedures. The diagram shows the w
 the steps below it provide detailed instructions which must be executed in the order shown.
 
 The CSM upgrade steps are run automatically, either directly through IUF stages or by a hook automatically executed at the beginning or end of an IUF stage.
-For more detail about about the CSM upgrade hooks, see the section [description of CSM upgrade hooks](#description-of-csm-upgrade-hooks).
+For more detail about about the CSM upgrade hooks, see the section [Description of CSM upgrade hooks](#description-of-csm-upgrade-hooks).
 
 ![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_upgrade_csm_and_addl_products_with_iuf_07082025.png)
 
 1. Read the _Important Notes_ section of the
-   [CSM 1.6.0 or later to 1.7.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
+   [CSM 1.6.0 or later to 1.7 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation.
 
 1. [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.6/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md)
@@ -38,7 +38,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 
 1. Prepare for the upgrade procedure and download product media
 
-   1. Follow the IUF [Prepare for the install or upgrade](preparation.md) instructions to set
+   1. Follow the IUF [Prepare for the Install or Upgrade](preparation.md) instructions to set
       environment variables used during the upgrade process.
 
    1. Download the desired HPE product media defined by the HPC CSM Software Recipe to `${MEDIA_DIR}`, which was defined in the previous step.
@@ -47,7 +47,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 
    > **NOTE** The CSM upgrade prerequisites are automatically executed in a hook run before `pre-install-check`.
 
-   Follow the IUF [Product delivery](product_delivery.md) instructions.
+   Follow the IUF [Product Delivery](product_delivery.md) instructions.
 
 1. Configuration
 
@@ -55,7 +55,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 
 1. Image preparation
 
-   Follow the IUF [Image preparation](image_preparation.md) instructions.
+   Follow the IUF [Image Preparation](image_preparation.md) instructions.
 
 1. Backup
 
@@ -65,7 +65,7 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 
    > **NOTE** The upgrade of CSM services and validation of CSM health occur automatically in a hook executed before the first management node is rolled out.
 
-   Follow the IUF [Management rollout](management_rollout.md) instructions.
+   Follow the IUF [Management Rollout](management_rollout.md) instructions.
 
 1. Deploy product
 
@@ -73,14 +73,14 @@ For more detail about about the CSM upgrade hooks, see the section [description 
 
    Follow these IUF instructions in order:
 
-   1. [Deploy product](deploy_product.md)
+   1. [Deploy Product](deploy_product.md)
    1. [Cilium Migration](cilium_migration.md)
-   1. [Validate deployment](validate_deployment.md)
-   1. [Perform Slingshot switch and management network switch firmware updates](slingshot_management_network_switch_updates.md)
+   1. [Validate Deployment](validate_deployment.md)
+   1. [Perform Slingshot Switch and Management Network Switch Firmware Updates](slingshot_management_network_switch_updates.md)
 
 1. Managed rollout
 
-   Follow the IUF [Managed rollout](managed_rollout.md) instructions.
+   Follow the IUF [Managed Rollout](managed_rollout.md) instructions.
 
 The IUF upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
 procedure and remove any installation artifacts, if desired.

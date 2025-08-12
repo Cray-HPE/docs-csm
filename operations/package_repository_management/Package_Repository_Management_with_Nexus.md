@@ -224,9 +224,10 @@ By default, product installers depend on Podman, paired with a vendor-specific S
 The Cray System Management \(CSM\) product adds a recent version of `quay.io/skopeo/stable` to the container registry, and it may be used to copy images into
 `registry.local`.
 
-From CSM `1.6.0`, the container images are signed and signatures are available along with the images. These signatures must be copied to Nexus along with the container images.
+Starting in CSM 1.6.0, the container images are signed and signatures are available along with the images.
+These signatures must be copied to Nexus along with the container images.
 
-#### Ensure that you have the following prerequisites in place before adding images
+#### Prerequisites before adding images
 
 - Valid credentials for both Artifactory and Nexus:
     - `ARTIFACTORY_USERNAME` & `ARTIFACTORY_TOKEN`
