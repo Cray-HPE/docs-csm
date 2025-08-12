@@ -6,7 +6,7 @@ This read-only state causes issues for Nexus as well as all the services that re
 During the install of any CSM version, a large amount data is added to Nexus. If there has not been a manual cleanup of old files in Nexus,
 then there is likely to be insufficient space for the next version of CSM to be installed.
 
-**NOTE:** The HPE Cray EX System Software release has around 130 Gigabytes of space needed in Nexus.
+**NOTE:** The HPE Cray EX System Software release requires around 130 Gigabytes of space in Nexus.
 
 This page outlines the procedure to manually cleanup Nexus, in order to ensure that there is sufficient free space for a CSM upgrade.
 
@@ -25,33 +25,33 @@ then it is recommended to delete that first, before taking any further steps.
 
 ### Marking a repository for deletion
 
-A repository can be deleted from the web UI or from the CLI.
+A repository can be deleted using the web UI or the CLI.
 
-To delete a repository from the CLI, reference
+To delete a repository using the CLI, see
 [Manage Repositories with Nexus](Manage_Repositories_with_Nexus.md#delete-a-repository).
 
-To delete a repository out of the web UI:
+To delete a repository using the web UI:
 
 1. Refer to [Access Nexus with the Web UI](Manage_Repositories_with_Nexus.md#access-nexus-with-the-web-ui).
 1. Authenticate to the web UI.
 1. Browse to the Nexus admin section.
-1. Click on **Repository**.
-1. Click on **Repositories**.
+1. Click on `Repository`.
+1. Click on `Repositories`.
 
    ![Nexus Repository List](../../img/operations/Nexus_Repository_List.png "Nexus Repository List")
 
-1. Select any repository to delete, where the **Type** is **hosted** and a new screen with a button that says
-**Delete repository** should appear at the top. Clicking that button will mark the repository for deletion.
+1. Select any repository to delete, where the `Type` is `hosted` and a new screen with a button that says
+`Delete repository` should appear at the top. Clicking that button will mark the repository for deletion.
 
    ![Nexus Delete Repository](../../img/operations/Nexus_Delete_Repository.png "Nexus Delete Repository")
 
 ### Marking a artifact for deletion
 
-An artifact can be easily deleted from the web UI. To delete an artifact from a repository:
+An artifact can be deleted using the web UI. To delete an artifact from a repository:
 
 1. Authenticate in the web UI.
-1. Click on **Browse**.
-1. Click on the repository you want to remove an asset from.
+1. Click on `Browse`.
+1. Click on the repository to remove an asset from.
 1. Click on the asset itself (either the folder, component, or asset).
 1. Select delete on the right side menu.
 
@@ -98,7 +98,7 @@ total size the blob store can be deleted.
 
 To check the amount of storage used, available, and total in the PVC.
 
-(`ncn-m#`) Run the following command on a mater node:
+(`ncn-m#`) Run the following command:
 
 ```bash
 kubectl exec -n nexus deploy/nexus -c nexus -- df -Ph /nexus-data | grep '/nexus-data' | awk '{print ("Used:", $3, "Available:", $4, "Total Size:", $2)}'
@@ -111,13 +111,13 @@ to proceed. Expanding the PVC will also require future work to allow for further
 
 **CAUTION:** This is an irreversible step and is not recommended.
 
-1. Scale Nexus to 0
+1. (`ncn-m#`) Scale Nexus to 0.
 
     ```bash
     kubectl scale deployment nexus -n nexus --replicas=0
     ```
 
-1. Increase nexus-data `pvc` storage size
+1. (`ncn-m#`) Increase `nexus-data` PVC storage size.
 
     ```bash
     kubectl edit pvc nexus-data -n nexus
@@ -130,36 +130,38 @@ to proceed. Expanding the PVC will also require future work to allow for further
           storage: 1500Gi  (was 1000Gi)
     ```
 
-1. Scale nexus back to 1
+1. (`ncn-m#`) Scale Nexus back to 1.
 
     ```bash
     kubectl scale deployment nexus -n nexus --replicas=1
     ```
 
-1. Update the customizations.yaml to persist the `pvc` size change.
+1. (`ncn-m#`) Update `customizations.yaml` to persist the PVC size change.
 
-    ```bash
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
-    ```
+    1. Copy `customizations.yaml` to a local file.
 
-    Edit customizations.yaml to add cray-nexus sonatype-nexus.persistence.storageSize
+        ```bash
+        kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+        ```
 
-    Example output:
+    1. Edit `customizations.yaml` to add `cray-nexus.sonatype-nexus.persistence.storageSize`.
 
-    ```yaml
-    cray-nexus:
-      sonatype-nexus:
-        nexus:
-          resources:
-            requests:
-              cpu: "2"
-        persistence:
-          storageSize: "1500Gi"
-    ```
+        Example:
 
-    Recreate the `site-init` secret from the modified customizations.yaml file.
+        ```yaml
+        cray-nexus:
+          sonatype-nexus:
+            nexus:
+              resources:
+                requests:
+                  cpu: "2"
+            persistence:
+              storageSize: "1500Gi"
+        ```
 
-    ```bash
-    kubectl delete secret -n loftsman site-init
-    kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-    ```
+    1. Recreate the `site-init` secret from the modified `customizations.yaml` file.
+
+        ```bash
+        kubectl delete secret -n loftsman site-init
+        kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+        ```
