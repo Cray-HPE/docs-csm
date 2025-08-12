@@ -119,5 +119,18 @@ else
   fi
 fi
 
+if [[ -f "$DONE_DIR/rr_cs_rollout_restart.done" ]]; then
+  echo "INFO RR Critical service rollout restart completed, skipping."
+else
+  # For each CS in static ConfigMap, perform rollout restart of the critical services
+  python3 rr_critical_service_restart.py
+  if [[ $? -eq 0 ]]; then
+    echo "INFO Successfully completed critical services rollout restart"
+    touch "$DONE_DIR/rr_cs_rollout_restart.done"
+  else
+    echo "ERROR Failed to do rollout restart of the critical services"
+  fi
+fi
+
 # If all steps succeeded, remove all .done files
 rm -f "$DONE_DIR"/*.done
