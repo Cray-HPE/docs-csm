@@ -143,10 +143,21 @@ to proceed. Expanding the PVC will also require future work to allow for further
     ```
 
     Edit customizations.yaml to add cray-nexus sonatype-nexus.persistence.storageSize
-          cray-nexus:
-            sonatype-nexus:
-              persistence:
-                storageSize: 1500Gi
+
+    Example output:
+
+    ```yaml
+    cray-nexus:
+      sonatype-nexus:
+        nexus:
+          resources:
+            requests:
+              cpu: "2"
+        persistence:
+          storageSize: "1500Gi"
+    ```
+
+    Recreate the `site-init` secret from the modified customizations.yaml file.
 
     ```bash
     kubectl delete secret -n loftsman site-init
