@@ -27,17 +27,17 @@
 Do rollout restart of the critical services defined in RR static ConfigMap.
 """
 
+import yaml
 import json
 import subprocess
 import sys
 import base64
 import os
-from typing import Dict
+import tempfile
 
-from typing_extensions import Literal, TypedDict
-import yaml
+CUSTOMIZATIONS="/tmp/customization.yaml"
 
-def load_configmap(name: str, namespace: str) -> dict:
+def load_configmap(name, namespace):
     """
     Fetch and return a ConfigMap from the specified namespace as a JSON object.
     Args:
@@ -61,11 +61,7 @@ def load_configmap(name: str, namespace: str) -> dict:
         sys.exit(1)
 
 
-class ServiceDetails(TypedDict):
-    type: str
-    namespace: str
-
-def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetails]) -> Literal[0, 1]:
+def rollout_restart_critical_services(critical_services):
     """
     Perform a rollout restart for each critical service defined in the static ConfigMap.
     Args:
@@ -73,43 +69,58 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
     Returns:
         int: 0 if successful, 1 if any service restart failed.
     """
+    failed_services = []
+
     for name, details in critical_services.items():
         resource_type = details["type"].lower()
         namespace = details["namespace"]
 
-        # Get the resource definition in JSON
-        get_command = [
-            "kubectl", "get", resource_type, name,
-            "-n", namespace, "-o", "json"
-        ]
-
+        # Get the resource definition
+        get_command = ["kubectl", "get", resource_type, name, "-n", namespace, "-o", "json"]
         try:
             result = subprocess.run(get_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             resource_json = json.loads(result.stdout)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
+            failed_services.append(f"{resource_type}/{name}")
+            continue
+        except json.JSONDecodeError as e:
+            print(f"Failed to parse JSON for {resource_type}/{name}: {str(e)}")
+            failed_services.append(f"{resource_type}/{name}")
+            continue
 
-            # Check if 'rrflag' is set for critical service
-            labels = resource_json.get("spec", {}).get("template", {}).get("metadata", {}).get("labels", {})
-            if "rrflag" not in labels:
-                print(f"Skipping {resource_type}/{name}: 'rrflag' label is not set for {resource_type}/{name} in namespace {namespace}")
-                continue
+        # Check for 'rrflag' label
+        labels = resource_json.get("spec", {}).get("template", {}).get("metadata", {}).get("labels", {})
+        if "rrflag" not in labels:
+            print(f"Skipping {resource_type}/{name}: 'rrflag' label is not set in namespace {namespace}")
+            continue
 
-            # Restart the critical service
-            restart_command = ["kubectl", "rollout", "restart", f"{resource_type}/{name}", "-n", namespace]
-            status_command = ["kubectl", "rollout", "status", resource_type, name, "-n", namespace, "--timeout=3m"]
-
-            subprocess.run(restart_command, check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE, universal_newlines=True)
-            subprocess.run(status_command, check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE, universal_newlines=True)
-            print(f"Restarted {resource_type}/{name} in namespace {namespace}")
+        # Restart the service
+        restart_command = ["kubectl", "rollout", "restart", f"{resource_type}/{name}", "-n", namespace]
+        try:
+            subprocess.run(restart_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         except subprocess.CalledProcessError as e:
             if "not found" in e.stderr.lower():
                 print(f"Skipping {resource_type}/{name}: resource not found in namespace {namespace}")
                 continue
             print(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
             print(f"Error: {e.stderr}")
-            return 1
-    return 0
+            failed_services.append(f"{resource_type}/{name}")
+            continue
 
-def set_rollout_complete(configmap_name: str, namespace: str) -> None:
+        # Check rollout status
+        status_command = ["kubectl", "rollout", "status", resource_type, name, "-n", namespace, "--timeout=3m"]
+        try:
+            subprocess.run(status_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+            print(f"Restarted {resource_type}/{name} in namespace {namespace}")
+        except subprocess.CalledProcessError as e:
+            print(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}")
+            print(f"Error: {e.stderr}")
+            failed_services.append(f"{resource_type}/{name}")
+
+    return 0 if not failed_services else 1
+
+def set_rollout_complete(configmap_name, namespace):
     """
     Set the "rollout_complete" field to "true" in the specified ConfigMap.
     Args:
@@ -143,7 +154,7 @@ def set_rollout_complete(configmap_name: str, namespace: str) -> None:
         sys.exit(1)
 
 
-def rr_enabled() -> bool:
+def rr_enabled():
     """
     Check if Rack Resiliency is enabled or not.
     Returns:
@@ -168,16 +179,12 @@ def rr_enabled() -> bool:
     encoded_yaml = secret_data["data"]["customizations.yaml"]
     decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
 
-    # Define the key path
-    key_path = "spec.kubernetes.services.rack-resiliency.enabled"
-
     # Write the yaml output to a file
-    output_file = "/tmp/customization.yaml"
+    output_file = CUSTOMIZATIONS
     with open(output_file, "w") as f:
         f.write(decoded_yaml)
 
     # Define the key path
-    output_file = "/tmp/customization.yaml"
     key_path = "spec.kubernetes.services.rack-resiliency.enabled"
 
     # Run yq command to extract the value
@@ -199,7 +206,7 @@ def rr_enabled() -> bool:
     return enabled.lower() in {"true", "t", "yes", "y", "on", "1"}
 
 
-def is_cluster_policy_applied(policy_name: str) -> bool:
+def is_cluster_policy_applied(policy_name):
     """
     Check if a specific ClusterPolicy is applied in the Kubernetes cluster.
     Args:
@@ -219,7 +226,7 @@ def is_cluster_policy_applied(policy_name: str) -> bool:
         return False
 
 
-def main() -> None:
+def main():
     """
     Main function to execute the rollout restart of critical services.
     """
