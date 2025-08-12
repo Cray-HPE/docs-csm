@@ -88,10 +88,10 @@ If there are any errors in the Unbound logs:
 
 - The `using localzone health.check.unbound. transparent` log is not an issue.
 - Typically, any error seen in Unbound, including the example above, falls under one of two categories:
-  - A bad configuration from a misconfiguration in the Helm chart. Currently, only the site/external DNS lookup can be at fault.
-    - **ACTION:** See the `customization.yaml` file and look at the `system_to_site_lookup` values. Ensure that the external lookup values are valid and working.
-  - Bad data \(as shown in the above example\) comes only from the DNS Helper and can be seen in the manager logs.
-    - **ACTION:** See [View manager (DNS Helper) logs](#view-manager-dns-helper-logs).
+    - A bad configuration from a misconfiguration in the Helm chart. Currently, only the site/external DNS lookup can be at fault.
+        - **ACTION:** See the `customization.yaml` file and look at the `system_to_site_lookup` values. Ensure that the external lookup values are valid and working.
+    - Bad data \(as shown in the above example\) comes only from the DNS Helper and can be seen in the manager logs.
+        - **ACTION:** See [View manager (DNS Helper) logs](#view-manager-dns-helper-logs).
 
 ## View manager \(DNS Helper\) logs
 
@@ -123,12 +123,12 @@ The healthy states are described below, as long as the write to the ConfigMap ha
 The manager runs periodically, about once every minute. Check if this is a one-time occurrence or if it is a recurring issue.
 
 - If the error shows in one manager log, but not during the next one, then this is likely a one-time failure.
-  - Check to see if the record exists in DNS, and if so, move on.
+    - Check to see if the record exists in DNS, and if so, move on.
 - If several or all manager logs show errors, particularly the same error, then this could be one of several sources:
-  - Bad network connections to DHCP or SLS/SMD.
-    - **ACTION:** Capture as much log data as possible and contact customer support.
-  - Bad data from DHCP or SLS/SMD.
-    - **ACTION:** If connections to DHCP \(Kea\) are involved, then refer to [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md).
+    - Bad network connections to DHCP or SLS/SMD.
+        - **ACTION:** Capture as much log data as possible and contact customer support.
+    - Bad data from DHCP or SLS/SMD.
+        - **ACTION:** If connections to DHCP \(Kea\) are involved, then refer to [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md).
 
 ## Restart Unbound
 
