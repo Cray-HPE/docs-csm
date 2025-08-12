@@ -146,7 +146,13 @@ def rr_enabled():
     secret_name = "site-init"
 
     kubectl_cmd = ["kubectl", "-n", namespace, "get", "secret", secret_name, "-o", "json"]
-    kubectl_output = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
+    try:
+        kubectl_output = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
+        if kubectl_output.returncode != 0:
+            raise ValueError(f"Error fetching site-init secret: {kubectl_output.stderr}")
+        return json.loads(kubectl_output.stdout)
+    except Exception as e:
+        return {"error": str(e)}
 
     # Parse JSON output
     secret_data = json.loads(kubectl_output.stdout)
@@ -158,9 +164,24 @@ def rr_enabled():
     # Define the key path
     key_path = "spec.kubernetes.services.rack-resiliency.enabled"
 
+    # Write the yaml output to a file
+    output_file = "/tmp/customization.yaml"
+    with open(output_file, "w") as f:
+        f.write(decoded_yaml)
+
+    # Define the key path
+    output_file = "/tmp/customization.yaml"
+    key_path = "spec.kubernetes.services.rack-resiliency.enabled"
+
     # Run yq command to extract the value
     yq_cmd = ["yq", "r", decoded_yaml, key_path]
-    result = subprocess.run(yq_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
+    try:
+        result = subprocess.run(yq_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
+        if result.returncode != 0:
+            raise ValueError(f"Error fetching site-init secret: {result.stderr}")
+        return json.loads(result.stdout)
+    except Exception as e:
+        return {"error": str(e)}
 
     # Extract and clean the output
     enabled = result.stdout.strip()
