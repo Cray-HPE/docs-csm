@@ -32,7 +32,7 @@ import subprocess
 import sys
 import base64
 import os
-from typing import Dict, List
+from typing import Dict
 
 from typing_extensions import Literal, TypedDict
 import yaml
