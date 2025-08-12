@@ -726,6 +726,7 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 | CSM 1.4.0                 | 5.**14.21-150400.24.38.1.25440.1.PTF.1204911** | SLES-15-SP4 upgrade and SUSE patch (case #00502283)                             |
 | CSM 1.5                   | 5.14.21-**150500.55.39.1.27360.1.PTF.1215587** | SLES-15-SP5 bond bug (SUSE case #00703657) and qlogic fix (SUSE case #00707151) |
 | CSM 1.6                   | **6.4.0-150600.23.17.1**                       | SLES-15-SP6                                                                     |
+| CSM 1.7                   | 6.4.0-150600.**23.53.1**                       |                                                                                 |
 
 [1]:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
 
