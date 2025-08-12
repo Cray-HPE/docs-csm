@@ -240,5 +240,5 @@ Use the following procedure to change the site DNS server that Unbound forwards 
 
 ## Increase the number of Unbound pods
 
-On large systems it may be necessary to increase the number of Unbound Pods because of the increased DNS query load.
+On large systems it may be necessary to increase the number of Unbound pods because of the increased DNS query load.
 See [Scale `cray-dns-unbound` service](../../CSM_product_management/Post_Install_Customizations.md#scale-cray-dns-unbound-service) for more information.

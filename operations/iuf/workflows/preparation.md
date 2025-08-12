@@ -1,4 +1,4 @@
-# Prepare for the install or upgrade
+# Prepare for the Install or Upgrade
 
 This section defines environment variables and directory content that is used throughout the workflow.
 
