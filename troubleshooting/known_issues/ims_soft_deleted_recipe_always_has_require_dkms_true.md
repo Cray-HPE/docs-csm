@@ -7,7 +7,7 @@ regardless of its original value. This new value persists even if the recipe is 
 operation.
 
 For more information on deleting and restoring resources in IMS, see
-[Delete or Recover Deleted IMS Content](../operations/image_management/Delete_or_Recover_Deleted_IMS_Content.md).
+[Delete or Recover Deleted IMS Content](../../operations/image_management/Delete_or_Recover_Deleted_IMS_Content.md).
 
 ## Workaround
 
