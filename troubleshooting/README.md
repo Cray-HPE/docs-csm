@@ -57,6 +57,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 * [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
+* [Soft Deleted IMS recipe always has `require_dkms=true`](known_issues/ims_soft_deleted_recipe_always_has_require_dkms_true.md)
 
 ## Booting
 
@@ -123,6 +124,10 @@ CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Depre
 ## Grafana dashboards
 
 * [Grafana Dashboards](../operations/system_management_health/Troubleshoot_Grafana_Dashboard.md)
+
+## Image management
+
+* [Soft Deleted IMS recipe always has `require_dkms=true`](known_issues/ims_soft_deleted_recipe_always_has_require_dkms_true.md)
 
 ## Kubernetes
 
