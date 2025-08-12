@@ -27,14 +27,17 @@
 Do rollout restart of the critical services defined in RR static ConfigMap.
 """
 
-import yaml
 import json
 import subprocess
 import sys
 import base64
 import os
+from typing import Dict, List
 
-def load_configmap(name, namespace):
+from typing_extensions import Literal, TypedDict
+import yaml
+
+def load_configmap(name: str, namespace: str) -> dict:
     """
     Fetch and return a ConfigMap from the specified namespace as a JSON object.
     Args:
@@ -58,7 +61,11 @@ def load_configmap(name, namespace):
         sys.exit(1)
 
 
-def rollout_restart_critical_services(critical_services):
+class ServiceDetails(TypedDict):
+    type: str
+    namespace: str
+
+def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetails]) -> Literal[0, 1]:
     """
     Perform a rollout restart for each critical service defined in the static ConfigMap.
     Args:
@@ -80,7 +87,7 @@ def rollout_restart_critical_services(critical_services):
             result = subprocess.run(get_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             resource_json = json.loads(result.stdout)
 
-            # Check to if 'rrflag' is set for critical service
+            # Check if 'rrflag' is set for critical service
             labels = resource_json.get("spec", {}).get("template", {}).get("metadata", {}).get("labels", {})
             if "rrflag" not in labels:
                 print(f"Skipping {resource_type}/{name}: 'rrflag' label is not set for {resource_type}/{name} in namespace {namespace}")
@@ -102,7 +109,7 @@ def rollout_restart_critical_services(critical_services):
             return 1
     return 0
 
-def set_rollout_complete(configmap_name, namespace):
+def set_rollout_complete(configmap_name: str, namespace: str) -> None:
     """
     Set the "rollout_complete" field to "true" in the specified ConfigMap.
     Args:
@@ -136,7 +143,7 @@ def set_rollout_complete(configmap_name, namespace):
         sys.exit(1)
 
 
-def rr_enabled():
+def rr_enabled() -> bool:
     """
     Check if Rack Resiliency is enabled or not.
     Returns:
@@ -192,7 +199,7 @@ def rr_enabled():
     return enabled.lower() in {"true", "t", "yes", "y", "on", "1"}
 
 
-def is_cluster_policy_applied(policy_name):
+def is_cluster_policy_applied(policy_name: str) -> bool:
     """
     Check if a specific ClusterPolicy is applied in the Kubernetes cluster.
     Args:
@@ -212,7 +219,7 @@ def is_cluster_policy_applied(policy_name):
         return False
 
 
-def main():
+def main() -> None:
     """
     Main function to execute the rollout restart of critical services.
     """
