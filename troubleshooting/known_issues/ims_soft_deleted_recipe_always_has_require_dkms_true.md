@@ -6,6 +6,9 @@ When an IMS recipe is deleted and becomes a "deleted recipe", its `require_dkms`
 regardless of its original value. This new value persists even if the recipe is later restored using an `undelete`
 operation.
 
+For more information on deleting and restoring resources in IMS, see
+[Delete or Recover Deleted IMS Content](../operations/image_management/Delete_or_Recover_Deleted_IMS_Content.md).
+
 ## Workaround
 
 (`ncn-mw#`) The problem can be worked around by manually updating the `require_dkms` value after the deleted
