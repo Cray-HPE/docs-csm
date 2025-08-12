@@ -1,4 +1,4 @@
-# Populate admin directory with files defining site preferences
+# Populate Admin Directory with Files Defining Site Preferences
 
 IUF activities use `${ADMIN_DIR}` to retain files that define site preferences for IUF. `${ADMIN_DIR}` is defined separately from `${ACTIVITY_DIR}` and `${MEDIA_DIR}` based on the assumption that the files in `${ADMIN_DIR}` will be
 used when performing future IUF operations unrelated to this workflow.
