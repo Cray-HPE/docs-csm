@@ -78,6 +78,10 @@ def load_configmap(name: str, namespace: str) -> dict:
         err_exit(e.stderr)
 
 class ServiceDetails(TypedDict):
+    """
+    The type (e.g. "Deployment", "StatefulSet") and namespace (e.g. "services")
+    for a critical service in Kubernetes
+    """
     type: str
     namespace: str
 
