@@ -10,22 +10,20 @@ and BMC/controller passwords.
 
 ## Topics
 
-- [Configure Administrative Access](#configure-administrative-access)
-    - [Topics](#topics)
-    - [1. Configure the Cray and SAT command line interfaces](#1-configure-the-cray-and-sat-command-line-interfaces)
-        - [Cray CLI configuration](#cray-cli-configuration)
-        - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
-        - [Manual configuration](#manual-configuration)
-        - [SAT CLI configuration](#sat-cli-configuration)
-    - [2. Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
-    - [3. Lock management nodes](#3-lock-management-nodes)
-    - [4. Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
-    - [5. Set up passwordless SSH](#5-set-up-passwordless-ssh)
-    - [6. Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
-    - [7. Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
-    - [8. Configure management nodes with CFS](#8-configure-management-nodes-with-cfs)
-    - [9. Restart Critical Services for Rack Resiliency](#9-restart-critical-services-for-rack-resiliency)
-    - [10. Proceed to next topic](#10-proceed-to-next-topic)
+- [1. Configure the Cray and SAT command line interfaces](#1-configure-the-cray-and-sat-command-line-interfaces)
+    - [Cray CLI configuration](#cray-cli-configuration)
+    - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
+    - [Manual configuration](#manual-configuration)
+    - [SAT CLI configuration](#sat-cli-configuration)
+- [2. Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
+- [3. Lock management nodes](#3-lock-management-nodes)
+- [4. Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
+- [5. Set up passwordless SSH](#5-set-up-passwordless-ssh)
+- [6. Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
+- [7. Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
+- [8. Configure management nodes with CFS](#8-configure-management-nodes-with-cfs)
+- [9. Restart Rack Resiliency critical services](#9-restart-rack-resiliency-critical-services)
+- [10. Proceed to next topic](#10-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -207,10 +205,12 @@ will generate the full CFS configuration including additional CSM layers and all
     The number reported should match the number of management nodes in the system.
     If there are failures, see [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md).
 
-## 9. Restart Critical Services for Rack Resiliency
+## 9. Restart Rack Resiliency critical services
 
-If Rack Resiliency was enabled using [Enable Rack Resiliency](prepare_site_init.md#enable-rack-resiliency) step of the
-[Prepare Site Init](prepare_site_init.md) procedure, run below script to restart the critical services for Rack Resiliency.
+> Skip this step if the Rack Resiliency feature is not enabled.
+> For more information, see [Enabling Rack Resiliency](../operations/rack_resiliency/Enabling_Rack_Resiliency.md).
+
+(`ncn-mw#`) Restart the critical services for Rack Resiliency.
 
 ```bash
 python3 /usr/share/doc/csm/upgrade/scripts/upgrade/scripts/k8s/rr_critical_service_restart.py
