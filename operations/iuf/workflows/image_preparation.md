@@ -1,4 +1,4 @@
-# Image preparation
+# Image Preparation
 
 This section creates CFS configurations and bootable images that will be used by later steps in the workflow.
 
