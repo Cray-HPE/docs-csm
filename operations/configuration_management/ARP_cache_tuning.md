@@ -11,7 +11,7 @@ The following information is required and will need to be gathered before perfor
 
 ---
 
-## Key ARP Cache Settings
+## Key ARP cache settings
 
 1. **`gc_thresh1`**: Minimum number of entries the cache attempts to maintain.
 2. **`gc_thresh2`**: Threshold where older entries start getting cleared before the cache overfills.
@@ -21,7 +21,7 @@ The following information is required and will need to be gathered before perfor
 
 ---
 
-## Formula for Tuning ARP cache settings
+## Formula for tuning ARP cache settings
 
 Storage nodes do not have HSN connections. To keep `arp` settings management simple, the values calculated for the worker nodes should also be applied to the storage nodes.
 
@@ -38,14 +38,12 @@ Where:
     - HSN NICs = number of NICs on the HSN per node. If some compute nodes have 1, some have 2, and some have 4 HSN NICs, then use the largest value of **`4`** HSN NICs per node.
     - NMN NICs = number of NICs on the NMN per node. Most nodes have a single NIC on the NMN, but workers will have two. For the formula, assume each node has **`1`** NIC On the NMN.
 
-### Calculate Remaining Values
+### Calculate remaining values
 
 - `gc_thresh2 = 1.5 × gc_thresh1`
 - `gc_thresh3 = 2 × gc_thresh2`
 
----
-
-## Example Calculation
+## Example calculation
 
 **Scenario**:
 
@@ -96,7 +94,7 @@ The following steps describe how to use the Configuration Framework Service (CFS
    > **`NOTE`** Update `CSM_RELEASE` for the version being used.
 
    ```bash
-   export CSM_RELEASE=1.6.0
+   export CSM_RELEASE=1.7.0
    export IMPORT_BRANCH=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq4 ".[\"${CSM_RELEASE}\"].configuration.import_branch") && echo "${IMPORT_BRANCH}"
    ```
 

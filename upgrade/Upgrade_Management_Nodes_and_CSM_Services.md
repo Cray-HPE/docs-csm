@@ -1,12 +1,12 @@
-# CSM 1.5 to 1.6 Upgrade Process
+# CSM 1.6 to 1.7 Upgrade Process
 
 ## Introduction
 
-This document guides an administrator through the upgrade of Cray Systems Management from version 1.5 to version 1.6.
+This document guides an administrator through the upgrade of Cray Systems Management from version 1.6 to version 1.7.
 This procedure works for all patch versions of the source and target CSM releases.
 
-This procedure is also the correct one to follow in the unusual situation of upgrading from a pre-release version of CSM 1.6.0
-to a newer version of CSM 1.6.
+This procedure is also the correct one to follow in the unusual situation of upgrading from a pre-release version of CSM 1.7.0
+to a newer version of CSM 1.7.
 
 When upgrading a system, follow this top-level file from top to bottom. The content on this top-level page is meant to be terse.
 For additional reference material on the upgrade processes and scripts mentioned explicitly on this page, see [resource material](resource_material/README.md).
@@ -30,7 +30,7 @@ For additional reference material on the upgrade processes and scripts mentioned
 
 ## Upgrade stages
 
-The upgrade to CSM 1.6 is done through IUF. Follow one of the following two procedures:
+The upgrade to CSM 1.7 is done through IUF. Follow one of the following two procedures:
 
 1. [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
 

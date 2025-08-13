@@ -110,7 +110,7 @@ is not at the recommended version and needs to be updated.
 (`ncn-m#`) Run `canu` to report the firmware level of all switches. The switch admin user password should be supplied when prompted.
 
 ```bash
-canu report network firmware --csm 1.6 --ips $(awk '/sw-/{ printf "%s%s", sep, $1; sep="," }' /etc/hosts)
+canu report network firmware --csm 1.7 --ips $(awk '/sw-/{ printf "%s%s", sep, $1; sep="," }' /etc/hosts)
 ```
 
 Example output:
