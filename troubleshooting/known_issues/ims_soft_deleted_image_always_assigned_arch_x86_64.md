@@ -4,7 +4,7 @@
 
 When an IMS image is deleted and becomes a "deleted image", its `arch` attribute is set to `x86_64`,
 regardless of its original value. This new value persists even if the image is later restored using
-the `undelete` operation.
+an `undelete` operation.
 
 This bug is fixed in CSM 1.6.1. In earlier CSM versions, the only option is to use the provided [Workaround](#workaround).
 

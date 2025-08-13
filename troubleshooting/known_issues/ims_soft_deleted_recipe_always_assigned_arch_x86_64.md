@@ -4,7 +4,7 @@
 
 When an IMS recipe is deleted and becomes a "deleted recipe", its `arch` attribute is set to `x86_64`,
 regardless of its original value. This new value persists even if the recipe is later restored using
-the `undelete` operation.
+an `undelete` operation.
 
 This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to use the provided [Workaround](#workaround).
 
