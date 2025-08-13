@@ -178,10 +178,6 @@ def rr_enabled():
     encoded_yaml = secret_data["data"]["customizations.yaml"]
     decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
 
-    with open(decoded_yaml, "r") as f:
-        policy = yaml.safe_load(f)
-
-
     # Write the yaml output to a file
     output_file = CUSTOMIZATIONS
     with open(output_file, "w") as f:
@@ -191,7 +187,7 @@ def rr_enabled():
     key_path = "spec.kubernetes.services.rack-resiliency.enabled"
 
     # Run yq command to extract the value
-    yq_cmd = ["yq", "r", decoded_yaml, key_path]
+    yq_cmd = ["yq", "r", output_file, key_path]
     try:
         result = subprocess.run(yq_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
         if result.returncode != 0:
