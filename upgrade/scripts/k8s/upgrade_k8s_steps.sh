@@ -125,10 +125,10 @@ else
   # For each CS in static ConfigMap, perform rollout restart of the critical service
   python3 rr_critical_service_restart.py
   if [[ $? -eq 0 ]]; then
-    echo "INFO Successfully completed critical services rollout restart"
+    echo "INFO Critical Services rollout restart not performed or successfully completed."
     touch "$DONE_DIR/rr_cs_rollout_restart.done"
   else
-    echo "ERROR Either rollout restart of the critical services is not performed or failed"
+    echo "ERROR Critical Services rollout restart failed."
   fi
 fi
 
