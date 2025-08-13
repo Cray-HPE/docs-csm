@@ -16,7 +16,7 @@
         * [Removing worker NCN when `iscsi_sbps` group does not exist](#removing-worker-ncn-when-iscsi_sbps-group-does-not-exist)
         * [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsi_sbps-group-exists)
     * [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade)
-* [Manual DNS records update](#manual-dns-records-update)
+* [Refresh iSCSI configuration](#refresh-iscsi-configuration)
 
 ## Overview
 
@@ -169,20 +169,11 @@ For details, see [After initial CSM 1.7 install or upgrade](#after-initial-csm-1
 ### CSM upgrade from 1.6 to 1.7
 
 During an upgrade from CSM 1.6 to CSM 1.7, if the administrator does not wish to enable this feature, no special steps
-need to be taken. If the administrator does wish to enable this feature, then the following steps need to be followed at the
-beginning of [2. Execute the IUF `management-nodes-rollout` stage](../iuf/workflows/management_rollout.md#2-execute-the-iuf-management-nodes-rollout-stage).
+need to be taken. If the administrator does wish to enable this feature, then at the beginning of
+[2. Execute the IUF `management-nodes-rollout` stage](../iuf/workflows/management_rollout.md#2-execute-the-iuf-management-nodes-rollout-stage),
+the administrator must create the `iscsi_worker` HSM group.
 
-1. Create the `iscsi_worker` HSM group.
-
-   See [Creating the group](#creating-the-group).
-
-1. Perform manual DNS update.
-
-   This step is required any time a worker node is changed from being enabled for iSCSI to being disabled for iSCSI.
-   In CSM 1.6, all worker nodes were enabled for iSCSI. Therefore, this step will always be required when first enabling
-   this feature on a system that previously was running CSM 1.6.
-
-   See [Manual DNS records update](#manual-dns-records-update).
+See [Creating the group](#creating-the-group).
 
 ### Adding or removing worker NCN
 
@@ -272,8 +263,9 @@ Otherwise (if the new worker NCN should be configured as an iSCSI target), perfo
 
 This means that all worker NCNs are configured as iSCSI targets.
 In this scenario, the remove NCN procedure can be performed as usual. After it is done, the
-administrator must manually update DNS records. See [Manual DNS records update](#manual-dns-records-update).
-
+administrator must refresh the iSCSI configuration.  See
+[Refresh iSCSI configuration](#refresh-iscsi-configuration).
+ 
 #### Removing worker NCN when `iscsi_sbps` group exists
 
 1. Check if the worker being removed is not a member of the `iscsi_sbps` group.
@@ -288,22 +280,9 @@ administrator must manually update DNS records. See [Manual DNS records update](
 
     See [Removing a worker from the group](#removing-a-worker-from-the-group).
 
-1. Instruct the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) to update
-   the iSCSI configuration.
+1. Refresh the iSCSI configuration.
 
-   > The latest CSM documentation RPM must be installed on the node where this step is being performed.
-   > See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
-
-   (`ncn-mw#`) The `refresh_worker_iscsi_config.py` script is provided to modify the CFS state of the worker NCNs to
-   force them to re-run the iSCSI configuration layer. It is run without arguments.
-
-   ```bash
-   /usr/share/doc/csm/scripts/operations/configuration/refresh_worker_iscsi_config.py
-   ```
-
-1. Manually update the DNS records.
-
-    See [Manual DNS records update](#manual-dns-records-update).
+    See [Refresh iSCSI configuration](#refresh-iscsi-configuration).
 
 1. Skip the rest of this document and perform the procedure to remove the worker NCN from the system.
 
@@ -329,36 +308,54 @@ for iSCSI can be changed. To do this, use the following procedure:
           See [Adding a worker to the group](#adding-a-worker-to-the-group) and
           [Removing a worker from the group](#removing-a-worker-from-the-group).
 
-1. Instruct the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) to update
-   the iSCSI configuration.
+1. Refresh the iSCSI configuration.
 
-   > The latest CSM documentation RPM must be installed on the node where this step is being performed.
-   > See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
-
-   (`ncn-mw#`) The `refresh_worker_iscsi_config.py` script is provided to modify the CFS state of the worker NCNs to
-   force them to re-run the iSCSI configuration layer. It is run without arguments.
-
-   ```bash
-   /usr/share/doc/csm/scripts/operations/configuration/refresh_worker_iscsi_config.py
-   ```
-
-1. Manually update DNS records, if needed.
-
-    If the changes made in the first step result in a worker being disabled as an iSCSI target when previously
-    it had been enabled as an iSCSI target, then an additional manual procedure is required.
-    See [Manual DNS records update](#manual-dns-records-update).
+    See [Refresh iSCSI configuration](#refresh-iscsi-configuration).
 
 1. *Optional:* Verify the iSCSI configuration.
 
     After the CFS node personalization is complete for all of the worker NCNs, administrators may wish to verify the iSCSI configuration.
     See [iSCSI SBPS Verification](iSCSI_SBPS_Verification.md).
 
-## Manual DNS records update
+## Refresh iSCSI configuration
 
-One of the things that the iSCSI Ansible playbook does is to add DNS entries for the workers that are enabled for iSCSI.
-However, this playbook does not have logic to remove these entries, in the case where a worker had previously been
-enabled for iSCSI but now is not. In this case, the administrator must manually remove these entries.
+The iSCSI configuration on the system should be refreshed whenever any of the following things takes place:
 
-These entries are added by the `csm.sbps.dns_srv_records` Ansible role in the `csm-config-management` repository in
-the [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
-See that role to determine which entries must be manually removed.
+* The iSCSI HSM group is created (except during the initial CSM 1.7 install/upgrade)
+* The iSCSI HSM group membership is changed
+    * If multiple changes are being made one after the other, then the refresh may be delayed until all of these are completed.
+* The iSCSI HSM group is deleted
+* A worker NCN is added or removed from the system
+    * See [Adding or removing worker NCN](#adding-or-removing-worker-ncn) for full details
+
+(`ncn-mw#`) The `refresh_worker_iscsi_config.py` script is provided to modify the state of the worker NCNs in the
+[Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs). It modifies the
+state in a way that forces them to re-run the iSCSI configuration layer. 
+
+> * The latest CSM documentation RPM must be installed on the node where this step is being performed.
+>   See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+> * This script can be run on any master or worker NCN where the documentation RPM is installed.
+> * This script is run without arguments.
+> * The script only needs to be run once on the system (not once per worker).
+
+```bash
+/usr/share/doc/csm/scripts/operations/configuration/refresh_worker_iscsi_config.py
+```
+
+Example output:
+
+```text
+The following workers will have their CFS states updated and error counts reset: ['x3000c0s11b0n0', 'x3000c0s26b0n0', 'x3000c0s33b0n0', 'x3000c0s7b0n0', 'x3000c0s9b0n0']
+Updating CFS components...
+Update successful. CFS batcher should soon start sessions to configure the nodes whose states were updated
+SUCCESS
+```
+
+Soon after the script completes, CFS batcher will begin scheduling new
+[CFS sessions](../configuration_management/CFS_Sessions.md) to perform the iSCSI refresh.
+This may take up to a few minutes, depending how the the
+[CFS Options](../configuration_management/CFS_Global_Options.md) are set on the system.
+For more information, see
+[`CFS-Batcher` scheduling](../configuration_management/Automatic_Configuration_Management.md#cfs-batcher-scheduling).
+
+Once these CFS sessions complete successfully, then the iSCSI configuration has been refreshed.
