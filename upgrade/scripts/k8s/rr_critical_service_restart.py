@@ -160,14 +160,31 @@ def rr_enabled():
     Returns:
         bool: True if RR is enabled, False otherwise.
     """
+import subprocess
+import json
+import base64
+import yaml
+
+def rr_enabled():
+    """
+    Check if Rack Resiliency is enabled or not.
+    Returns:
+        bool: True if RR is enabled, False otherwise.
+    """
     namespace = "loftsman"
     secret_name = "site-init"
 
     kubectl_cmd = ["kubectl", "-n", namespace, "get", "secret", secret_name, "-o", "json"]
     try:
-        kubectl_output = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
-        if kubectl_output.returncode != 0:
-            raise ValueError(f"Error fetching site-init secret: {kubectl_output.stderr}")
+        kubectl_output = subprocess.run(
+            kubectl_cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            check=True
+        )
+    except subprocess.CalledProcessError as e:
+        return {"error": f"Error fetching site-init secret: {e.stderr}"}
     except Exception as e:
         return {"error": str(e)}
 
@@ -175,25 +192,18 @@ def rr_enabled():
     secret_data = json.loads(kubectl_output.stdout)
 
     # Extract and decode the base64 data
-    encoded_yaml = secret_data["data"]["customizations.yaml"]
-    decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
-
-    # Write the yaml output to a file
-    output_file = CUSTOMIZATIONS
-    with open(output_file, "w") as f:
-        f.write(decoded_yaml)
-
-    # Define the key path
-    key_path = "spec.kubernetes.services.rack-resiliency.enabled"
-
-    # Run yq command to extract the value
-    yq_cmd = ["yq", "r", output_file, key_path]
     try:
-        result = subprocess.run(yq_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
-        if result.returncode != 0:
-            raise ValueError(f"Error fetching site-init secret: {result.stderr}")
+        encoded_yaml = secret_data["data"]["customizations.yaml"]
+        decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
+        data = yaml.safe_load(decoded_yaml)
     except Exception as e:
-        return {"error": str(e)}
+        return {"error": f"Failed to decode or parse YAML: {str(e)}"}
+
+    enabled = data.get('spec', {}) \
+                  .get('kubernetes', {}) \
+                  .get('services', {}) \
+                  .get('rack-resiliency', {}) \
+                  .get('enabled')
 
     # The csm-config Ansible code uses its built-in `bool` filter when parsing thie field, so we
     # should do the same here. That filter interprets the following values as True:
@@ -201,12 +211,15 @@ def rr_enabled():
     # int: 1
     # float: 1.0
     # boolean: True
-    enabled = result.stdout.strip()
-    if any(enabled is tvalue for tvalue in [1, 1.0, True]):
-        return True
-    if not isinstance(enabled, str):
-        return False
-    return enabled.lower() in {"true", "t", "yes", "y", "on", "1"}
+    truthy_values = {"true", "t", "yes", "y", "on", "1"}
+    if isinstance(enabled, bool):
+        return enabled
+    if isinstance(enabled, (int, float)):
+        return enabled == 1
+    if isinstance(enabled, str):
+        return enabled.strip().lower() in truthy_values
+
+    return False
 
 def is_cluster_policy_applied(policy_name):
     """
