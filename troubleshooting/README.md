@@ -94,6 +94,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
+* [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
 
 ## ConMan
 
