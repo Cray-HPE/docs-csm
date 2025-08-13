@@ -192,10 +192,10 @@ def rr_enabled():
             check=True
         )
     except subprocess.CalledProcessError as e:
-        print(f"Error fetching site-init secret: {e.stderr}")
+        print_err(f"Error fetching site-init secret: {e.stderr}")
         return False
     except Exception as e:
-        print("error": str(e))
+        print_err(f"error: {e}")
         return False
 
     # Parse JSON output
@@ -207,7 +207,7 @@ def rr_enabled():
         decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
         data = yaml.safe_load(decoded_yaml)
     except Exception as e:
-        print(f"Failed to decode or parse customizations YAML: {str(e)}")
+        print_err(f"Failed to decode or parse customizations.yaml: {e}")
         return False
 
     enabled = data.get('spec', {}) \
