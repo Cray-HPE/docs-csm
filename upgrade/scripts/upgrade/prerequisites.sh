@@ -716,6 +716,9 @@ fi
 do_upgrade_csm_chart cray-istio-ingress platform.yaml
 do_upgrade_csm_chart cray-kiali platform.yaml
 
+# Deploy Rack Resiliency chart
+do_upgrade_csm_chart cray-rrs platform.yaml
+
 # Delete all Helm secrets for a given chart across all namespaces and versions
 function delete_helm_secrets() {
   local chart_name secrets
