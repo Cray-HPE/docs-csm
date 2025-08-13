@@ -10,20 +10,22 @@ and BMC/controller passwords.
 
 ## Topics
 
-1. [Configure the Cray and SAT command line interfaces](#1-configure-the-cray-and-sat-command-line-interfaces)
+- [Configure Administrative Access](#configure-administrative-access)
+  - [Topics](#topics)
+  - [1. Configure the Cray and SAT command line interfaces](#1-configure-the-cray-and-sat-command-line-interfaces)
     - [Cray CLI configuration](#cray-cli-configuration)
-        - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
-        - [Manual configuration](#manual-configuration)
+      - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
+      - [Manual configuration](#manual-configuration)
     - [SAT CLI configuration](#sat-cli-configuration)
-1. [Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
-1. [Lock management nodes](#3-lock-management-nodes)
-1. [Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
-1. [Set up passwordless SSH](#5-set-up-passwordless-ssh)
-1. [Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
-1. [Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
-1. [Configure management nodes with CFS](#8-configure-management-nodes-with-cfs)
-1. [Restart Critical Services for Rack Resiliency](#9-restart-critical-services-for-rack-resiliency)
-1. [Proceed to next topic](#10-proceed-to-next-topic)
+  - [2. Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
+  - [3. Lock management nodes](#3-lock-management-nodes)
+  - [4. Configure BMC and controller parameters with SCSD](#4-configure-bmc-and-controller-parameters-with-scsd)
+  - [5. Set up passwordless SSH](#5-set-up-passwordless-ssh)
+  - [6. Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
+  - [7. Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
+  - [8. Configure management nodes with CFS](#8-configure-management-nodes-with-cfs)
+  - [9. Restart Critical Services for Rack Resiliency](#9-restart-critical-services-for-rack-resiliency)
+  - [10. Proceed to next topic](#10-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -220,4 +222,3 @@ After completing the operational procedures above which configure administrative
 step is to validate the health of management nodes and CSM services.
 
 See [Validate CSM Health](README.md#6-validate-csm-health).
-
