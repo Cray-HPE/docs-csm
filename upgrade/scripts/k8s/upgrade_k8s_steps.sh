@@ -123,13 +123,15 @@ if [[ -f "$DONE_DIR/rr_cs_rollout_restart.done" ]]; then
   echo "INFO Rack Resiliency Critical services rollout restart completed, skipping."
 else
   # For each CS in static ConfigMap, perform rollout restart of the critical service
-  python3 rr_critical_service_restart.py
-  if [[ $? -eq 0 ]]; then
-    echo "INFO Critical Services rollout restart not performed or successfully completed."
-    touch "$DONE_DIR/rr_cs_rollout_restart.done"
-  else
+  python3 rr_critical_service_restart.py || {
     echo "ERROR Critical Services rollout restart failed."
-  fi
+    exit 1
+  }
+  echo "INFO Critical Services rollout restart successfully completed, if it was necessary"
+  touch "$DONE_DIR/rr_cs_rollout_restart.done" || {
+    echo "ERROR Failed to create done file for Rack Resiliency critical services rollout restart"
+    exit 1
+  }
 fi
 
 # If all steps succeeded, remove all .done files
