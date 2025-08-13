@@ -1,4 +1,4 @@
-# Soft Deleted IMS Image Always Has `arch` Value Set To `x86_64`
+# Soft Deleted IMS Image Always Has `arch=x86_64`
 
 ## Issue description
 
