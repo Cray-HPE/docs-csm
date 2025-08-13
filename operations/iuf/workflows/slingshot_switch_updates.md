@@ -1,4 +1,4 @@
-# Perform Slingshot switch firmware updates
+# Perform Slingshot Switch Firmware Updates
 
 **`NOTE`** This subsection is only required if a new version of the slingshot product is being installed by IUF.
 Switch firmware updates may cause temporary interrupts in network traffic during the upgrade procedure.
