@@ -124,9 +124,6 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
         try:
             subprocess.run(restart_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         except subprocess.CalledProcessError as e:
-            if "not found" in e.stderr.lower():
-                print(f"Skipping {resource_type}/{name}: resource not found in namespace {namespace}")
-                continue
             print_err(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
             print_err(f"Error: {e.stderr}")
             failed_services.append(f"{resource_type}/{name}")
