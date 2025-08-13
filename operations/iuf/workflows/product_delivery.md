@@ -3,14 +3,14 @@
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 
 1. [Configure optional CSM features](#1-configure-optional-csm-features)
-1. [Execute the IUF `process-media` and `pre-install-check` stages](#1-execute-the-iuf-process-media-and-pre-install-check-stages)
-1. [Update `customizations.yaml`](#2-update-customizationsyaml)
-1. [Populate admin directory with files defining site preference](#3-populate-admin-directory-with-files-defining-site-preferences)
-1. [Execute the IUF `deliver-product` stage](#4-execute-the-iuf-deliver-product-stage)
-1. [Perform manual product delivery operations](#5-perform-manual-product-delivery-operations)
-1. [Next steps](#6-next-steps)
+1. [Execute the IUF `process-media` and `pre-install-check` stages](#2-execute-the-iuf-process-media-and-pre-install-check-stages)
+1. [Update `customizations.yaml`](#3-update-customizationsyaml)
+1. [Populate admin directory with files defining site preference](#4-populate-admin-directory-with-files-defining-site-preferences)
+1. [Execute the IUF `deliver-product` stage](#5-execute-the-iuf-deliver-product-stage)
+1. [Perform manual product delivery operations](#6-perform-manual-product-delivery-operations)
+1. [Next steps](#7-next-steps)
 
-## Configure optional CSM features
+## 1. Configure optional CSM features
 
 > If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
 
@@ -27,7 +27,7 @@ If an administrator does not wish to enable the Rack Resiliency feature, then th
 rest of this section can be skipped. Otherwise, follow these steps to enable
 (and optionally customize) Rack Resiliency.
 
-1. (`ncn-m001#`) Retrieve the `customizations.yaml` file.
+1. (`ncn-mw#`) Retrieve the `customizations.yaml` file.
 
     ```bash
     TMPDIR=$(mktemp -d -p ~) &&
@@ -42,14 +42,14 @@ rest of this section can be skipped. Otherwise, follow these steps to enable
     /root/tmp.iM4FrDrJEJ/customizations.yaml
     ```
 
-1. (`ncn-m001#`) Enable the feature in `customizations.yaml`.
+1. (`ncn-mw#`) Enable the feature in `customizations.yaml`.
 
     ```bash
     yq write -i "${TMPDIR}/customizations.yaml" \
         'spec.kubernetes.services.rack-resiliency.enabled' "true"
     ```
 
-1. (`ncn-m001#`) Optionally, set custom zone name prefixes.
+1. (`ncn-mw#`) Optionally, set custom zone name prefixes.
 
     See [Zone names](../../rack_resiliency/Zones.md#zone-names) for details
     on reasons for doing this and restrictions on names. This is optional; prefixes are not
@@ -73,7 +73,7 @@ rest of this section can be skipped. Otherwise, follow these steps to enable
             'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "ceph-prefix-string"
         ```
 
-1. (`ncn-m001#`) Update the `site-init` secret in the Kubernetes cluster.
+1. (`ncn-mw#`) Update the `site-init` secret in the Kubernetes cluster.
 
     ```bash
     kubectl delete secret -n loftsman site-init \
@@ -87,7 +87,7 @@ rest of this section can be skipped. Otherwise, follow these steps to enable
     secret/site-init created
     ```
 
-1. (`ncn-m001#`) Confirm that the fields are set to the desired values.
+1. (`ncn-mw#`) Confirm that the fields are set to the desired values.
 
     ```bash
     kubectl get secrets -n loftsman site-init \
