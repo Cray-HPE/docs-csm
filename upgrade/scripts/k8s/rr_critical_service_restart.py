@@ -27,13 +27,13 @@
 Do rollout restart of the critical services defined in RR static ConfigMap.
 """
 
-import yaml
 import json
 import subprocess
 import sys
 import base64
 import os
-import tempfile
+
+import yaml
 
 CUSTOMIZATIONS="/tmp/customization.yaml"
 
