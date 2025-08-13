@@ -195,9 +195,11 @@ def rr_enabled():
             check=True
         )
     except subprocess.CalledProcessError as e:
-        return {"error": f"Error fetching site-init secret: {e.stderr}"}
+        print(f"Error fetching site-init secret: {e.stderr}")
+        return False
     except Exception as e:
-        return {"error": str(e)}
+        print("error": str(e))
+        return False
 
     # Parse JSON output
     secret_data = json.loads(kubectl_output.stdout)
@@ -208,7 +210,8 @@ def rr_enabled():
         decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
         data = yaml.safe_load(decoded_yaml)
     except Exception as e:
-        return {"error": f"Failed to decode or parse YAML: {str(e)}"}
+        print(f"Failed to decode or parse customizations YAML: {str(e)}")
+        return False
 
     enabled = data.get('spec', {}) \
                   .get('kubernetes', {}) \
