@@ -197,14 +197,18 @@ def rr_enabled():
     except Exception as e:
         return {"error": str(e)}
 
-    # Extract and clean the output
+    # The csm-config Ansible code uses its built-in `bool` filter when parsing thie field, so we
+    # should do the same here. That filter interprets the following values as True:
+    # strings (case insensitive): 'true', 't', 'yes', 'y', 'on', '1'
+    # int: 1
+    # float: 1.0
+    # boolean: True
     enabled = result.stdout.strip()
     if any(enabled is tvalue for tvalue in [1, 1.0, True]):
         return True
     if not isinstance(enabled, str):
         return False
     return enabled.lower() in {"true", "t", "yes", "y", "on", "1"}
-
 
 def is_cluster_policy_applied(policy_name):
     """
@@ -230,18 +234,18 @@ def main():
     """
     Main function to execute the rollout restart of critical services.
     """
-    # Check if RR is enabled and if the cluster policy is applied
-    if not (rr_enabled() and is_cluster_policy_applied("insert-labels-topology-constraints")):
-        print("Either Rack Resiliency is not enabled or ClusterPolicy 'insert-labels-topology-constraints' not found. Skipping restart.")
-        sys.exit(0)
-
-    # Check if RR is enabled and if the cluster policy is applied
+    # Check if RR is enabled and cluster policy is applied
     if rr_enabled() and not is_cluster_policy_applied("insert-labels-topology-constraints"):
-      print("Rack Resiliency is enabled but ClusterPolicy 'insert-labels-topology-constraints' is not applied.")
-      sys.exit(1)
-    elif not rr_enabled() or not is_cluster_policy_applied("insert-labels-topology-constraints"):
-      print("Either Rack Resiliency is not enabled or ClusterPolicy 'insert-labels-topology-constraints' not found. Skipping restart.")
-      sys.exit(0)
+        print("Rack Resiliency is enabled but ClusterPolicy 'insert-labels-topology-constraints' is not applied. Skipping restart.")
+        sys.exit(1)
+    # Check if RR is not enabled and cluster policy is not applied
+    elif not rr_enabled() and not is_cluster_policy_applied("insert-labels-topology-constraints"):
+        print("Rack Resiliency is not enabled and ClusterPolicy 'insert-labels-topology-constraints' is not applied.Skipping restart.")
+        sys.exit(1)
+    # Check if RR is not enabled but cluster policy is applied
+    elif not rr_enabled() and is_cluster_policy_applied("insert-labels-topology-constraints"):
+        print("Rack Resiliency is not enabled  but ClusterPolicy 'insert-labels-topology-constraints' is applied. Skipping restart.")
+        sys.exit(1)
        
     # Load critical services
     config = load_configmap("rrs-mon-static", "rack-resiliency")

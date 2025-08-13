@@ -128,7 +128,7 @@ else
     echo "INFO Successfully completed critical services rollout restart"
     touch "$DONE_DIR/rr_cs_rollout_restart.done"
   else
-    echo "ERROR Failed to do rollout restart of the critical services"
+    echo "ERROR Either rollout restart of the critical services is not performed or failed"
   fi
 fi
 
