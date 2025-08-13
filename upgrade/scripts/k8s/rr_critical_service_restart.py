@@ -32,12 +32,28 @@ import subprocess
 import sys
 import base64
 import os
-from typing import Dict
+from typing import Dict, NoReturn
 
 from typing_extensions import Literal, TypedDict
 import yaml
 
 CUSTOMIZATIONS="/tmp/customization.yaml"
+
+def print_stderr(msg: str) -> None:
+    """
+    Write the specified message to stderr with a newline appended.
+    Then flush the buffer, to make sure it is written immediately.
+    """
+    sys.stderr.write(f"{msg}\n")
+    sys.stderr.flush()
+
+def err_exit(msg: str) -> NoReturn:
+    """
+    Prepends "ERROR: " to the message and then prints it to stderr.
+    Then exits the script with rc 1
+    """
+    print_stderr(f"ERROR: {msg}")
+    sys.exit(1)
 
 def load_configmap(name: str, namespace: str) -> dict:
     """
@@ -58,9 +74,8 @@ def load_configmap(name: str, namespace: str) -> dict:
         )
         return json.loads(result.stdout)
     except subprocess.CalledProcessError as e:
-        print(f"Failed to fetch ConfigMap '{name}' from namespace '{namespace}'")
-        print(f"Error: {e.stderr}")
-        sys.exit(1)
+        print_stderr(f"Failed to fetch ConfigMap '{name}' from namespace '{namespace}'")
+        err_exit(e.stderr)
 
 class ServiceDetails(TypedDict):
     type: str
@@ -86,11 +101,11 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             result = subprocess.run(get_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             resource_json = json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
-            print(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
+            print_err(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services.append(f"{resource_type}/{name}")
             continue
         except json.JSONDecodeError as e:
-            print(f"Failed to parse JSON for {resource_type}/{name}: {str(e)}")
+            print_err(f"Failed to parse JSON for {resource_type}/{name}: {str(e)}")
             failed_services.append(f"{resource_type}/{name}")
             continue
 
@@ -108,8 +123,8 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             if "not found" in e.stderr.lower():
                 print(f"Skipping {resource_type}/{name}: resource not found in namespace {namespace}")
                 continue
-            print(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
-            print(f"Error: {e.stderr}")
+            print_err(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
+            print_err(f"Error: {e.stderr}")
             failed_services.append(f"{resource_type}/{name}")
             continue
 
@@ -119,8 +134,8 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             subprocess.run(status_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             print(f"Restarted {resource_type}/{name} in namespace {namespace}")
         except subprocess.CalledProcessError as e:
-            print(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}")
-            print(f"Error: {e.stderr}")
+            print_err(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}")
+            print_err(f"Error: {e.stderr}")
             failed_services.append(f"{resource_type}/{name}")
 
     return 0 if not failed_services else 1
@@ -154,9 +169,8 @@ def set_rollout_complete(configmap_name: str, namespace: str) -> None:
         subprocess.run(command, check=True)
         print(f"Set rollout_complete=true in ConfigMap '{configmap_name}'")
     except subprocess.CalledProcessError as e:
-        print(f"Failed to patch ConfigMap '{configmap_name}'")
-        print(f"Error: {e}")
-        sys.exit(1)
+        print_err(f"Failed to patch ConfigMap '{configmap_name}'")
+        err_exit(e)
 
 def rr_enabled():
     """
@@ -239,16 +253,14 @@ def main() -> None:
     """
     # Check if RR is enabled and cluster policy is applied
     if rr_enabled() and not is_cluster_policy_applied("insert-labels-topology-constraints"):
-        sys.stderr.write("ERROR: Rack Resiliency is enabled but ClusterPolicy 'insert-labels-topology-constraints' is not applied. Skipping restart.\n")
-        sys.exit(1)
+        err_exit("Rack Resiliency is enabled but ClusterPolicy 'insert-labels-topology-constraints' is not applied. Skipping restart.")
     # Check if RR is not enabled and cluster policy is not applied
     if not rr_enabled() and not is_cluster_policy_applied("insert-labels-topology-constraints"):
         print("Rack Resiliency is not enabled and ClusterPolicy 'insert-labels-topology-constraints' is not applied.Skipping restart.")
         sys.exit(1)
     # Check if RR is not enabled but cluster policy is applied
     if not rr_enabled() and is_cluster_policy_applied("insert-labels-topology-constraints"):
-        sys.stderr.write("ERROR: Rack Resiliency is not enabled  but ClusterPolicy 'insert-labels-topology-constraints' is applied. Skipping restart.\n")
-        sys.exit(1)
+        err_exit("Rack Resiliency is not enabled  but ClusterPolicy 'insert-labels-topology-constraints' is applied. Skipping restart.")
        
     # Load critical services
     config = load_configmap("rrs-mon-static", "rack-resiliency")
@@ -256,15 +268,15 @@ def main() -> None:
         critical_services_json = config['data']['critical-service-config.json']
         critical_services = json.loads(critical_services_json)['critical_services']
     except KeyError as e:
-        print(f"Missing expected key in ConfigMap: {e}")
-        sys.exit(1)
+        err_exit(f"Missing expected key in ConfigMap: {e}")
 
     if rollout_restart_critical_services(critical_services) != 0:
-        sys.stderr.write(f"RR critical services rollout restart failed.\n")
-        sys.exit(1)
+        err_exit(f"RR critical services rollout restart failed.")
+
     print(f"RR critical services rollout restart successful.")
     # Set "rollout_complete" to "true" in RR dynamic ConfigMap
     set_rollout_complete("rrs-mon-dynamic", "rack-resiliency")
+    print("Done!")
 
 if __name__ == "__main__":
     main()
