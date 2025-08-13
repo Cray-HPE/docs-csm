@@ -13,7 +13,7 @@ For more information on deleting and restoring resources in IMS, see
 
 ## Workaround
 
-(`ncn-mw#`) The problem can be worked around by manually updating the `require_dkms` value after the deleted recipe
+(`ncn-mw#`) Work around the problem by manually updating the `require_dkms` value after the deleted recipe
 has been restored.
 
 > In the following command, replace `<RECIPE_ID>` with actual IMS recipe ID.
