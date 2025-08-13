@@ -35,7 +35,7 @@ this playbook does the following:
 * Installs the [SBPS Marshal Agent](#sbps-marshal-agent)
 * Adds Kubernetes labels to the worker NCNs that are designated to be iSCSI targets
 * Removes the labels from workers that are not designated to be iSCSI targets
-* Creates DNS SRV and A records for the workers.
+* Updates the DNS SRV and A records for the workers so that they match the set of workers that are enabled as iSCSI targets.
 
 See [Managing Selective Node Personalization](Managing_Selective_Node_Personalization.md) for details on how worker NCNs are
 designated to be iSCSI targets.
