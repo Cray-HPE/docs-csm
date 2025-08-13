@@ -1,11 +1,10 @@
-# Management rollout
+# Management Rollout
 
 This section updates the software running on management NCNs.
 
 - [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
 - [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
     - [Configure optional CSM features](#configure-optional-csm-features)
-        - [Rack Resiliency](#rack-resiliency)
         - [IPv6](#ipv6)
     - [`management-nodes-rollout` overview](#management-nodes-rollout-overview)
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
@@ -31,94 +30,6 @@ Once this step has completed:
 > If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
 
 Several CSM features can be enabled and configured as part of the upgrade process.
-
-#### Rack Resiliency
-
-> If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
-
-Rack Resiliency is new in CSM 1.7. It is disabled by default and it
-**cannot change between enabled and disabled later**. Administrators are advised to
-take time to determine whether or not they wish to use this feature. See
-[Rack Resiliency](../../rack_resiliency/README.md) for details.
-
-If an administrator does not wish to enable the Rack Resiliency feature, then the
-rest of this section can be skipped. Otherwise, follow these steps to enable
-(and optionally customize) Rack Resiliency.
-
-1. (`ncn-m001#`) Retrieve the `customizations.yaml` file.
-
-    ```bash
-    TMPDIR=$(mktemp -d -p ~) &&
-    kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' \
-        | base64 -d > "${TMPDIR}/customizations.yaml" \
-        && echo "${TMPDIR}/customizations.yaml"
-    ```
-
-    Example output:
-
-    ```text
-    /root/tmp.iM4FrDrJEJ/customizations.yaml
-    ```
-
-1. (`ncn-m001#`) Enable the feature in `customizations.yaml`.
-
-    ```bash
-    yq write -i "${TMPDIR}/customizations.yaml" \
-        'spec.kubernetes.services.rack-resiliency.enabled' "true"
-    ```
-
-1. (`ncn-m001#`) Optionally, set custom zone name prefixes.
-
-    See [Zone names](../../rack_resiliency/Zones.md#zone-names) for details
-    on reasons for doing this and restrictions on names. This is optional; prefixes are not
-    required. However, **prefixes cannot be changed, set, or removed later**.
-
-    1. Optionally, set a site-specific [Kubernetes zone](../../rack_resiliency/Zones.md#kubernetes-zones) prefix.
-
-        > In the following command, replace `k8s-prefix-string` with the desired Kubernetes zone prefix.
-
-        ```bash
-        yq write -i "${TMPDIR}/customizations.yaml" \
-            'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "k8s-prefix-string"
-        ```
-
-    1. Optionally, set a site-specific [Ceph zone](../../rack_resiliency/Zones.md#ceph-zones) prefix.
-
-        > In the following command, replace `ceph-prefix-string` with the desired Ceph zone prefix.
-
-        ```bash
-        yq write -i "${TMPDIR}/customizations.yaml" \
-            'spec.kubernetes.services.rack-resiliency.ceph_zone_prefix' "ceph-prefix-string"
-        ```
-
-1. (`ncn-m001#`) Update the `site-init` secret in the Kubernetes cluster.
-
-    ```bash
-    kubectl delete secret -n loftsman site-init \
-        && kubectl create secret -n loftsman generic site-init \
-            --from-file="${TMPDIR}/customizations.yaml"
-    ```
-
-    Expected output:
-
-    ```text
-    secret/site-init created
-    ```
-
-1. (`ncn-m001#`) Confirm that the fields are set to the desired values.
-
-    ```bash
-    kubectl get secrets -n loftsman site-init \
-        -o jsonpath='{.data.customizations\.yaml}' \
-        | base64 -d | yq r - 'spec.kubernetes.services.rack-resiliency'
-    ```
-
-    Example output (in a case where only the Ceph zone prefix was set):
-
-    ```yaml
-    enabled: true
-    ceph_zone_prefix: my-ceph-prefix
-    ```
 
 #### IPv6
 
