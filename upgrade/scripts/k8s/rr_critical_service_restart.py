@@ -266,13 +266,12 @@ def main():
         print(f"Missing expected key in ConfigMap: {e}")
         sys.exit(1)
 
-    if rollout_restart_critical_services(critical_services) == 0:
-        print(f"RR critical services rollout restart successful.")
-        # Set "rollout_complete" to "true" in RR dynamic ConfigMap
-        set_rollout_complete("rrs-mon-dynamic", "rack-resiliency")
-    else:
-        print(f"RR critical services rollout restart failed.")
+    if rollout_restart_critical_services(critical_services) != 0:
+        sys.stderr.write(f"RR critical services rollout restart failed.\n")
         sys.exit(1)
+    print(f"RR critical services rollout restart successful.")
+    # Set "rollout_complete" to "true" in RR dynamic ConfigMap
+    set_rollout_complete("rrs-mon-dynamic", "rack-resiliency")
 
 if __name__ == "__main__":
     main()
