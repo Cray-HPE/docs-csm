@@ -1,8 +1,18 @@
 # Kyverno policy management
 
+* [Mutation](#mutation)
+    * [Example mutation policy](#example-mutation-policy)
+* [Validation](#validation)
+    * [Example validation policy](#example-validation-policy)
+* [What is new in the HPE CSM 1.4 release and above](#what-is-new-in-the-hpe-csm-14-release-and-above)
+    * [Example to list policy violations at pod level](#example-to-list-policy-violations-at-pod-level)
+    * [Example to list all the policy violations](#example-to-list-all-the-policy-violations)
+* [Known issues](#known-issues)
+
 [Kyverno](https://kyverno.io/) is a policy engine designed specifically for Kubernetes.
 
-Kyverno allows cluster administrators to manage environment-specific configurations (independently of workload configurations) and enforce configuration best practices for their clusters.
+Kyverno allows cluster administrators to manage environment-specific configurations (independently of workload configurations)
+and enforce configuration best practices for their clusters.
 
 Kyverno can be used to scan existing workloads for best practices, or it can be used to enforce best practices by blocking or mutating API requests.
 
@@ -399,30 +409,28 @@ Example output:
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
 * Upgrade of Kyverno policy chart following Cray Kyverno chart fails with webhook timeout error
 
-  Kyverno-policy chart upgrade fails with webhook timeout errors due to default timeout value of 10 seconds.
+   `kyverno-policy` chart upgrade fails with webhook timeout errors because of default timeout value of 10 seconds.
   
-  Error message snippet
+   Error message snippet:
   
-  ```bash
-  Error: UPGRADE FAILED: cannot patch "pod-sec-ctxt-customer-access-ingress" with kind Policy: Internal error occurred: failed calling webhook 
-  "validate-policy.kyverno.svc": Post "https://cray-kyverno-svc.kyverno.svc:443/policyvalidate?timeout=10s": dial tcp 10.16.255.149:443: connect: 
-  connection refused chart=kyverno-policy command=ship namespace=kyverno version=1.4.3
-  ```
+   ```text
+   Error: UPGRADE FAILED: cannot patch "pod-sec-ctxt-customer-access-ingress" with kind Policy: Internal error occurred: failed calling webhook 
+   "validate-policy.kyverno.svc": Post "https://cray-kyverno-svc.kyverno.svc:443/policyvalidate?timeout=10s": dial tcp 10.16.255.149:443: connect: 
+   connection refused chart=kyverno-policy command=ship namespace=kyverno version=1.4.3
+   ```
   
-  Workaround
+   The solution for timeout issue is to increase the webhook timeout value from 10 seconds to 30 seconds for all the Kyverno policies on the system.
   
-  The solution for timeout issue is, to increase the webhook timeout value to 30 seconds from 10 seconds for all the Kyverno policies on the system.
+   (`ncn-mw#`) The code snippet below can be used to increase the timeout value for all the Kyverno policies.
   
-  The code snippet below can be used to increase the timeout value for all the Kyverno policies.
+   ```bash
+   while read -r namespace resource_name; do
+       echo "Patching policies.kyverno.io $namespace/$resource_name ..."
+       kubectl -n "$namespace" patch "policies.kyverno.io/$resource_name" --type json -p="[{\"op\": \"replace\", \"path\": \"/spec/webhookTimeoutSeconds\", \"value\": 30}]" || true
+   done < <(kubectl get policies.kyverno.io -A --output=go-template --template="{{ range .items }}{{ .metadata.namespace }} {{ .metadata.name }}{{ \"\n\" }}{{ end }}")
   
-  ```bash
-  while read -r namespace resource_name; do
-      echo "Patching policies.kyverno.io $namespace/$resource_name ..."
-      kubectl -n "$namespace" patch "policies.kyverno.io/$resource_name" --type json -p="[{\"op\": \"replace\", \"path\": \"/spec/webhookTimeoutSeconds\", \"value\": 30}]" || true
-  done < <(kubectl get policies.kyverno.io -A --output=go-template --template="{{ range .items }}{{ .metadata.namespace }} {{ .metadata.name }}{{ \"\n\" }}{{ end }}")
-  
-  while read -r resource_name; do
-      echo "Patching clusterpolicies.kyverno.io $resource_name ..."
-      kubectl -n "$namespace" patch "clusterpolicies.kyverno.io/$resource_name" --type json -p="[{\"op\": \"replace\", \"path\": \"/spec/webhookTimeoutSeconds\", \"value\": 30}]" || true
-  done < <(kubectl get clusterpolicies.kyverno.io -A --output=go-template --template="{{ range .items }}{{ .metadata.name }}{{ \"\n\" }}{{ end }}")
-  ```
+   while read -r resource_name; do
+       echo "Patching clusterpolicies.kyverno.io $resource_name ..."
+       kubectl -n "$namespace" patch "clusterpolicies.kyverno.io/$resource_name" --type json -p="[{\"op\": \"replace\", \"path\": \"/spec/webhookTimeoutSeconds\", \"value\": 30}]" || true
+   done < <(kubectl get clusterpolicies.kyverno.io -A --output=go-template --template="{{ range .items }}{{ .metadata.name }}{{ \"\n\" }}{{ end }}")
+   ```
