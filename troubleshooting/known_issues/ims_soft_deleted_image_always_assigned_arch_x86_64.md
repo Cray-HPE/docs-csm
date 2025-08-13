@@ -13,18 +13,18 @@ For more information on deleting and restoring resources in IMS, see [Delete or 
 
 ## Workaround
 
-1. (`ncn-mw#`) The problem can be worked around by manually updating the `arch` value after the deleted image has been restored..
+(`ncn-mw#`) The problem can be worked around by manually updating the `arch` value after the deleted image has been restored..
 
-    > In the following command, replace `<IMAGE_ID>` with actual IMS image ID.
+> In the following command, replace `<IMAGE_ID>` with actual IMS image ID.
 
-    ```bash
-    cray ims images update --arch <original value> <IMAGE_ID>
-    ```
+```bash
+cray ims images update --arch <original value> <IMAGE_ID>
+```
 
-    Example output:
+Example output:
 
-    ```json
-    {
+```json
+{
     "arch": "aarch64",
     "created": "2024-07-18T19:47:09.498875",
     "id": "fdca156c-19b2-4453-983d-45f8ee96fbcb",
@@ -35,7 +35,7 @@ For more information on deleting and restoring resources in IMS, see [Delete or 
     },
     "metadata": {},
     "name": "compute-csm-1.5-6.1.86-aarch64"
-    }
-    ```
+}
+```
 
 

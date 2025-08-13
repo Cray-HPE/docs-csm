@@ -13,18 +13,18 @@ For more information on deleting and restoring resources in IMS, see [Delete or 
 
 ## Workaround
 
-1. (`ncn-mw#`) The problem can be worked around by manually updating the `arch` value after the deleted recipe has been restored..
+(`ncn-mw#`) The problem can be worked around by manually updating the `arch` value after the deleted recipe has been restored..
 
-    > In the following command, replace `<RECIPE_ID>` with actual IMS image ID.
+> In the following command, replace `<RECIPE_ID>` with actual IMS image ID.
 
-    ```bash
-    cray ims recipes update --arch <original value> <RECIPE_ID>
-    ```
+```bash
+cray ims recipes update --arch <original value> <RECIPE_ID>
+```
 
-    Example output:
+Example output:
 
-    ```json
-    {
+```json
+{
     "arch": "x86_64",
     "created": "2025-04-18T17:07:03.236506",
     "id": "d2be2cc0-0294-4e4c-adc3-22796f61816e",
@@ -34,7 +34,7 @@ For more information on deleting and restoring resources in IMS, see [Delete or 
     "recipe_type": "kiwi-ng",
     "require_dkms": true,
     "template_dictionary": []
-    }
-    ```
+}
+```
 
 
