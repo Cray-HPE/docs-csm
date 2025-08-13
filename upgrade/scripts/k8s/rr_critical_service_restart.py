@@ -32,12 +32,14 @@ import subprocess
 import sys
 import base64
 import os
+from typing import Dict
 
+from typing_extensions import Literal, TypedDict
 import yaml
 
 CUSTOMIZATIONS="/tmp/customization.yaml"
 
-def load_configmap(name, namespace):
+def load_configmap(name: str, namespace: str) -> dict:
     """
     Fetch and return a ConfigMap from the specified namespace as a JSON object.
     Args:
@@ -60,8 +62,11 @@ def load_configmap(name, namespace):
         print(f"Error: {e.stderr}")
         sys.exit(1)
 
+class ServiceDetails(TypedDict):
+    type: str
+    namespace: str
 
-def rollout_restart_critical_services(critical_services):
+def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetails]) -> Literal[0, 1]:
     """
     Perform a rollout restart for each critical service defined in the static ConfigMap.
     Args:
@@ -120,7 +125,7 @@ def rollout_restart_critical_services(critical_services):
 
     return 0 if not failed_services else 1
 
-def set_rollout_complete(configmap_name, namespace):
+def set_rollout_complete(configmap_name: str, namespace: str) -> None:
     """
     Set the "rollout_complete" field to "true" in the specified ConfigMap.
     Args:
@@ -152,18 +157,6 @@ def set_rollout_complete(configmap_name, namespace):
         print(f"Failed to patch ConfigMap '{configmap_name}'")
         print(f"Error: {e}")
         sys.exit(1)
-
-
-def rr_enabled():
-    """
-    Check if Rack Resiliency is enabled or not.
-    Returns:
-        bool: True if RR is enabled, False otherwise.
-    """
-import subprocess
-import json
-import base64
-import yaml
 
 def rr_enabled():
     """
@@ -221,7 +214,7 @@ def rr_enabled():
 
     return False
 
-def is_cluster_policy_applied(policy_name):
+def is_cluster_policy_applied(policy_name: str) -> bool:
     """
     Check if a specific ClusterPolicy is applied in the Kubernetes cluster.
     Args:
@@ -240,7 +233,7 @@ def is_cluster_policy_applied(policy_name):
     except subprocess.CalledProcessError:
         return False
 
-def main():
+def main() -> None:
     """
     Main function to execute the rollout restart of critical services.
     """
