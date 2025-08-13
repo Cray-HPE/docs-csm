@@ -207,8 +207,8 @@ will generate the full CFS configuration including additional CSM layers and all
 
 ## 9. Restart Critical Services for Rack Resiliency
 
-If Rack Resiliency was enabled using [Enable Rack Resiliency](../../install/prepare_site_init.md#enable-rack-resiliency) step of the
-[Prepare Site Init](../../install/prepare_site_init.md) procedure, run below script to restart the critical services for Rack Resiliency.
+If Rack Resiliency was enabled using [Enable Rack Resiliency](prepare_site_init.md#enable-rack-resiliency) step of the
+[Prepare Site Init](prepare_site_init.md) procedure, run below script to restart the critical services for Rack Resiliency.
 
 ```bash
 python3 /usr/share/doc/csm/upgrade/scripts/upgrade/scripts/k8s/rr_critical_service_restart.py
