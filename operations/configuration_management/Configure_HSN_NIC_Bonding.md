@@ -82,7 +82,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
    > **`NOTE`** Update `CSM_RELEASE` for the version being used.
 
    ```bash
-   CSM_RELEASE=1.6.0
+   CSM_RELEASE=1.7.0
    kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq4 ".[\"${CSM_RELEASE}\"].configuration.import_branch"
    ```
 

@@ -243,12 +243,12 @@ Use the following procedure to change the site DNS server that Unbound forwards 
 
 ## Increase the number of Unbound pods
 
-On large systems it may be necessary to increase the number of Unbound Pods because of the increased DNS query load.
+On large systems it may be necessary to increase the number of Unbound pods because of the increased DNS query load.
 See [Scale `cray-dns-unbound` service](../../CSM_product_management/Post_Install_Customizations.md#scale-cray-dns-unbound-service) for more information.
 
 ## Change which HSN NIC is used for the node alias
 
-Previous CSM versions associate all HSN IPs with the node `nid` alias.
+CSM versions before CSM 1.6 associate all HSN IPs with the node `nid` alias.
 
 Example output from the `host nid000001` command:
 
@@ -259,7 +259,7 @@ nid000001 has address 10.253.0.1
 nid000001 has address 10.253.0.1
 ```
 
-Some workload managers do not handle this well so CSM 1.6 and above will only use the IP address of the first HSN NIC for this alias.
+Some workload managers do not handle this well, so CSM 1.6 and above will only use the IP address of the first HSN NIC for this alias.
 
 Example output from the `host nid000001` command:
 

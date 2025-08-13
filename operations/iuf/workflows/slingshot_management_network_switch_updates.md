@@ -1,4 +1,4 @@
-# Perform Slingshot switch and management network switch firmware updates
+# Perform Slingshot Switch and Management Network Switch Firmware Updates
 
 This section updates the Slingshot switch and management network switch firmware updates.
 
