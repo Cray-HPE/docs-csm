@@ -176,7 +176,7 @@ This procedure boots all compute nodes and user access nodes \(UANs\) in the con
       exit
       ```
 
-   1. (`slingshot-fabric-manager>`) If that doesn't work, then check the `FabricHost` log in the `slingshot-fabric-manager` pod for messages to see whether sweeps are happening on a regular basis (10 seconds) and have the correct quantity of Slingshot switches.
+   1. (`slingshot-fabric-manager>`) If that does not work, then check the `FabricHost` log in the `slingshot-fabric-manager` pod for messages to see whether sweeps are happening on a regular basis (10 seconds) and have the correct quantity of Slingshot switches.
 
       ```bash
       tail -f /opt/slingshot/data/slingshot/fabric-manager/8000/FabricHost.8000.0.log
