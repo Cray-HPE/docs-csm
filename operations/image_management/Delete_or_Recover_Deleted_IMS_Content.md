@@ -7,7 +7,7 @@ recipes and images store linked artifacts in the Simple Storage Service \(S3\) d
 are referenced by the IMS recipe and image records. The default option when deleting an IMS recipe and
 image record was to also delete these linked S3 artifacts.
 
-Here are the known issues for [Delete or Recover Deleted IMS Content](../../troubleshooting/README.md/#known-issues)
+Here are the known issues for [Delete or Recover Deleted IMS Content](../../troubleshooting/README.md#known-issues)
 
 ```bash
 cray ims recipes list --format toml
