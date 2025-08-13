@@ -265,7 +265,7 @@ This means that all worker NCNs are configured as iSCSI targets.
 In this scenario, the remove NCN procedure can be performed as usual. After it is done, the
 administrator must refresh the iSCSI configuration.  See
 [Refresh iSCSI configuration](#refresh-iscsi-configuration).
- 
+
 #### Removing worker NCN when `iscsi_sbps` group exists
 
 1. Check if the worker being removed is not a member of the `iscsi_sbps` group.
@@ -330,7 +330,7 @@ The iSCSI configuration on the system should be refreshed whenever any of the fo
 
 (`ncn-mw#`) The `refresh_worker_iscsi_config.py` script is provided to modify the state of the worker NCNs in the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs). It modifies the
-state in a way that forces them to re-run the iSCSI configuration layer. 
+state in a way that forces them to re-run the iSCSI configuration layer.
 
 > * The latest CSM documentation RPM must be installed on the node where this step is being performed.
 >   See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
