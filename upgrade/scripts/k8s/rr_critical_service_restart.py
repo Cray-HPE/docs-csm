@@ -168,7 +168,6 @@ def rr_enabled():
         kubectl_output = subprocess.run(kubectl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
         if kubectl_output.returncode != 0:
             raise ValueError(f"Error fetching site-init secret: {kubectl_output.stderr}")
-        return json.loads(kubectl_output.stdout)
     except Exception as e:
         return {"error": str(e)}
 
@@ -178,6 +177,10 @@ def rr_enabled():
     # Extract and decode the base64 data
     encoded_yaml = secret_data["data"]["customizations.yaml"]
     decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
+
+    with open(decoded_yaml, "r") as f:
+        policy = yaml.safe_load(f)
+
 
     # Write the yaml output to a file
     output_file = CUSTOMIZATIONS
@@ -193,7 +196,6 @@ def rr_enabled():
         result = subprocess.run(yq_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, check=True)
         if result.returncode != 0:
             raise ValueError(f"Error fetching site-init secret: {result.stderr}")
-        return json.loads(result.stdout)
     except Exception as e:
         return {"error": str(e)}
 
@@ -228,7 +230,6 @@ def is_cluster_policy_applied(policy_name):
         return True
     except subprocess.CalledProcessError:
         return False
-
 
 def main():
     """
