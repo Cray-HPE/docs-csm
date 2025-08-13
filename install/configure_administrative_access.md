@@ -12,8 +12,8 @@ and BMC/controller passwords.
 
 1. [Configure the Cray and SAT command line interfaces](#1-configure-the-cray-and-sat-command-line-interfaces)
     - [Cray CLI configuration](#cray-cli-configuration)
-    - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
-    - [Manual configuration](#manual-configuration)
+        - [Automatic configuration using temporary Keycloak account](#automatic-configuration-using-temporary-keycloak-account)
+        - [Manual configuration](#manual-configuration)
     - [SAT CLI configuration](#sat-cli-configuration)
 1. [Set `Management` role on the BMCs of management nodes](#2-set-management-role-on-the-bmcs-of-management-nodes)
 1. [Lock management nodes](#3-lock-management-nodes)
