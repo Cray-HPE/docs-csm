@@ -52,7 +52,7 @@ def err_exit(msg: str) -> NoReturn:
     Prepends "ERROR: " to the message and then prints it to stderr.
     Then exits the script with rc 1
     """
-    print_stderr(f"ERROR: {msg}")
+    print_err(f"ERROR: {msg}")
     sys.exit(1)
 
 def load_configmap(name: str, namespace: str) -> dict:
@@ -74,7 +74,7 @@ def load_configmap(name: str, namespace: str) -> dict:
         )
         return json.loads(result.stdout)
     except subprocess.CalledProcessError as e:
-        print_stderr(f"Failed to fetch ConfigMap '{name}' from namespace '{namespace}'")
+        print_err(f"Failed to fetch ConfigMap '{name}' from namespace '{namespace}'")
         err_exit(e.stderr)
 
 class ServiceDetails(TypedDict):
