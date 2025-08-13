@@ -33,8 +33,12 @@ iSCSI configuration. During [Management Node Personalization](../configuration_m
 this playbook does the following:
 
 * Installs the [SBPS Marshal Agent](#sbps-marshal-agent)
-* Adds Kubernetes labels to all worker NCNs, designating them as iSCSI-enabled targets
-* Creates DNS SRV and A records for the workers
+* Adds Kubernetes labels to the worker NCNs that are designated to be iSCSI targets
+* Removes the labels from workers that are not designated to be iSCSI targets
+* Creates DNS SRV and A records for the workers.
+
+See [Managing Selective Node Personalization](Managing_Selective_Node_Personalization.md) for details on how worker NCNs are
+designated to be iSCSI targets.
 
 ## iSCSI-enabled workers
 

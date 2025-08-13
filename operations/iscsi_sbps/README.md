@@ -14,7 +14,8 @@ is a boot content projection solution that replaces the Cray
 SBPS projects boot content like `rootfs` and [Cray Programming Environment (CPE)](../../glossary.md#cray-programming-environment-cpe) images.
 SBPS is aimed to offer better reliability, availability, security, ease and speed of deployment and ease of management than CPS/DVS.
 SBPS was introduced in CSM 1.6. In CSM 1.7.0, support is removed for projecting root filesystems and PE images using
-CPS and DVS.
+CPS and DVS. Also in CSM 1.7.0, the iSCSI SBPS [selective worker node personalization](#selective-worker-node-personalization)
+feature is introduced.
 
 The SBPS solution is spread across different components, including:
 
@@ -91,10 +92,31 @@ discovery from an initiator node during its boot.
 
 ### 1. Worker node personalization
 
-Worker nodes are configured for SBPS during [Management Node Personalization](../configuration_management/Management_Node_Personalization.md).
-This is the prerequisite step of the SBPS solution, where worker nodes are configured as iSCSI targets (servers)
-with necessary provisioning. The SBPS Marshal Agent is also installed (the required RPMs for the `targetcli`
-command and LIO are part of the NCN image).
+Node personalization is the prerequisite step of SBPS solution where worker nodes are configured as iSCSI targets (servers)
+with necessary provisioning. The required RPMs for the `targetcli` command and LIO are part of the NCN node image.
+The SBPS Marshal Agent gets installed during node personalization using CFS.
+
+#### Selective worker node personalization
+
+In CSM 1.6, all worker nodes are configured and enabled as iSCSI SBPS targets using
+[Management Node Personalization](../configuration_management/Management_Node_Personalization.md)
+
+Starting in CSM 1.7.0, selective iSCSI worker node personalization is introduced.
+All worker nodes are still **configured** for iSCSI, but selective node personalization gives
+administrators control over which worker nodes are enabled as iSCSI SBPS targets.
+
+The default behavior is still the same as in CSM 1.6, so if no action is taken to use this
+feature, then all worker nodes will continue to be enabled as iSCSI targets.
+
+For details on iSCSI selective worker node personalization,
+see [Managing Selective Node Personalization](Managing_Selective_Node_Personalization.md).
+
+#### Automatic setup with bootprep
+
+By default worker node personalization of iSCSI SBPS is done during CSM install/upgrade
+(using the [Install and Upgrade Framework (IUF)](../../glossary.md#install-and-upgrade-framework-iuf)).
+It is initiated during bootprep (`management-nodes-rollout`) in order to do worker node personalization
+automatically during boot time.
 
 ### 2. Validate configuration
 
