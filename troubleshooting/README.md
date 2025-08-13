@@ -82,6 +82,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
 - [Remove Duplicate Detected Events From the HSM Postgres Database](../operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md)
 - [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
+- [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 
 ## Booting
 
@@ -109,6 +110,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 - [Incrementally Configuring Images](incrementally_configuring_images.md)
 - [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
 - [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+- [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 
 ## ConMan
 
