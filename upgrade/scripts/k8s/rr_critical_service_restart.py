@@ -34,7 +34,7 @@ import base64
 import os
 from typing import Dict, NoReturn
 
-from typing_extensions import Literal, TypedDict
+from typing_extensions import TypedDict
 import yaml
 
 CUSTOMIZATIONS="/tmp/customization.yaml"
@@ -85,15 +85,15 @@ class ServiceDetails(TypedDict):
     type: str
     namespace: str
 
-def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetails]) -> Literal[0, 1]:
+def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetails]) -> bool:
     """
     Perform a rollout restart for each critical service defined in the static ConfigMap.
     Args:
         critical_services (dict): Dictionary of services with their type and namespace.
     Returns:
-        int: 0 if successful, 1 if any service restart failed.
+        bool: True if successful, False if any service restart failed.
     """
-    failed_services = []
+    failed_services = False
 
     for name, details in critical_services.items():
         resource_type = details["type"].lower()
@@ -106,11 +106,11 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             resource_json = json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
             print_err(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
-            failed_services.append(f"{resource_type}/{name}")
+            failed_services = True
             continue
         except json.JSONDecodeError as e:
             print_err(f"Failed to parse JSON for {resource_type}/{name}: {str(e)}")
-            failed_services.append(f"{resource_type}/{name}")
+            failed_services = True
             continue
 
         # Check for 'rrflag' label
@@ -126,7 +126,7 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
         except subprocess.CalledProcessError as e:
             print_err(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
             print_err(f"Error: {e.stderr}")
-            failed_services.append(f"{resource_type}/{name}")
+            failed_services = True
             continue
 
         # Check rollout status
@@ -137,9 +137,9 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
         except subprocess.CalledProcessError as e:
             print_err(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}")
             print_err(f"Error: {e.stderr}")
-            failed_services.append(f"{resource_type}/{name}")
+            failed_services = True
 
-    return 0 if not failed_services else 1
+    return failed_services
 
 def set_rollout_complete(configmap_name: str, namespace: str) -> None:
     """
@@ -276,7 +276,7 @@ def main() -> None:
     except KeyError as e:
         err_exit(f"Missing expected key in ConfigMap: {e}")
 
-    if rollout_restart_critical_services(critical_services) != 0:
+    if not rollout_restart_critical_services(critical_services):
         err_exit(f"RR critical services rollout restart failed.")
 
     print(f"RR critical services rollout restart successful.")
