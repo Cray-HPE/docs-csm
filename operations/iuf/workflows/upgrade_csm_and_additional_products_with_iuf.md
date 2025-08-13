@@ -1,4 +1,4 @@
-# Upgrade CSM and additional products with IUF
+# Upgrade CSM and Additional Products with IUF
 
 This procedure is used when performing an upgrade of Cray System Management (CSM) along with
 additional HPE Cray EX software products at the same time. This procedure would be used when
@@ -6,7 +6,7 @@ upgrading from one HPC CSM Software Recipe release to another.
 
 This procedure is _not_ used to perform an initial install or upgrade of HPE Cray EX software products
 when CSM itself is not being upgraded. See
-[Install or upgrade additional products with IUF](install_or_upgrade_additional_products_with_iuf.md) for that procedure.
+[Install or Upgrade Additional Products with IUF](install_or_upgrade_additional_products_with_iuf.md) for that procedure.
 
 This procedure streamlines the rollout of new images to management nodes. These images are based
 on the new images provided by the CSM product and customized by the additional HPE Cray EX software
@@ -34,7 +34,7 @@ the steps below it provide detailed instructions which must be executed in the o
 1. CSM preparation, prepare assets, and prerequisites.
 
    Read the _Important Notes_ section of the
-   [CSM 1.4.0 or later to 1.5.0 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
+   [CSM 1.4.0 or later to 1.5 Upgrade Process](../../../upgrade/Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation and then follow only these CSM instructions in order:
 
    1. [Stage 0.1 - Prepare assets](../../../upgrade/Stage_0_Prerequisites.md#stage-01---prepare-assets)
@@ -42,14 +42,14 @@ the steps below it provide detailed instructions which must be executed in the o
 
 1. Prepare for the upgrade procedure and download product media
 
-   1. Follow the IUF [Prepare for the install or upgrade](preparation.md) instructions to set
+   1. Follow the IUF [Prepare for the Install or Upgrade](preparation.md) instructions to set
       environment variables used during the upgrade process.
 
    1. Download the desired HPE product media defined by the HPC CSM Software Recipe to `${MEDIA_DIR}`, which was defined in the previous step.
 
 1. Product delivery
 
-   Follow the IUF [Product delivery](product_delivery.md) instructions.
+   Follow the IUF [Product Delivery](product_delivery.md) instructions.
 
 1. Configuration
 
@@ -57,7 +57,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
 1. Image preparation
 
-   Follow the IUF [Image preparation](image_preparation.md) instructions.
+   Follow the IUF [Image Preparation](image_preparation.md) instructions.
 
 1. CSM backup workload manager data
 
@@ -78,20 +78,20 @@ the steps below it provide detailed instructions which must be executed in the o
 
 1. Management rollout
 
-   Follow the IUF [Management rollout](management_rollout.md) instructions.
+   Follow the IUF [Management Rollout](management_rollout.md) instructions.
 
 1. Deploy product
 
    Follow these IUF instructions in order:
 
-   1. [Deploy product](deploy_product.md)
+   1. [Deploy Product](deploy_product.md)
    1. [Stage 3.6 - Complete Kubernetes upgrade](../../../upgrade/Stage_3.md#stage-36---complete-kubernetes-upgrade)
-   1. [Validate deployment](validate_deployment.md)
-   1. [Perform Slingshot switch firmware updates](slingshot_switch_updates.md)
+   1. [Validate Deployment](validate_deployment.md)
+   1. [Perform Slingshot Switch Firmware Updates](slingshot_switch_updates.md)
 
 1. Managed rollout
 
-   Follow the IUF [Managed rollout](managed_rollout.md) instructions.
+   Follow the IUF [Managed Rollout](managed_rollout.md) instructions.
 
 The IUF upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
 procedure and remove any installation artifacts, if desired.

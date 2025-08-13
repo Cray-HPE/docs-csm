@@ -1,4 +1,4 @@
-# Managed rollout
+# Managed Rollout
 
 This section updates the software running on managed compute and application (UAN, etc.) nodes.
 
