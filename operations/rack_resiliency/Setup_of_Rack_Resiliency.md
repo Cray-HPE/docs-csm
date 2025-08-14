@@ -28,7 +28,6 @@ There are some shared preparation steps, but the actual configuration steps diff
 | *Stage*                                       | *Ansible role*               |
 | --------------------------------------------- | ---------------------------- |
 | [Kubernetes zoning](#kubernetes-zoning)       | `csm.rr.k8s_topology_zoning` |
-| [Apply Kyverno policy](#apply-kyverno-policy) | `csm.rr.kyverno_policy`      |
 
 ### Ceph setup flow
 
@@ -115,11 +114,6 @@ The below stages are used to setup Kubernetes zones and apply the [Kyverno Polic
 This Ansible role uses the discovery results (`rr_hw_discovery.json`) from
 [Placement discovery](#placement-discovery) and applies Kubernetes zoning for
 master and worker nodes. For more information, see [Kubernetes zones](Zones.md#kubernetes-zones).
-
-### Apply Kyverno policy
-
-This Ansible role applies the Kyverno cluster policy `insert-labels-topology-constraints`.
-For more information, see [Kyverno Policy](Kyverno_Policy.md).
 
 ## Ceph setup
 
