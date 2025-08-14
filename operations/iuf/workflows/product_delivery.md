@@ -3,7 +3,7 @@
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 
 1. [Configure optional CSM features](#1-configure-optional-csm-features)
-  - [Rack Resiliency](#rack-resiliency)
+    - [Rack Resiliency](#rack-resiliency)
 1. [Execute the IUF `process-media` and `pre-install-check` stages](#2-execute-the-iuf-process-media-and-pre-install-check-stages)
 1. [Update `customizations.yaml`](#3-update-customizationsyaml)
 1. [Populate admin directory with files defining site preference](#4-populate-admin-directory-with-files-defining-site-preferences)
