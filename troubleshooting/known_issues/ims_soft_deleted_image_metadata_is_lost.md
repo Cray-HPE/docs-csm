@@ -1,19 +1,20 @@
-# Soft deleted IMS Image `metadata` attribute is lost
+# Soft Deleted IMS Image Always has `metadata={}`
 
 ## Issue description
 
-When IMS image is deleted and becomes a `deleted image` its `metadata` attribute is set to `{}`,
+When IMS image is deleted and becomes a "deleted image" its, `metadata` attribute is set to `{}`,
 regardless of its original value. This new value persists even if the image is later restored using
 `undelete` operation.
 
 This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to use the provided [Workaround](#workaround).
 
-For more information on deleting and restoring resources in IMS, see [Delete or Recover Deleted IMS Content](../../operations/image_management/Delete_or_Recover_Deleted_IMS_Content.md)
+For more information on deleting and restoring resources in IMS, see 
+[Delete or Recover Deleted IMS Content](../../operations/image_management/Delete_or_Recover_Deleted_IMS_Content.md)
 
 
 ## Workaround
 
-(`ncn-mw#`) The problem can be worked around by manually updating the `metadata` value after the deleted image has been restored.
+(`ncn-mw#`) Work around the problem by manually updating the `metadata` value after the deleted image has been restored.
 
 > Repeat the command for every `metadata` key/value pair in the image.
 > In the following command, replace `<IMAGE_ID>` with actual IMS image ID.
