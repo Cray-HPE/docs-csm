@@ -1,4 +1,10 @@
-# IMS Created Image Stores Incorrect Metadata Key Value
+# IMS Created Image Stores Incorrect Metadata
+
+* [Issue description](#issue-description)
+* [Workaround](#workaround)
+    * [Image has not yet been created](#image-has-not-yet-been-created)
+    * [Image was created without metadata](#image-was-created-without-metadata)
+    * [Image was created with metadata](#image-was-created-with-metadata)
 
 ## Issue description
 
@@ -9,7 +15,7 @@ Expected metadata:
 
 ```json
 "metadata": {
-    <metdata key>: <metadata value>
+    "<metadata_key>": "<metadata_value>"
   }
 ```
 
@@ -17,8 +23,8 @@ Actual metadata:
 
 ```json
 "metadata": {
-    "key": <metdata key>,
-    "value": <metadata value>
+    "key": "<metadata_key>",
+    "value": "<metadata_value>"
   }
 ```
 
@@ -26,67 +32,44 @@ This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to u
 
 ## Workaround
 
-Work around the problem by manually correcting the metadata after the image is created.
-This procedure shows how to work around the problem after creating an IMS image
-specifying a metadata key and value. In this procedure, these are referred to as the
-"desired" metadata key and value.
+When desiring an IMS image to have a particular metadata key and value set,
+there are three different scenarios an administrator may be in:
 
-> In the commands in this procedure, be sure to perform the following substitutions:
->
-> * Replace `<IMAGE_ID>` with actual IMS image ID.
-> * Replace `<desired_metadata_key>` with the actual desired metadata key.
-> * Replace `<desired_metadata_value>` with the actual desired metadata value.
->
-> The following values are used in the example output shown in this procedure:
->
-> * The IMS image ID is `a01eca53-4e1d-466f-9d87-7676c846c6b2`
-> * The desired metadata key is `csmqe-metadata-key`
-> * The desired metadata value is `csmqe-metadata-value`
+* [Image has not yet been created](#image-has-not-yet-been-created)
+* [Image was created without metadata](#image-was-created-without-metadata)
+* [Image was created with metadata](#image-was-created-with-metadata)
 
-1. (`ncn-mw#`) Update the image to properly set the desired metadata key/value pair.
+### Image has not yet been created
 
-    ```bash
-    cray ims images update <IMAGE_ID> \
-        --metadata-key "<desired_metadata_key>" \
-        --metadata-value "<desired_metadata_value>" \
-        --metadata-operation set --format json
-    ```
+In this case, the issue can be avoided by not specifying the metadata when creating
+the image, and instead setting it after the image has already been created.
 
-    Example output:
+1. Create the IMS image without specifying metadata.
 
-    ```json
-    {
-      "name": "csmqe-metadatacheck",
-      "link": null,
-      "arch": "x86_64",
-      "metadata": {
-        "csmqe-metadata-key": "csmqe-metadata-value",
-        "value": "csmqe-metadata-value"
-      },
-      "id": "a01eca53-4e1d-466f-9d87-7676c846c6b2",
-      "created": "2025-07-10T12:54:29.588107"
-    }
-    ```
+1. Update the IMS image to set the desired metadata.
 
-1. (`ncn-mw#`) Remove the `value` entry from the image metadata.
+    See [Set image metadata](../../operations/image_management/Image_Management_Workflows.md#2-set-image-metadata).
 
-    ```bash
-    cray ims images update <IMAGE_ID> --format json \
-        --metadata-operation remove --metadata-key value
-    ```
+### Image was created without metadata
 
-    Example output:
+In this case, the issue documented on this page does not apply, and no
+workaround is necessary. Simply update the IMS image to set the desired
+metadata.
 
-    ```json
-    {
-      "name": "csmqe-metadatacheck",
-      "link": null,
-      "arch": "x86_64",
-      "metadata": {
-        "csmqe-metadata-key": "csmqe-metadata-value"
-      },
-      "id": "a01eca53-4e1d-466f-9d87-7676c846c6b2",
-      "created": "2025-07-10T12:54:29.588107"
-    }
-    ```
+See [Set image metadata](../../operations/image_management/Image_Management_Workflows.md#2-set-image-metadata).
+
+### Image was created with metadata
+
+In this case, work around the problem by removing the invalid metadata, and then
+setting the correct metadata.
+
+1. Remove the incorrect metadata from the image.
+
+    Specifically, remove the metadata keys named `key` and `value`.
+    This will require two separate image update calls.
+    See [Remove image metadata](../../operations/image_management/Image_Management_Workflows.md#4-remove-image-metadata).
+
+1. Update the IMS image to set the desired metadata.
+
+    See [Set image metadata](../../operations/image_management/Image_Management_Workflows.md#2-set-image-metadata).
 
