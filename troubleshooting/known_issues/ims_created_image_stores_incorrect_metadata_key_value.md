@@ -31,10 +31,10 @@ This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to u
 > In the following command, replace `<IMAGE_ID>` with actual IMS image ID.
 
 ```bash
-cray ims images update <IMAGE_ID> --metadata-operation set --metadata-key <original metdata key> --metadata-value <original metadata value> --format json
+cray ims images update <IMAGE_ID> --metadata-operation set --metadata-key <desired_metadata_key> --metadata-value <desired_metadata_value> --format json
 ```
 
-Example output:
+In the following example output, the desired metadata key is `csmqe-metadata-key` and the desired metadata value is `csmqe-metadata-value`.
 
 ```json
 {
