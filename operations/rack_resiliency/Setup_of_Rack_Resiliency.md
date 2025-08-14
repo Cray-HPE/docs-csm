@@ -107,7 +107,7 @@ not included in this process.
 
 ## Kubernetes setup
 
-The below stages are used to setup Kubernetes zones and apply the [Kyverno Policy](Kyverno_Policy.md).
+The below stage is used to setup Kubernetes zones.
 
 ### Kubernetes zoning
 
