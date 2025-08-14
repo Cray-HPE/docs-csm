@@ -1,5 +1,17 @@
 # Kyverno Policy
 
+* [Overview](#overview)
+* [Policy details](#policy-details)
+* [Restart critical services](#restart-critical-services)
+    * [Upgrade from CSM 1.6 to CSM 1.7](#upgrade-from-csm-16-to-csm-17)
+    * [Fresh install of CSM 1.7](#fresh-install-of-csm17)
+    * [Modifying critical services](#modifying-critical-services)
+* [Add topology constraints](#add-topology-constraints)
+* [Add label](#add-label)
+* [Spreading pods across zones](#spreading-pods-across-zones)
+
+## Overview
+
 One of the key ways to ensure CSM critical services availability is that the failure of nodes or a
 single rack is to spread the replicas of these services across multiple zones and racks.
 
@@ -81,12 +93,18 @@ spec:
 If [Rack Resiliency is enabled](Enabling_Rack_Resiliency.md), then the `exclude` section is removed from the policy
 (using a post-install/post-upgrade hook).
 
-## How the policy works
+## Restart critical services
 
-### 1. Restart critical services
+The Kyverno policy is applied to each service the first time that service restarts,
+after the Kyverno policy is in effect for that service. There are specific times when
+these restarts are expected to happen.
+
+### Upgrade from CSM 1.6 to CSM 1.7
 
 At the end of CSM upgrade from 1.6 to 1.7, the critical services (which are either Deployments or StatefulSets) are restarted only if Rack Resiliency
 is enabled and the Kyverno policy is applied.
+
+### Fresh install of CSM 1.7
 
 During a fresh install of CSM 1.7, as part of
 [Configure Administrative Access](../../install/configure_administrative_access.md#configure-administrative-access),
@@ -94,9 +112,15 @@ the critical services are restarted in the
 [Restart Rack Resiliency critical services](../../install/configure_administrative_access.md#9-restart-rack-resiliency-critical-services)
 step. The critical services are restarted only when Rack Resiliency is enabled and the Kyverno policy is applied.
 
-During the service restart, the Kyverno policy is implemented by the Kyverno policy engine.
+### Modifying critical services
 
-### 2. Add topology constraints
+Administrators are able to modify the Rack Resiliency critical services.  If an administrator does nothing but remove critical
+services, then no service restarts are necessary. However, if any critical service is added or modified, then a
+service restart is performed as part of that procedure.
+
+For more detailed information, see [Manage Critical Services](Manage_Critical_Services.md).
+
+## Add topology constraints
 
 The policy engine updates the topology constraint to the Deployment or StatefulSet
 specifications of the critical services.
@@ -112,7 +136,7 @@ spec:
           whenUnsatisfiable: ScheduleAnyway
 ```
 
-### 3. Add label
+## Add label
 
 During restart, the label mentioned in the policy is added to all the pods belonging to the
 specific critical service Deployment or StatefulSet that is being restarted.
@@ -126,7 +150,7 @@ cray-bss-bitnami-etcd-1                     2/2     Running   0               4d
 cray-bss-bitnami-etcd-2                     2/2     Running   0               4d12h   app.kubernetes.io/component=etcd,app.kubernetes.io/instance=cray-hms-bss,app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=cray-bss-bitnami-etcd,app.kubernetes.io/version=3.5.21,apps.kubernetes.io/pod-index=2,controller-revision-hash=cray-bss-bitnami-etcd-855488694f,helm.sh/chart=etcd-11.2.3,rrflag=rr-cray-bss-bitnami-etcd,security.istio.io/tlsMode=istio,service.istio.io/canonical-name=cray-bss-bitnami-etcd,service.istio.io/canonical-revision=3.5.21,statefulset.kubernetes.io/pod-name=cray-bss-bitnami-etcd-2
 ```
 
-### 4. Spreading pods across zones
+## Spreading pods across zones
 
 When the scheduler launches the pod, using the selector `rrflag` the pods are spread across
 racks. During the failure of a NCN node or rack, when service replicas are restarted by Kubernetes,

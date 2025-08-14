@@ -58,7 +58,7 @@ these management node xnames to the corresponding Kubernetes and storage node na
 This mapping of rack xnames to Kubernetes and storage node hostnames is stored in the below format
 as a JSON file to be consumed by the Kubernetes and Ceph zoning modules later.
 
-Example of JSON file containing rack to management NCN hostname mapping (`rr_hw_discovery.json`):
+Example of JSON file containing rack to management NCN hostname mapping:
 
 ```json
 {
@@ -89,7 +89,7 @@ Example of JSON file containing rack to management NCN hostname mapping (`rr_hw_
 
 ### Placement validation
 
-This Ansible role uses the discovery results (`rr_hw_discovery.json`) from
+This Ansible role uses the discovery results from
 [Placement discovery](#placement-discovery) and validates whether the current
 placement meets the required criteria for enabling rack resiliency.
 
@@ -111,7 +111,7 @@ The below stage is used to setup Kubernetes zones.
 
 ### Kubernetes zoning
 
-This Ansible role uses the discovery results (`rr_hw_discovery.json`) from
+This Ansible role uses the discovery results from
 [Placement discovery](#placement-discovery) and applies Kubernetes zoning for
 master and worker nodes. For more information, see [Kubernetes zones](Zones.md#kubernetes-zones).
 
@@ -121,7 +121,7 @@ The below stages are used to setup the Ceph zones and update Ceph HAproxy config
 
 ### Ceph zoning
 
-This Ansible role uses the discovery results (`rr_hw_discovery.json`) from
+This Ansible role uses the discovery results from
 [Placement discovery](#placement-discovery) and applies Ceph zoning for
 storage nodes. Along with creating zones for Ceph storage nodes, zones for the Ceph services are
 also created. For more information, see [Ceph zones](Zones.md#ceph-zones).

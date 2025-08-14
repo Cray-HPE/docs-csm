@@ -290,7 +290,10 @@ service and then adding the modified critical service.
 ## Update Kyverno cluster policy
 
 After adding, removing, or modifying critical services using any of the above methods, the Kyverno
-cluster policy also must be updated to reflect those changes.
+cluster policy also must be updated to reflect those changes. The procedures to do this are included
+in this section.
+
+For more information on the Kyverno policy, see [Kyverno Policy](Kyverno_Policy.md).
 
 ### Add services to Kyverno policy
 
@@ -317,20 +320,17 @@ This procedure is only necessary after adding critical services to RR.
 
 1. (`ncn-mw#`) Restart the services that were added.
 
-    For each service that was added, perform a rollout restart of it, in order for the
-    updated policy to take effect on it.
+    CSM provides a script to automate this process.
+    This script checks every Rack Resiliency critical service to see if the
+    Kyverno policy has been applied to it or not. For any that have not, it performs rollout
+    restarts on them, one at a time. During the service restart, the Kyverno policy is applied to each service.
 
-    - If the service is a Deployment, then use:
+    > The latest CSM documentation RPM must be installed on the node where this step is being performed.
+    > See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
-        ```bash
-        kubectl rollout restart deployment -n <namespace> <service-name>
-        ```
-
-    - If the service is a StatefulSet, then use:
-
-        ```bash
-        kubectl rollout restart statefulset -n <namespace> <service-name>
-        ```
+    ```bash
+    python3 /usr/share/doc/csm/upgrade/scripts/upgrade/scripts/k8s/rr_critical_service_restart.py
+    ```
 
 ### Remove services from Kyverno policy
 
