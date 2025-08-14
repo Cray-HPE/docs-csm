@@ -8,10 +8,10 @@
 
 ## Issue description
 
-When an IMS image is created using command `cray ims images create` with metadata.
-The metadata in the image details does not match the expected key value format.
+When an IMS image is created, if a metadata key and value (also known as an image label) are specified,
+then the created image does not have the expected metadata.
 
-Expected metadata:
+This is the expected format after creating an image with a metadata key and value specified:
 
 ```json
 "metadata": {
@@ -19,7 +19,7 @@ Expected metadata:
   }
 ```
 
-Actual metadata:
+Because of the issue described on this page, the actual format is:
 
 ```json
 "metadata": {
@@ -29,6 +29,9 @@ Actual metadata:
 ```
 
 This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to use the provided [Workaround](#workaround).
+
+For more information on managing IMS image metadata, see
+[Manage image labels](../../operations/image_management/Image_Management_Workflows.md#manage-image-labels).
 
 ## Workaround
 
