@@ -22,7 +22,8 @@ and BMC/controller passwords.
 1. [Configure the root password and SSH keys in Vault](#6-configure-the-root-password-and-ssh-keys-in-vault)
 1. [Add switch admin password to Vault](#7-add-switch-admin-password-to-vault)
 1. [Configure management nodes with CFS](#8-configure-management-nodes-with-cfs)
-1. [Proceed to next topic](#9-proceed-to-next-topic)
+1. [Restart Rack Resiliency critical services](#9-restart-rack-resiliency-critical-services)
+1. [Proceed to next topic](#10-proceed-to-next-topic)
 
 > **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
@@ -204,7 +205,18 @@ will generate the full CFS configuration including additional CSM layers and all
     The number reported should match the number of management nodes in the system.
     If there are failures, see [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md).
 
-## 9. Proceed to next topic
+## 9. Restart Rack Resiliency critical services
+
+> Skip this step if the Rack Resiliency feature is not enabled.
+> For more information, see [Enabling Rack Resiliency](../operations/rack_resiliency/Enabling_Rack_Resiliency.md).
+
+(`ncn-mw#`) Restart the critical services for Rack Resiliency.
+
+```bash
+python3 /usr/share/doc/csm/upgrade/scripts/upgrade/scripts/k8s/rr_critical_service_restart.py
+```
+
+## 10. Proceed to next topic
 
 After completing the operational procedures above which configure administrative access, the next
 step is to validate the health of management nodes and CSM services.

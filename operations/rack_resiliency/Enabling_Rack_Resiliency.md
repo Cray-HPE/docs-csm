@@ -26,5 +26,5 @@ they must do so in the
 
 During an upgrade from CSM 1.6 to CSM 1.7, if an administrator wishes to enable Rack Resiliency,
 they must do so in the
-[Rack Resiliency](../../operations/iuf/workflows/management_rollout.md#rack-resiliency) step of the
-[Management Rollout](../../operations/iuf/workflows/management_rollout.md) procedure.
+[Rack Resiliency](../../operations/iuf/workflows/product_delivery.md#rack-resiliency) step of the
+[Product Delivery](../../operations/iuf/workflows/product_delivery.md) procedure.
