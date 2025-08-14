@@ -10,12 +10,13 @@ The service includes the following containers:
 
 - `init` containers:
     - `cray-rrs-check`: This checks if Rack Resiliency is enabled and if zones for Kubernetes and Ceph have been provisioned. It also ensures that the
-       rollout restart of all the critical services is successfully completed. This container waits till all these conditions are met before exit.
+       rollout restart of all the critical services is successfully completed. This container waits until all these conditions are met before it exits.
+       Until it exits, the RR services do not start.
     - `cray-rrs-init`: This validates the configuration parameters and initializes the environment required to begin the monitoring of critical services.
 - `cray-rrs-api`: This serves the endpoints for the RESTful APIs of RRS.
 - `cray-rrs-rms`: This is the core engine of the `cray-rrs` pod. This monitors the critical services and alerts the administrator when thresholds are not met.
 
-## `Kyverno` policy
+## Kyverno policy
 
-The RRS Helm chart also includes a `Kyverno` policy named `insert-labels-topology-constraints`. For more information, see [Kyverno Policy](Kyverno_Policy.md).
+The RRS Helm chart also includes a Kyverno policy named `insert-labels-topology-constraints`. For more information, see [Kyverno Policy](Kyverno_Policy.md).
 

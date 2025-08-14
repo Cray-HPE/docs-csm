@@ -85,14 +85,16 @@ If [Rack Resiliency is enabled](Enabling_Rack_Resiliency.md), then the `exclude`
 
 ### 1. Restart critical services
 
-At the end of CSM upgrade from 1.6 to 1.7, the critical services (which are either Deployments or StatefulSets) are restarted based on whether Rack Resiliency
-is enabled and the Kyverno policy is applied. During restart the policy is implemented by the Kyverno policy engine. 
+At the end of CSM upgrade from 1.6 to 1.7, the critical services (which are either Deployments or StatefulSets) are restarted only if Rack Resiliency
+is enabled and the Kyverno policy is applied.
 
 During a fresh install of CSM 1.7, as part of
 [Configure Administrative Access](../../install/configure_administrative_access.md#configure-administrative-access),
 the critical services are restarted in the
 [Restart Rack Resiliency critical services] (../../install/configure_administrative_access.md#9-restart-rack-resiliency-critical-services)
 step. The critical services are restarted only when Rack Resiliency is enabled and the Kyverno policy is applied.
+
+During the service restart, the Kyverno policy is implemented by the Kyverno policy engine. 
 
 ### 2. Add topology constraints
 
