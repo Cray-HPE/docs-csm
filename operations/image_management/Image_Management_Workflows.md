@@ -183,7 +183,7 @@ Mentioned in this workflow:
 > * IMS image metadata is sometimes referred to as image labels.
 > * There known issues related to IMS image metadata:
 >     * [IMS Created Image Stores Incorrect Metadata](../../troubleshooting/known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
->     * [Soft Deleted IMS Image Metadata is Lost](../../troubleshooting/known_issues/ims_soft_deleted_image_metadata_is_lost.md)
+>     * [Soft Deleted IMS Image Metadata is Lost](../../troubleshooting/known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
 
 **Use Case:** The system administrator would like to apply user supplied information about IMS
 images or remove metadata that has been previously set.
