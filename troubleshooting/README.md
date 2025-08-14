@@ -14,7 +14,7 @@ This document provides links to troubleshooting information for services and fun
 * [Grafana dashboards](#grafana-dashboards)
 * [Hardware Management System (HMS)](#hardware-management-system-hms)
 * [Image management](#image-management)
-    - [Deleting and recovering IMS resources](#deleting-and-recovering-ims-resources)
+    * [Deleting and recovering IMS resources](#deleting-and-recovering-ims-resources)
 * [Kubernetes](#kubernetes)
 * [MetalLB](#metallb)
 * [Node management](#node-management)

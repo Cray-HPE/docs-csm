@@ -8,9 +8,8 @@ regardless of its original value. This new value persists even if the image is l
 
 This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to use the provided [Workaround](#workaround).
 
-For more information on deleting and restoring resources in IMS, see 
+For more information on deleting and restoring resources in IMS, see
 [Delete or Recover Deleted IMS Content](../../operations/image_management/Delete_or_Recover_Deleted_IMS_Content.md)
-
 
 ## Workaround
 
@@ -41,5 +40,3 @@ Example output:
     "name": "compute-csm-1.5-6.1.86-aarch64"
 }
 ```
-
-

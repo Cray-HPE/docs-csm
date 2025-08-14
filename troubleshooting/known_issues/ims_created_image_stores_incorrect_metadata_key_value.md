@@ -3,7 +3,7 @@
 ## Issue description
 
 When an IMS image is created using command `cray ims images create` with metadata.
-The metadata in the image details does not match the expected key value format. 
+The metadata in the image details does not match the expected key value format.
 
 Expected metadata:
 
@@ -71,4 +71,3 @@ Example output:
   "created": "2025-07-10T12:54:29.588107"
 }
 ```
-
