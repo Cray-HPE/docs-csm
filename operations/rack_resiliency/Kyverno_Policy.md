@@ -4,7 +4,7 @@
 * [Policy details](#policy-details)
 * [Restart critical services](#restart-critical-services)
     * [Upgrade from CSM 1.6 to CSM 1.7](#upgrade-from-csm-16-to-csm-17)
-    * [Fresh install of CSM 1.7](#fresh-install-of-csm17)
+    * [Fresh install of CSM 1.7](#fresh-install-of-csm-17)
     * [Modifying critical services](#modifying-critical-services)
 * [Add topology constraints](#add-topology-constraints)
 * [Add label](#add-label)
