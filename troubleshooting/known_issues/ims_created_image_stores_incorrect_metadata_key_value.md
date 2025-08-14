@@ -16,7 +16,7 @@ This is the expected format after creating an image with a metadata key and valu
 ```json
 "metadata": {
     "<metadata_key>": "<metadata_value>"
-  }
+}
 ```
 
 Because of the issue described on this page, the actual format is:
@@ -25,7 +25,7 @@ Because of the issue described on this page, the actual format is:
 "metadata": {
     "key": "<metadata_key>",
     "value": "<metadata_value>"
-  }
+}
 ```
 
 This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to use the provided [Workaround](#workaround).
