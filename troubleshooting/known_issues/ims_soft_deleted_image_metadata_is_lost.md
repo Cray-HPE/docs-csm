@@ -1,4 +1,4 @@
-# Soft Deleted IMS Image Always has `metadata={}`
+# Soft Deleted IMS Image Metadata is Lost
 
 ## Issue description
 
