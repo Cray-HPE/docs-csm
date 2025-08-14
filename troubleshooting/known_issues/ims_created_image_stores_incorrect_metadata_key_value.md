@@ -72,4 +72,3 @@ setting the correct metadata.
 1. Update the IMS image to set the desired metadata.
 
     See [Set image metadata](../../operations/image_management/Image_Management_Workflows.md#2-set-image-metadata).
-
