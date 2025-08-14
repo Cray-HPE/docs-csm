@@ -76,19 +76,23 @@ spec:
   validationFailureAction: Audit
   ...
 ```
-**Note:**
-The **exclude** section of the policy shown in the above example is present when the policy is applied initially using Helm.
-Later, if [Rack Resiliency is enabled](Enabling_Rack_Resiliency.md), the **exclude** section is patched and removed from the policy 
-at the end of the Helm upgrade(using a post upgrade hook).
+
+**Note:** The `exclude` section of the policy shown in the above example is present when the policy is applied initially using Helm.
+If [Rack Resiliency is enabled](Enabling_Rack_Resiliency.md), then the `exclude` section is removed from the policy
+(using a post-install/post-upgrade hook).
 
 ## How the policy works
 
 ### 1. Restart critical services
 
-At the end of CSM upgrade from 1.6.x to 1.7.0, the critical services which are either Deployments or StatefulSets are restarted based on whether Rack Resiliency
-is enabled and `Kyverno` policy is applied. During restart the policy is implemented by the Kyverno policy engine. 
+At the end of CSM upgrade from 1.6 to 1.7, the critical services (which are either Deployments or StatefulSets) are restarted based on whether Rack Resiliency
+is enabled and the Kyverno policy is applied. During restart the policy is implemented by the Kyverno policy engine. 
 
-During fresh install of CSM 1.7.0, at the end of [configure administrative access procedure](../../install/configure_administrative_access.md#configure-administrative-access), the critical services should be manually restarted using the [steps mentioned here] (../../install/configure_administrative_access.md#9-restart-rack-resiliency-critical-services). Similar to upgrade, the critical services are restarted only when Rack Resiliency is enabled and `Kyverno` policy is applied.
+During a fresh install of CSM 1.7, as part of
+[Configure Administrative Access](../../install/configure_administrative_access.md#configure-administrative-access),
+the critical services are restarted in the
+[Restart Rack Resiliency critical services] (../../install/configure_administrative_access.md#9-restart-rack-resiliency-critical-services)
+step. The critical services are restarted only when Rack Resiliency is enabled and the Kyverno policy is applied.
 
 ### 2. Add topology constraints
 
