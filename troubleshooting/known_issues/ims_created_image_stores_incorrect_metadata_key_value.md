@@ -26,48 +26,67 @@ This bug is fixed in CSM 1.7.0. In earlier CSM versions, the only option is to u
 
 ## Workaround
 
-(`ncn-mw#`) Work around the problem by manually updating the `metadata` attribute `key` and `value` after the image is created.
+Work around the problem by manually correcting the metadata after the image is created.
+This procedure shows how to work around the problem after creating an IMS image
+specifying a metadata key and value. In this procedure, these are referred to as the
+"desired" metadata key and value.
 
-> In the following command, replace `<IMAGE_ID>` with actual IMS image ID.
+> In the commands in this procedure, be sure to perform the following substitutions:
+>
+> * Replace `<IMAGE_ID>` with actual IMS image ID.
+> * Replace `<desired_metadata_key>` with the actual desired metadata key.
+> * Replace `<desired_metadata_value>` with the actual desired metadata value.
+>
+> The following values are used in the example output shown in this procedure:
+>
+> * The IMS image ID is `a01eca53-4e1d-466f-9d87-7676c846c6b2`
+> * The desired metadata key is `csmqe-metadata-key`
+> * The desired metadata value is `csmqe-metadata-value`
 
-```bash
-cray ims images update <IMAGE_ID> --metadata-operation set --metadata-key <desired_metadata_key> --metadata-value <desired_metadata_value> --format json
-```
+1. (`ncn-mw#`) Update the image to properly set the desired metadata key/value pair.
 
-In the following example output, the desired metadata key is `csmqe-metadata-key` and the desired metadata value is `csmqe-metadata-value`.
+    ```bash
+    cray ims images update <IMAGE_ID> \
+        --metadata-key "<desired_metadata_key>" \
+        --metadata-value "<desired_metadata_value>" \
+        --metadata-operation set --format json
+    ```
 
-```json
-{
-  "name": "csmqe-metadatacheck",
-  "link": null,
-  "arch": "x86_64",
-  "metadata": {
-    "csmqe-metadata-key": "csmqe-metadata-value",
-    "value": "csmqe-metadata-value"
-  },
-  "id": "a01eca53-4e1d-466f-9d87-7676c846c6b2",
-  "created": "2025-07-10T12:54:29.588107"
-}
-```
+    Example output:
 
-> After updating the `metadata` with original `metadata key` and `metadata value`, Remove the `value` key from the image's `metadata`.
-In the following command, replace `<IMAGE_ID>` with actual IMS image ID.
+    ```json
+    {
+      "name": "csmqe-metadatacheck",
+      "link": null,
+      "arch": "x86_64",
+      "metadata": {
+        "csmqe-metadata-key": "csmqe-metadata-value",
+        "value": "csmqe-metadata-value"
+      },
+      "id": "a01eca53-4e1d-466f-9d87-7676c846c6b2",
+      "created": "2025-07-10T12:54:29.588107"
+    }
+    ```
 
-```bash
-cray ims images update <IMAGE_ID> --metadata-operation remove --metadata-key value --format json
-```
+1. (`ncn-mw#`) Remove the `value` entry from the image metadata.
 
-Example output:
+    ```bash
+    cray ims images update <IMAGE_ID> --format json \
+        --metadata-operation remove --metadata-key value
+    ```
 
-```json
-{
-  "name": "csmqe-metadatacheck",
-  "link": null,
-  "arch": "x86_64",
-  "metadata": {
-    "csmqe-metadata-key": "csmqe-metadata-value"
-  },
-  "id": "a01eca53-4e1d-466f-9d87-7676c846c6b2",
-  "created": "2025-07-10T12:54:29.588107"
-}
-```
+    Example output:
+
+    ```json
+    {
+      "name": "csmqe-metadatacheck",
+      "link": null,
+      "arch": "x86_64",
+      "metadata": {
+        "csmqe-metadata-key": "csmqe-metadata-value"
+      },
+      "id": "a01eca53-4e1d-466f-9d87-7676c846c6b2",
+      "created": "2025-07-10T12:54:29.588107"
+    }
+    ```
+
