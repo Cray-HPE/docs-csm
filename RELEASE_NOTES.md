@@ -388,6 +388,11 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * Fixed an issue where the hardware inventory history table in the HSM/SMD database grew too large due to duplicate "Detected" events.
     * See [Remove Duplicate Detected Events From the HSM Postgres Database](operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md) for more information.
 * Fixed an issue in [PCS](glossary.md#power-control-service-pcs) where the supported power transitions on Gigabyte BMCs can go missing.
+* Fixed an issue in the Ansible code in the `csm-config-management` repository in the [Version Control Service (VCS)](glossary.md#version-control-service-vcs)
+  that caused some plays to end prematurely.
+    * The bug was only observed when root SSH credentials were not set in Vault.
+    * For more information on setting root credentials in Vault, see
+      [Configure the root Password and SSH Keys in Vault](operations/CSM_product_management/Configure_the_root_Password_and_SSH_Keys_in_Vault.md).
 
 ## Deprecations
 
@@ -1001,6 +1006,7 @@ CASMCMS-9468 Update kubernetes Python module versions
 CASMCMS-9473 Fix Loading DST signing keys from K8S secret for emulation builds.
 CASMCMS-9474 Add certs to CFS ansible container
 CASMCMS-9479 Investigate duplicates docker.io/library/redis: BOS / CFS
+CASMCMS-9512: csm.ssh roles problems when no root credentials in Vault
 ```
 
 ### CASMCVT
