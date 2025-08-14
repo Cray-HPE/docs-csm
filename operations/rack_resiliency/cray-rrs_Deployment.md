@@ -13,3 +13,7 @@ The service includes the following containers:
     - `cray-rrs-init`: This validates the configuration parameters and initializes the environment required to begin the monitoring of critical services.
 - `cray-rrs-api`: This serves the endpoints for the RESTful APIs of RRS.
 - `cray-rrs-rms`: This is the core engine of the `cray-rrs` pod. This monitors the critical services and alerts the administrator when thresholds are not met.
+
+## `Kyverno` policy
+
+The RRS Helm chart also includes a `Kyverno` policy named `insert-labels-topology-constraints`. For more information, see [Kyverno Policy](Kyverno_Policy.md).
