@@ -19,4 +19,3 @@ The service includes the following containers:
 ## Kyverno policy
 
 The RRS Helm chart also includes a Kyverno policy named `insert-labels-topology-constraints`. For more information, see [Kyverno Policy](Kyverno_Policy.md).
-
