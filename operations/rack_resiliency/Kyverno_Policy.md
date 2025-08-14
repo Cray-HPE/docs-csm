@@ -51,6 +51,11 @@ spec:
           - cray-dvs-mqtt-ss
           - cray-hmnfd-bitnami-etcd
           ...
+    exclude: # Temporarily exclude resources in all namespaces
+      any:
+      - resources:
+          namespaces:
+          - "*"
     mutate:
       patchStrategicMerge:
         spec:
@@ -71,14 +76,19 @@ spec:
   validationFailureAction: Audit
   ...
 ```
+**Note:**
+The **exclude** section of the policy shown in the above example is present when the policy is applied initially using Helm.
+Later, if [Rack Resiliency is enabled](Enabling_Rack_Resiliency.md), the **exclude** section is patched and removed from the policy 
+at the end of the Helm upgrade(using a post upgrade hook).
 
 ## How the policy works
 
 ### 1. Restart critical services
 
-During Deployment of the Rack Resiliency Service, the critical services which are either
-Deployments or StatefulSets are restarted. During restart the policy is implemented by
-the Kyverno policy engine.
+At the end of CSM upgrade from 1.6.x to 1.7.0, the critical services which are either Deployments or StatefulSets are restarted based on whether Rack Resiliency
+is enabled and `Kyverno` policy is applied. During restart the policy is implemented by the Kyverno policy engine. 
+
+During fresh install of CSM 1.7.0, at the end of [configure administrative access procedure](../../install/configure_administrative_access.md#configure-administrative-access), the critical services should be manually restarted using the [steps mentioned here] (../../install/configure_administrative_access.md#9-restart-rack-resiliency-critical-services). Similar to upgrade, the critical services are restarted only when Rack Resiliency is enabled and `Kyverno` policy is applied.
 
 ### 2. Add topology constraints
 
