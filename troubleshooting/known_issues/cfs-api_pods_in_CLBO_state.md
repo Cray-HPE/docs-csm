@@ -1,8 +1,8 @@
-# `cfs-api` pods in CLBO state during CSM install
+# `cfs-api` Pods in CLBO State During CSM Install
 
 ## Issue description
 
-When installing CSM 1.6, `cray-shared-kafka-kafka` Kubernetes pods in the `services` namespace fail to come up which results in
+When installing CSM, `cray-shared-kafka-kafka` Kubernetes pods in the `services` namespace fail to come up which results in
 `cfs-api` pods in the `CrashLoopBackOff` state. This happens because of an issue with Zookeeper related to slow DNS.
 Zookeeper fails to come up if the DNS is not set up for all hosts at startup. When this happens, the cluster gets stuck with
 the Zookeeper pods running, but brokers not coming up.

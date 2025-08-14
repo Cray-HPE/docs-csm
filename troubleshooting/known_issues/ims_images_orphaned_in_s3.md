@@ -4,9 +4,9 @@ There was an issue where image files larger than 5Gb were not correctly deleted 
 was deleted through the IMS service. These artifacts are no longer referenced by IMS but are still
 left in the S3 `boot-images` bucket and need to be deleted manually.
 
-This issue is resolved in CSM 1.6.1 and 1.7.0 and will not produce additional orphaned artifacts
-after these versions, but orphaned artifacts may still exist on the system from previous versions if
-they have not been cleaned up.
+This issue is resolved in CSM 1.6.1 and 1.7.0; additional orphaned artifacts will not be produced
+in these or later versions. However, orphaned artifacts may still exist on the system that were
+produced in previous CSM versions, if they have not been cleaned up.
 
 ## Prerequisites
 

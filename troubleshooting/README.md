@@ -84,6 +84,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
 * [iSCSI NMN DNS A Records Missing](known_issues/iSCSI_NMN_DNS_A_Records_Missing.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
+* [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 * [Soft Deleted IMS Recipe Always Has `require_dkms=true`](known_issues/ims_soft_deleted_recipe_always_has_require_dkms_true.md)
 * [Soft Deleted IMS Recipe Always Has `arch=x86_64`](known_issues/ims_soft_deleted_recipe_always_assigned_arch_x86_64.md)
 * [Soft Deleted IMS Image Always Has `arch=x86_64`](known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64.md)
@@ -117,6 +118,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Incrementally Configuring Images](incrementally_configuring_images.md)
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+* [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 
 ## ConMan
 

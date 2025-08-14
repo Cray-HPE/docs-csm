@@ -1,4 +1,4 @@
-# Product delivery
+# Product Delivery
 
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 

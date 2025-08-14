@@ -1,8 +1,21 @@
 # Kyverno policy management
 
+* [Mutation](#mutation)
+    * [Example mutation policy](#example-mutation-policy)
+* [Validation](#validation)
+    * [Example validation policy](#example-validation-policy)
+* [What is new in the HPE CSM 1.4 release and above](#what-is-new-in-the-hpe-csm-14-release-and-above)
+    * [Example to list policy violations at pod level](#example-to-list-policy-violations-at-pod-level)
+    * [Example to list all the policy violations](#example-to-list-all-the-policy-violations)
+* [What is new in the HPE CSM 1.6 release and above](#what-is-new-in-the-hpe-csm-16-release-and-above)
+    * [Container image signature verification Kyverno policy](#container-image-signature-verification-kyverno-policy)
+        * [Policy customization](#policy-customization)
+* [Known issues](#known-issues)
+
 [Kyverno](https://kyverno.io/) is a policy engine designed specifically for Kubernetes.
 
-Kyverno allows cluster administrators to manage environment-specific configurations (independently of workload configurations) and enforce configuration best practices for their clusters.
+Kyverno allows cluster administrators to manage environment-specific configurations (independently of workload configurations)
+and enforce configuration best practices for their clusters.
 
 Kyverno can be used to scan existing workloads for best practices, or it can be used to enforce best practices by blocking or mutating API requests.
 
@@ -394,13 +407,13 @@ Example output:
 
 ## What is new in the HPE CSM 1.6 release and above
 
-1. Kyverno is upgraded from 1.9.5 version to 1.10.7 version and is now available for customers as part of the HPE CSM 1.6 release.
+* Kyverno is upgraded from 1.9.5 version to 1.10.7 version and is now available for customers as part of the HPE CSM 1.6 release.
 
    This is a major upgrade with many new features and bug fixes. For a complete list, refer to the external [CHANGELOG](https://github.com/kyverno/kyverno/blob/main/CHANGELOG.md).
 
-2. Container image signature verification Kyverno policy.
+* [Container image signature verification Kyverno policy](#container-image-signature-verification-kyverno-policy)
 
-### Container Image Signature Verification Kyverno Policy
+### Container image signature verification Kyverno policy
 
 Container image signing and runtime verification policy by name `check-image` is delivered (through Kyverno
 policy engine) as part of CSM 1.6 release in `Audit` only mode. (`Audit` only mode will log the policy violation
@@ -432,17 +445,14 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
 * [False positive audit logs are generated for Validation policy](https://github.com/kyverno/kyverno/issues/3970)
 * [No event is generated in case of mutation policy being applied to a resource](https://github.com/kyverno/kyverno/issues/2160)
 * [Inaccurate annotations are created after applying the policy](https://github.com/kyverno/kyverno/issues/3473)
-* Kyverno failed to verify `tls` certificate for signature verification from CSM 1.6 and above
+* Kyverno failed to verify TLS certificate for signature verification from CSM 1.6 and above
 
-    ```bash
-    10m         Warning   PolicyViolation   pod/canu-test-6ff597df6d-fbnbd   policy check-image/check-image fail: failed to 
-    verify image registry.local/artifactory.algol60.net/csm-docker/stable/cray-canu/canu-test:1.6.36: 
-    .attestors[0].entries[0].keys: Get "https://registry.local/v2/": tls: failed to verify certificate: x509: certificate 
-    signed by unknown authority
+    ```text
+    policy check-image/check-image fail: failed to verify image registry.local/artifactory.algol60.net/csm-docker/stable/cray-canu/canu-test:1.6.36: .attestors[0].entries[0].keys: Get "https://registry.local/v2/": tls: failed to verify certificate: x509: certificate signed by unknown authority
     ```
 
-    When end user encounters the above issue for signature verification then the solution is to restart the Kyverno pods.
-    Follow the commands mentioned in [Restart Kyverno](https://release-1-10-0.kyverno.io/docs/troubleshooting/)
+    When end user encounters the above issue for signature verification, then the solution is to restart the Kyverno pods.
+    Follow the commands mentioned in [Restart Kyverno](https://release-1-10-0.kyverno.io/docs/troubleshooting/).
 
-    Incase the issue still persists after restarting the Kyverno pods, we recommend to disable the background scanning in the Kyverno policy.
-    Set `background` to `false` to disable background scanning in the Kyverno policy
+    If the issue still persists after restarting the Kyverno pods, then HPE recommends disabling the background scanning in the Kyverno policy.
+    Set `background` to `false` to disable background scanning in the Kyverno policy.
