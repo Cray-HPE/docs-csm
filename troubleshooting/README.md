@@ -89,7 +89,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Soft Deleted IMS Recipe Always Has `arch=x86_64`](known_issues/ims_soft_deleted_recipe_always_assigned_arch_x86_64.md)
 * [Soft Deleted IMS Image Always Has `arch=x86_64`](known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64.md)
 * [Soft Deleted IMS Image Metadata is Lost](known_issues/ims_soft_deleted_image_metadata_is_lost.md)
-* [IMS Created Image Stores Incorrect Metadata](known_issues/ims_created_image_stores_incorrect_metadata_key_value.md)
+* [IMS Created Image Stores Incorrect Metadata](known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
 
 ## Booting
 
@@ -179,7 +179,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Troubleshoot Remote Build Node](../operations/image_management/Troubleshoot_Remote_Build_Node.md)
 * [Troubleshoot Interactions with zypper](../operations/image_management/Troubleshoot_zypper_interaction.md)
 * [iSCSI SBPS Verification](../operations/iscsi_sbps/iSCSI_SBPS_Verification.md)
-* [IMS Created Image Stores Incorrect Metadata](known_issues/ims_created_image_stores_incorrect_metadata_key_value.md)
+* [IMS Created Image Stores Incorrect Metadata](known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
 
 ### Deleting and recovering IMS resources
 
