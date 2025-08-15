@@ -12,8 +12,8 @@ This page contains general Rack Resiliency troubleshooting topics.
         - [Rack failure](#rack-failure)
         - [Status of Ceph](#status-of-ceph)
         - [Critical services events](#critical-services-events)
-            - [Imbalance of services](#imbalance-of-services)
-            - [Status of service](#status-of-service)
+            - [Service imbalance](#service-imbalance)
+            - [Service status](#service-status)
             - [Service not found](#service-not-found)
             - [Unable to register for notification](#unable-to-register-for-notification)
     - [Getting details about RMS](#getting-details-about-rms)
@@ -21,10 +21,10 @@ This page contains general Rack Resiliency troubleshooting topics.
 
 ## Cray CLI
 
-The Cray CLI is used to interact with multiple components of Rack Resiliency. Use the following command for usage information:
+(`ncn-mw#`) The Cray CLI is used to interact with multiple components of Rack Resiliency. Use the following command for usage information:
 
 ```bash
-(ncn-mw#) cray rrs --help
+cray rrs --help
 ```
 
 ### Wrong critical service type
@@ -32,10 +32,10 @@ The Cray CLI is used to interact with multiple components of Rack Resiliency. Us
 If a new critical service of type other than 'Deployment' or 'StatefulSet' is added through the Cray CLI,
 then an error is encountered.
 
-For example:
+(`ncn-mw#`) For example:
 
 ```bash
-(`ncn-mw#`) cray rrs criticalservices update --from-file file.json
+cray rrs criticalservices update --from-file file.json
 ```
 
 Example output:
@@ -75,6 +75,9 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 
 #### State change notification from HMNFD
 
+Example log entry for a state change notification from the
+[Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd):
+
 ```text
 2025-06-26 12:49:59,725 - INFO in rms - Notification received from HMNFD 2025-06-26 12:49:59,725 - WARNING in rms - Components '['x3000c0s11b0n0']' are changed to Off state.
 ```
@@ -84,6 +87,8 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 - Recovery: Power on the node(s).
 
 #### Node failure
+
+Example log entry reporting a node being down:
 
 ```text
 2025-06-26 12:49:59,997 - INFO in rms - Some nodes in rack x3000 are down. Failed nodes: ['x3000c0s11b0n0']
@@ -95,6 +100,8 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 
 #### Rack failure
 
+Example log entry reporting a rack health issue:
+
 ```text
 2025-06-26 12:49:59,997 - INFO in rms - All the nodes in the rack x3000 are not healthy - RACK FAILURE
 ```
@@ -104,6 +111,8 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 - Recovery: Power on the all the nodes in the rack.
 
 #### Status of Ceph
+
+Example log entries reporting Ceph status:
 
 ```text
 ...
@@ -135,7 +144,9 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 
 #### Critical services events
 
-##### Imbalance of services
+##### Service imbalance
+
+Example log entry reporting an imbalanced service:
 
 ```text
 2025-06-30 07:02:36,235 - WARNING in lib_rms - list of imbalanced services are - ['istiod']
@@ -145,7 +156,9 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 - Effect: This leads to danger of losing multiple replicas if another node failure happens.
 - Recovery: Ensure sufficient resources(CPU and memory) are available in each zone so that pods can be equally distributed.
 
-##### Status of service
+##### Service status
+
+Example log entries reporting on the status of a service:
 
 ```text
 2025-06-30 07:02:34,906 - WARNING in lib_rms - Deployment 'cray-capmc' in namespace 'services' is not ready. Only 1 replicas are ready out of 3 desired replicas
@@ -173,6 +186,8 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 
 ##### Service not found
 
+Example log entry reporting that a critical service was not found:
+
 ```text
 2025-06-30 07:02:36,233 - ERROR in lib_rms - Error fetching StatefulSet kube-multus-ds: Not Found
 ```
@@ -182,6 +197,8 @@ To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod runnin
 - Recovery: Delete or modify the critical service.
 
 #### Unable to register for notification
+
+Example log entry reporting a failure to register with HMNFD:
 
 ```text
 [2025-05-26 11:49:25,744] ERROR in rms: Attempt 1 : Failed to fetch subscription list from hmnfd. Error: 503 Server Error: Service Unavailable for url: https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions
