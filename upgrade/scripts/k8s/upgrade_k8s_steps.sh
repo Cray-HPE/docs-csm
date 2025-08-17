@@ -123,7 +123,7 @@ if [[ -f "$DONE_DIR/rr_cs_rollout_restart.done" ]]; then
   echo "INFO Rack Resiliency Critical services rollout restart already completed, skipping."
 else
   # For each CS in static ConfigMap, perform rollout restart of the critical service
-  python3 rr_critical_service_restart.py || {
+  python3 /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py || {
     echo "ERROR Critical Services rollout restart failed."
     exit 1
   }
