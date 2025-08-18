@@ -115,8 +115,8 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
 
         # Check for 'rrflag' label
         labels = resource_json.get("spec", {}).get("template", {}).get("metadata", {}).get("labels", {})
-        if "rrflag" not in labels:
-            print(f"Skipping {resource_type}/{name}: 'rrflag' label is not set in namespace {namespace}")
+        if "rrflag" in labels:
+            print(f"Skipping {resource_type}/{name}: 'rrflag' label is already set in namespace {namespace}")
             continue
 
         # Restart the service
