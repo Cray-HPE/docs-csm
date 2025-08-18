@@ -60,6 +60,13 @@
     * This feature **can only be enabled during an upgrade from CSM 1.6 to CSM 1.7 or an install of CSM 1.7**.
     * See [Enabling Rack Resiliency](operations/rack_resiliency/Enabling_Rack_Resiliency.md) for more details.
 
+### iSCSI SBPS
+
+* The [iSCSI SBPS feature](operations/iscsi_sbps/README.md) is enhanced to allow administrators
+  to select which worker NCNs are enabled as iSCSI targets. This is a change from CSM 1.6, where
+  all worker NCNs are enabled as iSCSI targets. For more information, see
+  [Managing Selective Node Personalization](operations/iscsi_sbps/Managing_Selective_Node_Personalization.md).
+
 ### Monitoring
 
 ### Miscellaneous functionality

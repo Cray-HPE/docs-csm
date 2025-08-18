@@ -5,6 +5,7 @@ This section updates the software running on management NCNs.
 - [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
 - [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
     - [Configure optional CSM features](#configure-optional-csm-features)
+        - [Selective iSCSI worker node personalization](#selective-iscsi-worker-node-personalization)
         - [IPv6](#ipv6)
     - [`management-nodes-rollout` overview](#management-nodes-rollout-overview)
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
@@ -30,6 +31,23 @@ Once this step has completed:
 > If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
 
 Several CSM features can be enabled and configured as part of the upgrade process.
+This has to be done at this point in the upgrade; unless otherwise noted in the specific section,
+these choices cannot be changed later.
+
+#### Selective iSCSI worker node personalization
+
+> If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
+
+In CSM 1.6, all the worker nodes are configured and enabled as iSCSI SBPS targets. Starting in CSM 1.7.0, selective worker node
+personalization is supported. All worker nodes are still **configured** for iSCSI, but selective node personalization
+gives administrators control over which worker nodes are actually enabled as iSCSI SBPS targets. The default behavior
+is still the same as in CSM 1.6, so if no action is taken to use this feature, then all worker nodes will remain
+enabled as iSCSI targets.
+
+For administrators who do not wish to use this feature, no action is required, and this step can be skipped.
+Otherwise, before proceeding, follow the procedure in the
+[CSM upgrade from 1.6 to 1.7](../../iscsi_sbps/Managing_Selective_Node_Personalization.md#csm-upgrade-from-16-to-17)
+section of [Managing Selective Node Personalization](../../iscsi_sbps/Managing_Selective_Node_Personalization.md).
 
 #### IPv6
 
