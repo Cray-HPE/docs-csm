@@ -256,13 +256,10 @@ def main() -> None:
     Main function to execute the rollout restart of critical services.
     """
     if not rr_enabled():
-        # RR is not enabled
-        if is_cluster_policy_applied("insert-labels-topology-constraints"):
-            # RR is not enabled, but the cluster policy is applied -- this is an error
-            err_exit("Rack Resiliency is not enabled  but ClusterPolicy 'insert-labels-topology-constraints' is applied. Skipping restart.")
-        ## RR is not enabled and the cluster policy is not applied
-        print("Rack Resiliency is not enabled and ClusterPolicy 'insert-labels-topology-constraints' is not applied.Skipping restart.")
+        ## RR is not enabled
+        print("Rack Resiliency is not enabled. Skipping restart.")
         sys.exit(0)
+
     # RR is enabled
     # Check cluster policy
     if not is_cluster_policy_applied("insert-labels-topology-constraints"):
