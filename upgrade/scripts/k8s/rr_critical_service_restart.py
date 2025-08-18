@@ -52,7 +52,7 @@ def err_exit(msg: str) -> NoReturn:
     Prepends "ERROR: " to the message and then prints it to stderr.
     Then exits the script with rc 1
     """
-    print_err(f"ERROR: {msg}")
+    print_stderr(f"ERROR: {msg}")
     sys.exit(1)
 
 def load_configmap(name: str, namespace: str) -> dict:
@@ -74,7 +74,7 @@ def load_configmap(name: str, namespace: str) -> dict:
         )
         return json.loads(result.stdout)
     except subprocess.CalledProcessError as e:
-        print_err(f"Failed to fetch ConfigMap '{name}' from namespace '{namespace}'")
+        print_stderr(f"Failed to fetch ConfigMap '{name}' from namespace '{namespace}'")
         err_exit(e.stderr)
 
 class ServiceDetails(TypedDict):
@@ -105,11 +105,11 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             result = subprocess.run(get_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             resource_json = json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
-            print_err(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
+            print_stderr(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services = True
             continue
         except json.JSONDecodeError as e:
-            print_err(f"Failed to parse JSON for {resource_type}/{name}: {str(e)}")
+            print_stderr(f"Failed to parse JSON for {resource_type}/{name}: {str(e)}")
             failed_services = True
             continue
 
@@ -124,8 +124,8 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
         try:
             subprocess.run(restart_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         except subprocess.CalledProcessError as e:
-            print_err(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
-            print_err(f"Error: {e.stderr}")
+            print_stderr(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
+            print_stderr(f"Error: {e.stderr}")
             failed_services = True
             continue
 
@@ -135,8 +135,8 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             subprocess.run(status_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             print(f"Restarted {resource_type}/{name} in namespace {namespace}")
         except subprocess.CalledProcessError as e:
-            print_err(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}")
-            print_err(f"Error: {e.stderr}")
+            print_stderr(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}")
+            print_stderr(f"Error: {e.stderr}")
             failed_services = True
 
     return failed_services
@@ -170,7 +170,7 @@ def set_rollout_complete(configmap_name: str, namespace: str) -> None:
         subprocess.run(command, check=True)
         print(f"Set rollout_complete=true in ConfigMap '{configmap_name}'")
     except subprocess.CalledProcessError as e:
-        print_err(f"Failed to patch ConfigMap '{configmap_name}'")
+        print_stderr(f"Failed to patch ConfigMap '{configmap_name}'")
         err_exit(e)
 
 def rr_enabled():
@@ -192,10 +192,10 @@ def rr_enabled():
             check=True
         )
     except subprocess.CalledProcessError as e:
-        print_err(f"Error fetching site-init secret: {e.stderr}")
+        print_stderr(f"Error fetching site-init secret: {e.stderr}")
         return False
     except Exception as e:
-        print_err(f"error: {e}")
+        print_stderr(f"error: {e}")
         return False
 
     # Parse JSON output
@@ -207,7 +207,7 @@ def rr_enabled():
         decoded_yaml = base64.b64decode(encoded_yaml).decode("utf-8")
         data = yaml.safe_load(decoded_yaml)
     except Exception as e:
-        print_err(f"Failed to decode or parse customizations.yaml: {e}")
+        print_stderr(f"Failed to decode or parse customizations.yaml: {e}")
         return False
 
     enabled = data.get('spec', {}) \
