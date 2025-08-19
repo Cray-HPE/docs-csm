@@ -10,6 +10,10 @@ The workflows in this section include:
 * [Create a new image](#create-a-new-image)
 * [Customize an image](#customize-an-image)
 * [Manage image labels](#manage-image-labels)
+    1. [List images](#1-list-images)
+    1. [Set image metadata](#2-set-image-metadata)
+    1. [Describe an image](#3-describe-an-image)
+    1. [Remove image metadata](#4-remove-image-metadata)
 
 ## Create a new image
 
@@ -174,63 +178,88 @@ Mentioned in this workflow:
 
     The new image artifacts are uploaded to Ceph S3.
 
-## Manage Image Labels
+## Manage image labels
 
-**Use Case:** The system administrator would like to apply user supplied information about IMS images or remove metadata that has been previously set.
+> * IMS image metadata is sometimes referred to as image labels.
+> * There known issues related to IMS image metadata:
+>     * [IMS Created Image Stores Incorrect Metadata](../../troubleshooting/known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
+>     * [Soft Deleted IMS Image Metadata is Lost](../../troubleshooting/known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
 
-**Components:** This workflow is based on the interaction of the Image Management Service \(IMS\) with other services after the image build process completes. The information added or removed can be used by separate
-APIs or processes for whatever specific purposes they implement for, as it involves specific images. Generally, downstream APIs define specific keys and values that can be associated with an image, then perform specific
-actions against those image records in a way that is consistent with their API's behavior. Typically, this allows administrators to attach general purpose information about IMS images that will help them manage the lifecycle
-of images that IMS maintains.
+**Use Case:** The system administrator would like to apply user supplied information about IMS
+images or remove metadata that has been previously set.
+
+**Components:** This workflow is based on the interaction of the Image Management Service \(IMS\)
+with other services after the image build process completes. The information added or removed can
+be used by separate APIs or processes for whatever specific purposes they implement for, as it
+involves specific images. Generally, downstream APIs define specific keys and values that can be
+associated with an image, then perform specific actions against those image records in a way that
+is consistent with their API's behavior. Typically, this allows administrators to attach general
+purpose information about IMS images that will help them manage the lifecycle of images that
+IMS maintains.
 
 **Workflow Overview:** The following sequence of steps occurs during this workflow.
 
-1. (`ncn-mw#`) Administrator identifies the image to add metadata information to.
+1. [List images](#1-list-images)
+1. [Set image metadata](#2-set-image-metadata)
+1. [Describe an image](#3-describe-an-image)
+1. [Remove image metadata](#4-remove-image-metadata)
 
-    Administrators may already know the image ID in question to label. If not, examining the existing images may be of help.
+### 1. List images
 
-    ```bash
-    cray ims images list
-    ```
+(`ncn-mw#`) Administrator identifies the image to add metadata information to.
 
-1. (`ncn-mw#`) Administrators may set a new label for an existing IMS image.
+> Administrators may already know the image ID in question to label. If not, examining the existing images may be of help.
 
-    One label may be changed (added or removed) during each update operation. Existing values for the provided key may be overwritten if already part of the image record.
+```bash
+cray ims images list
+```
 
-    ```bash
-    cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation set --metadata-value value --metadata-key key
-    ```
+### 2. Set image metadata
 
-1. (`ncn-mw#`) Administrators and downstream APIs may obtain the active record for a given image.
+(`ncn-mw#`) Administrators may set a new label in the metadata of an existing IMS image.
 
-    Image metadata information is also available via the `list` command for all images.
+> * One label may be set during each update.
+> * Existing values for the provided key may be overwritten if already part of the image record.
 
-    ```bash
-    cray ims images describe a506a6f6-54d9-4e5a-9e8d-1fc052d62504
-    ```
+```bash
+cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation set --metadata-value desired_value --metadata-key desired_key
+```
 
-    Expected output:
+### 3. Describe an image
 
-    ```toml
-    arch = "x86_64"
-    created = "2024-06-27T15:41:22.467177"
-    id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
-    [metadata]
-    key = "value"
-    ```
+(`ncn-mw#`) Administrators and downstream APIs may obtain the active record for a given image.
 
-1. (`ncn-mw#`) Administrators may remove previously set image metadata.
+> Image metadata information is also available when listing images. See [List images](#1-list-images).
 
-    Downstream APIs and Administrators using the CLI may affect these changes. During `--metadata-operation remove`, users may omit `--metadata-value` command line arguments.
+```bash
+cray ims images describe a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --format toml
+```
 
-    ```bash
-    cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation remove --metadata-key key
-    ```
+Example output:
 
-    Expected output:
+```toml
+arch = "x86_64"
+created = "2024-06-27T15:41:22.467177"
+id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
+[metadata]
+key = "value"
+```
 
-    ```toml
-    arch = "x86_64"
-    created = "2024-06-27T15:41:22.467177"
-    id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
-    ```
+### 4. Remove image metadata
+
+(`ncn-mw#`) Administrators may remove previously set image metadata.
+
+> * One label may be removed during each update.
+> * When specifying `--metadata-operation remove`, omit the `--metadata-value` command line argument.
+
+```bash
+cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation remove --metadata-key key_to_remove --format toml
+```
+
+Example output:
+
+```toml
+arch = "x86_64"
+created = "2024-06-27T15:41:22.467177"
+id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
+```

@@ -14,6 +14,7 @@ This document provides links to troubleshooting information for services and fun
 * [Grafana dashboards](#grafana-dashboards)
 * [Hardware Management System (HMS)](#hardware-management-system-hms)
 * [Image management](#image-management)
+    * [Deleting and recovering IMS resources](#deleting-and-recovering-ims-resources)
 * [Kubernetes](#kubernetes)
 * [MetalLB](#metallb)
 * [Node management](#node-management)
@@ -67,7 +68,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
-* [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
 * [Spire pods stuck in `PodInitializing`](known_issues/spire_pod_initializing.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [IUF CLI reports false error that `management-nodes-rollout` failed](known_issues/iuf_cli_false_error_management_rollout_failed.md)
@@ -85,6 +85,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [iSCSI NMN DNS A Records Missing](known_issues/iSCSI_NMN_DNS_A_Records_Missing.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
+* [Soft Deleted IMS Recipe Always Has `require_dkms=true`](known_issues/ims_soft_deleted_recipe_always_has_require_dkms_true.md)
+* [Soft Deleted IMS Recipe Always Has `arch=x86_64`](known_issues/ims_soft_deleted_recipe_always_assigned_arch_x86_64.md)
+* [Soft Deleted IMS Image Always Has `arch=x86_64`](known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64.md)
+* [Soft Deleted IMS Image Metadata is Lost](known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
+* [IMS Created Image Stores Incorrect Metadata](known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
 
 ## Booting
 
@@ -168,13 +173,20 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 * [Image Job Performance](../operations/image_management/Image_Job_Performance.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
-* [IMS image delete loses the `arch` information](known_issues/ims_image_delete_loses_arch.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 * [Troubleshoot Issues with Large Images](../operations/image_management/Troubleshoot_Large_Image.md)
 * [Troubleshoot Remote Build Node](../operations/image_management/Troubleshoot_Remote_Build_Node.md)
 * [Troubleshoot Interactions with zypper](../operations/image_management/Troubleshoot_zypper_interaction.md)
 * [iSCSI SBPS Verification](../operations/iscsi_sbps/iSCSI_SBPS_Verification.md)
+* [IMS Created Image Stores Incorrect Metadata](known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
+
+### Deleting and recovering IMS resources
+
+* [Soft Deleted IMS Recipe Always Has `require_dkms=true`](known_issues/ims_soft_deleted_recipe_always_has_require_dkms_true.md)
+* [Soft Deleted IMS Recipe Always Has `arch=x86_64`](known_issues/ims_soft_deleted_recipe_always_assigned_arch_x86_64.md)
+* [Soft Deleted IMS Image Always Has `arch=x86_64`](known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64.md)
+* [Soft Deleted IMS Image Metadata is Lost](known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
 
 ## Kubernetes
 

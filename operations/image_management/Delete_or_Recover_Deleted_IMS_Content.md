@@ -1,5 +1,8 @@
 # Delete or Recover Deleted IMS Content
 
+> There are known issues related to deleting and recovering resources in IMS. For more information, see
+> [Deleting and recovering IMS resources](../../troubleshooting/README.md#deleting-and-recovering-ims-resources).
+
 The Image Management System \(IMS\) manages user supplied SSH public Keys, customizable image recipes,
 images, and IMS jobs that are used to build or customize images. In previous versions of IMS, deleting
 an IMS public key, recipe, or image resulted in that item being permanently deleted. Additionally, IMS
@@ -64,6 +67,9 @@ the deleted collection.
 * IMS and Nexus are running.
 
 ## Delete an IMS artifact
+
+> There are known issues related to deleting and recovering resources in IMS. For more information, see
+> [Deleting and recovering IMS resources](../../troubleshooting/README.md#deleting-and-recovering-ims-resources).
 
 Use the `cray` CLI utility to delete either soft delete or hard delete an IMS public key, recipe, or image.
 
@@ -177,6 +183,9 @@ Deleting an IMS public key, recipe, or image record performs the following actio
         ```
 
 ## Recover Deleted IMS Artifacts
+
+> There are known issues related to deleting and recovering resources in IMS. For more information, see
+> [Deleting and recovering IMS resources](../../troubleshooting/README.md#deleting-and-recovering-ims-resources).
 
 Use the IMS undelete command to update the record\(s\) within the deleted collection for an IMS public key, recipe, or image.
 
