@@ -1,6 +1,8 @@
-# Setup Rack Resiliency Post Install/Upgrade
+# Enable Rack Resiliency on a Running System
 
-Rack Resiliency can be enabled and setup anytime post install or upgrade of CSM 1.7.0.
+Rack Resiliency can be enabled and configured on a system running CSM 1.7+.
+For details on doing this during an install or upgrade to CSM 1.7, see
+[Enable Rack Resiliency During Install or Upgrade](Enable_Rack_Resiliency_During_Install_or_Upgrade.md).
 
 1. [Rack Resiliency Enablement](#step-1-rack-resiliency-enablement)
 2. [Run Rack Resiliency CFS Ansible plays](#step-2-run-rack-resiliency-cfs-ansible-plays)

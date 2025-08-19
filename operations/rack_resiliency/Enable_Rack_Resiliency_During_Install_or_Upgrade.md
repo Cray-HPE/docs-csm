@@ -1,6 +1,8 @@
-# Enabling Rack Resiliency
+# Enable Rack Resiliency During Install or Upgrade
 
-Enabling Rack Resiliency is the first step for setting up Rack Resiliency.
+This page documents the procedures for enabling and configuring Rack Resiliency during
+a CSM install or upgrade. For information on how to do this on a running system, see
+[Enable Rack Resiliency on a Running System](Enable_Rack_Resiliency_on_a_Running_System.md).
 
 **NOTE:**
 
@@ -29,7 +31,3 @@ During an upgrade from CSM 1.6 to CSM 1.7, if an administrator wishes to enable 
 they must do so in the
 [Rack Resiliency](../../operations/iuf/workflows/product_delivery.md#rack-resiliency) step of the
 [Product Delivery](../../operations/iuf/workflows/product_delivery.md) procedure.
-
-## Post install or upgrade
-
-To enable Rack Resiliency anytime after an install or upgrade to CSM 1.7 refer to [Rack Resiliency Enablement](Enable_and_setup_Rack_Resiliency_post_install_upgrade.md#step-1-rack-resiliency-enablement).

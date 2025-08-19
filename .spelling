@@ -1099,7 +1099,7 @@ lockout-tagout
 - operations/rack_resiliency/Zones.md
 MPFDs
 
-- operations/rack_resiliency/Enable_and_setup_Rack_Resiliency_post_install_upgrade.md
+- operations/rack_resiliency/Enable_Rack_Resiliency_on_a_Running_System.md
 clusterpolicy
 
 - operations/README.md

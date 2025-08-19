@@ -56,9 +56,11 @@
 
 * The optional [Rack Resiliency](operations/rack_resiliency/README.md) feature enhances CSM
   resiliency by offering protection to the management plane against rack-level failures.
-    * This feature is disabled by default
-    * This feature **can only be enabled during an upgrade from CSM 1.6 to CSM 1.7 or an install of CSM 1.7**.
-    * See [Enabling Rack Resiliency](operations/rack_resiliency/Enabling_Rack_Resiliency.md) for more details.
+    * This feature is disabled by default.
+    * For details on enabling this during an install or upgrade, see
+      [Enable Rack Resiliency During Install or Upgrade](operations/rack_resiliency/Enable_Rack_Resiliency_During_Install_or_Upgrade.md).
+    * For details on enabling this feature operationally outside of an install or upgrade, see
+      [Enable Rack Resiliency on a Running System](operations/rack_resiliency/Enable_Rack_Resiliency_on_a_Running_System.md).
 
 ### iSCSI SBPS
 

@@ -30,9 +30,10 @@ By default, Rack Resiliency zone names will be the component name ([xname](../..
 the associated [physical rack](README.md#physical-racks) (which will be the same as the first 5 characters
 of the xnames of the associated NCNs. For example, `x3000` or `x3001`.
 
-When first [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md), administrators can optionally specify
-prefixes to be used for Kubernetes zone names, Ceph zone names, or both. These prefixes will be prepended
-to the default zone names described above, separated by a dash (`-`) character (e.g. `myprefix-x3002`).
+When first [Enabling and configuring](README.md#enable-and-configure) Rack Resiliency, administrators can
+optionally specify prefixes to be used for Kubernetes zone names, Ceph zone names, or both. These prefixes
+will be prepended to the default zone names described above, separated by a dash (`-`) character
+(e.g. `myprefix-x3002`).
 
 **NOTE:** Prefixes can only be specified during the initial enablement process. They cannot be
 changed, removed, or set later.

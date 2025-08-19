@@ -406,7 +406,8 @@ services due to a single rack failure. This feature prevents system-wide outages
 successful scheduling and execution of user jobs.
 
 - [Rack Resiliency](rack_resiliency/README.md)
-- [Enabling Rack Resiliency](rack_resiliency/Enabling_Rack_Resiliency.md)
+- [Enable Rack Resiliency During Install or Upgrade](rack_resiliency/Enable_Rack_Resiliency_During_Install_or_Upgrade.md)
+- [Enable Rack Resiliency on a Running System](rack_resiliency/Enable_Rack_Resiliency_on_a_Running_System.md)
 - [Manage Critical Services](rack_resiliency/Manage_Critical_Services.md)
 - [Critical Services](rack_resiliency/Critical_Services.md)
 - [Zones](rack_resiliency/Zones.md)
