@@ -3,7 +3,7 @@
 Rack Resiliency can be enabled and setup anytime post install or upgrade of CSM 1.7.0.
 
 1. [Rack Resiliency Enablement](#step-1-rack-resiliency-enablement)
-2. [Run Rack Resiliency CFS Ansible plays](#step-2-run-rack-resiliency-cfs-Ansible-plays)
+2. [Run Rack Resiliency CFS Ansible plays](#step-2-run-rack-resiliency-cfs-ansible-plays)
 3. [Deploy `cray-rrs` helm chart](#step-3-deploy-cray-rrs-helm-chart)
 4. [Perform rollout restart of critical services](#step-4-perform-rollout-restart-of-critical-services)
 
