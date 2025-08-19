@@ -42,9 +42,9 @@ pg_logdir=/home/postgres/pgdata/pgroot/pg_log
 while read namespace pod; do
   echo "INFO: Checking ${pod} in namespace ${namespace}"
   last_log=$(kubectl -n ${namespace} exec ${pod} -- sh -c "ls -tr1 ${pg_logdir}/*.csv | tail -1")
-  found=$(kubectl -n ${namespace} exec ${pod}  -- sh -c "tail -50 ${last_log} | egrep -c 'cannot set transaction read-write mode during recovery|cannot execute UPDATE in a read-only transaction'" 2>/dev/null)
-  if (( found > 0 )); then
+  found=$(kubectl -n ${namespace} exec ${pod} -- sh -c "tail -50 ${last_log} | egrep -c 'cannot set transaction read-write mode during recovery|cannot execute UPDATE in a read-only transaction'" 2>/dev/null)
+  if ((found > 0)); then
     echo "WARN: Restarting PostgreSQL replica Pod ${pod} that is receiving UPDATE transactions"
-    kubectl -n ${namespace} delete pod ${pod} >/dev/null
+    kubectl -n ${namespace} delete pod ${pod} > /dev/null
   fi
 done < <(kubectl get pod -A -l spilo-role=replica -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name --no-headers)
