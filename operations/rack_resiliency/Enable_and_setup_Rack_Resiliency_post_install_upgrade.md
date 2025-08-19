@@ -3,7 +3,7 @@
 Rack Resiliency can be enabled and setup anytime post install or upgrade of CSM 1.7.0.
 
 1. [Rack Resiliency Enablement](#step-1-rack-resiliency-enablement)
-2. [Run Rack Resiliency CFS ansible plays](#step-2-run-rack-resiliency-cfs-ansible-plays)
+2. [Run Rack Resiliency CFS Ansible plays](#step-2-run-rack-resiliency-cfs-Ansible-plays)
 3. [Deploy `cray-rrs` helm chart](#step-3-deploy-cray-rrs-helm-chart)
 4. [Perform rollout restart of critical services](#step-4-perform-rollout-restart-of-critical-services)
 
@@ -86,9 +86,9 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
     ceph_zone_prefix: my-ceph-prefix
     ```
 
-## Step 2: Run Rack Resiliency CFS ansible plays
+## Step 2: Run Rack Resiliency CFS Ansible plays
 
-Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency. Follow the below procedure to deploy the RR ansible plays post install or upgrade of CSM 1.7.0:
+Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency. Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM 1.7.0:
 
 ### Deploying Kubernetes setup flow
 
@@ -120,19 +120,19 @@ Now continue with the [steps for Rack Resiliency setup](#steps-for-rack-resilien
 
 ### Steps for Rack Resiliency setup
 
-#### 1. (`ncn-m#`) Get the name of latest config applied on the cluster.
+#### 1. (`ncn-m#`) Get the name of latest config applied on the cluster
 
 ```bash
 CONFIG=$( cray cfs components describe $XNAME --format json | jq -r '.desiredConfig' )
 ```
 
-#### 2. (`ncn-m#`) Get the latest config applied on the cluster.
+#### 2. (`ncn-m#`) Get the latest config applied on the cluster
 
 ```bash
 cray cfs configurations describe $CONFIG --format json | jq -r '. | del(.name) | del(.lastUpdated)' > ${CONFIG}.json
 ```
 
-#### 3. (`ncn-m#`) Check if the rack resiliency playbook is present in the configuration.
+#### 3. (`ncn-m#`) Check if the rack resiliency playbook is present in the configuration
 
 ```bash
 cat ${CONFIG}.json | grep rack_resiliency_for_mgmt_nodes.yml
@@ -186,8 +186,9 @@ vim ${CONFIG}.json
 ```
 
 **NOTE**:
-* `commit`: replace the commit id in step 3.2 with the commit id fetched from step 3.1.
-* `name`, `cloneurl` and `playbook` can be left as it is.
+
+- `commit`: replace the commit id in step 3.2 with the commit id fetched from step 3.1.
+- `name`, `cloneurl` and `playbook` can be left as it is.
 
 3.3. (`ncn-m#`) Update the config.
 
@@ -195,13 +196,14 @@ vim ${CONFIG}.json
 cray cfs configurations update --file ${CONFIG}.json ${CONFIG}
 ```
 
-#### 4. (`ncn-m#`) Perform the component update.
+#### 4. (`ncn-m#`) Perform the component update
 
 ```bash
 cray cfs components update $XNAME --state []
 ```
 
-#### 5. (`ncn-m#`) Wait till configuration status of the component changes to configured.
+#### 5. (`ncn-m#`) Wait till configuration status of the component changes to configured
+
 ```bash
 cray cfs components describe $XNAME
 ```
@@ -225,13 +227,14 @@ Example output:
 /etc/cray/upgrade/csm/test-activity/2148565/media/csm-1.7.0-rc.2
 ```
 
-3. (`ncn-mw#`) Install the helm chart on the cluster.
+1. (`ncn-mw#`) Install the helm chart on the cluster.
 
 ```bash
 helm upgrade --install -n rack-resiliency cray-rrs $CSM_ARTI_DIR/helm/cray-rrs-1.1.0.tgz
 ```
 
 Example output:
+
 ```text
 NAME: cray-rrs
 LAST DEPLOYED: Tue Aug 19 03:31:34 2025
@@ -243,7 +246,7 @@ NOTES:
 Installation info for chart cray-rrs:
 ```
 
-- Post installation of `cray-rrs` helm chart, verify all Rack Resiliency related objects using the below commands:
+Post installation of `cray-rrs` helm chart, verify all Rack Resiliency related objects using the below commands:
 
 1. (`ncn-mw#`) To check the resources in `rack-resiliency` namespace use:
 
@@ -267,7 +270,7 @@ NAME                                  DESIRED   CURRENT   READY   AGE
 replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
 ```
 
-2. (`ncn-mw#`) Check the `clusterpolicy`
+1. (`ncn-mw#`) Check the `clusterpolicy`
 
 ```bash
 kubectl get clusterpolicy

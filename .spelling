@@ -1099,6 +1099,9 @@ lockout-tagout
 - operations/rack_resiliency/Zones.md
 MPFDs
 
+- operations/rack_resiliency/Enable_and_setup_Rack_Resiliency_post_install_upgrade.md
+clusterpolicy
+
 - operations/README.md
 Alerta
 
