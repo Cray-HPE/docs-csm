@@ -1,4 +1,4 @@
-# Setup Rack Resiliency Post Install
+# Setup Rack Resiliency Post Install/Upgrade
 
 ## Step 1: Rack Resiliency Enablement
 
@@ -107,8 +107,10 @@ cd csm-config-management
 
 #### 1. (`ncn-m#`) Get the xname of the master node to personalize.
 
+**For Example:**
+
 ```bash
-XNAME=$( ssh <selected-master-node> cat /etc/cray/xname )
+XNAME=$( ssh ncn-m001 cat /etc/cray/xname )
 ```
 
 #### 2. (`ncn-m#`) Get the name of latest config applied on the cluster.
@@ -117,7 +119,7 @@ XNAME=$( ssh <selected-master-node> cat /etc/cray/xname )
 CONFIG=$( cray cfs components describe $XNAME --format json | jq -r '.desiredConfig' )
 ```
 
-#### 3. (`ncn-m#`) Get the latest applied config on the cluster.
+#### 3. (`ncn-m#`) Get the latest config applied on the cluster.
 
 ```bash
 cray cfs configurations describe $CONFIG --format json | jq -r '. | del(.name) | del(.lastUpdated)' > ${CONFIG}.json
@@ -132,13 +134,12 @@ cat ${CONFIG}.json | grep rack_resiliency_for_mgmt_nodes.yml
 Example Output:
 
 ```text
-ncn-m001:~/ # cat ${CONFIG}.json | grep rack_resiliency_for_mgmt_nodes.yml
-      "playbook": "rack_resiliency_for_mgmt_nodes.yml"
+"playbook": "rack_resiliency_for_mgmt_nodes.yml"
 ```
 
-- If the above command returns the output shown above then go to [step 5](#5-ncn-m-perform-the-component-update), else add the rack resiliency layer using procedure below:
+**NOTE:** If the above command returns the output shown above, then go to [step 5](#5-ncn-m-perform-the-component-update), else add the rack resiliency layer using the procedure below:
 
-4.1. (`ncn-m#`) Get the corresponding `csm-config` branch (@VCS) from product catalog for CSM 1.7.0 version.
+4.1. (`ncn-m#`) Get the corresponding `csm-config` branch (@VCS) from the product catalog for CSM 1.7.0 version.
 
 ```bash
 kubectl get cm -n services cray-product-catalog -o yaml | yq - r 'data.csm' | grep ^1.7.0 -A 10
