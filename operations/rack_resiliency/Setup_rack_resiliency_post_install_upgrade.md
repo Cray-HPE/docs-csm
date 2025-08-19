@@ -1,5 +1,12 @@
 # Setup Rack Resiliency Post Install/Upgrade
 
+Rack Resiliency can be enabled and setup anytime post install or upgrade of CSM 1.7.0.
+
+1. [Rack Resiliency Enablement](#step-1-rack-resiliency-enablement)
+2. [Run Rack Resiliency CFS ansible plays](#step-2-run-rack-resiliency-cfs-ansible-plays)
+3. [Deploy `cray-rrs` helm chart](#step-3-deploy-cray-rrs-helm-chart)
+4. [Perform rollout restart of critical services](#step-4-perform-rollout-restart-of-critical-services)
+
 ## Step 1: Rack Resiliency Enablement
 
 Follow these steps to enable (and optionally customize) Rack Resiliency.
@@ -79,33 +86,13 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
     ceph_zone_prefix: my-ceph-prefix
     ```
 
-## Step 2: Deploy Rack Resiliency CFS ansible plays
+## Step 2: Run Rack Resiliency CFS ansible plays
 
-### Setup flows
+Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency. Follow the below procedure to deploy the RR ansible plays post install or upgrade of CSM 1.7.0:
 
-Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency. Since the ansible roles for setting up Kubernetes and Ceph [zones](Zones.md) have to be applied post install or upgrade, the below procedure has to be followed:
+### Deploying Kubernetes setup flow
 
-### Checking the latest Rack Resiliency ansible plays in gitea
-
-1. (`ncn#`) Log into VCS and clone `csm-config-management.git` @ VCS.
-
-```bash
-VCS_USER=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_username}} | base64 --decode)
-VCS_PASS=$(kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode)
-git clone "https://${VCS_USER}:${VCS_PASS}@api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
-```
-
-2. Navigate to `csm-config-management`
-
-```bash
-cd csm-config-management
-```
-
-3. The `rack_resiliency_for_mgmt_nodes.yml` file present inside the `csm-config-management` directory is the playbook for setting up Kubernetes and Ceph zones. This playbook also performs the [common preparation flow](Setup_of_Rack_Resiliency.md#common-preparation-flow) before setting up the zones.
-
-### Deploying Kubernetes Ansible flow
-
-For Kubernetes zoning, select a master node to personalize
+For Kubernetes zoning, select a master node to personalize.
 
 (`ncn-m#`) Get the xname of the selected master node.
 
@@ -117,7 +104,7 @@ XNAME=$( ssh ncn-m001 cat /etc/cray/xname )
 
 Now continue with the [steps for Rack Resiliency setup](#steps-for-rack-resiliency-setup)
 
-### Deploying Ceph Ansible flow
+### Deploying Ceph setup flow
 
 For Ceph zoning, select a storage node to personalize.
 
@@ -193,7 +180,7 @@ vim ${CONFIG}.json
       "commit": "9c30b68a29878996761f3c8280d6e57dfb79e8c8",
       "name": "csm-ncn-rack-resiliency",
       "playbook": "rack_resiliency_for_mgmt_nodes.yml"
-    }
+    },
   ]
 }
 ```
@@ -202,7 +189,7 @@ vim ${CONFIG}.json
 * `commit`: replace the commit id in step 3.2 with the commit id fetched from step 3.1.
 * `name`, `cloneurl` and `playbook` can be left as it is.
 
-3.3. (`ncn-m#`) Update the config
+3.3. (`ncn-m#`) Update the config.
 
 ```bash
 cray cfs configurations update --file ${CONFIG}.json ${CONFIG}
@@ -223,9 +210,9 @@ In case of failure refer to [CFS troubleshooting guide](../configuration_managem
 
 ## Step 3: Deploy `cray-rrs` helm chart
 
-The chart is deployed in the `rack-resiliency` namespace using the following procedure:
+Deploy [`cray-rrs`](cray-rrs_Deployment.md) in `rack-resiliency` namespace using the following procedure:
 
-1. (`ncn-mw#`) Get current CSM installation location
+1. (`ncn-mw#`) Get current CSM installation location.
 
 ```bash
 . /etc/cray/upgrade/csm/myenv
@@ -299,7 +286,6 @@ prepend-registry                     true        true         True    39d   Read
 
 **Note** : Ensure that the clusterpolicy `insert-labels-topology-constraints` is in `Ready` state.
 
-
-## Step 4: Perform a rollout restart of critical services
+## Step 4: Perform rollout restart of critical services
 
 Perform rollout restart of the critical services using the [script](../../upgrade/scripts/k8s/rr_critical_service_restart.py)

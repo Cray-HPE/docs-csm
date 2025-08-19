@@ -16,6 +16,7 @@
     - [RRS CLI](#rrs-cli)
     - [RRS API](#rrs-api)
 - [Architecture](#architecture)
+- [Enable and setup Rack Resiliency post install or upgrade of CSM](Setup_rack_resiliency_post_install_upgrade.md)
 - [Troubleshooting](#troubleshooting)
 
 ## Introduction

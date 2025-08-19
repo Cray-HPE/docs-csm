@@ -5,9 +5,9 @@ Enabling Rack Resiliency is the first step for setting up Rack Resiliency.
 **NOTE:**
 
 * By default, the Rack Resiliency feature is disabled.
-* Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an
-  upgrade from CSM 1.6 to CSM 1.7.
-* Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
+* Rack Resiliency can be enabled during fresh install of CSM 1.7 or an
+  upgrade from CSM 1.6 to CSM 1.7. Also, it can be enabled anytime after an install or upgrade.
+* Rack Resiliency cannot be disabled after it has been enabled.
 
 At the same time that Rack Resiliency is enabled, administrators also have the option
 to customize the [Zone names](Zones.md#zone-names) for the zones that will be created
@@ -28,3 +28,7 @@ During an upgrade from CSM 1.6 to CSM 1.7, if an administrator wishes to enable 
 they must do so in the
 [Rack Resiliency](../../operations/iuf/workflows/product_delivery.md#rack-resiliency) step of the
 [Product Delivery](../../operations/iuf/workflows/product_delivery.md) procedure.
+
+## Post install or upgrade
+
+To enable Rack Resiliency anytime after an install or upgrade to CSM 1.7 refer to [Rack Resiliency Enablement](Setup_rack_resiliency_post_install_upgrade.md#step-1-rack-resiliency-enablement).
