@@ -6,7 +6,8 @@ Enabling Rack Resiliency is the first step for setting up Rack Resiliency.
 
 * By default, the Rack Resiliency feature is disabled.
 * Rack Resiliency can be enabled during fresh install of CSM 1.7 or an
-  upgrade from CSM 1.6 to CSM 1.7. Also, it can be enabled anytime after an install or upgrade.
+  upgrade from CSM 1.6 to CSM 1.7. It can also be enabled as an operational procedure on a
+  system running CSM 1.7+, outside of an install or upgrade.
 * Rack Resiliency cannot be disabled after it has been enabled.
 
 At the same time that Rack Resiliency is enabled, administrators also have the option
