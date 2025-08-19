@@ -31,4 +31,4 @@ they must do so in the
 
 ## Post install or upgrade
 
-To enable Rack Resiliency anytime after an install or upgrade to CSM 1.7 refer to [Rack Resiliency Enablement](Setup_rack_resiliency_post_install_upgrade.md#step-1-rack-resiliency-enablement).
+To enable Rack Resiliency anytime after an install or upgrade to CSM 1.7 refer to [Rack Resiliency Enablement](Enable_and_setup_Rack_Resiliency_post_install_upgrade.md#step-1-rack-resiliency-enablement).
