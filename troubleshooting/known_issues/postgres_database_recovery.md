@@ -40,29 +40,55 @@ continues to send transactions to the former leader which is now a replica and c
 
 ## Solution
 
-### Apply workaround
+### Option 1 - Apply automated workaround
 
-The Patroni database monitor usually relies on the `kubernetes` service to communicate with the Kubernetes API. The following parameter causes
-Patroni to resolve the list of API nodes behind the service and connect directly to them reducing the chance of timeout or failure when performing
-API calls.
+The workaround is to restart either the PostgreSQL replica that is receiving UPDATE transactions or the service that is sending them. The following script can automatically detect this condition and restart affected PostgreSQL replicas.
 
-1. (`ncn-mw#`) Apply the `postgres-pod` `RoleBinding` to allow the PostgreSQL clusters to access the Kubernetes API endpoint.
+**`NOTE`** Do not run this script multiple times in quick succession. The script may detect a false positive and restart replicas unnecessarily if the PostgreSQL server logs have not yet advanced beyond the detection threshold of the last 50 log entries.
 
-   ```bash
-   kubectl apply -f /usr/share/doc/csm/upgrade/scripts/upgrade/postgres-pod.yaml
-   ```
-
-1. (`ncn-mw#`) Update the `postgres-nodes-pod-env` ConfigMap.
+1. (`ncn-mw#`) Run the `check_postgres_replica_transactions.sh` script.
 
    ```bash
-   kubectl -n services patch cm postgres-nodes-pod-env -p '{"data":{"PATRONI_KUBERNETES_BYPASS_API_SERVICE":"true"}}'
+   /usr/share/doc/csm/troubleshooting/scripts/check_postgres_replica_transactions.sh
    ```
 
-This workaround will cause the `cray-postgres-operator` to perform a rolling restart of all the PostgreSQL clusters to apply the parameter.
+   Example output:
 
-### Restart affected services
+   ```console
+   INFO: Checking cray-nls-postgres-0 in namespace argo
+   INFO: Checking cray-nls-postgres-1 in namespace argo
+   INFO: Checking capsules-dispatch-server-postgres-0 in namespace services
+   INFO: Checking capsules-dispatch-server-postgres-1 in namespace services
+   INFO: Checking capsules-warehouse-server-postgres-0 in namespace services
+   INFO: Checking capsules-warehouse-server-postgres-1 in namespace services
+   INFO: Checking cfs-ara-postgres-0 in namespace services
+   INFO: Checking cfs-ara-postgres-1 in namespace services
+   INFO: Checking cray-console-data-postgres-1 in namespace services
+   INFO: Checking cray-dhcp-kea-postgres-0 in namespace services
+   INFO: Checking cray-dhcp-kea-postgres-2 in namespace services
+   INFO: Checking cray-dns-powerdns-postgres-0 in namespace services
+   INFO: Checking cray-dns-powerdns-postgres-1 in namespace services
+   INFO: Checking cray-hms-badger-postgres-0 in namespace services
+   INFO: Checking cray-hms-badger-postgres-2 in namespace services
+   INFO: Checking cray-sls-postgres-0 in namespace services
+   INFO: Checking cray-sls-postgres-2 in namespace services
+   INFO: Checking cray-smd-postgres-0 in namespace services
+   INFO: Checking cray-smd-postgres-1 in namespace services
+   INFO: Checking gitea-vcs-postgres-1 in namespace services
+   INFO: Checking gitea-vcs-postgres-2 in namespace services
+   INFO: Checking keycloak-postgres-0 in namespace services
+   INFO: Checking keycloak-postgres-2 in namespace services
+   INFO: Checking cray-spire-postgres-1 in namespace spire
+   INFO: Checking cray-spire-postgres-2 in namespace spire
+   WARN: Restarting PostgreSQL replica Pod cray-spire-postgres-2 that is receiving UPDATE transactions
+   INFO: Checking spire-postgres-0 in namespace spire
+   WARN: Restarting PostgreSQL replica Pod spire-postgres-0 that is receiving UPDATE transactions
+   INFO: Checking spire-postgres-1 in namespace spire
+   ```
 
-If the workaround was not previously applied then it will be necessary to restart affected services in order to force them to connect to the correct
+### Option 2 - Manually restart affected services
+
+It is necessary to restart affected services or their database in order to force them to connect to the correct
 instance of the database.
 
 #### Spire
