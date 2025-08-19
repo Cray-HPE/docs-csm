@@ -329,7 +329,7 @@ This procedure is only necessary after adding critical services to RR.
     > See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
     ```bash
-    python3 /usr/share/doc/csm/upgrade/scripts/upgrade/scripts/k8s/rr_critical_service_restart.py
+    python3 /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
     ```
 
 ### Remove services from Kyverno policy

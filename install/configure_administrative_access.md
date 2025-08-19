@@ -232,7 +232,7 @@ will generate the full CFS configuration including additional CSM layers and all
 (`ncn-mw#`) Restart the critical services for Rack Resiliency.
 
 ```bash
-python3 /usr/share/doc/csm/upgrade/scripts/upgrade/scripts/k8s/rr_critical_service_restart.py
+python3 /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
 ```
 
 ## 11. Proceed to next topic
