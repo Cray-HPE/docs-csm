@@ -35,11 +35,11 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
 
 3. (`ncn-mw#`) Optionally, set custom zone name prefixes.
 
-    See [Zone names](../../rack_resiliency/Zones.md#zone-names) for details
+    See [Zone names](Zones.md#zone-names) for details
     on reasons for doing this and restrictions on names. This is optional; prefixes are not
     required. However, **prefixes cannot be changed, set, or removed later**.
 
-    1. Optionally, set a site-specific [Kubernetes zone](../../rack_resiliency/Zones.md#kubernetes-zones) prefix.
+    1. Optionally, set a site-specific [Kubernetes zone](Zones.md#kubernetes-zones) prefix.
 
         > In the following command, replace `k8s-prefix-string` with the desired Kubernetes zone prefix.
 
@@ -48,7 +48,7 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
             'spec.kubernetes.services.rack-resiliency.k8s_zone_prefix' "k8s-prefix-string"
         ```
 
-    2. Optionally, set a site-specific [Ceph zone](../../rack_resiliency/Zones.md#ceph-zones) prefix.
+    2. Optionally, set a site-specific [Ceph zone](Zones.md#ceph-zones) prefix.
 
         > In the following command, replace `ceph-prefix-string` with the desired Ceph zone prefix.
 
@@ -288,4 +288,4 @@ prepend-registry                     true        true         True    39d   Read
 
 ## Step 4: Perform rollout restart of critical services
 
-Perform rollout restart of the critical services using the [script](../../upgrade/scripts/k8s/rr_critical_service_restart.py)
+Perform rollout restart of the critical services using the [script](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
