@@ -1,18 +1,18 @@
 # Move Unmanaged Ceph OSDs
 
-**`IMPORTANT:`** This document is addressing how to move all unmanaged OSDs when they should
-be managed by the ceph orchestrator. If some OSDs are intentionally unmanaged, do not use
+**`IMPORTANT:`** This document addresses how to move OSDs that are unmanaged, but should actually
+be managed by the Ceph orchestrator. For OSDs that are intentionally unmanaged, do not use
 this document to move them.
 
-(`ncn-s#`) Check to see if you have unmanaged OSDs:
+(`ncn-s#`) Check for unmanaged OSDs.
 
 ```bash
 ceph orch ls | awk 'NR==1 || /osd/'
 ```
 
-Example output (the example shows 8 unmanaged OSDs with `osd` service name):
+Example output (the following example shows eight unmanaged OSDs with `osd` service name):
 
-```bash
+```text
 NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT 
 osd                                           8  5m ago     -    <unmanaged>
 osd.all-available-devices                    16  5m ago     6d   *
@@ -38,17 +38,13 @@ spec:
 ## Prerequisites
 
 This procedure requires administrative privileges and assumes `osd` as the service name for
-unmanaged OSDs as shown in the example output above.
+unmanaged OSDs, as shown in the example output above.
 
 ## Procedure
 
-1. Log in as `root` on the first storage node \(`ncn-s001`\).
+Perform the following steps on every storage node that has unintentionally unmanaged OSDs,
 
-    ```bash
-    ssh ncn-s001
-    ```
-
-1. (`ncn-s#`) Create a service specification `yaml` file with the following content.
+1. (`ncn-s#`) Create a service specification YAML file with the following content:
 
     ```yaml
     service_type: osd
@@ -63,7 +59,7 @@ unmanaged OSDs as shown in the example output above.
       objectstore: bluestore
     ```
 
-1. (`ncn-s#`) Apply the service specification defined in the above `yaml` file.
+1. (`ncn-s#`) Apply the service specification defined in the above YAML file.
 
     ```bash
     ceph orch apply -i <above_yaml_file>
@@ -77,7 +73,7 @@ unmanaged OSDs as shown in the example output above.
 
     Example output (no `unmanaged` line):
 
-    ```text
+    ```yaml
     service_type: osd
     service_name: osd
     placement:
@@ -89,7 +85,7 @@ unmanaged OSDs as shown in the example output above.
       objectstore: bluestore
     ```
 
-1. (`ncn-s#`) Verify that there are no unmanaged OSDs:
+1. (`ncn-s#`) Verify that there are no unmanaged OSDs.
 
     ```bash
     ceph orch ls | awk 'NR==1 || /osd/'
@@ -97,7 +93,7 @@ unmanaged OSDs as shown in the example output above.
 
     Example output (`osd` service no longer shows `<unmanaged>` placement):
 
-    ```bash
+    ```text
     NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT 
     osd                                           8  10m ago    -    *
     osd.all-available-devices                    16  10m ago    7d   *
@@ -105,7 +101,7 @@ unmanaged OSDs as shown in the example output above.
 
 1. (`ncn-s#`) On each storage node, identify OSDs with `osd` service name.
 
-    The following example shows 8 such OSDs on one storage node.
+    The following example shows eight such OSDs on one storage node.
 
     ```bash
     cephadm ls | jq -r '.[] | select(.service_name=="osd").name'
@@ -124,12 +120,12 @@ unmanaged OSDs as shown in the example output above.
     osd.23
     ```
 
-**`NOTE:`** Be sure to replace the `<CLUSTER_ID>` and `<OSD_ID>` field in the following
-steps with the actual Ceph cluster ID and OSD ID being updated.
-For example, if the OSD is `osd.12`, the `<OSD_ID>` value would be 12.
-
 1. (`ncn-s#`) For each OSD from the above output, update its service name to
-`osd.all-available-devices` as follows.
+    `osd.all-available-devices` as follows.
+
+    > Be sure to replace the `<CLUSTER_ID>` and `<OSD_ID>` field in the following
+    > command with the actual Ceph cluster ID and OSD ID being updated.
+    > For example, if the OSD is `osd.12`, the `<OSD_ID>` value would be 12.
 
     ```bash
     cd /var/lib/ceph/<CLUSTER_ID>
@@ -137,7 +133,7 @@ For example, if the OSD is `osd.12`, the `<OSD_ID>` value would be 12.
     ```
 
 1. (`ncn-s#`) After all OSDs from the above list have been updated on the storage node,
-verify no OSDs have the service name other than `osd.all-available-devices`.
+    verify no OSDs have the service name other than `osd.all-available-devices`.
 
     ```bash
     for f in osd.*/unit.meta; do jq -r .service_name "$f"; done | uniq
@@ -149,8 +145,7 @@ verify no OSDs have the service name other than `osd.all-available-devices`.
     osd.all-available-devices
     ```
 
-1. (`ncn-s#`) Repeat the above steps on other storage nodes if they also have
-unmanaged OSDs.
+1. (`ncn-s#`) Repeat the above steps on other storage nodes if they also have unmanaged OSDs.
 
 1. (`ncn-s#`) After all such OSDs have been updated, wait for a minute and verify that `osd`
 service name has zero OSDs by running the following command.
@@ -167,9 +162,9 @@ service name has zero OSDs by running the following command.
     osd.all-available-devices                    24  20s ago    7d   *
     ```
 
-**`NOTE:`** If `osd` service name does not show zero OSDs, it's likely that you neglected
-to perform the update on some OSDs or from some storage nodes. Make sure no OSD has `osd`
-service name before proceeding.
+    **`NOTE:`** A non-zero count of OSDs under the `osd` service name may indicate that the update was not
+    applied to certain OSDs or storage nodes. Ensure that no OSDs are associated with the `osd` service name
+    before proceeding.
 
 1. (`ncn-s#`) Remove `osd` service name.
 
