@@ -78,6 +78,7 @@ spec:
         command: |-
           cd {{ getEnv "CSM_PATH" }}
           ./install.sh
+          exit 1
         troubleshooting: |-
           In the event that `install.sh` does not complete successfully, consult the
           [known issues](#known-issues) below to resolve potential problems and then try
