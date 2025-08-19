@@ -4,7 +4,7 @@ The Configuration Framework Service \(CFS\) manages its own keys separate from k
 communication between CFS and the components or images that it is configuring.
 These are separate from the keys used by users and should not need to be managed.
 
-* [`cfs-state-reporter` service]
+* [`cfs-state-reporter` service](#cfs-state-reporter-service)
 * [Check `cfs-state-reporter` health](#check-cfs-state-reporter-health)
 * [`cfs-state-reporter` problem scenarios](#cfs-state-reporter-problem-scenarios)
   * [`cfs-state-reporter` failed](#cfs-state-reporter-failed)
