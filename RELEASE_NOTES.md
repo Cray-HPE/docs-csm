@@ -1,54 +1,54 @@
 # Cray System Management (CSM) - Release Notes
 
 * [New](#new)
-* [Resiliency](#resiliency)
-* [iSCSI SBPS](#iscsi-sbps)
-* [Monitoring](#monitoring)
-* [Miscellaneous functionality](#miscellaneous-functionality)
-* [`cray-site-init` updates](#cray-site-init-updates)
-    * [Main Feature](#main-feature)
-        * [`csi patch csm ipv6`](#csi-patch-csm-ipv6)
-            * [Removing/Undoing IPv6](#removingundoing-ipv6)
-            * [Scoping](#scoping)
-        * [System administrator changes](#system-administrator-changes)
-    * [Flag changes](#flag-changes)
-    * [New sub-commands](#new-sub-commands)
-    * [Removed sub-commands](#removed-sub-commands)
-    * [Behavior changes](#behavior-changes)
-    * [Bugfixes](#bugfixes)
-* [New hardware support](#new-hardware-support)
-* [New software support](#new-software-support)
-* [Automation improvements](#automation-improvements)
-* [Base platform component upgrades](#base-platform-component-upgrades)
-* [Security improvements](#security-improvements)
-* [Customer-requested enhancements](#customer-requested-enhancements)
-* [Documentation enhancements](#documentation-enhancements)
+    * [Resiliency](#resiliency)
+    * [iSCSI SBPS](#iscsi-sbps)
+    * [Monitoring](#monitoring)
+    * [Miscellaneous functionality](#miscellaneous-functionality)
+    * [`cray-site-init` updates](#cray-site-init-updates)
+        * [Main Feature](#main-feature)
+            * [`csi patch csm ipv6`](#csi-patch-csm-ipv6)
+                * [Removing/Undoing IPv6](#removingundoing-ipv6)
+                * [Scoping](#scoping)
+            * [System administrator changes](#system-administrator-changes)
+        * [Flag changes](#flag-changes)
+        * [New sub-commands](#new-sub-commands)
+        * [Removed sub-commands](#removed-sub-commands)
+        * [Behavior changes](#behavior-changes)
+        * [Bugfixes](#bugfixes)
+    * [New hardware support](#new-hardware-support)
+    * [New software support](#new-software-support)
+    * [Automation improvements](#automation-improvements)
+    * [Base platform component upgrades](#base-platform-component-upgrades)
+    * [Security improvements](#security-improvements)
+    * [Customer-requested enhancements](#customer-requested-enhancements)
+    * [Documentation enhancements](#documentation-enhancements)
 * [Noteworthy changes](#noteworthy-changes)
 * [Test](#test)
 * [Bug fixes](#bug-fixes)
 * [Deprecations](#deprecations)
 * [Removals](#removals)
 * [Known issues](#known-issues)
-* [Security vulnerability exceptions in CSM 1.7](#security-vulnerability-exceptions-in-csm-17)
+    * [Security vulnerability exceptions in CSM 1.7](#security-vulnerability-exceptions-in-csm-17)
 * [Resolved CASTs](#resolved-casts)
 * [All resolved issues](#all-resolved-issues)
-* [Networking](#networking)
-* [IUF](#iuf)
-* [Cray SAT](#cray-sat)
-* [Security and Kyverno Policies](#security-and-kyverno-policies)
-* [Upgrades](#upgrades)
-* [DOCS](#docs)
-* [CASM](#casm)
-* [CASMCMS](#casmcms)
-* [CASMCVT](#casmcvt)
-* [CASMDIAG](#casmdiag)
-* [CASMHMS](#casmhms)
-* [CASMINST](#casminst)
-* [CASMMON](#casmmon)
-* [CASMPET](#casmpet)
-* [CASMSMF](#casmsmf)
-* [MTL](#mtl)
-* [USS](#uss)
+    * [Networking](#networking)
+    * [IUF](#iuf)
+    * [Cray SAT](#cray-sat)
+    * [Security and Kyverno Policies](#security-and-kyverno-policies)
+    * [Upgrades](#upgrades)
+    * [DOCS](#docs)
+    * [CASM](#casm)
+    * [CASMCMS](#casmcms)
+    * [CASMCVT](#casmcvt)
+    * [CASMDIAG](#casmdiag)
+    * [CASMHMS](#casmhms)
+    * [CASMINST](#casminst)
+    * [CASMMON](#casmmon)
+    * [CASMPET](#casmpet)
+    * [CASMSMF](#casmsmf)
+    * [MTL](#mtl)
+    * [USS](#uss)
 
 ## New
 
@@ -388,6 +388,11 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * Fixed an issue where the hardware inventory history table in the HSM/SMD database grew too large due to duplicate "Detected" events.
     * See [Remove Duplicate Detected Events From the HSM Postgres Database](operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md) for more information.
 * Fixed an issue in [PCS](glossary.md#power-control-service-pcs) where the supported power transitions on Gigabyte BMCs can go missing.
+* Fixed an issue in the Ansible code in the `csm-config-management` repository in the [Version Control Service (VCS)](glossary.md#version-control-service-vcs)
+  that caused some plays to end prematurely.
+    * The bug was only observed when root SSH credentials were not set in Vault.
+    * For more information on setting root credentials in Vault, see
+      [Configure the root Password and SSH Keys in Vault](operations/CSM_product_management/Configure_the_root_Password_and_SSH_Keys_in_Vault.md).
 
 ## Deprecations
 
@@ -1001,6 +1006,7 @@ CASMCMS-9468 Update kubernetes Python module versions
 CASMCMS-9473 Fix Loading DST signing keys from K8S secret for emulation builds.
 CASMCMS-9474 Add certs to CFS ansible container
 CASMCMS-9479 Investigate duplicates docker.io/library/redis: BOS / CFS
+CASMCMS-9512: csm.ssh roles problems when no root credentials in Vault
 ```
 
 ### CASMCVT
