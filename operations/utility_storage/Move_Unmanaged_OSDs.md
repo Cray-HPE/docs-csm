@@ -69,7 +69,7 @@ unmanaged OSDs as shown in the example output above.
     ceph orch apply -i <above_yaml_file>
     ```
 
-1. (`ncn-s#`) Verify that `osd` service name no longer has `unmanaged` set to `true`
+1. (`ncn-s#`) Verify that `osd` service name no longer has `unmanaged` set to `true`.
 
     ```bash
     ceph orch ls --service_name osd --export
