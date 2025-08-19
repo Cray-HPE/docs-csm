@@ -267,7 +267,6 @@ kubectl get all -n rack-resiliency
 Example output:
 
 ```text
-ncn-m001:~ # kubectl get all -n rack-resiliency 
 NAME                            READY   STATUS     RESTARTS   AGE
 pod/cray-rrs-86d4465c9d-qf6f5   2/2     Running   0          19h
 
@@ -290,7 +289,6 @@ kubectl get clusterpolicy
 Example Output:
 
 ```text
-ncn-m001:~ # kubectl get clusterpolicy
 NAME                                 ADMISSION   BACKGROUND   READY   AGE   MESSAGE
 check-image                          true        true         True    39d   Ready
 cluster-job-ttl                      true        true         True    39d   Ready
