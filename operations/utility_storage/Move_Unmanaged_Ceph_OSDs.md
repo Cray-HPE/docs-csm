@@ -4,6 +4,12 @@
 be managed by the Ceph orchestrator. For OSDs that are intentionally unmanaged, do not use
 this document to move them.
 
+* [Checking for unmanaged OSDs](#checking-for-unmanaged-osds)
+* [Prerequisites](#prerequisites)
+* [Procedure](#procedure)
+
+## Checking for unmanaged OSDs
+
 (`ncn-s#`) Check for unmanaged OSDs.
 
 ```bash
@@ -42,7 +48,7 @@ unmanaged OSDs, as shown in the example output above.
 
 ## Procedure
 
-Perform the following steps on every storage node that has unintentionally unmanaged OSDs,
+Perform the following steps on every storage node that has unintentionally unmanaged OSDs.
 
 1. (`ncn-s#`) Create a service specification YAML file with the following content:
 
@@ -62,7 +68,7 @@ Perform the following steps on every storage node that has unintentionally unman
 1. (`ncn-s#`) Apply the service specification defined in the above YAML file.
 
     ```bash
-    ceph orch apply -i <above_yaml_file>
+    ceph orch apply -i <path_to_yaml_file>
     ```
 
 1. (`ncn-s#`) Verify that `osd` service name no longer has `unmanaged` set to `true`.
@@ -121,19 +127,19 @@ Perform the following steps on every storage node that has unintentionally unman
     ```
 
 1. (`ncn-s#`) For each OSD from the above output, update its service name to
-    `osd.all-available-devices` as follows.
+   `osd.all-available-devices` as follows.
 
     > Be sure to replace the `<CLUSTER_ID>` and `<OSD_ID>` field in the following
     > command with the actual Ceph cluster ID and OSD ID being updated.
     > For example, if the OSD is `osd.12`, the `<OSD_ID>` value would be 12.
 
     ```bash
-    cd /var/lib/ceph/<CLUSTER_ID>
+    cd /var/lib/ceph/<CLUSTER_ID> &&
     sed -i '/service_name/s/osd/osd.all-available-devices/g' osd.<OSD_ID>/unit.meta
     ```
 
 1. (`ncn-s#`) After all OSDs from the above list have been updated on the storage node,
-    verify no OSDs have the service name other than `osd.all-available-devices`.
+   verify no OSDs have the service name other than `osd.all-available-devices`.
 
     ```bash
     for f in osd.*/unit.meta; do jq -r .service_name "$f"; done | uniq
@@ -148,7 +154,7 @@ Perform the following steps on every storage node that has unintentionally unman
 1. (`ncn-s#`) Repeat the above steps on other storage nodes if they also have unmanaged OSDs.
 
 1. (`ncn-s#`) After all such OSDs have been updated, wait for a minute and verify that `osd`
-service name has zero OSDs by running the following command.
+   service name has zero OSDs.
 
     ```bash
     ceph orch ls | awk 'NR==1 || /osd/'
