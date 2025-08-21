@@ -108,7 +108,7 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             if f"Error from server (NotFound): {resource_type.lower()}s.apps \"{name}\" not found" in e.stderr:
                 print(f"Skipping {resource_type}/{name}: resource not found in namespace {namespace}")
                 continue
-            print(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
+            print_stderr(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services = True
             continue
         except json.JSONDecodeError as e:
