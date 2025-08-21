@@ -106,6 +106,9 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             resource_json = json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
             print_stderr(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
+            if "not found" in e.stderr.lower():
+                print(f"Skipping {resource_type}/{name}: resource not found in namespace {namespace}")
+                continue
             failed_services = True
             continue
         except json.JSONDecodeError as e:
@@ -273,7 +276,7 @@ def main() -> None:
     except KeyError as e:
         err_exit(f"Missing expected key in ConfigMap: {e}")
 
-    if not rollout_restart_critical_services(critical_services):
+    if rollout_restart_critical_services(critical_services):
         err_exit(f"RR critical services rollout restart failed.")
 
     print(f"RR critical services rollout restart successful.")
