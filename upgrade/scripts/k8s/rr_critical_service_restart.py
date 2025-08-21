@@ -105,10 +105,10 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             result = subprocess.run(get_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             resource_json = json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
-            print_stderr(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
-            if "not found" in e.stderr.lower():
+            if f"Error from server (NotFound): {resource_type.lower()}s.apps \"{name}\" not found" in e.stderr:
                 print(f"Skipping {resource_type}/{name}: resource not found in namespace {namespace}")
                 continue
+            print(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services = True
             continue
         except json.JSONDecodeError as e:
@@ -127,8 +127,7 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
         try:
             subprocess.run(restart_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         except subprocess.CalledProcessError as e:
-            print_stderr(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
-            print_stderr(f"Error: {e.stderr}")
+            print_stderr(f"Failed to restart {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services = True
             continue
 
@@ -138,8 +137,7 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             subprocess.run(status_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             print(f"Restarted {resource_type}/{name} in namespace {namespace}")
         except subprocess.CalledProcessError as e:
-            print_stderr(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}")
-            print_stderr(f"Error: {e.stderr}")
+            print_stderr(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services = True
 
     return failed_services
