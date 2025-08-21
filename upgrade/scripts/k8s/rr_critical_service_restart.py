@@ -91,7 +91,7 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
     Args:
         critical_services (dict): Dictionary of services with their type and namespace.
     Returns:
-        bool: True if successful, False if any service restart failed.
+        bool: False if successful, True if any service restart failed.
     """
     failed_services = False
 
