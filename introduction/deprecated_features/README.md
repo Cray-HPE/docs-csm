@@ -12,6 +12,7 @@ version for their planned removal, customers are still strongly encouraged to ma
     - [Removals in CSM 1.6](#removals-in-csm-16)
     - [Removals in CSM 1.7](#removals-in-csm-17)
 - [Deprecations](#deprecations)
+    - [Deprecated in CSM 1.7](#deprecated-in-csm-17)
     - [Deprecated in CSM 1.6](#deprecated-in-csm-16)
     - [Deprecated in CSM 1.5](#deprecated-in-csm-15)
     - [Deprecated in CSM 1.4](#deprecated-in-csm-14)
@@ -57,12 +58,27 @@ in chronological order.
   [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
     - These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
 - Experimental `disable_components_on_completion` [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
-  [option](../../operations/boot_orchestration/Options.md)
+  [option](../../operations/boot_orchestration/Options.md).
+- Some sub-commands of the [Cray Site Init (CSI)](../../glossary.md#cray-site-init-csi) tool are removed.
+    - `csi config load` (no longer used and had outdated/unmaintained structures)
+    - `csi pit get` (no longer used and was causing problems with the lint workflow and circular dependencies)
 
 ## Deprecations
 
 This section groups the deprecated features by the CSM release in which they were deprecated, in reverse chronological order (the most recently deprecated
 features are listed first).
+
+### Deprecated in CSM 1.7
+
+- Some parts of the [Cray Site Init (CSI)](../../glossary.md#cray-site-init-csi) tool are deprecated in CSM 1.7.0.
+    - Several `csi config init` flags are deprecated by flags added in CSM 1.7:
+        - `cmn-cidr` (Deprecated by `cmn-cidr4`)
+        - `cmn-gateway` (Deprecated by `cmn-gateway4`)
+        - `chn-cidr` (Deprecated by `chn-cidr4`)
+        - `chn-gateway` (Deprecated by `chn-gateway4`)
+    - Several `csi patch` sub-commands are deprecated by sub-commands added in CSM 1.7:
+        - `csi patch ca` (Deprecated by `csi patch init ca`)
+        - `csi patch packages` (Deprecated by `csi patch init packages`)
 
 ### Deprecated in CSM 1.6
 
