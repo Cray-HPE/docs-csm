@@ -479,7 +479,7 @@ If you want to continue manually, please follow the steps below.
 
         Example output if `ncn-m002` is set as `first-master-hostname`:
 
-        ```text
+        ```toml
         first-master-hostname = "ncn-m002"
         ```
 
@@ -507,7 +507,7 @@ If you want to continue manually, please follow the steps below.
 
         Example output if `ncn-m001` is now set as `first-master-hostname`:
 
-        ```text
+        ```toml
         first-master-hostname = "ncn-m001"
         ```
 
@@ -615,12 +615,12 @@ If you want to continue manually, please follow the steps below.
     1. (`ncn-mw#`) Make sure that `ncn-m001` is not set as `first-master-hostname`.
 
         ```bash
-        cray bss bootparameters list --hosts Global | grep first-master-hostname
+        cray bss bootparameters list --hosts Global --format toml | grep first-master-hostname
         ```
 
         Example output if `ncn-m001` is set as `first-master-hostname`:
 
-        ```text
+        ```toml
         first-master-hostname = "ncn-m001"
         ```
 
@@ -643,12 +643,12 @@ If you want to continue manually, please follow the steps below.
     1. (`ncn-mw#`) Verify that the `first-master-hostname` has been updated:
 
         ```bash
-        cray bss bootparameters list --hosts Global | grep first-master-hostname
+        cray bss bootparameters list --hosts Global --format toml | grep first-master-hostname
         ```
 
         Example output if `ncn-m002` is now set as `first-master-hostname`:
 
-        ```text
+        ```toml
         first-master-hostname = "ncn-m002"
         ```
 
