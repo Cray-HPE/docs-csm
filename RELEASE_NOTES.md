@@ -5,17 +5,7 @@
     * [iSCSI SBPS](#iscsi-sbps)
     * [Monitoring](#monitoring)
     * [Miscellaneous functionality](#miscellaneous-functionality)
-    * [`cray-site-init` updates](#cray-site-init-updates)
-        * [Main Feature](#main-feature)
-            * [`csi patch csm ipv6`](#csi-patch-csm-ipv6)
-                * [Removing/Undoing IPv6](#removingundoing-ipv6)
-                * [Scoping](#scoping)
-            * [System administrator changes](#system-administrator-changes)
-        * [Flag changes](#flag-changes)
-        * [New sub-commands](#new-sub-commands)
-        * [Removed sub-commands](#removed-sub-commands)
-        * [Behavior changes](#behavior-changes)
-        * [Bugfixes](#bugfixes)
+    * [`csi` tool updates](#csi-tool-updates)
     * [New hardware support](#new-hardware-support)
     * [New software support](#new-software-support)
     * [Automation improvements](#automation-improvements)
@@ -77,162 +67,20 @@
   Support is added for `v2` and `v3` API versions.
 * Recipe builds using kiwi-ng now include the signing keys contained in the `hpe-signing-key` secret, which allows for the verification of the recipe build artifacts.
 
-### `cray-site-init` updates
+### `csi` tool updates
 
-CSM V1.7 includes a major version bump for `cray-site-init`.
-
-#### Main Feature
+CSM 1.7 includes a major version bump for [Cray Site Init (CSI)](glossary.md#cray-site-init-csi).
 
 * **Added IPv6 enablement for fresh installs and already deployed CSM systems**
-* cloud-init data for IPv6 addresses and gateways on the CMN
-* SLS data for IPv6 addresses and gateways on the CMN and CHN
+* cloud-init data for IPv6 addresses and gateways on the [CMN](glossary.md#customer-management-network-cmn)
+* [SLS](glossary.md#system-layout-service-sls) data for IPv6 addresses and gateways on the CMN and
+  [CHN](glossary.md#customer-high-speed-network-chn)
 * Supports IPv6 NTP servers
 * Supports IPv6 site link (only supports IPv4 or IPv6 exclusively)
+* **Extensive usage changes** and bug fixes in support of the new features. This includes behavior changes
+  to `csi config` that administrators performing fresh installs of CSM should be aware of.
 
-IPv6 data is now consumed during a Fresh install during `csi config init` by including the new IPv6 keys:
-
-* `chn-gateway6`
-* `chn-cidr6`
-* `cmn-gateway6`
-* `cmn-cidr6`
-
-For runtime/upgrades, the same flags are used but with the `csi patch csm ipv6` command. This command will patch SLS
-with IPv6 reservations for the `bootstrap_dhcp` and `network_hardware` subnets in the CHN and CMN. The list of subnets
-can be overridden, but not the list of networks, and only during the `csi patch csm ipv6` command (not during
-`csi config init`). This command is designed to be repeatable for use after new hardware has been added.
-
-##### `csi patch csm ipv6`
-
-This command defaults to a dry run; all proposed changes to BSS and SLS will be written to a timestamped directory in
-the user's working directory (unless otherwise overridden by `-b|--backup-dir`) along with backups of the original data.
-
-Passing `--commit` to the command will disable the dry run; all proposed changes and backups will be written in the same
-manner as the dry run, before being applied to BSS and SLS.
-
-This command will skip entries that already have IPv6 data unless the `-f|--force` flag is present. This means:
-
-* Re-running `csi patch csm ipv6` on an already patched system with no hardware changes will result in no change
-* Re-running `csi patch csm ipv6` on an already patched system *with new hardware added* will result in new IP
-  reservations and BSS data *for only that hardware*
-* Re-running `csi patch csm ipv6 --force` will update existing IPv6 addresses within `csi patch csm ipv6`'s scope
-
-Without `--force`, `csi patch csm ipv6` will respect any existing `IPAddress6` reservations in BSS and SLS installed by
-hand (e.g. by the customer or admin). Please be aware that after the first run of CSI `--commit`, the generated backups
-are the only way to restore the manually added `IPAddress6` reservations.
-
-###### Removing/Undoing IPv6
-
-`csi patch csm ipv6` has a `--remove` flag, and by default this flag runs as a dry run unless `--commit` is present.
-This removes all IPv6 data in BSS and SLS within the scope of `csi patch csm ipv6`, e.g. the CHN, CMN, and their
-`bootstrap_dhcp` and `network_hardware` subnets (unless otherwise overridden with `--subnets`).
-
-`--remove` will create backups in the same manner as the patch command.
-
-###### Scoping
-
-By default, `csi patch csm ipv6` targets the `bootstrap_dhcp` and `network_hardware` subnets within the Customer
-High-speed Network (CHN) and Customer Management Network (CMN).
-
-* The list of targeted subnets can be overridden with the `--subnets` flag (see usage)
-* The list of targeted networks **are not** configurable beyond the CHN and CMN, to exclude one or the other, the
-  corresponding flags should be omitted (e.g. leave out `--chn-cidr6/--chn-gateway6` to omit the CHN)
-
-> ***NOTE***: Any SLS `IPReservation` within the target subnets will be given IPv6 leases (e.g. every `IPReservation`
-> entry in the CMN's `bootstrap_dhcp` subnet will receive an `IPAddress6` entry, there is no hardware
-> filter or differentiator to choose otherwise).
-
-##### System administrator changes
-
-These changes may be important for system administrators and configuration maintainers to be aware of.
-
-* `csi config init empty` and `csi config init` produce `system_config.yaml` files without deprecated flags, alias
-  flags, and program assistant flags. Examples:
-    * `config` and `help`
-    * `cmn-gw` and `can-gw`
-    * Deprecated keys (e.g. `bgp-peers`)
-  > ***It is strongly recommended to update saved configs with the new `system_config.yaml` after running this newer
-  CSI***. CSI will remind users to replace existing backups with the newly generated `system_config.yaml` file
-  after running `csi config init`
-* All generated files from `csi config init` (with exception to where it is legal) now include in their headers:
-    * The version of CSI that generated them
-    * A ubiquitous timestamp for when `csi config init` was called
-
-      Example:
-
-      ```text
-      #
-      ## This file was generated by cray-site-init.
-      ## Version: 2.0.5
-      ## Generated time: 2025-08-02T21:09:36.528837Z
-      #
-      ```
-
-#### Flag changes
-
-Using deprecated flags will cause a warning to be emitted.
-
-New flags:
-
-* `csi config init` flags
-    * `chn-gateway6`
-    * `chn-cidr6`
-    * `cmn-gateway6`
-    * `cmn-cidr6`
-    * `cmn-cidr4` *(deprecates `cmn-cidr`)*
-    * `cmn-gateway4` *(deprecates`cmn-gateway`)*
-    * `chn-cidr4` *(deprecates `chn-cidr`)*
-    * `chn-gateway4` *(deprecates`chn-gateway`)*
-* `csi` main program flags
-    * `input-dir`  a directory to look for input files (not including `system_config.yaml` , that is looked for in
-      the `PWD` unless an alternative path was passed to`--config`) example:
-      `/tmp/csi config init -i /var/www/ephemeral/prep -c /var/www/ephemeral/prep/system_config.yaml` or on a local
-      workstation,
-      `./csi config init -i ~/gitstuff/hpc-shasta-system-config/redbull/1.6 -c ~/gitstuff/hpc-shasta-system-config/redbull/1.6/system_config.yaml`
-    * `--k8s-secret-name` and `--k8s-namespace` can be used to override the location to read the OpenID token (
-      defaults, `default`, and `admin-client-auth` respectively)
-    * `--csm-api-url` can be used to change the target API URL (default `"https://api-gw-service-nmn.local"`)
-
-#### New sub-commands
-
-Deprecated sub-commands will not appear in `csi --help` usage, and invoking them will emit a warning.
-
-* `csi patch csm ipv6` will patch IPv6 data into CSM for network devices, application nodes, and non-compute nodes.
-* `csi patch init ca` *(deprecates `csi patch ca`)*
-* `csi patch init packages` *(deprecates `csi patch packages`)*
-
-#### Removed sub-commands
-
-* `csi config load` was no longer used and had outdated/unmaintained structures
-* `csi pit get` was no longer used and was causing problems with the lint workflow and circular dependencies
-
-#### Behavior changes
-
-* `csi config init` will exit immediately if any generated file fails to template.
-    * Previously, `csi` would carry on and possibly leave the user with malformed files. The user would need to decipher
-      an error happened between the dozens of innocuous messages printed to screen.
-    * Now, if a template fails to generate for any reason the program will exit with an error.
-      > ***NOTE*** Some templates required a refactor for this failure to be properly acknowledged, and while this issue
-      is
-      fixed it remains broken for templates like `metallb.yaml`
-* ***IMPORTANT*** 1-2 addresses shift IP address reservations in some subnets
-    * Previously, all subnet reservations started with a +2 deviation from their subnet's IP to account for the subnet
-      IP and gateway IP
-    * Now, this logic only applies to a subnet that shares the same IP as its "super net" network
-      > ***Systems that are fresh installing CSM V1.7 that had been running a previous version of CSM V1.6 must
-      > regenerate their switch configurations for BGP to work..***
-
-#### Bugfixes
-
-* Fixed an erroneous message during `csi config init` where "disk configuration" would print once for each NCN.
-* Fixed a bug in the DNSMasq files where the `domain=` key was set to the SLS subnet start and end IP instead of the
-  entire network.
-* Previously, for CSM 1.7 the `k8s-primary-cni` value was ignored in `system_config.yaml`
-* Fixes an issue where deprecated keys that had aliases were still required, this was due to the split-brain aspect of
-  Cobra command line vs. Viper configs. Now keys are merged and removed and replaced with aliased values as defined by
-  Cobra. This extends `MTL-2396` further, and was necessary for the proper deprecation of `chn-cidr`,
-  `chn-gateway`, `cmn-cidr`, `cmn-gateway`
-* Prohibits setting overlapping CIDRs between the `*-cidr` parameters during `csi config init` and
-  `csi patch csm ipv6` (`CASMINST-7208`)
+For full details on these extensive changes, see [`csi` Tool Changes](introduction/csi_Tool_Changes.md).
 
 ### New hardware support
 
@@ -249,14 +97,14 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 
 | Platform Component           | Version |
 |------------------------------|---------|
-| `Kubernetes`                 | 1.32.5  |
-| `Kyverno`                    | 1.13.4  |
+| Kubernetes                   | 1.32.5  |
+| Kyverno                      | 1.13.4  |
 | `Strimzi Kafka`              | 0.45.0  |
 | `argo-workflow-controller`   | 3.4.5   |
 | `argo-workflows`             | 3.4.5   |
 | `bitnami-etcd` for clusters  | 3.5.21  |
 | `etcd` on `ncn-mxxx`         | 3.5.18  |
-| `ceph`                       | 17.2.6  |
+| Ceph                         | 17.2.6  |
 | `containerd`                 | 1.7.27  |
 | `coredns`                    | 1.11.3  |
 | `cray-certmanager`           | 1.17.0  |
@@ -266,26 +114,26 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 | `cray-spire`                 | 1.5.5   |
 | `cray-vault-operator`        | 1.22.5  |
 | `cray-velero`                | 10.0.1  |
-| `helm`                       | 3.18.3  |
+| Helm                         | 3.18.3  |
 | `istio`                      | 1.26.0  |
-| `kata`                       | 3.17.0  |
-| `keycloak`                   | 21.1.1  |
-| `kiali`                      | 2.10.0  |
+| Kata                         | 3.17.0  |
+| Keycloak                     | 21.1.1  |
+| Kiali                        | 2.10.0  |
 | `metrics-server`             | 0.6.3   |
-| `nexus`                      | 3.70.4  |
+| Nexus                        | 3.70.4  |
 | `pause`                      | 3.10    |
 | `postgres-operator`          | 1.10.1  |
-| `postgresql`                 | 15.2    |
+| PostgreSQL                   | 15.2    |
 | `sealed-secrets`             | 0.28.0  |
 | `spire-intermediate`         | 1.0.1   |
 | `tapms-operator`             | 1.9.1   |
-| `Cilium`                     | 1.16.5  |
+| Cilium                       | 1.16.5  |
 
 ### Security improvements
 
 * Spire node attestation can now be setup to use TPM chips on supported platforms, see [Enable TPM node attestation with Spire](operations/spire/Enable_TPM_node_attestation.md) for more information.
 * The old version of the Spire server was removed to fully transition to the newer version of Spire.
-* Updated all HMS services to point to latest upstream image and Go module dependencies.  This resolved all currently known point-in-time CVE issues in HMS services.
+* Updated all HMS services to point to latest upstream image and Go module dependencies. This resolved all currently known point-in-time CVE issues in HMS services.
 * Pod Security Policies (PSP) have been removed. Pod Security Standards (PSS) Baseline policies are now enforced using Kyverno.
   For details and exceptions, see [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
 * Container image signature verification is enforced by Kyverno policies to enhance supply chain security;
@@ -320,9 +168,9 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * Kyverno image verification policy is being shipped in `Enforce` mode. Container images that are unsigned will not be deployed.
   For more information on the policy, how to add exceptions, and how to allow third party signing keys, see
   [What is new in the HPE CSM 1.7 release and above](operations/kubernetes/Kyverno.md#what-is-new-in-the-hpe-csm-17-release-and-above).
-* `PProf` debug support has been added to all remaining HMS services.  See [Debugging With HMS `PProf` Images](troubleshooting/debugging_with_hms_pprof_images.md) for more information.
+* `PProf` debug support has been added to all remaining HMS services. See [Debugging With HMS `PProf` Images](troubleshooting/debugging_with_hms_pprof_images.md) for more information.
 * IPv6 support on Customer Accessible Networks. See the [IPv6 Configuration Guide](operations/network/customer_accessible_networks/ipv6_configuration_guide.md) for more information.
-* The `Weave` Container Networking Interface (CNI) has been deprecated in favor of Cilium.
+* The `Weave` Container Networking Interface (CNI) has been replaced by Cilium.
     * A fresh install of CSM 1.7 will use Cilium by default.
     * Upgrading from CSM 1.6 to 1.7 will migrate the CNI from Weave to Cilium. See [Upgrade CSM and additional products with IUF](operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md) for more information.
 
@@ -333,7 +181,7 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
 * Modified `run_hms_ct_tests.sh` to handle concurrency better
 * Fixed intermittent failures sometimes seen when running `check_key_id_in_jwks.sh`
 * Added retry logic to `goss-postgresql-syncfailed.yaml` to prevent intermittent false positives
-* Added retry logic to `postgres_clusters_running.sh to prevent` intermittent false positives
+* Added retry logic to `postgres_clusters_running.sh` to prevent intermittent false positives
 * Added tests to the Software Management Services (SMS) health checks:
     * Added [BOS](glossary.md#boot-orchestration-service-bos) create/update/delete (CRUD) tests for session templates and sessions.
     * Added [CFS](glossary.md#configuration-framework-service-cfs) CRUD tests for configurations and sources.
@@ -361,8 +209,8 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
   [PCS](glossary.md#power-control-service-pcs),
   [SMD](glossary.md#hardware-state-manager-smd),
   `hmcollector`, and [FAS](glossary.md#firmware-action-service-fas)
-  services.  This reduced instances of pods being restarted due to
-  `OOMKilled` and failed liveness and/or readiness probes.  These
+  services. This reduced instances of pods being restarted due to
+  `OOMKilled` and failed liveness and/or readiness probes. These
   changes also improved the responsiveness and scalability of these
   services.
     * In the CSM 1.7.0 release, additional resource leaks in these same services were found and resolved.
@@ -376,7 +224,7 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
       [HMNFD](glossary.md#hardware-management-notification-fanout-daemon-hmnfd),
       [SCSD](glossary.md#system-configuration-service-scsd),
       [SLS](glossary.md#system-layout-service-sls)
-* A bug was fixed in the `hmcollector-poll` service so that event subscriptions are no longer lost after updating Paradise BMC firmware.  The service no longer needs to be restarted after performing firmware updates.
+* A bug was fixed in the `hmcollector-poll` service so that event subscriptions are no longer lost after updating Paradise BMC firmware. The service no longer needs to be restarted after performing firmware updates.
 * Fixed an issue where a soft deleted IMS recipe was always assigned the architecture `x86_64`, regardless of the architecture of the recipe that was deleted.
 * Fixed an issue where a soft deleted IMS recipe was always assigned `require_dkms=true`, regardless of the value of the recipe that was deleted.
 * Fixed an issue where incorrect metadata was stored for newly created IMS images.
@@ -393,8 +241,14 @@ Deprecated sub-commands will not appear in `csi --help` usage, and invoking them
     * The bug was only observed when root SSH credentials were not set in Vault.
     * For more information on setting root credentials in Vault, see
       [Configure the root Password and SSH Keys in Vault](operations/CSM_product_management/Configure_the_root_Password_and_SSH_Keys_in_Vault.md).
+* The [Cray Site Init (CSI)](glossary.md#cray-site-init-csi) tool had several bug fixes.
+  For details, see [Bugfixes](introduction/csi_Tool_Changes.md#bugfixes).
 
 ## Deprecations
+
+* Some parts of the [Cray Site Init (CSI)](glossary.md#cray-site-init-csi)
+  tool are deprecated in CSM 1.7.0. For details, see
+  [`csi` Tool Changes](introduction/csi_Tool_Changes.md).
 
 For more details and a list of all deprecated CSM features, see [Deprecations](introduction/deprecated_features/README.md#deprecations).
 
@@ -408,13 +262,25 @@ For more details and a list of all deprecated CSM features, see [Deprecations](i
     * These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
 * Experimental `disable_components_on_completion` [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
   [option](operations/boot_orchestration/Options.md).
+* The `Weave` Container Networking Interface (CNI) has been removed and replaced by Cilium.
+    * A fresh install of CSM 1.7 will use Cilium by default.
+    * Upgrading from CSM 1.6 to 1.7 will migrate the CNI from Weave to Cilium. See
+      [Upgrade CSM and additional products with IUF](operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
+      for more information.
+* Some sub-commands of the [Cray Site Init (CSI)](glossary.md#cray-site-init-csi)
+  tool are removed in CSM 1.7.0. For details, see
+  [Removed sub-commands](introduction/csi_Tool_Changes.md#removed-sub-commands).
 
 For more details and a list of all features with an announced removal target, see [Removals](introduction/deprecated_features/README.md#removals).
 
 ## Known issues
 
-* Systems running CSM V1.6 or earlier that fresh install CSM V1.7 must regenerate their management switch configuration due to the [`cray-site-init` behavior changes](#behavior-changes).
-    * Systems upgrading from CSM V1.6 to CSM V1.7 **may ignore** this issue until the next CSM V1.7 (or higher version) reinstall.
+* Systems running CSM 1.6 or earlier that fresh install CSM 1.7 must regenerate their
+  management switch configuration because of the
+  [Other behavior changes](introduction/csi_Tool_Changes.md#other-behavior-changes)
+  made in the [Cray Site Init (CSI)](glossary.md#cray-site-init-csi) tool.
+    * Systems upgrading from CSM 1.6 to CSM 1.7 **may ignore** this issue until the next
+      CSM 1.7+ reinstall.
 
 For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
 
