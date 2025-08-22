@@ -91,7 +91,7 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
     Args:
         critical_services (dict): Dictionary of services with their type and namespace.
     Returns:
-        bool: True if successful, False if any service restart failed.
+        bool: False if successful, True if any service restart failed.
     """
     failed_services = False
 
@@ -105,6 +105,9 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             result = subprocess.run(get_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             resource_json = json.loads(result.stdout)
         except subprocess.CalledProcessError as e:
+            if f"Error from server (NotFound): {resource_type.lower()}s.apps \"{name}\" not found" in e.stderr:
+                print(f"Skipping {resource_type}/{name}: resource not found in namespace {namespace}")
+                continue
             print_stderr(f"Failed to get {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services = True
             continue
@@ -124,8 +127,7 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
         try:
             subprocess.run(restart_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         except subprocess.CalledProcessError as e:
-            print_stderr(f"Failed to restart {resource_type}/{name} in namespace {namespace}")
-            print_stderr(f"Error: {e.stderr}")
+            print_stderr(f"Failed to restart {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services = True
             continue
 
@@ -135,8 +137,7 @@ def rollout_restart_critical_services(critical_services: Dict[str, ServiceDetail
             subprocess.run(status_command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
             print(f"Restarted {resource_type}/{name} in namespace {namespace}")
         except subprocess.CalledProcessError as e:
-            print_stderr(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}")
-            print_stderr(f"Error: {e.stderr}")
+            print_stderr(f"Rollout status check failed for {resource_type}/{name} in namespace {namespace}: {e.stderr}")
             failed_services = True
 
     return failed_services
@@ -273,7 +274,7 @@ def main() -> None:
     except KeyError as e:
         err_exit(f"Missing expected key in ConfigMap: {e}")
 
-    if not rollout_restart_critical_services(critical_services):
+    if rollout_restart_critical_services(critical_services):
         err_exit(f"RR critical services rollout restart failed.")
 
     print(f"RR critical services rollout restart successful.")
