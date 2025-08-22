@@ -4,7 +4,7 @@ Rack Resiliency can be enabled and configured on a system running CSM 1.7+.
 For details on doing this during an install or upgrade to CSM 1.7, see
 [Enable Rack Resiliency During Install or Upgrade](Enable_Rack_Resiliency_During_Install_or_Upgrade.md).
 
-1. [Enable and customize](1-enable-and-customize)
+1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
 1. [Deploy Helm chart](#3-deploy-helm-chart)
 1. [Restart critical services](#4-restart-critical-services)
@@ -92,7 +92,7 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
 
 Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency. Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM 1.7.0:
 
-### Deploying Kubernetes setup flow
+### 2.1 Deploying Kubernetes setup flow
 
 For Kubernetes zoning, select a master node to personalize.
 
@@ -106,7 +106,7 @@ XNAME=$( ssh ncn-m001 cat /etc/cray/xname )
 
 Now continue with the [steps for Rack Resiliency setup](#steps-for-rack-resiliency-setup)
 
-### Deploying Ceph setup flow
+### 2.2 Deploying Ceph setup flow
 
 For Ceph zoning, select a storage node to personalize.
 
@@ -146,7 +146,7 @@ Now continue with the [steps for Rack Resiliency setup](#steps-for-rack-resilien
     "playbook": "rack_resiliency_for_mgmt_nodes.yml"
     ```
 
-    **NOTE:** If the above command returns the output shown above, then 
+    **NOTE:** If the above command returns the output shown above, then
     skip to the next step (Perform the component update). Otherwise, perform
     the following sub-steps to add the rack resiliency layer.
 
