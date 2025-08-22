@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -114,6 +114,8 @@ spec:
                     ls -d \
                         /root/apply_csm_configuration.* \
                         /root/csm_upgrade.* \
+                        /etc/motd \
+                        /root/.bashrc \
                         /root/output.log 2>/dev/null |
                     sed 's_^/__' |
                     xargs tar -C / -czvf "/root/${BACKUP_TARFILE}"
