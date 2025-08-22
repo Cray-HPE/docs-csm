@@ -484,7 +484,7 @@ If you want to continue manually, please follow the steps below.
         ```
 
         **`IMPORTANT:`** If the selected node is set as `first-master-hostname`, then change it to
-        another master node, for example, `ncn-m001`.
+        another master node; for example, `ncn-m001`.
 
         ```bash
         export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
