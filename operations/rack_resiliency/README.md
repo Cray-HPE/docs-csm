@@ -1,5 +1,6 @@
 # Rack Resiliency (RR)
 
+- [Warning: RR is not for production use](#warning-rr-is-not-for-production-use)
 - [Introduction](#introduction)
 - [Terminology and components](#terminology-and-components)
     - [Rack Resiliency Service (RRS)](#rack-resiliency-service-rrs)
@@ -18,6 +19,12 @@
 - [Architecture](#architecture)
 - [Troubleshooting](#troubleshooting)
 
+## Warning: RR is not for production use
+
+In CSM 1.7.0, Rack Resiliency is **experimental** and **use-at-your-own-risk**. It is offered
+as a technology preview for administrators who wish to try it in a non-production environment.
+It has not undergone sufficient validation to be considered stable for production use.
+
 ## Introduction
 
 HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for critical
@@ -26,7 +33,7 @@ if management nodes are concentrated within a single rack. This can result in th
 Additionally, incorrect physical placement or software configuration of storage nodes can cause
 utility storage service disruptions due to rack-level failures.
 
-To address these issues, CSM 1.7.0 introduces the Rack Resiliency feature, which provides management
+To address these issues, CSM 1.7.0 includes the technology preview of Rack Resiliency, which provides management
 rack level resiliency to maintain HA of critical management services due to a single rack failure.
 This feature prevents system-wide outages, allowing for successful execution of user jobs or
 scheduling new ones.
@@ -42,7 +49,7 @@ scheduling new ones.
 
 ### Rack Resiliency Service (RRS)
 
-RRS is the implementation of the Rack Resiliency feature in CSM.
+RRS is the implementation of Rack Resiliency in CSM.
 
 For details on the Kubernetes deployment of RRS, see [`cray-rrs` Deployment](cray-rrs_Deployment.md).
 

@@ -1,10 +1,10 @@
 # Enabling Rack Resiliency
 
-Enabling Rack Resiliency is the first step for setting up Rack Resiliency.
+## Overview
 
-**NOTE:**
-
-* By default, the Rack Resiliency feature is disabled.
+* Rack Resiliency **should not** be used in a production environment. For more details, see
+  [Warning: RR is not for production use](README.md#warning-rr-is-not-for-production-use).
+* By default, Rack Resiliency is disabled.
 * Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an
   upgrade from CSM 1.6 to CSM 1.7.
 * Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
@@ -17,14 +17,12 @@ decision to enable Rack Resiliency, the decision made here about prefixes
 
 ## Fresh install of CSM 1.7
 
-During a fresh install of CSM 1.7, if an administrator wishes to enable Rack Resiliency,
-they must do so in the
-[Enable Rack Resiliency](../../install/prepare_site_init.md#enable-rack-resiliency) step of the
-[Prepare Site Init](../../install/prepare_site_init.md) procedure.
+During a fresh install of CSM 1.7, if an administrator wishes to enable Rack Resiliency, they must do so in the
+[Enable Rack Resiliency (experimental)](../../install/prepare_site_init.md#enable-rack-resiliency-experimental)
+step of the [Prepare Site Init](../../install/prepare_site_init.md) procedure.
 
 ## Upgrade from CSM 1.6 to CSM 1.7
 
-During an upgrade from CSM 1.6 to CSM 1.7, if an administrator wishes to enable Rack Resiliency,
-they must do so in the
-[Rack Resiliency](../../operations/iuf/workflows/product_delivery.md#rack-resiliency) step of the
-[Product Delivery](../../operations/iuf/workflows/product_delivery.md) procedure.
+During an upgrade from CSM 1.6 to CSM 1.7, if an administrator wishes to enable Rack Resiliency, they must do so in the
+[Rack Resiliency (experimental)](../../operations/iuf/workflows/product_delivery.md#rack-resiliency-experimental)
+step of the [Product Delivery](../../operations/iuf/workflows/product_delivery.md) procedure.

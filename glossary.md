@@ -573,13 +573,16 @@ Liquid-Cooled TDS cabinet coolant manifolds.
 
 ## Rack Resiliency
 
-The Rack Resiliency feature provides additional layers of resiliency in the event of a failure of a physical rack in the system.
+> Rack Resiliency is **experimental**. For more details, see
+> [Warning: RR is not for production use](README.md#warning-rr-is-not-for-production-use).
+
+The Rack Resiliency technology preview provides additional layers of resiliency in the event of a failure of a physical rack in the system.
 
 For more information, see [Rack Resiliency](operations/rack_resiliency/README.md).
 
 ## Rack Resiliency Service (RRS)
 
-The implementation in CSM of the [Rack Resiliency](#rack-resiliency) feature.
+The implementation in CSM of the [Rack Resiliency](#rack-resiliency) technology preview.
 
 For more information, see [Rack Resiliency Service](operations/rack_resiliency/README.md#rack-resiliency-service-rrs).
 
