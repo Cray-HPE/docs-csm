@@ -451,7 +451,7 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
     Behavior: Kyverno’s admission controller is configured to emit admission reports on every webhook call.
     In clusters with heavy workloads, this may cause etcd to experience downtime.
 
-    Solution: (`ncn-mw#`) Disable Kyverno admission reports by editing the `kyverno-admission-controller` deployment.
+    Solution: (`ncn-mw#`) Disable Kyverno admission reports temporarily by editing the `kyverno-admission-controller` deployment.
 
     ```bash
     kubectl -n kyverno edit deployment kyverno-admission-controller
@@ -459,3 +459,12 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
 
     Under `spec.template.spec.containers[0].args`, replace `--admissionReports=true`  with `--admissionReports=false`.
     Then save and exit.
+
+    Once the upgrade has completed, set `admissionReports` to true to re-enable it.
+
+    Impact of Temporarily disabling `admissionReports`:
+
+    What works?: Policy enforcement (mutate/validate/generate) works noramlly.
+
+    What doesn't work?: Policy reports of the existing resources can be incomplete during this time.
+
