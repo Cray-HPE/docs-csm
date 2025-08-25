@@ -467,4 +467,3 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
     What works?: Policy enforcement (mutate/validate/generate) works noramlly.
 
     What doesn't work?: Policy reports of the existing resources can be incomplete during this time.
-
