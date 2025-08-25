@@ -26,14 +26,14 @@ jobs:
 
     # v3.13 works with anchors - https://github.com/tcort/markdown-link-check/issues/225
     - name: Check links in changed files
-      uses: docker://ghcr.io/tcort/markdown-link-check:3.12.2
+      uses: docker://ghcr.io/tcort/markdown-link-check:3.13.0
       if: ${{ steps.changed-files.outputs.deleted_files == '' && steps.changed-files.outputs.renamed_files == '' }}
       with:
         args: "--config .github/config/markdown_link.json ${{ steps.changed-files.outputs.all_changed_files }}"
 
     # In case if any files were renamed or deleted, other files may still have references - need a full scan
     - name: Full scan
-      uses: docker://ghcr.io/tcort/markdown-link-check:3.12.2
+      uses: docker://ghcr.io/tcort/markdown-link-check:3.13.0
       if: ${{ steps.changed-files.outputs.deleted_files != '' || steps.changed-files.outputs.renamed_files != '' || inputs.force_full_scan }}
       with:
         entrypoint: find
