@@ -29,7 +29,7 @@ jobs:
       uses: docker://ghcr.io/tcort/markdown-link-check:3.13.6
       if: ${{ steps.changed-files.outputs.deleted_files == '' && steps.changed-files.outputs.renamed_files == '' }}
       with:
-        args: "--config .github/config/markdown_link.json ${{ steps.changed-files.outputs.all_changed_files }}"
+        args: "-v --config .github/config/markdown_link.json ${{ steps.changed-files.outputs.all_changed_files }}"
 
     # In case if any files were renamed or deleted, other files may still have references - need a full scan
     - name: Full scan
