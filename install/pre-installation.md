@@ -1,5 +1,9 @@
 # Pre-Installation
 
+Test 1: [link to nonexistent section of README](README.md#warning-rr-is-experimental)
+
+Test 2: [link to nonexistent section of other page](install_csm_services.md#warning-rr-is-experimental)
+
 The page walks a user through setting up the Cray LiveCD with the intention of installing Cray System Management (CSM).
 
 1. [Boot installation environment](#1-boot-installation-environment)
