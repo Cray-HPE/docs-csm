@@ -1,6 +1,6 @@
 # Rack Resiliency (RR)
 
-- [Warning: RR is not for production use](#warning-rr-is-not-for-production-use)
+- [Warning: RR is experimental](#warning-rr-is-experimental)
 - [Introduction](#introduction)
 - [Terminology and components](#terminology-and-components)
     - [Rack Resiliency Service (RRS)](#rack-resiliency-service-rrs)
@@ -19,7 +19,7 @@
 - [Architecture](#architecture)
 - [Troubleshooting](#troubleshooting)
 
-## Warning: RR is not for production use
+## Warning: RR is experimental
 
 In CSM 1.7.0, Rack Resiliency is **experimental** and **use-at-your-own-risk**. It is offered
 as a technology preview for administrators who wish to try it in a non-production environment.
