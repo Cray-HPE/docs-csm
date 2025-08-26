@@ -474,8 +474,7 @@ the system size.
 
 ### Enable Rack Resiliency (experimental)
 
-> Rack Resiliency **should not** be used in a production environment. For more details, see
-> [Attention: RR is experimental](../operations/rack_resiliency/README.md#attention-rr-is-experimental).
+> [Rack Resiliency is **experimental**](../operations/rack_resiliency/README.md#attention-rr-is-experimental).
 
 Rack Resiliency is new in CSM 1.7. It is disabled by default and it
 **cannot change between enabled and disabled later**. Administrators are advised to
