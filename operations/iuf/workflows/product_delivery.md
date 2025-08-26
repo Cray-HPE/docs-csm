@@ -19,7 +19,7 @@ This section ensures the product content is loaded onto the system and available
 
 > - If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
 > - Rack Resiliency **should not** be used in a production environment. For more details, see
->   [Warning: RR is experimental](../../rack_resiliency/README.md#warning-rr-is-experimental).
+>   [Attention: RR is experimental](../../rack_resiliency/README.md#attention-rr-is-experimental).
 
 Rack Resiliency is new in CSM 1.7. It is disabled by default and it
 **cannot change between enabled and disabled later**. Administrators are advised to
