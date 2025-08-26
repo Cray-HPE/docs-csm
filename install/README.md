@@ -118,6 +118,11 @@ See [Validate the LiveCD](pre-installation.md#5-validate-the-livecd).
 
 ### 7. Configure management network switches
 
+> **IMPORTANT** Systems running CSM 1.6 or earlier that fresh install CSM 1.7 must regenerate their
+> management switch configuration because of the
+> [Other behavior changes](../introduction/csi_Tool_Changes.md#other-behavior-changes)
+> made in the [Cray Site Init (CSI)](../glossary.md#cray-site-init-csi) tool.
+
 #### Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->

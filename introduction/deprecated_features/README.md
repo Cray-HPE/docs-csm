@@ -12,6 +12,7 @@ version for their planned removal, customers are still strongly encouraged to ma
     - [Removals in CSM 1.6](#removals-in-csm-16)
     - [Removals in CSM 1.7](#removals-in-csm-17)
 - [Deprecations](#deprecations)
+    - [Deprecated in CSM 1.7](#deprecated-in-csm-17)
     - [Deprecated in CSM 1.6](#deprecated-in-csm-16)
     - [Deprecated in CSM 1.5](#deprecated-in-csm-15)
     - [Deprecated in CSM 1.4](#deprecated-in-csm-14)
@@ -58,11 +59,21 @@ in chronological order.
     - These have been replaced by the unified `ncn_nodes.yaml` top-level playbook.
 - Experimental `disable_components_on_completion` [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
   [option](../../operations/boot_orchestration/Options.md).
+- Some sub-commands of the [Cray Site Init (CSI)](../../glossary.md#cray-site-init-csi)
+  tool are removed. For details, see
+  [Removed sub-commands](../csi_Tool_Changes.md#removed-sub-commands)
 
 ## Deprecations
 
 This section groups the deprecated features by the CSM release in which they were deprecated, in reverse chronological order (the most recently deprecated
 features are listed first).
+
+### Deprecated in CSM 1.7
+
+- Some parts of the [Cray Site Init (CSI)](../../glossary.md#cray-site-init-csi)
+  tool are deprecated in CSM 1.7.0.
+    - [`csi config init` deprecated flags](../csi_Tool_Changes.md#csi-config-init-deprecated-flags)
+    - [`csi patch` deprecated sub-commands](../csi_Tool_Changes.md#csi-patch-deprecated-sub-commands)
 
 ### Deprecated in CSM 1.6
 

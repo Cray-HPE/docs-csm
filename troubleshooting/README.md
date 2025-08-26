@@ -70,6 +70,12 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
+* Systems running CSM 1.6 or earlier that fresh install CSM 1.7 must regenerate their
+  management switch configuration because of the
+  [Other behavior changes](../introduction/csi_Tool_Changes.md#other-behavior-changes)
+  made in the [Cray Site Init (CSI)](../glossary.md#cray-site-init-csi) tool.
+    * Systems upgrading from CSM 1.6 to CSM 1.7 **may ignore** this issue until the next
+      CSM 1.7+ reinstall.
 
 ## Booting
 
