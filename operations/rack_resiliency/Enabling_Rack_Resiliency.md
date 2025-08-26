@@ -3,7 +3,7 @@
 ## Overview
 
 * Rack Resiliency **should not** be used in a production environment. For more details, see
-  [Attention: RR is experimental](README.md#attention-rr-is-experimental).
+  [Rack Resiliency is experimental](README.md#attention-rr-is-experimental).
 * By default, Rack Resiliency is disabled.
 * Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an
   upgrade from CSM 1.6 to CSM 1.7.
