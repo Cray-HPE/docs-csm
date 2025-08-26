@@ -246,5 +246,8 @@ see [Removals](introduction/deprecated_features/README.md#removals)
 * `sat bootprep` image customization error
     * The SAT product should be upgraded to 2.6.23 to avoid this issue.
     * For more information, including a workaround, see [sat bootprep image customization error](troubleshooting/known_issues/sat_bootprep_image_customization_error.md).
+* PostgreSQL clusters may fall into `SyncFailed` state after upgrade from CSM 1.4 to 1.5 due to Kyverno webhook conflicts
+    * This issue can be resolved by temporarily removing Kyverno webhook configurations and restarting the Kyverno deployment.
+    * For more information, including a workaround, see [PostgreSQL Clusters in `SyncFailed` State Due to Kyverno Webhook](troubleshooting/known_issues/postgres_syncfailed_kyverno_webhook.md).
 
 For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).

@@ -80,6 +80,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 * [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 * [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
+* [PostgreSQL Clusters in `SyncFailed` State Due to Kyverno Webhook](known_issues/postgres_syncfailed_kyverno_webhook.md)
 * [Remove Duplicate Detected Events From the HSM Postgres Database](../operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
