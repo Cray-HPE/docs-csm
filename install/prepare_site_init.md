@@ -10,7 +10,7 @@ directory which contains important customizations for various products.
     - [Customize DNS configuration](#customize-dns-configuration)
     - [Configure Prometheus SNMP Exporter](#configure-prometheus-snmp-exporter)
     - [Configure maximum Istio Gateway pods](#configure-maximum-istio-gateway-pods)
-    - [Enable Rack Resiliency](#enable-rack-resiliency)
+    - [Enable Rack Resiliency (experimental)](#enable-rack-resiliency-experimental)
 1. [Encrypt secrets](#4-encrypt-secrets)
 1. [Customer-specific customizations](#5-customer-specific-customizations)
 
@@ -472,7 +472,9 @@ the system size.
     done
     ```
 
-### Enable Rack Resiliency
+### Enable Rack Resiliency (experimental)
+
+> [Rack Resiliency is **experimental**](../operations/rack_resiliency/README.md#attention-rr-is-experimental).
 
 Rack Resiliency is new in CSM 1.7. It is disabled by default and it
 **cannot change between enabled and disabled later**. Administrators are advised to

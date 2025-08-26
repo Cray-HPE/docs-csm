@@ -3,7 +3,7 @@
 This section ensures the product content is loaded onto the system and available for later steps in the workflow.
 
 1. [Configure optional CSM features](#1-configure-optional-csm-features)
-    - [Rack Resiliency](#rack-resiliency)
+    - [Rack Resiliency (experimental)](#rack-resiliency-experimental)
 1. [Execute the IUF `process-media` and `pre-install-check` stages](#2-execute-the-iuf-process-media-and-pre-install-check-stages)
 1. [Update `customizations.yaml`](#3-update-customizationsyaml)
 1. [Populate admin directory with files defining site preference](#4-populate-admin-directory-with-files-defining-site-preferences)
@@ -15,9 +15,10 @@ This section ensures the product content is loaded onto the system and available
 
 > If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
 
-### Rack Resiliency
+### Rack Resiliency (experimental)
 
-> If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
+> - If this IUF procedure is not part of an upgrade from CSM 1.6 to CSM 1.7, then this section should be skipped.
+> - [Rack Resiliency is **experimental**](../../rack_resiliency/README.md#attention-rr-is-experimental).
 
 Rack Resiliency is new in CSM 1.7. It is disabled by default and it
 **cannot change between enabled and disabled later**. Administrators are advised to

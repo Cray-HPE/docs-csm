@@ -1,7 +1,6 @@
 # Cray System Management (CSM) - Release Notes
 
 * [New](#new)
-    * [Resiliency](#resiliency)
     * [iSCSI SBPS](#iscsi-sbps)
     * [Monitoring](#monitoring)
     * [Miscellaneous functionality](#miscellaneous-functionality)
@@ -13,6 +12,7 @@
     * [Security improvements](#security-improvements)
     * [Customer-requested enhancements](#customer-requested-enhancements)
     * [Documentation enhancements](#documentation-enhancements)
+    * [Rack Resiliency technology preview](#rack-resiliency-technology-preview)
 * [Noteworthy changes](#noteworthy-changes)
 * [Test](#test)
 * [Bug fixes](#bug-fixes)
@@ -41,14 +41,6 @@
     * [USS](#uss)
 
 ## New
-
-### Resiliency
-
-* The optional [Rack Resiliency](operations/rack_resiliency/README.md) feature enhances CSM
-  resiliency by offering protection to the management plane against rack-level failures.
-    * This feature is disabled by default
-    * This feature **can only be enabled during an upgrade from CSM 1.6 to CSM 1.7 or an install of CSM 1.7**.
-    * See [Enabling Rack Resiliency](operations/rack_resiliency/Enabling_Rack_Resiliency.md) for more details.
 
 ### iSCSI SBPS
 
@@ -159,6 +151,19 @@ For full details on these extensive changes, see [`csi` Tool Changes](introducti
 ### Documentation enhancements
 
 * Updated Kyverno documentation.
+
+### Rack Resiliency technology preview
+
+> Rack Resiliency is available as a technology preview for evaluation purposes in a test environment;
+> it **should not** be used in a production environment. For more details, see
+> [RR is experimental](operations/rack_resiliency/README.md#attention-rr-is-experimental).
+
+The optional [Rack Resiliency](operations/rack_resiliency/README.md) technology preview enhances CSM
+resiliency by offering protection to the management plane against rack-level failures.
+
+* Rack Resiliency is disabled by default
+* Rack Resiliency **can only be enabled during an upgrade from CSM 1.6 to CSM 1.7 or an install of CSM 1.7**.
+* See [Enabling Rack Resiliency](operations/rack_resiliency/Enabling_Rack_Resiliency.md) for more details.
 
 ## Noteworthy changes
 
