@@ -156,7 +156,7 @@ For full details on these extensive changes, see [`csi` Tool Changes](introducti
 
 > Rack Resiliency is available as a technology preview for evaluation purposes in a test environment;
 > it **should not** be used in a production environment. For more details, see
-> [Attention: RR is experimental](operations/rack_resiliency/README.md#attention-rr-is-experimental).
+> [RR is experimental](operations/rack_resiliency/README.md#attention-rr-is-experimental).
 
 The optional [Rack Resiliency](operations/rack_resiliency/README.md) technology preview enhances CSM
 resiliency by offering protection to the management plane against rack-level failures.
