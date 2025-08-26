@@ -70,6 +70,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
+* [PostgreSQL System ID Mismatch](known_issues/postgres_system_id_mismatch.md)
 * Systems running CSM 1.6 or earlier that fresh install CSM 1.7 must regenerate their
   management switch configuration because of the
   [Other behavior changes](../introduction/csi_Tool_Changes.md#other-behavior-changes)
