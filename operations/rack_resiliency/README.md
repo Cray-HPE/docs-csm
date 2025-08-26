@@ -22,7 +22,7 @@
 ## Attention: RR is experimental
 
 In CSM 1.7.0, Rack Resiliency is **experimental** and **use-at-your-own-risk**. It is offered
-as a technology preview for administrators who wish to try it in a non-production environment.
+as a technology preview for administrators who wish to evaluate it in a non-production environment.
 It has not undergone sufficient validation to be considered stable for production use.
 
 ## Introduction
