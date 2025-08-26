@@ -573,8 +573,7 @@ Liquid-Cooled TDS cabinet coolant manifolds.
 
 ## Rack Resiliency
 
-> Rack Resiliency is **experimental**. For more details, see
-> [Attention: RR is experimental](operations/rack_resiliency/README.md#attention-rr-is-experimental).
+> [Rack Resiliency is **experimental**](operations/rack_resiliency/README.md#attention-rr-is-experimental).
 
 The Rack Resiliency technology preview provides additional layers of resiliency in the event of a failure of a physical rack in the system.
 
