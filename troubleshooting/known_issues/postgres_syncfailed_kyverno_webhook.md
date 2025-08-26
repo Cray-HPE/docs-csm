@@ -2,7 +2,7 @@
 
 ## Description
 
-Sometimes after PostgreSQL clusters upgrade from version 11 to 14 (CSM 1.4 to CSM 1.5), most
+Sometimes after PostgreSQL clusters upgrade from version 11 to 14 (CSM 1.4 to CSM 1.5),
 clusters fall into a `SyncFailed` state due to admission webhook conflicts with Kyverno policies.
 The issue occurs when the Kyverno mutating webhook `mutate.kyverno.svc-fail` denies requests
 during PostgreSQL pod updates, preventing the clusters from maintaining their healthy state.
