@@ -471,6 +471,46 @@ If you want to continue manually, please follow the steps below.
 
 1. Reboot each of the master nodes (one at a time), going from the highest to lowest number, excluding `ncn-m001`. There are special instructions for `ncn-m001` later, because its console connection is not managed by ConMan.
 
+    1. (`ncn-mw#`) Make sure that the selected node is not set as `first-master-hostname`.
+
+        ```bash
+        cray bss bootparameters list --hosts Global --format toml | grep first-master-hostname
+        ```
+
+        Example output if `ncn-m002` is set as `first-master-hostname`:
+
+        ```toml
+        first-master-hostname = "ncn-m002"
+        ```
+
+        **`IMPORTANT:`** If the selected node is set as `first-master-hostname`, then change it to
+        another master node; for example, `ncn-m001`.
+
+        ```bash
+        export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | \
+            jq -r '.access_token')
+        promotingMaster=ncn-m001
+        VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster \
+            --limit Global
+        ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            "/usr/share/doc/csm/upgrade/scripts/k8s/promote-initial-master.sh"
+        ```
+
+    1. (`ncn-mw#`) Verify that the `first-master-hostname` has been updated:
+
+        ```bash
+        cray bss bootparameters list --hosts Global --format toml | grep first-master-hostname
+        ```
+
+        Example output if `ncn-m001` is now set as `first-master-hostname`:
+
+        ```toml
+        first-master-hostname = "ncn-m001"
+        ```
+
     1. Establish a console session to the master node being rebooted.
 
         See step [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
@@ -480,7 +520,7 @@ If you want to continue manually, please follow the steps below.
     1. (`ncn-m#`) Reboot the selected node.
 
         ```bash
-         shutdown -r now
+        shutdown -r now
         ```
 
         **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below.
@@ -571,6 +611,46 @@ If you want to continue manually, please follow the steps below.
     1. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number, until all master nodes have successfully rebooted.
 
 1. Reboot `ncn-m001`.
+
+    1. (`ncn-mw#`) Make sure that `ncn-m001` is not set as `first-master-hostname`.
+
+        ```bash
+        cray bss bootparameters list --hosts Global --format toml | grep first-master-hostname
+        ```
+
+        Example output if `ncn-m001` is set as `first-master-hostname`:
+
+        ```toml
+        first-master-hostname = "ncn-m001"
+        ```
+
+        **`IMPORTANT:`** If `ncn-m001` is set as `first-master-hostname`, then change it to another
+        master node, for example, `ncn-m002`.
+
+        ```bash
+        export TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | \
+            jq -r '.access_token')
+        promotingMaster=ncn-m002
+        VERBOSE=1 csi handoff bss-update-cloud-init --set meta-data.first-master-hostname=$promotingMaster \
+            --limit Global
+        ssh $promotingMaster -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            "/usr/share/doc/csm/upgrade/scripts/k8s/promote-initial-master.sh"
+        ```
+
+    1. (`ncn-mw#`) Verify that the `first-master-hostname` has been updated:
+
+        ```bash
+        cray bss bootparameters list --hosts Global --format toml | grep first-master-hostname
+        ```
+
+        Example output if `ncn-m002` is now set as `first-master-hostname`:
+
+        ```toml
+        first-master-hostname = "ncn-m002"
+        ```
 
     1. Determine the site/external IP address for one of the other NCNs in the system, in order to establish an SSH session with that NCN.
 
