@@ -17,7 +17,6 @@ This procedure shows how to connect to the node's Serial Over LAN (SOL) via ConM
 
 ### Sensitive input echoed when using CLI to access console
 
-
 **`IMPORTANT`** When using the `cray` CLI for access and a password is required, it will be visible on the screen as it is
 being typed. The websocket connection is secure and the password will not be recorded in the console logs but it will be
 visible on the screen and will be captured by a `screen` session. If this is a concern, use the procedure to
