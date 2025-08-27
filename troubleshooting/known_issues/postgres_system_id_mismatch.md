@@ -71,7 +71,7 @@ the affected PostgreSQL cluster.
    kubectl edit postgresql cfs-ara-postgres -n services
    ```
 
-1. (`ncn-mw#`) Wait for all three pods to be running and verify cluster health.
+1. (`ncn-mw#`) Wait for all three pods to be running.
 
    ```bash
    kubectl -n services get pods -l application=spilo,cluster-name=cfs-ara-postgres
