@@ -58,8 +58,6 @@ the affected PostgreSQL cluster.
 
 1. (`ncn-mw#`) Delete the persistent volume claims for the deleted replica pods.
 
-   Commands:
-
    ```bash
    kubectl delete pvc pgdata-cfs-ara-postgres-1 -n services
    kubectl delete pvc pgdata-cfs-ara-postgres-2 -n services
@@ -67,17 +65,13 @@ the affected PostgreSQL cluster.
 
 1. (`ncn-mw#`) Scale the PostgreSQL cluster back up to three instances.
 
-   Command:
+   Edit the cluster in Kubernetes, change the `numberOfInstances` value from `1` back to `3`, and save the changes.
 
    ```bash
    kubectl edit postgresql cfs-ara-postgres -n services
    ```
 
-   Change the `numberOfInstances` value from `1` to `3` and save the file.
-
 1. (`ncn-mw#`) Wait for all three pods to be running and verify cluster health.
-
-   Command:
 
    ```bash
    kubectl -n services get pods -l application=spilo,cluster-name=cfs-ara-postgres
@@ -85,15 +79,15 @@ the affected PostgreSQL cluster.
 
    Wait until all three pods are in `Running` state.
 
-1. (`ncn-mw#`) Verify the PostgreSQL cluster status is healthy.
+1. (`ncn-mw#`) Verify that the PostgreSQL cluster status is healthy.
 
-   Command:
+   All cluster members should show as `running` with consistent timeline (TL) values and minimal lag.
 
    ```bash
    kubectl -n services exec -it cfs-ara-postgres-0 -c postgres -- patronictl list
    ```
 
-   Example output:
+   Example of healthy output:
 
    ```text
    + Cluster: cfs-ara-postgres -------+---------+---------+----+-----------+
@@ -104,5 +98,3 @@ the affected PostgreSQL cluster.
    | cfs-ara-postgres-2 | 10.32.3.211 | Replica | running |  1 |         0 |
    +--------------------+-------------+---------+---------+----+-----------+
    ```
-
-All cluster members should show as `running` with consistent timeline (TL) values and minimal lag.
