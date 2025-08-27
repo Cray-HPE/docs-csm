@@ -1,6 +1,8 @@
 # Log in to a Node Using ConMan
 
-This procedure shows how to connect to the node's Serial Over LAN (SOL) via ConMan.
+These procedures show how to connect to the node's Serial Over LAN (SOL) via ConMan.
+
+> **`NOTE`** These procedures have changed since the CSM 1.6 release.
 
 ## Prerequisites
 
@@ -23,8 +25,6 @@ visible on the screen and will be captured by a `screen` session. If this is a c
 [log in using ConMan directly within a Kubernetes pod](#log-in-using-conman-directly-within-a-kubernetes-pod).
 
 ### Procedure to log in using Cray CLI
-
-> **`NOTE`** this procedure has changed since the CSM 1.6.x releases.
 
 1. Log on to a Kubernetes master or worker node.
 
@@ -60,7 +60,7 @@ visible on the screen and will be captured by a `screen` session. If this is a c
 
 ## Log in using ConMan directly within a Kubernetes pod
 
-> **`NOTE`** this procedure has changed since the CSM 0.9 release.
+> **`NOTE`** This procedure has changed since the CSM 0.9 release.
 
 1. Log on to a Kubernetes master or worker node.
 
