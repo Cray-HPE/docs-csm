@@ -83,14 +83,7 @@ The user performing these procedures needs to have access permission to the `cra
 
 1. (`ncn-mw#`) Establish a serial console session with the desired NCN.
 
-    ```bash
-    cray console interact $XNAME
-    ```
-
-    The console session log files for each NCN are located in a shared volume in the `cray-console-node` pods.
-    In those pods, the log files are in the `/var/log/conman/` directory and are named `console.<xname>`.
-
-1. Exit the connection to the console by entering `&.``[Enter]`.
+    Follow the instructions in [Log in to a Node Using ConMan](Log_in_to_a_Node_Using_ConMan.md).
 
 ## Evacuation procedure
 

@@ -103,7 +103,7 @@ On a regular schedule, the log rotation will execute the following steps:
     subject to rotation.
 
     If the files are larger than the `LOG_ROTATE_FILE_SIZE`, decrease the
-    value of `LOG_ROTATE_SEC_FREQ` so the rotation happens too often.
+    value of `LOG_ROTATE_SEC_FREQ` so the rotation happens more often.
 
 1. Log files are being rotated before a complete boot.
 
