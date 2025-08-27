@@ -402,7 +402,7 @@ For example:
     ```
 
   To resolve the above issue, follow the solution steps in
-  [PostgreSQL System ID Mismatch](../../troubleshooting/known_issues/postgres_system_id_mismatch.md)
+  [PostgreSQL System ID Mismatch](../../troubleshooting/known_issues/postgres_system_id_mismatch.md).
 
 - If a cluster member is `stopped` after a successful reinitialization, check for `pg_internal.init.*` files that may need to be cleaned up. This can occur if the `pgdata`
   disk was full prior to the reinitialization, leaving truncated `pg_internal.init.*` files in the `pgdata` directory.
