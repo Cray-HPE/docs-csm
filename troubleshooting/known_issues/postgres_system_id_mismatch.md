@@ -40,13 +40,11 @@ the affected PostgreSQL cluster.
 
 1. (`ncn-mw#`) Scale the PostgreSQL cluster down to a single instance.
 
-   Command:
+   Edit the cluster in Kubernetes, change the `numberOfInstances` value from `3` to `1`, and save the changes.
 
    ```bash
    kubectl edit postgresql cfs-ara-postgres -n services
    ```
-
-   Change the `numberOfInstances` value from `3` to `1` and save the file.
 
 1. (`ncn-mw#`) Wait for the replica pods to be deleted.
 
