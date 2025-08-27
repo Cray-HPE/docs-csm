@@ -73,6 +73,7 @@ ArubaOS-CX
 ASICs
 backdoor
 backend
+backoff
 BardPeak
 barebones
 base-64
@@ -373,6 +374,7 @@ non-SquashFS
 noncompute
 noncritical
 nondefault
+nonexistent
 nonzero
 NVidia
 OAuth
