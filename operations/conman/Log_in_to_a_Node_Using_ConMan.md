@@ -10,8 +10,8 @@ This procedure shows how to connect to the node's Serial Over LAN (SOL) via ConM
 ## Limitations
 
 * Encryption of compute node logs is not enabled, so the passwords may be passed in clear text.
-* Tenant access restriction requires use of the Cray CLI method. Direct access to ConMan within a K8S pod does not restrict access by tenant.
-* If the user is a member of a tenant, then only the consoles for that tenant are available.
+* Tenant access restriction requires use of the Cray CLI method. Direct access to ConMan within a Kubernetes pod does not restrict access by tenant.
+* If the user is a member of a tenant, then only the consoles for that tenant are available when using the CLI.
 
 ## Log in using the Cray CLI
 
