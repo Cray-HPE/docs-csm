@@ -174,7 +174,7 @@ See [Automatic Configuration Management](Automatic_Configuration_Management.md) 
 
 > **`NOTE`** This option is only available in the v3 CFS API.
 
-Any sessions that have failed while using the `debug_on_failure` option will wait for this many seconds before automatically terminating if the the completion flag
+Any sessions that have failed while using the `debug_on_failure` option will wait for this many seconds before automatically terminating if the completion flag
 is not touched.
 
 * v3 name: `debug_wait_time`
@@ -208,16 +208,16 @@ See [Automatic Configuration Management](Automatic_Configuration_Management.md) 
 
 > **`NOTE`** This option is only available in the v3 CFS API.
 
-When list listing component, session, or configuration records, CFS will by default return a maximum of this many records.
+When listing component, session, or configuration records, CFS will by default return a maximum of this many records.
 
 * v3 name: `default_page_size`
 * Default: `1000` entries in the list
 
-If the `limit` parameter is not specified in the call, then the default page size is what will be used for the maximum number of records returned in one call.
+If the `limit` parameter is not specified in the call, then the maximum number of records returned in one call is equal to the default page size.
 See [Paging CFS Records](Paging_CFS_Records.md) for more information on paging.
 
 This parameter has a secondary purpose in the v2 API.
-Calls that exceed this number of records will instead return an error stating that the response is too large.
+In CFS v2, calls that exceed this number of records will instead return an error stating that the response is too large.
 In this case users should switch to the v3 API to take advantage of paging.
 This number can be increased through the v3 API to allow more records to be returned through the v2 API, but this risks causing calls to fail due to memory constraints.
 
