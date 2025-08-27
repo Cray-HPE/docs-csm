@@ -28,79 +28,203 @@ Example output:
 }
 ```
 
-The following are the CFS global options:
+In the [CFS API specification](../../api/cfs.md), these options are defined in the
+[`V2Options`](../../api/cfs.md#schemav2options) schema.
 
-* **`additionalInventoryUrl`**
+The values for all CFS global options can be modified with the `cray cfs options update` command.
 
-  A Git clone URL to supply additional inventory content to all CFS sessions.
+The following are the CFS global options, their names in CFS, and their default values.
 
-  See [Manage Multiple Inventories in a Single Location](Manage_Multiple_Inventories_in_a_Single_Location.md) for more information.
+| *Option*                                | *CFS name*                  | *Default*                   | *Type*  | *Units/format*                         |
+| --------------------------------------- | --------------------------- | --------------------------- | ------- | -------------------------------------- |
+| [Additional inventory URL][add-url]     | `additionalInventoryUrl`    | `""`                        | string  | Git clone URL                          |
+| [Batch size][bat-siz]                   | `batchSize`                 | `25`                        | integer | Components                             |
+| [Batch window][bat-win]                 | `batchWindow`               | `60`                        | integer | seconds                                |
+| [Batcher check interval][bat-chk]       | `batcherCheckInterval`      | `10`                        | integer | seconds                                |
+| [Batcher disable][bat-dis]              | `batcherDisable`            | `false`                     | boolean | -                                      |
+| [Batcher maximum backoff][bat-bac]      | `batcherMaxBackoff`         | `3600`                      | integer | seconds                                |
+| [Batcher pending timeout][bat-pen]      | `batcherPendingTimeout`     | `300`                       | integer | seconds                                |
+| [Default Ansible configuration][ancfg]  | `defaultAnsibleConfig`      | `"cfs-default-ansible-cfg"` | string  | ConfigMap name in `services` namespace |
+| [Default batcher retry policy][bat-ret] | `defaultBatcherRetryPolicy` | `3`                         | integer | Component configuration attempts       |
+| [Default playbook][pbook]               | `defaultPlaybook`           | `"site.yml"`                | string  | Name of Ansible playbook               |
+| [Hardware synchronization interval][hw] | `hardwareSyncInterval`      | `10`                        | integer | seconds                                |
+| [Logging level][log-lvl]                | `loggingLevel`              | `"INFO"`                    | string  | Python logging level                   |
+| [Session Time-To-Live (TTL)][ses-ttl]   | `sessionTTL`                | `"7d"`                      | string  | Length of time or empty string         |
 
-* **`batchSize`**
+## Additional inventory URL
 
-  This option determines the maximum number of components that will be included in each session created by CFS Batcher.
+A Git clone URL to supply additional inventory content to all CFS sessions.
 
-  See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
+* Name: `additionalInventoryUrl`
+* Default: `""` (empty string)
 
-* **`batchWindow`**
+See [Manage Multiple Inventories in a Single Location](Manage_Multiple_Inventories_in_a_Single_Location.md) for more information.
 
-  This option sets the number of seconds that CFS batcher will wait before scheduling a CFS session when the number of components needing configuration has not reached the `batchSize` limit.
+## Batch size
 
-  See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
+This option determines the maximum number of components that will be included in each session created by CFS Batcher.
 
-* **`batcherCheckInterval`**
+* Name: `batchSize`
+* Default: `25` components per session
 
-  This option sets how often CFS batcher checks for components waiting to be configured. This value must be lower than `batchWindow`.
+> **WARNING:** Increasing this value will result in fewer batcher-created sessions, but will also require more resources for
+> [Ansible Execution Environment (AEE)](Ansible_Execution_Environments.md) containers to do the configuration.
 
-  See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
+See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
 
-* **`batcherDisable`**
+## Batch window
 
-  This option allows the CFS batcher service to be disabled.
-  If set to true, CFS batcher will still monitor existing sessions, but will not create new sessions or monitor the desired state of components.
-  This is preferred over setting a high `batcherCheckInterval` when doing maintenance because the CFS batcher continues to monitor the CFS options and will resume when this flag is unset, rather than requiring a restart to refresh the options.
+This option sets the number of seconds that CFS batcher will wait before scheduling a CFS session when the number of components
+needing configuration has not reached the [batch size][bat-siz] limit.
 
-* **`batcherMaxBackoff`**
+* Name: `batchWindow`
+* Default: `60` seconds
 
-  This option specifies the maximum number of seconds that the CFS batcher's back-off will reach.
-  When all sessions are failing, CFS batcher will reduce the frequency with which sessions are created.
-  This back-off time will continue to increase up to this cap, and will reset to 0 when a new session is successful.
+The batch window time-boxes the creation of sessions so no component needs to wait for the queue to fill.
+  
+> **WARNING:** Lower values will cause CFS batcher to be more responsive to creating sessions, but values too low may result in
+> degraded performance of both the CFS APIs as well as the overall system.
 
-* **`batcherPendingTimeout`**
+See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
 
-  This option specifies the maximum number of seconds that CFS batcher will wait for a new session to enter a running state before deleting the session and trying again.
-  This retry helps manage rare communication errors that can cause sessions to be stuck in a pending state.
+## Batcher check interval
 
-* **`defaultAnsibleConfig`**
+This option sets how often CFS batcher checks for components waiting to be configured.
 
-  See [Set the `ansible.cfg` for a Session](Set_the_ansible-cfg_for_a_Session.md) for more information.
+* Name: `batcherCheckInterval`
+* Default: `10` seconds
 
-* **`defaultBatcherRetryPolicy`**
+This value must be lower than the [batch window][bat-win].
 
-  When a component \(node\) requiring configuration fails to configure from a previous configuration session launched by CFS batcher, the error is logged.
-  `defaultBatcherRetryPolicy` is the maximum number of failed configurations allowed per component before CFS batcher will stop attempting to configure the component.
+It is not recommended to increase this value during maintenance periods, in order to avoid CFS sessions being scheduled. In that
+situation, use the [batcher disable][bat-dis] option.
 
-  See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
+> **WARNING:** Lower values will cause CFS Batcher to be more responsive to creating sessions, but values too low may result in
+> degraded performance of the CFS APIs on larger systems.
 
-* **`defaultPlaybook`**
+See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
 
-  Use this value when no playbook is specified in a configuration layer.
+## Batcher disable
 
-* **`hardwareSyncInterval`**
+This option specifies whether the CFS batcher service is enabled or disabled.
 
-  The number of seconds between checks to the Hardware State Manager \(HSM\) for new hardware additions to the system. When new hardware is registered with HSM, CFS will add it as a component.
+* Name: `batcherDisable`
+* Default: `false`
 
-  See [Configuration Management of System Components](Configuration_Management_of_System_Components.md) for more information.
+If set to `true`, CFS batcher will still monitor existing sessions, but will not create new sessions or monitor the desired state of components.
+When doing maintenance, disabling batcher is preferred over setting a high [batcher check interval][bat-chk].
+This is because the CFS batcher does not check the CFS options while it waits for the check interval to elapse,
+meaning that after the maintenance is complete, reducing the check interval may take some time in order to take effect, and
+the only alternative to force it to happen sooner is to restart the batcher service. Alternatively, even while batcher is disabled,
+it still monitors the CFS options, and will resume its activities when it sees that the disable flag is set to `false`.
 
-The default values for all CFS global options can be modified with the `cray cfs options update` command.
+See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
 
-* **`loggingLevel`**
+## Batcher maximum backoff
 
-  The level that all CFS services will log at.
-  This can be changed dynamically to enable or disable debugging at any time.
+This option specifies the maximum number of seconds that the CFS batcher's back-off will reach.
 
-* **`sessionTTL`**
+* Name: `batcherMaxBackoff`
+* Default: `3600` seconds
 
-  The time-to-live for completed CFS sessions.
-  Running sessions will not be deleted.
-  This can be specified as a number of days (e.g. `7d`) or hours (e.g. `12h`).
+When all sessions are failing, CFS batcher will reduce the frequency with which sessions are created.
+This back-off time will continue to increase up to this cap, and will reset to 0 when a new session is successful.
+
+See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
+
+## Batcher pending timeout
+
+This option specifies the maximum number of seconds that CFS batcher will wait for a new session to enter a running state before deleting the session and trying again.
+
+* Name: `batcherPendingTimeout`
+* Default: `300` seconds
+
+This retry helps manage rare communication errors that can cause sessions to be stuck in a pending state.
+
+See [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md) for more information.
+
+## Default Ansible configuration
+
+The name of the Kubernetes ConfigMap in the `services` namespace that contains the
+Ansible configuration to use for CFS sessions when none is explicitly specified.
+
+* Name: `defaultAnsibleConfig`
+* Default: `"cfs-default-ansible-cfg"`
+
+See [Set the `ansible.cfg` for a Session](Set_the_ansible-cfg_for_a_Session.md) for more information.
+
+## Default batcher retry policy
+
+The default batcher retry policy is the maximum number of failed configuration attempts allowed per component before CFS batcher will stop attempting to configure the component.
+
+* Name: `defaultBatcherRetryPolicy`
+* Default: `3` attempts to configure a component
+
+This value can be overridden on a per component basis.
+
+For more information, see:
+
+* [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md)
+* [Configuration Management of System Components](Configuration_Management_of_System_Components.md)
+
+## Default playbook
+
+This value is used when no playbook is specified in a configuration layer.
+
+* Name: `defaultPlaybook`
+* Default: `"site.yml"`
+
+For more information on configuration layers, see [Configuration Layers](Configuration_Layers.md).
+
+## Hardware synchronization interval
+
+The number of seconds between checks to the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm)
+for new hardware additions to the system.
+
+* Name: `hardwareSyncInterval`
+* Default: `10` seconds
+
+When new hardware is registered with HSM, CFS will add it as a component.
+
+See [Configuration Management of System Components](Configuration_Management_of_System_Components.md) for more information.
+
+## Logging level
+
+> Do not confuse this with the Ansible verbosity level. For details on how to change that, see [Change the Ansible Verbosity Logs](Change_the_Ansible_Verbosity_Logs.md).
+
+The logging level for all CFS services.
+
+* Name: `loggingLevel`
+* Default: `"INFO"`
+* Valid values: `"DEBUG"`, `"INFO"`, `"WARNING"`, `"ERROR"`
+
+This aids debugging by allowing the logging level to be changed dynamically at any time.
+
+## Session Time-To-Live (TTL)
+
+The time-to-live for completed CFS sessions.
+
+* Name: `"sessionTTL"`
+* Default: `"7d"`
+
+Running sessions will not be deleted.
+Specified in minutes (e.g. `"45m"`), hours (e.g. `"9h"`), days (e.g. `"17d"`), or weeks (e.g. `"57w"`).
+Set to an empty string to disable.
+
+For more information, see [Automatic Session Deletion with `sessionTTL`](Automatic_Session_Deletion_with_sessionTTL.md).
+
+<!--- Define the reference-style Markdown links used to reduce the size of the options table. -->
+
+[add-url]: #additional-inventory-url
+[bat-siz]: #batch-size
+[bat-win]: #batch-window
+[bat-chk]: #batcher-check-interval
+[bat-dis]: #batcher-disable
+[bat-bac]: #batcher-maximum-backoff
+[bat-pen]: #batcher-pending-timeout
+[ancfg]: #default-ansible-configuration
+[bat-ret]: #default-batcher-retry-policy
+[pbook]: #default-playbook
+[hw]: #hardware-synchronization-interval
+[log-lvl]: #logging-level
+[ses-ttl]: #session-time-to-live-ttl
