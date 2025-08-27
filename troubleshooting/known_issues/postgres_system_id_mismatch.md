@@ -16,11 +16,14 @@ causing replication failures and preventing proper cluster recovery.
 PostgreSQL pods display unhealthy status and the affected pod logs contain "system ID mismatch"
 error messages.
 
-Example log output from the unhealthy pod:
+(`ncn-mw#`) Check the pod log.
 
 ```bash
 kubectl -n services logs cfs-ara-postgres-1 -c postgres
 ```
+
+If an unhealthy pod is experiencing this problem, then its log will contain a
+line that resembles the following:
 
 ```text
 2025-08-21 20:27:39,777 CRITICAL: system ID mismatch, node cfs-ara-postgres-1 belongs to a different cluster: 7541118075072872658 != 7233898320826871891
