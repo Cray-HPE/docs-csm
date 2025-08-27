@@ -311,33 +311,37 @@ There are a couple of ways to resolve this situation.
               storage: 200Gi
         ```
 
-    1. Update the customizations.yaml to persist the `pvc` size change.
+    1. Update `customizations.yaml` to persist the PVC size change.
 
-        Download the customizations.yaml
+        1. Download `customizations.yaml`
 
-        ```bash
-        kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
-        ```
+            ```bash
+            kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d > customizations.yaml
+            ```
 
-        Edit customizations.yaml to add cray-console-operator cray-service.persistentVolumeClaims.data-claim.resources.requests.storage
-        to match the new size set in the PVC above. For example, if the new size is 200Gi:
+        1. Edit `customizations.yaml`.
 
-        ```yaml
-        cray-console-operator:
-          cray-service:
-            persistentVolumeClaims:
-              data-claim:
-                resources:
-                  requests:
-                    storage: 200Gi
-        ```
+            Add `cray-console-operator cray-service.persistentVolumeClaims.data-claim.resources.requests.storage`
+            to match the new size set in the PVC above.
 
-        Save the changed customizations.yaml
+            For example, if the new size is `200Gi`:
 
-        ```bash
-        kubectl delete secret -n loftsman site-init
-        kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
-        ```
+            ```yaml
+            cray-console-operator:
+              cray-service:
+                persistentVolumeClaims:
+                  data-claim:
+                    resources:
+                      requests:
+                        storage: 200Gi
+            ```
+
+        1. Save the changed `customizations.yaml`
+
+            ```bash
+            kubectl delete secret -n loftsman site-init
+            kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+            ```
 
     1. Scale the number of `cray-console-operator` pods to zero.
 
