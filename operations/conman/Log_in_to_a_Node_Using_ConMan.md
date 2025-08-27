@@ -13,13 +13,18 @@ This procedure shows how to connect to the node's Serial Over LAN (SOL) via ConM
 * Tenant access restriction requires use of the Cray CLI method. Direct access to ConMan within a K8S pod does not restrict access by tenant.
 * If the user is a member of a tenant, then only the consoles for that tenant are available.
 
-## Procedure to log in using the Cray CLI
+## Log in using the Cray CLI
 
-> **`IMPORTANT`** When using the `cray` CLI for access and a password is required, it will be visible on the
-> screen as it is being typed. The websocket connection is secure and the password will not be recorded
-> in the console logs but it will be visible on the screen and will be captured by a `screen` session. If this is a concern, use
-> the [procedure to log in using ConMan directly within a Kubernetes pod](#procedure-to-log-in-using-conman-directly-within-a-kubernetes-pod).
->
+### Sensitive input echoed when using CLI to access console
+
+
+**`IMPORTANT`** When using the `cray` CLI for access and a password is required, it will be visible on the screen as it is
+being typed. The websocket connection is secure and the password will not be recorded in the console logs but it will be
+visible on the screen and will be captured by a `screen` session. If this is a concern, use the procedure to
+[log in using ConMan directly within a Kubernetes pod](#log-in-using-conman-directly-within-a-kubernetes-pod).
+
+### Procedure to log in using Cray CLI
+
 > **`NOTE`** this procedure has changed since the CSM 1.6.x releases.
 
 1. Log on to a Kubernetes master or worker node.
@@ -54,7 +59,7 @@ This procedure shows how to connect to the node's Serial Over LAN (SOL) via ConM
     Connection closed by the server.
     ```
 
-## Procedure to log in using ConMan directly within a Kubernetes pod
+## Log in using ConMan directly within a Kubernetes pod
 
 > **`NOTE`** this procedure has changed since the CSM 0.9 release.
 
