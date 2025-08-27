@@ -40,7 +40,7 @@ For convenience all changes are listed here.
   execution to remain up for a limited time so that users can `exec` into the
   [Ansible Execution Environment (AEE)](Ansible_Execution_Environments.md) container and debug
   the problem. See [Troubleshoot CFS Issues](Troubleshoot_CFS_Issues.md) for more information.
-* The CFS v3 supports new debugging playbooks which are included by default.
+* CFS v3 supports new debugging playbooks which are included by default.
   This can be accessed by specifying `debug_fail`, `debug_facts` or `debug_noop` as the
   configuration for a session if a configuration has not already been created with that name.
   See [Troubleshoot CFS Issues](Troubleshoot_CFS_Issues.md) for more information.
