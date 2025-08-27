@@ -6,16 +6,18 @@
 
 ## ARA Records Ansible \(ARA\)
 
-The Ansible logs from all Configuration Framework Service \(CFS\) sessions are recorded using ARA Records Ansible \(ARA\),
-which provides an Ansible friendly way to view the logs for CFS.
-ARA is an open-source log collector, API, and UI, specifically for collecting and parsing Ansible logs.
-For more on ARA in general, see [the ARA home page](https://ara.recordsansible.org/).
+The Ansible logs from all Configuration Framework Service \(CFS\) sessions are recorded using
+ARA Records Ansible \(ARA\), which provides an Ansible-friendly way to view the logs for CFS.
+ARA is an open-source log collector, API, and UI, specifically for collecting and parsing
+Ansible logs. For more information on ARA in general, see
+[the ARA home page](https://ara.recordsansible.org/).
 
 ## Accessing the UI
 
-The ARA UI can be accessed via `https://ara.cmn.SYSTEM_DOMAIN_NAME`.
+The ARA UI can be accessed using `https://ara.cmn.SYSTEM_DOMAIN_NAME`.
 
-Additionally, links that include filters for specific components or sessions are included in the component and session records.
+Additionally, links that include filters for specific components or sessions are included in
+the component and session records. For example:
 
 ```json
 {
@@ -29,9 +31,12 @@ Additionally, links that include filters for specific components or sessions are
 }
 ```
 
-The `logs` field in the above output is an example of a link including a filter for a specific component name (xname).
+The `logs` field in the above output is an example of a link including a filter for a specific
+component name ([xname](../../glossary.md#xname)).
 
-The links in records can be disabled by setting the `include_ara_links` option to false in the [CFS Global Options](CFS_Global_Options.md) if ARA is not being used.
+The links in records can be disabled by setting
+[Include ARA links](CFS_Global_Options.md#include-ara-links) to `false` in the
+[CFS Global Options](CFS_Global_Options.md).
 
 ## Disabling ARA
 
@@ -51,4 +56,8 @@ ARA is a plugin for Ansible that can easily be disabled if needed.
 
 1. Save the modified ConfigMap.
 
-After the modified ConfigMap has been saved, all new CFS sessions that are created will no longer record logs to ARA.
+After the modified ConfigMap has been saved, all new CFS sessions that are created will no
+longer record logs to ARA.
+
+For more information on the Ansible configuration file, see
+[Configure Ansible](Configure_Ansible.md).

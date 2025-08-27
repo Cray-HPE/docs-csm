@@ -475,6 +475,7 @@ artifact's
 artifacts
 backdoor
 backend
+backoff
 barebones
 base-64
 base-64-encoded
@@ -642,6 +643,7 @@ non-failsafe
 noncompute
 noncritical
 nondefault
+nonexistent
 nonzero
 nvram
 orch
