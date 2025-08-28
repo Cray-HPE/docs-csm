@@ -90,6 +90,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Soft Deleted IMS Image Always Has `arch=x86_64`](known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64.md)
 * [Soft Deleted IMS Image Metadata is Lost](known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
 * [IMS Created Image Stores Incorrect Metadata](known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
+* [PostgreSQL System ID Mismatch](known_issues/postgres_system_id_mismatch.md)
 
 ## Booting
 
