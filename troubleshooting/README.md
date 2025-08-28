@@ -70,6 +70,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [PostgreSQL Cluster Upgrades Failing](known_issues/postgres_cluster_upgrade_failure.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
+* [Sensitive input echoed when using CLI to access console](../operations/conman/Log_in_to_a_Node_Using_ConMan.md#sensitive-input-echoed-when-using-cli-to-access-console)
 * Systems running CSM 1.6 or earlier that fresh install CSM 1.7 must regenerate their
   management switch configuration because of the
   [Other behavior changes](../introduction/csi_Tool_Changes.md#other-behavior-changes)
@@ -109,6 +110,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [ConMan Failing to Connect to a Console](../operations/conman/Troubleshoot_ConMan_Failing_to_Connect_to_a_Console.md)
 * [ConMan Asking for Password on SSH Connection](../operations/conman/Troubleshoot_ConMan_Asking_for_Password_on_SSH_Connection.md)
 * [Console Node Pod Stuck in Terminating State](../operations/conman/Troubleshoot_ConMan_Node_Pod_Stuck_Terminating.md)
+* [Sensitive input echoed when using CLI to access console](../operations/conman/Log_in_to_a_Node_Using_ConMan.md#sensitive-input-echoed-when-using-cli-to-access-console)
 
 ## Customer Management Network (CMN)
 
