@@ -98,10 +98,6 @@ func main() {
             " UPDATE",
             " DELETE"
           ],
-          "hookcredentials": {
-            "secretname": "string",
-            "secretnamespace": "string"
-          },
           "name": "string",
           "url": "http://<url>:<port>"
         }
@@ -123,7 +119,8 @@ func main() {
             "x0c3s6b0n0"
           ]
         }
-      ]
+      ],
+      "requiresVaultKeyUpdate": true
     },
     "status": {
       "childnamespaces": [
@@ -137,10 +134,6 @@ func main() {
             " UPDATE",
             " DELETE"
           ],
-          "hookcredentials": {
-            "secretname": "string",
-            "secretnamespace": "string"
-          },
           "name": "string",
           "url": "http://<url>:<port>"
         }
@@ -191,9 +184,6 @@ Status Code **200**
 |»» tenanthooks|[[TenantHook](#schematenanthook)]|false|none|+kubebuilder:validation:Optional|
 |»»» blockingcall|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional|
 |»»» eventtypes|[string]|false|none|none|
-|»»» hookcredentials|[HookCredentials](#schemahookcredentials)|false|none|+kubebuilder:validation:Optional|
-|»»»» secretname|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook|
-|»»»» secretnamespace|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret|
 |»»» name|string|false|none|none|
 |»»» url|string|false|none|none|
 |»» tenantkms|[TenantKmsResource](#schematenantkmsresource)|false|none|+kubebuilder:validation:Optional|
@@ -207,6 +197,7 @@ Status Code **200**
 |»»» hsmpartitionname|string|false|none|none|
 |»»» type|string|true|none|none|
 |»»» xnames|[string]|true|none|none|
+|»» requiresVaultKeyUpdate|boolean|false|none|none|
 |» status|[TenantStatus](#schematenantstatus)|false|none|The observed state of Tenant|
 |»» childnamespaces|[string]|false|none|none|
 |»» tenanthooks|[[TenantHook](#schematenanthook)]|false|none|[The webhook definition to call an API for tenant CRUD operations]|
@@ -321,10 +312,6 @@ func main() {
             " UPDATE",
             " DELETE"
           ],
-          "hookcredentials": {
-            "secretname": "string",
-            "secretnamespace": "string"
-          },
           "name": "string",
           "url": "http://<url>:<port>"
         }
@@ -346,7 +333,8 @@ func main() {
             "x0c3s6b0n0"
           ]
         }
-      ]
+      ],
+      "requiresVaultKeyUpdate": true
     },
     "status": {
       "childnamespaces": [
@@ -360,10 +348,6 @@ func main() {
             " UPDATE",
             " DELETE"
           ],
-          "hookcredentials": {
-            "secretname": "string",
-            "secretnamespace": "string"
-          },
           "name": "string",
           "url": "http://<url>:<port>"
         }
@@ -414,9 +398,6 @@ Status Code **200**
 |»» tenanthooks|[[TenantHook](#schematenanthook)]|false|none|+kubebuilder:validation:Optional|
 |»»» blockingcall|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional|
 |»»» eventtypes|[string]|false|none|none|
-|»»» hookcredentials|[HookCredentials](#schemahookcredentials)|false|none|+kubebuilder:validation:Optional|
-|»»»» secretname|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook|
-|»»»» secretnamespace|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret|
 |»»» name|string|false|none|none|
 |»»» url|string|false|none|none|
 |»» tenantkms|[TenantKmsResource](#schematenantkmsresource)|false|none|+kubebuilder:validation:Optional|
@@ -430,6 +411,7 @@ Status Code **200**
 |»»» hsmpartitionname|string|false|none|none|
 |»»» type|string|true|none|none|
 |»»» xnames|[string]|true|none|none|
+|»» requiresVaultKeyUpdate|boolean|false|none|none|
 |» status|[TenantStatus](#schematenantstatus)|false|none|The observed state of Tenant|
 |»» childnamespaces|[string]|false|none|none|
 |»» tenanthooks|[[TenantHook](#schematenanthook)]|false|none|[The webhook definition to call an API for tenant CRUD operations]|
@@ -533,10 +515,6 @@ func main() {
           " UPDATE",
           " DELETE"
         ],
-        "hookcredentials": {
-          "secretname": "string",
-          "secretnamespace": "string"
-        },
         "name": "string",
         "url": "http://<url>:<port>"
       }
@@ -558,7 +536,8 @@ func main() {
           "x0c3s6b0n0"
         ]
       }
-    ]
+    ],
+    "requiresVaultKeyUpdate": true
   },
   "status": {
     "childnamespaces": [
@@ -572,10 +551,6 @@ func main() {
           " UPDATE",
           " DELETE"
         ],
-        "hookcredentials": {
-          "secretname": "string",
-          "secretnamespace": "string"
-        },
         "name": "string",
         "url": "http://<url>:<port>"
       }
@@ -619,30 +594,6 @@ bearerAuth
 
 # Schemas
 
-<h2 id="tocS_HookCredentials">HookCredentials</h2>
-<!-- backwards compatibility -->
-<a id="schemahookcredentials"></a>
-<a id="schema_HookCredentials"></a>
-<a id="tocShookcredentials"></a>
-<a id="tocshookcredentials"></a>
-
-```json
-{
-  "secretname": "string",
-  "secretnamespace": "string"
-}
-
-```
-
-Optional credentials for calling webhook
-
-### Properties
-
-|Name|Type|Required|Restrictions|Description|
-|---|---|---|---|---|
-|secretname|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes secret name containing credentials for calling webhook|
-|secretnamespace|string|false|none|+kubebuilder:validation:Optional<br>Optional Kubernetes namespace for the secret|
-
 <h2 id="tocS_ResponseError">ResponseError</h2>
 <!-- backwards compatibility -->
 <a id="schemaresponseerror"></a>
@@ -685,10 +636,6 @@ Optional credentials for calling webhook
           " UPDATE",
           " DELETE"
         ],
-        "hookcredentials": {
-          "secretname": "string",
-          "secretnamespace": "string"
-        },
         "name": "string",
         "url": "http://<url>:<port>"
       }
@@ -710,7 +657,8 @@ Optional credentials for calling webhook
           "x0c3s6b0n0"
         ]
       }
-    ]
+    ],
+    "requiresVaultKeyUpdate": true
   },
   "status": {
     "childnamespaces": [
@@ -724,10 +672,6 @@ Optional credentials for calling webhook
           " UPDATE",
           " DELETE"
         ],
-        "hookcredentials": {
-          "secretname": "string",
-          "secretnamespace": "string"
-        },
         "name": "string",
         "url": "http://<url>:<port>"
       }
@@ -780,10 +724,6 @@ The primary schema/definition of a tenant
     " UPDATE",
     " DELETE"
   ],
-  "hookcredentials": {
-    "secretname": "string",
-    "secretnamespace": "string"
-  },
   "name": "string",
   "url": "http://<url>:<port>"
 }
@@ -798,7 +738,6 @@ The webhook definition to call an API for tenant CRUD operations
 |---|---|---|---|---|
 |blockingcall|boolean|false|none|+kubebuilder:default:=false<br>+kubebuilder:validation:Optional|
 |eventtypes|[string]|false|none|none|
-|hookcredentials|[HookCredentials](#schemahookcredentials)|false|none|+kubebuilder:validation:Optional|
 |name|string|false|none|none|
 |url|string|false|none|none|
 
@@ -910,10 +849,6 @@ The desired resources for the Tenant
         " UPDATE",
         " DELETE"
       ],
-      "hookcredentials": {
-        "secretname": "string",
-        "secretnamespace": "string"
-      },
       "name": "string",
       "url": "http://<url>:<port>"
     }
@@ -935,7 +870,8 @@ The desired resources for the Tenant
         "x0c3s6b0n0"
       ]
     }
-  ]
+  ],
+  "requiresVaultKeyUpdate": true
 }
 
 ```
@@ -952,6 +888,7 @@ The desired state of Tenant
 |tenantkms|[TenantKmsResource](#schematenantkmsresource)|false|none|+kubebuilder:validation:Optional|
 |tenantname|string|true|none|none|
 |tenantresources|[[TenantResource](#schematenantresource)]|true|none|The desired resources for the Tenant|
+|requiresVaultKeyUpdate|boolean|false|none|none|
 
 <h2 id="tocS_TenantStatus">TenantStatus</h2>
 <!-- backwards compatibility -->
@@ -973,10 +910,6 @@ The desired state of Tenant
         " UPDATE",
         " DELETE"
       ],
-      "hookcredentials": {
-        "secretname": "string",
-        "secretnamespace": "string"
-      },
       "name": "string",
       "url": "http://<url>:<port>"
     }
