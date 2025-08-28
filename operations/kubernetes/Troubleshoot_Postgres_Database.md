@@ -367,6 +367,43 @@ For example:
             +------------------------------+------------+--------+---------+----+-----------+
             ```
 
+- If `patronictl reinit` fails with `status code=503` and the failed pod log shows
+  `system ID mismatch` error:
+
+    (`ncn-mw#`) For example:
+
+    ```bash
+    patronictl reinit cfs-ara-postgres cfs-ara-postgres-1
+    ```
+
+    Example output:
+
+    ```text
+    + Cluster: cfs-ara-postgres (7541118075072872658) ----+----+-----------+
+    | Member             | Host       | Role    | State   | TL | Lag in MB |
+    +--------------------+------------+---------+---------+----+-----------+
+    | cfs-ara-postgres-0 | 10.38.0.38 | Leader  | running |  1 |           |
+    | cfs-ara-postgres-1 | 10.34.0.16 | Replica | stopped |    |   unknown |
+    +--------------------+------------+---------+---------+----+-----------+
+    Are you sure you want to reinitialize members cfs-ara-postgres-1? [y/N]: y
+    Failed: reinitialize for member cfs-ara-postgres-1, status code=503, (upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: 111)
+    ```
+
+    Check the failed pod log (in this case, `cfs-ara-postgres-1`):
+
+    ```bash
+    kubectl -n services logs cfs-ara-postgres-1 -c postgres
+    ```
+
+    Example output:
+
+    ```text
+    2025-08-21 20:27:39,777 CRITICAL: system ID mismatch, node cfs-ara-postgres-1 belongs to a different cluster: 7541118075072872658 != 7233898320826871891
+    ```
+
+  To resolve the above issue, follow the solution steps in
+  [PostgreSQL System ID Mismatch](../../troubleshooting/known_issues/postgres_system_id_mismatch.md).
+
 - If a cluster member is `stopped` after a successful reinitialization, check for `pg_internal.init.*` files that may need to be cleaned up. This can occur if the `pgdata`
   disk was full prior to the reinitialization, leaving truncated `pg_internal.init.*` files in the `pgdata` directory.
 
