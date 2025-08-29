@@ -9,7 +9,7 @@
 ## Overview
 
 When debugging, it can be useful to view the Ansible logs with greater verbosity than
-the default. The verbosity level is an integer. Valid verbosity levels are integers
+the default. Valid verbosity levels are the integers
 `0` (the default) through `4`, with higher numbers indicating increased verbosity.
 These translate into the number of `-v` arguments passed into the `ansible-playbook`
 command when the playbooks are executed.
