@@ -49,8 +49,7 @@ in chronological order.
 ### Removed in CSM 1.6
 
 - [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) v1
-    - When upgrading to CSM 1.6, all BOS v1 session data is deleted. See [BOS data notice](../../upgrade/README.md#bos-data-notice)
-      for more details.
+    - When upgrading to CSM 1.6, all BOS v1 session data is deleted.
 - User Access Service
 - User Access Instance
 
