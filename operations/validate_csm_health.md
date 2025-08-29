@@ -514,3 +514,19 @@ The end of successful test output will resemble the following:
 ```text
 cray.barebones-boot-test: INFO     Successfully completed barebones image boot test.
 ```
+
+[operations/validate_csm_health.md](#0-cray-command-line-interface)
+
+[operations/validate_csm_health.md](#1-platform-health-checks)
+
+[operations/validate_csm_health.md](#22-hardware-state-manager-discovery-validation)
+
+[operations/validate_csm_health.md](#221-interpreting-hsm-discovery-results)
+
+[operations/validate_csm_health.md](#222-known-issues-with-hsm-discovery-validation)
+
+[operations/validate_csm_health.md](#3-software-management-services-sms-health-checks)
+
+[operations/validate_csm_health.md](#413-gateway-health-tests-from-outside-the-system)
+
+[operations/validate_csm_health.md](#5-booting-csm-barebones-image)

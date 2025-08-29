@@ -773,3 +773,5 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 [23]:https://www.suse.com/security/cve/CVE-2022-33981.html
 
 [24]:https://www.virtualbox.org/ticket/20180
+
+[background/ncn_kernel.md](#metalserver)

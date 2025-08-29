@@ -144,3 +144,5 @@ for details on the commands executed.
 ```bash
 iuf -a admin-230127 run -sv /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin -r update-vcs-config
 ```
+
+[operations/iuf/stages/update_vcs_config.md](#customer-branch-name)

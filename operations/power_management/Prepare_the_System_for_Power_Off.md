@@ -580,3 +580,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 ## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
+
+[operations/power_management/Prepare_the_System_for_Power_Off.md](#identify-bos-session-templates-for-managed-nodes)
+
+[operations/power_management/Prepare_the_System_for_Power_Off.md](#procedure)

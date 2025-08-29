@@ -61,3 +61,5 @@ longer record logs to ARA.
 
 For more information on the Ansible configuration file, see
 [Configure Ansible](Configure_Ansible.md).
+
+[operations/configuration_management/Ansible_Log_Collection.md](#ara-records-ansible-ara)

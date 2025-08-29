@@ -346,3 +346,5 @@ Writing manifest to image destination
 Storing signatures
 5779738096ecb47dd7192d44ceef7032110edd38204f66c9ca4e35fca952975c
 ```
+
+[operations/package_repository_management/Package_Repository_Management_with_Nexus.md](#adding-images)

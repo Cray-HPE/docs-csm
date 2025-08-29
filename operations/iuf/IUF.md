@@ -947,3 +947,15 @@ For cleaning up the Nexus blob storage, see
 The `logs` for the progress of deletion is generated in the
 `/etc/cray/upgrade/csm/iuf/deletion` directory or the `$CWD` from
 where the `prodmgr` is run. The filename is generated as: `delete-<product>-<version>-<timestamp>`. This can be used to analyze the components deleted as part of the deletion run.
+
+[operations/iuf/IUF.md](#activities)
+
+[operations/iuf/IUF.md](#activity)
+
+[operations/iuf/IUF.md](#arm-images)
+
+[operations/iuf/IUF.md](#list-activities)
+
+[operations/iuf/IUF.md](#run)
+
+[operations/iuf/IUF.md](#site-and-recipe-variables)

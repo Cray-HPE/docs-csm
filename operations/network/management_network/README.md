@@ -154,3 +154,7 @@ security vulnerabilities.
   documentation.
 * A Security Bulletin is released when all vulnerable products still in support life have publicly available images that
   contain the fix for the security vulnerability.
+
+[operations/network/management_network/README.md](#adding-switch-admin-password-to-Vault)
+
+[operations/network/management_network/README.md](#adding-switch-admin-password-to-vault)

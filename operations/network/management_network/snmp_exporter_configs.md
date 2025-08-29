@@ -95,3 +95,5 @@ under the `spec.kubernetes.services.cray-sysmgmt-health.snmpExporter` service de
 | `params.conf.target`     | `10.252.0.2` | Add list of switch targets to SNMP Exporter to monitor                              |
 
 For a complete set of available parameters, consult the `values.yaml` file for the `cray-sysmgmt-health` chart.
+
+[operations/network/management_network/snmp_exporter_configs.md](#adding-snmp-credentials-to-the-system)

@@ -234,3 +234,5 @@ of images that IMS maintains.
     created = "2024-06-27T15:41:22.467177"
     id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
     ```
+
+[operations/image_management/Image_Management_Workflows.md](#manage-image-labels)

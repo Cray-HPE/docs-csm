@@ -278,3 +278,5 @@ Repeat the steps in this section on the next master node, until they have been p
     services            cray-dns-unbound-manager-27758660-d7d2l                           0/2     Init:0/1            0          23m   <none>        ncn-w003   <none>           <none>
     services            sonar-sync-27758660-75qxb                                         0/1     ContainerCreating   0          23m   <none>        ncn-w002   <none>           <none>
      ```
+
+[operations/kubernetes/Restore_Bare-Metal_etcd_Clusters_from_an_S3_Snapshot.md](#2-restore-member-directory)

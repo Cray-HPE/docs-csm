@@ -340,3 +340,7 @@ Use the `cray cfs v3 configurations update` command, similar to creating a confi
       "name": "configurations-example"
     }
     ```
+
+[operations/configuration_management/CFS_Configurations.md](#using-branches-in-configuration-layers)
+
+[operations/configuration_management/CFS_Configurations.md](#using-sources-in-a-configuration-layer)

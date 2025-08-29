@@ -51,3 +51,5 @@ See [Create an Image Customization CFS Session](Create_an_Image_Customization_CF
 The CFS API currently lists two other supported inventory options, `spec` and `repo`, however these options have been deprecated.
 For those wishing to specify their own inventory beyond what is found in HSM,
 see the `additional_inventory` options described in [Adding Additional Inventory](Adding_Additional_Inventory.md)
+
+[operations/configuration_management/CFS_Session_Inventory.md](#dynamic-inventory)

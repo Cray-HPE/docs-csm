@@ -241,3 +241,11 @@ After completing the operational procedures above which configure administrative
 step is to validate the health of management nodes and CSM services.
 
 See [Validate CSM Health](README.md#6-validate-csm-health).
+
+[install/configure_administrative_access.md](#1-configure-the-cray-command-line-interface)
+
+[install/configure_administrative_access.md](#8-iscsi-sbps-configuration)
+
+[install/configure_administrative_access.md](#9-restart-rack-resiliency-critical-services)
+
+[install/configure_administrative_access.md](#configure-administrative-access)

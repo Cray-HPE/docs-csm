@@ -104,3 +104,5 @@ scripts, revision control with git, configuration management with Ansible, YAML,
 ## Copyright and license
 
 See [LICENSE](LICENSE).
+
+[README.md](#configuration-management)

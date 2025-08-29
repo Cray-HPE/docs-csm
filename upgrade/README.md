@@ -60,3 +60,5 @@ CSM 1.7 patch upgrades. Instead, consider upgrading to the latest CSM 1.7 patch 
 
 There are no CSM 1.7 patch versions currently available. When any become available, they will
 be listed here.
+
+[upgrade/README.md](#bos-data-notice)

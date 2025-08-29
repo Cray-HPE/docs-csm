@@ -31,3 +31,5 @@ Example output:
   }
 ]
 ```
+
+[operations/network/management_network/chn_test.md](#procedure-to-check-chn)

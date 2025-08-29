@@ -50,3 +50,5 @@ Slurm will then use the reboot script to call the BOS `applystaged` endpoint.
 ``` bash
 scontrol reboot nextstate=Down Reason="Rolling Reboot" nid00000[6-7]
 ```
+
+[operations/boot_orchestration/Rolling_Upgrades.md](#using-staged-sessions-with-slurm)

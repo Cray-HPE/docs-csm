@@ -421,3 +421,9 @@ also be of use. As an example, one can sometimes match up `ls -l /dev/disk/by-pa
     > `efibootmgr -b 0014 -d`.
 
 This is the end of the `Locating USB device` procedure.
+
+[background/ncn_boot_workflow.md](#determine-the-current-boot-order)
+
+[background/ncn_boot_workflow.md](#setting-boot-order)
+
+[background/ncn_boot_workflow.md](#trimming-boot-order)

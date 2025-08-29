@@ -130,3 +130,7 @@ also created. For more information, see [Ceph zones](Zones.md#ceph-zones).
 
 This Ansible role updates Ceph HAproxy configuration with latest information after performing
 Ceph zoning. It also updates `ceph.conf` with latest configuration, on all storage nodes.
+
+[operations/rack_resiliency/Setup_of_Rack_Resiliency.md](#ceph-zoning)
+
+[operations/rack_resiliency/Setup_of_Rack_Resiliency.md](#placement-discovery)

@@ -511,3 +511,9 @@ The DNS records check only needs to be performed on a single worker NCN.
     ```
 
     Confirm that the number of DNS A records listed by this command equals the number of DNS SRV records listed in the previous step.
+
+[operations/iscsi_sbps/iSCSI_SBPS_Verification.md](#iscsi-enabled-workers)
+
+[operations/iscsi_sbps/iSCSI_SBPS_Verification.md](#node-personalization)
+
+[operations/iscsi_sbps/iSCSI_SBPS_Verification.md](#sbps-marshal-agent)

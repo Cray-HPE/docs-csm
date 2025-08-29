@@ -162,3 +162,5 @@ Once the SHCD has run cleanly through CANU and CANU output has been manually val
 
    - `customer communication` (CAST ticket for customers)
    - SharePoint (internal systems and sometimes customer systems)
+
+[operations/network/management_network/validate_shcd.md](#validate-the-shcd)

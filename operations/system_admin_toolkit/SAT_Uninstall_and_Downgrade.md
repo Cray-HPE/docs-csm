@@ -143,3 +143,7 @@ of the `cray-sat` container image run by Podman when the `sat` command is execut
 
 1. If this change must be persistent across multiple sessions on the system, the
    `export SAT_IMAGE="..."` can be added to the user's `~/.bash_profile` or `~/.bashrc` file.
+
+[operations/system_admin_toolkit/SAT_Uninstall_and_Downgrade.md](#downgrade-switch-between-sat-versions)
+
+[operations/system_admin_toolkit/SAT_Uninstall_and_Downgrade.md](#uninstall-remove-a-version-of-sat)

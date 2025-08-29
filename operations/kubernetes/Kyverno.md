@@ -932,3 +932,7 @@ Redeploy the `cray-kyverno-policies-upstream` chart under the `platform` manifes
     When container images are copied to Nexus, their signatures must be copied along with them. Otherwise, the pods that use those images can be blocked.
     To ensure that signatures are copied along with images to Nexus, follow the
     [Adding images](../package_repository_management/Package_Repository_Management_with_Nexus.md#adding-images) procedure.
+
+[operations/kubernetes/Kyverno.md](#known-issues)
+
+[operations/kubernetes/Kyverno.md](#what-is-new-in-the-hpe-csm-17-release-and-above)

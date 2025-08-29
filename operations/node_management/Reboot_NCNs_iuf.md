@@ -117,3 +117,5 @@ Follow the steps below to reboot worker nodes:
         ```
 
 **`NOTE`** To complete reboot of master nodes manually, refer to the procedure mentioned [here](Reboot_NCNs_manual.md#ncn-master-nodes).
+
+[operations/node_management/Reboot_NCNs_iuf.md](#ncn-worker-nodes)

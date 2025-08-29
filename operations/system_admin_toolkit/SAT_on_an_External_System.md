@@ -347,3 +347,7 @@ use externally-accessible API endpoints exposed by CSM.
        jsonpath='{.data.secret_key}' | base64 -d > \
        ~/.config/sat/s3_secret_key
    ```
+
+[operations/system_admin_toolkit/SAT_on_an_External_System.md](#install-and-configure-sat)
+
+[operations/system_admin_toolkit/SAT_on_an_External_System.md](#limitations)

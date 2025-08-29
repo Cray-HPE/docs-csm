@@ -83,3 +83,5 @@ HSN status, Ceph status, and SDU and RDA configurations. This information will b
 - If performing an upgrade that includes upgrading only CSM, return to the
   [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.
+
+[operations/iuf/workflows/preparation.md](#4-save-system-state-before-upgrade)

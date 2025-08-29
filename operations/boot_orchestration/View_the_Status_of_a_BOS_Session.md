@@ -78,3 +78,5 @@ This timestamp will initially be `null` and will be set when the session ends.
 #### `duration`
 
 This lists the duration of the session in `h:mm:ss`. While the session is running, this will be the current duration, and the value is locked-in when the session completes.
+
+[operations/boot_orchestration/View_the_Status_of_a_BOS_Session.md](#bos-session-status)

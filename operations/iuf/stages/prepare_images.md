@@ -194,3 +194,5 @@ and the `product_vars.yaml` configuration file found in the `/etc/cray/upgrade/c
 ```bash
 iuf -a admin-230127 run -sv /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin -r prepare-images
 ```
+
+[operations/iuf/stages/prepare_images.md](#artifacts-created)

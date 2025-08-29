@@ -901,3 +901,5 @@ file schema. This HTML documentation can be browsed with a web browser.
    x bootprep-schema-docs/schema_doc.min.js
    another-machine$ open bootprep-schema-docs/index.html
    ```
+
+[operations/system_admin_toolkit/usage/SAT_Bootprep.md](#variable-substitutions)

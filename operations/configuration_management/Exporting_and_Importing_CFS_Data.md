@@ -106,3 +106,5 @@ criteria listed above.
       ```bash
       /usr/share/doc/csm/scripts/operations/configuration/import_cfs_data.sh --clear-cfs /tmp/cfs-export-20230410170613-Tg0nap.tgz
       ```
+
+[operations/configuration_management/Exporting_and_Importing_CFS_Data.md](#import)

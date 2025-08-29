@@ -164,3 +164,5 @@ a CFS source to supply additional inventory content to all CFS sessions.
 
 For more information, see [Additional inventory source](CFS_Global_Options.md#additional_inventory_source)
 and [Using sources in additional inventory](Adding_Additional_Inventory.md#using-sources-in-additional-inventory).
+
+[operations/configuration_management/CFS_Sources.md](#create-a-cfs-source)

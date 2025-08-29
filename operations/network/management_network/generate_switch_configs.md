@@ -48,3 +48,5 @@ NOTE: Only major and minor versions of CSM are tracked at this time. CANU bug fi
     ```bash
     canu generate network config --csm 1.5 -a full --ccj system-ccj.json  --sls-file sls_file.json --custom-config system-custom-config.yaml --folder generated
     ```
+
+[operations/network/management_network/generate_switch_configs.md](#generate-configuration-files)

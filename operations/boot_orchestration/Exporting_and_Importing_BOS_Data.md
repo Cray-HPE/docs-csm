@@ -170,3 +170,5 @@ BOS session templates or BOS options can also be manually exported and imported 
    ```bash
    cray bos v2 options update --help
    ```
+
+[operations/boot_orchestration/Exporting_and_Importing_BOS_Data.md](#exporting-and-importing-bos-data)

@@ -765,3 +765,7 @@ If you want to continue manually, please follow the steps below.
     At a minimum, run the platform health checks.
 
     See [Validate CSM Health](../validate_csm_health.md) for the platform health checks.
+
+[operations/node_management/Reboot_NCNs_manual.md](#ncn-master-nodes)
+
+[operations/node_management/Reboot_NCNs_manual.md](#ncn-worker-nodes)

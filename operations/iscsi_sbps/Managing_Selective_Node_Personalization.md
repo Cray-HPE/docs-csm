@@ -359,3 +359,9 @@ For more information, see
 [`CFS-Batcher` scheduling](../configuration_management/Automatic_Configuration_Management.md#cfs-batcher-scheduling).
 
 Once these CFS sessions complete successfully, then the iSCSI configuration has been refreshed.
+
+[operations/iscsi_sbps/Managing_Selective_Node_Personalization.md](#adding-or-removing-worker-ncn)
+
+[operations/iscsi_sbps/Managing_Selective_Node_Personalization.md](#csm-install)
+
+[operations/iscsi_sbps/Managing_Selective_Node_Personalization.md](#csm-upgrade-from-16-to-17)

@@ -125,3 +125,5 @@ cray ims jobs delete <IMS_JOB_ID>
 
 After the job is deleted, a new image customization job can be created. See
 [Customize an Image Root Using IMS](../../operations/image_management/Customize_an_Image_Root_Using_IMS.md).
+
+[troubleshooting/known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md](#error-identification)

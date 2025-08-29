@@ -118,3 +118,5 @@ The `csm.password` Ansible role supports setting passwords for non-root users.
     Follow [Procedure: Configure `root` password in Vault](#procedure-configure-root-password-in-vault).
 
 1. Create a configuration layer using the new Ansible playbook and create a CFS session using that layer.
+
+[operations/security_and_authentication/Update_NCN_Passwords.md](#procedure-configure-root-password-in-vault)

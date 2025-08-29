@@ -283,3 +283,5 @@ has been fully installed and configured.
 
 See [Next topic](README.md#installation-of-additional-hpe-cray-ex-software-products) for more information on other product
 streams to be installed and configured after CSM.
+
+[install/prepare_compute_nodes.md](#configure-hpe-apollo-6500-xl645d-gen10-plus-compute-nodes)

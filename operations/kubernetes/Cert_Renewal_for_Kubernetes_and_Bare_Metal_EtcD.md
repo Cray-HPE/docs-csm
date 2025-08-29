@@ -631,3 +631,11 @@ Run the following steps from a master node.
       ```text
         state=up, endpoint=https://10.252.1.10:2379/metrics, labels={endpoint="http-metrics",instance="10.252.1.10:2379",job="kube-etcd",namespace="kube-system",service="vms-kube-etcd"}, scrapes_total=28114, scrapes_failed=0, last_scrape=14838ms ago, scrape_duration=14ms, samples_scraped=1487, error=
       ```
+
+[operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md](#modify-certificate-validity-period)
+
+[operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md](#renew-all-certificates)
+
+[operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md](#renew-etcd-certificate)
+
+[operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md](#update-client-secrets)

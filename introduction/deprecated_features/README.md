@@ -120,3 +120,7 @@ features are listed first).
 ### Deprecated in CSM 0.9.3
 
 - [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) v1 REST API
+
+[introduction/deprecated_features/README.md](#deprecations)
+
+[introduction/deprecated_features/README.md](#removals)

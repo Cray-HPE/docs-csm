@@ -100,3 +100,5 @@ Example configuration:
   }
 }
 ```
+
+[operations/configuration_management/Adding_Additional_Inventory.md](#using-sources-in-additional-inventory)

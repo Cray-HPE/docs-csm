@@ -156,3 +156,5 @@ sorted by safest to touch relative to keeping an SSH connection up.
     ```text
     Id=wicked.service
     ```
+
+[operations/node_management/NCN_Network_Troubleshooting.md](#restart-network-services-and-interfaces)

@@ -101,3 +101,9 @@ URL: `https://kiali-istio.cmn.SYSTEM_DOMAIN_NAME/`
 Kiali provides real-time introspection into the Istio service mesh using metrics and traces from Istio.
 
 For more information about the features of this interface, refer to the [Kiali online documentation/](https://kiali.io/documentation/).
+
+[operations/system_management_health/Access_System_Management_Health_Services.md](#grafana)
+
+[operations/system_management_health/Access_System_Management_Health_Services.md](#system-domain-name)
+
+[operations/system_management_health/Access_System_Management_Health_Services.md](#victoriametrics)

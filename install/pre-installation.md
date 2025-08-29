@@ -707,3 +707,33 @@ successfully.
 After completing this procedure, proceed to configure the management network switches.
 
 See [Configure management network switches](README.md#7-configure-management-network-switches).
+
+[install/pre-installation.md](#1-boot-installation-environment)
+
+[install/pre-installation.md](#12-boot-the-livecd)
+
+[install/pre-installation.md](#13-first-log-in)
+
+[install/pre-installation.md](#14-prepare-the-data-partition)
+
+[install/pre-installation.md](#15-set-reusable-environment-variables)
+
+[install/pre-installation.md](#2-download-and-extract-the-csm-tarball)
+
+[install/pre-installation.md](#3-create-system-configuration)
+
+[install/pre-installation.md](#31-customize-system_configyaml)
+
+[install/pre-installation.md](#32-generate-topology-files)
+
+[install/pre-installation.md](#33-customize-system_configyaml)
+
+[install/pre-installation.md](#33-generate-system-configuration)
+
+[install/pre-installation.md](#36-initialize-the-livecd)
+
+[install/pre-installation.md](#4-import-the-csm-tarball)
+
+[install/pre-installation.md](#5-validate-the-livecd)
+
+[install/pre-installation.md](#generate-topology-files)

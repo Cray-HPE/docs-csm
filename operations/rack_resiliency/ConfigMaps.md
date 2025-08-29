@@ -199,3 +199,9 @@ and `dynamic-data.yaml` contains a large YAML string.
 HPE provides a standard set of critical services which are needed for the successful execution of user jobs.
 However, it possible to add additional critical services to the list. For more information on managing the
 critical services, see [Manage Critical Service](Manage_Critical_Services.md).
+
+[operations/rack_resiliency/ConfigMaps.md](#1-static-configmap)
+
+[operations/rack_resiliency/ConfigMaps.md](#2-dynamic-configmap)
+
+[operations/rack_resiliency/ConfigMaps.md](#2-veiwing-configmap)

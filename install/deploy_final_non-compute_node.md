@@ -468,3 +468,11 @@ However, the commands in this section are all run **on** `ncn-m001`.
 ## 7. Next topic
 
 Return to the previous page and continue to the next step.
+
+[install/deploy_final_non-compute_node.md](#31-handoff-data)
+
+[install/deploy_final_non-compute_node.md](#4-reboot)
+
+[install/deploy_final_non-compute_node.md](#5-enable-ncn-disk-wiping-safeguard)
+
+[install/deploy_final_non-compute_node.md](#7-configure-dns-and-ntp-on-each-bmc)

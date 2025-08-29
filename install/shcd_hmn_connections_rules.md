@@ -1129,3 +1129,11 @@ The HMN connections representation for the SHCD table row above:
 ### Management switches: SLS
 
 The management switches in SLS are not populated by `hmn_connections.json`, but instead from `switch_metadata.csv`.
+
+[install/shcd_hmn_connections_rules.md](#application-node)
+
+[install/shcd_hmn_connections_rules.md](#building-component-names-xnames-for-nodes-in-a-dual-application-node-chassis)
+
+[install/shcd_hmn_connections_rules.md](#building-component-names-xnames-for-nodes-in-a-single-application-node-chassis)
+
+[install/shcd_hmn_connections_rules.md](#introduction)

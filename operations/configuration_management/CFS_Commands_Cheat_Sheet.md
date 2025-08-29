@@ -165,3 +165,5 @@ See [CFS Sessions](CFS_Sessions.md) for more information.
     ```
 
 See [Troubleshoot CFS Issues](Troubleshoot_CFS_Issues.md) for more information.
+
+[operations/configuration_management/CFS_Commands_Cheat_Sheet.md](#managing-many-components)

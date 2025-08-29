@@ -112,3 +112,7 @@ fatal: unable to access 'https://crayvcs:BPuN/M846JL5XKTTWVqcV2mhuZfzOC64nnZ/e54
 See [VCS Password With Illegal Characters](VCS_Password_With_Illegal_Characters.md) for more information on this problem, including
 remediation steps.
 See [SMS test execution](#sms-test-execution) for more information on running the test in verbose mode and locating its log file.
+
+[troubleshooting/known_issues/sms_health_check.md](#invalid-cfs-component)
+
+[troubleshooting/known_issues/sms_health_check.md](#software-management-services-health-checks)

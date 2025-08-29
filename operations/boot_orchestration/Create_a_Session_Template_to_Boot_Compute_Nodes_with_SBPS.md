@@ -209,3 +209,5 @@ root=sbps-s3:s3-path:<etag>:<transport>:<schema version>:<IQN Domain>:<DNS SRV r
 ```text
 root=sbps-s3:s3://boot-images/4fab0408-0bfe-4668-b957-964f8ff0e4e9/rootfs:b6ea7a2314d54dead0c94223863b3488-1977:sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:30
 0```
+
+[operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md](#boot-set-rootfs_provider_passthrough-parameter)

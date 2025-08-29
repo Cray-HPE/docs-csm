@@ -165,3 +165,5 @@ to proceed. Expanding the PVC will also require future work to allow for further
         kubectl delete secret -n loftsman site-init
         kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
         ```
+
+[operations/package_repository_management/Nexus_Space_Cleanup.md](#cleanup-of-data-not-being-used)

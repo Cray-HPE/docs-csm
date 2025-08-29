@@ -315,3 +315,5 @@ and ConfigMap, the CFS Batcher will not automatically apply the new passwordless
 
 See the [Re-run node personalization on management nodes](../configuration_management/Management_Node_Personalization.md#re-run-node-personalization-on-management-nodes)
 procedure to re-run NCN node personalization on management nodes.
+
+[operations/CSM_product_management/Set_Up_Passwordless_SSH.md](#ssh-configuration-files)

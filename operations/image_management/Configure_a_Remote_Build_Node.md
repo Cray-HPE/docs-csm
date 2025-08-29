@@ -839,3 +839,9 @@ The output will look something like:
   }
 ]
 ```
+
+[operations/image_management/Configure_a_Remote_Build_Node.md](#adding-and-removing-remote-build-nodes-to-ims)
+
+[operations/image_management/Configure_a_Remote_Build_Node.md](#adding-storage-to-a-remote-build-node)
+
+[operations/image_management/Configure_a_Remote_Build_Node.md](#use-an-existing-compute-node#)

@@ -581,3 +581,11 @@ Once this step has completed:
 - If performing an upgrade that includes upgrading only CSM, then return to the
   [Upgrade only CSM through IUF](../../../upgrade/Upgrade_Only_CSM_with_iuf.md)
   workflow to continue the upgrade.
+
+[operations/iuf/workflows/management_rollout.md](#2-execute-the-iuf-management-nodes-rollout-stage)
+
+[operations/iuf/workflows/management_rollout.md](#3-execute-the-iuf-management-nodes-rollout-stage)
+
+[operations/iuf/workflows/management_rollout.md](#31-management-nodes-rollout-with-csm-upgrade)
+
+[operations/iuf/workflows/management_rollout.md](#note-for-csm-v170)

@@ -49,3 +49,5 @@ following endpoints accessed via the `shasta` external hostname:
 - `/v2`
 - `/service/rest`
 - `/capsules/`
+
+[operations/security_and_authentication/System_Security_and_Authentication.md](#json-web-tokens-jwts)

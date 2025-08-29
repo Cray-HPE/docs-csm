@@ -133,3 +133,5 @@ For example, in SAT non-interactive mode:
   ```bash
   sat-man sat-status
   ```
+
+[operations/system_admin_toolkit/about_sat/Introduction_to_SAT.md](#sat-man-pages)

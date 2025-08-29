@@ -305,3 +305,13 @@ For more information, see [Automatic Session Deletion with `session_ttl`](Automa
 [ara-lnk]: #include-ara-links
 [log-lvl]: #logging-level
 [ses-ttl]: #session-time-to-live-ttl
+
+[operations/configuration_management/CFS_Global_Options.md](#additional-inventory-source)
+
+[operations/configuration_management/CFS_Global_Options.md](#additional_inventory_source)
+
+[operations/configuration_management/CFS_Global_Options.md](#debug-wait-time)
+
+[operations/configuration_management/CFS_Global_Options.md](#default-page-size)
+
+[operations/configuration_management/CFS_Global_Options.md](#include-ara-links)

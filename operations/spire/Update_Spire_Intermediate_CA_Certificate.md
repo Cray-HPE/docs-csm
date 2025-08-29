@@ -56,3 +56,5 @@ kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" 
    ```bash
    kubectl get secret -n spire spire.spire.ca-tls -o json | jq -r '.data."tls.crt" | @base64d' | openssl x509 -noout -enddate
    ```
+
+[operations/spire/Update_Spire_Intermediate_CA_Certificate.md](#replace-the-spire-intermediate-ca-certificate)

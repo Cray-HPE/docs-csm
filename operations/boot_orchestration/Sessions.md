@@ -44,3 +44,5 @@ Depending on how far along that node is in the BOS session, this may or may not 
 Prior to CSM 1.7, BOS never checked for HSM locks. Instead, locked nodes would be included in the session,
 and the PCS failures described above would result in their boots failing. The associated error message
 in BOS for that component was generally not helpful in determining the true cause of the problem.
+
+[operations/boot_orchestration/Sessions.md](#bos-sessions-and-hsm-locks)

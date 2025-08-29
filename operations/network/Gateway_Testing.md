@@ -394,3 +394,7 @@ SKIP - [sma-telemetry]: https://api.chn.eniac.dev.cray.com/apis/sma-telemetry-ap
 
 Overall Gateway Test Status:  PASS
 ```
+
+[operations/network/Gateway_Testing.md](#running-gateway-tests-on-a-device-outside-the-system)
+
+[operations/network/Gateway_Testing.md](#running-gateway-tests-on-an-ncn-management-node)

@@ -254,3 +254,13 @@ to be aware of.
   necessary for the proper deprecation of `chn-cidr`, `chn-gateway`, `cmn-cidr`, and `cmn-gateway`.
 * Now prohibits setting overlapping CIDRs between the `*-cidr` parameters during `csi config init`
   and `csi patch csm ipv6`.
+
+[introduction/csi_Tool_Changes.md](#bugfixes)
+
+[introduction/csi_Tool_Changes.md](#csi-config-init-deprecated-flags)
+
+[introduction/csi_Tool_Changes.md](#csi-patch-deprecated-sub-commands)
+
+[introduction/csi_Tool_Changes.md](#other-behavior-changes)
+
+[introduction/csi_Tool_Changes.md](#removed-sub-commands)

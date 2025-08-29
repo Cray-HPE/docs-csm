@@ -1203,3 +1203,7 @@ MTL-2584 Package sweep for SLE-15-SP6 -- CSM 1.7
 USS-959 Sign container images released with USS
 USS-3710 SUSE Provided RPM tool 'SOPS' Not functional on master/worker nodes
 ```
+
+[RELEASE_NOTES.md](#cray-site-init-updates)
+
+[RELEASE_NOTES.md](#csi-patch-csm-ipv6)

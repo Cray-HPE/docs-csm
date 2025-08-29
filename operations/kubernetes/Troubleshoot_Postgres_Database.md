@@ -1151,3 +1151,5 @@ If a Postgres cluster no longer has a leader, the database will need to be recov
 ### Recover from a missing Postgres leader
 
 See the [Recover from Postgres WAL Event](Recover_from_Postgres_WAL_Event.md) procedure.
+
+[operations/kubernetes/Troubleshoot_Postgres_Database.md](#postgres-status-syncfailed)

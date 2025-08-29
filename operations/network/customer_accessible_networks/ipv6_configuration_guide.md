@@ -233,3 +233,9 @@ If performing a fresh install simply add the IP address or hostname to `ntp-serv
 - UAN and other Application nodes.
     - IPv6 addresses are assigned in SLS for UAN nodes in the CHN network. The `uan_can_setup` option must be enabled in the `uss-config-management` VCS repo in order to apply this configuration to the node.
       See the HPE Cray Supercomputing User Services Software (USS) for more information.
+
+[operations/network/customer_accessible_networks/ipv6_configuration_guide.md](#domain-name-system-dns)
+
+[operations/network/customer_accessible_networks/ipv6_configuration_guide.md](#enabling-ipv6-during-csm-upgrade)
+
+[operations/network/customer_accessible_networks/ipv6_configuration_guide.md](#keycloak)

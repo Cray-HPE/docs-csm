@@ -219,3 +219,5 @@ This helps to understand the various configuration parameters which control RMS 
 
 The health of the critical services can be checked by listing and describing them using the
 RRS API or CLI. See [Manage Critical Services](Manage_Critical_Services.md).
+
+[operations/rack_resiliency/Troubleshooting.md](#troubleshooting-rack-resiliency)

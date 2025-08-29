@@ -312,3 +312,7 @@ for management nodes and assign them to the management nodes.
       ```text
       All components updated successfully.
       ```
+
+[operations/system_admin_toolkit/usage/SAT_and_IUF.md](#iuf-variable-substitutions)
+
+[operations/system_admin_toolkit/usage/SAT_and_IUF.md](#obtaining-iuf-session-variables-and-bootprep-files)

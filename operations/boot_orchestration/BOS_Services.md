@@ -91,3 +91,9 @@ This operator monitors all components that are enabled in BOS and sets their `ph
 The `bos-state-reporter` was introduced in BOS v2. It runs on all components managed by BOS and periodically reports back the actual state of the component it runs on.
 This is installed as a package at image customization time.
 See [Options](Options.md) for more information on setting `component_actual_state_ttl` option, which controls how long this data is valid if it is not updated.
+
+[operations/boot_orchestration/BOS_Services.md](#bos-operators)
+
+[operations/boot_orchestration/BOS_Services.md](#bos-state-reporter)
+
+[operations/boot_orchestration/BOS_Services.md](#session-setup)

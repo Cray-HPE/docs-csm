@@ -47,3 +47,5 @@ To power off management cabinets, refer to [Power Off Management Cabinets](Power
 ## `Lockout Tagout` Facility Power
 
 If facility power must be removed from a single cabinet or cabinet group for maintenance, follow proper `lockout-tagout` procedures for the site.
+
+[operations/power_management/System_Power_Off_Procedures.md](#Power_off_the_External_File_systems)

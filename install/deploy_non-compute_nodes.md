@@ -300,3 +300,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 
 See [Install CSM Services](README.md#2-install-csm-services).
+
+[install/deploy_non-compute_nodes.md](#2-deploy-management-nodes)
+
+[install/deploy_non-compute_nodes.md](#23-check-lvm-on-kubernetes-ncns)

@@ -112,3 +112,5 @@ visible on the screen and will be captured by a `screen` session, if one is runn
     Using the command above, a user can also attach to an already active SOL session that is being used by another user, so both can access the node's SOL simultaneously.
 
 1. Exit the connection to the console with the `&.` command.
+
+[operations/conman/Log_in_to_a_Node_Using_ConMan.md](#sensitive-input-echoed-when-using-cli-to-access-console)

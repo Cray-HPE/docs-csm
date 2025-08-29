@@ -111,3 +111,5 @@ Example output:
 ```bash
 cray bos v2 sessions delete <BOS_SESSION_ID>
 ```
+
+[operations/boot_orchestration/Manage_a_BOS_Session.md](#create-a-new-v2-session)

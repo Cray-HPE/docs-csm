@@ -36,3 +36,5 @@ Use the manual reboot procedure to reboot NCNs. Please refer to the [Reboot NCNs
 
 1. Reboot NCNs with IUF. This is used for worker and storage nodes only. Please refer to the [Reboot NCNs with IUF](Reboot_NCNs_iuf.md)  
 **`NOTE`** Rebooting master nodes is not supported with IUF and must be performed manually as mentioned [here](Reboot_NCNs_manual.md#ncn-master-nodes).
+
+[operations/node_management/Reboot_NCNs.md](#ncn-rolling-reboot)

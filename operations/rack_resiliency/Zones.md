@@ -253,3 +253,15 @@ up = [ "osd.1", "osd.4", "osd.7", "osd.10", "osd.13", "osd.16", "osd.20", "osd.2
 
 This command returns detailed information about the zone, including the Kubernetes and storage NCNs that
 belong to it, along with their statuses.
+
+[operations/rack_resiliency/Zones.md](#ceph-zones)
+
+[operations/rack_resiliency/Zones.md](#command-to-view-Ceph-zones)
+
+[operations/rack_resiliency/Zones.md](#command-to-view-Kubernetes-zones)
+
+[operations/rack_resiliency/Zones.md](#kubernetes-zones)
+
+[operations/rack_resiliency/Zones.md](#managing-zones)
+
+[operations/rack_resiliency/Zones.md](#zone-names)

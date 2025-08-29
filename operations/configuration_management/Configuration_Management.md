@@ -43,3 +43,5 @@ CFS remotely executes Ansible configuration content on nodes or boot images with
 1. CFS creates a Kubernetes job that runs the Ansible to apply each of the playbooks in the specified configuration.
 
 For more information on the flow of CFS sessions see the [CFS Flow Diagrams](CFS_Flow_Diagrams.md).
+
+[operations/configuration_management/Configuration_Management.md](#use-cases)

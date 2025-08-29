@@ -104,3 +104,5 @@ The hooks below are automatically executed when CSM is being upgraded with IUF.
 
    The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane is performed in a hook executed after `deploy-product`.
    The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
+
+[operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md](#description-of-csm-upgrade-hooks)

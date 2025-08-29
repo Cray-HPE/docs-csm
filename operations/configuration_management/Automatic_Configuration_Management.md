@@ -107,3 +107,5 @@ The BOS session ID is required to run the following command.
 ```bash
 cray cfs v3 sessions list --tags bos_session=BOS_SESSION_ID
 ```
+
+[operations/configuration_management/Automatic_Configuration_Management.md](#cfs-batcher-scheduling)
