@@ -28,23 +28,25 @@ Example output:
 
 The values for all CFS global options can be modified with the `cray cfs options update` command.
 
-The following are the CFS global options, their names in CFS, and their default values.
+The following are the CFS global options, their names in CFS, which CFS API versions support them, and their default values.
 
-| *Option*                                | *CFS name*                  | *Default*                   | *Type*  | *Units/format*                         |
-| --------------------------------------- | --------------------------- | --------------------------- | ------- | -------------------------------------- |
-| [Additional inventory URL][add-url]     | `additionalInventoryUrl`    | `""`                        | string  | Git clone URL                          |
-| [Batch size][bat-siz]                   | `batchSize`                 | `25`                        | integer | Components                             |
-| [Batch window][bat-win]                 | `batchWindow`               | `60`                        | integer | seconds                                |
-| [Batcher check interval][bat-chk]       | `batcherCheckInterval`      | `10`                        | integer | seconds                                |
-| [Batcher maximum backoff][bat-bac]      | `batcherMaxBackoff`         | `3600`                      | integer | seconds                                |
-| [Default Ansible configuration][ancfg]  | `defaultAnsibleConfig`      | `"cfs-default-ansible-cfg"` | string  | ConfigMap name in `services` namespace |
-| [Default batcher retry policy][bat-ret] | `defaultBatcherRetryPolicy` | `3`                         | integer | Component configuration attempts       |
-| [Default clone URL][clo-url]        | `defaultCloneUrl` | `"https://api-gw-service-nmn.local/vcs/cray/config-management.git"` | string | Git clone URL |
-| [Default playbook][pbook]               | `defaultPlaybook`           | `"site.yml"`                | string  | Name of Ansible playbook               |
-| [Hardware synchronization interval][hw] | `hardwareSyncInterval`      | `10`                        | integer | seconds                                |
-| [Session Time-To-Live (TTL)][ses-ttl]   | `sessionTTL`                | `"7d"`                      | string  | Length of time or empty string         |
+| *Option*                                | *CFS name*                  | *API versions* | *Default*                   | *Type*  | *Units/format*                         |
+| --------------------------------------- | --------------------------- | -------------- | --------------------------- | ------- | -------------------------------------- |
+| [Additional inventory URL][add-url]     | `additionalInventoryUrl`    | 2              | `""`                        | string  | Git clone URL                          |
+| [Batch size][bat-siz]                   | `batchSize`                 | 1, 2           | `25`                        | integer | Components                             |
+| [Batch window][bat-win]                 | `batchWindow`               | 1, 2           | `60`                        | integer | seconds                                |
+| [Batcher check interval][bat-chk]       | `batcherCheckInterval`      | 1, 2           | `10`                        | integer | seconds                                |
+| [Batcher maximum backoff][bat-bac]      | `batcherMaxBackoff`         | 2              | `3600`                      | integer | seconds                                |
+| [Default Ansible configuration][ancfg]  | `defaultAnsibleConfig`      | 1, 2           | `"cfs-default-ansible-cfg"` | string  | ConfigMap name in `services` namespace |
+| [Default batcher retry policy][bat-ret] | `defaultBatcherRetryPolicy` | 1, 2           | `3`                         | integer | Component configuration attempts       |
+| [Default clone URL][clo-url]        | `defaultCloneUrl` | 1 | `"https://api-gw-service-nmn.local/vcs/cray/config-management.git"` | string | Git clone URL |
+| [Default playbook][pbook]               | `defaultPlaybook`           | 1, 2           | `"site.yml"`                | string  | Name of Ansible playbook               |
+| [Hardware synchronization interval][hw] | `hardwareSyncInterval`      | 1, 2           | `10`                        | integer | seconds                                |
+| [Session Time-To-Live (TTL)][ses-ttl]   | `sessionTTL`                | 1, 2           | `"7d"`                      | string  | Length of time or empty string         |
 
 ## Additional inventory URL
+
+> **NOTE:** This option is not available in CFS v1.
 
 A Git clone URL to supply additional inventory content to all CFS sessions.
 
@@ -96,6 +98,8 @@ See [Configuration Management with the CFS Batcher](Configuration_Management_wit
 
 ## Batcher maximum backoff
 
+> **NOTE:** This option is not available in CFS v1.
+
 This option specifies the maximum number of seconds that the CFS batcher's back-off will reach.
 
 * Name: `batcherMaxBackoff`
@@ -131,6 +135,8 @@ For more information, see:
 * [Configuration Management of System Components](Configuration_Management_of_System_Components.md)
 
 ## Default clone URL
+
+> **NOTE:** This option is not available in CFS v2.
 
 **NOTE**: This option is deprecated and has no effect. It is removed in CSM 1.2.
 
