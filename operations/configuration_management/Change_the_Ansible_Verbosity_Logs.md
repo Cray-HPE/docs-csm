@@ -49,16 +49,16 @@ in some cases can even cause problems.
 
 * It is not recommended to use level `3` or `4` with sessions that target a large numbers
   of hosts. Avoid this by setting an Ansible limit, reducing the number of targets.
-    * See [Creating sessions with increased verbosity][create] for details on
-      how to specify an Ansible limit.
+  * See [Creating sessions with increased verbosity][create] for details on
+    how to specify an Ansible limit.
 * Consider reviewing the Ansible tasks being run and altering them, in order to reduce their
   log output.
 * **WARNING:** Setting the Ansible verbosity to `4` can cause CFS sessions to hang. There
   are multiple ways to avoid this issue:
-    * Reduce the verbosity to `3` or lower.
-    * Adjust the `display_ok_hosts` and `display_skipped_hosts` settings in the
-      Ansible configuration that the session is using. For more details, see
-      [Set the `ansible.cfg` for a Session](Set_the_ansible-cfg_for_a_Session.md).
+  * Reduce the verbosity to `3` or lower.
+  * Adjust the `display_ok_hosts` and `display_skipped_hosts` settings in the
+    Ansible configuration that the session is using. For more details, see
+    [Set the `ansible.cfg` for a Session](Set_the_ansible-cfg_for_a_Session.md).
 
 ## Creating sessions with increased verbosity
 
