@@ -79,7 +79,7 @@ order to specify the Ansible configuration, limit, or verbosity.
 
 Not all CFS sessions are created directly by an administrator. For example:
 
-* A session may be created indirectly (as part of a [SAT][sat] operation or a script being run,
+* A session may be created indirectly (as part of a script being run,
   for example).
 * A session may be created by the CFS batcher. For more information,
   see [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md).
@@ -96,4 +96,3 @@ level for these sessions. For more details, see [Set the `ansible.cfg` for a Ses
 [ancfg]: CFS_Global_Options.md#default-ansible-configuration
 [create]: #creating-sessions-with-increased-verbosity
 [indirect]: #increasing-verbosity-for-sessions-that-are-not-created-directly
-[sat]: ../../glossary.md#system-admin-toolkit-sat
