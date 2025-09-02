@@ -87,7 +87,7 @@ The following are the BOS global options:
     Determines if a component will be marked as disabled after its desired state matches its current state.
     If false, BOS will continue to maintain the state of the nodes declaratively.
     This is an experimental feature and is not fully supported.
-    This option is [removed in CSM 1.7](../../introduction/deprecated_features/README.md#removals-in-csm-17).
+    This option is [removed in CSM 1.7](../../introduction/deprecated_features/README.md#removed-in-csm-17).
 
 * `discovery_frequency`
 
