@@ -453,6 +453,8 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
 
     Solution: (`ncn-mw#`) Disable Kyverno admission reports temporarily by editing the `kyverno-admission-controller` deployment.
 
+    > Note: While Kyverno admissions reports are disabled, policy enforcement works normally, but policy reports may be incomplete.
+
     ```bash
     kubectl -n kyverno edit deployment kyverno-admission-controller
     ```
@@ -460,10 +462,4 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
     Under `spec.template.spec.containers[0].args`, replace `--admissionReports=true`  with `--admissionReports=false`.
     Then save and exit.
 
-    Once the upgrade has completed, set `admissionReports` to true to re-enable it.
-
-    Impact of Temporarily disabling `admissionReports`:
-
-    What works?: Policy enforcement (mutate/validate/generate) works noramlly.
-
-    What doesn't work?: Policy reports of the existing resources can be incomplete during this time.
+    Once the upgrade has completed, set `admissionReports` to `true` to re-enable it.
