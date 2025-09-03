@@ -91,6 +91,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Soft Deleted IMS Image Metadata is Lost](known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
 * [IMS Created Image Stores Incorrect Metadata](known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
 * [PostgreSQL System ID Mismatch](known_issues/postgres_system_id_mismatch.md)
+* [Kyverno policy management](../operations/kubernetes/Kyverno.md#known-issues)
 
 ## Booting
 
@@ -224,6 +225,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Keycloak User Localization](../operations/security_and_authentication/Keycloak_User_Localization.md)
 * [Troubleshoot Kyverno configuration manually](../operations/security_and_authentication/Troubleshoot_Kyverno_Configuration_manually.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+* [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
 
 ## Spire
 
