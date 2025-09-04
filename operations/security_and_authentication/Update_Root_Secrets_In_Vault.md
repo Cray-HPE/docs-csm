@@ -5,7 +5,6 @@
     * [`write_root_secrets_to_vault.py`](#write_root_secrets_to_vaultpy)
     * [`write_ssh_config_to_vault.py`](#write_ssh_config_to_vaultpy)
     * [`restore_ssh_config_from_vault.py`](#restore_ssh_config_from_vaultpy)
-    * [Related tools](#related-tools)
 * [Manual procedures](#manual-procedures)
     * [Password hash](#password-hash)
     * [SSH keys](#ssh-keys)
@@ -46,7 +45,6 @@ to safely update the data in Vault.
 * [`write_root_secrets_to_vault.py`](#write_root_secrets_to_vaultpy)
 * [`write_ssh_config_to_vault.py`](#write_ssh_config_to_vaultpy)
 * [`restore_ssh_config_from_vault.py`](#restore_ssh_config_from_vaultpy)
-* [Related tools](#related-tools)
 
 ### `write_root_secrets_to_vault.py`
 

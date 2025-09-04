@@ -217,7 +217,7 @@ The Compute Rolling Upgrade Service (CRUS) upgrades sets of [compute nodes](#com
 set of nodes to be out of service at once. CRUS manages the workload management status of nodes, handling each of the steps
 required to upgrade compute nodes.
 
-* For more information on CRUS, see [Compute Rolling Upgrades](operations/index.md#compute-rolling-upgrades).
+* For more information on CRUS, see [Compute Rolling Upgrades](operations/README.md#compute-rolling-upgrades).
 * For more information on the CRUS API, see [CRUS API](api/crus.md).
 
 > **`NOTES`**

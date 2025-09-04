@@ -729,5 +729,3 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 ## Next topic
 
 After completing this procedure, proceed to configure the management network switches.
-
-See [Configure management network switches](README.md#5-configure-management-network-switches).

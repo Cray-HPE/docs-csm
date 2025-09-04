@@ -92,7 +92,7 @@ consider upgrading to the latest CSM `v1.4` patch release. See
 
 1. Download and extract the CSM `v1.4.3` release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
 
 1. (`ncn-m001#`) Set `CSM_DISTDIR` to the directory of the extracted files.
 

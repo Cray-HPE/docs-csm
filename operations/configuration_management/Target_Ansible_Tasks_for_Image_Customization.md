@@ -50,7 +50,7 @@ to selectively run individual tasks with `when: cray_cfs_image`, or to ignore in
 
 Conditionals can also be applied to entire roles if desired \(see the external [apply Ansible conditionals to roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#conditionals-with-includes).
 In instances where the same playbook may be run in both modes, it is best practice to include a conditional on all parts of the playbook. This is best done by placing the conditional on an `include_*` statement.
-See [Write Ansible Code for CFS: Reduce wasted time](Write_Ansible_Code_for_CFS.md#reduce-wasted-time) for more information on optimizing conditionals.
+See [Write Ansible Code for CFS: Avoid repeated conditionals with `include_*`](Write_Ansible_Code_for_CFS.md#avoid-repeated-conditionals-with-include_) for more information on optimizing conditionals.
 
 It is best practice to include a default in Ansible roles for playbook and role portability because CFS injects this variable at runtime. This can be done in the defaults section of the role, or where the variable is called. For example:
 
