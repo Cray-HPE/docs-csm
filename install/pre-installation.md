@@ -702,4 +702,4 @@ successfully.
 
 After completing this procedure, proceed to configure the management network switches.
 
-See [Configure management network switches](README.md#7-configure-management-network-switches).
+See [Configure management network switches](README.md#8-configure-management-network-switches).

@@ -77,7 +77,7 @@ list of patch versions.
 
 1. Download and extract the CSM `v1.5.2` release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
 
 1. (`ncn-m001#`) Set `CSM_DISTDIR` to the directory of the extracted files.
 

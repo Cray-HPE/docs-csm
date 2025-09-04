@@ -6,21 +6,19 @@ network configurations are generated. This is an iterative process to create a m
 
 ## Topics
 
-- [Validate the SHCD](#validate-the-shcd)
-  - [Topics](#topics)
-  - [Prerequisites](#prerequisites)
-  - [Validation steps](#validation-steps)
-  - [Under the hood](#under-the-hood)
+- [Prerequisites](#prerequisites)
+- [Validation steps](#validation-steps)
+- [Under the hood](#under-the-hood)
     - [Check warnings](#check-warnings)
     - [Check SHCD port usage](#check-shcd-port-usage)
-  - [Logging and updates](#logging-and-updates)
+- [Logging and updates](#logging-and-updates)
 
 ## Prerequisites
 
 - Up-to-date SHCD.
 - CANU installed with version 1.1.11 or greater.
-  - Run `canu --version` to see version.
-  - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md).
+    - Run `canu --version` to see version.
+    - If doing a CSM install or upgrade, a CANU RPM is located in the release tarball. For more information, see [Update CANU From CSM Tarball](canu/update_canu_from_csm_tarball.md).
 
 ## Validation steps
 
@@ -67,8 +65,6 @@ network configurations are generated. This is an iterative process to create a m
    > the spreadsheet before moving on. A "clean run" through a worksheet will include the model, a port-map of each node and may include warnings. See a
    > list of typical errors at the end of this document to help in fixing the worksheet data.
 
-1. Proceed to [generate topology files](../../../install/pre-installation.md#generate-topology-files).
-
 ## Under the hood
 
 A worksheet that runs *cleanly* will have checked that:
@@ -82,11 +78,11 @@ In addition, a clean run will have the following sections:
 - SHCD Node Connections – A high level list of all node connections on the system.
 - SHCD Port Usage – A Port-by-port detailed listing of all node connections on the system.
 - Warnings:
-  - A list of nodes found that are not categorized on the system.
+    - A list of nodes found that are not categorized on the system.
 
-    **`NOTE`** This list is important as it could include misspellings of nodes that should be included!
+      **`NOTE`** This list is important as it could include misspellings of nodes that should be included!
 
-  - A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system.
+    - A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system.
 
 ### Check warnings
 

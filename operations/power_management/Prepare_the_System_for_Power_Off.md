@@ -209,12 +209,12 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
    * If there is no `nexus-bak` PVC, then use this Nexus export procedure to create one. This procedure does check that
    there is enough space available for the copy of the `nexus-data` PVC and provides guidance on how to clean up space if
    necessary or reduce the size of the existing `nexus-data` PVC.
-   See [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#Export).
+   See [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#export).
 
    * If there is an existing `nexus-bak` PVC, but it is too old or the age is not recent enough to include the most recent
    software update or otherwise not considered valid, then use the Nexus cleanup procedure before the export procedure.
-   See [Nexus Cleanup](../package_repository_management/Nexus_Export_and_Restore.md#Cleanup), then see
-   [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#Export).
+   See [Nexus Cleanup](../package_repository_management/Nexus_Export_and_Restore.md#cleanup), then see
+   [Nexus Export](../package_repository_management/Nexus_Export_and_Restore.md#export).
 
 ### Identify BOS session templates for managed nodes
 
