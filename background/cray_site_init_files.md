@@ -90,3 +90,5 @@ versioninfo:
   compiler: gc
   platform: linux/amd64
 ```
+
+[`background/cray_site_init_files.md`](#save-file--avoiding-parameters)

@@ -49,3 +49,9 @@ Only follow the steps in the section for the node type that is being rebuilt:
 ## Validation
 
 After completing all of the steps, run the [Final Validation](Final_Validation_Steps.md) steps.
+
+[`operations/node_management/Rebuild_NCNs.md`](#Prerequisites)
+
+[`operations/node_management/Rebuild_NCNs.md`](#Validation)
+
+[`operations/node_management/Rebuild_NCNs.md`](#prerequisites)

@@ -253,3 +253,5 @@ Use the `cray hsm locks unlock` command to perform unlocking.
    [Success]
    ComponentIDs = [ "x3000c0s6b0",]
    ```
+
+[`operations/hardware_state_manager/Lock_and_Unlock_Management_Nodes.md`](#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs)

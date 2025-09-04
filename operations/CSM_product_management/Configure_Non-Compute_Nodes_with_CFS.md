@@ -237,3 +237,7 @@ Prior to running management NCN personalization, gather the following informatio
 
     > **`NOTE`** The CSM configuration layer **MUST** be the first layer in the
     > NCN personalization CFS configuration.
+
+[`operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md`](#run-ncn-personalization)
+
+[`operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md`](#set_root_password)

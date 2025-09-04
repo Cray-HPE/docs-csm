@@ -1170,3 +1170,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
    ```bash
    ncn# cray fas actions create UPDATED_COMMAND.json
    ```
+
+[`operations/firmware/FAS_Use_Cases.md`](#cn-workaround)
+
+[`operations/firmware/FAS_Use_Cases.md`](#ncn-bios-bmc)

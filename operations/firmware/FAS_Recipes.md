@@ -303,3 +303,23 @@ Make sure to wait for the current firmware to be updated before starting a new F
 ## Update Non-Compute Nodes (NCNs)
 
 See [Uploading BIOS and BMC Firmware for NCNs in FAS Use Cases](FAS_Use_Cases.md#ncn-bios-bmc).
+
+[`operations/firmware/FAS_Recipes.md`](#cray-device-type-chassisbmc--target-bmc)
+
+[`operations/firmware/FAS_Recipes.md`](#cray-device-type-nodebmc--target-bmc)
+
+[`operations/firmware/FAS_Recipes.md`](#cray-device-type-nodebmc--target-nodebios)
+
+[`operations/firmware/FAS_Recipes.md`](#cray-device-type-nodebmc--target-redstone-fpga)
+
+[`operations/firmware/FAS_Recipes.md`](#gigabyte-device-type-nodebmc--target-bios)
+
+[`operations/firmware/FAS_Recipes.md`](#hpe-device-type-nodebmc--target-ilo-5-bmc)
+
+[`operations/firmware/FAS_Recipes.md`](#hpe-device-type-nodebmc--target-system-rom-bios)
+
+[`operations/firmware/FAS_Recipes.md`](#manufacturer--cray)
+
+[`operations/firmware/FAS_Recipes.md`](#manufacturer-gigabyte)
+
+[`operations/firmware/FAS_Recipes.md`](#manufacturer-hpe)

@@ -104,3 +104,7 @@ After completion of the firmware update with FAS, the CSM product stream has bee
 configured. Refer to the `1.5 HPE Cray EX System Software Getting Started Guide S-8000`
 on the [`HPE Customer Support Center`](https://www.hpe.com/support/ex-gsg) for
 more information on other product streams to be upgraded and configured after CSM.
+
+[`upgrade/index.md`](#update_management_network)
+
+[`upgrade/index.md`](#upgrade_management_nodes_csm_services)

@@ -73,3 +73,5 @@ Instead, when creating a configuration session meant to customize a boot image, 
 creation.
 
 See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for more information.
+
+[`operations/configuration_management/Ansible_Inventory.md`](#dynamic-inventory-and-host-groups)

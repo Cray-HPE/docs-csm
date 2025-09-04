@@ -397,3 +397,7 @@ for more information.
 * If the PIT node is not booted, see
 [Change NCN Image Root Password and SSH Keys](../security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
 for more information.
+
+[`operations/node_management/Configure_NTP_on_NCNs.md`](#configure_ncn_images_to_use_local_timezone)
+
+[`operations/node_management/Configure_NTP_on_NCNs.md`](#set-a-local-timezone)

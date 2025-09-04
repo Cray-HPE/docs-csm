@@ -109,3 +109,7 @@ See [Load Olympus BMC Recovery Firmware into TFTP server](../operations/firmware
 After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
 
 See [Validate CSM Health](index.md#validate_csm_health).
+
+[`install/configure_administrative_access.md`](#configure_cray_cli)
+
+[`install/configure_administrative_access.md`](#configure_keycloak_account)

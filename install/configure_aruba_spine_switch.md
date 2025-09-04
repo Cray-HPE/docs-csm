@@ -522,3 +522,5 @@ To display the running configuration:
    sw-spine-001# show running-config
    ```
 
+
+[`install/configure_aruba_spine_switch.md`](#Configure-Edge-Port)

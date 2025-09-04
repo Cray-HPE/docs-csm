@@ -604,3 +604,11 @@ examine differences to ensure all changes are relevant. For example, when
 applying a customer-specific customization used in a prior version, be sure the
 change still makes sense. It is common for options to change as new features are
 introduced and bugs are fixed.
+
+[`install/prepare_site_init.md`](#create-baseline-system-customizations)
+
+[`install/prepare_site_init.md`](#generate-sealed-secrets)
+
+[`install/prepare_site_init.md`](#push-to-a-remote-repository)
+
+[`install/prepare_site_init.md`](#version-control-site-init-files)

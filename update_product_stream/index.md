@@ -239,3 +239,15 @@ In order to carry out this procedure, the name of the workaround breakpoint (for
 ## Check for field notices about hotfixes
 
 Collect all available field notices about hotfixes which should be applied to this CSM software release. Check with HPE Cray service for more information.
+
+[`update_product_stream/index.md`](#apply-workarounds)
+
+[`update_product_stream/index.md`](#check-for-latest-documentation)
+
+[`update_product_stream/index.md`](#check-for-latest-workarounds-and-documentation-updates)
+
+[`update_product_stream/index.md`](#documentation)
+
+[`update_product_stream/index.md`](#download-and-extract-csm-product-release)
+
+[`update_product_stream/index.md`](#workarounds)

@@ -323,3 +323,7 @@ wiping a different type of node than what a step specifies, then skip that step.
     > **WARNING:** Do not run these commands on `ncn-m001`
 
     Perform the [Basic wipe](#basic-wipe) procedure on each node.
+
+[`install/wipe_ncn_disks_for_reinstallation.md`](#basic-wipe)
+
+[`install/wipe_ncn_disks_for_reinstallation.md`](#full-wipe)

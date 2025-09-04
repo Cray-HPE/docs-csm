@@ -102,3 +102,5 @@ For more information, see [NCN Operating System Releases](ncn_operating_system_r
 Metal Basecamp is a `cloud-init` `DataSource` available on the LiveCD. Basecamp's configuration file offers many inputs for various `cloud-init` scripts embedded within the NCN images.
 
 For more information, see [`cloud-init` Basecamp Configuration](cloud-init_basecamp_configuration.md).
+
+[`background/index.md`](#cray_site_init_files)

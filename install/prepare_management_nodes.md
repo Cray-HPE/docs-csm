@@ -217,3 +217,5 @@ linux# poweroff
 The next step is to bootstrap the PIT node.
 
 See [Bootstrap PIT Node](index.md#bootstrap_pit_node).
+
+[`install/prepare_management_nodes.md`](#set_node_bmcs_to_dhcp)
