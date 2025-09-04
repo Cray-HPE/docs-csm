@@ -50,7 +50,6 @@ section of the [Upgrade CSM and Additional Products with IUF](../operations/iuf/
    During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
    configuration changes will be lost as the audit log configuration will be reset to defaults defined in [Audit Logs](../operations/security_and_authentication/Audit_Logs.md).
 
-
    Follow these IUF instructions in order:
 
    1. [Deploy Product](../operations/iuf/workflows/deploy_product.md)
