@@ -46,4 +46,4 @@
 
     To fix this issue, re-cable `ncn-w001` so that it is correctly connected to `sw-spine-001`.
 
-1. Return to [deploying the management nodes](../../../install/deploy_non-compute_nodes.md#23-check-lvm-on-kubernetes-ncns).
+1. Return to [deploying the management nodes](../../../install/deploy_non-compute_nodes.md).
