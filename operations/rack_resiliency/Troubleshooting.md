@@ -204,13 +204,13 @@ Example log entry reporting a failure to register with HMNFD:
 [2025-05-26 11:49:25,744] ERROR in rms: Attempt 1 : Failed to fetch subscription list from hmnfd. Error: 503 Server Error: Service Unavailable for url: https://api-gw-service-nmn.local/apis/hmnfd/hmi/v2/subscriptions
 ```
 
-- Cause: The HMNFD service is nor running.
-- Effect: This leads to RMS not receiving notifications from HMNFD.
-- Recovery: Ensure HMNFD service is running.
+- Cause: The HMNFD service is not running.
+- Effect: RMS is not receiving notifications from HMNFD.
+- Recovery: Ensure that the HMNFD service is running.
 
 ### Getting details about RMS
 
-To know the startup time, last monitoring cycle timestamp, the polling intervals and the configured critical services it is necessary to [view the ConfigMap](ConfigMaps.md#2-veiwing-configmap).
+To know the startup time, last monitoring cycle timestamp, the polling intervals and the configured critical services it is necessary to [view the ConfigMap](ConfigMaps.md#viewing-configmap).
 This helps to understand the various configuration parameters which control RMS behavior.
 
 **Note**: It is recommended not to modify those configuration parameters without consulting HPE support.

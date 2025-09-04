@@ -45,7 +45,7 @@ Some of the health check tests will fail if the Cray Command Line Interface (CLI
 Tests with this dependency are noted in their descriptions below. These tests may be skipped but **this is not recommended**.
 
 If running these checks during an initial CSM install, then to find details on configuring the Cray CLI, see
-[Configure the Cray command line interface](../install/configure_administrative_access.md#1-configure-the-cray-command-line-interface)
+[Cray CLI configuration](../install/configure_administrative_access.md#cray-cli-configuration)
 from the install documentation.
 
 If running these checks after the initial CSM install, then to find details on configuring the Cray CLI, see

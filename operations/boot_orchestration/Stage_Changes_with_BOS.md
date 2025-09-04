@@ -12,7 +12,7 @@ These changes will not immediately take effect, and will instead be applied when
 ## Creating a staged session
 
 (`ncn-mw#`) Creating a staged session is no different than creating a normal session, with one exception: the `staged` value should be set to `True`.
-For more on creating sessions, see [Create a new v2 session](Manage_a_BOS_Session.md#create-a-new-v2-session).
+For more on creating sessions, see [Create a new session](Manage_a_BOS_Session.md#create-a-new-session).
 
 ```bash
 cray bos v2 sessions create --template-name TEMPLATE_NAME --operation boot --stage True --format json

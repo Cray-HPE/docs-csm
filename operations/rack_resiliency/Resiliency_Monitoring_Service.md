@@ -21,8 +21,8 @@ provide its functionality:
 
 - [ConfigMaps](#configmaps)
 - [Hardware Management Notification Fanout Daemon (HMNFD)](../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd)
-- [Kubernetes zones](Zones.md#command-to-view-Kubernetes-zones)
-- [Ceph zones](Zones.md#command-to-view-Ceph-zones)
+- [Kubernetes zones](Zones.md#kubernetes-zones)
+- [Ceph zones](Zones.md#ceph-zones)
 
 ## Operation
 
