@@ -28,7 +28,7 @@ This document is intended to guide an administrator through the process going to
 
 1. Download and extract the CSM 1.0.10 release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract-csm-product-release).
 
 1. Set `CSM_DISTDIR` to the directory of the extracted files:
 

@@ -1,4 +1,4 @@
-# Collecting the BMC MAC Addresses
+# Collecting the BMC MAC Addresses  
 
 This guide will detail how to collect BMC MAC addresses from an HPE Cray EX system with configured switches.
 The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
