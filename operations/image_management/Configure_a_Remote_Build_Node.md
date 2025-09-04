@@ -5,13 +5,14 @@ Configure or create an IMS remote build node for use for image builds.
 * [Prerequisites](#prerequisites)
 * [Overview](#overview)
 * [Configuring a remote build node](#configuring-a-remote-build-node)
-* [Use an existing compute node](#use-an-existing-compute-node)
-* [Create a barebones IMS builder image](#create-a-barebones-ims-builder-image)
-* [Adding storage to a remote build node](#adding-storage-to-a-remote-build-node)
-* [Adding and removing an HSM lock](#adding-and-removing-an-hsm-lock)
-* [Adding remote build nodes to IMS](#adding-remote-build-nodes-to-ims)
+    * [Use an existing compute node](#use-an-existing-compute-node)
+    * [Create a barebones IMS builder image](#create-a-barebones-ims-builder-image)
+    * [Adding storage to a remote build node](#adding-storage-to-a-remote-build-node)
+    * [Adding and removing an HSM lock](#adding-and-removing-an-hsm-lock)
+    * [Adding remote build nodes to IMS](#adding-remote-build-nodes-to-ims)
 * [Removing remote build nodes from IMS](#removing-remote-build-nodes-from-ims)
 * [Listing remote build nodes in IMS](#listing-remote-build-nodes-in-ims)
+* [Checking the status of remote build nodes](#checking-the-status-of-remote-build-nodes)
 
 ## Prerequisites
 
@@ -709,7 +710,7 @@ that node with IMS, allowing it to be used for image builds.
     }
     ```
 
-### Removing remote build nodes from IMS
+## Removing remote build nodes from IMS
 
 (`ncn-mw#`) Remove a remote build node from IMS.
 
@@ -719,7 +720,7 @@ cray ims remote-build-nodes delete "${IMS_REMOTE_NODE_XNAME}"
 
 There is no expected output from this operation.
 
-### Listing remote build nodes in IMS
+## Listing remote build nodes in IMS
 
 (`ncn-mw#`) List available remote build nodes in IMS.
 
@@ -737,7 +738,7 @@ Expected output will be something like:
 ]
 ```
 
-### Checking the status of remote build nodes
+## Checking the status of remote build nodes
 
 Before a job is set up to be launched on a remote build node, IMS checks that there is
 a remote node capable of running the job. If a node is registered as a remote build node
