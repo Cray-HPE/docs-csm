@@ -393,3 +393,5 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
     curl -s -k -d grant_type=password -d client_id=shasta -d username=<username> -d password=<password> \
                 https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token
     ```
+
+[`operations/kubernetes/Restore_Postgres.md`](#restore-postgres-for-keycloak)

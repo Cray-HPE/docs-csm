@@ -179,3 +179,5 @@ cray bos v2 sessiontemplates update --file <INPUT_FILE> <TEMPLATE_NAME>
 ```
 
 The format of this input file is the same as the one used to [Create a session template](#create-a-session-template).
+
+[`operations/boot_orchestration/Manage_a_Session_Template.md`](#modify-a-session-template)

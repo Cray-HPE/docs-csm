@@ -43,3 +43,5 @@ Additionally, configuration management of specific components \(nodes\) can also
 1. Creating a configuration with one or more layers within a specific Git repository, and committing it to be executed by Ansible.
 2. Setting the desired configuration state of a node to the prescribed layers.
 3. Enabling the CFS Batcher to automatically configure nodes by creating one or more configuration sessions to apply the configuration layer\(s\).
+
+[`operations/configuration_management/Configuration_Management.md`](#use-cases)

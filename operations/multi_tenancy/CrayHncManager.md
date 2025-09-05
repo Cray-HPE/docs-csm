@@ -206,3 +206,5 @@ spec:
     * Propagating: rolebindings (/v1)
     * Propagating: roles (/v1)
     ```
+
+[`operations/multi_tenancy/CrayHncManager.md`](#tenant-naming-requirements)

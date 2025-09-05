@@ -1210,3 +1210,7 @@ Prerequisites:
    ```bash
    cray fas actions create UPDATED_COMMAND.json
    ```
+
+[`operations/firmware/FAS_Use_Cases.md`](#compute-node-bios-workaround-for-hpe-cray-ex425)
+
+[`operations/firmware/FAS_Use_Cases.md`](#update-non-compute-node-ncn-bios-and-bmc-firmware)

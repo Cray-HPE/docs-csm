@@ -380,3 +380,5 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 ## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
+
+[`operations/power_management/Prepare_the_System_for_Power_Off.md`](#procedure)

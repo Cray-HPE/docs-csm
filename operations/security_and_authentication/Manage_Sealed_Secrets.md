@@ -297,3 +297,5 @@ Output looks similar to the following:
    ```json
    {"SNMPUsername": "<USERID>", "SNMPAuthPassword": "<A-PASS>", "SNMPPrivPassword": "<P-PASS>"}
    ```
+
+[`operations/security_and_authentication/Manage_Sealed_Secrets.md`](#decrypt-sealed-secrets-for-review)

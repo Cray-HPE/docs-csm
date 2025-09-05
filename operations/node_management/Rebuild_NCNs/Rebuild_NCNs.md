@@ -99,3 +99,7 @@ See [Prepare Storage Nodes](Prepare_Storage_Nodes.md).
 ## Validation
 
 After completing all of the steps, run the [Final Validation](Final_Validation_Steps.md) steps.
+
+[`operations/node_management/Rebuild_NCNs/Rebuild_NCNs.md`](#prerequisites)
+
+[`operations/node_management/Rebuild_NCNs/Rebuild_NCNs.md`](#validation)

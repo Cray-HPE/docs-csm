@@ -269,3 +269,11 @@ identified by a `type` value:
     path = "s3://boot-images/4e78488d-4d92-4675-9d83-97adfc17cb19/manifest.json"
     etag = ""
     ```
+
+[`operations/image_management/Import_External_Image_to_IMS.md`](#2-set-helper-variables)
+
+[`operations/image_management/Import_External_Image_to_IMS.md`](#4-create-image-record-in-ims)
+
+[`operations/image_management/Import_External_Image_to_IMS.md`](#5-upload-artifacts-to-s3)
+
+[`operations/image_management/Import_External_Image_to_IMS.md`](#6-create-upload-and-register-image-manifest)

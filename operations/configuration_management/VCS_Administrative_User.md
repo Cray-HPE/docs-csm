@@ -270,3 +270,5 @@ This can be done either using the VCS web interface, or using the command line.
         For more details on this test, including known issues and other command line options, see [Software Management Services health checks](../../troubleshooting/known_issues/sms_health_check.md).
 
 * **Make sure to perform the entire linked chart redeploy procedure, including the step to save the updated customizations.**
+
+[`operations/configuration_management/VCS_Administrative_User.md`](#change-vcs-administrative-user-password)

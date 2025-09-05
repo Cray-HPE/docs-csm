@@ -46,3 +46,5 @@ provides remediation steps if they are needed.
    ```
 
 1. Repeat the first two steps of this procedure to confirm that the job completed and that the Keycloak user count is correct.
+
+[`operations/security_and_authentication/Keycloak_User_Localization.md`](#verification-procedure)

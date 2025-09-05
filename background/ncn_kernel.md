@@ -712,3 +712,5 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 [21]:https://www.suse.com/security/cve/CVE-2021-4034.html
 [22]:https://www.suse.com/security/cve/CVE-2022-0185.html
 [23]:https://www.suse.com/security/cve/CVE-2022-33981.html
+
+[`background/ncn_kernel.md`](#metalserver)

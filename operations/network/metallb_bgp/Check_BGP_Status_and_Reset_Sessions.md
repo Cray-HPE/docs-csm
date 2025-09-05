@@ -311,3 +311,5 @@ The following procedures may not resolve the problem after just one attempt. In 
         ```
 
     Once all sessions are in an `Established` state, BGP reset is complete.
+
+[`operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md`](#check-bgp-status-and-reset-sessions)

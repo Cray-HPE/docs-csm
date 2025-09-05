@@ -874,3 +874,13 @@ these backups.
 - [Removing a Tenant](multi_tenancy/Remove_a_Tenant.md)
 - [Slurm Operator](multi_tenancy/SlurmOperator.md)
 - [Tenant and Partition Management System (TAPMS) Overview](multi_tenancy/Tapms.md)
+
+[`operations/README.md`](#compute-rolling-upgrades)
+
+[`operations/README.md`](#configuration-management)
+
+[`operations/README.md`](#security-and-authentication)
+
+[`operations/README.md`](#spire)
+
+[`operations/README.md`](#system-layout-service-sls)

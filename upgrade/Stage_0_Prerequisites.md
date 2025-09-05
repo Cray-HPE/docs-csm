@@ -406,3 +406,7 @@ For any typescripts that were started during this stage, stop them with the `exi
 ## Stage completed
 
 This stage is completed. Continue to [Stage 1 - Ceph image upgrade](Stage_1.md).
+
+[`upgrade/Stage_0_Prerequisites.md`](#stage-0---prerequisites-and-preflight-checks)
+
+[`upgrade/Stage_0_Prerequisites.md`](#stage-01---prepare-assets)

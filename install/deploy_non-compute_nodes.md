@@ -375,3 +375,5 @@ If the check fails after doing the rebuild, contact support.
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 
 See [Install CSM Services](README.md#2-install-csm-services).
+
+[`install/deploy_non-compute_nodes.md`](#2-deploy-management-nodes)

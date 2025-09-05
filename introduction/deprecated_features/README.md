@@ -131,3 +131,7 @@ features are listed first).
 - [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) v1 REST API (in CSM 0.9.3)
 - [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) v1
   - In CSM 0.9, CFS v2 is the default for the [Cray CLI](../../glossary.md#cray-cli-cray)
+
+[`introduction/deprecated_features/README.md`](#removals)
+
+[`introduction/deprecated_features/README.md`](#removed-in-csm-17)

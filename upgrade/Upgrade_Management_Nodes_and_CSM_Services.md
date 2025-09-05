@@ -153,3 +153,5 @@ mentioned explicitly on this page, see [resource material](resource_material/REA
    [2021-07-22 20:50:38] UNINSTALL_CONMAN
    [2021-07-22 20:58:39] INSTALL_NEW_CONSOLE <=== Add this line if this has been manually run and should be skipped
    ```
+
+[`upgrade/Upgrade_Management_Nodes_and_CSM_Services.md`](#relevant-troubleshooting-links-for-upgrade-related-issues)

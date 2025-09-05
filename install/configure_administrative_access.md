@@ -104,3 +104,7 @@ See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/
 After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
 
 See [Validate CSM Health](README.md#7-validate-csm-health).
+
+[`install/configure_administrative_access.md`](#1-configure-keycloak-account)
+
+[`install/configure_administrative_access.md`](#2-configure-the-cray-command-line-interface)

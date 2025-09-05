@@ -485,3 +485,5 @@ In order to manually run management NCN personalization, first gather the follow
     - Otherwise, update the existing management NCN personalization CFS configuration, replacing the
       existing CSM configuration layer with the JSON from the previous step. See
       [Perform NCN Personalization](Perform_NCN_Personalization.md).
+
+[`operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md`](#2-configure-the-root-password-and-ssh-keys-in-vault)

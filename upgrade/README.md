@@ -111,3 +111,7 @@ Follow the procedures for updating firmware with the Firmware Actions Service (F
 After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
 configured. Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
 on the HPE Customer Support Center for more information on other product streams to be upgraded and configured after CSM.
+
+[`upgrade/README.md`](#2-upgrade-management-nodes-and-csm-services)
+
+[`upgrade/README.md`](#3-validate-csm-health)
