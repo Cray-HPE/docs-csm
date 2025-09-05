@@ -9,7 +9,7 @@ take place. Watching the console or the console log for certain nodes can help t
 what happens and when. When the process completes for all nodes, the Ceph storage is
 initialized and the Kubernetes cluster is created and ready for a workload. The PIT node
 will join Kubernetes after it is rebooted later in
-[Deploy Final NCN](README.md#4-deploy-final-ncn).
+[Deploy Final NCN](deploy_final_non-compute_node.md).
 
 ## Timing of deployments
 
@@ -323,4 +323,4 @@ Ceph can begin to exhibit latency over time unless OSDs are restarted and some O
 
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 
-See [Install CSM Services](README.md#2-install-csm-services).
+See [Install CSM Services](install_csm_services.md).

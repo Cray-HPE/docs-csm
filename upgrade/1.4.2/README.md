@@ -51,7 +51,7 @@ consider upgrading to the latest CSM `v1.4` patch release. See
 1. [Upload NCN images](#upload-ncn-images)
 1. [Upgrade Ceph and stop local Docker registries](#upgrade-ceph-and-stop-local-docker-registries)
 1. [Enable `smartmon` metrics on storage NCNs](#enable-smartmon-metrics-on-storage-ncns)
-1. [Configure NCNs without restart](#configure-ncn-nodes-without-restart)
+1. [Configure NCNs without restart](#configure-ncns-without-restart)
 1. [Update test suite packages](#update-test-suite-packages)
 1. [Verification](#verification)
 1. [Take Etcd manual backup](#take-etcd-manual-backup)
@@ -80,7 +80,7 @@ consider upgrading to the latest CSM `v1.4` patch release. See
 
 1. Download and extract the CSM `v1.4.2` release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
 
 1. (`ncn-m001#`) Set `CSM_DISTDIR` to the directory of the extracted files.
 

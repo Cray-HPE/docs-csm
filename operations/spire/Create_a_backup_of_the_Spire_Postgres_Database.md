@@ -1,7 +1,7 @@
 # Create a Backup of the Spire Postgres Database
 
 Perform a manual backup of the contents of the Spire Postgres database. This backup can be used to restore the contents of the Spire Postgres database at a later point
-in time using the [Restore Spire Postgres from Backup](../kubernetes/Restore_Postgres.md#restore-postgres-for-spire) procedure.
+in time using the [Restore Postgres](../kubernetes/Restore_Postgres.md) procedure.
 
 ## Prerequisites
 

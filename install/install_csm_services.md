@@ -142,24 +142,21 @@ proceeding with the rest of the install.
 Because there are a number of dependencies between them, some services are not expected to work
 immediately after the install script completes.
 
-1. After having waited until services are healthy (
-   run `kubectl get po -A | grep -v 'Completed\|Running'` to see which pods may still be `Pending`),
-   take a manual backup of all Etcd clusters.
-   These clusters are automatically backed up every 24 hours, but not until the clusters have been
-   up that long.
-   Taking a manual backup enables restoring from backup later in this install process if needed.
+After having waited until services are healthy
+(run `kubectl get po -A | grep -v 'Completed\|Running'` to see which pods may still be `Pending`),
+take a manual backup of all Etcd clusters.
+These clusters are automatically backed up every 24 hours, but not until the clusters have been
+up that long.
+Taking a manual backup enables restoring from backup later in this install process if needed.
 
-   ```bash
-   /usr/share/doc/csm/scripts/operations/etcd/take-etcd-manual-backups.sh post_install
-   ```
-
-1. The next step is to validate CSM health before redeploying the final NCN.
-   See [Validate CSM health before final NCN deployment](README.md#3-validate-csm-health-before-final-ncn-deployment).
+```bash
+/usr/share/doc/csm/scripts/operations/etcd/take-etcd-manual-backups.sh post_install
+```
 
 ## Next topic
 
-After installing CSM, proceed
-to [validate CSM health before final NCN deployment](README.md#3-validate-csm-health-before-final-ncn-deployment).
+The next step is to validate CSM health before redeploying the final NCN.
+See [Validate CSM Health](../operations/validate_csm_health.md).
 
 ## Known issues
 
