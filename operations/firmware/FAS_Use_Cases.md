@@ -722,7 +722,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
 > Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#6-configure-dns-and-ntp-on-each-bmc).
+> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc).
 
 ```json
 {
@@ -1065,7 +1065,7 @@ Make sure you have waited for the current firmware to be updated before starting
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
 > Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#6-configure-dns-and-ntp-on-each-bmc).
+> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc).
 
 ```json
 {
@@ -1128,7 +1128,7 @@ Example output:
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
    If the DNS server is incorrect, the node will not be able to download the firmware.
-   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#6-configure-dns-and-ntp-on-each-bmc) for more information.
+   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc) for more information.
 1. Run a `dryrun` for all NCNs first to determine which NCNs and targets need updating.
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
@@ -1149,7 +1149,7 @@ Example output:
       Make sure to run the next step for `HPE` NCNs after rebooting the node.
       See [Reboot NCNs](../node_management/Reboot_NCNs.md).
    1. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh`.
-      See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#6-configure-dns-and-ntp-on-each-bmc).
+      See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc).
    1. Relock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 

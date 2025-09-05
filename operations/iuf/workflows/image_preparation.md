@@ -2,7 +2,7 @@
 
 This section creates CFS configurations and bootable images that will be used by later steps in the workflow.
 
-Before proceeding, ensure any site customizations to product content stored in VCS have been made per [Perform manual product configuration operations](configuration.md#2-perform-manual-product-configuration-operations) to ensure CFS configurations
+Before proceeding, ensure any site customizations to product content stored in VCS have been made per [Perform manual product configuration operations](configuration.md#3-perform-manual-product-configuration-operations) to ensure CFS configurations
 and images are created with the correct content and configuration values.
 
 1. [Execute the IUF `update-cfs-config` and `prepare-images` stages](#1-execute-the-iuf-update-cfs-config-and-prepare-images-stages)
