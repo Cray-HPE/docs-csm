@@ -76,7 +76,7 @@ See [Update Management Network](update_management_network.md).
   beyond the scope of this document) prior to validating UAS and UAI. Failures in UAI creation that result
   from incorrect or incomplete installation of these products will generally take the form of UAIs stuck in
   waiting state trying to set up volume mounts.
-* Performing the [Booting CSM `barebones` image](../operations/validate_csm_health.md#booting-csm-barebones-image)
+* Performing the [Booting CSM `barebones` image](../operations/validate_csm_health.md#4-booting-csm-barebones-image)
   test may be skipped if no compute nodes are available (that is, if all compute nodes are active running
   application workloads).
 
@@ -86,7 +86,7 @@ following validation checks to ensure that everything is still working properly 
 1. [Platform Health Checks](../operations/validate_csm_health.md#platform-health-checks)
 1. [Hardware Management Services Health Checks](../operations/validate_csm_health.md#hms-health-checks)
 1. [Software Management Services Validation Utility](../operations/validate_csm_health.md#sms-health-checks)
-1. [Validate UAS and UAI Functionality](../operations/validate_csm_health.md#uas-uai-validate)
+1. [Validate UAS and UAI Functionality](../operations/validate_csm_health.md#uas-uai-validate-install)
 
 See [Validate CSM Health](../operations/validate_csm_health.md).
 

@@ -1040,7 +1040,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 
 * The system is running HPE Cray EX release v1.4 or higher.
 * The system has completed the Cray System Management \(CSM\) installation.
-* A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#cn-bios).
+* A firmware upgrade has been done following [Update Liquid-Cooled Compute Node BIOS Firmware](#liquidcooled).
   * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
   * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 * The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.

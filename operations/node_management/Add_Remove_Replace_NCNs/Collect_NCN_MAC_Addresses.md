@@ -8,7 +8,7 @@ A temporary MAC address collection iPXE bootscript is put into place on the syst
 ## Prerequisites
 
 This procedure must be performed on a master or worker NCN that has the latest CSM documentation installed.
-See [Check for latest documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
+See [Check for latest documentation](../../../update_product_stream/index.md#check-for-latest-workarounds-and-documentation-updates).
 
 ## Procedure
 

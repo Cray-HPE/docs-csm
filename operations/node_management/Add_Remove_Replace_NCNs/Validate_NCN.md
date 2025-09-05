@@ -108,7 +108,7 @@ Validate the worker node added successfully.
 
 1. Confirm BGP is healthy.
 
-    Follow the steps in the [Check BGP Status and Reset Sessions](../../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#Prerequisites) to verify and fix BGP if needed.
+    Follow the steps in the [Check BGP Status and Reset Sessions](../../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md#prerequisites) to verify and fix BGP if needed.
 
 <a name="validate-storage-node"></a>
 

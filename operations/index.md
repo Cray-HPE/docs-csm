@@ -551,7 +551,6 @@ The Customer Access Network \(CAN\) provides access from outside the customer ne
 - [Connect to the CAN](network/customer_access_network/Connect_to_the_CAN.md)
 - [CAN with Dual-Spine Configuration](network/customer_access_network/CAN_with_Dual-Spine_Configuration.md)
 - [Troubleshoot CAN Issues](network/customer_access_network/Troubleshoot_CAN_Issues.md)
-- [CMN known issues](../troubleshooting/index.md#customer-management-network-cmn)
 
 ### Dynamic Host Configuration Protocol (DHCP)
 

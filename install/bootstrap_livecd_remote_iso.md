@@ -325,7 +325,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
    * `hmn_connections.json`
    * `ncn_metadata.csv`
    * `switch_metadata.csv`
-   * `system_config.yaml` (only available after [first-install generation of system files](#first-timeinitial-installs-bare-metal))
+   * `system_config.yaml` (only available after first-install generation of system files)
 
    > The optional `application_node_config.yaml` file may be provided for further definition of settings relating to how application nodes will appear in HSM for roles and
    > subroles. See [Create Application Node YAML](create_application_node_config_yaml.md).

@@ -3,14 +3,14 @@
 The procedures described on this page must be completed before any node is booted with the Cray Pre-Install Toolkit (PIT), which is performed in a later document. When the PIT
 node is referenced during these procedures, it means the node that will be booted as the PIT node.
 
-1. [Quiesce compute and application nodes](#quiesce_compute_and_application_nodes)
-1. [Disable DHCP service](#disable_dhcp_service)
-1. [Wipe disks on booted nodes](#wipe_disks_on_booted_nodes)
-1. [Set IPMI credentials](#set_ipmi_credentials)
-1. [Power off booted nodes](#power_off_booted_nodes)
-1. [Set node BMCs to DHCP](#set_node_bmcs_to_dhcp)
-1. [Wipe USB device on PIT node](#wipe_usb_device_on_pit_node)
-1. [Power off PIT node](#power_off_pit_node)
+1. [Quiesce compute and application nodes](#quiesce-compute-nodes-and-application-nodes)
+1. [Disable DHCP service](#disable-dhcp-service)
+1. [Wipe disks on booted nodes](#wipe-disks-on-booted-nodes)
+1. [Set IPMI credentials](#set-ipmi-credentials)
+1. [Power off booted nodes](#power-off-booted-nodes)
+1. [Set node BMCs to DHCP](#set-node-bmcs-to-dhcp)
+1. [Wipe USB device on PIT node](#wipe-usb-device-on-pit-node)
+1. [Power off PIT node](#power-off-pit-node)
 
 <a name="quiesce_compute_and_application_nodes"></a>
 
@@ -114,7 +114,7 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the booted LiveCD, if re
 Set the BMCs on the management nodes to DHCP. During the install of the management nodes their BMCs get set to static IP addresses. The installation expects these
 BMCs to be set back to DHCP before proceeding.
 
-> These steps require that the [Set IPMI credentials](#set_ipmi_credentials) steps have been performed.
+> These steps require that the [Set IPMI credentials](#set-ipmi-credentials) steps have been performed.
 
 1. Set the `LAN` variable based on NCN hardware type.
 

@@ -35,7 +35,7 @@ Taking the export can take multiple hours and Nexus will be unavailable for the 
 use 360 GiB on cluster), then Nexus would be unavailable for around 2 hours while the export was taking place.
 
 To get an export, run the export script on any master node where the latest CSM documentation is installed. See
-[Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+[Check for latest documentation](../../update_product_stream/index.md#check-for-latest-workarounds-and-documentation-updates).
 
 > If an export has been taken previously, then it should be deleted before a new export is taken. See [Cleanup previous export](#cleanup-previous-export).
 
@@ -49,7 +49,7 @@ The restore will delete any changes made to Nexus after the backup was taken. Th
 (for example, if the export took two hours then the restore would take around one hour). While the restore is underway, Nexus is unavailable.
 
 To restore Nexus to the state of the backup, run the restore script on any master node where the latest CSM documentation is installed. See
-[Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+[Check for latest documentation](../../update_product_stream/index.md#check-for-latest-workarounds-and-documentation-updates).
 
 ```bash
 ncn-m# /usr/share/doc/csm/scripts/nexus-restore.sh

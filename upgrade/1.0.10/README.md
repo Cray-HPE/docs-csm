@@ -14,7 +14,7 @@ For information on how to do that, see [Upgrade CSM](../index.md).
 1. [Rollout deployment restart](#rollout-deployment-restart)
 1. [Apply pod priorities](#apply-pod-priorities)
 1. [Verification](#verification)
-   1. [Run NCN personalization](#run-ncn-personalization)
+   1. [Run NCN personalization](#run_ncn_personalization)
    1. [Exit typescript](#exit-typescript)
 
 <a name="preparation"></a>
@@ -233,7 +233,7 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 ## Run NCN personalization
 
 1. Run NCN Personalization to update the NCNs to the latest configuration.
-   Complete the [Run NCN Personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#run-ncn-personalization)
+   Complete the [Run NCN Personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#run_ncn_personalization)
    procedure.
 
 1. Check the version of the Loftsman RPM installed on each NCN. Output below

@@ -50,7 +50,7 @@ for example, for NCN boot images. If the actual set of image artifacts differs f
     IMS requires that an image's root filesystem is in SquashFS format. Select one of the following options based on the current state of the image root being used:
 
     * If the image being added is in `tgz` format, then refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.md).
-    * If the image being added meets the above requirements, then proceed to [Create image record in IMS](#2-create-image-record-in-ims).
+    * If the image being added meets the above requirements, then proceed to [Create image record in IMS](#4-create-image-record-in-ims).
     * If the image root is in a format other than `tgz` or SquashFS, then convert the image root to `tgz`/SquashFS before continuing.
 
 ### 2. Set helper variables
