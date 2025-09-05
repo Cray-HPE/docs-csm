@@ -10,7 +10,7 @@ This section updates the software running on management NCNs.
     - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
     - [3.4 Personalize NCN storage nodes](#34-personalize-ncn-storage-nodes)
 - [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns)
-- [5. Update management host Slingshot NIC firmware](#5-pdate-managuement-host-slingshot-nic-firmware)
+- [5. Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware)
 - [6. Next steps](#6-next-steps)
 
 ## 1. Perform Slingshot switch firmware updates

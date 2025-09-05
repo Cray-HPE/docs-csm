@@ -13,7 +13,6 @@ This document provides links to troubleshooting information for services and fun
 * [Customer Management Network (CMN)](#customer-management-network-cmn)
 * [Domain Name Service (DNS)](#domain-name-service-dns)
 * [Grafana dashboards](#grafana-dashboards)
-* [Image management](#image-management)
 * [Kubernetes](#kubernetes)
 * [MetalLB](#metallb)
 * [Node management](#node-management)

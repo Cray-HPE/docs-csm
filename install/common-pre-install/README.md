@@ -30,16 +30,16 @@ shown here with numbered topics.
 
 [Prerequisites](#prerequisites)
 
-1. [Pre-installation](#pre-installation)  
+- [Pre-installation](#pre-installation)  
     1. [Boot pre-install live ISO and seed files generation](#1-boot-pre-install-live-iso-and-seed-files-generation)
     1. [Preparing for a re-installation](#2-preparing-for-a-re-installation)
     1. [Boot installation environment](#3-boot-installation-environment)
-    1. [Import CSM tarball](#4-import-csm-tarball)
-    1. [Create system configuration](#5-create-system-configuration)
+    1. [Create system configuration](#4-create-system-configuration)
+    1. [Initialize Nexus](#5-initialize-nexus)
     1. [Configure management network switches](#6-configure-management-network-switches)
-        1. [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
-        1. [Configure the management network with CANU](#configure-the-management-network-with-canu)
-1. [Installation](#installation)
+        - [Ensure SNMP is configured on the management network switches](#ensure-snmp-is-configured-on-the-management-network-switches)
+        - [Configure the management network with CANU](#configure-the-management-network-with-canu)
+- [Installation](#installation)
     1. [Deploy management nodes](#1-deploy-management-nodes)
     1. [Install CSM services](#2-install-csm-services)
     1. [Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
@@ -51,13 +51,13 @@ shown here with numbered topics.
     1. [Update firmware with FAS](#9-update-firmware-with-fas)
     1. [Prepare compute nodes](#10-prepare-compute-nodes)
     1. [Troubleshooting installation problems](#11-troubleshooting-installation-problems)
-1. [Post-installation](#post-installation)
+- [Post-installation](#post-installation)
     1. [Kubernetes Encryption](#1-kubernetes-encryption)
     1. [Export Nexus Data](#2-export-nexus-data)
-1. [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
+- [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
 
 > **`NOTE:`** If problems are encountered during the installation,
-> [Troubleshooting installation problems](#10-troubleshooting-installation-problems) and
+> [Troubleshooting installation problems](#11-troubleshooting-installation-problems) and
 > [Cray System Management (CSM) Administration Guide](../../operations/README.md) will offer assistance.
 
 ## Prerequisites
@@ -109,13 +109,13 @@ See [Pre-installation](pre-installation-cpi.md).
 
 See [Boot installation environment](pre-installation-cpi.md#1-boot-installation-environment).
 
-### 4. Import CSM tarball
+### 4. Create system configuration
 
-See [Import CSM tarball](pre-installation-cpi.md#2-import-csm-tarball).
+See [Create system configuration](pre-installation-cpi.md#2-create-system-configuration).
 
-### 5. Create system configuration
+### 5. Initialize Nexus
 
-See [Create system configuration](pre-installation-cpi.md#3-create-system-configuration).
+See [Initialize Nexus](pre-installation-cpi.md#3-initialize-nexus).
 
 ### 6. Configure management network switches
 
