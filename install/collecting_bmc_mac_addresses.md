@@ -159,7 +159,8 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
    Ignore errors regarding `site-init` (because it may not exist at this time).
 
-   > **`NOTE`** This assumes all other topology files are present in `$PITDATA/prep` from [Generate Topology Files](pre-installation.md#32-generate-topology-files).
+   > **`NOTE`** This assumes all other topology files are present in `$PITDATA/prep` from the
+   > [Create system configuration](pre-installation.md#3-create-system-configuration) procedure.
 
    ```bash
    /root/bin/pit-init.sh

@@ -6,7 +6,7 @@ Power off PDUs and any remaining components in management cabinets which are pow
 
 **CAUTION:** The nodes and switches in management cabinets should only
 be powered off when it has been confirmed that the management Kubernetes cluster and any Lustre or Spectrum Scale filesystems in the cabinets have been cleanly shut down. See the procedures in
-[Power Off the External File Systems](System_Power_Off_Procedures.md#Power_off_the_External_File_systems)
+[Power Off the External File Systems](System_Power_Off_Procedures.md#power-off-the-external-file-systems)
 and [Shut Down and Power Off the Management Kubernetes Cluster](Shut_Down_and_Power_Off_the_Management_Kubernetes_Cluster.md).
 
 1. (Optional) Power down the modular coolant distribution unit (MCDU) in a liquid-cooled HPE Cray EX2000 cabinet.

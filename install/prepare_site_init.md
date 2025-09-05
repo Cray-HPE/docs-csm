@@ -451,7 +451,7 @@ section for links to the relevant procedures.
     cd "${PITDATA}"
     ```
 
-1. `site-init` is now prepared. Resume [Initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
+1. `site-init` is now prepared. Resume [Initialize the LiveCD](pre-installation.md#4-initialize-the-livecd).
 
 ## 5. Customer-specific customizations
 

@@ -17,15 +17,15 @@ are times that problems crop up with running these remote jobs.
 
 1. Verify that the remote node is defined in IMS.
 
-    For more information, see [Adding and removing remote build nodes to IMS](Configure_a_Remote_Build_Node.md#adding-and-removing-remote-build-nodes-to-ims).
+    For more information, see [Listing remote build nodes in IMS](Configure_a_Remote_Build_Node.md#listing-remote-build-nodes-in-ims).
 
 1. Verify that SSH keys are installed on the remote node.
 
-    For more information, see [Use an existing compute node](Configure_a_Remote_Build_Node.md#use-an-existing-compute-node#).
+    For more information, see [Use an existing compute node](Configure_a_Remote_Build_Node.md#use-an-existing-compute-node).
 
 1. Verify that Podman is installed on the remote node.
 
-    For more information, see [Use an existing compute node](Configure_a_Remote_Build_Node.md#use-an-existing-compute-node#).
+    For more information, see [Use an existing compute node](Configure_a_Remote_Build_Node.md#use-an-existing-compute-node).
 
 1. Check the architecture of of the job and remote node.
 

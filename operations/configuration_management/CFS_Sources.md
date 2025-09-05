@@ -162,5 +162,5 @@ of the CA certificate file.
 The additional inventory source [CFS Global Option](CFS_Global_Options.md) allows administrators to specify
 a CFS source to supply additional inventory content to all CFS sessions.
 
-For more information, see [Additional inventory source](CFS_Global_Options.md#additional_inventory_source)
+For more information, see [Additional inventory source](CFS_Global_Options.md#additional-inventory-source)
 and [Using sources in additional inventory](Adding_Additional_Inventory.md#using-sources-in-additional-inventory).

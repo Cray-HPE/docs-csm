@@ -108,23 +108,31 @@ After identifying which hardware is in the system, start with the top item on th
 > Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
 > **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
 
-1. [Cray](FAS_Use_Cases.md#liquid-cooled-nodes-update-procedures)
-   1. [`ChassisBMC`](FAS_Use_Cases.md#update-chassis-management-module-firmware)
-   1. `NodeBMC`
-      1. [BMC](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-bmc)
-      1. [`NodeBIOS`](FAS_Use_Cases.md#manufacturer-cray--device-type--nodebmc--target--nodebios)
-      1. [Redstone FPGA](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-redstone-fpga)
-      1. [Management Ethernet](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-management-ethernet)
-      1. [`AccVBIOS`](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-accvbios)
-      1. [`AccUC`](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-accuc)
-1. [Gigabyte](FAS_Use_Cases.md#gigabyte)
-   1. [BMC](FAS_Use_Cases.md#manufacturer-gigabyte--device-type-nodebmc--target-bmc)
-   1. [BIOS](FAS_Use_Cases.md#manufacturer-gigabyte--device-type--nodebmc--target--bios)
-1. [HPE](FAS_Use_Cases.md#hpe)
-   1. [`iLO 5` (BMC)](FAS_Use_Cases.md#manufacturer-hpe--device-type-nodebmc--target-ilo-5-bmc)
-   1. [`iLO 6` (BMC)](FAS_Use_Cases.md#manufacturer-hpe--device-type-nodebmc--target-ilo-6-bmc)
-   1. [System ROM (BIOS)](FAS_Use_Cases.md#manufacturer-hpe--device-type-nodebmc--target-system-rom-bios)
-1. [Foxconn (Paradise)](FAS_Paradise.md)
+* [Cray](FAS_Use_Cases.md#liquid-cooled-nodes-update-procedures)
+    * [`ChassisBMC`](FAS_Use_Cases.md#update-chassis-management-module-firmware)
+    * `NodeBMC`
+        * [BMC](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-bmc)
+        * [`NodeBIOS`](FAS_Use_Cases.md#manufacturer-cray--device-type--nodebmc--target--nodebios)
+        * [Redstone FPGA](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-redstone-fpga-accfpga0)
+        * [Management Ethernet](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-management-ethernet)
+        * [`AccVBIOS`](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-accvbios)
+        * [`AccUC`](FAS_Use_Cases.md#manufacturer-cray--device-type-nodebmc--target-accuc)
+* Gigabyte
+    * [Compute nodes](FAS_Use_Cases.md#gigabyte-compute-nodes)
+        * [BMC](FAS_Use_Cases.md#manufacturer-gigabyte--device-type-compute-nodebmc--target-bmc)
+        * [BIOS](FAS_Use_Cases.md#manufacturer-gigabyte--device-type-compute-nodebmc--target-bios)
+    * [NCNs](FAS_Use_Cases.md#gigabyte-ncns)
+        * [BMC](FAS_Use_Cases.md#manufacturer-gigabyte--device-type-ncn-nodebmc--target-bmc)
+        * [BIOS](FAS_Use_Cases.md#manufacturer-gigabyte--device-type-ncn-nodebmc--target-bios)
+* HPE
+    * [Compute nodes](FAS_Use_Cases.md#hpe-compute-nodes)
+        * [`iLO 5` (BMC)](FAS_Use_Cases.md#manufacturer-hpe--device-type-compute-nodebmc--target-ilo-5-aka-bmc)
+        * [`iLO 6` (BMC)](FAS_Use_Cases.md#manufacturer-hpe--device-type-compute-nodebmc--target-ilo-6-aka-bmc)
+        * [System ROM (BIOS)](FAS_Use_Cases.md#manufacturer-hpe--device-type-compute-nodebmc--target-system-rom-aka-bios)
+    * [NCNs](FAS_Use_Cases.md#hpe-ncns)
+        * [`iLO 5` (BMC)](FAS_Use_Cases.md#manufacturer-hpe--device-type-ncn-nodebmc--target-ilo-5-aka-bmc)
+        * [System ROM (BIOS)](FAS_Use_Cases.md#manufacturer-hpe--device-type-ncn-nodebmc--target-system-rom-aka-bios)
+* [Foxconn (Paradise)](FAS_Paradise.md)
 
 ## FAS administrative procedures
 
