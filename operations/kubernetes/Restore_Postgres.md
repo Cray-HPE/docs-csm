@@ -1093,3 +1093,5 @@ The Capsules Dispatch Server can be restored in the same manner as the warehouse
 `warehouse` with `dispatch`; however, the dispatch server maintains temporary information for running Capsules
 Environments. Therefore, restoring data to this service is not necessary. Using the analytics documentation, it is also
 possible to cleanup existing jobs and skip this step.
+
+[`operations/kubernetes/Restore_Postgres.md`](#restore-postgres-for-keycloak)

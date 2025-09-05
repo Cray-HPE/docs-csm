@@ -254,3 +254,29 @@ Some topics also have supplementary troubleshooting sections listed in the CSM [
    After completion of the firmware update with FAS and the preparation of compute nodes, the CSM product stream has
    been fully installed and configured. Refer to the 1.5 _HPE Cray EX System Software Getting Started Guide S-8000_
    on the [HPE Customer Support Center](https://www.hpe.com/support/ex-gsg) for more information on other product streams to be installed and configured after CSM.
+
+[`install/index.md`](#bootstrap_pit_node)
+
+[`install/index.md`](#collect_mac_addresses_for_ncns)
+
+[`install/index.md`](#configure_administrative_access)
+
+[`install/index.md`](#configure_management_network)
+
+[`install/index.md`](#deploy_management_nodes)
+
+[`install/index.md`](#install_csm_services)
+
+[`install/index.md`](#next_topic)
+
+[`install/index.md`](#prepare_compute_nodes)
+
+[`install/index.md`](#prepare_configuration_payload)
+
+[`install/index.md`](#prepare_management_nodes)
+
+[`install/index.md`](#redeploy_pit_node)
+
+[`install/index.md`](#validate_csm_health)
+
+[`install/index.md`](#validate_csm_health_before_pit_redeploy)

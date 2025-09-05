@@ -224,3 +224,5 @@ For granting non-administrative access to the organization and its repositories,
 Select the permissions appropriately, and then navigate to the following URL to add members to the newly created team:
 
 `https://vcs.SHASTA_CLUSTER_DNS_NAME/vcs/org/cray/teams/NEWTEAM`
+
+[`operations/configuration_management/Version_Control_Service_VCS.md`](#vcs-administrative-user)

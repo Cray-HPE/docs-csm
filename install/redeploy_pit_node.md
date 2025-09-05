@@ -650,3 +650,13 @@ Perform the following steps **on `ncn-m001`**.
 ## 8. Next topic
 
 After completing this procedure, proceed to [Configure Administrative Access](index.md#configure_administrative_access).
+
+[`install/redeploy_pit_node.md`](#7-configure-dns-and-ntp-on-each-bmc)
+
+[`install/redeploy_pit_node.md`](#collect-can-ip-ncn-m002)
+
+[`install/redeploy_pit_node.md`](#configure-dns-and-ntp-on-each-bmc)
+
+[`install/redeploy_pit_node.md`](#csi-handoff-bss-metadata)
+
+[`install/redeploy_pit_node.md`](#ncn-boot-artifacts-hand-off)

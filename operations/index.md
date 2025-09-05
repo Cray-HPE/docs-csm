@@ -704,3 +704,11 @@ User Access Instance \(UAI\) using the `cray` command. Users can also transfer d
   - [Troubleshoot Common Mistakes when Creating a Custom End-User UAI Image](UAS_user_and_admin_topics/Troubleshoot_Common_Mistakes_when_Creating_a_Custom_End-User_UAI_Image.md)
   - [Troubleshoot UAS / CLI Authentication Issues](UAS_user_and_admin_topics/Troubleshoot_UAI_Authentication_Issues.md)
 - [UAS known issues](../troubleshooting/index.md#user-access-service-uas)
+
+[`operations/index.md`](#compute-rolling-upgrades)
+
+[`operations/index.md`](#security-and-authentication)
+
+[`operations/index.md`](#spire)
+
+[`operations/index.md`](#system-configuration-service)

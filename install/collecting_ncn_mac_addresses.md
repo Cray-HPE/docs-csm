@@ -316,3 +316,5 @@ If the  `ncn_metadata.csv` file is incorrect, the NCNs will be unable to deploy.
 
    For any NCNs which booted far enough to begin running `cloud-init`, set their BMCs to DHCP. If in doubt, it does no
    harm to perform this step. See [Set node BMCs to DHCP](prepare_management_nodes.md#set-node-bmcs-to-dhcp).
+
+[`install/collecting_ncn_mac_addresses.md`](#procedure-ipxe-consoles)

@@ -319,3 +319,7 @@ If problems persist after several attempts, then proceed to the [Further steps](
 
     * [Aruba](#aruba-ssh)
     * [Mellanox](#mellanox-ssh)
+
+[`operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md`](#Prerequisites)
+
+[`operations/network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md`](#prerequisites)

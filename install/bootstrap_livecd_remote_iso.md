@@ -614,3 +614,7 @@ and [Configuration Payload Files](prepare_configuration_payload.md#configuration
 After completing this procedure, the next step is to configure the management network switches.
 
 See [Configure Management Network Switches](index.md#configure_management_network)
+
+[`install/bootstrap_livecd_remote_iso.md`](#first-login)
+
+[`install/bootstrap_livecd_remote_iso.md`](#set-up-site-link)
