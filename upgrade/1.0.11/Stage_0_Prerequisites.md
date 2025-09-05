@@ -42,7 +42,10 @@ This check will also be conducted in the 'prerequisites.sh' script listed below 
 
 **`IMPORTANT`**
 
-For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
+For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits
+**MUST** be lowered on several services in order for this upgrade to succeed. See
+[TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information
+on how to accomplish this.
 
 ## Stage 0.3 - Update `customizations.yaml`
 
@@ -82,7 +85,7 @@ Perform these steps to update `customizations.yaml`:
     ncn-m001# git push
     ```
 
-5. Return to the original working directory:
+1. Return to the original working directory:
 
     ```bash
     ncn-m001# cd -
@@ -110,7 +113,9 @@ Perform these steps to update `customizations.yaml`:
 
 1. Run check script:
 
-    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`, but this is not accurate. The script will only unmount it if the script itself mounts it. That is, if it is mounted when the script begins, the script will not unmount it.
+    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`,
+    but this is not accurate. The script will only unmount it if the script itself mounts
+    it. That is, if it is mounted when the script begins, the script will not unmount it.
 
     * Option 1 - Internet Connected Environment
 
@@ -154,13 +159,20 @@ Perform these steps to update `customizations.yaml`:
 
 ## Stage 0.5 - Backup VCS Data
 
-To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Backup and Restore VCS Data](../../operations/configuration_management/Backup_and_Restore_VCS_Data.md) for these procedures.
+To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location.
+See [Backup and Restore VCS Data](../../operations/configuration_management/Backup_and_Restore_VCS_Data.md) for these procedures.
 
-**`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
+**`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**.
+The backup procedure is being done here as a precautionary step.
 
 ## Stage 0.6 - Backup Workload Manager Data
 
-To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
+To prevent any possibility of losing Workload Manager configuration data or files,
+a backup is required. Please execute all Backup procedures (for the Workload Manager in use)
+located in the `Troubleshooting and Administrative Tasks` sub-section of the
+`Install a Workload Manager` section of the
+`HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
+The resulting backup data should be stored in a safe location off of the system.
 
 ## Stage 0.7 - Update the Storage Node runcmds for reboots
 
@@ -205,9 +217,9 @@ that is applied by CFS during post-boot NCN personalization to change the on-dis
 NCN personalization has been run, then the password in Vault should be used for console access.
 
 1. Use this procedure to change the k8s-image used for master nodes and worker nodes and the ceph-image
-used by utility storage nodes. See
-[Change NCN Image Root Password and SSH Keys](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
-for more information.
+   used by utility storage nodes. See
+   [Change NCN Image Root Password and SSH Keys](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
+   for more information.
 
 1. Adjust the version variables used later in the upgrade.
 
@@ -218,27 +230,26 @@ for more information.
       ncn-m001# echo $K8SNEW
       ```
 
-    2. Check current versions in `/etc/cray/upgrade/csm/myenv`.
+   1. Check current versions in `/etc/cray/upgrade/csm/myenv`.
 
       ```bash
       ncn-m001# grep CEPH_VERSION /etc/cray/upgrade/csm/myenv
       ncn-m001# grep KUBERNETES_VERSION /etc/cray/upgrade/csm/myenv
       ```
 
-    3. If the `CEPH_VERSION` or `KUBERNETES_VERSION` does not match the `CEPHNEW` and `K8SNEW` settings, edit the file.
+   1. If the `CEPH_VERSION` or `KUBERNETES_VERSION` does not match the `CEPHNEW` and `K8SNEW` settings, edit the file.
 
       ```bash
       ncn-m001# vi /etc/cray/upgrade/csm/myenv
       ```
 
-2. Use this procedure to change the root password in Vault and the CSM layer of configuration
-applied during NCN Personalizaion. Usually this configuration is done during the first time installation
-of CSM software, but if was not done then, it should be done now. See
-[Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
-[full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
-for more information.
+1. Use this procedure to change the root password in Vault and the CSM layer of configuration
+   applied during NCN Personalizaion. Usually this configuration is done during the first time installation
+   of CSM software, but if was not done then, it should be done now. See
+   [Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
+   [full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
+   for more information.
 
 ## Stage 0.10 - Continue to Stage 1
 
 Once the above steps have been completed, proceed to [Stage 1](Stage_1.md).
-

@@ -8,14 +8,14 @@ join the Kubernetes cluster as the final of three master nodes, forming a quorum
 procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be unavailable.
 
 1. [Required services](#required-services)
-2. [Notice of danger](#notice-of-danger)
-3. [Hand-off](#hand-off)
-4. [Reboot](#reboot)
-5. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
-7. [Remove the default NTP pool](#remove-the-default-ntp-pool)
-8. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
-9. [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
-10. [Next topic](#next-topic)
+1. [Notice of danger](#notice-of-danger)
+1. [Hand-off](#hand-off)
+1. [Reboot](#reboot)
+1. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
+1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
+1. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
+1. [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
+1. [Next topic](#next-topic)
 
 <a name="required-services"></a>
 

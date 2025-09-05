@@ -45,7 +45,10 @@ This check will also be conducted in the `prerequisites.sh` script listed below 
 
 **`IMPORTANT`**
 
-For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
+For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits
+**MUST** be lowered on several services in order for this upgrade to succeed. See
+[TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information
+on how to accomplish this.
 
 ## Stage 0.3 - Update `customizations.yaml`
 
@@ -85,7 +88,7 @@ Perform these steps to update `customizations.yaml`:
     ncn-m001# git push
     ```
 
-5. Return to original working directory:
+1. Return to original working directory:
 
     ```bash
     ncn-m001# cd -
@@ -113,7 +116,9 @@ Perform these steps to update `customizations.yaml`:
 
 1. Run check script:
 
-    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`, but this is not accurate. The script will only unmount it if the script itself mounts it. That is, if it is mounted when the script begins, the script will not unmount it.
+    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`,
+    but this is not accurate. The script will only unmount it if the script itself mounts
+    it. That is, if it is mounted when the script begins, the script will not unmount it.
 
     * Option 1 - Internet Connected Environment
 
@@ -163,7 +168,11 @@ To prevent any possibility of losing configuration data, backup the VCS data and
 
 ## Stage 0.6 - Backup Workload Manager Data
 
-To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
+To prevent any possibility of losing Workload Manager configuration data or files, a backup is required.
+Please execute all Backup procedures (for the Workload Manager in use) located in the
+`Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager`
+section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
+The resulting backup data should be stored in a safe location off of the system.
 
 ## Stage 0.7 - Update the Storage Node runcmds for reboots
 

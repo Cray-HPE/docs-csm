@@ -34,9 +34,10 @@ Prepare a master node before rebuilding it.
     ```bash
     ncn-m# craysys metadata get first-master-hostname
     ncn-m002
-    ```
 
-    * If the node returned is not the one being rebuilt, proceed to the step which [stops etcd](#stop-the-etcd-service-on-the-master-node-being-removed) and skip the substeps here.
+   ```
+
+    * If the node returned is not the one being rebuilt, proceed to the step which [stops etcd](#step-4---stop-the-etcd-service-on-the-master-node-being-removed) and skip the substeps here.
 
 1. Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
 
@@ -129,7 +130,7 @@ Prepare a master node before rebuilding it.
     etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member remove <MEMBER_ID>
     ```
 
-### Step 4 - Stop the etcd service ***on the master node being removed***
+### Step 4 - Stop the etcd service on the master node being removed
 
 ```bash
 systemctl stop etcd.service

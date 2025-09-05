@@ -14,7 +14,7 @@ For information on how to do that, see [Upgrade CSM](../index.md).
 1. [Rollout deployment restart](#rollout-deployment-restart)
 1. [Apply pod priorities](#apply-pod-priorities)
 1. [Verification](#verification)
-   1. [Run NCN personalization](#run_ncn_personalization)
+   1. [Run NCN personalization](#run-ncn-personalization)
    1. [Exit typescript](#exit-typescript)
 
 <a name="preparation"></a>

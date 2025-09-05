@@ -33,7 +33,9 @@ failure.
 
 ## When To Lock Management Nodes
 
-To best protect system health, NCNs should be locked as early as possible in the install/upgrade cycle. The later in the process, the more risk there is of accidentally taking down a critical node. NCN locking must be done after Kubernetes is running and the HSM service is operational.
+To best protect system health, NCNs should be locked as early as possible in the install/upgrade cycle.
+The later in the process, the more risk there is of accidentally taking down a critical node. NCN locking
+must be done after Kubernetes is running and the HSM service is operational.
 
 Check whether HSM is running with the following command:
 
@@ -43,7 +45,7 @@ ncn# kubectl -n services get pods | grep smd
 
 Example output:
 
-```
+```text
 cray-smd-848bcc875c-6wqsh           2/2     Running    0          9d
 cray-smd-848bcc875c-hznqj           2/2     Running    0          9d
 cray-smd-848bcc875c-tp6gf           2/2     Running    0          6d22h
@@ -79,13 +81,14 @@ The `processing-model rigid` parameter means that the operation must succeed on 
 target nodes or the entire operation will fail.
 
 1. Lock the management nodes.
+
    ```bash
-   ncn# cray hsm locks lock create --role Management --processing-model rigid
+   ncn# cray hsm locks lock create --role Management --processing-model rigid --format toml
    ```
 
    Example output:
 
-   ```
+   ```toml
    Failure = []
 
    [Counts]
@@ -98,15 +101,16 @@ target nodes or the entire operation will fail.
    ```
 
 1. Lock the NodeBMCs of those management nodes.
+
    ```bash
-   ncn# cray hsm locks lock create --component-ids \
+   ncn# cray hsm locks lock create --component-ids --format toml \
             $(cray hsm state components list --role management --type node --format json | jq '.Components[].ID' |
               sed 's/n[0-9]*//;s/"//g' | tr '\n' ',' | sed 's/.$//')
    ```
 
    Example output:
 
-   ```
+   ```toml
    Failure = []
 
    [Counts]
@@ -121,13 +125,14 @@ target nodes or the entire operation will fail.
 ### To lock single nodes or lists of specific nodes (and their BMCs)
 
 1. Lock the management nodes.
+
    ```bash
-   ncn# cray hsm locks lock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid
+   ncn# cray hsm locks lock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid --format toml
    ```
 
    Example output:
 
-   ```bash
+   ```toml
    Failure = []
 
    [Counts]
@@ -140,17 +145,18 @@ target nodes or the entire operation will fail.
    ```
 
 1. Lock the BMC of those nodes.
+
    > **Note:** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore cannot be locked.
 
    > Remove `n0` from all of the xnames to get a list of the NodeBMCs that need to be locked.
 
    ```bash
-   ncn# cray hsm locks lock create --component-ids x3000c0s6b0 --processing-model rigid
+   ncn# cray hsm locks lock create --component-ids x3000c0s6b0 --processing-model rigid --format toml
    ```
 
    Example output:
 
-   ```
+   ```toml
    Failure = []
 
    [Counts]
@@ -173,13 +179,14 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 ### To unlock all nodes (and their BMCs) with the _Management_ role
 
 1. Unlock the management nodes.
+
    ```bash
-   ncn# cray hsm locks unlock create --role Management --processing-model rigid
+   ncn# cray hsm locks unlock create --role Management --processing-model rigid --format toml
    ```
 
    Example output:
 
-   ```
+   ```toml
    Failure = []
 
    [Counts]
@@ -192,15 +199,16 @@ Use the `cray hsm locks unlock` command to perform unlocking.
    ```
 
 1. Unlock the BMCs of those management nodes.
+
    ```bash
-   ncn# cray hsm locks unlock create --component-ids \
+   ncn# cray hsm locks unlock create --component-ids --format toml \
             $(cray hsm state components list --role management --type node --format json | jq '.Components[].ID' |
               sed 's/n[0-9]*//;s/"//g' | tr '\n' ',' | sed 's/.$//')
    ```
 
    Example output:
 
-   ```
+   ```toml
    Failure = []
 
    [Counts]
@@ -215,13 +223,14 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 ### To unlock single or lists of specific nodes (and their BMCs)
 
 1. Unlock the management nodes.
+
    ```bash
-   ncn# cray hsm locks unlock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid
+   ncn# cray hsm locks unlock create --role Management --component-ids x3000c0s6b0n0 --processing-model rigid --format toml
    ```
 
    Example output:
 
-   ```
+   ```toml
    Failure = []
 
    [Counts]
@@ -238,12 +247,12 @@ Use the `cray hsm locks unlock` command to perform unlocking.
    > Remove `n0` from all of the xnames to get a list of the NodeBMCs that need to be locked.
 
    ```bash
-   ncn# cray hsm locks unlock create --component-ids x3000c0s6b0 --processing-model rigid
+   ncn# cray hsm locks unlock create --component-ids x3000c0s6b0 --processing-model rigid --format toml
    ```
 
    Example output:
 
-   ```
+   ```toml
    Failure = []
 
    [Counts]
