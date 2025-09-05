@@ -257,6 +257,8 @@ Run the following script to apply anti-affinity to `coredns` pods:
 ```
 
 > **`NOTE`**: `kubelet` has been upgraded already, ignore the warning to upgrade it.
+Additionally, if Kubernetes audit logging is enabled, local configuration changes will be lost as the
+audit logging configuration will be reset to defaults defined in [Audit Logs](../operations/security_and_authentication/Audit_Logs.md)
 
 - Uninstall the deprecated `etcd-operator`.
 
