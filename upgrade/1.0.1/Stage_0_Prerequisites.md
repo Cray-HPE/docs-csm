@@ -1,6 +1,6 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.1 (available with Shasta v1.5).
+> **NOTE:** CSM 0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM 1.0.1 (available with Shasta v1.5).
 >
 > **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. `1.0.0` > `1.0.0-beta.19`.
 >
@@ -11,7 +11,7 @@ Use the following command can be used to check the CSM version on the system:
 ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | tee csm-version.txt
 ```
 
-This check will also be conducted in the `prerequisites.sh` script listed below and will fail if the system is not running CSM-0.9.4, CSM-0.9.5, or CSM-1.0.0.
+This check will also be conducted in the `prerequisites.sh` script listed below and will fail if the system is not running CSM 0.9.4, CSM 0.9.5, or CSM 1.0.0.
 
 >**`IMPORTANT:`**
 >
@@ -174,9 +174,9 @@ Please execute all Backup procedures (for the Workload Manager in use) located i
 section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
 The resulting backup data should be stored in a safe location off of the system.
 
-## Stage 0.7 - Update the Storage Node runcmds for reboots
+## Stage 0.7 - Update the Storage Node `runcmds` for reboots
 
-To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script on `ncn-m001`:
+To prevent accidental storage `cloud-init` runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script on `ncn-m001`:
 
 ```bash
 ncn-m001# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py

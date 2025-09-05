@@ -4,9 +4,9 @@ The management nodes serve Network Time Protocol (NTP) at stratum 10, except for
 
 Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
-* [Change NTP Config](#change_ntp_config)
+* [Change NTP Configuration](#change_ntp_config)
 * [Troubleshooting NTP](#troubleshooting_ntp)
-  * [chrony Log Files](#chrony_log_files)
+  * [`chrony` Log Files](#chrony_log_files)
   * [Force a Time Sync](#force_a_time_sync)
   * [Known Issues and Bugs](#known-issues-and-bugs)
 * [Customize NTP](#customize_ntp)
@@ -14,7 +14,7 @@ Until an upstream NTP server is configured, the time on the NCNs may not match t
 
 <a name="change_ntp_config"></a>
 
-## Change NTP Config
+## Change NTP Configuration
 
 The three different methods for configuring NTP are described below. The first option is the
 recommended method.
@@ -227,7 +227,9 @@ peer ncn-w003 minpoll -2 maxpoll 9 iburst
 
 ##### Fix BSS Metadata
 
-If nodes are missing metadata for NTP, you will be required to generate the data using `csi` and your system's `system_config.yaml`. If you do not have your seed data in the `system_config.yaml` then you will need to open a ticket to help generate the NTP data.
+If nodes are missing metadata for NTP, it is required to generate the data using `csi` and
+the system's `system_config.yaml`. If there is no seed data in the `system_config.yaml`,
+then open a support ticket to help generate the NTP data.
 
 The following steps are structured to be executed on one node at a time. However, step #3 will generate all relevant files for each node. If multiple nodes are missing NTP data in BSS, you can apply this fix to each node.
 
@@ -273,7 +275,7 @@ The following steps are structured to be executed on one node at a time. However
     ncn# cp ./usr/share/doc/csm/scripts/chrony.conf.cray.tmpl /etc/cloud/templates/chrony.conf.cray.tmpl
     ```
 
-    Alternatively, download the latest versions from Github:
+    Alternatively, download the latest versions from GitHub:
 
     ```bash
     ncn# wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py`
@@ -310,7 +312,10 @@ The following steps are structured to be executed on one node at a time. However
 
 ##### Fix `ncn-m001`
 
-Most of the bugs from CSM 0.9 carried forward with upgrades. Most commonly, `ncn-m001` is the problem because it either does not have a valid upstream server, or it has a bad configuration. This can be quickly remedied by running three commands to download the latest `cc_ntp` module, download an updated template, and re-run `cloud-init`.
+Most of the bugs from CSM 0.9 carried forward with upgrades.
+Most commonly, `ncn-m001` is the problem because it either does not have a valid upstream server,
+or it has a bad configuration. This can be quickly remedied by running three commands to download
+the latest `cc_ntp` module, download an updated template, and re-run `cloud-init`.
 
 ```bash
 ncn-m001# wget -O /usr/lib/python3.6/site-packages/cloudinit/config/cc_ntp.py https://raw.githubusercontent.com/Cray-HPE/metal-cloud-init/main/cloudinit/config/cc_ntp.py
@@ -329,6 +334,7 @@ The other NCNs sometimes have the wrong stratum set or are missing the `initstep
     ```
 
 1. Add a new line after the `logchange` directive
+
     ```bash
     ncn# sed -i "/^\(logchange 1.0\)\$/a initstepslew 1 ncn-m001" /etc/chrony.d/cray.conf
     ```
@@ -355,7 +361,7 @@ This procedure needs to be completed on the PIT node before the other management
 
 HPE Cray EX systems with CSM software have UTC as the default time zone. To change this, you will need
 to set an environment variable, as well as `chroot` into the node images and change some files
-there. You can find a list of timezones to use in the commands below by running `timedatectl list-timezones`.
+there. You can find a list of time zones to use in the commands below by running `timedatectl list-timezones`.
 
 1. Run the following commands, replacing them with your timezone as needed.
 
@@ -449,7 +455,7 @@ there. You can find a list of timezones to use in the commands below by running 
 #### Configure NCN Images to Use Local Timezone
 
 Adjust the node images so that they also boot in the local timezone.
-This is accomplished by `chroot`ing into the unsquashed images, making some modifications,
+This is accomplished by a `chroot` into the unsquashed images, making some modifications,
 re-squashing them, and moving the new images into place. This is included as an optional
 image modification step in the two procedures below.
 
@@ -458,7 +464,7 @@ image modification step in the two procedures below.
   for more information.
 
    **Note:** Make a note that when performing the
-   [csi handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off),
+   [`csi` handoff of NCN boot artifacts in Redeploy PIT Node](../../install/redeploy_pit_node.md#ncn-boot-artifacts-hand-off),
    be sure to specify these new images. Otherwise `ncn-m001` will use the default timezone when it boots, and subsequent
    reboots of the other NCNs will also lose the customized timezone changes.
 

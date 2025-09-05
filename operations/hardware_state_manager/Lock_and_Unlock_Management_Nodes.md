@@ -73,9 +73,9 @@ should once again be locked.
 
 Use the `cray hsm locks lock` command to perform locking.
 
-**NOTE:** When locking NCNs, you must lock their NodeBMCs as well.
+**NOTE:** When locking NCNs, you must lock their `NodeBMCs` as well.
 
-### To lock all nodes (and their BMCs) with the _Management_ role
+### To lock all nodes (and their BMCs) with the Management role
 
 The `processing-model rigid` parameter means that the operation must succeed on all
 target nodes or the entire operation will fail.
@@ -100,7 +100,7 @@ target nodes or the entire operation will fail.
    ComponentIDs = [ "x3000c0s5b0n0", "x3000c0s4b0n0", "x3000c0s7b0n0", "x3000c0s6b0n0", "x3000c0s3b0n0", "x3000c0s2b0n0", "x3000c0s9b0n0", "x3000c0s8b0n0",]
    ```
 
-1. Lock the NodeBMCs of those management nodes.
+1. Lock the `NodeBMCs` of those management nodes.
 
    ```bash
    ncn# cray hsm locks lock create --component-ids --format toml \
@@ -147,8 +147,8 @@ target nodes or the entire operation will fail.
 1. Lock the BMC of those nodes.
 
    > **Note:** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore cannot be locked.
-
-   > Remove `n0` from all of the xnames to get a list of the NodeBMCs that need to be locked.
+   >
+   > Remove `n0` from all of the xnames to get a list of the `NodeBMCs` that need to be locked.
 
    ```bash
    ncn# cray hsm locks lock create --component-ids x3000c0s6b0 --processing-model rigid --format toml
@@ -174,9 +174,9 @@ target nodes or the entire operation will fail.
 
 Use the `cray hsm locks unlock` command to perform unlocking.
 
-***NOTE: When unlocking NCNs, you must unlock their NodeBMCs as well.***
+***NOTE: When unlocking NCNs, you must unlock their `NodeBMCs` as well.***
 
-### To unlock all nodes (and their BMCs) with the _Management_ role
+### To unlock all nodes (and their BMCs) with the Management role
 
 1. Unlock the management nodes.
 
@@ -244,7 +244,7 @@ Use the `cray hsm locks unlock` command to perform unlocking.
 
 1. Unlock the BMCs of those management nodes.
 
-   > Remove `n0` from all of the xnames to get a list of the NodeBMCs that need to be locked.
+   > Remove `n0` from all of the xnames to get a list of the `NodeBMCs` that need to be locked.
 
    ```bash
    ncn# cray hsm locks unlock create --component-ids x3000c0s6b0 --processing-model rigid --format toml

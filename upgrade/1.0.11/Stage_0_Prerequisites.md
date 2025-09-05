@@ -1,6 +1,6 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-1.0.1 or later is required in order to upgrade to CSM-1.0.11.
+> **NOTE:** CSM 1.0.1 or later is required in order to upgrade to CSM 1.0.11.
 
 The following command can be used to check the CSM version on the system:
 
@@ -8,7 +8,7 @@ The following command can be used to check the CSM version on the system:
 ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm'
 ```
 
-This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM-1.0.1 or CSM-1.0.10.
+This check will also be conducted in the 'prerequisites.sh' script listed below and will fail if the system is not running CSM 1.0.1 or CSM 1.0.10.
 
 >**`IMPORTANT:`**
 >
@@ -174,7 +174,7 @@ located in the `Troubleshooting and Administrative Tasks` sub-section of the
 `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
 The resulting backup data should be stored in a safe location off of the system.
 
-## Stage 0.7 - Update the Storage Node runcmds for reboots
+## Stage 0.7 - Update the Storage Node `runcmds` for reboots
 
 1. Obtain an API token:
 
@@ -185,7 +185,7 @@ The resulting backup data should be stored in a safe location off of the system.
                         jq -r '.access_token')
     ```
 
-1. To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, run the below script.
+1. To prevent accidental storage `cloud-init` runs and also to ensure the Ceph services are set to auto-start on boot, run the below script.
 
     ```bash
     ncn-m001# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py
@@ -204,7 +204,7 @@ The resulting file needs to be saved in the event that BSS data needs to be rest
 ## Stage 0.9 - Modify NCN Images
 
 Any site modifications to the images used to boot the management nodes need to be done again
-as part of this upgrade. These may include changing the root password, adding different ssh
+as part of this upgrade. These may include changing the root password, adding different SSH
 keys for the root account, or setting a default timezone.
 
 The management nodes deploy with a default password in the image, so it is a recommended best
@@ -216,7 +216,7 @@ node that is being rebuilt, but this password should be different than the one s
 that is applied by CFS during post-boot NCN personalization to change the on-disk password. Once
 NCN personalization has been run, then the password in Vault should be used for console access.
 
-1. Use this procedure to change the k8s-image used for master nodes and worker nodes and the ceph-image
+1. Use this procedure to change the `k8s-image` used for master nodes and worker nodes and the `ceph-image`
    used by utility storage nodes. See
    [Change NCN Image Root Password and SSH Keys](../../operations/security_and_authentication/Change_NCN_Image_Root_Password_and_SSH_Keys.md)
    for more information.
@@ -244,7 +244,7 @@ NCN personalization has been run, then the password in Vault should be used for 
       ```
 
 1. Use this procedure to change the root password in Vault and the CSM layer of configuration
-   applied during NCN Personalizaion. Usually this configuration is done during the first time installation
+   applied during NCN Personalization. Usually this configuration is done during the first time installation
    of CSM software, but if was not done then, it should be done now. See
    [Update NCN Passwords](../../operations/security_and_authentication/Update_NCN_Passwords.md) and
    [full NCN personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#set_root_password)
