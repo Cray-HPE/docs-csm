@@ -157,7 +157,7 @@ then these should already be set. In this case, skip this section and proceed to
 
 If this procedure is being done as part of [Management Node Image Customization](../configuration_management/Management_Node_Image_Customization.md),
 then these artifacts should already exist in S3. In this case, skip this section and proceed to
-[Create image manifest file and upload to S3](#6-create-image-manifest-file-and-upload-to-s3).
+[Create, upload, and register image manifest](#6-create-upload-and-register-image-manifest).
 
 1. Navigate to the directory containing the artifact files.
 

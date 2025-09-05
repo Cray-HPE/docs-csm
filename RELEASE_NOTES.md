@@ -173,7 +173,7 @@
   * NCN image modification using [IMS](glossary.md#image-management-service-ims) and [CFS](glossary.md#configuration-framework-service-cfs)
   * Minimal space requirements for CSM V1.3.0
   * The new `cray-externaldns-manager` service
-* [CAN](glossary.md#customer-access-network) documentation updated to reflect BICAN
+* [CAN](glossary.md#customer-access-network-can) documentation updated to reflect BICAN
 
 ## Bug fixes
 

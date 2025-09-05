@@ -91,7 +91,7 @@ credentials being in Vault will fail until they are added.
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
 
 To ensure proper operation of the [River Endpoint Discovery Service (REDS)](../glossary.md#river-endpoint-discovery-service-reds) hardware discovery process,
-[Power Control Service (PCS)](../glossary.md#power-control-service-pcs)/[Redfish Translation Service (RTS)](../glossary.md#redfish-translation-service-rts)
+[Redfish Translation Service (RTS)](../glossary.md#redfish-translation-service-rts)
 management switch availability monitoring, and the Prometheus SNMP Exporter, validate the following:
 
 - SNMP is enabled on the management network switches.

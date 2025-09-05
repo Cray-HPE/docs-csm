@@ -6,7 +6,6 @@ Procedures for leveraging the Firmware Action Service (FAS) CLI to manage firmwa
 
 * [Warning for non-compute nodes (NCNs)](#warning-for-non-compute-nodes-ncns)
 * [Declarative vs imperative FAS updates](#declarative-vs-imperative-fas-updates)
-* [Exclude nodes from an update](#exclude-nodes-from-an-update)
 * [Ignore management nodes within FAS](#ignore-management-nodes-within-fas)
 * [Override an image for an update](#override-an-image-for-an-update)
 * [Check for new firmware versions with a dry-run](#check-for-new-firmware-versions-with-a-dry-run)
