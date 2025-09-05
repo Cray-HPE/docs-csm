@@ -4,7 +4,7 @@ Validate the storage node rebuilt successfully.
 
 Skip this section if a master or worker node was rebuilt.
 
-1. Verify there are 3 mons, 3 mds, 3 mgr processes, and rgws
+1. Verify there are 3 `mon`, 3 `mds`, 3 `mgr` processes, and `rgws`
 
     ```bash
     ncn-m# ceph -s
@@ -53,13 +53,13 @@ Skip this section if a master or worker node was rebuilt.
      9   ssd  1.74660         osd.9         up  1.00000 1.00000
     ```
 
-1. Verify the radosgw and haproxy are correct.
+1. Verify the `radosgw` and `haproxy` are correct.
 
-    There will be an output \(without an error\) returned if radosgw and haproxy are correct.
+    There will be an output \(without an error\) returned if `radosgw` and `haproxy` are correct.
 
     ```bash
     ncn# curl -k https://rgw-vip.nmn
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
-   [Return to Main Page](../Rebuild_NCNs.md#Validation)
+   [Return to Main Page](../Rebuild_NCNs.md#validation)

@@ -8,15 +8,14 @@ join the Kubernetes cluster as the final of three master nodes, forming a quorum
 procedure entails deactivating the LiveCD, meaning the LiveCD and all of its resources will be unavailable.
 
 1. [Required services](#required-services)
-2. [Notice of danger](#notice-of-danger)
-3. [Hand-off](#hand-off)
-4. [Reboot](#reboot)
-5. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
-6. [Fix NTP on `ncn-m001`](#fix-ntp-config-on-ncn-m001)
-7. [Remove the default NTP pool](#remove-the-default-ntp-pool)
-8. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
-9. [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
-10. [Next topic](#next-topic)
+1. [Notice of danger](#notice-of-danger)
+1. [Hand-off](#hand-off)
+1. [Reboot](#reboot)
+1. [Enable NCN disk wiping safeguard](#enable-ncn-disk-wiping-safeguard)
+1. [Remove the default NTP pool](#remove-the-default-ntp-pool)
+1. [Configure DNS and NTP on each BMC](#configure-dns-and-ntp-on-each-bmc)
+1. [Validate `BOOTRAID` artifacts](#validate-bootraid-artifacts)
+1. [Next topic](#next-topic)
 
 <a name="required-services"></a>
 
@@ -201,7 +200,7 @@ The steps in this section load hand-off data before a later procedure reboots th
          xargs tar -C / -czvf /var/www/ephemeral/prep/logs/pit-backup-$(date +%Y-%m-%d_%H-%M-%S).tgz
     ```
 
-1. Upload the bootstrap information.
+1. <a name="backup-bootstrap-information"></a>Upload the bootstrap information.
 
     > **NOTE:** This preserves information that should always be kept together in order to fresh-install the system again.
 
@@ -251,7 +250,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 
         This only needs to be done for the PIT node, not for any of the other NCNs. See
         [Setting boot order](../background/ncn_boot_workflow.md#setting-order) and
-        [Trimming boot order](../background/ncn_boot_workflow.md#trimming_boot_order).
+        [Trimming boot order](../background/ncn_boot_workflow.md#trimming-boot-order).
 
     1. Tell the PIT node to PXE boot on the next boot.
 

@@ -1,6 +1,6 @@
 # Stage 0 - Prerequisites and Preflight Checks
 
-> **NOTE:** CSM-0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM-1.0.1 (available with Shasta v1.5).
+> **NOTE:** CSM 0.9.4 or later CSM 0.9.x is required in order to upgrade to CSM 1.0.1 (available with Shasta v1.5).
 >
 > **NOTE:** Installed CSM versions may be listed from the product catalog using the following command. This will sort a semantic version without a hyphenated suffix after the same semantic version with a hyphenated suffix, e.g. `1.0.0` > `1.0.0-beta.19`.
 >
@@ -11,7 +11,7 @@ Use the following command can be used to check the CSM version on the system:
 ncn# kubectl get cm -n services cray-product-catalog -o json | jq -r '.data.csm' | tee csm-version.txt
 ```
 
-This check will also be conducted in the `prerequisites.sh` script listed below and will fail if the system is not running CSM-0.9.4, CSM-0.9.5, or CSM-1.0.0.
+This check will also be conducted in the `prerequisites.sh` script listed below and will fail if the system is not running CSM 0.9.4, CSM 0.9.5, or CSM 1.0.0.
 
 >**`IMPORTANT:`**
 >
@@ -45,7 +45,10 @@ This check will also be conducted in the `prerequisites.sh` script listed below 
 
 **`IMPORTANT`**
 
-For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits **MUST** be lowered on several services in order for this upgrade to succeed. See [TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information on how to accomplish this.
+For TDS systems with only three worker nodes, prior to proceeding with this upgrade CPU limits
+**MUST** be lowered on several services in order for this upgrade to succeed. See
+[TDS Lower CPU Requests](../../operations/kubernetes/TDS_Lower_CPU_Requests.md) for information
+on how to accomplish this.
 
 ## Stage 0.3 - Update `customizations.yaml`
 
@@ -85,7 +88,7 @@ Perform these steps to update `customizations.yaml`:
     ncn-m001# git push
     ```
 
-5. Return to original working directory:
+1. Return to original working directory:
 
     ```bash
     ncn-m001# cd -
@@ -113,7 +116,9 @@ Perform these steps to update `customizations.yaml`:
 
 1. Run check script:
 
-    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`, but this is not accurate. The script will only unmount it if the script itself mounts it. That is, if it is mounted when the script begins, the script will not unmount it.
+    **NOTE** The `prerequisites.sh` script will warn that it will unmount `/mnt/pitdata`,
+    but this is not accurate. The script will only unmount it if the script itself mounts
+    it. That is, if it is mounted when the script begins, the script will not unmount it.
 
     * Option 1 - Internet Connected Environment
 
@@ -157,17 +162,21 @@ Perform these steps to update `customizations.yaml`:
 
 ## Stage 0.5 - Backup VCS Data
 
-To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
+To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Backup and Restore VCS Data](../../operations/configuration_management/Backup_and_Restore_VCS_Data.md) for these procedures.
 
 **`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
 
 ## Stage 0.6 - Backup Workload Manager Data
 
-To prevent any possibility of losing Workload Manager configuration data or files, a back-up is required. Please execute all Backup procedures (for the Workload Manager in use) located in the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager` section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`. The resulting back-up data should be stored in a safe location off of the system.
+To prevent any possibility of losing Workload Manager configuration data or files, a backup is required.
+Please execute all Backup procedures (for the Workload Manager in use) located in the
+`Troubleshooting and Administrative Tasks` sub-section of the `Install a Workload Manager`
+section of the `HPE Cray Programming Environment Installation Guide: CSM on HPE Cray EX`.
+The resulting backup data should be stored in a safe location off of the system.
 
-## Stage 0.7 - Update the Storage Node runcmds for reboots
+## Stage 0.7 - Update the Storage Node `runcmds` for reboots
 
-To prevent accidental storage cloud-init runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script on `ncn-m001`:
+To prevent accidental storage `cloud-init` runs and also to ensure the Ceph services are set to auto-start on boot, please run the below script on `ncn-m001`:
 
 ```bash
 ncn-m001# python3 /usr/share/doc/csm/scripts/patch-ceph-runcmd.py

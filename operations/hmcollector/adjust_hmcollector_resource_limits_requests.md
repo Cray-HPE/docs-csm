@@ -190,7 +190,7 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
 
    1. Review the changes to `customizations.yaml`.
 
-      Verify that [baseline system customizations](../../install/prepare_site_init.md#create-baseline-system-customizations)
+      Verify that [baseline system customizations](../../install/prepare_site_init.md#3-create-baseline-system-customizations)
       and any customer-specific settings are correct.
 
    1. Update the `site-init` sealed secret in the `loftsman` namespace.

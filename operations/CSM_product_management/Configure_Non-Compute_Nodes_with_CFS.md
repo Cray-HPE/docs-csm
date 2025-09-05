@@ -83,7 +83,7 @@ keys.
         The `replace_ssh_keys.sh` script can be used to replace the keys from files.
 
         > The `docs-csm` RPM must be installed in order to use this script. See
-        > [Check for Latest Documentation](../../update_product_stream/index.md#documentation)
+        > [Check for Latest Documentation](../../update_product_stream/index.md#check-for-latest-workarounds-and-documentation-updates)
 
         ```bash
         ncn-mw# /usr/share/doc/csm/scripts/operations/configuration/replace_ssh_keys.sh \

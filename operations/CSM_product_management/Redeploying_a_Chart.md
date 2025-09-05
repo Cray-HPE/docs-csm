@@ -17,7 +17,7 @@ specify which charts should be redeployed and what customizations (if any) shoul
 
 * CSM is fully installed and operational.
 * The latest CSM documentation RPMs are installed on the node where this procedure is being performed. See
-  [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+  [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-workarounds-and-documentation-updates).
 * If this procedure was linked from another page, the administrator must have the following information from that other page:
   * The name of the charts to be redeployed (for example, `cray-hms-bss`, `cray-sysmgmt-health`, or `spire`).
   * The base name of the manifest for each of these charts (for example, `sysmgmt`, `platform`, or `storage`).

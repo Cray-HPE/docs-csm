@@ -370,7 +370,7 @@ Before rebooting NCNs:
     1. Failover any Postgres leader that is running on the worker node being rebooted.
 
        This script must be run from a master or worker node with the latest CSM documentation installed.
-       See [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+       See [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-workarounds-and-documentation-updates).
 
        ```bash
        ncn-mw# /usr/share/doc/csm/upgrade/1.0.1/scripts/k8s/failover-leader.sh <node to be rebooted>
@@ -757,7 +757,7 @@ Before rebooting NCNs:
 1. Remove any dynamically assigned interface IP addresses that did not get released automatically.
 
     This script must be run from `ncn-m001`, which must have the latest CSM documentation installed.
-    See [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-documentation).
+    See [Check for latest documentation](../../update_product_stream/index.md#check-for-latest-workarounds-and-documentation-updates).
 
    ```bash
    ncn-mw# /usr/share/doc/csm/scripts/CASMINST-2015.sh

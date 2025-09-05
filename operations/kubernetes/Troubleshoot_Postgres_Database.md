@@ -2,13 +2,13 @@
 
 This page contains general Postgres troubleshooting topics.
 
-- [The `patronictl` tool](#patronictl)
-- [Database unavailable](#Unavailable)
-- [Database disk full](#Diskfull)
-- [Replication lagging](#Lag)
-- [Postgres status `SyncFailed`](#syncfailed)
-- [Cluster member missing](#Missing)
-- [Postgres leader missing](#leader)
+- [The `patronictl` tool](#the-patronictl-tool)
+- [Database unavailable](#database-unavailable)
+- [Database disk full](#database-disk-full)
+- [Replication lagging](#replication-lagging)
+- [Postgres status `SyncFailed`](#postgres-status-syncfailed)
+- [Cluster member missing](#cluster-member-missing)
+- [Postgres leader missing](#postgres-leader-missing)
 
 <a name="patronictl"></a>
 

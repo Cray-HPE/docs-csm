@@ -21,7 +21,7 @@ Skip this section if a worker or storage node was rebuilt.
 
 1. Ensure there is proper routing set up for liquid-cooled hardware.
 
-1. Confirm the `sdc` disk has the correct lvm on the rebuilt node.
+1. Confirm the `sdc` disk has the correct LVM on the rebuilt node.
 
     ```bash
     ncn-m# lsblk | grep -A2 ^sdc
@@ -39,9 +39,9 @@ Skip this section if a worker or storage node was rebuilt.
                    --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
     ```
 
-1. Confirm what the Configuration Framework Service (CFS) configurationStatus is for the desiredConfig after rebooting the node.
+1. Confirm what the Configuration Framework Service (CFS) `configurationStatus` is for the `desiredConfig` after rebooting the node.
 
-    The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+    The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#prerequisites).
 
     ```bash
     ncn# cray cfs components describe $XNAME --format json
@@ -54,8 +54,13 @@ Skip this section if a worker or storage node was rebuilt.
       "retryPolicy": 3,
     ```
 
-    If the configurationStatus is `pending`, wait for the job to finish before continuing. If the configurationStatus is `failed`, this means the failed CFS job configurationStatus should be addressed now for this node. If the configurationStatus is `unconfigured` and the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
-    If configurationStatus is `failed`, See [Troubleshoot Ansible Play Failures in CFS Sessions](../../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md#Prerequisites) for how to analyze the pod logs from `cray-cfs` to determine why the configuration may not have completed.
+    If the `configurationStatus` is `pending`, wait for the job to finish before continuing.
+    If the `configurationStatus` is `failed`, this means the failed CFS job `configurationStatus`
+    should be addressed now for this node. If the `configurationStatus` is `unconfigured` and
+    the NCN personalization procedure has not been done as part of an install yet, this can be ignored.
+    If `configurationStatus` is `failed`, see
+    [Troubleshoot Ansible Play Failures in CFS Sessions](../../configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
+    for how to analyze the pod logs from `cray-cfs` to determine why the configuration may not have completed.
 
 1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
 
@@ -64,4 +69,4 @@ Skip this section if a worker or storage node was rebuilt.
     ncn-mw# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
     ```
 
-   [Return to Main Page](../Rebuild_NCNs.md#Validation)
+   [Return to Main Page](../Rebuild_NCNs.md#validation)

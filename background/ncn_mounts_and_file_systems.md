@@ -3,14 +3,14 @@
 The management non-compute nodes (NCNs) use drive storage for persistence and block storage. This page outlines
 reference information for these disks, their partition tables, and their management.
 
-- [What controls partitioning](#What-controls-partitioning)
+- [What controls partitioning](#what-controls-partitioning)
 - [Plan of record / baseline](#plan-of-record--baseline)
   - [Problems when above or below baseline](#problems-when-above-or-below-baseline)
 - [Disk layout quick-reference tables](#disk-layout-quick-reference-tables)
 - [OverlayFS and persistence](#overlayfs-and-persistence)
   - [`SQFSRAID` and `ROOTRAID` overlays](#sqfsraid-and-rootraid-overlays)
   - [Helpful commands](#helpful-commands)
-  - [OverlayFS example](#overlayfs-example)
+  - [OverlayFS examples](#overlayfs-examples)
     - [`mount` command](#mount-command)
     - [`losetup` command](#losetup-command)
     - [`lsblk` command](#lsblk-command)

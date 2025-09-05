@@ -2,18 +2,20 @@
 
 ## Introduction
 
-This document is intended to guide an administrator through the process going to Cray Systems Management v1.0.10 from v1.0.1. If you are at an earlier version, you must first upgrade to at least v1.0.1. For information on how to do that, see [Upgrade CSM](../index.md).
+This document is intended to guide an administrator through the process going to Cray Systems Management v1.0.10 from v1.0.1.
+Systems at an earlier version must first upgrade to at least v1.0.1.
+For information on how to do that, see [Upgrade CSM](../index.md).
 
 ## Steps
 
 1. [Preparation](#preparation)
 1. [Setup Nexus](#setup-nexus)
-1. [Upgrade Services](#upgrade-services)
-1. [Rollout Deployment Restart](#rollout-deployment-restart)
-1. [Apply Pod Priorities](#apply-pod-priorities)
+1. [Upgrade services](#upgrade-services)
+1. [Rollout deployment restart](#rollout-deployment-restart)
+1. [Apply pod priorities](#apply-pod-priorities)
 1. [Verification](#verification)
-1. [Run NCN Personalization](#run-ncn-personalization)
-1. [Exit Typescript](#exit-typescript)
+   1. [Run NCN personalization](#run-ncn-personalization)
+   1. [Exit typescript](#exit-typescript)
 
 <a name="preparation"></a>
 
@@ -28,7 +30,7 @@ This document is intended to guide an administrator through the process going to
 
 1. Download and extract the CSM 1.0.10 release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract-csm-product-release).
 
 1. Set `CSM_DISTDIR` to the directory of the extracted files:
 
@@ -49,23 +51,22 @@ This document is intended to guide an administrator through the process going to
 
    See [Check for Latest Workarounds and Documentation Updates](../../update_product_stream/index.md#workarounds).
 
-1. Resets known_hosts on storage nodes. These change during the upgrade procedure and result in invalid known_hosts file that prevents password-less SSH between storage nodes.
+1. Reset `known_hosts` on storage nodes. These change during the upgrade procedure and result in invalid `known_hosts` files that prevent password-less SSH between storage nodes.
 
-```bash
-ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+   ```bash
+   ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'truncate --size=0 ~/.ssh/known_hosts'
+   ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
+   ```
 
-ncn-m001# grep -oP "(ncn-s\w+)" /etc/hosts | sort -u | xargs -t -i ssh {} 'grep -oP "(ncn-s\w+|ncn-m\w+|ncn-w\w+)" /etc/hosts | sort -u | xargs -t -i ssh-keyscan -H \{\} >> /root/.ssh/known_hosts'
-```
+1. Back up BSS data
 
-1. Backup BSS Data
-
-In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data.
+   In the event of a problem during the upgrade which may cause the loss of BSS data, perform the following to preserve this data.
 
    ```bash
    ncn-m001# cray bss bootparameters list --format=json >bss-backup-$(date +%Y-%m-%d).json
    ```
 
-The resulting file needs to be saved in the event that BSS data needs to be restored in the future.
+   Save the resulting file, in case that BSS data needs to be restored in the future.
 
 <a name="setup-nexus"></a>
 
@@ -79,10 +80,10 @@ ncn-m001# cd "$CSM_DISTDIR"
 ncn-m001# ./lib/setup-nexus.sh
 ```
 
-On success, `setup-nexus.sh` will output `OK` on stderr and exit with status
+On success, `setup-nexus.sh` will output `OK` on `stderr` and exit with status
 code `0`, e.g.:
 
-```bash
+```console
 + Nexus setup complete
 setup-nexus.sh: OK
 ncn-m001# echo $?
@@ -91,11 +92,12 @@ ncn-m001# echo $?
 
 In the event of an error, consult [Troubleshoot Nexus](../../operations/package_repository_management/Troubleshoot_Nexus.md)
 to resolve potential problems and then try running `setup-nexus.sh` again. Note that subsequent runs of `setup-nexus.sh` may
-report `FAIL` when uploading duplicate assets. This is ok as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits
+report `FAIL` when uploading duplicate assets. This is okay as long as `setup-nexus.sh` outputs `setup-nexus.sh: OK` and exits
 with status code `0`.
 
 <a name="run-validation-checks-pre-upgrade"></a>
-## Run Validation Checks (Pre-Upgrade)
+
+## Run validation checks (pre-upgrade)
 
 _Pre-upgrades must run after nexus is setup in order to ensure any and all necessary RPMs are available_.
 
@@ -109,12 +111,18 @@ _Pre-upgrades must run after nexus is setup in order to ensure any and all neces
    ncn-m001# /usr/share/doc/csm/upgrade/lib/validation/CASMREL-776-CSM12-NCN-boot-order-backport/install-hotfix.sh
    ```
 
-
 <a name="upgrade-services"></a>
 
-## Upgrade Services
+## Upgrade services
 
-> For TDS systems with only three worker nodes the `customizations.yaml` file will be edited automatically during upgrade to lower CPU requests on several services which can improve pod scheduling on smaller systems. See the file: `${CSM_DISTDIR}/tds_cpu_requests.yaml` for these settings. If desired, this file can be modified (prior to proceeding with this upgrade) with different values if other settings are desired in the `customizations.yaml` file for this system. For more information about modifying `customizations.yaml` and tuning based on specific systems, see [Post Install Customizations](https://github.com/Cray-HPE/docs-csm/blob/release/1.0/operations/CSM_product_management/Post_Install_Customizations.md).
+> For TDS systems with only three worker nodes the `customizations.yaml` file will be edited
+> automatically during upgrade to lower CPU requests on several services which can improve pod
+> scheduling on smaller systems. See the file: `${CSM_DISTDIR}/tds_cpu_requests.yaml` for these
+> settings. If desired, this file can be modified (prior to proceeding with this upgrade) with
+> different values if other settings are desired in the `customizations.yaml` file for this
+> system. For more information about modifying `customizations.yaml` and tuning based on specific
+> systems, see
+> [Post Install Customizations](../../operations/CSM_product_management/Post_Install_Customizations.md).
 
 Run `upgrade.sh` to deploy upgraded CSM applications and services:
 
@@ -125,12 +133,17 @@ ncn-m001# ./upgrade.sh
 
 <a name="rollout-deployment-restart"></a>
 
-## Rollout Deployment Restart
+## Rollout deployment restart
 
 Instruct Kubernetes to gracefully restart the Unbound pods:
 
-```text
+```bash
 ncn-m001:~ # kubectl -n services rollout restart deployment cray-dns-unbound
+```
+
+Example output:
+
+```text
 deployment.apps/cray-dns-unbound restarted
 
 ncn-m001:~ # kubectl -n services rollout status deployment cray-dns-unbound
@@ -146,16 +159,24 @@ Waiting for deployment "cray-dns-unbound" rollout to finish: 1 old replicas are 
 deployment "cray-dns-unbound" successfully rolled out
 ```
 
-* If cray-dns-unbound goes into CLBO after deployment restart.
-Please see [Unbound in CrashLoopBackOff after deployment restart](../../troubleshooting/known_issues/unbound_clbo.md)
+If `cray-dns-unbound` goes into CLBO after deployment restart, then see
+[Unbound in `CrashLoopBackOff` after deployment restart](../../troubleshooting/known_issues/unbound_clbo.md).
+
 <a name="apply-pod-priorities"></a>
 
-## Apply Pod Priorities
+## Apply pod priorities
 
-Run the `add_pod_priority.sh` script to create and apply a pod priority class to services critical to CSM. This will give these services a higher priority than others to ensure they get scheduled by Kubernetes in the event that resources limited on smaller deployments.
+Run the `add_pod_priority.sh` script to create and apply a pod priority class to services
+critical to CSM. This will give these services a higher priority than others to ensure they
+get scheduled by Kubernetes in the event that resources limited on smaller deployments.
 
 ```bash
 ncn-m001:~ # /usr/share/doc/csm/upgrade/1.0.1/scripts/upgrade/add_pod_priority.sh
+```
+
+Example output:
+
+```text
 Creating csm-high-priority-service pod priority class
 priorityclass.scheduling.k8s.io/csm-high-priority-service configured
 
@@ -181,12 +202,17 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 
 ## Verification
 
-### Verify CSM Version in Product Catalog
+### Verify CSM version in Product Catalog
 
 1. Verify that the following command includes the new CSM version:
 
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
+   ```
+
+   Example output:
+
+   ```text
    0.9.2
    0.9.3
    0.9.4
@@ -196,7 +222,7 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
    1.0.10
    ```
 
-1. Confirm the `import_date` reflects the timestamp of the upgrade:
+1. Confirm that the `import_date` reflects the timestamp of the upgrade:
 
    ```bash
    ncn-m001# kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.0.10".configuration.import_date'
@@ -204,13 +230,13 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 
 <a name="run-ncn-personalization"></a>
 
-## Run NCN Personalization
+## Run NCN personalization
 
-1. Run NCN Personalization to update the NCNs to the latest configruation.
-   Complete the [Run NCN Personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#run-ncn-personalization)
+1. Run NCN Personalization to update the NCNs to the latest configuration.
+   Complete the [Run NCN Personalization](../../operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md#run_ncn_personalization)
    procedure.
 
-1. Confirm the version of the Loftsman RPM installed on each NCN. Output below
+1. Check the version of the Loftsman RPM installed on each NCN. Output below
    will vary based on the number of NCNs in the system.
 
    ```bash
@@ -219,6 +245,11 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
        out=$(ssh -oStrictHostKeyChecking=no -q $xname "rpm -qa | grep loftsman")
        echo $xname $out
    done
+   ```
+
+   Example output:
+
+   ```text
    x3000c0s11b0n0 loftsman-1.2.0-1.x86_64
    x3000c0s13b0n0 loftsman-1.2.0-1.x86_64
    x3000c0s15b0n0 loftsman-1.2.0-1.x86_64
@@ -240,7 +271,7 @@ After running the `add_pod_priority.sh` script, the affected pods will be restar
 
 ## Exit Typescript
 
-Remember to exit your typescript.
+Remember to exit the typescript.
 
 ```bash
 ncn-m001# exit
