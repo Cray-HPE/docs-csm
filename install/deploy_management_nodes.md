@@ -1034,3 +1034,7 @@ If there are LVM check failures, then the problem must be resolved before contin
     1. Power off each affected worker node.
     1. Return to the [Boot the Master and Worker Nodes](#boot-master-and-worker-nodes) step of the [Deploy Management Nodes](#deploy_management_nodes) section above.
         * Note: The `ipmitool` command will give errors trying to power on the unaffected nodes, because they are already powered on -- this is expected and not a problem.
+
+[`install/deploy_management_nodes.md`](#deploy)
+
+[`install/deploy_management_nodes.md`](#ensure-time-is-accurate-before-deploying-ncns)

@@ -573,3 +573,5 @@ Run the following steps from a master node.
       ```text
         "lastError": "",
       ```
+
+[`operations/kubernetes/Cert_Renewal_for_Kubernetes_and_Bare_Metal_EtcD.md`](#renew-etcd-certificate)

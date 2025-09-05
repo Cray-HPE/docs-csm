@@ -497,3 +497,11 @@ baseline configuration during initial system installation.
 It is **strongly recommended** that the `site-init` repository be maintained
 off-cluster. Add a remote repository and push the baseline configuration on
 `master` branch to a corresponding remote branch.
+
+[`install/prepare_site_init.md`](#3-create-baseline-system-customizations)
+
+[`install/prepare_site_init.md`](#5-version-control-site-init-files)
+
+[`install/prepare_site_init.md`](#51-push-to-a-remote-repository)
+
+[`install/prepare_site_init.md`](#configure-prometheus-snmp-exporter)

@@ -135,3 +135,5 @@ mount -o remount /
 ```
 
 If the `squashfs` files were excluded from the backup, repopulate them following the configuration section.
+
+[`install/boot_livecd_virtual_iso.md`](#hpe-ilo-bmcs)

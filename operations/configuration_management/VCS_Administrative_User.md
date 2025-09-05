@@ -270,3 +270,5 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
         For more details on this test, including known issues and other command line options, see [Software Management Services health checks](../validate_csm_health.md#sms-health-checks).
 
 * **Make sure to perform the entire linked chart redeploy procedure, including the step to save the updated customizations.**
+
+[`operations/configuration_management/VCS_Administrative_User.md`](#change-vcs-administrative-user-password)

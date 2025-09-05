@@ -381,3 +381,5 @@ An authentication token is required to access the API gateway and to use the `sa
 ## Next step
 
 Return to [System Power Off Procedures](System_Power_Off_Procedures.md) and continue with next step.
+
+[`operations/power_management/Prepare_the_System_for_Power_Off.md`](#procedure)

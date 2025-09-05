@@ -317,3 +317,9 @@ the `Troubleshooting and Administrative Tasks` sub-section of the `Install a Wor
 ## Stage completed
 
 This stage is completed. Continue to [Stage 1 - Ceph image upgrade](Stage_1.md).
+
+[`upgrade/1.2/Stage_0_Prerequisites.md`](#stage-02---update-sls)
+
+[`upgrade/1.2/Stage_0_Prerequisites.md`](#stage-03---upgrade-management-network)
+
+[`upgrade/1.2/Stage_0_Prerequisites.md`](#stage-04---prerequisites-check)

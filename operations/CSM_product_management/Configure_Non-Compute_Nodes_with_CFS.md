@@ -435,3 +435,7 @@ In order to manually run management NCN personalization, first gather the follow
 
     > **`NOTE`** The CSM configuration layer **MUST** be the first layer in the
     > NCN personalization CFS configuration.
+
+[`operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md`](#auto_apply_csm_config)
+
+[`operations/CSM_product_management/Configure_Non-Compute_Nodes_with_CFS.md`](#set_root_password)

@@ -181,3 +181,7 @@ If the connection must be disabled, log in to the respective leaf-bmc switch.
 
 [1]: http://www.mellanox.com/page/management_tools
 
+
+[`install/switch_pxe_boot_from_onboard_nic_to_pcie.md`](#high-speed-network)
+
+[`install/switch_pxe_boot_from_onboard_nic_to_pcie.md`](#setting-expected-values)

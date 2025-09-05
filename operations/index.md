@@ -753,3 +753,15 @@ a User Access Instance \(UAI\) using the `cray` command. Users can also transfer
   - [Troubleshoot Broker UAI SSSD Cannot Use `/etc/sssd/sssd.conf`](UAS_user_and_admin_topics/Troubleshoot_Broker_SSSD_Cant_Use_sssd_conf.md)
   - [Troubleshoot UAS / CLI Authentication Issues](UAS_user_and_admin_topics/Troubleshoot_UAI_Authentication_Issues.md)
 - [UAS known issues](../troubleshooting/index.md#user-access-service-uas)
+
+[`operations/index.md`](#compute-rolling-upgrades)
+
+[`operations/index.md`](#configuration-management)
+
+[`operations/index.md`](#security-and-authentication)
+
+[`operations/index.md`](#spire)
+
+[`operations/index.md`](#system-configuration-service)
+
+[`operations/index.md`](#system-layout-service-sls)

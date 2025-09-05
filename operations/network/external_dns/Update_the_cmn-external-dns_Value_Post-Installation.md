@@ -106,3 +106,5 @@ The `external-dns` IP address reservation in the SLS CMN `cmn_metallb_static_poo
    ncn-m001# kubectl delete secret -n loftsman site-init
    ncn-m001# kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
    ```
+
+[`operations/network/external_dns/Update_the_cmn-external-dns_Value_Post-Installation.md`](#update-customizationsyaml)

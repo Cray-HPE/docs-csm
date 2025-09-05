@@ -95,3 +95,5 @@ On each affected NCN run the following:
 ```bash
 ncn# /srv/cray/scripts/common/chrony/csm_ntp.py
 ```
+
+[`operations/node_management/Configure_NTP_on_NCNs.md`](#fix-broken-configuration)

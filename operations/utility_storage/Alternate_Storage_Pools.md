@@ -241,3 +241,11 @@ Removing image: 100% complete...done.
    ncn-s001:~ # ceph osd pool rm csm-release csm-release --yes-i-really-really-mean-it
    pool 'csm-release' removed
    ```
+
+[`operations/utility_storage/Alternate_Storage_Pools.md`](#create-a-storage-pool)
+
+[`operations/utility_storage/Alternate_Storage_Pools.md`](#create-and-map-an-rbd-device)
+
+[`operations/utility_storage/Alternate_Storage_Pools.md`](#mount-an-rbd-device)
+
+[`operations/utility_storage/Alternate_Storage_Pools.md`](#move-an-rbd-device-to-another-node)

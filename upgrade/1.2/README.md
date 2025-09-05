@@ -148,3 +148,5 @@ undisrupted access to UANs during the upgrade.
 
   - See the inline comment above on how to rerun a single step.
   - In order to rerun the whole upgrade of a node, delete its state file.
+
+[`upgrade/1.2/README.md`](#relevant-troubleshooting-links-for-upgrade-related-issues)

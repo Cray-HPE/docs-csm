@@ -52,3 +52,7 @@ sections, but there is also a general troubleshooting topic.
     would be to install HFP which will inform the Firmware Action Services (FAS) of the newest firmware
     available. Once FAS is aware that new firmware is available, then see
     [Update Firmware with FAS](../operations/firmware/Update_Firmware_with_FAS.md).
+
+[`upgrade/index.md`](#upgrade_management_nodes_csm_services)
+
+[`upgrade/index.md`](#validate_csm_health)

@@ -471,3 +471,7 @@ This is a table of deprecated FS labels/partitions from Shasta 1.3 (no longer in
 | `CRAYVBIS`    | `/var/cray/vbis`              | `ncn-w001`, `ncn-w002`  | Ephemeral | 900 GiB       |
 | `CRAYNFS`     | `/var/lib/nfsroot/nmd`        | `ncn-w001`, `ncn-w002`  | Ephemeral | 12 GiB        |
 | `CRAYSDU`     | `/var/lib/sdu`                | All masters and workers | LVM       | 100 GiB       |
+
+[`background/ncn_mounts_and_file_systems.md`](#plan-of-record--baseline)
+
+[`background/ncn_mounts_and_file_systems.md`](#problems-when-above-or-below-baseline)

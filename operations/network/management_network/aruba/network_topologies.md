@@ -17,3 +17,10 @@ The following images are example network topologies for systems of various sizes
 ### Small
 
 ![](../../../../img/network/management_network/small.png)
+[`operations/network/management_network/aruba/network_topologies.md`](#large)
+
+[`operations/network/management_network/aruba/network_topologies.md`](#medium)
+
+[`operations/network/management_network/aruba/network_topologies.md`](#small)
+
+[`operations/network/management_network/aruba/network_topologies.md`](#very-large)

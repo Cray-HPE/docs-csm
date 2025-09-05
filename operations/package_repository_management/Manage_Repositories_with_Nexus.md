@@ -522,3 +522,7 @@ This example uses a Keycloak account with username `USERNAME` and password `PASS
 ```bash
 ncn-mw# curl -i -sfv -u "USERNAME:PASSWORD" -H "accept: application/json" -X GET https://packages.local/service/rest/beta/security/user-sources
 ```
+
+[`operations/package_repository_management/Manage_Repositories_with_Nexus.md`](#access-nexus-with-the-web-ui)
+
+[`operations/package_repository_management/Manage_Repositories_with_Nexus.md`](#delete-a-repository)

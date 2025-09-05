@@ -317,3 +317,7 @@ wiping a different type of node than what a step specifies, then skip that step.
     ```
 
 1. Perform the [Basic wipe](#basic-wipe) procedure.
+
+[`install/wipe_ncn_disks_for_reinstallation.md`](#basic-wipe)
+
+[`install/wipe_ncn_disks_for_reinstallation.md`](#full-wipe)

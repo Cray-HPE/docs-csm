@@ -84,3 +84,5 @@ The following table includes popular vendor and device IDs.
 | Mellanox Technologies | ConnectX-5 | **`1017`** | `15b3` |
 | Giga-Byte | Intel Corporation I350 | `1521` | `8086` |
 | QLogic Corporation | FastLinQ QL41000 | `8070` | **`1077`** |
+
+[`background/ncn_networking.md`](#vendor-and-bus-id-identification)

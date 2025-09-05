@@ -65,3 +65,5 @@ The following features have been completely removed:
 <a name="other_changes"></a>
 
 ## Other changes
+
+[`introduction/differences.md`](#deprecated_features)

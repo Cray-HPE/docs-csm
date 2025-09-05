@@ -300,3 +300,5 @@ has been fully installed and configured. Check the next topic.
 
 See [Next topic](index.md#next_topic) for more information on other product
 streams to be installed and configured after CSM.
+
+[`install/prepare_compute_nodes.md`](#configure-hpe-apollo-6500-x645d-gen10-plus-compute-nodes)

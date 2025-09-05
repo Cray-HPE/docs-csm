@@ -136,3 +136,5 @@ The `csm.ssh_key` Ansible role supports setting SSH keys for non-root users.
     Follow [Procedure: Configure root SSH keys in Vault](#procedure-configure-root-ssh-keys-in-vault).
 
 1. Create a configuration layer using the new Ansible playbook and create a CFS session using that layer.
+
+[`operations/security_and_authentication/SSH_Keys.md`](#configure_root_keys_in_vault)

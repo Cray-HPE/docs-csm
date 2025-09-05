@@ -788,3 +788,5 @@ See [Gateway Testing](../gateway_testing.md) for more information.
 ### Disabling VLAN7 for UANs
 
 After updating to CSM 1.2, the UAN nodes need to have their access to the CMN (VLAN7) removed. The procedure to [Remove UAN Access to the CMN](bican_disable_uan_vlan7.md) restricts access to UAN by removing VLAN 7 from the switch ports.
+
+[`operations/network/management_network/bican_enable.md`](#minimize-uan-downtime)

@@ -644,3 +644,7 @@ Prepare the `site-init` directory by performing the [Prepare `Site Init`](prepar
 After completing this procedure, proceed to configure the management network switches.
 
 See [Configure Management Network Switches](index.md#configure_management_network)
+
+[`install/bootstrap_livecd_remote_iso.md`](#first-login)
+
+[`install/bootstrap_livecd_remote_iso.md`](#set-up-site-link)
