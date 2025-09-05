@@ -259,3 +259,7 @@ These values will be needed when upgrading the NCN storage nodes in the followin
         ceph config set mgr mgr/prometheus/rbd_stats_pools "kube,smf"
         ceph config set mgr mgr/prometheus/rbd_stats_pools_refresh_interval 600
         ```
+
+[`operations/iuf/stages/management_nodes_rollout.md`](#set-ncn-boot-image-for-ncn-m001-or-ncn-storage-nodes)
+
+[`operations/iuf/stages/management_nodes_rollout.md`](#upgrade-ncn-storage-nodes-into-the-customized-image)

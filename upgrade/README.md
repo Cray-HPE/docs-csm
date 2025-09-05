@@ -57,3 +57,9 @@ CSM 1.4 patch release.
 * [CSM 1.4.2 Patch Installation Instructions](1.4.2/README.md)
 * [CSM 1.4.3 Patch Installation Instructions](1.4.3/README.md)
 * [CSM 1.4.4 Patch Installation Instructions](1.4.4/README.md)
+
+[`upgrade/README.md`](#csm-majorminor-version-upgrade)
+
+[`upgrade/README.md`](#csm-patch-version-upgrade)
+
+[`upgrade/README.md`](#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)

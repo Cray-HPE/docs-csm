@@ -166,3 +166,5 @@ For additional reference material on the upgrade processes and scripts mentioned
 - Helm chart timeouts
 
   See [`Helm Chart Timeouts` known issues](../troubleshooting/known_issues/helm_chart_deploy_timeouts.md) for steps to increase the timeout for a chart that is taking longer than five minutes to deploy.
+
+[`upgrade/Upgrade_Management_Nodes_and_CSM_Services.md`](#relevant-troubleshooting-links-for-upgrade-related-issues)

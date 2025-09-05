@@ -927,3 +927,21 @@ using `kubectl describe`.
 
    If volumes are missing they will show up in the `Events:` section of the output. Other problems may show up there as well. The names of the missing volumes or other issues
    should indicate what needs to be fixed to make the UAI run.
+
+[`operations/validate_csm_health.md`](#0-cray-command-line-interface)
+
+[`operations/validate_csm_health.md`](#1-platform-health-checks)
+
+[`operations/validate_csm_health.md`](#22-hardware-state-manager-discovery-validation)
+
+[`operations/validate_csm_health.md`](#221-interpreting-hsm-discovery-results)
+
+[`operations/validate_csm_health.md`](#222-known-issues-with-hsm-discovery-validation)
+
+[`operations/validate_csm_health.md`](#3-software-management-services-sms-health-checks)
+
+[`operations/validate_csm_health.md`](#413-gateway-health-tests-from-outside-the-system)
+
+[`operations/validate_csm_health.md`](#5-booting-csm-barebones-image)
+
+[`operations/validate_csm_health.md`](#62-validate-uai-creation)

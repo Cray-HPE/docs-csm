@@ -721,3 +721,5 @@ Before rebooting NCNs:
     At a minimum, run the platform health checks.
 
     See [Validate CSM Health](../validate_csm_health.md) for the platform health checks.
+
+[`operations/node_management/Reboot_NCNs.md`](#ncn-worker-nodes)

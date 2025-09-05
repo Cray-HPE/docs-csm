@@ -214,3 +214,7 @@ For more information, see
 ```bash
 cray bos v1 session delete <BOS_SESSION_ID>
 ```
+
+[`operations/boot_orchestration/Manage_a_BOS_Session.md`](#create-a-new-v2-session)
+
+[`operations/boot_orchestration/Manage_a_BOS_Session.md`](#delete-a-session)

@@ -280,3 +280,5 @@ See [Update the Gigabyte Node BIOS Time](../operations/node_management/Update_th
 
 After completing the preparation for compute nodes, the CSM product stream
 has been fully installed and configured.
+
+[`install/prepare_compute_nodes.md`](#configure-hpe-apollo-6500-xl645d-gen10-plus-compute-nodes)

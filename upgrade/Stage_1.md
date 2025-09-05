@@ -269,3 +269,17 @@ All Kubernetes nodes have been rebooted into the new image.
 > on `ncn-m001` at this time.
 
 This stage is completed. Continue to [Stage 2](Stage_2.md).
+
+[`upgrade/Stage_1.md`](#stage-11---master-node-image-upgrade)
+
+[`upgrade/Stage_1.md`](#stage-12---worker-node-image-upgrade)
+
+[`upgrade/Stage_1.md`](#stage-13---ncn-m001-upgrade)
+
+[`upgrade/Stage_1.md`](#stage-14---upgrade-weave-and-multus)
+
+[`upgrade/Stage_1.md`](#stage-15---coredns-anti-affinity)
+
+[`upgrade/Stage_1.md`](#stage-16---complete-kubernetes-upgrade)
+
+[`upgrade/Stage_1.md`](#upgrade-ncn-m001)

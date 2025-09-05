@@ -169,3 +169,7 @@ If the connection must be disabled, log in to the respective leaf-bmc switch.
 
 [1]: http://www.mellanox.com/page/management_tools
 
+
+[`operations/node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md`](#high-speed-network)
+
+[`operations/node_management/Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md`](#setting-expected-values)

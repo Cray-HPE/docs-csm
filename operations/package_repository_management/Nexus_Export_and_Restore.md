@@ -165,3 +165,7 @@ If an export is stopped prematurely or fails to complete, there are a few steps 
         ```bash
         kubectl -n nexus scale deployment nexus --replicas=1
         ```
+
+[`operations/package_repository_management/Nexus_Export_and_Restore.md`](#cleanup)
+
+[`operations/package_repository_management/Nexus_Export_and_Restore.md`](#export)

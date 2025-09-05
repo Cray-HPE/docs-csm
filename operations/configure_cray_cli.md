@@ -426,3 +426,7 @@ debug level log messages to be displayed. Alternatively, each failing node may b
         1. Verify that the processes restarted using the command from step 3.
 
             At this point the processes should restart. If they do not, then retry steps 2 and 3.
+
+[`operations/configure_cray_cli.md`](#configure-all-ncns-with-temporary-keycloak-user)
+
+[`operations/configure_cray_cli.md`](#single-user-already-configured-in-keycloak)

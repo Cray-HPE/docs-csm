@@ -180,3 +180,5 @@ found in the `/etc/cray/upgrade/csm/admin` directory.
 ```bash
 iuf -a admin-230127 run -sv /etc/cray/upgrade/csm/admin/site_vars.yaml -bpcd /etc/cray/upgrade/csm/admin -r prepare-images
 ```
+
+[`operations/iuf/stages/prepare_images.md`](#artifacts-created)

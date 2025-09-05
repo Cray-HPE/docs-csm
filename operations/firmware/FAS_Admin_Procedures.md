@@ -632,3 +632,9 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     > **`NOTE`** The FAS loader will not overwrite image records already in FAS.
     >`Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
+
+[`operations/firmware/FAS_Admin_Procedures.md`](#ignore-management-nodes-within-fas)
+
+[`operations/firmware/FAS_Admin_Procedures.md`](#load-firmware-from-nexus)
+
+[`operations/firmware/FAS_Admin_Procedures.md`](#load-firmware-from-rpm-or-zip-file)

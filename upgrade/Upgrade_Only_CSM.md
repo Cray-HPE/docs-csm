@@ -43,3 +43,5 @@ Follow the procedures for updating firmware with the Firmware Action Service (FA
 
 After completion of the validation of CSM health, the CSM product stream has been fully upgraded and
 configured.
+
+[`upgrade/Upgrade_Only_CSM.md`](#3-validate-csm-health-during-upgrade)

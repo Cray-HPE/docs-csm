@@ -55,3 +55,5 @@ gateway with `sat auth`). To complete the initial configuration of SAT, refer to
 If the full SAT product stream is not being installed, it is recommended that you uninstall old versions of the
 SAT product stream to avoid confusion in the output of `sat showrev`. For more information,
 refer to **SAT Uninstall and Downgrade** in the SAT documentation.
+
+[`operations/sat/sat_in_csm.md`](#sat-documentation)

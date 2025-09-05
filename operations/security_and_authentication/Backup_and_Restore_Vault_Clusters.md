@@ -372,3 +372,5 @@ For more information on Velero, refer to the [external Velero documentation](htt
         cray-vault-2                             5/5     Running   2          38s
         cray-vault-configurer-56df7f768d-c7mk2   2/2     Running   0          2m21s
         ```
+
+[`operations/security_and_authentication/Backup_and_Restore_Vault_Clusters.md`](#restore-from-a-backup)

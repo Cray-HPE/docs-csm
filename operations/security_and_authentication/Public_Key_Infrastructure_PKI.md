@@ -89,3 +89,5 @@ The platform does not provide revocation lists or access to a revocation service
 ### Key escrow
 
 The platform does not provide any key escrow services.
+
+[`operations/security_and_authentication/Public_Key_Infrastructure_PKI.md`](#revocation-lists-and-online-certificate-status-protocol-ocsp)

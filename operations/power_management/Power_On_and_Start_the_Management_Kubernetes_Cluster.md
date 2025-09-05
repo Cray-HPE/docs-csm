@@ -660,3 +660,5 @@ Some systems are configured with lazy mounts that do not have this requirement f
 ## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.
+
+[`operations/power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md`](#check-cronjobs)

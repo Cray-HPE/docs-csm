@@ -363,3 +363,5 @@ Logging into http://localhost:8080/keycloak as user admin of realm master
 Resource not found for url: http://localhost:8080/keycloak/admin/realms/shasta/users/b49abdcc-a314-4355-89d7-44f4d8d33ab8
 command terminated with exit code 1
 ```
+
+[`operations/security_and_authentication/Keycloak_User_Management_with_Kcadm.md`](#update-a-local-keycloak-user-credential)

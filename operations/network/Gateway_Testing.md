@@ -589,3 +589,7 @@ Overall Gateway Test Status:  PASS
 Deleting UAI uai-vers-733eea45
 results = [ "Successfully deleted uai-vers-733eea45",]
 ```
+
+[`operations/network/Gateway_Testing.md`](#running-gateway-tests-on-a-device-outside-the-system)
+
+[`operations/network/Gateway_Testing.md`](#running-gateway-tests-on-an-ncn-management-node)

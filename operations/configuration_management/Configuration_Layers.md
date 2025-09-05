@@ -151,3 +151,5 @@ Use the `cray cfs configurations --help` command to manage CFS configurations on
 * `describe`: Display info about a single configuration and its layer\(s\).
 * `update`: Create a new configuration or modify an existing configuration.
 * `delete`: Delete an existing configuration.
+
+[`operations/configuration_management/Configuration_Layers.md`](#use-branches-in-configuration-layers)

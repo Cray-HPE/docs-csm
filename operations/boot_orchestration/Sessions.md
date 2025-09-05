@@ -79,3 +79,5 @@ The following limitations currently exist with BOS sessions:
 * The partition parameter is not honored.
 * All nodes proceed at the same pace. BOA will not move on to the next step of the boot process until
   all components have succeeded or failed the current step.
+
+[`operations/boot_orchestration/Sessions.md`](#bos-v2-sessions-and-hsm-locks)

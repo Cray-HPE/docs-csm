@@ -110,3 +110,5 @@ Entire groups can be removed. The group label is deleted and removed from all me
 ```bash
 cray hsm groups delete GROUP_LABEL
 ```
+
+[`operations/hardware_state_manager/Manage_Component_Groups.md`](#modify-a-group)

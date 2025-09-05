@@ -659,3 +659,17 @@ For any typescripts that were started during this stage, stop them with the `exi
 ## Stage completed
 
 This stage is completed. Continue to [Stage 1 - Kubernetes Upgrade](Stage_1.md).
+
+[`upgrade/Stage_0_Prerequisites.md`](#option-2-upgrade-of-csm-on-system-with-additional-products)
+
+[`upgrade/Stage_0_Prerequisites.md`](#stage-0---prerequisites-and-preflight-checks)
+
+[`upgrade/Stage_0_Prerequisites.md`](#stage-01---prepare-assets)
+
+[`upgrade/Stage_0_Prerequisites.md`](#stage-02---prerequisites)
+
+[`upgrade/Stage_0_Prerequisites.md`](#stage-04---backup-workload-manager-data)
+
+[`upgrade/Stage_0_Prerequisites.md`](#stage-05---upgrade-ceph-and-stop-local-docker-registries)
+
+[`upgrade/Stage_0_Prerequisites.md`](#stage-06---enable-smartmon-metrics-on-storage-ncns)

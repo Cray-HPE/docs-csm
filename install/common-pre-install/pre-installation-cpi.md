@@ -629,3 +629,9 @@ Follow  [Configure management network switches](README.md#6-configure-management
 After completing the Pre-install step, the next step is to Deploy Management Nodes.
 
 See [Deploy Management Nodes](README.md#1-deploy-management-nodes).
+
+[`install/common-pre-install/pre-installation-cpi.md`](#1-boot-installation-environment)
+
+[`install/common-pre-install/pre-installation-cpi.md`](#2-create-system-configuration)
+
+[`install/common-pre-install/pre-installation-cpi.md`](#3-initialize-nexus)

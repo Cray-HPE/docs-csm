@@ -171,3 +171,7 @@ downloaded and unpacked.
 ## Next topic
 
 Proceed to "Boot installation environment".
+
+[`install/re-installation.md`](#set-ipmi-credentials)
+
+[`install/re-installation.md`](#set-node-bmcs-to-dhcp)

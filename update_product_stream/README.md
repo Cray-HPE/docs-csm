@@ -242,3 +242,7 @@ Using http proxies in any way other than the following examples will cause many 
 ## Check for field notices about hotfixes
 
 Collect all available field notices about hotfixes which should be applied to this CSM software release. Check with HPE Cray service for more information.
+
+[`update_product_stream/README.md`](#check-for-latest-documentation)
+
+[`update_product_stream/README.md`](#download-and-extract-csm-product-release)

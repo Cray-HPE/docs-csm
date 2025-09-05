@@ -196,3 +196,5 @@ In addition, the `cfs_free` strategy is limited by the fact that configuration i
 This means that even when using the `cfs_free` strategy, all nodes must complete a playbook together before moving onto the next playbook.
 
 The CFS Ansible strategies extend the similarly named Ansible strategy, adding reporting callbacks that are used to track components' state. `cfs_linear` and `cfs_free` should always be used in place of `linear` and `free` to ensure that CFS functions correctly.
+
+[`operations/configuration_management/Write_Ansible_Code_for_CFS.md`](#avoid-repeated-conditionals-with-include_)

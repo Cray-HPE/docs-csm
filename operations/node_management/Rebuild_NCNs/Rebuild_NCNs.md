@@ -137,3 +137,9 @@ live node personalization. For example, [SSH configuration files](../../CSM_prod
 ## Validation
 
 After completing all of the steps, run the [Final Validation](Final_Validation_Steps.md) steps.
+
+[`operations/node_management/Rebuild_NCNs/Rebuild_NCNs.md`](#prerequisites)
+
+[`operations/node_management/Rebuild_NCNs/Rebuild_NCNs.md`](#restrictions)
+
+[`operations/node_management/Rebuild_NCNs/Rebuild_NCNs.md`](#storage-node)

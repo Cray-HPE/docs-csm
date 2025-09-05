@@ -916,3 +916,13 @@ these backups.
 - [Slurm Operator](multi-tenancy/SlurmOperator.md)
 - [Tenant and Partition Management System (TAPMS) Overview](multi-tenancy/Tapms.md)
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
+
+[`operations/README.md`](#compute-rolling-upgrades)
+
+[`operations/README.md`](#configuration-management)
+
+[`operations/README.md`](#security-and-authentication)
+
+[`operations/README.md`](#spire)
+
+[`operations/README.md`](#system-layout-service-sls)

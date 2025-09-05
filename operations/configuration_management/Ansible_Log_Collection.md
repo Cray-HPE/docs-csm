@@ -39,3 +39,5 @@ longer record logs to ARA.
 
 For more information on the Ansible configuration file, see
 [Set the `ansible.cfg` for a Session](Set_the_ansible-cfg_for_a_Session.md).
+
+[`operations/configuration_management/Ansible_Log_Collection.md`](#ara-records-ansible-ara)

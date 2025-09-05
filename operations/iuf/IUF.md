@@ -719,3 +719,11 @@ The following actions may be useful if errors are encountered when executing `iu
   workflow and debug the issue.
 - If an Argo step fails, Argo will attempt to re-execute the step. If the retry succeeds, the failed step will still be displayed, colored red, in the Argo UI alongside the successful retry step, colored green. Although the failed
   step is still displayed, it did not affect the success of the overall workflow and can be ignored.
+
+[`operations/iuf/IUF.md`](#activities)
+
+[`operations/iuf/IUF.md`](#activity)
+
+[`operations/iuf/IUF.md`](#list-activities)
+
+[`operations/iuf/IUF.md`](#site-and-recipe-variables)

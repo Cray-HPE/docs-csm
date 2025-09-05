@@ -60,3 +60,5 @@ This section applies to all node types. The commands in this section assume the 
 ## Next Step
 
 If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.
+
+[`operations/node_management/Rebuild_NCNs/Identify_Nodes_and_Update_Metadata.md`](#procedure)

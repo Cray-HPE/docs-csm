@@ -322,3 +322,7 @@ See the [Install or upgrade additional products with IUF](../../operations/iuf/w
 procedure to continue with the installation of additional HPE Cray EX software products.
 
 For additional information on the IUF, see [Install and Upgrade Framework](../../operations/iuf/IUF.md).
+
+[`install/common-pre-install/README.md`](#1-deploy-management-nodes)
+
+[`install/common-pre-install/README.md`](#6-configure-management-network-switches)

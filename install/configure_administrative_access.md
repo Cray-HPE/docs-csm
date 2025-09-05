@@ -172,3 +172,5 @@ that configuration to the booted management nodes.
 ## 8. Proceed to next topic
 
 Return to the previous page and continue to the next step.
+
+[`install/configure_administrative_access.md`](#1-configure-the-cray-command-line-interface)

@@ -140,3 +140,5 @@ for more information on the CFS Batcher.
     ```bash
     cray cfs components update --error-count 0 --state '[]' --format json "${XNAME}"
     ```
+
+[`operations/configuration_management/Management_Node_Personalization.md`](#re-run-node-personalization-on-management-nodes)

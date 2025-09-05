@@ -87,3 +87,7 @@ For information on staging boot artifacts, see the section [Upload Node Boot Inf
     If this feature is used, the configuration can also be updated by telling CFS to update the commits for all layers of a configuration that specify branches.
     Similar to when updating the configuration from a file, this will automatically start configuration on any enabled nodes that are using this configuration.
     For information on using branches, see [Use branches in configuration layers](../configuration_management/Configuration_Layers.md#use-branches-in-configuration-layers).
+
+[`operations/boot_orchestration/Stage_Changes_with_BOS.md`](#applying-a-staged-state)
+
+[`operations/boot_orchestration/Stage_Changes_with_BOS.md`](#creating-a-staged-session)

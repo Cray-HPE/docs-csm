@@ -197,3 +197,5 @@ The DVS configuration files determine which interface to use (NMN or HSN). Howev
 
 It is also possible to specify CFS configuration in the boot set. If specified, this will override whatever value is set in the base session template.
 This feature is not supported for BOS v1.
+
+[`operations/boot_orchestration/Session_Templates.md`](#node-groups)

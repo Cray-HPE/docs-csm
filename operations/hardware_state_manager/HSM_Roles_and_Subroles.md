@@ -85,3 +85,5 @@ data:
 ```
 
 Deleting roles/subroles from this list will also remove them from HSM. However, deleting any of the pre-defined roles or subroles will have no effect.
+
+[`operations/hardware_state_manager/HSM_Roles_and_Subroles.md`](#add-custom-roles-and-subroles)

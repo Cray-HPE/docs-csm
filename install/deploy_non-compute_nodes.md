@@ -324,3 +324,5 @@ Ceph can begin to exhibit latency over time unless OSDs are restarted and some O
 After completing the deployment of the management nodes, the next step is to install the CSM services.
 
 See [Install CSM Services](install_csm_services.md).
+
+[`install/deploy_non-compute_nodes.md`](#2-deploy-management-nodes)

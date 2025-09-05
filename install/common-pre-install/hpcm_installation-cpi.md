@@ -956,3 +956,5 @@ These steps can help reclaim ~40 GB of space in the `tmpfs/overlay` partition.
 After completing this procedure, proceed to pre-installation.
 
 See [Pre-installation](pre-installation-cpi.md).
+
+[`install/common-pre-install/hpcm_installation-cpi.md`](#seed-file-generation)

@@ -729,3 +729,19 @@ Follow the [Prepare Site Init](prepare_site_init.md) procedure.
 ## Next topic
 
 After completing this procedure, proceed to configure the management network switches.
+
+[`install/pre-installation.md`](#1-boot-installation-environment)
+
+[`install/pre-installation.md`](#12-boot-the-livecd)
+
+[`install/pre-installation.md`](#13-first-log-in)
+
+[`install/pre-installation.md`](#14-prepare-the-data-partition)
+
+[`install/pre-installation.md`](#15-set-reusable-environment-variables)
+
+[`install/pre-installation.md`](#2-import-csm-tarball)
+
+[`install/pre-installation.md`](#3-create-system-configuration)
+
+[`install/pre-installation.md`](#36-initialize-the-livecd)

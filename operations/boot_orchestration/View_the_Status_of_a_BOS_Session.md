@@ -483,3 +483,5 @@ Example output:
   ]
 }
 ```
+
+[`operations/boot_orchestration/View_the_Status_of_a_BOS_Session.md`](#bos-v2-session-status)
