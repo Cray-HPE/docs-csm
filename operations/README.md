@@ -85,7 +85,6 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 - [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
 - [IMS API](../api/ims.md)
-- [IMS known issues](../troubleshooting/README.md#image-management)
 
 ## Boot orchestration
 

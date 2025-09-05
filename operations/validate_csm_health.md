@@ -4,7 +4,7 @@ Anytime after the installation of the CSM services, the health of the management
 
 The following are examples of when to run health checks:
 
-- After completing the [Install CSM Services](../install/README.md#2-install-csm-services) step of the CSM install (**not** before)
+- After completing the [Install CSM Services](../install/install_csm_services.md) step of the CSM install (**not** before)
 - Before and after NCN reboots
 - After the system is brought back up
 - Any time there is unexpected behavior observed

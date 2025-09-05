@@ -59,7 +59,7 @@ This is due to a redeployment of the Ceph `csi` provisioners into namespaces, in
     > This step can be skipped if user localization is not required.
 
     After an upgrade, it is possible that all expected Keycloak users were not localized.
-    See [Verification procedure](../operations/security_and_authentication/Keycloak_User_Localization.md#Verification-procedure)
+    See [Verification procedure](../operations/security_and_authentication/Keycloak_User_Localization.md#verification-procedure)
     to confirm that Keycloak localization has completed as expected.
 
 ## Take Etcd Manual Backup
@@ -85,4 +85,4 @@ For any typescripts that were started during this stage, stop them with the `exi
 
 ## Stage completed
 
-This stage is completed. Proceed to [Validate CSM health](README.md#3-validate-csm-health) on the main upgrade page.
+This stage is completed. Proceed to [Validate CSM health](Upgrade_Only_CSM.md#3-validate-csm-health) on the main upgrade page.
