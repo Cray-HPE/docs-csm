@@ -212,7 +212,7 @@ For any typescripts that were started earlier on `ncn-m001`, stop them with the 
        rpm -Uvh --force /root/libcsm-latest.noarch.rpm
        ```
 
-    If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](../operations/iuf/workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
+    If this step was executed as a result of the [`management-nodes-rollout` with CSM upgrade](../operations/iuf/workflows/management_rollout.md#21-management-nodes-rollout-with-csm-upgrade)
     instructions, return to that procedure and continue with the next step.
     Otherwise, if performing an upgrade of only CSM, proceed to the next step.
 

@@ -111,4 +111,4 @@ upgrade procedure which could cause problems.
 
 ## Return to CSM `1.5.2` patch
 
-Return to the next step of the CSM `1.5.2` patch procedure [Configure E1000 node and Redfish Exporter for SMART data](index.md#configure-e1000-node-and-redfish-exporter-for-smart-data).
+Return to the next step of the CSM `1.5.2` patch procedure [Configure E1000 node and Redfish Exporter for SMART data](README.md#configure-e1000-node-and-redfish-exporter-for-smart-data).

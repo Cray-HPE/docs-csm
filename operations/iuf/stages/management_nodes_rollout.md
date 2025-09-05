@@ -18,7 +18,7 @@ the same steps for rebuilding/upgrading NCN worker nodes.
    configuration.
 
 See
-the [3. Execute the IUF `management-nodes-rollout` stage](../workflows/management_rollout.md#3-execute-the-iuf-management-nodes-rollout-stage)
+the [2. Execute the IUF `management-nodes-rollout` stage](../workflows/management_rollout.md#2-execute-the-iuf-management-nodes-rollout-stage)
 documentation for more information.
 
 `management-nodes-rollout` details are explained in the following sections:
@@ -187,13 +187,13 @@ Expected behavior:
 ## Set NCN boot image for `ncn-m001`
 
 Follow these steps when upgrading `ncn-m001`
-during [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade)
+during [2.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#21-management-nodes-rollout-with-csm-upgrade)
 when following the procedures in
 [Install or upgrade additional products with IUF](../workflows/install_or_upgrade_additional_products_with_iuf.md)
 or [Upgrade CSM and additional products with IUF](../workflows/upgrade_csm_and_additional_products_with_iuf.md).
 
   1. (`ncn-mw#`) Set the `IMS_RESULTANT_IMAGE_ID` to be the `final_image_id` found
-    in [3.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#31-management-nodes-rollout-with-csm-upgrade). Then update the BSS parameters for `ncn-m001`.
+    in [2.1 `management-nodes-rollout` with CSM upgrade](../workflows/management_rollout.md#21-management-nodes-rollout-with-csm-upgrade). Then update the BSS parameters for `ncn-m001`.
 
       ```bash
       IMS_RESULTANT_IMAGE_ID=<value of final_image_id>
