@@ -50,7 +50,7 @@ for example, for NCN boot images. If the actual set of image artifacts differs f
     IMS requires that an image's root filesystem is in SquashFS format. Select one of the following options based on the current state of the image root being used:
 
     * If the image being added is in `tgz` format, then refer to [Convert TGZ Archives to SquashFS Images](Convert_TGZ_Archives_to_SquashFS_Images.md).
-    * If the image being added meets the above requirements, then proceed to [Create image record in IMS](#2-create-image-record-in-ims).
+    * If the image being added meets the above requirements, then proceed to [Create image record in IMS](#4-create-image-record-in-ims).
     * If the image root is in a format other than `tgz` or SquashFS, then convert the image root to `tgz`/SquashFS before continuing.
 
 ### 2. Set helper variables
@@ -155,7 +155,7 @@ then these should already be set. In this case, skip this section and proceed to
 
 If this procedure is being done as part of [NCN Worker Image Customization](../configuration_management/NCN_Worker_Image_Customization.md),
 then these artifacts should already exist in S3. In this case, skip this section and proceed to
-[Create image manifest file and upload to S3](#6-create-image-manifest-file-and-upload-to-s3).
+[Create, upload, and register image manifest](#6-create-upload-and-register-image-manifest).
 
 1. Navigate to the directory containing the artifact files.
 

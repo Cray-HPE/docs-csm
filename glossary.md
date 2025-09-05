@@ -64,7 +64,7 @@ Glossary of terms used in CSM documentation.
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
 * [Redfish Translation Service (RTS)](#redfish-translation-service)
 * [River Cabinet](#river-cabinet)
-* [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service)
+* [River Endpoint Discovery Service (REDS)](#river-endpoint-discovery-service-reds)
 * [Rosetta ASIC](#rosetta-asic)
 * [Service/IO Cabinet](#serviceio-cabinet)
 * [Shasta Cabling Diagram (SHCD)](#shasta-cabling-diagram)

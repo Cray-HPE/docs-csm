@@ -73,7 +73,7 @@ Detailed information on the fixes and configuration updates after CANU release 1
 
 1. Download and extract the CSM `v1.2.2` release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/index.md#download-and-extract-csm-product-release).
 
 1. Set `CSM_DISTDIR` to the directory of the extracted files.
 

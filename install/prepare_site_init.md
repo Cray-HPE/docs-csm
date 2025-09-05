@@ -7,7 +7,7 @@ directory which contains important customizations for various products.
 1. [Create and initialize `site-init` directory](#2-create-and-initialize-site-init-directory)
 1. [Create baseline system customizations](#3-create-baseline-system-customizations)
     - [Setup LDAP configuration](#setup-ldap-configuration)
-    - [End of LDAP configuration](#end-of-ldap-configuration)
+    - [After LDAP configuration](#after-ldap-configuration)
 1. [Customer-specific customizations](#4-customer-specific-customizations)
 1. [Version control `site-init` files](#5-version-control-site-init-files)
     1. [Push to a remote repository](#51-push-to-a-remote-repository)
@@ -143,7 +143,7 @@ with system-specific customizations.
 
 ### Setup LDAP configuration
 
-> **`NOTE`** Skip past LDAP configuration to [here](#end-of-ldap-configuation) if there is no LDAP configuration at this time. If LDAP should be enabled later,
+> **`NOTE`** Skip ahead to [After LDAP configuration](#after-ldap-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
 > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
 1. Set environment variables for the LDAP server and its port.
@@ -311,7 +311,7 @@ with system-specific customizations.
        pit# yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize
        ```
 
-### End of LDAP configuration
+### After LDAP configuration
 
 1. Configure the Unbound DNS resolver (if needed).
 
@@ -394,7 +394,7 @@ with system-specific customizations.
 
    - If DNSSEC is to be used, then add the desired keys into the `dnssec` SealedSecret.
 
-1. (Optional) Configure Prometheus SNMP Exporter.
+1. <a name="configure-prometheus-snmp-exporter"></a>(Optional) Configure Prometheus SNMP Exporter.
 
    The Prometheus SNMP exporter needs to be configured with a list of management network switches to scrape metrics from in
    order to populate the System Health Service Grafana dashboards.

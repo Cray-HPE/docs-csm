@@ -91,10 +91,6 @@ Preparation of the environment must be done before attempting to deploy the mana
 
 ### 1.2 Ensure time is accurate before deploying NCNs
 
-**NOTE:** Optionally, in order to use a timezone other than UTC, instead of step 1 below, follow
-[this procedure for setting a local timezone](../operations/node_management/Configure_NTP_on_NCNs.md#set-a-local-timezone). Then
-proceed to step 2.
-
 1. Ensure that the PIT node has the correct current time.
 
    The time can be inaccurate if the system has been powered off for a long time, or, for example, the CMOS was cleared on a Gigabyte node. See [Clear Gigabyte CMOS](clear_gigabyte_cmos.md).
@@ -333,12 +329,13 @@ be performed are in the [Deploy](#deploy) section.
 
         > Every NCN except for `ncn-m001` should be included in the output from this script. If that is not the case,
         > then verify that all NCN BMCs are set to use DHCP. See
-        > [Set node BMCs to DHCP](prepare_management_nodes.md#set_node_bmcs_to_dhcp). After that is done,
+        > [Set node BMCs to DHCP](prepare_management_nodes.md#set-node-bmcs-to-dhcp). After that is done,
         > re-run the `set-sqfs-links.sh` script.
 
 1. Customize boot scripts for any out-of-baseline NCNs
 
-    * **Worker nodes** with more than two small disks need to make adjustments to [prevent bare-metal `etcd` creation](../background/ncn_mounts_and_file_systems.md#worker-nodes-with-etcd).
+    * **Worker nodes** with more than two small disks need to make adjustments in order to avoid
+      [problems when above or below baseline](../background/ncn_mounts_and_file_systems.md#problems-when-above-or-below-baseline).
     * For a brief overview of what is expected, see [disk plan of record / baseline](../background/ncn_mounts_and_file_systems.md#plan-of-record--baseline).
 
 1. Run the BIOS baseline script to apply configurations to BMCs.
@@ -429,7 +426,8 @@ be performed are in the [Deploy](#deploy) section.
 
 1. Wait for storage nodes before booting Kubernetes master nodes and worker nodes.
 
-   **NOTE:** Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf` appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
+   <a name="boot-master-and-worker-nodes"></a>**NOTE:** Once all storage nodes are up and the message `...sleeping 5 seconds until /etc/kubernetes/admin.conf`
+   appears on `ncn-s001`'s console, it is safe to proceed with booting the **Kubernetes master nodes and worker nodes**
 
     ```bash
     pit# grep -oP "($mtoken|$wtoken)" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U $USERNAME -E -H {} power on
