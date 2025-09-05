@@ -24,7 +24,7 @@ Update the network switches for the NCN that is being added.
 
 ### Mellanox and Dell `Spine/Agg` Switch Updates
 
-[`Spine/Agg` edge port configuration](../../../install/configure_mellanox_spine_switch.md#Configure-MLAG)
+[`Spine/Agg` edge port configuration](../../../install/configure_mellanox_spine_switch.md#configure-MLAG)
 
 ### Mellanox and Dell Spine BGP Updates
 
@@ -49,13 +49,13 @@ router bgp 65533 vrf default neighbor 10.252.1.13 transport connection-mode pass
 
 ### Mellanox and Dell BMC Port Configuration
 
-[Dell edge port configuration](../../../install/configure_dell_leaf_switch.md#Configure-Edge-Port)
+[Dell edge port configuration](../../../install/configure_dell_leaf_switch.md#configure-Edge-Port)
 
 ## Aruba
 
 ### Aruba `Spine/Agg` Switch Updates
 
-[`Spine/Agg` edge port configuration](../../../install/configure_aruba_spine_switch.md#Configure-Edge-Port)
+[`Spine/Agg` edge port configuration](../../../install/configure_aruba_spine_switch.md#configure-Edge-Port)
 
 ### Aruba Spine BGP Updates
 
@@ -99,6 +99,6 @@ router bgp 65533
 
 ### Aruba BMC Port Configuration
 
-Refer to [Aruba edge port configuration](../../../install/configure_aruba_leaf_switch.md#Configure-Edge-Port) for more information.
+Refer to [Aruba edge port configuration](../../../install/configure_aruba_leaf_switch.md#configure-Edge-Port) for more information.
 
 Proceed to the next step to [Add NCN Data](Add_NCN_Data.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.

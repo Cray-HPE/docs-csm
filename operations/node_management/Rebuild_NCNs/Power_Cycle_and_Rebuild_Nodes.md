@@ -118,7 +118,7 @@ This section applies to all node types. The commands in this section assume the 
 
    1. Find the desired IP address.
 
-      These commands assume that the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites) have been set.
+      These commands assume that the variables from [the prerequisites section](../Rebuild_NCNs.md#prerequisites) have been set.
 
       ```bash
       ncn# dig +short ${NODE}.hmn
@@ -176,7 +176,7 @@ This section applies to all node types. The commands in this section assume the 
 
    1. Find the desired IP address.
 
-      These commands assume that the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites) have been set.
+      These commands assume that the variables from [the prerequisites section](../Rebuild_NCNs.md#prerequisites) have been set.
 
       ```bash
       ncn# dig +short ${NODE}.can

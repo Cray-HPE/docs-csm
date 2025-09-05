@@ -15,7 +15,7 @@ For example, if this is a rebuild in place, then Ceph components will not be rep
 
 1. Ensure that the latest CSM documentation RPM is installed on `ncn-m001`.
 
-    See [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-documentation).
+    See [Check for Latest Documentation](../../../update_product_stream/index.md#check-for-latest-workarounds-and-documentation-updates).
 
 1. When rebuilding a node, make sure that `/srv/cray/scripts/common/storage-ceph-cloudinit.sh` and `/srv/cray/scripts/common/pre-load-images.sh` have been removed from the `runcmd` in BSS.
 

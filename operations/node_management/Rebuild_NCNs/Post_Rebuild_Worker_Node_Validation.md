@@ -81,4 +81,4 @@ Skip this section if a master or storage node was rebuilt.
     ncn-mw# /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
     ```
 
-   [Return to Main Page](../Rebuild_NCNs.md#Validation)
+   [Return to Main Page](../Rebuild_NCNs.md#validation)

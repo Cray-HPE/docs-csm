@@ -157,7 +157,7 @@ Perform these steps to update `customizations.yaml`:
 
 ## Stage 0.5 - Backup VCS Data
 
-To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Version_Control_Service_VCS.md](../../operations/configuration_management/Version_Control_Service_VCS.md#backup-and-restore-data) for these procedures.
+To prevent any possibility of losing configuration data, backup the VCS data and store it in a safe location. See [Backup and Restore VCS Data](../../operations/configuration_management/Backup_and_Restore_VCS_Data.md) for these procedures.
 
 **`IMPORTANT:`** As part of this stage, **only perform the backup, not the restore**. The backup procedure is being done here as a precautionary step.
 

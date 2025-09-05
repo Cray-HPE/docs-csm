@@ -8,7 +8,7 @@ Prepare a master node before rebuilding it.
 
 ### Step 1 - Confirm what the Configuration Framework Service (CFS) `configurationStatus` is for the `desiredConfig` before shutting down the node
 
-1. The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+1. The following command will indicate if a CFS job is currently in progress for this node. This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#prerequisites).
 
     ```bash
     ncn-m# cray cfs components describe $XNAME --format json
@@ -138,7 +138,7 @@ systemctl stop etcd.service
 ### Step 5 - Remove the node from the Kubernetes cluster
 
 * This command should not be run on the node being deleted.
-* This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites).
+* This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#prerequisites).
 
     ```bash
     kubectl delete node $NODE
@@ -151,7 +151,7 @@ This will allow the node to rejoin the cluster automatically when it rebuilds.
 * The IP and hostname of the rebuilt node is needed for the following command.
 * Replace the `<IP_ADDRESS>` address value with the IP address you noted in an earlier step from the `etcdctl` command.
 
-**IMPORTANT:** This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#Prerequisites)
+**IMPORTANT:** This command assumes you have set the variables from [the prerequisites section](../Rebuild_NCNs.md#prerequisites)
 
 ```bash
 etcdctl --cacert=/etc/kubernetes/pki/etcd/ca.crt --cert=/etc/kubernetes/pki/etcd/ca.crt --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member add $NODE --peer-urls=https://<IP_ADDRESS>:2380

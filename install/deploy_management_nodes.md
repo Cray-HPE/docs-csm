@@ -685,7 +685,7 @@ If there are LVM check failures, then the problem must be resolved before contin
 
 <a name="check-for-unused-drives-on-utility-storage-nodes"></a>
 
-### 3.3 Check for unused drives on utility storage nodes
+### 3.4 Check for unused drives on utility storage nodes
 
 > **IMPORTANT:** Do the following if NCNs are Gigabyte hardware. It is suggested (but optional) for HPE NCNs.
 >
