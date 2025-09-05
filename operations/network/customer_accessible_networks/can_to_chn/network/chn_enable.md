@@ -756,7 +756,7 @@ CHN network configuration of compute nodes is performed by the UAN CFS configura
 
    `configurationStatus` should change from `pending` to `configured` once CFS configuration of the node is complete.
 
-For more information on managing node with CFS, see [Configuration Management](../../../../../README.md#configuration-management).
+For more information on managing node with CFS, see [Configuration Management](../../../../README.md#configuration-management).
 
 ## Cleanup phase
 

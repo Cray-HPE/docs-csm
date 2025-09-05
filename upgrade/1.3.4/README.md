@@ -32,7 +32,7 @@ If upgrading from CSM `v1.2.2` directly to `v1.3.4`, follow the procedures descr
 
 1. Download and extract the CSM `v1.3.4` release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
 
 1. (`ncn-m001#`) Set `CSM_DISTDIR` to the directory of the extracted files.
 

@@ -163,7 +163,7 @@ The targets can be run in the same action (as shown in the example) or run separ
 On larger systems, it is recommended to run as two actions one after each other as the output will be shorter.
 
 > **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
-See [Update liquid-cooled node firmware](#update-liquid-cooled-nodes-bmc-fpga-and-node-bios) for more information.
+See [Update liquid-cooled node firmware](#update-liquid-cooled-nodes-bmc-fpga-management-ethernet-accvbios-and-node-bios) for more information.
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
 The BMC will still have power and will perform the update.
 If nodes are not off when the update command is issued, it will report as a failed update.
@@ -683,7 +683,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
 > Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc).
+> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#8-configure-dns-and-ntp-on-each-bmc).
 
 ```json
 {
@@ -1016,7 +1016,7 @@ Make sure you have waited for the current firmware to be updated before starting
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
 > Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc).
+> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#8-configure-dns-and-ntp-on-each-bmc).
 
 ```json
 {
@@ -1052,7 +1052,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
 #### HPE node system ROM (BIOS) procedure for NCN
 
 1. For `HPE` NCNs, check the DNS servers by running the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh ilo -H XNAME -s`. Replace `XNAME` with the xname of the NCN BMC.
-   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc) for more information.
+   See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#8-configure-dns-and-ntp-on-each-bmc) for more information.
 1. Run a `dryrun` for all NCNs first to determine which NCNs and targets need updating.
 1. For each NCN requiring updates to target `BMC` or `iLO 5`:
    > **`NOTE`** Update of `BMC` and `iLO 5` will not affect the nodes.
@@ -1068,7 +1068,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
    1. Reboot the node.
       See [Reboot NCNs](../node_management/Reboot_NCNs.md).
    1. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh`.
-      See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#7-configure-dns-and-ntp-on-each-bmc).
+      See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#8-configure-dns-and-ntp-on-each-bmc).
    1. Relock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 
@@ -1079,7 +1079,7 @@ Correct an issue where the model of the liquid-cooled compute node BIOS is the i
 Prerequisites:
 
 * The system is running HPE Cray EX release v1.4 or higher.
-* A firmware upgrade has been done following [Update liquid-cooled compute node BIOS firmware](#update-liquid-cooled-nodes-bmc-fpga-and-node-bios).
+* A firmware upgrade has been done following [Update liquid-cooled compute node BIOS firmware](#update-liquid-cooled-nodes-bmc-fpga-management-ethernet-accvbios-and-node-bios).
   * The result of the upgrade is that the `NodeX.BIOS` has failed as `noSolution` and the `stateHelper` field for the operation states is `"No Image Available"`.
   * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 * The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.

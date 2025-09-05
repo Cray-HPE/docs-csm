@@ -103,4 +103,4 @@ See [Configure Non-Compute Nodes with CFS](../operations/CSM_product_management/
 
 After completing the operational procedures above which configure administrative access, the next step is to validate the health of management nodes and CSM services.
 
-See [Validate CSM Health](README.md#6-validate-csm-health).
+See [Validate CSM Health](README.md#7-validate-csm-health).

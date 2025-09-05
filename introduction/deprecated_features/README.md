@@ -93,8 +93,7 @@ features are listed first).
 ### Deprecated in CSM 1.5
 
 - Remaining [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) v3 features
-  - CAPMC may be removed in the future. It is replaced with the [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs).
-    Everyone is encouraged to transition to PCS as soon as possible.
+  - CAPMC may be removed in the future.
   - See the [CAPMC Deprecation Notice](CAPMC_Deprecation_Notice.md) for more details.
 
 ### Deprecated in CSM 1.4
