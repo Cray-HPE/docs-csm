@@ -232,7 +232,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 
         This only needs to be done for the PIT node, not for any of the other NCNs. See
         [Setting boot order](../background/ncn_boot_workflow.md#setting-order) and
-        [Trimming boot order](../background/ncn_boot_workflow.md#trimming_boot_order).
+        [Trimming boot order](../background/ncn_boot_workflow.md#trimming-boot-order).
 
     1. Tell the PIT node to PXE boot on the next boot.
 

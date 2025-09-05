@@ -7,7 +7,7 @@ Until an upstream NTP server is configured, the time on the NCNs may not match t
 ## Topics
 
 * [Fix BSS metadata](#fix-bss-metadata)
-* [Fix broken configurations](#fix-broken-configurations)
+* [Fix broken configurations](#fix-broken-configuration)
 
 <a name="fix-bss-metadata"></a>
 

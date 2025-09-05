@@ -15,12 +15,12 @@ backup of Workload Manager configuration data and files is created. Once complet
 
 ### Stages
 
-- [Stage 0.1 - Prepare assets](#prepare-assets)
-- [Stage 0.2 - Update SLS](#update-sls)
-- [Stage 0.3 - Upgrade Management Network](#update-management-network)
-- [Stage 0.4 - Prerequisites Check](#prerequisites-check)
-- [Stage 0.5 - Backup Workload Manager Data](#backup_workload_manager)
-- [Stage completed](#stage_completed)
+- [Stage 0.1 - Prepare assets](#stage-01---prepare-assets)
+- [Stage 0.2 - Update SLS](#stage-02---update-sls)
+- [Stage 0.3 - Upgrade Management Network](#stage-03---upgrade-management-network)
+- [Stage 0.4 - Prerequisites Check](#stage-04---prerequisites-check)
+- [Stage 0.5 - Backup Workload Manager Data](#stage-05---backup-workload-manager-data)
+- [Stage completed](#stage-completed)
 
 ## Stage 0.1 - Prepare assets
 
@@ -81,7 +81,7 @@ backup of Workload Manager configuration data and files is created. Once complet
    ncn-m001# /usr/share/doc/csm/upgrade/1.2/scripts/upgrade/prepare-assets.sh --csm-version ${CSM_RELEASE} --endpoint "${ENDPOINT}"
    ```
 
-1. Skip the `Manual copy` subsection and proceed to [Stage 0.2 - Update SLS](#stage-0.2-update-sls).
+1. Skip the `Manual copy` subsection and proceed to [Stage 0.2 - Update SLS](#stage-02---update-sls).
 
 ### Manual copy
 
@@ -290,7 +290,7 @@ If the following command does not complete successfully, check if the `TOKEN` en
 1. (Optional) Commit changes to `customizations.yaml`.
 
    `customizations.yaml` has been updated in this procedure. If
-   [using an external Git repository for managing customizations](../../install/prepare_site_init.md#version-control-site-init-files) as recommended,
+   [using an external Git repository for managing customizations](../../install/prepare_site_init.md#5-version-control-site-init-files) as recommended,
    then clone a local working tree and commit appropriate changes to `customizations.yaml`.
 
    For example:
