@@ -29,7 +29,7 @@ This assumes that the HMN is not setup on the PIT node; these steps cater to bar
 
 1. (`pit#`) Set up the management network if it does not already exist.
 
-   > **NOTE** This network will be overwritten when `/root/bin/pit-init.sh` is invoked during [Initialize the LiveCD](pre-installation.md#4-initialize-the-livecd).
+   > **NOTE** This network will be overwritten when `/root/bin/pit-init.sh` is invoked during [Initialize the LiveCD](pre-installation.md#36-initialize-the-livecd).
 
    - Set up the `bond`:
 

@@ -683,7 +683,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
 > Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#6-configure-dns-and-ntp-on-each-bmc).
+> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#8-configure-dns-and-ntp-on-each-bmc).
 
 ```json
 {
@@ -1016,7 +1016,7 @@ Make sure you have waited for the current firmware to be updated before starting
 > **IMPORTANT:** If updating the System ROM of an NCN, the NTP and DNS server values will be lost and must be restored.
 > For NCNs **other than `ncn-m001`** this can be done using the `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh` script.
 > Use the `-h` option to get a list of command line options required to restore the NTP and DNS values.
-> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#6-configure-dns-and-ntp-on-each-bmc).
+> See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#8-configure-dns-and-ntp-on-each-bmc).
 
 ```json
 {
@@ -1068,7 +1068,7 @@ The NCN must be rebooted after updating the BIOS firmware. Follow the [Reboot NC
    1. Reboot the node.
       See [Reboot NCNs](../node_management/Reboot_NCNs.md).
    1. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh`.
-      See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#6-configure-dns-and-ntp-on-each-bmc).
+      See [Configure DNS and NTP on Each BMC](../../install/deploy_final_non-compute_node.md#8-configure-dns-and-ntp-on-each-bmc).
    1. Relock the NCN BMC.
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
 
