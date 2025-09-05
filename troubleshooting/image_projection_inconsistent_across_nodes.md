@@ -62,6 +62,6 @@ There are two ways to resolve this problem.
 This would likely mean restarting the product installation from an early IUF stage.
 
 1. If the image is being exported by SBPS, do a rolling reboot of worker nodes to ensure all worker nodes have the correct image information.
-Follow the [NCN rolling reboot documentation](../operations/node_management/Reboot_NCNs.md#ncn-rolling-reboot).
+   For details, see [Reboot NCNs](../operations/node_management/Reboot_NCNs.md).
 
 1. If compute nodes are still experiencing issues after worker nodes have been rebooted, compute nodes will also need to be rebooted to cleanly remount the image.

@@ -15,7 +15,7 @@
 
 ## Overview
 
-A **zone** in the Rack Resiliency solution is [Failure domain](README.md#failure-domain). Specifically, it is
+A **zone** in the Rack Resiliency solution is [Failure domain](README.md#failure-domains). Specifically, it is
 a representation of a Management Plane Failure Domain (MPFD). In general for CSM, a MPFD constitutes one or more
 racks that contain CSM management nodes. Managed nodes are not considered in MPFDs.
 

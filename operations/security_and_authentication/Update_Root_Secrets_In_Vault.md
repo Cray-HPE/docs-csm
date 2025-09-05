@@ -72,7 +72,7 @@ see its usage.
 
 ### Related tools
 
-See [Adding switch admin password to Vault](../network/management_network/README.md#adding-switch-admin-password-to-Vault).
+See [Adding switch admin password to Vault](../network/management_network/README.md#adding-switch-admin-password-to-vault).
 
 ## Manual procedures
 

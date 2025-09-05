@@ -109,7 +109,7 @@ is enabled and the Kyverno policy is applied.
 During a fresh install of CSM 1.7, as part of
 [Configure Administrative Access](../../install/configure_administrative_access.md#configure-administrative-access),
 the critical services are restarted in the
-[Restart Rack Resiliency critical services](../../install/configure_administrative_access.md#9-restart-rack-resiliency-critical-services)
+[Restart Rack Resiliency critical services](../../install/configure_administrative_access.md#10-restart-rack-resiliency-critical-services)
 step. The critical services are restarted only when Rack Resiliency is enabled and the Kyverno policy is applied.
 
 ### Modifying critical services

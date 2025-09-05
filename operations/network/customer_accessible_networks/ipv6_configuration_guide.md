@@ -147,7 +147,7 @@ New command line options were added to the Cray Site Initializer tool (`csi`).
 | `cmn-cidr6`    | IPv6 Gateway for NCNs on the CMN                      |
 
 These options can be used during a fresh install to configure IPv6. See
-[`cray-site-init` updates](../../../RELEASE_NOTES.md#cray-site-init-updates)
+[`csi` Tool Changes](../../../introduction/csi_Tool_Changes.md)
 for more information.
 
 ### 2. Configure services for IPv6 during install
@@ -181,7 +181,7 @@ current working directory. This behavior can be overridden with the `-b|--backup
 
 The `--commit` option will apply the proposed changes to BSS and SLS.
 
-See [`cray-site-init` updates](../../../RELEASE_NOTES.md#csi-patch-csm-ipv6) for a detailed description of the `csi patch csm ipv6` options.
+See [`csi` Tool Changes](../../../introduction/csi_Tool_Changes.md) for a detailed description of the `csi patch csm ipv6` options.
 
 ### 2. Configure services for IPv6 during upgrade
 

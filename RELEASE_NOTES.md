@@ -53,7 +53,7 @@
 
 ### Miscellaneous functionality
 
-* Console logs and interaction is now available and tenant aware through the `cray` CLI, see [console](operations/conman/ConMan.md#console) for more information.
+* Console logs and interaction is now available and tenant aware through the `cray` CLI, see [ConMan](operations/conman/ConMan.md) for more information.
 * [Configuration Framework Service (CFS)](glossary.md#configuration-framework-service-cfs) components can now be updated in bulk through the [Cray CLI (`cray`)](glossary.md#cray-cli-cray).
   See [Managing many components](operations/configuration_management/CFS_Commands_Cheat_Sheet.md#managing-many-components) for more information.
   Support is added for `v2` and `v3` API versions.

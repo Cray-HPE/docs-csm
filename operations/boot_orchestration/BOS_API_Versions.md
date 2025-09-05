@@ -1,12 +1,13 @@
 # Boot Orchestration
 
 The Boot Orchestration Service \(BOS\) currently supports API version v2.
-The following is a summary of the changes BOS v2 made from v1, and the upgrade path from v1 to v2.
+For historical context,
+the following is a summary of the changes BOS v2 made from v1, and the upgrade path from v1 to v2.
 
 ## BOS v1 removal
 
 BOS v1 is removed in CSM 1.6. During the upgrade to CSM 1.6, all BOS v1 session data is deleted. Other BOS data
-may be modified or, in rare cases, deleted. See [BOS data notice](../../upgrade/README.md#bos-data-notice) for more details.
+may be modified or, in rare cases, deleted.
 
 ## BOS v2 improvements
 

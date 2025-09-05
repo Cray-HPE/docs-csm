@@ -559,8 +559,8 @@ After updating management host Slingshot NIC firmware, all nodes where the firmw
 
 Choose one of the below options to reboot worker nodes:
 
-- To manually reboot the nodes follow the [Reboot NCNs manually](../../node_management/Reboot_NCNs_manual.md#ncn-worker-nodes) for all nodes where the firmware was updated.  
-- To use IUF to reboot the nodes, follow the [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md#ncn-worker-nodes) for all nodes where the firmware was updated.
+- To manually reboot the nodes follow the [Reboot NCNs manually](../../node_management/Reboot_NCNs_manual.md#ncn-worker-nodes) procedure for all nodes where the firmware was updated.  
+- To use IUF to reboot the nodes, follow the [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md#12-ncn-worker-nodes) procedure for all nodes where the firmware was updated.
 
 Once this step has completed:
 
