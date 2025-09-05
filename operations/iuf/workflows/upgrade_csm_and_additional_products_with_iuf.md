@@ -69,7 +69,10 @@ For more detail about about the CSM upgrade hooks, see the section [Description 
 
 1. Deploy product
 
-   > **NOTE** The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane is performed in a hook automatically executed after `deploy-product`.
+   > **NOTE** The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of
+   the Kubernetes control plane is performed in a hook automatically executed after `deploy-product`.
+   During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
+   configuration changes will be lost as the audit log configuration will be reset to defaults defined in [Audit Logs](../../security_and_authentication/Audit_Logs.md).
 
    Follow these IUF instructions in order:
 
@@ -104,3 +107,6 @@ The hooks below are automatically executed when CSM is being upgraded with IUF.
 
    The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane is performed in a hook executed after `deploy-product`.
    The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
+
+   > **NOTE** During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
+   configuration changes will be lost as the audit log configuration will be reset to defaults defined in [Audit Logs](../../security_and_authentication/Audit_Logs.md).

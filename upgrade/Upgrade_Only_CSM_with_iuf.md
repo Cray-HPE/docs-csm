@@ -46,6 +46,8 @@ section of the [Upgrade CSM and Additional Products with IUF](../operations/iuf/
 1. Deploy products.
 
    > **NOTE** The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane is performed in a hook automatically executed after `deploy-product`.
+   During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
+   configuration changes will be lost as the audit log configuration will be reset to defaults defined in [Audit Logs](../operations/security_and_authentication/Audit_Logs.md).
 
    Follow these IUF instructions in order:
 
