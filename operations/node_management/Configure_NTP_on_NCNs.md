@@ -4,14 +4,13 @@ The management nodes serve Network Time Protocol (NTP) at stratum 10, except for
 
 Until an upstream NTP server is configured, the time on the NCNs may not match the current time at the site, but they will stay in sync with each other.
 
-**Topics**
-   * [Change NTP Config](#change_ntp_config)
-   * [Troubleshooting NTP](#troubleshooting_ntp)
-      * [chrony Log Files](#chrony_log_files)
-      * [Force a Time Sync](#force_a_time_sync)
-      * [Known Issues and Bugs](#known-issues-and-bugs)
-   * [Customize NTP](#customize_ntp)
-      * [Set A Local Timezone](#set-a-local-timezone)
+* [Change NTP Config](#change_ntp_config)
+* [Troubleshooting NTP](#troubleshooting_ntp)
+  * [chrony Log Files](#chrony_log_files)
+  * [Force a Time Sync](#force_a_time_sync)
+  * [Known Issues and Bugs](#known-issues-and-bugs)
+* [Customize NTP](#customize_ntp)
+  * [Set A Local Timezone](#set-a-local-timezone)
 
 <a name="change_ntp_config"></a>
 ## Change NTP Config

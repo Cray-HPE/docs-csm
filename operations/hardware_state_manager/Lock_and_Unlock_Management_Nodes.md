@@ -5,13 +5,14 @@ The ability to ignore non-compute nodes (NCNs) is turned off by default. Managem
 This section only covers using locks with the Hardware State Manager (HSM). For more information
 on ignoring nodes, refer to the following sections:
 
-   * Firmware Action Service (FAS): See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore).
-   * Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
+* Firmware Action Service (FAS): See [Ignore Node within FAS](../firmware/FAS_Admin_Procedures.md#ignore-management-nodes-within-fas).
+* Cray Advanced Platform Monitoring and Control (CAPMC): See [Ignore Nodes with CAPMC](../power_management/Ignore_Nodes_with_CAPMC.md)
 
 The following actions can be prevented when a node is locked.
-   * Firmware upgrades with FAS
-   * Power off operations with CAPMC
-   * Reset operations with CAPMC
+
+* Firmware upgrades with FAS
+* Power off operations with CAPMC
+* Reset operations with CAPMC
 
 Doing any of these actions by accident will shut down a management node. If the node is a Kubernetes master or worker
 node, this can have serious negative effects on system operations. If a single node is taken down by mistake, it is
