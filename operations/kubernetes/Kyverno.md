@@ -462,33 +462,33 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
     In clusters with heavy workloads, this may cause etcd to experience downtime.
 
     Symptom:
-  * Running `kubectl get po` may fail with:
+    * Running `kubectl get po` may fail with:
 
-      ```bash
-      Unable to connect to the server: EOF
-      ```
+        ```text
+        Unable to connect to the server: EOF
+        ```
 
     * Running an etcd key distribution check may show a disproportionate number of Kyverno objects:
 
-      ```bash
-      ETCDCTL_API=3 etcdctl \
-        --endpoints=https://127.0.0.1:2379 \
-        --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-        --cert=/etc/kubernetes/pki/etcd/peer.crt \
-        --key=/etc/kubernetes/pki/etcd/peer.key \
-        get /registry --prefix --keys-only |
-        grep -v ^$ |
-        awk -F '/' '{ h[$3]++ } END {for (k in h) print h[k], k}' |
-        sort -nr | head
-      ```
+        ```bash
+        ETCDCTL_API=3 etcdctl \
+          --endpoints=https://127.0.0.1:2379 \
+          --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+          --cert=/etc/kubernetes/pki/etcd/peer.crt \
+          --key=/etc/kubernetes/pki/etcd/peer.key \
+          get /registry --prefix --keys-only |
+          grep -v ^$ |
+          awk -F '/' '{ h[$3]++ } END {for (k in h) print h[k], k}' |
+          sort -nr | head
+        ```
 
-      Example output:
+        Example output:
 
-      ```bash
-      XXXXX kyverno.io   <== significantly higher than other resource types
-      XXXX  configmaps
-      ...   ...
-      ```
+        ```text
+        XXXXX kyverno.io   <== significantly higher than other resource types
+        XXXX  configmaps
+        ...   ...
+        ```
 
     Solution: (`ncn-mw#`) Disable Kyverno admission reports temporarily by editing the `kyverno-admission-controller` deployment.
 
