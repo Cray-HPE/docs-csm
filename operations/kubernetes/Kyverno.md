@@ -461,6 +461,35 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
     Behavior: Kyverno’s admission controller is configured to emit admission reports on every webhook call.
     In clusters with heavy workloads, this may cause etcd to experience downtime.
 
+    Symptom:
+  * Running `kubectl get po` may fail with:
+
+      ```bash
+      Unable to connect to the server: EOF
+      ```
+
+    * Running an etcd key distribution check may show a disproportionate number of Kyverno objects:
+
+      ```bash
+      ETCDCTL_API=3 etcdctl \
+        --endpoints=https://127.0.0.1:2379 \
+        --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+        --cert=/etc/kubernetes/pki/etcd/peer.crt \
+        --key=/etc/kubernetes/pki/etcd/peer.key \
+        get /registry --prefix --keys-only |
+        grep -v ^$ |
+        awk -F '/' '{ h[$3]++ } END {for (k in h) print h[k], k}' |
+        sort -nr | head
+      ```
+
+      Example output:
+
+      ```bash
+      XXXXX kyverno.io   <== significantly higher than other resource types
+      XXXX  configmaps
+      ...   ...
+      ```
+
     Solution: (`ncn-mw#`) Disable Kyverno admission reports temporarily by editing the `kyverno-admission-controller` deployment.
 
     > Note: While Kyverno admissions reports are disabled, policy enforcement works normally, but policy reports may be incomplete.
@@ -473,3 +502,8 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
     Then save and exit.
 
     Once the upgrade has completed, set `admissionReports` to `true` to re-enable it.
+
+    Additional Notes:
+    * This issue can arise during the **Management Rollout stage** of the CSM upgrade, when Kyverno is upgraded.
+    * The situation is **rare** and typically only observed in very large clusters with many resources/policies in Audit mode.
+    * It is **not necessary to modify Kyverno settings for every upgrade**. Apply the mitigation only if the symptoms appear.
