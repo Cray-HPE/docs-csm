@@ -53,7 +53,7 @@ See [CSM 1.6.2 Release Notes](../../RELEASE_NOTES_1.6.2.md).
 
 1. Download and extract the CSM release to `ncn-m001`.
 
-   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract).
+   See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
 
 1. (`ncn-m001#`) Set `CSM_DISTDIR` to the directory of the extracted files.
 
