@@ -457,53 +457,51 @@ and [match/exclude](https://release-1-10-0.kyverno.io/docs/writing-policies/matc
     If the issue still persists after restarting the Kyverno pods, then HPE recommends disabling the background scanning in the Kyverno policy.
     Set `background` to `false` to disable background scanning in the Kyverno policy.
 * Multiple Kyverno admission reports may cause etcd downtime during upgrade to CSM 1.6.
+    * Issue: Kyverno’s admission controller is configured to emit admission reports on every webhook call.
+      In clusters with heavy workloads, this may cause etcd to experience downtime.
+        * This issue can arise during the **Management Rollout stage** of the CSM upgrade, when Kyverno is upgraded.
+        * The situation is **rare** and typically only observed in very large clusters with many resources/policies in Audit mode.
+        * It is **not necessary** to preemptively modify Kyverno settings for every upgrade.
+          Apply the mitigation only if the symptoms appear.
+    * Symptoms
+        * (`ncn-mw#`) Running `kubectl get po` may fail with:
 
-    Behavior: Kyverno’s admission controller is configured to emit admission reports on every webhook call.
-    In clusters with heavy workloads, this may cause etcd to experience downtime.
+            ```text
+            Unable to connect to the server: EOF
+            ```
 
-    Symptom:
-    * Running `kubectl get po` may fail with:
+        * Running an etcd key distribution check may show a disproportionate number of Kyverno objects:
 
-        ```text
-        Unable to connect to the server: EOF
-        ```
+            (`ncn-mw#`) If this issue is happening, then then output of this command will report significantly more
+            `kyverno.io` objects than objects of other resource types.
 
-    * Running an etcd key distribution check may show a disproportionate number of Kyverno objects:
+            ```bash
+            ETCDCTL_API=3 etcdctl \
+              --endpoints=https://127.0.0.1:2379 \
+              --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+              --cert=/etc/kubernetes/pki/etcd/peer.crt \
+              --key=/etc/kubernetes/pki/etcd/peer.key \
+              get /registry --prefix --keys-only |
+              grep -v ^$ |
+              awk -F '/' '{ h[$3]++ } END {for (k in h) print h[k], k}' |
+              sort -nr | head
+            ```
 
-        ```bash
-        ETCDCTL_API=3 etcdctl \
-          --endpoints=https://127.0.0.1:2379 \
-          --cacert=/etc/kubernetes/pki/etcd/ca.crt \
-          --cert=/etc/kubernetes/pki/etcd/peer.crt \
-          --key=/etc/kubernetes/pki/etcd/peer.key \
-          get /registry --prefix --keys-only |
-          grep -v ^$ |
-          awk -F '/' '{ h[$3]++ } END {for (k in h) print h[k], k}' |
-          sort -nr | head
-        ```
+    * Solution: (`ncn-mw#`) Disable Kyverno admission reports temporarily by editing the `kyverno-admission-controller` deployment.
 
-        Example output:
+        > Note: While Kyverno admissions reports are disabled, policy enforcement works normally, but policy reports may be incomplete.
 
-        ```text
-        XXXXX kyverno.io   <== significantly higher than other resource types
-        XXXX  configmaps
-        ...   ...
-        ```
+        1. Open the deployment for editing.
 
-    Solution: (`ncn-mw#`) Disable Kyverno admission reports temporarily by editing the `kyverno-admission-controller` deployment.
+            ```bash
+            kubectl -n kyverno edit deployment kyverno-admission-controller
+            ```
 
-    > Note: While Kyverno admissions reports are disabled, policy enforcement works normally, but policy reports may be incomplete.
+        1. Disable admission reports.
 
-    ```bash
-    kubectl -n kyverno edit deployment kyverno-admission-controller
-    ```
+            Under `spec.template.spec.containers[0].args`, replace `--admissionReports=true`  with `--admissionReports=false`.
 
-    Under `spec.template.spec.containers[0].args`, replace `--admissionReports=true`  with `--admissionReports=false`.
-    Then save and exit.
+        1. Save and exit to apply the changes.
 
-    Once the upgrade has completed, set `admissionReports` to `true` to re-enable it.
-
-    Additional Notes:
-    * This issue can arise during the **Management Rollout stage** of the CSM upgrade, when Kyverno is upgraded.
-    * The situation is **rare** and typically only observed in very large clusters with many resources/policies in Audit mode.
-    * It is **not necessary to modify Kyverno settings for every upgrade**. Apply the mitigation only if the symptoms appear.
+        1. Once the upgrade has completed, repeat the previous steps but set `admissionReports` to `true`, in order to
+           re-enable admission reports.
