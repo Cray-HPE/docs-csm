@@ -91,7 +91,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Soft Deleted IMS Image Metadata is Lost](known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
 * [IMS Created Image Stores Incorrect Metadata](known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
 * [PostgreSQL System ID Mismatch](known_issues/postgres_system_id_mismatch.md)
-* [Kyverno policy management](../operations/kubernetes/Kyverno.md#known-issues)
+* [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
 
 ## Booting
 
