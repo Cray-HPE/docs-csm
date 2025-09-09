@@ -2,9 +2,25 @@
 
 The creation, deletion, and modification of partitions is enabled by the Hardware State Manager \(HSM\) APIs.
 
+* [Example partition](#example-partition)
+* [Prerequisites](#prerequisites)
+* [Create and modify a partition](#create-and-modify-a-partition)
+  * [Create a partition](#create-a-partition)
+  * [Modify a partition](#modify-a-partition)
+* [Retrieve a partition](#retrieve-a-partition)
+* [List partitions](#list-partitions)
+* [Delete a partition](#delete-a-partition)
+* Related links
+  * [Component Groups and Partitions](Component_Groups_and_Partitions.md)
+  * [Component Partition Members](Component_Partition_Members.md)
+  * [Manage Component Groups](Manage_Component_Groups.md)
+  * [Component Membership](Component_Memberships.md)
+
+## Example partition
+
 The following is an example partition that contains the optional tags field:
 
-```screen
+```json
 {
     "name" : "partition 1",
     "description" : "partition 1",
@@ -21,63 +37,100 @@ The following is an example partition that contains the optional tags field:
 }
 ```
 
-**Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work.
+## Prerequisites
 
-### Create a New Partition
+The commands on this page will not work unless the Cray CLI has been initialized on the node where
+the commands are being run. For more information, see
+[Configure the Cray CLI](../configure_cray_cli.md).
 
-Creating a partition is very similar to creating a group. Members can either be provided in an initial list, or the list can be initially empty and added to later. There is no exclusiveGroups field because partition memberships are always exclusive. The following are two different ways to create a partition.
+## Create and modify a partition
 
-Create a new partition with an empty members list and two optional tags:
+Members can either be provided in an initial list, or the list can be initially empty and added to
+later. There is no `exclusiveGroups` field because partition memberships are always exclusive.
 
-```screen
-ncn-m# cray hsm partitions create --name PARTITION_NAME \
---tags TAG1,TAG2 \
---description DESCRIPTION_OF_PARTITION_NAME
-```
+The following examples show different ways to create and modify a partition.
 
-Create a new partition with a pre-set members list:
+### Create a partition
 
-```screen
-ncn-m# cray hsm partitions create --name PARTITION_NAME \
---description DESCRIPTION OF PARTITION_NAME \
---members-ids MEMBER_ID,MEMBER_ID,MEMBER_ID,MEMBER_ID
-```
+* Create a new partition with an empty members list and two optional tags:
 
-Create a new partition:
+    ```screen
+    ncn-mw# cray hsm partitions create --name PARTITION_NAME \
+                --tags TAG1,TAG2 \
+                --description DESCRIPTION_OF_PARTITION_NAME
+    ```
 
-```screen
-ncn-m# cray hsm partitions create -v --label PARTITION_LABEL
-```
+* Create a new partition with a specified members list:
 
-Add a description of the partition:
+    ```screen
+    ncn-mw# cray hsm partitions create --name PARTITION_NAME \
+                --description DESCRIPTION OF PARTITION_NAME \
+                --members-ids MEMBER_ID,MEMBER_ID,MEMBER_ID,MEMBER_ID
+    ```
 
-```screen
-ncn-m# cray hsm partitions update test_group --description "Description of partition"
-```
+* Create a new partition:
 
-Add a new component to the partition:
+    ```screen
+    ncn-mw# cray hsm partitions create -v --label PARTITION_NAME
+    ```
 
-```screen
-ncn-m# cray hsm partitions members create --id XNAME PARTITION_LABEL
-```
+### Modify a partition
 
-### Retrieve Partition Information
+* Add a description to a partition:
+
+    ```screen
+    ncn-mw# cray hsm partitions update test_group --description "Description of partition"
+    ```
+
+* Add a new component to a partition:
+
+    > For more information, see [Component Partition Members](Component_Partition_Members.md).
+
+    ```screen
+    ncn-mw# cray hsm partitions members create --id XNAME PARTITION_NAME
+    ```
+
+* Remove a component from a partition:
+
+    > For more information, see [Component Partition Members](Component_Partition_Members.md).
+
+    ```screen
+    ncn-mw# cray hsm partitions members delete XNAME PARTITION_NAME
+    ```
+
+## Retrieve a partition
 
 Information about a partition is retrieved with the partition name.
 
-Retrieve all fields for a partition, including the members list:
+* Retrieve all fields for a partition, including the members list:
+
+    ```screen
+    ncn-mw# cray hsm partitions describe PARTITION_NAME
+    ```
+
+* Retrieve only the members list for a partition:
+
+    > For more information, see [Component Partition Members](Component_Partition_Members.md).
+
+    ```screen
+    ncn-mw# cray hsm partitions members list PARTITION_NAME
+    ```
+
+## List partitions
+
+Retrieve a listing of all partitions, including all fields of those partitions.
 
 ```screen
-ncn-m# cray hsm partitions describe PARTITION_NAME
+ncn-mw# cray hsm partitions list
 ```
 
-### Delete a Partition
+## Delete a partition
 
-Once a partition is deleted, the former members will not have a partition assigned to them and are ready to be assigned to a new partition.
+Once a partition is deleted, the former members will not have a partition assigned to them and are
+ready to be assigned to a new partition.
 
-Delete a partition so all members are no longer in it:
+Delete a partition:
 
 ```screen
-ncn-m# cray hsm partitions delete PARTITION_NAME
+ncn-mw# cray hsm partitions delete PARTITION_NAME
 ```
-
