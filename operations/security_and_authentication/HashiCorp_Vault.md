@@ -26,8 +26,8 @@ The resulting instance is deployed to the `vault` namespace.
 
 For more information, refer to the following resources:
 
-- [`Bank-vaults` external documentation](https://banzaicloud.com/docs/bank-vaults/overview/)
-- [Vault external documentation](https://www.vaultproject.io/docs)
+- [`Bank-vaults` external documentation](https://bank-vaults.dev/docs/concepts/)
+- [Vault external documentation](https://developer.hashicorp.com/vault/docs)
 
 ## Storage model
 
