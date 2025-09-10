@@ -35,14 +35,21 @@
         },
         {
             "pattern": "https://jira-pro\\.its\\.hpecorp\\.net:8443(/.*)?"
+        },
+        {
+            "pattern": "https://developer.hashicorp.com(/.*)?"
         }
     ],
     "httpHeaders": [
         {
-            "urls": ["https://buy.hpe.com/us/en/"],
+            "urls": ["https://buy.hpe.com/us/en/", "https://www.dell.com/support/", "https://www.arubanetworks.com/techdocs/"],
             "headers": {
                 "Accept-Encoding": "UTF-8"
             }
         }
-    ]
+    ],
+    "retryOn429": true,
+    "retryCount": 2,
+    "fallbackRetryDelay": "60s",
+    "timeout": "60s"
 }
