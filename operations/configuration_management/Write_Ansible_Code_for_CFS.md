@@ -45,7 +45,7 @@ Moving image customizations tasks to their own playbook can remove the need to e
 ### Disable fact gathering
 
 * Turn off facts that are not needed in a playbook by setting `gather_facts: false`. If only a few facts are required, it is also possible to limit fact gathering by setting `gather_subset`.
-For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/latest/modules/setup_module.html) documentation.
+For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/4/modules/setup_module.html) documentation.
 * Avoid importing playbooks in other playbooks.  This will trigger fact gathering for each imported playbook, potentially collecting the same information multiple times.
 
 ### Reduce wasted time
@@ -55,8 +55,8 @@ For more information on `gather_subset`, see the external [Ansible module setup]
   This is because these are static imports that are compiled at the beginning of the playbook, and the conditional is inherited by every task in the role or block.
   Evaluating these conditionals for each task may only take a second or two, but across the hundreds of tasks that might be part of a playbook, this can add up to significant wasted time.
   Instead use dynamic imports with the `include_*` tasks. Because these are evaluated at runtime, a conditional can skip the import of the role or tasks entirely, and is only evaluated once.
-  See the Ansible documentation on [Conditionals with re-use](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#conditionals-with-re-use)
-  and [Re-using files and roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html#re-using-files-and-roles) for more information.
+  See the Ansible documentation on [Conditionals with re-use](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#conditionals-with-reuse)
+  and [Re-using files and roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html#reusing-files-and-roles) for more information.
 * Avoid using the same CFS configuration/playbook for all nodes and relying on the `hosts` keyword to determine what tasks will run against each node. Ansible will skip sections of the playbook that have a `hosts` target that does
   not match any nodes in the current inventory/limit, but when multiple types of nodes are configured at the same time with the same configuration, they may end up in the same batch and Ansible run. This would mean that Ansible
   has to run through the sections for both types of nodes, taking more time than if the nodes were in separate batches and could skip past the unneeded code.
