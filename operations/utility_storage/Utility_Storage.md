@@ -45,7 +45,6 @@ Ceph related operations
 - [Dump Ceph Crash Data](Dump_Ceph_Crash_Data.md)
 - [Identify Ceph Latency Issues](Identify_Ceph_Latency_Issues.md)
 - [Manage Ceph Services](Manage_Ceph_Services.md)
-- [Restore Nexus Data After Data Corruption](Restore_Corrupt_Nexus.md)
 - [Collect Information about the Ceph Cluster](Collect_Information_About_the_Ceph_Cluster.md)
 
 Ceph tools' usage documentation
