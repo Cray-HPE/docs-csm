@@ -47,7 +47,7 @@ And example entry for a custom repository:
 
 ### Setup
 
-* Install `packer` from a reputable source, like [`packer.io`](https://www.packer.io/).
+* Install `packer` from a reputable source, like [the HashiCorp `packer` home page](https://developer.hashicorp.com/packer).
 
 If building QEMU images in MacOS, then specific QEMU options must be adjusted:
 
