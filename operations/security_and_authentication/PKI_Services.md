@@ -27,7 +27,7 @@ For more information, refer to the following resources:
 
 - [HashiCorp Vault](HashiCorp_Vault.md)
 - [`Bank-vault` external documentation](https://bank-vaults.dev/docs/concepts/)
-- [Vault external documentation](https://www.vaultproject.io/docs)
+- [Vault external documentation](https://developer.hashicorp.com/vault/docs)
 
 ## Jetstack Cert-manager
 

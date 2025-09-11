@@ -4,7 +4,10 @@ The Customer Access Network \(CAN\) and Customer Management Network \(CMN\) need
 should only have one default gateway. Therefore, the multi-active gateway protocol \(MAGP\) on the Mellanox spines can be used to create a virtual router gateway IP address that can direct to either of the spines,
 depending on the state of the spines. The Virtual Switching Extension \(VSX\) for Aruba spines serve the same purpose.
 
-For more information, see the external documentation available directly from Aruba or Mellanox.
+For more information:
+
+- [Mellanox](https://enterprise-support.nvidia.com/s/article/howto-configure-magp-on-mellanox-switches)
+- [Aruba](https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html#book.html)
 
 ![Dual-Spine Configuration](../../../img/operations/CAN_Dual-Spine_Configuration.png "Dual-Spine Configuration")
 
