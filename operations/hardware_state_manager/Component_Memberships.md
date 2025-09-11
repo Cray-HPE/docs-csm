@@ -4,10 +4,35 @@ Memberships are a read-only resource that is generated automatically by changes 
 in `/hsm/v2/State/Components` is represented. Filter options are available to prune the list, or a specific component name
 (xname) can be given. All groups and the partition \(if any\) of each component are listed.
 
-At this point in time, only information about node components is needed. The `--type` node filter option is used in the
-commands below to retrieve information about node memberships only.
+Membership information is only needed for node components. The `--type` node filter option is used in the
+commands on this page to retrieve information about node memberships only.
 
-The following is an example membership:
+* [Prerequisites](#prerequisites)
+* [Retrieve membership data for a component](#retrieve-membership-data-for-a-component)
+* [List component membership data](#list-component-membership-data)
+* Related links
+    * [Component Groups and Partitions](Component_Groups_and_Partitions.md)
+    * [Component Group Members](Component_Group_Members.md)
+    * [Component Partition Members](Component_Partition_Members.md)
+
+## Prerequisites
+
+The commands on this page will not work unless the Cray CLI has been initialized on the node where
+the commands are being run. For more information, see
+[Configure the Cray CLI](../configure_cray_cli.md).
+
+## Retrieve membership data for a component
+
+Any components in `/hsm/v2/State/Components` can have its group and memberships looked up with its
+individual component name (xname).
+
+(`ncn-mw#`) Retrieve membership information for a component.
+
+```bash
+cray hsm memberships describe MEMBER_ID --format json
+```
+
+Example output:
 
 ```json
 {
@@ -21,29 +46,20 @@ The following is an example membership:
 }
 ```
 
-**Troubleshooting:** If the Cray CLI has not been initialized, the CLI commands will not work.
+## List component membership data
 
-## Retrieve Group and Partition Memberships
+By default, the memberships collection contains all components, regardless of if they are in a
+group. However, a filtered subset is desired more frequently. Querying the memberships collection
+supports the same query options as `/hsm/v2/State/Components`.
 
-By default, the memberships collection contains all components, regardless of if they are in a group. However, a filtered subset
-is desired more frequently. Querying the memberships collection supports the same query options as `/hsm/v2/State/Components`.
+* (`ncn-mw#`) Retrieve all node memberships:
 
-Retrieve all node memberships:
+    ```bash
+    cray hsm memberships list --type Node
+    ```
 
-```bash
-cray hsm memberships list --type Node
-```
+* (`ncn-mw#`) Retrieve only nodes not in a partition:
 
-Retrieve only nodes not in a partition:
-
-```bash
-cray hsm memberships list --type Node --partition NULL
-```
-
-## Retrieve Membership Data for a Given Component
-
-Any components in `/hsm/v2/State/Components` can have its group and memberships looked up with its individual component component name (xname).
-
-```bash
-cray hsm memberships describe MEMBER_ID
-```
+    ```bash
+    cray hsm memberships list --type Node --partition NULL
+    ```
