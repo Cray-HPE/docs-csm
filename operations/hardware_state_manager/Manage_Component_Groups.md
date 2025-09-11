@@ -1,6 +1,7 @@
 # Manage Component Groups
 
-The creation, deletion, and modification of groups is enabled by the Hardware State Manager \(HSM\) APIs.
+The creation, deletion, and modification of groups is enabled by the Hardware State Manager
+\(HSM\) APIs.
 
 * [Example group](#example-group)
 * [Prerequisites](#prerequisites)
@@ -8,7 +9,13 @@ The creation, deletion, and modification of groups is enabled by the Hardware St
     * [Create a group](#create-a-group)
     * [Modify a group](#modify-a-group)
 * [Retrieve a group](#retrieve-a-group)
+* [List groups](#list-groups)
 * [Delete a group](#delete-a-group)
+* Related links
+    * [Component Groups and Partitions](Component_Groups_and_Partitions.md)
+    * [Component Group Members](Component_Group_Members.md)
+    * [Manage Component Partitions](Manage_Component_Partitions.md)
+    * [Component Membership](Component_Memberships.md)
 
 ## Example group
 
@@ -36,14 +43,18 @@ The following is an example group that contains the optional fields tags and `ex
 
 ## Prerequisites
 
-The commands on this page will not work unless the Cray CLI has been initialized on the node where the commands
-are being run. For more information, see [Configure the Cray CLI](../configure_cray_cli.md).
+The commands on this page will not work unless the Cray CLI has been initialized on the node where
+the commands are being run. For more information, see
+[Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Create and modify a group
 
-A group is defined by its members list and identifying label. It is also possible to add a description and a free form set of tags to help organize groups.
+A group is defined by its members list and identifying label. It is also possible to add a
+description and a free form set of tags to help organize groups.
 
-The members list may be set initially with the full list of member IDs, or can begin empty and have components added individually.
+The members list may be set initially with the full list of member IDs, or can begin empty and have
+components added individually.
+
 The following examples show different ways to create and modify a group.
 
 ### Create a group
@@ -73,7 +84,7 @@ The following examples show different ways to create and modify a group.
 
 ### Modify a group
 
-* (`ncn-mw#`) Add a description of a group:
+* (`ncn-mw#`) Add a description to a group:
 
     ```bash
     cray hsm groups update test_group --description "Description of group"
@@ -81,11 +92,15 @@ The following examples show different ways to create and modify a group.
 
 * (`ncn-mw#`) Add a new component to a group:
 
+    > For more information, see [Component Group Members](Component_Group_Members.md).
+
     ```bash
     cray hsm groups members create --id XNAME GROUP_LABEL
     ```
 
 * (`ncn-mw#`) Remove a component from a group:
+
+    > For more information, see [Component Group Members](Component_Group_Members.md).
 
     ```bash
     cray hsm groups members delete XNAME GROUP_LABEL
@@ -93,19 +108,37 @@ The following examples show different ways to create and modify a group.
 
 ## Retrieve a group
 
-Retrieve the complete group object to learn more about a group. This is also submitted when the group is created, except it is up-to-date with any additions or deletions from the members set.
+Retrieve the complete group object to learn more about a group. This is also submitted when the
+group is created, except it is up-to-date with any additions or deletions from the members set.
 
-(`ncn-mw#`) Retrieve all fields for a group, including the members list:
+* (`ncn-mw#`) Retrieve all fields for a group, including the members list:
+
+    ```bash
+    cray hsm groups describe GROUP_LABEL
+    ```
+
+* (`ncn-mw#`) Retrieve only the members list for a group:
+
+    > For more information, see [Component Group Members](Component_Group_Members.md).
+
+    ```bash
+    cray hsm groups members list GROUP_LABEL
+    ```
+
+## List groups
+
+(`ncn-mw#`) Retrieve a listing of all groups, including all fields of those groups.
 
 ```bash
-cray hsm groups describe GROUP_LABEL
+cray hsm groups list
 ```
 
 ## Delete a group
 
-Entire groups can be removed. The group label is deleted and removed from all members who were formerly a part of the group.
+Entire groups can be removed. The group label is deleted and removed from all members that were
+formerly a part of the group.
 
-(`ncn-mw#`) Delete a group with the following command:
+(`ncn-mw#`) Delete a group:
 
 ```bash
 cray hsm groups delete GROUP_LABEL

@@ -47,7 +47,7 @@ See [Create an Image Customization CFS Session](Create_an_Image_Customization_CF
 ### Disable fact gathering
 
 * Turn off facts that are not needed in a playbook by setting `gather_facts: false`. If only a few facts are required, it is also possible to limit fact gathering by setting `gather_subset`.
-For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/latest/modules/setup_module.html) documentation.
+For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/4/modules/setup_module.html) documentation.
 * Reducing fact gathering time is especially important when importing multiple playbooks from a top level playbook.
   Fact gathering will trigger for each imported playbook, potentially collecting the same information multiple times.
   
@@ -144,8 +144,8 @@ Instead the role should be imported dynamically so that the `when` conditional i
       when: cray_cfs_image
 ```
 
-See the Ansible documentation on [Conditionals with re-use](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#conditionals-with-re-use)
-and [Re-using files and roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html#re-using-files-and-roles) for more information.
+See the Ansible documentation on [Conditionals with re-use](https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html#conditionals-with-reuse)
+and [Re-using files and roles](https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse.html#reusing-files-and-roles) for more information.
 (Dynamic re-use is not possible when importing playbooks, so instead consider using `group_by` rather than a conditional static import.)
 
 ### Other tips

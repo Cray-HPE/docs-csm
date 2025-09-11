@@ -1,8 +1,39 @@
 # Component Partition Members
 
-The members object in the partition definition has additional actions available for managing the members after the partition has been created.
+The members object in the partition definition has actions\
+available for managing the members after the partition has been created.
 
-The following is an example of partition members:
+* [Prerequisites](#prerequisites)
+* [Retrieve partition members](#retrieve-partition-members)
+* [Add partition members](#add partition members)
+* [Remove partition members](#remove-partition-members)
+* Related links
+    * [Component Groups and Partitions](Component_Groups_and_Partitions.md)
+    * [Manage Component Partitions](Manage_Component_Partitions.md)
+    * [Component Group Members](Component_Group_Members.md)
+    * [Component Membership](Component_Memberships.md)
+
+## Prerequisites
+
+The commands on this page will not work unless the Cray CLI has been initialized on the node where
+the commands are being run. For more information, see
+[Configure the Cray CLI](../configure_cray_cli.md).
+
+## Retrieve partition members
+
+Retrieving members of a partition is very similar to how group members are
+retrieved and modified. No filtering options are available in partitions.
+However, there are partition and group filtering parameters for the
+`/hsm/v2/State/Components` and `/hsm/v2/memberships` collections, with
+both essentially working the same way.
+
+(`ncn-mw#`) Retrieve only the members array for a single partition:
+
+```bash
+cray hsm partitions members list PARTITION_NAME --format json
+```
+
+Example output:
 
 ```json
 {
@@ -12,43 +43,37 @@ The following is an example of partition members:
 }
 ```
 
-### Retrieve Partition Members
+## Add partition members
 
-Retrieving members of a partition is very similar to how group members are retrieved and modified. No filtering options are available in partitions. However, there are partition and group filtering parameters for the /hsm/v2/State/Components and /hsm/v2/memberships collections, with both essentially working the same way.
+Components can be added to a partition's member list, assuming that the
+component is not already a member of any partition.
 
-Retrieve only the members array for a single partition:
+(`ncn-mw#`) Add a component to a partition:
 
-```screen
-cray hsm partitions members list PARTITION_NAME
-```
-
-### Add a Component to Partition
-
-Components can be added to a partition's member list, assuming it is not already a member or in another partition. This can be verified by looking at the membership information.
-
-Add a component to a partition:
-
-```screen
+```bash
 cray hsm partitions members create --id COMPONENT_ID PARTITION_NAME
 ```
 
 For example:
 
-```screen
+```bash
 cray hsm partitions members create --id x1c0s0b0n0 partition1
 ```
 
-### Remove a Partition Member
+### Remove partition members
 
-Remove a single component from a partition, assuming it is a current member. It will no longer be in any partition and is free to be assigned to a new one.
+Single components may be removed from a given partition, assuming that they are currently a member
+of that partition. After being removed, the component will no longer be in any partition and is
+free to be assigned to a new one.
 
-```screen
+(`ncn-mw#`) Remove a member from a partition:
+
+```bash
 cray hsm partitions members delete MEMBER_ID PARTITION_NAME
 ```
 
 For example:
 
-```screen
+```bash
 cray hsm partitions members delete x1c0s0b0n0 partition1
 ```
-
