@@ -39,6 +39,6 @@ CFS will handle scaling up Ansible to run on many hosts, but there are still pla
 - Import roles rather than playbooks. Each time a new playbook starts, Ansible automatically gathers facts for all the systems it is running against. This is not necessary more than once and can
   slow down Ansible execution.
 - Turn off facts that are not needed in a playbook by setting `gather_facts: false`. If only a few facts are required, it is also possible to limit fact gathering by setting `gather_subset`. For more
-  information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/latest/modules/setup_module.html) documentation.
+  information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/4/modules/setup_module.html) documentation.
 - Use loops rather than individual tasks where modules are called multiple times. Some Ansible modules will optimize the command, such as grouping package installations into a single transaction
   For more information, see the external [Ansible playbook loops](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) documentation.
