@@ -5,9 +5,9 @@ should only have one default gateway. Therefore, the multi-active gateway protoc
 depending on the state of the spines. The Virtual Switching Extension \(VSX\) for Aruba spines serve the same purpose.
 
 For more information:
-<!-- markdown-link-check-disable-next-line -->
-- Mellanox: [`https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches`](https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches)
-- Aruba: [`https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html#book.html`](https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html#book.html)
+
+- [Mellanox](https://enterprise-support.nvidia.com/s/article/howto-configure-magp-on-mellanox-switches)
+- [Aruba](https://www.arubanetworks.com/techdocs/AOS-CX/10.04/HTML/5200-6728/index.html#book.html)
 
 ![Dual-Spine Configuration](../../../img/operations/CAN_Dual-Spine_Configuration.png "Dual-Spine Configuration")
 
@@ -76,7 +76,6 @@ interface 1/1/42
     no shutdown
     description WASP spine-002 1/11
     ip address 10.101.15.153/30
-
 
 ip route 10.102.5/26 10.101.15.150
 ip route 10.102.5/26 10.101.15.154

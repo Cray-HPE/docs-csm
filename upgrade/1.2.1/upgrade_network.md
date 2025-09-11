@@ -30,7 +30,7 @@ NOTE: Only major and minor versions of CSM are tracked at this time. CANU bug fi
 * `--a`   : What is the system architecture? (See above)
 * `--ccj` : Match the `ccj.json` file to the one you created for your system.
 * `--sls` : Match the `sls_file.json` to the one you created for your system.
-* `--custom-config` : Pass in a switch configuration file that CANU will inject into the generated configuration. For more information, see the [CANU documentation](https://github.com/Cray-HPE/canu#generate-switch-configs-including-custom-configurations).
+* `--custom-config` : Pass in a switch configuration file that CANU will inject into the generated configuration. For more information, see the [CANU documentation](https://github.com/Cray-HPE/canu/blob/1.6.13/readme.md#generate-switch-configs-including-custom-configurations).
 
 * Generate switch configuration files for the entire system:
 
@@ -81,7 +81,7 @@ CANU-generated switch configurations will not include any ports or devices not d
 configurations being applied against existing running configurations CANU will recommend removal of some critical configurations. It is vital
 that these devices and configurations be identified and protected. This can be accomplished in three ways:
 
-* Generate Switch configuration including custom configurations. [Custom configuration](https://github.com/Cray-HPE/canu/blob/develop/readme.md#generate-switch-configs-including-custom-configurations)
+* Generate Switch configuration including custom configurations. [Custom configuration](https://github.com/Cray-HPE/canu/blob/1.6.13/readme.md#generate-switch-configs-including-custom-configurations)
 
 * Based on experienced networking knowledge, manually reorder the proposed upgrade configurations. This may require manual exclusion of required
   configurations which the CANU analysis says to remove.

@@ -407,7 +407,6 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Adding a Ceph Node to the Ceph Cluster](utility_storage/Add_Ceph_Node.md)
 - [Shrink the Ceph Cluster](utility_storage/Remove_Ceph_Node.md)
 - [Alternate Storage Pools](utility_storage/Alternate_Storage_Pools.md)
-- [Restore Nexus Data After Data Corruption](utility_storage/Restore_Corrupt_Nexus.md)
 - [Troubleshoot Failure to Get Ceph Health](utility_storage/Troubleshoot_Failure_to_Get_Ceph_Health.md)
 - [Troubleshoot a Down OSD](utility_storage/Troubleshoot_a_Down_OSD.md)
 - [Troubleshoot Ceph OSDs Reporting Full](utility_storage/Troubleshoot_Ceph_OSDs_Reporting_Full.md)
