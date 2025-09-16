@@ -83,6 +83,7 @@ Other
 
 - [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)
 - [Troubleshoot S3FS Mount Issues](Troubleshoot_S3FS_Mounts.md)
+- [Troubleshoot S3FS Cache Cleanup](Troubleshoot_S3FS_Cache_Cleanup.md)
 - [Troubleshoot System Clock Skew](Troubleshoot_System_Clock_Skew.md)
 - [Troubleshoot Ceph Services Not Starting After a Server Crash](Troubleshoot_Ceph_Services_Not_Starting.md)
 - [Troubleshoot Pods Failing to Restart on Other Worker Nodes](Troubleshoot_Pods_Multi-Attach_Error.md)
