@@ -4,14 +4,20 @@ This procedure describes how to manually clean up S3FS cache when the automatic 
 
 ## Background
 
-CSM includes an automatic S3FS cache pruning mechanism via a daily cron job:
+(`ncn-w#`) CSM includes an automatic S3FS cache pruning mechanism in the form of a daily `cron` job:
 
 ```bash
-# cat /etc/cron.d/prune-s3fs-boot-images-cache 
+cat /etc/cron.d/prune-s3fs-boot-images-cache
+```
+
+Output:
+
+```text
 0 0 * * * root /usr/bin/prune-s3fs-cache.sh boot-images /var/lib/s3fs_cache 161061273600 -silent
 ```
 
-However, over time, some files may not be properly pruned by the automated process, leading to increasing disk usage that requires manual intervention.
+However, some files may not be properly pruned by the automated process.
+Over time, this may lead to increasing disk usage, which requires manual intervention.
 
 ## Symptoms
 
@@ -44,7 +50,7 @@ ncn-w001:/var/lib/s3fs_cache # du -sh boot-images/ .boot-images.mirror/
 
 ## Procedure
 
-### 1. Manual Cache Cleanup
+### Manual cache cleanup
 
 Perform the following steps on each affected worker node:
 
@@ -54,52 +60,54 @@ Perform the following steps on each affected worker node:
    cd /var/lib/s3fs_cache/
    ```
 
-2. (`ncn-w#`) Check current disk usage:
+1. (`ncn-w#`) Check current disk usage:
 
    ```bash
    df -h /var/lib/s3fs_cache/
    du -sh *
    ```
 
-3. (`ncn-w#`) Clean up files older than 30 days in the main cache directory:
+1. (`ncn-w#`) Clean up files older than 30 days in the main cache directory:
 
    ```bash
    cd /var/lib/s3fs_cache/boot-images/
    find . -atime +30 -type f | xargs rm -vf
    ```
 
-4. (`ncn-w#`) Clean up files in the mirror directory:
+1. (`ncn-w#`) Clean up files in the mirror directory:
 
    ```bash
    cd /var/lib/s3fs_cache/.boot-images.mirror/
    find . -atime +30 -type f | xargs rm -vf
    ```
 
-5. (`ncn-w#`) Clean up files in the `stat` directory:
+1. (`ncn-w#`) Clean up files in the `stat` directory:
 
    ```bash
    cd /var/lib/s3fs_cache/.boot-images.stat/
    find . -atime +30 -type f | xargs rm -vf
    ```
 
-6. (`ncn-w#`) Remove empty directories:
+1. (`ncn-w#`) Remove empty directories:
 
    ```bash
    cd /var/lib/s3fs_cache/
    find . -type d -empty -delete
    ```
 
-7. (`ncn-w#`) Check the disk usage after cleanup:
+1. (`ncn-w#`) Check the disk usage after cleanup:
 
    ```bash
    df -h /var/lib/s3fs_cache/
    ```
 
-### 3. Alternative Cleanup Methods
+## Alternative cleanup methods
 
-#### For More Aggressive Cleanup
+### More aggressive cleanup
 
-If you need to clean up files older than a different time period, adjust the `-atime` parameter:
+In order to clean up files older than a different time period, adjust the `-atime` parameter.
+
+(`ncn-w#`) For example:
 
 ```bash
 # Clean up files older than 7 days
@@ -109,25 +117,26 @@ find . -atime +7 -type f | xargs rm -vf
 find . -atime +1 -type f | xargs rm -vf
 ```
 
-#### For Complete Cache Reset
+### Complete cache reset
 
-If the cache is severely corrupted or you need to start fresh:
+(`ncn-w#`) If the cache is severely corrupted or if wishing to start fresh, then perform
+a complete cache reset.
 
-> **Warning**: This will remove all cached data and may cause temporary performance impact as the cache rebuilds.
+> **Warning**: This will remove all cached data, which may cause a temporary performance impact as the cache rebuilds.
 
 ```bash
 cd /var/lib/s3fs_cache/
 rm -rf boot-images/ .boot-images.mirror/ .boot-images.stat/
 ```
 
-## Important Notes
+## Important notes
 
-- **Safe to Delete**: S3FS cache files can be safely deleted at any time as they are rebuilt on demand
-- **Performance Impact**: Deleting cache may cause temporary performance degradation as data is re-cached
-- **Regular Maintenance**: Consider implementing regular manual cleanup if automatic pruning proves insufficient
+- **Safe to delete**: S3FS cache files can be safely deleted at any time as they are rebuilt on demand
+- **Performance impact**: Deleting cache may cause temporary performance degradation as data is re-cached
+- **Regular maintenance**: Consider implementing regular manual cleanup if automatic pruning proves insufficient
 - **Monitoring**: Set up alerts for disk usage on worker nodes to catch cache growth early
 
-## Related Documentation
+## Related documentation
 
 - [Troubleshoot S3FS Mounts](Troubleshoot_S3FS_Mounts.md)
 - [Utility Storage](Utility_Storage.md)
