@@ -117,9 +117,10 @@ find . -atime +1 -type f | xargs rm -vf
 
 #### For Complete Cache Reset
 
-If the cache is severely corrupted or you need to start fresh:
+(`ncn-w#`) If the cache is severely corrupted or if wishing to start fresh, then perform
+a complete cache reset.
 
-> **Warning**: This will remove all cached data and may cause temporary performance impact as the cache rebuilds.
+> **Warning**: This will remove all cached data, which may cause a temporary performance impact as the cache rebuilds.
 
 ```bash
 cd /var/lib/s3fs_cache/
