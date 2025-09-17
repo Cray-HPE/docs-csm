@@ -50,7 +50,7 @@ ncn-w001:/var/lib/s3fs_cache # du -sh boot-images/ .boot-images.mirror/
 
 ## Procedure
 
-### 1. Manual Cache Cleanup
+### Manual cache cleanup
 
 Perform the following steps on each affected worker node:
 
