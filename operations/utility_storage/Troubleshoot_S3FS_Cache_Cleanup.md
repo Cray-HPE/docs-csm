@@ -4,14 +4,20 @@ This procedure describes how to manually clean up S3FS cache when the automatic 
 
 ## Background
 
-CSM includes an automatic S3FS cache pruning mechanism via a daily cron job:
+(`ncn-w#`) CSM includes an automatic S3FS cache pruning mechanism in the form of a daily `cron` job:
 
 ```bash
-# cat /etc/cron.d/prune-s3fs-boot-images-cache 
+cat /etc/cron.d/prune-s3fs-boot-images-cache
+```
+
+Output:
+
+```text
 0 0 * * * root /usr/bin/prune-s3fs-cache.sh boot-images /var/lib/s3fs_cache 161061273600 -silent
 ```
 
-However, over time, some files may not be properly pruned by the automated process, leading to increasing disk usage that requires manual intervention.
+However, some files may not be properly pruned by the automated process.
+Over time, this may lead to increasing disk usage, which requires manual intervention.
 
 ## Symptoms
 
