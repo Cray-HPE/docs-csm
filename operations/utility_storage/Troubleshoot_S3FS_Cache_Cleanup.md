@@ -60,42 +60,42 @@ Perform the following steps on each affected worker node:
    cd /var/lib/s3fs_cache/
    ```
 
-2. (`ncn-w#`) Check current disk usage:
+1. (`ncn-w#`) Check current disk usage:
 
    ```bash
    df -h /var/lib/s3fs_cache/
    du -sh *
    ```
 
-3. (`ncn-w#`) Clean up files older than 30 days in the main cache directory:
+1. (`ncn-w#`) Clean up files older than 30 days in the main cache directory:
 
    ```bash
    cd /var/lib/s3fs_cache/boot-images/
    find . -atime +30 -type f | xargs rm -vf
    ```
 
-4. (`ncn-w#`) Clean up files in the mirror directory:
+1. (`ncn-w#`) Clean up files in the mirror directory:
 
    ```bash
    cd /var/lib/s3fs_cache/.boot-images.mirror/
    find . -atime +30 -type f | xargs rm -vf
    ```
 
-5. (`ncn-w#`) Clean up files in the `stat` directory:
+1. (`ncn-w#`) Clean up files in the `stat` directory:
 
    ```bash
    cd /var/lib/s3fs_cache/.boot-images.stat/
    find . -atime +30 -type f | xargs rm -vf
    ```
 
-6. (`ncn-w#`) Remove empty directories:
+1. (`ncn-w#`) Remove empty directories:
 
    ```bash
    cd /var/lib/s3fs_cache/
    find . -type d -empty -delete
    ```
 
-7. (`ncn-w#`) Check the disk usage after cleanup:
+1. (`ncn-w#`) Check the disk usage after cleanup:
 
    ```bash
    df -h /var/lib/s3fs_cache/
