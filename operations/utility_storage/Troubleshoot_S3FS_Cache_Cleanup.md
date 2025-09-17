@@ -101,11 +101,13 @@ Perform the following steps on each affected worker node:
    df -h /var/lib/s3fs_cache/
    ```
 
-### 3. Alternative Cleanup Methods
+## Alternative cleanup methods
 
-#### For More Aggressive Cleanup
+### More aggressive cleanup
 
-If you need to clean up files older than a different time period, adjust the `-atime` parameter:
+In order to clean up files older than a different time period, adjust the `-atime` parameter.
+
+(`ncn-w#`) For example:
 
 ```bash
 # Clean up files older than 7 days
@@ -115,7 +117,7 @@ find . -atime +7 -type f | xargs rm -vf
 find . -atime +1 -type f | xargs rm -vf
 ```
 
-#### For Complete Cache Reset
+### Complete cache reset
 
 (`ncn-w#`) If the cache is severely corrupted or if wishing to start fresh, then perform
 a complete cache reset.
