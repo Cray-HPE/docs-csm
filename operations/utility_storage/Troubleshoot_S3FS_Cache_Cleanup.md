@@ -127,14 +127,14 @@ cd /var/lib/s3fs_cache/
 rm -rf boot-images/ .boot-images.mirror/ .boot-images.stat/
 ```
 
-## Important Notes
+## Important notes
 
-- **Safe to Delete**: S3FS cache files can be safely deleted at any time as they are rebuilt on demand
-- **Performance Impact**: Deleting cache may cause temporary performance degradation as data is re-cached
-- **Regular Maintenance**: Consider implementing regular manual cleanup if automatic pruning proves insufficient
+- **Safe to delete**: S3FS cache files can be safely deleted at any time as they are rebuilt on demand
+- **Performance impact**: Deleting cache may cause temporary performance degradation as data is re-cached
+- **Regular maintenance**: Consider implementing regular manual cleanup if automatic pruning proves insufficient
 - **Monitoring**: Set up alerts for disk usage on worker nodes to catch cache growth early
 
-## Related Documentation
+## Related documentation
 
 - [Troubleshoot S3FS Mounts](Troubleshoot_S3FS_Mounts.md)
 - [Utility Storage](Utility_Storage.md)
