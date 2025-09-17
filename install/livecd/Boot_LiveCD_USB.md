@@ -131,8 +131,8 @@ boot order to have the USB device first.
    > ```
 
    ```bash
-   ipmitool -I lanplus -U "${username}" -E -H "${BMC}" chassis bootdev floppy options=efiboot
-   ipmitool -I lanplus -U "${username}" -E -H "${BMC}" chassis power off
+   ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis bootdev floppy options=efiboot
+   ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power off
    ```
 
 1. Insert the USB stick into a USB3 port (USB2 is compatible, USB3 offers the best performance).
@@ -140,8 +140,8 @@ boot order to have the USB device first.
 1. (`external#`) Power the server on.
 
    ```bash
-   ipmitool -I lanplus -U "${username}" -E -H "${BMC}" chassis power on
-   ipmitool -I lanplus -U "${username}" -E -H "${BMC}" sol activate
+   ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" chassis power on
+   ipmitool -I lanplus -U "${USERNAME}" -E -H "${BMC}" sol activate
    ```
 
 1. Do not exit the typescript. After completing this procedure, proceed to [First log in](../pre-installation.md#13-first-log-in).
