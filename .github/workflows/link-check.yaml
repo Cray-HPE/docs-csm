@@ -41,7 +41,7 @@ jobs:
 
     - name: Get changed files
       id: changed-files
-      uses: tj-actions/changed-files@v46
+      uses: tj-actions/changed-files@v47
       with:
         files: "**/*.md"
         files_ignore: |
@@ -65,7 +65,7 @@ jobs:
 
     - name: Report errors
       if: ${{ steps.changed-files.outputs.deleted_files != '' || steps.changed-files.outputs.renamed_files != '' || inputs.force_full_scan }}
-      uses: actions/github-script@v7
+      uses: actions/github-script@v8
       with:
         script: |
             const fs = require('fs');
