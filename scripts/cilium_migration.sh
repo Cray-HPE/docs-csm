@@ -31,6 +31,12 @@ if [[ $CNI_VALUE == "cilium" ]]; then
 else
   echo "INFO k8s-primary-cni is '$CNI_VALUE'. Proceeding with migration workflow."
 
+  if ! kubectl get jobs -n argo | grep upgrade-k8s-job | grep Complete; then
+    echo "ERROR Please wait until the upgrade-k8s-job is Complete before running this script."
+    echo "ERROR To check on job status, run 'kubectl get jobs -n argo | grep upgrade-k8s-job'"
+    exit 1
+  fi
+
   echo "INFO Generating Cilium workflow manifest"
 
   if [[ ! -f /usr/share/doc/csm/workflows/cilium/generateCiliumLiveMigration.py ]]; then
