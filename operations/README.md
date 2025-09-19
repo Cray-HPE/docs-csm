@@ -479,6 +479,7 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Troubleshoot `HEALTH_ERR` Module `devicehealth` has failed table Device already exists](utility_storage/Troubleshoot_HEALTH_ERR_Module_devicehealth.md)
 - [Troubleshoot Insufficient Standby MDS Daemons Available](utility_storage/Troubleshoot_Insufficient_Standby_MDS_Daemons_Available.md)
 - [Troubleshoot S3FS Mount Issues](utility_storage/Troubleshoot_S3FS_Mounts.md)
+- [Troubleshoot S3FS Cache Cleanup](utility_storage/Troubleshoot_S3FS_Cache_Cleanup.md)
 - [Fixing incorrect number of PG Issues](utility_storage/Troubleshoot_Pools_Have_Many_More_Objects_Per_Pg_Than_Average.md)
 - [Utility storage known issues](../troubleshooting/README.md#utility-storage)
 
