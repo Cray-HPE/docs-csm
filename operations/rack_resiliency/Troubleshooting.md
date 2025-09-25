@@ -18,6 +18,8 @@ This page contains general Rack Resiliency troubleshooting topics.
             - [Unable to register for notification](#unable-to-register-for-notification)
     - [Getting details about RMS](#getting-details-about-rms)
 - [Critical services health check](#critical-services-health-check)
+- [Deployment status](#status-of-cray-rrs-pod)
+- [Node movement troubleshooting](#physical-movement-of-nodes-from-one-rack-to-another)
 
 ## Cray CLI
 
