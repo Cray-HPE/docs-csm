@@ -219,3 +219,36 @@ This helps to understand the various configuration parameters which control RMS 
 
 The health of the critical services can be checked by listing and describing them using the
 RRS API or CLI. See [Manage Critical Services](Manage_Critical_Services.md).
+
+## Status of cray-rrs pod
+
+When the `cray-rrs` deployment is deployed on the system, the status of the will depend on the condition that if rack-resiliency is enabled or not. If rack-resiliency is not enabled then the pod will remain in `init` stage.
+```bash
+kubectl get po -n rack-resiliency
+```
+
+```text
+NAME                        READY   STATUS     RESTARTS   AGE
+cray-rrs-6c5585cfdf-lmctt   0/2     Init:0/2   0          6d5h
+```
+
+This can be confirmed by checking the logs of the `cray-rrs-check` container.
+
+```bash
+kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
+```
+
+```text
+/etc/ssh/sshd_config line 32: Unsupported option UsePAM
+2025-09-18 22:06:22,589 - INFO in wait: Checking Rack Resiliency enablement and Kubernetes/CEPH zone creation...
+2025-09-18 22:06:22,815 - INFO in wait: 'spec.kubernetes.services.rack-resiliency.enabled' value in customizations.yaml is: False
+2025-09-18 22:06:22,817 - INFO in wait: Rack Resiliency is disabled.
+```
+
+## Physical movement of node(s) from one rack to another
+
+When the nodes are moved physically from one rack to another using the [procedure](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md), after completing the procedure always rollout restart the `cray-rrs` deployment.
+
+```bash
+(ncn-mw) kubectl rollout restart deployment -n rack-resiliency cray-rrs
+```
