@@ -225,6 +225,7 @@ RRS API or CLI. See [Manage Critical Services](Manage_Critical_Services.md).
 ## Status of cray-rrs pod
 
 When the `cray-rrs` deployment is deployed on the system, the status of the will depend on the condition that if rack-resiliency is enabled or not. If rack-resiliency is not enabled then the pod will remain in `init` stage.
+
 ```bash
 kubectl get po -n rack-resiliency
 ```
