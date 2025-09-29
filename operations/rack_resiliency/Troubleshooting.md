@@ -222,9 +222,9 @@ This helps to understand the various configuration parameters which control RMS 
 The health of the critical services can be checked by listing and describing them using the
 RRS API or CLI. See [Manage Critical Services](Manage_Critical_Services.md).
 
-## Status of cray-rrs pod
+## `cray-rrs` pod is in `init` state
 
-When the `cray-rrs` deployment is deployed on the system, the status of the will depend on the condition that if rack-resiliency is enabled or not. If rack-resiliency is not enabled then the pod will remain in `init` stage.
+When rack resiliency is disabled the status if the `cray-rrs` deployment continues to be in `init` state.
 
 ```bash
 kubectl get po -n rack-resiliency
@@ -247,6 +247,11 @@ kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
 2025-09-18 22:06:22,815 - INFO in wait: 'spec.kubernetes.services.rack-resiliency.enabled' value in customizations.yaml is: False
 2025-09-18 22:06:22,817 - INFO in wait: Rack Resiliency is disabled.
 ```
+
+This is an expected behavior as the `cray-rrs` deployment waits in case the following three conditions are not met:
+1. Rack Resiliency is not enabled
+2. [Zones](Zones.md) are not configured(Kubernetes or Ceph)
+3. [Configmaps](ConfigMaps.md) not present
 
 ## Physical movement of node(s) from one rack to another
 
