@@ -18,7 +18,7 @@ This page contains general Rack Resiliency troubleshooting topics.
             - [Unable to register for notification](#unable-to-register-for-notification)
     - [Getting details about RMS](#getting-details-about-rms)
 - [Critical services health check](#critical-services-health-check)
-- [Deployment status](#status-of-cray-rrs-pod)
+- [Deployment status](#cray-rrs-pod-is-in-init-state)
 - [Node movement troubleshooting](#physical-movement-of-nodes-from-one-rack-to-another)
 
 ## Cray CLI
@@ -249,9 +249,10 @@ kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
 ```
 
 This is an expected behavior as the `cray-rrs` deployment waits in case the following three conditions are not met:
+
 1. Rack Resiliency is not enabled
 2. [Zones](Zones.md) are not configured(Kubernetes or Ceph)
-3. [Configmaps](ConfigMaps.md) not present
+3. [ConfigMaps](ConfigMaps.md) not present
 
 ## Physical movement of node(s) from one rack to another
 
