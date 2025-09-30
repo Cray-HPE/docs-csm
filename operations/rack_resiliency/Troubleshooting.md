@@ -224,7 +224,7 @@ RRS API or CLI. See [Manage Critical Services](Manage_Critical_Services.md).
 
 ## `cray-rrs` pod is in `init` state
 
-When rack resiliency is disabled the status if the `cray-rrs` deployment continues to be in `init` state.
+After rack resiliency chart is deployed the status of the `cray-rrs` deployment continues to be in `Init` state.
 
 This is an expected behavior as the `cray-rrs` deployment waits in case the following three conditions are not met:
 
