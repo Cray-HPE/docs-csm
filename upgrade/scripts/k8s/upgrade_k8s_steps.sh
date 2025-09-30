@@ -119,6 +119,23 @@ else
   fi
 fi
 
+if [[ -f "$DONE_DIR/remove_psp.done" ]]; then
+  echo "INFO Remove unneeded PSP resources already completed, skipping."
+else
+  echo "INFO Remove unneeded PSP resources."
+  /usr/share/doc/csm/upgrade/scripts/k8s/remove_psp.sh
+  if [[ $? -ne 0 ]]; then
+    echo "ERROR Failed to remove unneeded PSP resources."
+    exit 1
+  fi
+  touch "$DONE_DIR/remove_psp.done"
+  if [[ $? -ne 0 ]]; then
+    echo "ERROR Failed to create done file for remove PSP resources"
+    exit 1
+  fi
+  echo "INFO Successfully removed unneeded PSP resources."
+fi
+
 if [[ -f "$DONE_DIR/rr_cs_rollout_restart.done" ]]; then
   echo "INFO Rack Resiliency Critical services rollout restart already completed, skipping."
 else
