@@ -338,7 +338,6 @@ HTTP response body: {"kind":"Status","apiVersion":"v1","metadata":{},"status":"F
 2025-09-30 07:26:34,318 - INFO in init: Updating rms state to init_fail because of initialization failure
 ```
 
-
 ## Physical movement of node(s) from one rack to another
 
 When the nodes are moved physically from one rack to another using the [procedure](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md), after completing the procedure always rollout restart the `cray-rrs` deployment.
