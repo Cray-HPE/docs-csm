@@ -3,6 +3,13 @@
 This procedure describes how to use the System Admin Toolkit's (SAT) `sat bmccreds`
 command to set a global credential for all BMCs on air-cooled nodes.
 
+> **WARNING**: Do not attempt to set a password longer than 20 characters on management node BMCs.
+> The maximum password length supported by `ipmitool` is 20 characters, and `ipmitool` is used
+> during the [System Power On Procedures](../power_management/System_Power_On_Procedures.md) and
+> [System Power Off Procedures](../power_management/System_Power_Off_Procedures.md) to
+> monitor, control, and query management nodes. If a password longer than 20 characters is set on
+> those nodes, the documented steps to power off and power on management nodes will fail.
+
 For more information including alternate methods of using `sat bmccreds`, see: [Set BMC Credentials Using SAT](../../operations/system_configuration_service/Set_BMC_Credentials.md),
 or the `sat-bmccreds(8)` man page by running `sat-man bmccreds`.
 
