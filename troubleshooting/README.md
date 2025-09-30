@@ -71,6 +71,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 * [PostgreSQL System ID Mismatch](known_issues/postgres_system_id_mismatch.md)
+* [`cray-rrs` deployment in Init state](known_issues/rack_resiliency_known_issue.md)
 * [Sensitive input echoed when using CLI to access console](../operations/conman/Log_in_to_a_Node_Using_ConMan.md#sensitive-input-echoed-when-using-cli-to-access-console)
 * Systems running CSM 1.6 or earlier that fresh install CSM 1.7 must regenerate their
   management switch configuration because of the
