@@ -226,14 +226,24 @@ RRS API or CLI. See [Manage Critical Services](Manage_Critical_Services.md).
 
 When rack resiliency is disabled the status if the `cray-rrs` deployment continues to be in `init` state.
 
+This is an expected behavior as the `cray-rrs` deployment waits in case the following three conditions are not met:
+
+1. Rack Resiliency is not enabled
+2. [Zones](Zones.md) are not configured(Kubernetes or Ceph)
+3. [ConfigMaps](ConfigMaps.md) not present
+
+Check the status of pod for `cray-rrs` deployment:
+
 ```bash
-kubectl get po -n rack-resiliency
+kubectl get pod -n rack-resiliency
 ```
 
 ```text
 NAME                        READY   STATUS     RESTARTS   AGE
 cray-rrs-6c5585cfdf-lmctt   0/2     Init:0/2   0          6d5h
 ```
+
+### 1. Rack Resiliency is not enabled
 
 This can be confirmed by checking the logs of the `cray-rrs-check` container.
 
@@ -248,11 +258,86 @@ kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
 2025-09-18 22:06:22,817 - INFO in wait: Rack Resiliency is disabled.
 ```
 
-This is an expected behavior as the `cray-rrs` deployment waits in case the following three conditions are not met:
+### 2. Zones are not configured(Kubernetes or Ceph)
 
-1. Rack Resiliency is not enabled
-2. [Zones](Zones.md) are not configured(Kubernetes or Ceph)
-3. [ConfigMaps](ConfigMaps.md) not present
+This can be confirmed by checking the logs of the `cray-rrs-check` container.
+
+```bash
+kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
+```
+
+```text
+/etc/ssh/sshd_config line 32: Unsupported option UsePAM
+2025-09-29 15:20:19,675 - INFO in wait: Checking Rack Resiliency enablement and Kubernetes/CEPH zone creation...
+2025-09-29 15:20:19,884 - INFO in wait: 'spec.kubernetes.services.rack-resiliency.enabled' value in customizations.yaml is: True
+2025-09-29 15:20:19,885 - INFO in wait: Rack resiliency is enabled.
+2025-09-29 15:20:19,885 - INFO in wait: Checking zoning for Kubernetes and CEPH nodes...
+2025-09-29 15:20:19,964 - ERROR in lib_rms: No K8s topology zone present
+2025-09-29 15:20:19,966 - INFO in wait: Kubernetes zones are not created.
+```
+
+### 3. ConfigMaps not present
+
+This can be confirmed by checking the logs of the `cray-rrs-init` container.
+
+```bash
+kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-init
+```
+
+```text
+/etc/ssh/sshd_config line 32: Unsupported option UsePAM
+2025-09-30 07:26:28,705 - WARNING in lib_configmap: Lock ConfigMap rrs-mon-dynamic-lock does not exist in namespace rack-resiliency; nothing to release
+2025-09-30 07:26:28,717 - WARNING in lib_configmap: Lock ConfigMap rrs-mon-static-lock does not exist in namespace rack-resiliency; nothing to release
+2025-09-30 07:26:28,718 - INFO in lib_configmap: [ad365f4c] Fetching ConfigMap rrs-mon-dynamic from namespace rack-resiliency
+2025-09-30 07:26:28,735 - INFO in init: Reinitializing the Rack Resiliency Service.This could happen if previous RRS pod has been terminated
+2025-09-30 07:26:28,736 - INFO in init: RMS is in init state. Resetting to init state
+2025-09-30 07:26:28,770 - INFO in lib_configmap: Updating ConfigMap rrs-mon-dynamic in namespace rack-resiliency
+2025-09-30 07:26:28,810 - WARNING in lib_configmap: Lock ConfigMap rrs-mon-dynamic-lock does not exist in namespace rack-resiliency; nothing to release
+2025-09-30 07:26:28,811 - INFO in lib_configmap: ConfigMap rrs-mon-dynamic in namespace rack-resiliency updated successfully
+2025-09-30 07:26:28,886 - INFO in init: Retrieving zone information and status of k8s and CEPH nodes
+2025-09-30 07:26:32,785 - INFO in lib_rms: CEPH is healthy
+2025-09-30 07:26:34,292 - INFO in init: RMS pod is running on node: ncn-w006 in rack x3000c0s9b0n0 under zone zone3
+2025-09-30 07:26:34,293 - INFO in lib_configmap: [85f28042] Fetching ConfigMap rrs-mon-static from namespace rack-resiliency
+2025-09-30 07:26:34,304 - ERROR in lib_configmap: [85f28042] API error fetching ConfigMap
+Traceback (most recent call last):
+  File "/app/src/lib/lib_configmap.py", line 319, in read_configmap
+    config_map = v1.read_namespaced_config_map(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/venv/lib/python3.12/site-packages/kubernetes/client/api/core_v1_api.py", line 23231, in read_namespaced_config_map
+    return self.read_namespaced_config_map_with_http_info(name, namespace, **kwargs)  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/venv/lib/python3.12/site-packages/kubernetes/client/api/core_v1_api.py", line 23318, in read_namespaced_config_map_with_http_info
+    return self.api_client.call_api(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/venv/lib/python3.12/site-packages/kubernetes/client/api_client.py", line 348, in call_api
+    return self.__call_api(resource_path, method,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/venv/lib/python3.12/site-packages/kubernetes/client/api_client.py", line 180, in __call_api
+    response_data = self.request(
+                    ^^^^^^^^^^^^^
+  File "/app/venv/lib/python3.12/site-packages/kubernetes/client/api_client.py", line 373, in request
+    return self.rest_client.GET(url,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/venv/lib/python3.12/site-packages/kubernetes/client/rest.py", line 244, in GET
+    return self.request("GET", url,
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/venv/lib/python3.12/site-packages/kubernetes/client/rest.py", line 238, in request
+    raise ApiException(http_resp=r)
+kubernetes.client.exceptions.ApiException: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Audit-Id': '4464c112-3ebe-4187-ad92-37455e2adc01', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Kubernetes-Pf-Flowschema-Uid': 'a48f299c-32b4-46dd-b465-b67aed410a1d', 'X-Kubernetes-Pf-Prioritylevel-Uid': '8de31b72-3590-42e5-909f-b0b2aa8b8245', 'Date': 'Tue, 30 Sep 2025 07:26:34 GMT', 'Content-Length': '208'})
+HTTP response body: {"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"configmaps \"rrs-mon-static\" not found","reason":"NotFound","details":{"name":"rrs-mon-static","kind":"configmaps"},"code":404}
+
+
+2025-09-30 07:26:34,318 - ERROR in init: Could not read static configmap rrs-mon-static: API error: (404)
+Reason: Not Found
+HTTP response headers: HTTPHeaderDict({'Audit-Id': '4464c112-3ebe-4187-ad92-37455e2adc01', 'Cache-Control': 'no-cache, private', 'Content-Type': 'application/json', 'X-Kubernetes-Pf-Flowschema-Uid': 'a48f299c-32b4-46dd-b465-b67aed410a1d', 'X-Kubernetes-Pf-Prioritylevel-Uid': '8de31b72-3590-42e5-909f-b0b2aa8b8245', 'Date': 'Tue, 30 Sep 2025 07:26:34 GMT', 'Content-Length': '208'})
+HTTP response body: {"kind":"Status","apiVersion":"v1","metadata":{},"status":"Failure","message":"configmaps \"rrs-mon-static\" not found","reason":"NotFound","details":{"name":"rrs-mon-static","kind":"configmaps"},"code":404}
+
+
+2025-09-30 07:26:34,318 - INFO in init: Updating rms state to init_fail because of initialization failure
+```
+
 
 ## Physical movement of node(s) from one rack to another
 
