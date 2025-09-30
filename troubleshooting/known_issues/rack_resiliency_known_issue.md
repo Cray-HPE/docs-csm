@@ -13,8 +13,9 @@ When rack resiliency is disabled, the `cray-rrs` deployment remains in the `Init
    ```bash
    kubectl get po -n rack-resiliency
    ```
+
    Example Output:
-   
+
    ```text
    NAME                        READY   STATUS     RESTARTS   AGE
    cray-rrs-6c5585cfdf-lmctt   0/2     Init:0/2   0          6d5h
@@ -35,7 +36,7 @@ When rack resiliency is disabled, the `cray-rrs` deployment remains in the `Init
 
 ## Root Cause
 
-The cray-rrs deployment enters the Init state when the following conditions are not met:
+The `cray-rrs` deployment enters the Init state when the following conditions are not met:
 
 1. Rack Resiliency is not enabled
 2. [Zones](../../operations/rack_resiliency/Zones.md) are not configured(Kubernetes or Ceph)
