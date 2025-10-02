@@ -67,7 +67,6 @@ apiserver_has_psp() {
   return "${ret_val}"
 }
 
-
 # A list of known PSPs, taking from system running CSM 1.6
 DEFAULT_PSPS="cray-ceph-csi-cephfs-nodeplugin cray-ceph-csi-cephfs-provisioner"
 DEFAULT_PSPS="${DEFAULT_PSPS} cray-ceph-csi-rbd-nodeplugin cray-ceph-csi-rbd-provisioner"
@@ -84,7 +83,7 @@ DEFAULT_PSPS="${DEFAULT_PSPS} privileged restricted restricted-transition restri
 DEFAULT_PSPS="${DEFAULT_PSPS} sealed-secrets-kube-system sma-vm-cluster spire spire-agent uas-default-psp"
 
 delete_any_psp() {
-  PSPS=$(kubectl get psp -ojsonpath='{.items[*].metadata.name}' 2>/dev/null)
+  PSPS=$(kubectl get psp -ojsonpath='{.items[*].metadata.name}' 2> /dev/null)
   if [ -z "${PSPS}" ]; then
     echo "No existing podsecuritypolices"
     PSPS="${DEFAULT_PSPS}"
@@ -113,22 +112,22 @@ KNOWN_PSP_CR="${KNOWN_PSP_CR} sealed-secrets-kube-system-psp sma-vm-cluster-clus
 #     CLUSTERROLE_MIXED_PSP: ClusterRoles that have a mix of PSP and non-PSP resources
 get_clusterroles() {
   CR=$(kubectl get clusterrole -ojsonpath='{.items[*].metadata.name}')
-  CLUSTERROLES=$(echo ${CR} ${KNOWN_PSP_CR}| tr ' ' '\n' | sort -u | tr '\n' ' ')
+  CLUSTERROLES=$(echo ${CR} ${KNOWN_PSP_CR} | tr ' ' '\n' | sort -u | tr '\n' ' ')
 
   CLUSTERROLE_NO_PSP=""
   CLUSTERROLE_ONLY_PSP=""
   CLUSTERROLE_MIXED_PSP=""
   CLUSTERROLE_NX=""
   for cr in ${CLUSTERROLES}; do
-    if ! resources=$(kubectl get clusterrole "${cr}" -o jsonpath='{.rules[*].resources[*]}{"\n"}' 2>/dev/null); then
+    if ! resources=$(kubectl get clusterrole "${cr}" -o jsonpath='{.rules[*].resources[*]}{"\n"}' 2> /dev/null); then
       CLUSTERROLE_NX="${CLUSTERROLE_NX} ${cr}"
-      elif [ "${resources}" = podsecuritypolicies ]; then
-        CLUSTERROLE_ONLY_PSP="${CLUSTERROLE_ONLY_PSP} ${cr}"
-      elif echo "${resources}" | grep -q podsecuritypolicies; then
-        CLUSTERROLE_MIXED_PSP="${CLUSTERROLE_MIXED_PSP} ${cr}"
-      else
-        CLUSTERROLE_NO_PSP="${CLUSTERROLE_NO_PSP} ${cr}"
-      fi
+    elif [ "${resources}" = podsecuritypolicies ]; then
+      CLUSTERROLE_ONLY_PSP="${CLUSTERROLE_ONLY_PSP} ${cr}"
+    elif echo "${resources}" | grep -q podsecuritypolicies; then
+      CLUSTERROLE_MIXED_PSP="${CLUSTERROLE_MIXED_PSP} ${cr}"
+    else
+      CLUSTERROLE_NO_PSP="${CLUSTERROLE_NO_PSP} ${cr}"
+    fi
   done
   echo "CLUSTERROLE_NX: ${CLUSTERROLE_NX}"
   echo "CLUSTERROLE_ONLY_PSP: ${CLUSTERROLE_ONLY_PSP}"
@@ -151,11 +150,10 @@ delete_psp_from_clusterroles() {
   for cr in "$@"; do
     #kubectl get clusterrole "${cr}" -o json | jq 'del(.rules[] | select(.resources[0]=="podsecuritypolicies"))' | kubectl apply ${DRY_RUN} -f -
 
-    INDEX=$(kubectl get clusterrole "${cr}" -o json  | jq '.rules | map(.resources[0] == "podsecuritypolicies") | index(true)')
+    INDEX=$(kubectl get clusterrole "${cr}" -o json | jq '.rules | map(.resources[0] == "podsecuritypolicies") | index(true)')
     kubectl patch ${DRY_RUN} clusterrole "${cr}" --type=json -p="[{'op': 'remove', 'path': '/rules/${INDEX}'}]"
   done
 }
-
 
 KNOWN_PSP_R="ceph-cephfs/cray-ceph-csi-cephfs-nodeplugin ceph-rbd/cray-ceph-csi-rbd-nodeplugin sma/sma-vm-cluster sysmgmt-health/cray-sysmgmt-health-grafana"
 
@@ -166,7 +164,7 @@ KNOWN_PSP_R="ceph-cephfs/cray-ceph-csi-cephfs-nodeplugin ceph-rbd/cray-ceph-csi-
 get_roles() {
   # Get a list of Roles
   R=$(kubectl get roles -A -ojsonpath='{range .items[*]}{.metadata.namespace}/{.metadata.name}{"\n"}{end}')
-  ROLES=$(echo ${R} ${KNOWN_PSP_R}| tr ' ' '\n' | sort -u | tr '\n' ' ')
+  ROLES=$(echo ${R} ${KNOWN_PSP_R} | tr ' ' '\n' | sort -u | tr '\n' ' ')
 
   ROLE_NO_PSP=""
   ROLE_ONLY_PSP=""
@@ -174,7 +172,7 @@ get_roles() {
   for nr in ${ROLES}; do
     ns=${nr%/*}
     r=${nr#*/}
-    if ! resources=$(kubectl get role -n "${ns}" "${r}" -o jsonpath='{.rules[*].resources[*]}{"\n"}' 2>/dev/null); then
+    if ! resources=$(kubectl get role -n "${ns}" "${r}" -o jsonpath='{.rules[*].resources[*]}{"\n"}' 2> /dev/null); then
       ROLE_NX="${ROLE_NX} ${nr}"
     elif [ "${resources}" = podsecuritypolicies ]; then
       ROLE_ONLY_PSP="${ROLE_ONLY_PSP} ${nr}"
@@ -207,7 +205,7 @@ delete_psp_from_roles() {
   for nr in "$@"; do
     ns=${nr%/*}
     r=${nr#*/}
-    INDEX=$(kubectl get role -n "${ns}" "${r}" -o json  | jq '.rules | map(.resources[0] == "podsecuritypolicies") | index(true)')
+    INDEX=$(kubectl get role -n "${ns}" "${r}" -o json | jq '.rules | map(.resources[0] == "podsecuritypolicies") | index(true)')
     kubectl patch ${DRY_RUN} role -n "${ns}" "${r}" --type=json -p="[{'op': 'remove', 'path': '/rules/${INDEX}'}]"
   done
 }
@@ -319,7 +317,7 @@ get_sa() {
 
   for sa in ${PSP_ONLY_SA}; do
     kind=${sa%%/*}
-    if [[ "${kind}" != ServiceAccount ]]; then
+    if [[ ${kind} != ServiceAccount ]]; then
       continue
     fi
     name_ns=${sa#*/}
