@@ -41,7 +41,7 @@
 #   and remove the line with:
 #     enable-admission-plugins=PodSecurityPolicy
 #
-# sed -i '/enable-admission-plugins=PodSecurityPolicy/d' /etc/kubernetes/manifests/kube-apiserver.yaml"
+# sed -i '/enable-admission-plugins=PodSecurityPolicy/d' /etc/kubernetes/manifests/kube-apiserver.yaml
 #
 # The kubelet will automatically restart the kube-apiserver pods.  Wait for each kube-apiserver
 # pod to restart and enter Running state before restarting the next one
@@ -64,7 +64,7 @@ apiserver_has_psp() {
       echo
     fi
   done
-  return "${ret_val}"
+  return ${ret_val}
 }
 
 # A list of known PSPs, taking from system running CSM 1.6
