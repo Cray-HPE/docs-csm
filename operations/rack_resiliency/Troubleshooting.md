@@ -337,7 +337,7 @@ HTTP response body: {"kind":"Status","apiVersion":"v1","metadata":{},"status":"F
 
 ## Physical movement of node(s) from one rack to another
 
-Considering the case where Rack Resiliency is enabled and when the nodes are moved physically from one rack to another using the [procedure](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md), always rollout restart the cray-rrs deployment.
+Considering the case where Rack Resiliency is enabled and when the nodes are moved physically from one rack to another using the [procedure](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md), always rollout restart the `cray-rrs` deployment.
 
 ```bash
 (ncn-mw) kubectl rollout restart deployment -n rack-resiliency cray-rrs
