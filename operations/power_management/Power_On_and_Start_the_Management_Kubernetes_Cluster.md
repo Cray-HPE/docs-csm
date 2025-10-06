@@ -145,16 +145,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    INFO: Command output: norecover is unset
    INFO: Running command: ceph osd unset nobackfill
    INFO: Command output: nobackfill is unset
-   INFO: Waiting up to 180 seconds for Ceph to become healthy after unfreeze
-   INFO: Detected MON_CLOCK_SKEW warning.
-   INFO: Affected monitors: mon.ncn-s002
-   INFO: Restarting time synchronization service on ncn-s002
-   INFO: Successfully restarted time synchronization service on ncn-s002
-   INFO: Waiting 60 seconds for clocks to synchronize...
-   INFO: Restarting monitor daemon: mon.ncn-s002
-   Scheduled to restart mon.ncn-s002 on host 'ncn-s002'
-   INFO: Successfully restarted monitor daemon: mon.ncn-s002
-   INFO: Waiting 60 seconds after restarting monitor daemons...
+   INFO: Waiting up to 60 seconds for Ceph to become healthy after unfreeze
    INFO: Checking Ceph health
    INFO: Ceph is healthy.
    INFO: Ceph unfreeze completed successfully on storage NCNs.
@@ -178,41 +169,6 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
    INFO: Stopping console logging on ncn-s001,ncn-w001,ncn-m002,ncn-w003,ncn-s003,ncn-s002,ncn-w002,ncn-m003.
    INFO: Succeeded with boot of other management NCNs.
    ```
-
-   The above command may fail either while waiting for a group of management NCNs to boot and become
-   reachable or while waiting for Ceph to become healthy. See the following sub-steps for how to
-   proceed in either of those cases.
-
-   1. If any of the nodes time out during boot, an error message like the following will be logged:
-
-      ```text
-      ERROR: Waiting for condition "Hosts accessible via SSH" timed out after 300 seconds
-      ERROR: Unable to reach the following NCNs via SSH after powering them on: ncn-s001, ncn-s002, ncn-s003. Troubleshoot the issue and then try again.
-      ```
-
-      If this error occurs, troubleshoot the issue and then repeat the `sat bootsys` command again.
-
-   1. If Ceph does not become healthy within the expected time, the `sat bootsys` command will
-      prompt whether to proceed further or exit to allow further troubleshooting of Ceph health
-      issues. If the prompt is answered with 'yes', the command will continue to boot the other
-      management nodes.
-
-      Example output:
-
-      ```text
-      INFO: Checking Ceph health
-      ERROR: Waiting for condition "Ceph cluster in healthy state" timed out after 60 seconds
-      ERROR: Failed to unfreeze Ceph on storage NCNs: Ceph is not healthy. Please correct Ceph health and try again.
-      Ceph is not healthy. Do you want to continue anyway? [yes,no] yes
-      INFO: Continuing despite Ceph not being healthy as per user's input, make sure to verify it later.
-      INFO: Checking whether ceph filesystem is mounted on /etc/cray/upgrade/csm.
-      ```
-
-      If the prompt is answered with 'no', the command will exit and allow the administrator to
-      troubleshoot the Ceph health issues. Note that a Ceph status of `HEALTH_WARN` may resolve on
-      its own if given time to recover. For further Ceph health troubleshooting procedures, see
-      [Manage Ceph Services](../utility_storage/Manage_Ceph_Services.md). After troubleshooting the
-      Ceph health issues, repeat the `sat bootsys` command.
 
 1. (`ncn-m001#`) Monitor the consoles for each NCN while nodes are booting:
 
