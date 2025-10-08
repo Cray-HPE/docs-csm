@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -155,6 +155,29 @@ check_sls_health >> "${LOG_FILE}" 2>&1
   done
   set -e
 } >> ${LOG_FILE} 2>&1
+
+state_name="UPDATE_NCN_KERNEL_PARAMETERS"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    # As boot parameters are added or removed, update these arrays.
+    # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
+    bootparameters_to_set=("split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" "rd.live.overlay.thin=0" "rd.live.dir=${CSM_RELEASE}")
+    bootparameters_to_delete=("rd.live.squashimg" "rd.live.overlay.thin" "rd.live.dir")
+
+    for bootparameter in "${bootparameters_to_delete[@]}"; do
+      csi handoff bss-update-param --delete "${bootparameter}" --limit "${TARGET_XNAME}"
+    done
+
+    for bootparameter in "${bootparameters_to_set[@]}"; do
+      csi handoff bss-update-param --set "${bootparameter}" --limit "${TARGET_XNAME}"
+    done
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "${target_ncn}"
+else
+  echo "====> ${state_name} has been completed"
+fi
 
 ${basedir}/../common/ncn-rebuild-common.sh $target_ncn
 
