@@ -279,9 +279,6 @@ spec:
                     if [[ $? -ne 0 ]]; then
                         echo "ERROR master node ncn-m001 upgrade has failed"
                         exit 1
-                    else
-                        rm /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done
-                    fi          
           - name: rebuild-config-image-update
             dependencies:
               - upgrade-m001
