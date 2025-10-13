@@ -6,7 +6,7 @@ For details on doing this during an install or upgrade to CSM 1.7, see
 
 1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
-1. [Deploy Helm chart](#3-deploy-helm-chart)
+1. [Check the Helm chart](#3-check-the-cray-rrs-helm-chart)
 1. [Restart critical services](#4-restart-critical-services)
 
 ## 1. Enable and customize
@@ -209,43 +209,23 @@ cray cfs components update $XNAME --state []
     In case of configuration failure, see
     [Troubleshoot CFS Issues](../configuration_management/Troubleshoot_CFS_Issues.md).
 
-## 3. Deploy Helm chart
+## 3. Check the `cray-rrs` Helm chart
 
-Deploy [`cray-rrs`](cray-rrs_Deployment.md) in `rack-resiliency` namespace using the following procedure:
+Assure the `cray-rrs` helm chart is present in `rack-resiliency` namespace using the following procedure:
 
-1. (`ncn-mw#`) Get current CSM installation location.
+1. (`ncn-mw#`) Get the list of the helm charts.
 
     ```bash
-    . /etc/cray/upgrade/csm/myenv
-    echo $CSM_ARTI_DIR
+    helm ls -n rack-resiliency
     ```
 
     Example output:
 
     ```text
-    /etc/cray/upgrade/csm/test-activity/2148565/media/csm-1.7.0-rc.2
+    ncn-m001:~ # helm ls -n rack-resiliency 
+    NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+    cray-rrs        rack-resiliency 107             2025-09-26 21:43:12.5031915 +0000 UTC   deployed        cray-rrs-1.1.0  1.1.0      
     ```
-
-1. (`ncn-mw#`) Install the helm chart on the cluster.
-
-    ```bash
-    helm upgrade --install -n rack-resiliency cray-rrs $CSM_ARTI_DIR/helm/cray-rrs-1.1.0.tgz
-    ```
-
-    Example output:
-
-    ```text
-    NAME: cray-rrs
-    LAST DEPLOYED: Tue Aug 19 03:31:34 2025
-    NAMESPACE: rack-resiliency
-    STATUS: deployed
-    REVISION: 1
-    TEST SUITE: None
-    NOTES:
-    Installation info for chart cray-rrs:
-    ```
-
-    Post installation of `cray-rrs` helm chart, verify all Rack Resiliency related objects using the below commands:
 
 1. (`ncn-mw#`) To check the resources in `rack-resiliency` namespace use:
 
