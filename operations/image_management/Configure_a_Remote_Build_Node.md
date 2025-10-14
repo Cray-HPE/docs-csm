@@ -166,8 +166,8 @@ used to work with images, or if it can still run compute jobs while building ima
     has local disk drives, it is recommended to use those drives for these directories. If the remote build node has
     high speed network access to a storage system, it is recommended to use that storage system for these directories.
 
-    NOTE: A Lustre filesystem may have issues when used for rpm installations. If Lustre is used and there are
-    issues with rpm installations, consider using a different filesystem for `/var/tmp` and `/tmp`.
+    NOTE: A Lustre filesystem may have issues when used for RPM installations. If Lustre is used and there are
+    issues with RPM installations, consider using a different filesystem for `/var/tmp` and `/tmp`.
 
 ### Create a barebones IMS builder image
 
