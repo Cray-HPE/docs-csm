@@ -80,8 +80,8 @@ Some things to consider are:
     * If there is a lot of RAM available, create volumes from memory.
     * If there is high speed network storage available, it may be beneficial to use it.
 
-    NOTE: A Lustre filesystem may have issues when used for rpm installations. If Lustre is used and there are
-    issues with rpm installations, consider using a different filesystem for `/var/tmp` and `/tmp`.
+    NOTE: A Lustre filesystem may have issues when used for RPM installations. If Lustre is used and there are
+    issues with RPM installations, consider using a different filesystem for `/var/tmp` and `/tmp`.
 
 1. Network access.
 
