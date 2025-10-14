@@ -38,7 +38,49 @@ spec:
           - name: desiredCfsConfig
       dag:
         tasks:
+        - name: check-disk-space
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  set -euo pipefail
+                  TARGET="{{inputs.parameters.targetNcn}}"
+                  THRESHOLD=80
+                  NAME_WORKER_REGEX='^ncn-w[0-9]+$'
+
+                  echo "INFO Checking /var/lib/containerd usage (threshold ${THRESHOLD}%) excluding ${TARGET}"
+                  workers=$(kubectl get nodes --no-headers 2>/dev/null | awk '{print $1}' | grep -E "${NAME_WORKER_REGEX}" | grep -v "^${TARGET}$" || true)
+                  if [ -z "${workers}" ]; then
+                    echo "DEBUG No other worker nodes found; continuing drain for ${TARGET}."
+                    exit 0
+                  fi
+                  risk_nodes=()
+                  for worker in $workers; do
+                    disk_usage_percentage=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@"$worker" "df -P /var/lib/containerd 2>/dev/null | tail -1 | awk '{print \$5}'" 2>/dev/null || true)
+                    disk_usage_percentage=${disk_usage_percentage%\%}
+                    if [ -z "$disk_usage_percentage" ] || ! [[ "$disk_usage_percentage" =~ ^[0-9]+$ ]]; then
+                      echo "WARN Unable to determine usage on $worker"
+                      continue
+                    fi
+                    if [ "$disk_usage_percentage" -ge "$THRESHOLD" ]; then
+                      echo "DEBUG Node $worker at ${disk_usage_percentage}% (>= ${THRESHOLD}%)"
+                      risk_nodes+=("$worker")
+                    fi
+                  done
+                  if [ "${#risk_nodes[@]}" -gt 0 ]; then
+                    echo "ERROR Threshold exceeded on: ${risk_nodes[*]}"
+                    echo "INFO Refer to operations > kubernetes > containerd section of the CSM documentation to cleanup /var/lib/containerd on the affected nodes and then re-run the IUF stage"
+                    exit 1
+                  fi
+                  echo "INFO All checked workers $(echo "$workers" | paste -sd',' -) below ${THRESHOLD}%"
         - name: drain
+          dependencies:
+            - check-disk-space
           templateRef:
             name: kubectl-and-curl-template
             template: shell-script
