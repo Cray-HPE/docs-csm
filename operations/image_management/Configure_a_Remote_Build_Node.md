@@ -78,7 +78,10 @@ Some things to consider are:
 
     * If there are local disk drives on the node, use them.
     * If there is a lot of RAM available, create volumes from memory.
-    * If lustre is available, use lustre mounts.
+    * If there is high speed network storage available, it may be beneficial to use it.
+
+    NOTE: A Lustre filesystem may have issues when used for RPM installations. If Lustre is used and there are
+    issues with RPM installations, consider using a different filesystem for `/var/tmp` and `/tmp`.
 
 1. Network access.
 
@@ -163,8 +166,8 @@ used to work with images, or if it can still run compute jobs while building ima
     has local disk drives, it is recommended to use those drives for these directories. If the remote build node has
     high speed network access to a storage system, it is recommended to use that storage system for these directories.
 
-    NOTE: A Lustre filesystem may be used for the `/var/tmp` and `/tmp` directories, but it is not an overlay
-    filesystem and will not work for the `/var/lib/containers` directory.
+    NOTE: A Lustre filesystem may have issues when used for RPM installations. If Lustre is used and there are
+    issues with RPM installations, consider using a different filesystem for `/var/tmp` and `/tmp`.
 
 ### Create a barebones IMS builder image
 
