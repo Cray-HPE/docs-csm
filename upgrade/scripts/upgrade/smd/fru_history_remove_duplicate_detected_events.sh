@@ -44,10 +44,17 @@ BATCH_SIZE="${BATCH_SIZE:-1000000}"
 # Default: 1 second
 REPLICATION_SLEEP_DELAY="${REPLICATION_SLEEP_DELAY:-1}"
 
+# Vacuum type - controls disk space reclamation
+# FULL: Returns disk space to OS, but requires up to 2x table size and blocks writes
+# ANALYZE: Safer for large tables, frees space for reuse but doesn't return to OS
+# Default: FULL
+VACUUM_TYPE="${VACUUM_TYPE:-FULL}"
+
 echo "Using batch size: $BATCH_SIZE rows per batch"
 echo "Using replication sleep delay: $REPLICATION_SLEEP_DELAY seconds between batches"
+echo "Using vacuum type: VACUUM $VACUUM_TYPE"
 echo ""
-echo "Set BATCH_SIZE and REPLICATION_SLEEP_DELAY environment variables to override"
+echo "Set BATCH_SIZE, REPLICATION_SLEEP_DELAY, and VACUUM_TYPE variables to override"
 echo ""
 
 # Dig into the secrets store to find all necessary connection data
@@ -186,26 +193,30 @@ echo "Pruning complete: $TOTAL_DELETED total rows deleted across $BATCH_COUNT ba
 #
 #     1. Do nothing
 #            * Standard vacuum will eventually run but could be days or weeks
-#     2. Standard vacuum
+#     2. VACUUM ANALYZE
 #            * Non-blocking
-#            * Frees internal space
+#            * Frees internal space for reuse
 #            * Does not return disk space to the OS
-#     3. Full vacuum
+#            * Much less memory-intensive than VACUUM FULL
+#            * Safer for large tables
+#     3. VACUUM FULL
 #            * Blocking - no updates allowed to table until complete
-#            * Frees internal space
+#            * Frees internal space for reuse
 #            * Returns disk space to the OS
+#            * Requires up to 2x table size in free disk space
+#            * Very memory-intensive and can crash pods on large tables
 #
-# So, run a full vacuum
+# The VACUUM_TYPE variable controls which approach is used
 
 echo ""
-echo "Running VACUUM FULL on hwinv_hist table to reclaim disk space..."
+echo "Running VACUUM $VACUUM_TYPE on hwinv_hist table..."
 
 kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
-	psql \"$PSQL_OPTS\" -c \"VACUUM FULL hwinv_hist;\"
+	psql \"$PSQL_OPTS\" -c \"VACUUM $VACUUM_TYPE hwinv_hist;\"
 "
 
 if [[ $? -ne 0 ]]; then
-  echo "Error running VACUUM FULL" >&2
+  echo "Error running VACUUM $VACUUM_TYPE" >&2
   exit 1
 fi
 
