@@ -33,6 +33,23 @@
 
 set -eo pipefail
 
+# Batch size for DELETE operations - tune based on available memory
+# Smaller batches = slower but safer for memory-constrained environments
+# Larger batches = faster but require more memory
+# Default: 1000000 rows per batch
+BATCH_SIZE="${BATCH_SIZE:-1000000}"
+
+# Sleep delay between batches to allow replication to catch up
+# Increase if experiencing replication lag or resource contention
+# Default: 1 second
+REPLICATION_SLEEP_DELAY="${REPLICATION_SLEEP_DELAY:-1}"
+
+echo "Using batch size: $BATCH_SIZE rows per batch"
+echo "Using replication sleep delay: $REPLICATION_SLEEP_DELAY seconds between batches"
+echo ""
+echo "Set BATCH_SIZE and REPLICATION_SLEEP_DELAY environment variables to override"
+echo ""
+
 # Dig into the secrets store to find all necessary connection data
 #
 # Update SECRET_KEY_REF if it was changed in the SMD chart!
@@ -97,36 +114,71 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
-# Run the pruning logic
+# Run the pruning logic in batches to avoid memory exhaustion
+# This approach processes data in chunks to prevent OOM issues
 
 echo ""
-echo "Pruning hwinv_hist table... "
+echo -n "Pruning hwinv_hist table "
 
-kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
-	psql \"$PSQL_OPTS\" -c \"
-	WITH ordered AS (
-		SELECT ctid, id, \"timestamp\", event_type,
-			LAG(event_type) OVER (PARTITION BY id ORDER BY \"timestamp\") AS prev_type
-		FROM hwinv_hist
-		WHERE id IN (
-			SELECT loc.id
-			FROM hwinv_by_loc loc
-			WHERE loc.type IN ('Processor', 'NodeAccel')
+BATCH_COUNT=0
+TOTAL_DELETED=0
+
+while true; do
+	BATCH_COUNT=$((BATCH_COUNT + 1))
+
+	# Run the delete (limited to BATCH_SIZE) and capture full output
+	OUTPUT=$(kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
+		psql \"$PSQL_OPTS\" -c \"
+		WITH ordered AS (
+			SELECT ctid, id, \"timestamp\", event_type,
+				LAG(event_type) OVER (PARTITION BY id ORDER BY \"timestamp\") AS prev_type
+			FROM hwinv_hist
+			WHERE id IN (
+				SELECT loc.id
+				FROM hwinv_by_loc loc
+				WHERE loc.type IN ('Processor', 'NodeAccel')
+			)
+			LIMIT 100000
+		),
+		dups AS (
+			SELECT ctid
+			FROM ordered
+			WHERE event_type = 'Detected' AND prev_type = 'Detected'
+			LIMIT $BATCH_SIZE
 		)
-	),
-	dups AS (
-		SELECT ctid
-		FROM ordered
-		WHERE event_type = 'Detected' AND prev_type = 'Detected'
-	)
-	DELETE FROM hwinv_hist
-	WHERE ctid IN (SELECT ctid FROM dups);\"
-"
+		DELETE FROM hwinv_hist
+		WHERE ctid IN (SELECT ctid FROM dups);
+		SELECT ROW_COUNT();\"
+	" 2>&1)
 
-if [[ $? -ne 0 ]]; then
-  echo "Error executing SQL command" >&2
-  exit 1
-fi
+	# Check for errors
+	if [[ $? -ne 0 ]]; then
+		echo ""
+		echo "$OUTPUT"
+		echo ""
+		echo "Error executing SQL command" >&2
+		exit 1
+	fi
+
+	# Extract just the row count from the last line for exit condition
+	DELETED=$(echo "$OUTPUT" | tail -1 | tr -cd '0-9')
+
+	# If nothing deleted then we're done
+	if [[ -z "$DELETED" || "$DELETED" -eq 0 ]]; then
+		break
+	fi
+
+	TOTAL_DELETED=$((TOTAL_DELETED + DELETED))
+
+	# Print progress indicator
+	echo -n "."
+
+	# Small delay to allow replication to catch up and resources to be freed
+	sleep $REPLICATION_SLEEP_DELAY
+done
+
+echo ""
+echo "Pruning complete: $TOTAL_DELETED total rows deleted across $BATCH_COUNT batches"
 
 # The pruning logic above removed a large part of the hwinv_hist table. This
 # did not however change the table and database sizes.  In order to free
