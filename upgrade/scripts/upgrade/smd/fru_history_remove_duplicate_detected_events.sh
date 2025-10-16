@@ -33,11 +33,20 @@
 
 set -eo pipefail
 
+# Capture start time
+START_TIME=$(date +%s)
+
 # Batch size for DELETE operations - tune based on available memory
 # Smaller batches = slower but safer for memory-constrained environments
 # Larger batches = faster but require more memory
-# Default: 1000000 rows per batch
-BATCH_SIZE="${BATCH_SIZE:-1000000}"
+# Default: 250000 rows per batch
+BATCH_SIZE="${BATCH_SIZE:-250000}"
+
+# Maximum number of batches to process before exiting
+# Useful for processing large datasets incrementally to avoid pod crashes
+# Set to 0 for unlimited (process all duplicates)
+# Default: 0 (unlimited)
+MAX_BATCHES="${MAX_BATCHES:-0}"
 
 # Sleep delay between batches to allow replication to catch up
 # Increase if experiencing replication lag or resource contention
@@ -50,11 +59,25 @@ REPLICATION_SLEEP_DELAY="${REPLICATION_SLEEP_DELAY:-1}"
 # Default: FULL
 VACUUM_TYPE="${VACUUM_TYPE:-FULL}"
 
-echo "Using batch size: $BATCH_SIZE rows per batch"
-echo "Using replication sleep delay: $REPLICATION_SLEEP_DELAY seconds between batches"
-echo "Using vacuum type: VACUUM $VACUUM_TYPE"
+# Validate VACUUM_TYPE
+# Validate VACUUM_TYPE
+case "$VACUUM_TYPE" in
+	FULL|ANALYZE)
+		# Valid option
+		;;
+	*)
+		echo "Error: Invalid VACUUM_TYPE='$VACUUM_TYPE'" >&2
+		echo "Valid options: FULL or ANALYZE" >&2
+		exit 1
+		;;
+esac
+
+echo "Batch size:        $BATCH_SIZE rows per batch"
+echo "Max batches:       $MAX_BATCHES (0 = unlimited)"
+echo "Replication delay: $REPLICATION_SLEEP_DELAY seconds between batches"
+echo "Vacuum type:       $VACUUM_TYPE"
 echo ""
-echo "Set BATCH_SIZE, REPLICATION_SLEEP_DELAY, and VACUUM_TYPE variables to override"
+echo "Set BATCH_SIZE, MAX_BATCHES, REPLICATION_SLEEP_DELAY, and VACUUM_TYPE variables to override"
 echo ""
 
 # Dig into the secrets store to find all necessary connection data
@@ -91,14 +114,17 @@ kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
 	psql \"$PSQL_OPTS\" -c \"
 	DO \\\$\$
 	DECLARE
+		tbl_len_before     bigint := 0;   /* hwinv_history row count before pruning */
 		tbl_size_before    bigint := 0;   /* hwinv_history size before pruning */
 		db_size_before     bigint := 0;   /* DB size before pruning */
 	BEGIN
+		SELECT COUNT(*) FROM hwinv_hist INTO tbl_len_before;
 		SELECT pg_total_relation_size('hwinv_hist') INTO tbl_size_before;
 		SELECT pg_database_size(current_database()) INTO db_size_before;
 
-		RAISE NOTICE 'hwinv_history table size before pruning:  % mb', tbl_size_before / 1024 / 1024;
-		RAISE NOTICE 'Database size before pruning:             % mb', db_size_before / 1024 / 1024;
+		RAISE NOTICE 'hwinv_history row count before pruning:    %', to_char(tbl_len_before, 'FM999,999,999,999');
+		RAISE NOTICE 'hwinv_history table size before pruning:   % mb', tbl_size_before / 1024 / 1024;
+		RAISE NOTICE 'Database size before pruning:              % mb', db_size_before / 1024 / 1024;
 	END;
 	\\\$\$ LANGUAGE plpgsql;\"
 "
@@ -136,26 +162,33 @@ while true; do
 	# Run the delete (limited to BATCH_SIZE) and capture full output
 	OUTPUT=$(kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
 		psql \"$PSQL_OPTS\" -c \"
-		WITH ordered AS (
-			SELECT ctid, id, \"timestamp\", event_type,
-				LAG(event_type) OVER (PARTITION BY id ORDER BY \"timestamp\") AS prev_type
-			FROM hwinv_hist
-			WHERE id IN (
-				SELECT loc.id
-				FROM hwinv_by_loc loc
-				WHERE loc.type IN ('Processor', 'NodeAccel')
+		DO \\\$\\\$
+		DECLARE
+			rows_deleted INTEGER;
+		BEGIN
+			WITH ordered AS (
+				SELECT ctid, id, timestamp, event_type,
+					LAG(event_type) OVER (PARTITION BY id ORDER BY timestamp) AS prev_type
+				FROM hwinv_hist
+				WHERE id IN (
+					SELECT loc.id
+					FROM hwinv_by_loc loc
+					WHERE loc.type IN ('Processor', 'NodeAccel')
+				)
+			),
+			dups AS (
+				SELECT ctid
+				FROM ordered
+				WHERE event_type = 'Detected' AND prev_type = 'Detected'
+				LIMIT $BATCH_SIZE
 			)
-			LIMIT 100000
-		),
-		dups AS (
-			SELECT ctid
-			FROM ordered
-			WHERE event_type = 'Detected' AND prev_type = 'Detected'
-			LIMIT $BATCH_SIZE
-		)
-		DELETE FROM hwinv_hist
-		WHERE ctid IN (SELECT ctid FROM dups);
-		SELECT ROW_COUNT();\"
+			DELETE FROM hwinv_hist
+			WHERE ctid IN (SELECT ctid FROM dups);
+
+			GET DIAGNOSTICS rows_deleted = ROW_COUNT;
+			RAISE NOTICE '%', rows_deleted;
+		END;
+		\\\$\\\$;\"
 	" 2>&1)
 
 	# Check for errors
@@ -167,11 +200,12 @@ while true; do
 		exit 1
 	fi
 
-	# Extract just the row count from the last line for exit condition
-	DELETED=$(echo "$OUTPUT" | tail -1 | tr -cd '0-9')
+	# Extract the row count from NOTICE output (last NOTICE line only)
+	DELETED=$(echo "$OUTPUT" | grep "NOTICE:" | tail -1 | grep -oE '[0-9]+')
 
 	# If nothing deleted then we're done
 	if [[ -z "$DELETED" || "$DELETED" -eq 0 ]]; then
+		echo -n "."
 		break
 	fi
 
@@ -180,12 +214,24 @@ while true; do
 	# Print progress indicator
 	echo -n "."
 
+	# Check if we've reached the maximum batch limit
+	if [[ $MAX_BATCHES -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
+		echo ""
+		echo "Reached maximum batch limit of $MAX_BATCHES batches"
+		break
+	fi
+
 	# Small delay to allow replication to catch up and resources to be freed
 	sleep $REPLICATION_SLEEP_DELAY
 done
 
 echo ""
-echo "Pruning complete: $TOTAL_DELETED total rows deleted across $BATCH_COUNT batches"
+if [[ $MAX_BATCHES -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
+	echo "Partial pruning complete: $TOTAL_DELETED rows deleted across $BATCH_COUNT batches (limit reached)"
+	echo "Run script again to continue processing remaining duplicates"
+else
+	echo "Pruning complete: $TOTAL_DELETED total rows deleted across $BATCH_COUNT batches"
+fi
 
 # The pruning logic above removed a large part of the hwinv_hist table. This
 # did not however change the table and database sizes.  In order to free
@@ -220,6 +266,28 @@ if [[ $? -ne 0 ]]; then
   exit 1
 fi
 
+# Clean up temporary index (unless we hit batch limit - leave it for next run)
+
+if [[ $MAX_BATCHES -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
+  echo ""
+  echo "Leaving temporary index hwinvhist_id_ts_idx in place for next run"
+  echo "Cleanup complete"
+else
+  echo ""
+  echo "Dropping temporary index hwinvhist_id_ts_idx..."
+
+  kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
+	psql \"$PSQL_OPTS\" -c \"DROP INDEX IF EXISTS hwinvhist_id_ts_idx;\"
+  "
+
+  if [[ $? -ne 0 ]]; then
+    echo "Error dropping temporary index" >&2
+    exit 1
+  fi
+
+  echo "Cleanup complete"
+fi
+
 # Capture and print sizes after pruning and vacuuming
 
 echo ""
@@ -228,14 +296,28 @@ kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
 	psql \"$PSQL_OPTS\" -c \"
 	DO \\\$\$
 	DECLARE
+		tbl_len_after     bigint := 0;   /* hwinv_history row count after pruning */
 		tbl_size_after    bigint := 0;   /* hwinv_history size after pruning */
 		db_size_after     bigint := 0;   /* DB size after pruning */
 	BEGIN
+		SELECT COUNT(*) FROM hwinv_hist INTO tbl_len_after;
 		SELECT pg_total_relation_size('hwinv_hist') INTO tbl_size_after;
 		SELECT pg_database_size(current_database()) INTO db_size_after;
 
-		RAISE NOTICE 'hwinv_history table size after pruning:  % mb', tbl_size_after / 1024 / 1024;
-		RAISE NOTICE 'Database size after pruning:             % mb', db_size_after / 1024 / 1024;
+		RAISE NOTICE 'hwinv_history row count after pruning:    %', to_char(tbl_len_after, 'FM999,999,999,999');
+		RAISE NOTICE 'hwinv_history table size after pruning:   % mb', tbl_size_after / 1024 / 1024;
+		RAISE NOTICE 'Database size after pruning:              % mb', db_size_after / 1024 / 1024;
 	END;
 	\\\$\$ LANGUAGE plpgsql;\"
 "
+
+# Calculate and display total execution time
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
+
+HOURS=$((ELAPSED / 3600))
+MINUTES=$(((ELAPSED % 3600) / 60))
+SECONDS=$((ELAPSED % 60))
+
+echo ""
+echo "Total execution time: ${HOURS}h ${MINUTES}m ${SECONDS}s"
