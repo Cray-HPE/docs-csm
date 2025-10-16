@@ -13,6 +13,7 @@ Configure or create an IMS remote build node for use for image builds.
 * [Removing remote build nodes from IMS](#removing-remote-build-nodes-from-ims)
 * [Listing remote build nodes in IMS](#listing-remote-build-nodes-in-ims)
 * [Checking the status of remote build nodes](#checking-the-status-of-remote-build-nodes)
+* [Configuring remote job heartbeat timeout](#configuring-remote-job-heartbeat-timeout)
 
 ## Prerequisites
 
@@ -843,3 +844,93 @@ The output will look something like:
   }
 ]
 ```
+
+## Configuring remote job heartbeat timeout
+
+When a remote job is running, IMS checks that the job is still active on the remote build node. If IMS
+fails to interact with the job for a specified number of attempts, the job is considered failed and will be
+terminated. The default number of attempts is `12`.
+
+If the remote build node is on a slow network, or if the remote build node is under heavy load, it may be
+necessary to increase the number of attempts to avoid jobs being incorrectly marked as failed.
+
+(`ncn-mw#`) To check the current heartbeat timeout settings:
+
+Execute the following command to see the current value:
+
+```bash
+kubectl -n services get cm cray ims-config -o jsonpath='{.data.DEFAULT_IMS_JOB_REMOTE_TIMEOUT_COUNT}'
+```
+
+Expected output will be something like:
+
+```text
+12
+```
+
+(`ncn-mw#`) To change the heartbeat timeout settings:
+
+In the command below, replace `<new_value>` with the desired number of attempts.
+
+```bash
+kubectl -n services patch cm ims-config --type merge -p '{"data":{"DEFAULT_IMS_JOB_REMOTE_TIMEOUT_COUNT":"<new_value>"}}'
+```
+
+Expected output will be something like:
+
+```text
+configmap/ims-config patched
+```
+
+After changing the configuration, the `cray-ims` pod must be restarted to pick up the new configuration.
+
+```bash
+kubectl -n services rollout restart deployment cray-ims
+```
+
+NOTE: This will not affect jobs that are already running on remote build nodes. The new configuration
+will only affect jobs that are started after the configuration change.
+
+(`ncn-mw#`) To find if the heartbeat timeout is terminating jobs:
+
+Check the job pod's `sshd` container log for messages similar to the following:
+
+```bash
+kubectl -n ims logs --follow <job_pod_name> -c sshd
+```
+
+Expect output similar to the following if the timeout is occurring:
+
+```text
+Running user shell for customize action
+Waiting for /mnt/image/ready flag
+chown: cannot access '/mnt/image/image-root': No such file or directory
+JOB_ENABLE_DKMS: True
+is_dkms=true
+dkms mounts not set in sshd pod for remote jobs
+Checking build architecture: x86_64
+To mark this shell as successful, touch the file "/mnt/image/complete".
+To mark this shell as failed, touch the file "/mnt/image/failed".
+Waiting for User to mark this shell as either successful or failed.
+Warning: Permanently added 'x3000c0s19b1n0' (ED25519) to the list of known hosts.
+Remote container heartbeat failed - error count: 1
+Remote container heartbeat failed - error count: 2
+Remote container heartbeat failed - error count: 3
+Remote container heartbeat failed - error count: 4
+Remote container heartbeat failed - error count: 5
+Remote container heartbeat failed - error count: 6
+Remote container heartbeat failed - error count: 7
+Remote container heartbeat failed - error count: 8
+Remote container heartbeat failed - error count: 9
+Remote container heartbeat failed - error count: 10
+Remote container heartbeat failed - error count: 11
+Remote container heartbeat failed - error count: 12
+Remote job is no longer accessible after 12 consecutive errors - exiting wait loop
+/mnt/image/failed exists; Shell was marked failed.
+Exiting ssh environment
+Touching failed flag: /mnt/image/failed
+Touching /mnt/image/exiting flag
+```
+
+If there are messages like this in the log but the job is still running correctly, it may be necessary
+to increase the heartbeat timeout configuration as described above.
