@@ -205,7 +205,7 @@ while true; do
 
 	# If nothing deleted then we're done
 	if [[ -z "$DELETED" || "$DELETED" -eq 0 ]]; then
-		echo -n "."
+		BATCH_COUNT=$((BATCH_COUNT - 1))
 		break
 	fi
 
@@ -213,6 +213,11 @@ while true; do
 
 	# Print progress indicator
 	echo -n "."
+
+	# If batch size is ALL, we are done after one iteration
+	if [[ "$BATCH_SIZE" == "ALL" ]]; then
+		break
+	fi
 
 	# Check if we've reached the maximum batch limit
 	if [[ $MAX_BATCHES -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
@@ -226,7 +231,7 @@ while true; do
 done
 
 echo ""
-if [[ $MAX_BATCHES -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
+if [[ $MAX_BATCHES -gt 0 && $TOTAL_DELETED -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
 	echo "Partial pruning complete: $TOTAL_DELETED rows deleted across $BATCH_COUNT batches (limit reached)"
 	echo "Run script again to continue processing remaining duplicates"
 else
