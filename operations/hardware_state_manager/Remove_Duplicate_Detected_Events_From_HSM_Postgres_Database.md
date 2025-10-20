@@ -210,50 +210,53 @@ other component types were affected by this bug.
 We have seen cases where the `fru_history_remove_duplicate_detected_events.sh`
 script can fail if there are too many duplicate "Detected" events present
 in the database.  Should this occur, the pruning operation will need to be
-broken down into smaller sets of operations.
+broken down into smaller sets of operations.  This section can be skipped
+if the pruning operation above succeeded.
 
 Full descriptive details of each of the environmental variables used in the
 secondary procedure can be found at the bottom of this page.
 
 The first step in breaking down the pruning operation is finding an
 appropriate batch size.  We recommend starting by setting the `VACUUM_TYPE`
-to `ANALYZE`, a `MAX_BATCHES` of 1, and a `BATCH_SIZE` of 100,000:
+to `ANALYZE`, `MAX_BATCHES` to 1, and `BATCH_SIZE` to 100,000:
 
-```
+```bash
 BATCH_SIZE=100000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
 ```
 
 Should that complete successfully, move on to attempt 1,000,000 duplicates:
 
-```
+```bash
 BATCH_SIZE=1000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
 ```
 
 Should that complete successfully, move on to attempt 10,000,000 duplicates:
 
-```
+```bash
 BATCH_SIZE=10000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
 ```
 
 Should that suceed lets try our luck with 100,000,000 duplicates:
 
-```
+```bash
 BATCH_SIZE=100000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
 ```
 
-It is likely that the max batch size will be either 10,000,000 or
+It is likely that the max batch size will either be 10,000,000 or
 100,000,000.
 
 Once the maximum batch size is arrived at, you can then start increasing
-the number of batches processed per run with the MAX_BATCHES variable.
+the number of batches processed per run by increasing the value assigned
+to the `MAX_BATCHES` variable.
 
-Once all duplicates have been pruned, then run the script one final time with a FULL vacuum:
+Once all duplicates have been pruned, then run the script one final time
+with a `FULL` vacuum:
 
-```
+```bash
 VACUUM_TYPE=FULL ./fru_history_remove_duplicate_detected_events.sh
 ```
 
-This last step is necessary to return disk space to the OS.
+A `FULL` vacuum is necessary to return disk space to the OS.
 
 #### Environment Variables
 
