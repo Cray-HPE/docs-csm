@@ -166,26 +166,35 @@ other component types were affected by this bug.
     Example output:
 
     ```text
-    Determining the postgres leader...
-    The SMD postgres leader is cray-smd-postgres-2
-    NOTICE:  hwinv_history table size before pruning:  652 mb
-    NOTICE:  Database size before pruning:             666 mb
+    Batch size:        ALL (ALL = unlimited)
+    Max batches:       0 (0 = unlimited)
+    Replication delay: 1 seconds between batches
+    Vacuum type:       FULL
+
+    Set BATCH_SIZE, MAX_BATCHES, REPLICATION_SLEEP_DELAY, and VACUUM_TYPE variables to override
+
+    NOTICE:  hwinv_history row count before pruning:    137,857,584
+    NOTICE:  hwinv_history table size before pruning:   86841 mb
+    NOTICE:  Database size before pruning:              86868 mb
     DO
 
     Operations may take considerable time - please do not interrupt
-    
+
     Creating hwinvhist_id_ts_idx index on hwinv_hist table...
     CREATE INDEX
-    
-    Pruning hwinv_hist table...
-    DELETE 1740689
-    
-    Running VACUUM FULL on hwinv_hist table to reclaim disk space...
+
+    Pruning hwinv_hist table ..
+    Pruning complete: 137431152 total rows deleted across 2 batches
+
+    Running VACUUM FULL on hwinv_hist table...
     VACUUM
-    
-    NOTICE:  hwinv_history table size after pruning:  268 mb
-    NOTICE:  Database size after pruning:             282 mb
+
+    NOTICE:  hwinv_history row count after pruning:    426,432
+    NOTICE:  hwinv_history table size after pruning:   182 mb
+    NOTICE:  Database size after pruning:              210 mb
     DO
+
+    Total execution time: 0h 12m 46s
     ```
 
     Should any issues arise requiring restoration of the hardware inventory

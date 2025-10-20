@@ -39,8 +39,9 @@ START_TIME=$(date +%s)
 # Batch size for DELETE operations - tune based on available memory
 # Smaller batches = slower but safer for memory-constrained environments
 # Larger batches = faster but require more memory
-# Default: 250000 rows per batch
-BATCH_SIZE="${BATCH_SIZE:-250000}"
+# Set to a number to limit batch size (e.g., 250000)
+# Default: ALL (process all duplicates in one batch)
+BATCH_SIZE="${BATCH_SIZE:-ALL}"
 
 # Maximum number of batches to process before exiting
 # Useful for processing large datasets incrementally to avoid pod crashes
@@ -60,7 +61,6 @@ REPLICATION_SLEEP_DELAY="${REPLICATION_SLEEP_DELAY:-1}"
 VACUUM_TYPE="${VACUUM_TYPE:-FULL}"
 
 # Validate VACUUM_TYPE
-# Validate VACUUM_TYPE
 case "$VACUUM_TYPE" in
 	FULL|ANALYZE)
 		# Valid option
@@ -72,7 +72,7 @@ case "$VACUUM_TYPE" in
 		;;
 esac
 
-echo "Batch size:        $BATCH_SIZE rows per batch"
+echo "Batch size:        $BATCH_SIZE (ALL = unlimited)"
 echo "Max batches:       $MAX_BATCHES (0 = unlimited)"
 echo "Replication delay: $REPLICATION_SLEEP_DELAY seconds between batches"
 echo "Vacuum type:       $VACUUM_TYPE"
@@ -264,28 +264,6 @@ kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
 if [[ $? -ne 0 ]]; then
   echo "Error running VACUUM $VACUUM_TYPE" >&2
   exit 1
-fi
-
-# Clean up temporary index (unless we hit batch limit - leave it for next run)
-
-if [[ $MAX_BATCHES -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
-  echo ""
-  echo "Leaving temporary index hwinvhist_id_ts_idx in place for next run"
-  echo "Cleanup complete"
-else
-  echo ""
-  echo "Dropping temporary index hwinvhist_id_ts_idx..."
-
-  kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
-	psql \"$PSQL_OPTS\" -c \"DROP INDEX IF EXISTS hwinvhist_id_ts_idx;\"
-  "
-
-  if [[ $? -ne 0 ]]; then
-    echo "Error dropping temporary index" >&2
-    exit 1
-  fi
-
-  echo "Cleanup complete"
 fi
 
 # Capture and print sizes after pruning and vacuuming
