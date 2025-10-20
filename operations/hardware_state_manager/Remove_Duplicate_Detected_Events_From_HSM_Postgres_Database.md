@@ -173,9 +173,9 @@ other component types were affected by this bug.
 
     Set BATCH_SIZE, MAX_BATCHES, REPLICATION_SLEEP_DELAY, and VACUUM_TYPE variables to override
 
-    NOTICE:  hwinv_history row count before pruning:    137,857,584
-    NOTICE:  hwinv_history table size before pruning:   86841 mb
-    NOTICE:  Database size before pruning:              86868 mb
+    NOTICE:  hwinv_history row count before pruning:    180,857,684
+    NOTICE:  hwinv_history table size before pruning:   79831 mb
+    NOTICE:  Database size before pruning:              79858 mb
     DO
 
     Operations may take considerable time - please do not interrupt
@@ -184,18 +184,106 @@ other component types were affected by this bug.
     CREATE INDEX
 
     Pruning hwinv_hist table ..
-    Pruning complete: 137431152 total rows deleted across 2 batches
+    Pruning complete: 180431252 total rows deleted across 2 batches
 
     Running VACUUM FULL on hwinv_hist table...
     VACUUM
 
     NOTICE:  hwinv_history row count after pruning:    426,432
-    NOTICE:  hwinv_history table size after pruning:   182 mb
-    NOTICE:  Database size after pruning:              210 mb
+    NOTICE:  hwinv_history table size after pruning:   199 mb
+    NOTICE:  Database size after pruning:              226 mb
     DO
 
-    Total execution time: 0h 12m 46s
+    Total execution time: 0h 17m 32s
     ```
 
     Should any issues arise requiring restoration of the hardware inventory
     history table, please refer back to step 3.
+
+    We have seen cases where the `fru_history_remove_duplicate_detected_events.sh`
+    script can fail if there are too many duplicate "Detected" events
+    present in the database.  Should this occur, please refer to the
+    secondary procedure described further below.
+
+### Secondary Procedure
+
+We have seen cases where the `fru_history_remove_duplicate_detected_events.sh`
+script can fail if there are too many duplicate "Detected" events present
+in the database.  Should this occur, the pruning operation will need to be
+broken down into smaller sets of operations.
+
+Full descriptive details of each of the environmental variables used in the
+secondary procedure can be found at the bottom of this page.
+
+The first step in breaking down the pruning operation is finding an
+appropriate batch size.  We recommend starting by setting the `VACUUM_TYPE`
+to `ANALYZE`, a `MAX_BATCHES` of 1, and a `BATCH_SIZE` of 100,000:
+
+```
+BATCH_SIZE=100000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
+```
+
+Should that complete successfully, move on to attempt 1,000,000 duplicates:
+
+```
+BATCH_SIZE=1000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
+```
+
+Should that complete successfully, move on to attempt 10,000,000 duplicates:
+
+```
+BATCH_SIZE=10000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
+```
+
+Should that suceed lets try our luck with 100,000,000 duplicates:
+
+```
+BATCH_SIZE=100000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
+```
+
+It is likely that the max batch size will be either 10,000,000 or
+100,000,000.
+
+Once the maximum batch size is arrived at, you can then start increasing
+the number of batches processed per run with the MAX_BATCHES variable.
+
+Once all duplicates have been pruned, then run the script one final time with a FULL vacuum:
+
+```
+VACUUM_TYPE=FULL ./fru_history_remove_duplicate_detected_events.sh
+```
+
+This last step is necessary to return disk space to the OS.
+
+#### Environment Variables
+
+There are four environment variables to facilitate this:
+
+##### BATCH_SIZE
+
+This variable limits the number of duplicate events to prune per iteration
+of the operation.  The default is `ALL` which implies no limit is in place.
+If tuning of this variable is required, the recommendation is to start low
+and increase until failure is encountered, at which point back down to the
+next lowest batch size that did successfully complete.
+
+##### MAX_BATCHES
+
+This variable limits the number of batches, or iterations, to perform.
+The default is `0` which implies no limit is in place. When narrowing in
+on the appropriate values for `BATCH_SIZE`, it is recommended to set this
+to `1`.  Once an appropriate `BATCH_SIZE` is obtained, this value can be
+increased.
+
+##### REPLICATION_SLEEP_DELAY
+
+This is the sleep delay between batches to allow replication to catch up.
+The default is `1` second.  It is unlikely that you will need to adjust
+this value upwards.
+
+##### VACUUM_TYPE
+
+This controls the type of vacuum to perform after pruning.  The default is
+`FULL` but it is recommended to specify `ANALYZE` until the database is
+fully pruned.  Once fully pruned, a final `FULL` vacuum should be performed.
+The full vacuum is required in order to return disk space to the OS.
