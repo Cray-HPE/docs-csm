@@ -25,7 +25,7 @@
 
 set -eo pipefail
 
-SCRIPT_DIR=$(dirname $(realpath ${BASH_SOURCE[0]}))
+SCRIPT_DIR=$(dirname "$(realpath ${BASH_SOURCE[0]})")
 
 availRGW=$(ceph df -f json | jq '.stats.total_avail_bytes' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
 echo "Gibibytes available in cluster: $availRGW"
