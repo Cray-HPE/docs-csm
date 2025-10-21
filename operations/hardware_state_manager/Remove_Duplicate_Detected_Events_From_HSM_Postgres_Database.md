@@ -255,39 +255,39 @@ After all duplicates have been removed, run the script one final time with a
 VACUUM_TYPE=FULL ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
 ```
 
-**Note:** A `FULL` vacuum is required to return disk space to the operating system.
+_Note:_ A `FULL` vacuum is required to return disk space to the operating system.
 
 #### Environment Variables
 
 The following environment variables control the behavior of the pruning script:
 
-##### BATCH_SIZE
+##### `BATCH_SIZE`
 
-**Default:** `ALL` (no limit)
+_Default:_ `ALL` (no limit)
 
 Limits the number of duplicate events to prune per iteration. When tuning
 this variable, start with a low value and increase incrementally until a
 failure occurs, then use the last successful batch size.
 
-##### MAX_BATCHES
+##### `MAX_BATCHES`
 
-**Default:** `0` (no limit)
+_Default:_ `0` (no limit)
 
 Limits the number of batches (iterations) to perform. When determining the
 appropriate `BATCH_SIZE`, set this to `1` to test one batch at a time.
 Once an appropriate `BATCH_SIZE` is determined, increase this value to
 process multiple batches per run.
 
-##### REPLICATION_SLEEP_DELAY
+##### `REPLICATION_SLEEP_DELAY`
 
-**Default:** `1` (second)
+_Default:_ `1` (second)
 
 Specifies the sleep delay in seconds between batches to allow database
 replication to catch up. Adjusting this value is typically not necessary.
 
-##### VACUUM_TYPE
+##### `VACUUM_TYPE`
 
-**Default:** `FULL`
+_Default:_ `FULL`
 
 Controls the type of vacuum to perform after pruning. Options are `FULL`
 or `ANALYZE`. Use `ANALYZE` during incremental pruning operations to save

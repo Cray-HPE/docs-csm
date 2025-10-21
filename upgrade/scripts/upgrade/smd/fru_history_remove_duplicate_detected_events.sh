@@ -62,14 +62,14 @@ VACUUM_TYPE="${VACUUM_TYPE:-FULL}"
 
 # Validate VACUUM_TYPE
 case "$VACUUM_TYPE" in
-	FULL|ANALYZE)
-		# Valid option
-		;;
-	*)
-		echo "Error: Invalid VACUUM_TYPE='$VACUUM_TYPE'" >&2
-		echo "Valid options: FULL or ANALYZE" >&2
-		exit 1
-		;;
+  FULL|ANALYZE)
+    # Valid option
+    ;;
+  *)
+    echo "Error: Invalid VACUUM_TYPE='$VACUUM_TYPE'" >&2
+    echo "Valid options: FULL or ANALYZE" >&2
+    exit 1
+    ;;
 esac
 
 echo "Batch size:        $BATCH_SIZE (ALL = unlimited)"
@@ -157,10 +157,10 @@ BATCH_COUNT=0
 TOTAL_DELETED=0
 
 while true; do
-	BATCH_COUNT=$((BATCH_COUNT + 1))
+  BATCH_COUNT=$((BATCH_COUNT + 1))
 
-	# Run the delete (limited to BATCH_SIZE) and capture full output
-	OUTPUT=$(kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
+  # Run the delete (limited to BATCH_SIZE) and capture full output
+  OUTPUT=$(kubectl -n services exec "$POSTGRES_LEADER" -c postgres -it -- bash -c "
 		psql \"$PSQL_OPTS\" -c \"
 		DO \\\$\\\$
 		DECLARE
@@ -191,51 +191,51 @@ while true; do
 		\\\$\\\$;\"
 	" 2>&1)
 
-	# Check for errors
-	if [[ $? -ne 0 ]]; then
-		echo ""
-		echo "$OUTPUT"
-		echo ""
-		echo "Error executing SQL command" >&2
-		exit 1
-	fi
+  # Check for errors
+  if [[ $? -ne 0 ]]; then
+    echo ""
+    echo "$OUTPUT"
+    echo ""
+    echo "Error executing SQL command" >&2
+    exit 1
+  fi
 
-	# Extract the row count from NOTICE output (last NOTICE line only)
-	DELETED=$(echo "$OUTPUT" | grep "NOTICE:" | tail -1 | grep -oE '[0-9]+')
+  # Extract the row count from NOTICE output (last NOTICE line only)
+  DELETED=$(echo "$OUTPUT" | grep "NOTICE:" | tail -1 | grep -oE '[0-9]+')
 
-	# If nothing deleted then we're done
-	if [[ -z "$DELETED" || "$DELETED" -eq 0 ]]; then
-		BATCH_COUNT=$((BATCH_COUNT - 1))
-		break
-	fi
+  # If nothing deleted then we're done
+  if [[ -z "$DELETED" || "$DELETED" -eq 0 ]]; then
+    BATCH_COUNT=$((BATCH_COUNT - 1))
+    break
+  fi
 
-	TOTAL_DELETED=$((TOTAL_DELETED + DELETED))
+  TOTAL_DELETED=$((TOTAL_DELETED + DELETED))
 
-	# Print progress indicator
-	echo -n "."
+  # Print progress indicator
+  echo -n "."
 
-	# If batch size is ALL, we are done after one iteration
-	if [[ "$BATCH_SIZE" == "ALL" ]]; then
-		break
-	fi
+  # If batch size is ALL, we are done after one iteration
+  if [[ "$BATCH_SIZE" == "ALL" ]]; then
+    break
+  fi
 
-	# Check if we've reached the maximum batch limit
-	if [[ $MAX_BATCHES -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
-		echo ""
-		echo "Reached maximum batch limit of $MAX_BATCHES batches"
-		break
-	fi
+  # Check if we've reached the maximum batch limit
+  if [[ $MAX_BATCHES -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
+    echo ""
+    echo "Reached maximum batch limit of $MAX_BATCHES batches"
+    break
+  fi
 
-	# Small delay to allow replication to catch up and resources to be freed
-	sleep $REPLICATION_SLEEP_DELAY
+  # Small delay to allow replication to catch up and resources to be freed
+  sleep $REPLICATION_SLEEP_DELAY
 done
 
 echo ""
 if [[ $MAX_BATCHES -gt 0 && $TOTAL_DELETED -gt 0 && $BATCH_COUNT -ge $MAX_BATCHES ]]; then
-	echo "Partial pruning complete: $TOTAL_DELETED rows deleted across $BATCH_COUNT batches (limit reached)"
-	echo "Run script again to continue processing remaining duplicates"
+  echo "Partial pruning complete: $TOTAL_DELETED rows deleted across $BATCH_COUNT batches (limit reached)"
+  echo "Run script again to continue processing remaining duplicates"
 else
-	echo "Pruning complete: $TOTAL_DELETED total rows deleted across $BATCH_COUNT batches"
+  echo "Pruning complete: $TOTAL_DELETED total rows deleted across $BATCH_COUNT batches"
 fi
 
 # The pruning logic above removed a large part of the hwinv_hist table. This
