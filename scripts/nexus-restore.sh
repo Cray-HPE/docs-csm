@@ -25,7 +25,7 @@
 
 set -exo pipefail
 
-SCRIPT_DIR=$(dirname $(realpath ${BASH_SOURCE[0]}))
+SCRIPT_DIR=$(dirname "$(realpath ${BASH_SOURCE[0]})")
 
 if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phase}') ]]; then
   echo "Error no backup PVC was found\nPlease run nexus-backup.sh before trying to restore"
