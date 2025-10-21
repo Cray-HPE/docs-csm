@@ -168,8 +168,8 @@ while true; do
 			rows_deleted INTEGER;
 		BEGIN
 			WITH ordered AS (
-				SELECT ctid, id, timestamp, event_type,
-					LAG(event_type) OVER (PARTITION BY id ORDER BY timestamp) AS prev_type
+				SELECT ctid, id, \"timestamp\", event_type,
+					LAG(event_type) OVER (PARTITION BY id ORDER BY \"timestamp\") AS prev_type
 				FROM hwinv_hist
 				WHERE id IN (
 					SELECT loc.id
