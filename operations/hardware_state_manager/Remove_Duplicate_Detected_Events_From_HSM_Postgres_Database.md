@@ -173,6 +173,9 @@ other component types were affected by this bug.
 
     Set BATCH_SIZE, MAX_BATCHES, REPLICATION_SLEEP_DELAY, and VACUUM_TYPE variables to override
 
+    Determining the postgres leader...
+    The SMD postgres leader is cray-smd-postgres-0
+
     NOTICE:  hwinv_history row count before pruning:    180,857,684
     NOTICE:  hwinv_history table size before pruning:   79831 mb
     NOTICE:  Database size before pruning:              79858 mb
@@ -183,8 +186,8 @@ other component types were affected by this bug.
     Creating hwinvhist_id_ts_idx index on hwinv_hist table...
     CREATE INDEX
 
-    Pruning hwinv_hist table ..
-    Pruning complete: 180431252 total rows deleted across 2 batches
+    Pruning hwinv_hist table .
+    Pruning complete: 180431252 total rows deleted across 1 batches
 
     Running VACUUM FULL on hwinv_hist table...
     VACUUM

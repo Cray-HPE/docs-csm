@@ -107,6 +107,7 @@ echo "Determining the postgres leader..."
 POSTGRES_LEADER=$(kubectl exec cray-smd-postgres-0 -n services -c postgres -t -- patronictl list -f json | jq -r '.[] | select(.Role == "Leader").Member')
 
 echo "The SMD postgres leader is $POSTGRES_LEADER"
+echo ""
 
 # Capture and print sizes before pruning and vacuuming
 
