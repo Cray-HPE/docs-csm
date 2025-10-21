@@ -203,90 +203,93 @@ other component types were affected by this bug.
     We have seen cases where the `fru_history_remove_duplicate_detected_events.sh`
     script can fail if there are too many duplicate "Detected" events
     present in the database.  Should this occur, please refer to the
-    secondary procedure described further below.
+    alternative procedure described further below.
 
-### Secondary Procedure
+### Alternative Procedure for Large Databases
 
-We have seen cases where the `fru_history_remove_duplicate_detected_events.sh`
-script can fail if there are too many duplicate "Detected" events present
-in the database.  Should this occur, the pruning operation will need to be
-broken down into smaller sets of operations.  This section can be skipped
-if the pruning operation above succeeded.
+If the `fru_history_remove_duplicate_detected_events.sh` script fails due to
+an excessive number of duplicate "Detected" events in the database, the pruning
+operation must be broken down into smaller batches. Skip this section if the
+pruning operation in step 4 completed successfully.
 
-Full descriptive details of each of the environmental variables used in the
-secondary procedure can be found at the bottom of this page.
+This procedure uses environment variables to control the batch size and number
+of iterations. Full descriptions of each variable are provided at the end of
+this section.
 
-The first step in breaking down the pruning operation is finding an
-appropriate batch size.  We recommend starting by setting the `VACUUM_TYPE`
-to `ANALYZE`, `MAX_BATCHES` to 1, and `BATCH_SIZE` to 100,000:
-
-```bash
-BATCH_SIZE=100000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
-```
-
-Should that complete successfully, move on to attempt 1,000,000 duplicates:
+The first step is to determine an appropriate batch size through incremental
+testing. Begin with conservative settings: `VACUUM_TYPE` set to `ANALYZE`,
+`MAX_BATCHES` set to 1, and `BATCH_SIZE` set to 100,000:
 
 ```bash
-BATCH_SIZE=1000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
+BATCH_SIZE=100000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
 ```
 
-Should that complete successfully, move on to attempt 10,000,000 duplicates:
+If successful, increase the batch size to 1,000,000:
 
 ```bash
-BATCH_SIZE=10000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
+BATCH_SIZE=1000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
 ```
 
-Should that suceed lets try our luck with 100,000,000 duplicates:
+If successful, increase the batch size to 10,000,000:
 
 ```bash
-BATCH_SIZE=100000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ./fru_history_remove_duplicate_detected_events.sh
+BATCH_SIZE=10000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
 ```
 
-It is likely that the max batch size will either be 10,000,000 or
-100,000,000.
-
-Once the maximum batch size is arrived at, you can then start increasing
-the number of batches processed per run by increasing the value assigned
-to the `MAX_BATCHES` variable.
-
-Once all duplicates have been pruned, then run the script one final time
-with a `FULL` vacuum:
+If successful, attempt 100,000,000:
 
 ```bash
-VACUUM_TYPE=FULL ./fru_history_remove_duplicate_detected_events.sh
+BATCH_SIZE=100000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
 ```
 
-A `FULL` vacuum is necessary to return disk space to the OS.
+The maximum viable batch size is typically either 10,000,000 or 100,000,000.
+
+Once the maximum batch size has been determined, increase the number of batches
+processed per run by adjusting the `MAX_BATCHES` variable. Continue running the
+script until all duplicate events are pruned.
+
+After all duplicates have been removed, run the script one final time with a
+`FULL` vacuum to reclaim disk space:
+
+```bash
+VACUUM_TYPE=FULL ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
+```
+
+**Note:** A `FULL` vacuum is required to return disk space to the operating system.
 
 #### Environment Variables
 
-There are four environment variables to facilitate this:
+The following environment variables control the behavior of the pruning script:
 
 ##### BATCH_SIZE
 
-This variable limits the number of duplicate events to prune per iteration
-of the operation.  The default is `ALL` which implies no limit is in place.
-If tuning of this variable is required, the recommendation is to start low
-and increase until failure is encountered, at which point back down to the
-next lowest batch size that did successfully complete.
+**Default:** `ALL` (no limit)
+
+Limits the number of duplicate events to prune per iteration. When tuning
+this variable, start with a low value and increase incrementally until a
+failure occurs, then use the last successful batch size.
 
 ##### MAX_BATCHES
 
-This variable limits the number of batches, or iterations, to perform.
-The default is `0` which implies no limit is in place. When narrowing in
-on the appropriate values for `BATCH_SIZE`, it is recommended to set this
-to `1`.  Once an appropriate `BATCH_SIZE` is obtained, this value can be
-increased.
+**Default:** `0` (no limit)
+
+Limits the number of batches (iterations) to perform. When determining the
+appropriate `BATCH_SIZE`, set this to `1` to test one batch at a time.
+Once an appropriate `BATCH_SIZE` is determined, increase this value to
+process multiple batches per run.
 
 ##### REPLICATION_SLEEP_DELAY
 
-This is the sleep delay between batches to allow replication to catch up.
-The default is `1` second.  It is unlikely that you will need to adjust
-this value upwards.
+**Default:** `1` (second)
+
+Specifies the sleep delay in seconds between batches to allow database
+replication to catch up. Adjusting this value is typically not necessary.
 
 ##### VACUUM_TYPE
 
-This controls the type of vacuum to perform after pruning.  The default is
-`FULL` but it is recommended to specify `ANALYZE` until the database is
-fully pruned.  Once fully pruned, a final `FULL` vacuum should be performed.
-The full vacuum is required in order to return disk space to the OS.
+**Default:** `FULL`
+
+Controls the type of vacuum to perform after pruning. Options are `FULL`
+or `ANALYZE`. Use `ANALYZE` during incremental pruning operations to save
+time. After all duplicates are removed, perform a final `FULL` vacuum to
+reclaim disk space and return it to the operating system.
