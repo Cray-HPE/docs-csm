@@ -25,12 +25,14 @@
 
 set -exo pipefail
 
+SCRIPT_DIR=$(dirname "$(realpath ${BASH_SOURCE[0]})")
+
 if [[ "Bound" != $(kubectl get pvc -n nexus nexus-bak -o jsonpath='{.status.phase}') ]]; then
   echo "Error no backup PVC was found\nPlease run nexus-backup.sh before trying to restore"
   exit 1
 fi
 
-source nexus_helper.sh
+source ${SCRIPT_DIR}/nexus_helper.sh
 alpine_version=$(get_latest_alpine)
 
 kubectl -n nexus scale deployment nexus --replicas=0
