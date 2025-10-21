@@ -174,7 +174,7 @@ other component types were affected by this bug.
     Set BATCH_SIZE, MAX_BATCHES, REPLICATION_SLEEP_DELAY, and VACUUM_TYPE variables to override
 
     Determining the postgres leader...
-    The SMD postgres leader is cray-smd-postgres-0
+    The SMD postgres leader is cray-smd-postgres-2
 
     NOTICE:  hwinv_history row count before pruning:    180,857,684
     NOTICE:  hwinv_history table size before pruning:   79831 mb
