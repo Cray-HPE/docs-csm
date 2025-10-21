@@ -62,7 +62,7 @@ VACUUM_TYPE="${VACUUM_TYPE:-FULL}"
 
 # Validate VACUUM_TYPE
 case "$VACUUM_TYPE" in
-  FULL|ANALYZE)
+  FULL | ANALYZE)
     # Valid option
     ;;
   *)
@@ -204,7 +204,7 @@ while true; do
   DELETED=$(echo "$OUTPUT" | grep "NOTICE:" | tail -1 | grep -oE '[0-9]+')
 
   # If nothing deleted then we're done
-  if [[ -z "$DELETED" || "$DELETED" -eq 0 ]]; then
+  if [[ -z $DELETED || $DELETED -eq 0 ]]; then
     BATCH_COUNT=$((BATCH_COUNT - 1))
     break
   fi
@@ -215,7 +215,7 @@ while true; do
   echo -n "."
 
   # If batch size is ALL, we are done after one iteration
-  if [[ "$BATCH_SIZE" == "ALL" ]]; then
+  if [[ $BATCH_SIZE == "ALL" ]]; then
     break
   fi
 
