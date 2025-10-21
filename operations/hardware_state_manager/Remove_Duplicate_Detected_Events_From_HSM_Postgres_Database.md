@@ -205,8 +205,8 @@ other component types were affected by this bug.
 
     We have seen cases where the `fru_history_remove_duplicate_detected_events.sh`
     script can fail if there are too many duplicate "Detected" events
-    present in the database.  Should this occur, please refer to the
-    alternative procedure described further below.
+    present in the database.  Should this occur, see the alternative
+    procedure described further below.
 
 ### Alternative Procedure for Large Databases
 
