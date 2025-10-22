@@ -54,6 +54,8 @@ is configured. The `rootfs` and `PE` images are hosted in the [Image Management 
 and S3 respectively and both of these images are mapped to `boot-images` bucket of S3. DNS records are created and used for target node
 discovery from an initiator node during its boot.
 
+**Note:** Atleast one iSCSI target/server (worker node) should be active for the image projection or for any I/O's from iSCSI initiators/clients.
+
 ### iSCSI target/server
 
 * Standard Linux kernel
@@ -79,7 +81,7 @@ discovery from an initiator node during its boot.
     * These `LUNs` get mounted onto the initiator node as DM multipath `LUNs`
     * DM multipath software provides I/O multipath for high availability (failover and failback) and I/O load balancing
 
-![iSCSI SBPS workflow](../../img/SBPS_flow_diagram.jpg)
+![iSCSI SBPS workflow](../../img/SBPS_workflow_latest.png)
 
 ## Steps to achieve SBPS
 
@@ -227,6 +229,8 @@ Example output:
 ```bash
 cray ims images update bbe0e9eb-fa8f-4896-9f54-95dbd26de9bb --metadata-operation remove --metadata-key sbps-project
 ```
+
+**Note:**
 
 > * Only remove tags from images that are not currently in use. Removing tags from images that are currently in use will
 >   stop the content projection by SBPS Marshal agent, causing undesirable behavior on compute nodes or UANs using the content.

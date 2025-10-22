@@ -418,6 +418,9 @@ The above `targetcli ls` command output shows the following:
 * 26 iSCSI `LUNs` created which have the `PE` or `squashfs` image ID being mapped
 * These iSCSI `LUNs` are ready for projection
 
+**Note:**
+Please ensure to have only the images tagged for projection and recommend to remove the tag for unused images. If the unused images left untagged, the iSCSI clients may result in shortage of memory. For details on image tagging see [Image Tagging](README.md#4-ims-image-tagging)
+
 ## `multipath` command
 
 (`nid#`) Administrators may also view the state of the initiator nodes (i.e. managed nodes using iSCSI LUNs).
