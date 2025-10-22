@@ -157,7 +157,7 @@ check_sls_health >> "${LOG_FILE}" 2>&1
 } >> ${LOG_FILE} 2>&1
 
 state_name="UPDATE_NCN_KERNEL_PARAMETERS"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+state_recorded=$(is_state_recorded "${state_name}" ${target_ncn})
 if [[ ${state_recorded} == "0" ]]; then
   echo "====> ${state_name} ..."
   {
