@@ -54,7 +54,7 @@ is configured. The `rootfs` and `PE` images are hosted in the [Image Management 
 and S3 respectively and both of these images are mapped to `boot-images` bucket of S3. DNS records are created and used for target node
 discovery from an initiator node during its boot.
 
-**Note:** Atleast one iSCSI target/server (worker node) should be active for the image projection or for any I/O's from iSCSI initiators/clients.
+**Note:** At least one iSCSI target/server (worker node) should be active for the image projection or for any I/O's from iSCSI initiators/clients.
 
 ### iSCSI target/server
 
