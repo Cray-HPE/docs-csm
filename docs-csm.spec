@@ -55,4 +55,4 @@ cat INSTALLED_FILES | xargs -i sh -c 'test -L {} && exit || test -f $RPM_BUILD_R
 
 %post
 /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
-
+exit 0
