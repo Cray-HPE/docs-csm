@@ -21,13 +21,14 @@ completes its upgrade, then quorum would be lost.
 1. [Start typescript](#1-start-typescript)
 1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
 1. [Fix Kafka CRD issue](#3-fix-kafka-crd-issue)
-1. [Export Nexus data](#4-export-nexus-data)
-1. [Remove duplicate detected events from the HSM Postgres database](#5-remove-duplicate-detected-events-from-the-hsm-postgres-database)
-1. [Adding switch admin password to Vault](#6-adding-switch-admin-password-to-vault)
-1. [Ensure SNMP is configured on the management network switches](#7-ensure-snmp-is-configured-on-the-management-network-switches)
-1. [Running sessions](#8-running-sessions)
-1. [Health validation](#9-health-validation)
-1. [Stop typescript](#10-stop-typescript)
+1. [Prune Nexus data](#4-prune-nexus-data)
+1. [Export Nexus data](#5-export-nexus-data)
+1. [Remove duplicate detected events from the HSM Postgres database](#6-remove-duplicate-detected-events-from-the-hsm-postgres-database)
+1. [Adding switch admin password to Vault](#7-adding-switch-admin-password-to-vault)
+1. [Ensure SNMP is configured on the management network switches](#8-ensure-snmp-is-configured-on-the-management-network-switches)
+1. [Running sessions](#9-running-sessions)
+1. [Health validation](#10-health-validation)
+1. [Stop typescript](#11-stop-typescript)
 
 ### 1. Start typescript
 
@@ -66,7 +67,11 @@ If the cluster has followed the upgrade path mentioned above, run the following 
 
 Reference [cray-kafka-operator chart upgrade failure](../troubleshooting/known_issues/kafka_chart_upgrade_failure.md) workaround document for additional details.
 
-### 4. Export Nexus data
+### 4. Prune Nexus data
+
+Over time, it's possible for the persistent volume that stores Nexus data to fill up with old and unnecessary files, which can cause the upgrade to fail if disk utilization gets to 100%. Please see [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md) for specific steps.
+
+### 5. Export Nexus data
 
 **Warning:** This process can take multiple hours where Nexus is unavailable and should be done
 during scheduled maintenance periods.
@@ -78,7 +83,7 @@ If there is no maintenance period available, then skip this step until after the
 Reference [Nexus Export and Restore Procedure](../operations/package_repository_management/Nexus_Export_and_Restore.md)
 for details.
 
-### 5. Remove duplicate detected events from the HSM Postgres database
+### 6. Remove duplicate detected events from the HSM Postgres database
 
 **Warning:** This process may also take multiple hours to complete.  Once
 the pruning script is started please, do not interrupt it.
@@ -91,13 +96,13 @@ upgrade time
 Reference [Remove Duplicate Detected Events From the HSM Postgres Database](../operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md)
 for instructions on how to complete this step.
 
-### 6. Adding switch admin password to Vault
+### 7. Adding switch admin password to Vault
 
 If it has not been done previously, record in Vault the `admin` user password for the management switches in the system.
 
 See [Adding switch admin password to Vault](../operations/network/management_network/README.md#adding-switch-admin-password-to-vault).
 
-### 7. Ensure SNMP is configured on the management network switches
+### 8. Ensure SNMP is configured on the management network switches
 <!-- snmp-authentication-tag -->
 <!-- When updating this information, search the docs for the snmp-authentication-tag to find related content -->
 <!-- These comments can be removed once we adopt HTTP/lw-dita/Generated docs with re-usable snippets -->
@@ -135,7 +140,7 @@ contains the following relevant information:
 
 Return here after verifying that SNMP is properly configured on the management network switches.
 
-### 8. Running sessions
+### 9. Running sessions
 
 [Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos),
 [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs),
@@ -173,7 +178,7 @@ Return here after verifying that SNMP is properly configured on the management n
    There is currently no method to prevent new sessions from being created as long as the service
    APIs are accessible on the API gateway.
 
-### 9. Health validation
+### 10. Health validation
 
 1. Validate CSM health.
 
@@ -188,6 +193,6 @@ Return here after verifying that SNMP is properly configured on the management n
    If a Lustre file system is being used, then see the ClusterStor documentation for details on how
    to validate Lustre health.
 
-### 10. Stop typescript
+### 11. Stop typescript
 
 For any typescripts that were started during this preparation stage, stop them with the `exit` command.
