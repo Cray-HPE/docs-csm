@@ -92,122 +92,12 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
 
 Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency. Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM 1.7.0:
 
-### 2.1 Deploying Kubernetes setup flow
+Since the system is already CSM 1.7.0 and Rack Resiliency is enabled we need to run the Ansible plays using the [python script](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py). This script configures Kubernetes and Ceph [zones](Zones.md) on Master and Storage nodes respectively.
 
-For Kubernetes zoning, select a master node to personalize.
-
-(`ncn-m#`) Get the xname of the selected master node.
-
-**For Example:**
-
+Example Usage:
 ```bash
-XNAME=$( ssh ncn-m001 cat /etc/cray/xname )
+python /usr/share/doc/csm/scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py
 ```
-
-Now continue with the [steps for Rack Resiliency setup](#steps-for-rack-resiliency-setup)
-
-### 2.2 Deploying Ceph setup flow
-
-For Ceph zoning, select a storage node to personalize.
-
-(`ncn-m#`) Get the xname of the selected storage node.
-
-**For Example:**
-
-```bash
-XNAME=$( ssh ncn-s001 cat /etc/cray/xname )
-```
-
-Now continue with the [steps for Rack Resiliency setup](#steps-for-rack-resiliency-setup)
-
-### Steps for Rack Resiliency setup
-
-1. (`ncn-m#`) Get the name of latest config applied on the cluster
-
-    ```bash
-    CONFIG=$( cray cfs components describe $XNAME --format json | jq -r '.desiredConfig' )
-    ```
-
-1. (`ncn-m#`) Get the latest config applied on the cluster
-
-    ```bash
-    cray cfs configurations describe $CONFIG --format json | jq -r '. | del(.name) | del(.lastUpdated)' > ${CONFIG}.json
-    ```
-
-1. (`ncn-m#`) Check if the rack resiliency playbook is present in the configuration
-
-    ```bash
-    cat ${CONFIG}.json | grep rack_resiliency_for_mgmt_nodes.yml
-    ```
-
-    Example Output:
-
-    ```text
-    "playbook": "rack_resiliency_for_mgmt_nodes.yml"
-    ```
-
-    **NOTE:** If the above command returns the output shown above, then
-    skip to the next step (Perform the component update). Otherwise, perform
-    the following sub-steps to add the rack resiliency layer.
-
-    1. (`ncn-m#`) Get the corresponding `csm-config` branch (@VCS) from the product catalog for CSM 1.7.0 version.
-
-        ```bash
-        kubectl get cm -n services cray-product-catalog -o yaml | yq - r 'data.csm' | grep ^1.7.0 -A 10
-        ```
-
-        Example output:
-
-        ```yaml
-        1.7.0:
-          configuration:
-            clone_url: https://vcs.cmn.odin.hpc.amslabs.hpecorp.net/vcs/cray/csm-config-management.git
-            commit: 9c30b68a29878996761f3c8280d6e57dfb79e8c8
-            import_branch: cray/csm/1.43.0
-            import_date: 2025-07-28 15:51:40.054187
-            ssh_url: git@vcs.cmn.odin.hpc.amslabs.hpecorp.net:cray/csm-config-management.git
-        ```
-
-    1. Edit `${CONFIG}.json` by adding a new layer with commit ID found in the previous step.
-
-        Add the following layer in the `{CONFIG}.json` file. Be sure to substitute the actual
-        commit ID found in the previous step. Leave all other fields as they are shown here.
-
-        ```json
-        {
-          "layers": [
-            {
-              "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-              "commit": "commit_id_goes_here",
-              "name": "csm-ncn-rack-resiliency",
-              "playbook": "rack_resiliency_for_mgmt_nodes.yml"
-            },
-          ]
-        }
-        ```
-
-    1. (`ncn-m#`) Update the configuration in CFS.
-
-        ```bash
-        cray cfs configurations update --file ${CONFIG}.json ${CONFIG}
-        ```
-
-1. (`ncn-m#`) Perform the component update.
-
-```bash
-cray cfs components update $XNAME --state []
-```
-
-1. (`ncn-m#`) Wait for the component to be configured.
-
-    Wait until the configuration status of the component changes to `configured`.
-
-    ```bash
-    cray cfs components describe $XNAME
-    ```
-
-    In case of configuration failure, see
-    [Troubleshoot CFS Issues](../configuration_management/Troubleshoot_CFS_Issues.md).
 
 ## 3. Check the `cray-rrs` Helm chart
 
@@ -271,3 +161,9 @@ Assure the `cray-rrs` helm chart is present in `rack-resiliency` namespace using
 ## 4. Restart critical services
 
 Perform rollout restart of the critical services using the [script](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
+
+Example Usage:
+
+```bash
+python /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
+```
