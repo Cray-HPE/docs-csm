@@ -98,13 +98,13 @@ Since the system is already CSM 1.7.0 and Rack Resiliency is enabled, we need to
 Rack Resiliency using the script [`refresh_master_storage_rack_resiliency_config.py`](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py). This script configures
 Kubernetes and Ceph [zones](Zones.md) on Master and Storage nodes respectively.
 
-Example Usage:
+(`ncn-mw#`) Example usage:
 
 ```bash
 python /usr/share/doc/csm/scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py
 ```
 
-Example Output:
+Example output:
 
 ```text
 Checking if any Master NCN has the Rack Resiliency playbook layer...
@@ -126,10 +126,10 @@ SUCCESS
 
 ## 3. Check the `cray-rrs` Helm chart
 
-Since the system is on CSM 1.7.0, `cray-rrs` helm chart should be have been installed in the `rack-resiliency` namespace.
-Verify that the `cray-rrs` helm chart is present in `rack-resiliency` namespace using the following procedure:
+The `cray-rrs` Helm chart should already be installed in the `rack-resiliency` namespace.
+Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace using the following procedure:
 
-1. (`ncn-mw#`) Get the list of the helm charts.
+1. (`ncn-mw#`) List the Helm charts.
 
     ```bash
     helm ls -n rack-resiliency
@@ -143,7 +143,7 @@ Verify that the `cray-rrs` helm chart is present in `rack-resiliency` namespace 
     cray-rrs        rack-resiliency 1               2025-09-26 21:43:12.5031915 +0000 UTC   deployed        cray-rrs-1.1.0  1.1.0      
     ```
 
-1. (`ncn-mw#`) To check the resources in `rack-resiliency` namespace use:
+1. (`ncn-mw#`) List the resources in the `rack-resiliency` namespace.
 
     ```bash
     kubectl get all -n rack-resiliency
@@ -165,7 +165,7 @@ Verify that the `cray-rrs` helm chart is present in `rack-resiliency` namespace 
     replicaset.apps/cray-rrs-86d4465c9d   1         0         0       19h
     ```
 
-    > Note: Refer to [`cray rrs pod is in init state`](Troubleshooting.md#cray-rrs-pod-is-in-init-state) to understand why the `cray-rrs` deployment is not in `Ready` state.
+    > Refer to [`cray rrs pod is in init state`](Troubleshooting.md#cray-rrs-pod-is-in-init-state) to understand why the `cray-rrs` deployment is not in `Ready` state.
 
 1. (`ncn-mw#`) Check the `clusterpolicy`.
 
@@ -180,13 +180,13 @@ Verify that the `cray-rrs` helm chart is present in `rack-resiliency` namespace 
     insert-labels-topology-constraints   true        true         True    19h   Ready
     ```
 
-**Note** : Ensure that the `clusterpolicy` `insert-labels-topology-constraints` is in `Ready` state.
+    Ensure that the `clusterpolicy` `insert-labels-topology-constraints` is in `Ready` state.
 
 ## 4. Restart critical services
 
 Perform rollout restart of the critical services using the script [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
 
-Example Usage:
+Example usage:
 
 ```bash
 python /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
@@ -194,26 +194,26 @@ python /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
 
 ## 5. Verify the status of `cray-rrs` deployment
 
-1. (`ncn-mw#`) To check the resources in `rack-resiliency` namespace use:
+(`ncn-mw#`) List the resources in the `rack-resiliency` namespace:
 
-    ```bash
-    kubectl get all -n rack-resiliency
-    ```
+```bash
+kubectl get all -n rack-resiliency
+```
 
-    Example output:
+Example output:
 
-    ```text
-    NAME                            READY   STATUS     RESTARTS   AGE
-    pod/cray-rrs-86d4465c9d-qf6f5   2/2     Ready      0          19h
+```text
+NAME                            READY   STATUS     RESTARTS   AGE
+pod/cray-rrs-86d4465c9d-qf6f5   2/2     Ready      0          19h
 
-    NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
-    service/cray-rrs   ClusterIP   10.18.164.23   <none>        80/TCP,8551/TCP   19h
+NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
+service/cray-rrs   ClusterIP   10.18.164.23   <none>        80/TCP,8551/TCP   19h
 
-    NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/cray-rrs   1/1     1            1           19h
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/cray-rrs   1/1     1            1           19h
 
-    NAME                                  DESIRED   CURRENT   READY   AGE
-    replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
-    ```
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
+```
 
 > Note: Both the Pods and the Deployment should be in the Ready state.

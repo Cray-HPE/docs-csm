@@ -166,6 +166,7 @@ resiliency by offering protection to the management plane against rack-level fai
 * See [Enabling Rack Resiliency During Install or Upgrade](operations/rack_resiliency/Enabling_Rack_Resiliency.md) for more details.
 * For details on enabling this feature operationally outside of an install or upgrade, see
   [Enable Rack Resiliency on a Running System](operations/rack_resiliency/Enabling_RR_on_running_system.md)
+* Rack Resiliency cannot be disabled after it has been enabled.
 
 ## Noteworthy changes
 
