@@ -2,7 +2,7 @@
 
 Rack Resiliency can be enabled and configured on a system running CSM 1.7+.
 For details on doing this during an install or upgrade to CSM 1.7, see
-[Enable Rack Resiliency During Install or Upgrade](Enable_Rack_Resiliency_During_Install_or_Upgrade.md).
+[Enable Rack Resiliency During Install or Upgrade](Enabling_Rack_Resiliency.md).
 
 1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
@@ -92,9 +92,12 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
 
 Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency. Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM 1.7.0:
 
-Since the system is already CSM 1.7.0 and Rack Resiliency is enabled we need to run the Ansible plays using the [python script](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py). This script configures Kubernetes and Ceph [zones](Zones.md) on Master and Storage nodes respectively.
+Since the system is already CSM 1.7.0 and Rack Resiliency is enabled we need to run the Ansible plays using the
+[python script](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py). This script configures
+Kubernetes and Ceph [zones](Zones.md) on Master and Storage nodes respectively.
 
 Example Usage:
+
 ```bash
 python /usr/share/doc/csm/scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py
 ```
