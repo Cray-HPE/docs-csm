@@ -8,6 +8,7 @@ Rack Resiliency can be enabled and configured on a system running CSM 1.7+.
 1. [Run Ansible plays](#2-run-ansible-plays)
 1. [Check the Helm chart](#3-check-the-cray-rrs-helm-chart)
 1. [Restart critical services](#4-restart-critical-services)
+1. [Verify the status of `cray-rrs` deployment](#5-verify-the-status-of-cray-rrs-deployment)
 
 ## 1. Enable and customize
 
@@ -209,7 +210,7 @@ python /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
     service/cray-rrs   ClusterIP   10.18.164.23   <none>        80/TCP,8551/TCP   19h
 
     NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/cray-rrs   1/1     0            1           19h
+    deployment.apps/cray-rrs   1/1     1            1           19h
 
     NAME                                  DESIRED   CURRENT   READY   AGE
     replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
