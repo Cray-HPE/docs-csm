@@ -17,6 +17,7 @@
     - [RRS CLI](#rrs-cli)
     - [RRS API](#rrs-api)
 - [Architecture](#architecture)
+- [Enable and configure](#enable-and-configure)
 - [Troubleshooting](#troubleshooting)
 
 ## Attention: RR is experimental
@@ -130,9 +131,17 @@ See [Rack Resiliency Service v1](../../api/rrs.md) for more information.
 
 The Rack Resiliency solution is implemented in multiple stages. These stages are:
 
-1. [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md)
+1. [Enable and configure](#enable-and-configure)
 1. [Setup of Rack Resiliency](Setup_of_Rack_Resiliency.md)
 1. [Resiliency Monitoring Service](Resiliency_Monitoring_Service.md)
+
+## Enable and configure
+
+How to enable and configure Rack Resiliency depends on the context.
+See the following links:
+
+- [Enable Rack Resiliency During Install or Upgrade](Enabling_Rack_Resiliency.md)
+- [Enable Rack Resiliency on a Running System](Enabling_RR_on_running_system.md)
 
 ## Troubleshooting
 

@@ -1103,6 +1103,9 @@ lockout-tagout
 - operations/rack_resiliency/Zones.md
 MPFDs
 
+- operations/rack_resiliency/Enabling_Rack_resiliency.md
+clusterpolicy
+
 - operations/README.md
 Alerta
 
