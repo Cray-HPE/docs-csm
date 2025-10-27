@@ -1,7 +1,7 @@
 # Enable Rack Resiliency on a Running System
 
 Rack Resiliency can be enabled and configured on a system running CSM 1.7+.
-For details on doing this during an install or upgrade to CSM 1.7, see
+> Note: For details on doing this during an install or upgrade to CSM 1.7, see
 [Enable Rack Resiliency During Install or Upgrade](Enabling_Rack_Resiliency.md).
 
 1. [Enable and customize](#1-enable-and-customize)
@@ -90,10 +90,11 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
 
 ## 2. Run Ansible plays
 
-Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency. Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM 1.7.0:
+Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency.
+Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM:
 
-Since the system is already CSM 1.7.0 and Rack Resiliency is enabled we need to run the Ansible plays using the
-[python script](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py). This script configures
+Since the system is already CSM 1.7.0 and Rack Resiliency is enabled, we need to configure CFS to rerun the Ansible plays for
+Rack Resiliency using the script [`refresh_master_storage_rack_resiliency_config.py`](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py). This script configures
 Kubernetes and Ceph [zones](Zones.md) on Master and Storage nodes respectively.
 
 Example Usage:
@@ -102,9 +103,30 @@ Example Usage:
 python /usr/share/doc/csm/scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py
 ```
 
+Example Output:
+
+```text
+Checking if any Master NCN has the Rack Resiliency playbook layer...
+✔ 3 Master NCN(s) have the Rack Resiliency playbook layer.
+✔ 3 Storage NCN(s) have the Rack Resiliency playbook layer.
+
+=== Processing Master NCNs ===
+Updating 3 master CFS components...
+✔ Master NCNs successfully updated.
+
+
+=== Processing Storage NCNs ===
+Updating 3 storage CFS components...
+✔ Storage NCNs successfully updated.
+
+All updates completed successfully. CFS batcher should soon reconfigure these NCNs.
+SUCCESS
+```
+
 ## 3. Check the `cray-rrs` Helm chart
 
-Assure the `cray-rrs` helm chart is present in `rack-resiliency` namespace using the following procedure:
+Since the system is on CSM 1.7.0, `cray-rrs` helm chart should be have been installed in the `rack-resiliency` namespace.
+Verify that the `cray-rrs` helm chart is present in `rack-resiliency` namespace using the following procedure:
 
 1. (`ncn-mw#`) Get the list of the helm charts.
 
@@ -117,7 +139,7 @@ Assure the `cray-rrs` helm chart is present in `rack-resiliency` namespace using
     ```text
     ncn-m001:~ # helm ls -n rack-resiliency 
     NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
-    cray-rrs        rack-resiliency 107             2025-09-26 21:43:12.5031915 +0000 UTC   deployed        cray-rrs-1.1.0  1.1.0      
+    cray-rrs        rack-resiliency 1               2025-09-26 21:43:12.5031915 +0000 UTC   deployed        cray-rrs-1.1.0  1.1.0      
     ```
 
 1. (`ncn-mw#`) To check the resources in `rack-resiliency` namespace use:
@@ -142,31 +164,55 @@ Assure the `cray-rrs` helm chart is present in `rack-resiliency` namespace using
     replicaset.apps/cray-rrs-86d4465c9d   1         0         0       19h
     ```
 
+    > Note: Refer to [`cray rrs pod is in init state`](Troubleshooting.md#cray-rrs-pod-is-in-init-state) to understand why the `cray-rrs` deployment is not in `Ready` state.
+
 1. (`ncn-mw#`) Check the `clusterpolicy`.
 
     ```bash
-    kubectl get clusterpolicy
+    kubectl get clusterpolicy | grep insert-labels-topology-constraints
     ```
 
     Example output:
 
     ```text
     NAME                                 ADMISSION   BACKGROUND   READY   AGE   MESSAGE
-    check-image                          true        true         True    39d   Ready
-    cluster-job-ttl                      true        true         True    39d   Ready
     insert-labels-topology-constraints   true        true         True    19h   Ready
-    podsecurity-subrule-baseline         true        true         True    39d   Ready
-    prepend-registry                     true        true         True    39d   Ready
     ```
 
 **Note** : Ensure that the `clusterpolicy` `insert-labels-topology-constraints` is in `Ready` state.
 
 ## 4. Restart critical services
 
-Perform rollout restart of the critical services using the [script](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
+Perform rollout restart of the critical services using the script [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
 
 Example Usage:
 
 ```bash
 python /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
 ```
+
+## 5. Verify the status of `cray-rrs` deployment
+
+1. (`ncn-mw#`) To check the resources in `rack-resiliency` namespace use:
+
+    ```bash
+    kubectl get all -n rack-resiliency
+    ```
+
+    Example output:
+
+    ```text
+    NAME                            READY   STATUS     RESTARTS   AGE
+    pod/cray-rrs-86d4465c9d-qf6f5   2/2     Ready      0          19h
+
+    NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
+    service/cray-rrs   ClusterIP   10.18.164.23   <none>        80/TCP,8551/TCP   19h
+
+    NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/cray-rrs   1/1     0            1           19h
+
+    NAME                                  DESIRED   CURRENT   READY   AGE
+    replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
+    ```
+
+> Note: Both the Pods and the Deployment should be in the Ready state.
