@@ -37,6 +37,12 @@ spec:
               requests:
                 cpu: "1"
       cray-dhcp-kea:
+        cray-service:
+          containers:
+            cray-dhcp-kea:
+              resources:
+                requests:
+                  cpu: "500m"
         cray-postgresql:
           sqlCluster:
             resources:

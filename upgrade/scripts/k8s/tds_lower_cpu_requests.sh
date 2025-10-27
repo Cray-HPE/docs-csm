@@ -83,6 +83,10 @@ yaml_path="$base.cray-dhcp-kea.cray-postgresql.sqlCluster.resources.requests.cpu
 cray_dhcp_kea_postgres_new_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_dhcp_kea_postgres_new_request
 
+yaml_path="$base.cray-dhcp-kea.cray-service.containers.cray-dhcp-kea.resources.requests.cpu"
+cray_dhcp_kea_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_dhcp_kea_new_cpu_request
+
 yaml_path="$base.cray-hms-capmc.cray-service.containers.cray-capmc.resources.requests.cpu"
 cray_capmc_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_capmc_new_cpu_request
@@ -466,6 +470,14 @@ if [[ $crayDnsUnboundDeployed -ne 0 ]]; then
     kubectl rollout status deployment -n services cray-dns-unbound
     echo ""
   fi
+fi
+
+if [ ! -z $cray_dhcp_kea_new_cpu_request ]; then
+  current_req=$(kubectl get deployment -n services cray-dhcp-kea -o json | jq -r '.spec.template.spec.containers[] | select(.name== "cray-dhcp-kea") | .resources.requests.cpu')
+  echo "Patching cray-dhcp-kea deployment with new cpu request of $cray_dhcp_kea_new_cpu_request (from $current_req)"
+  kubectl patch deployment cray-dhcp-kea -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_dhcp_kea_new_cpu_request\" }]"
+  kubectl rollout status deployment -n services cray-dhcp-kea
+  echo ""
 fi
 
 # push updated customizations.yaml to k8s
