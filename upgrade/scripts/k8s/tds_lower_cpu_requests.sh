@@ -457,7 +457,7 @@ if [[ $crayOpaHmnDeployed -ne 0 ]]; then
   fi
 fi
 
-crayDnsUnboundDeployed=$(kubectl -n services get deployment cray-dns-unbound --no-headers| wc -l)
+crayDnsUnboundDeployed=$(kubectl -n services get deployment cray-dns-unbound --no-headers | wc -l)
 if [[ $crayDnsUnboundDeployed -ne 0 ]]; then
   if [ ! -z $cray_dns_unbound_new_cpu_request ]; then
     current_req=$(kubectl -n services get deployment cray-dns-unbound -o json | jq -r '.spec.template.spec.containers[] | select(.name=="cray-dns-unbound") | .resources.requests.cpu')
