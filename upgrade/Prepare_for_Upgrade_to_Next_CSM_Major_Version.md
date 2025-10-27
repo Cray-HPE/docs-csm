@@ -53,7 +53,7 @@ See [Check for latest documentation](../update_product_stream/README.md#check-fo
 
 ### 3. Prune Nexus data
 
-Over time, it's possible for the persistent volume that stores Nexus data to fill up with old and unnecessary files, which can cause the upgrade to fail if disk utilization gets to 100%. Please see [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md) for specific steps.
+Over time, it's possible for the persistent volume that stores Nexus data to fill up with old and unnecessary files, which can cause the upgrade to fail if not enough disk space is available. Please see [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md) for specific steps.
 
 ### 4. Export Nexus data
 
