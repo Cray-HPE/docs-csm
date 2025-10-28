@@ -94,9 +94,11 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
 Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency.
 Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM:
 
-Since the system is already CSM 1.7.0 and Rack Resiliency is enabled, we need to configure CFS to rerun the Ansible plays for
-Rack Resiliency using the script [`refresh_master_storage_rack_resiliency_config.py`](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py). This script configures
-Kubernetes and Ceph [zones](Zones.md) on Master and Storage nodes respectively.
+Since Rack Resiliency was disabled earlier and has just been enabled in the previous step,
+We must configure CFS to rerun the Ansible plays for Rack Resiliency using the script
+[`refresh_master_storage_rack_resiliency_config.py`](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py).
+This script applies the necessary configuration and sets up Kubernetes and Ceph [zones](Zones.md)
+on Master and Storage nodes, respectively.
 
 (`ncn-mw#`) Example usage:
 
@@ -189,6 +191,26 @@ Example usage:
 
 ```bash
 /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
+```
+
+Example Output:
+
+```text
+Restarted deployment/cilium-operator in namespace kube-system
+Restarted deployment/coredns in namespace kube-system
+Skipping deployment/cray-activemq-artemis-operator-controller-manager: 'rrflag' label is already set in namespace dvs
+Skipping deployment/cray-capmc: 'rrflag' label is already set in namespace services
+Skipping deployment/cray-ceph-csi-cephfs-provisioner: 'rrflag' label is already set in namespace ceph-cephfs
+Skipping deployment/cray-ceph-csi-rbd-provisioner: 'rrflag' label is already set in namespace ceph-rbd
+Skipping deployment/cray-certmanager-cert-manager: 'rrflag' label is already set in namespace cert-manager
+Skipping deployment/cray-certmanager-cert-manager-cainjector: 'rrflag' label is already set in namespace cert-manager
+...
+Skipping deployment/slurmdbd-backup: 'rrflag' label is already set in namespace user
+Skipping deployment/sshot-net-operator: 'rrflag' label is already set in namespace sshot-net-operator
+RR critical services rollout restart successful.
+configmap/rrs-mon-dynamic patched (no change)
+Set rollout_complete=true in ConfigMap 'rrs-mon-dynamic'
+Done!
 ```
 
 ## 5. Verify the status of `cray-rrs` deployment

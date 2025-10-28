@@ -162,7 +162,6 @@ The optional [Rack Resiliency](operations/rack_resiliency/README.md) technology 
 resiliency by offering protection to the management plane against rack-level failures.
 
 * Rack Resiliency is disabled by default
-* Rack Resiliency **can only be enabled during an upgrade from CSM 1.6 to CSM 1.7 or an install of CSM 1.7**.
 * See [Enabling Rack Resiliency During Install or Upgrade](operations/rack_resiliency/Enabling_Rack_Resiliency.md) for more details.
 * For details on enabling this feature operationally outside of an install or upgrade, see
   [Enable Rack Resiliency on a Running System](operations/rack_resiliency/Enabling_RR_on_running_system.md)
