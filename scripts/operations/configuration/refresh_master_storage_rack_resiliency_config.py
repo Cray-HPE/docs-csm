@@ -23,14 +23,24 @@
 # OTHER DEALINGS IN THE SOFTWARE.
 #
 """
-Usage: refresh_master_storage_rack_resiliency_config.py
+refresh_master_storage_rack_resiliency_config.py
 
-This script modifies the CFS component status of both Master and Storage NCNs
-to ensure the Rack Resiliency playbook layer is properly refreshed.
+This script refreshes the Rack Resiliency playbook layer
+(`rack_resiliency_for_mgmt_nodes.yml`) for all Master and Storage NCNs.
+
+This script modifies the CFS component status of master and storage NCNs to clear out
+the Rack Resiliency playbook entry. It also sets the error count for the component to 0.
+This will cause CFS batcher to schedule new CFS sessions to run that playbook
+on the master and storage nodes.
+
+It checks if any Master or Storage NCN has the Rack Resiliency layer configured
+in CFS. If at least one node in either category has the layer, it proceeds to
+remove that layer from all Master and Storage NCNs’ CFS states so that CFS can
+automatically reapply it, ensuring the configuration is refreshed.
 
 Behavior:
-  - If NONE of the Master or Storage NCNs have the Rack Resiliency layer → abort.
-  - If any Master or Storage NCNs has Rack Resiliency layer → continue and refresh CFS states for the Master or Storage NCNs.
+  - If none of the Master or Storage NCNs have the Rack Resiliency layer → abort.
+  - If any Master or Storage NCN has the layer → refresh the CFS state for both roles.
 """
 
 
