@@ -16,6 +16,8 @@ example, if there are three Kubernetes master nodes and one is being upgraded, t
 maintained by the remaining two nodes. If one of those two nodes has a fault before the third node
 completes its upgrade, then quorum would be lost.
 
+**Warning2:** 
+
 ## Preparation steps
 
 1. [Start typescript](#1-start-typescript)
