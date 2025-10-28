@@ -103,7 +103,7 @@ Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information 
 Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM:
 
 Since Rack Resiliency was disabled earlier and has just been enabled in the previous step,
-We must configure CFS to rerun the Ansible plays for Rack Resiliency using the script
+the next step is to configure CFS to rerun the Ansible plays for Rack Resiliency. This is done using the script
 [`refresh_master_storage_rack_resiliency_config.py`](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py).
 This script applies the necessary configuration and sets up Kubernetes and Ceph [zones](Zones.md)
 on Master and Storage nodes, respectively.
