@@ -7,7 +7,7 @@ Specifically, the setup is done by the `rack_resiliency_for_mgmt_nodes.yml` Ansi
 repository.
 
 If Rack Resiliency is not enabled, then this playbook will do nothing.
-See [Enabling Rack Resiliency](README.md#enable-and-configure) for details on
+See [Enable and configure](README.md#enable-and-configure) for details on
 how it is enabled.
 
 ## Setup flows

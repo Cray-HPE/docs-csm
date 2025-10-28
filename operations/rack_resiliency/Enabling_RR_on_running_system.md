@@ -1,5 +1,13 @@
 # Enable Rack Resiliency on a Running System
 
+## Overview
+
+* Rack Resiliency **should not** be used in a production environment. For more details, see
+  [Rack Resiliency is experimental](README.md#attention-rr-is-experimental).
+* By default, Rack Resiliency is disabled.
+* This page documents the procedures for enabling and configuring Rack Resiliency on a Running system.
+* Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
+
 Rack Resiliency can be enabled and configured on a system running CSM 1.7+.
 > Note: For details on doing this during an install or upgrade to CSM 1.7, see
 [Enable Rack Resiliency During Install or Upgrade](Enabling_Rack_Resiliency.md).
@@ -190,7 +198,7 @@ Perform rollout restart of the critical services using the script [`rr_critical_
 Example usage:
 
 ```bash
-/usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
+python /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
 ```
 
 Example Output:
