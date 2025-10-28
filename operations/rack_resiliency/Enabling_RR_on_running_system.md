@@ -215,4 +215,4 @@ NAME                                  DESIRED   CURRENT   READY   AGE
 replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
 ```
 
-> Note: Both the Pods and the Deployment should be in the Ready state.
+The pod should have have status `Ready`. The pod should show `2/2` in the `READY` column, and the deployment should show `1/1` in the `READY` column.
