@@ -169,7 +169,7 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
 1. (`ncn-mw#`) Check the `clusterpolicy`.
 
     ```bash
-    kubectl get clusterpolicy | grep insert-labels-topology-constraints
+    kubectl get clusterpolicy insert-labels-topology-constraints
     ```
 
     Example output:
