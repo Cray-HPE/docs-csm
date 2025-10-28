@@ -140,7 +140,7 @@ The Rack Resiliency solution is implemented in multiple stages. These stages are
 How to enable and configure Rack Resiliency depends on the context.
 See the following links:
 
-- [Enable Rack Resiliency During Install or Upgrade](Enabling_Rack_Resiliency.md)
+- [Enable Rack Resiliency During Install or Upgrade](Enabling_RR_During_Install_or_Upgrade.md)
 - [Enable Rack Resiliency on a Running System](Enabling_RR_on_running_system.md)
 
 ## Troubleshooting

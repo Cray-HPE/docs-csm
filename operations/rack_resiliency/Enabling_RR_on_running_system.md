@@ -10,7 +10,7 @@
 
 Rack Resiliency can be enabled and configured on a system running CSM 1.7+.
 > Note: For details on doing this during an install or upgrade to CSM 1.7, see
-[Enable Rack Resiliency During Install or Upgrade](Enabling_Rack_Resiliency.md).
+[Enable Rack Resiliency During Install or Upgrade](Enabling_RR_During_Install_or_Upgrade.md).
 
 1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
