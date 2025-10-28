@@ -172,6 +172,8 @@ file found in `${ADMIN_DIR}`.
     iuf -a ${ACTIVITY_NAME} run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r update-vcs-config
     ```
 
+    > **WARNING:** If the `update-vcs-config` stage of IUF fails due to git merge conflicts, they must be resolved manually as described in the [`Resolving VCS merge conflicts documentation`](../../configuration_management/VCS_Branching_Strategy.md#resolving-vcs-merge-conflicts).
+
 Once this step has completed:
 
 - Product configuration content has been merged to VCS branches as described in the [update-vcs-config stage documentation](../stages/update_vcs_config.md)
