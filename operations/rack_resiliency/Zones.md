@@ -27,8 +27,8 @@ Rack Resiliency maps its zones into both the Kubernetes cluster and Ceph cluster
 ## Zone names
 
 By default, Rack Resiliency zone names will be the component name ([xname](../../glossary.md#xname)) of
-the associated [physical rack](README.md#physical-racks) (which will be the same as the first 5 characters)
-of the xnames of the associated NCNs. For example, `x3000` or `x3001`.
+the associated [physical rack](README.md#physical-racks) (which will be the same as the first 5 characters
+of the xnames of the associated NCNs). For example, `x3000` or `x3001`.
 
 When first [Enabling Rack Resiliency](README.md#enable-and-configure), administrators can
 optionally specify prefixes to be used for Kubernetes zone names, Ceph zone names, or both.
