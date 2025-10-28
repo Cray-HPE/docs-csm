@@ -101,7 +101,7 @@ Kubernetes and Ceph [zones](Zones.md) on Master and Storage nodes respectively.
 (`ncn-mw#`) Example usage:
 
 ```bash
-python /usr/share/doc/csm/scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py
+/usr/share/doc/csm/scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py
 ```
 
 Example output:
