@@ -138,7 +138,6 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
     Example output:
 
     ```text
-    ncn-m001:~ # helm ls -n rack-resiliency 
     NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
     cray-rrs        rack-resiliency 1               2025-09-26 21:43:12.5031915 +0000 UTC   deployed        cray-rrs-1.1.0  1.1.0      
     ```
