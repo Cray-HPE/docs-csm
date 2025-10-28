@@ -90,7 +90,7 @@ spec:
 ```
 
 **Note:** The `exclude` section of the policy shown in the above example is present when the policy is applied initially using Helm.
-If [Rack Resiliency is enabled](Enabling_Rack_Resiliency.md), then the `exclude` section is removed from the policy(using a post-install/post-upgrade hook).
+If [Rack Resiliency is enabled](Enabling_Rack_Resiliency.md), then the `exclude` section is removed from the policy (using a post-install/post-upgrade hook).
 
 ## Restart critical services
 
