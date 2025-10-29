@@ -198,10 +198,10 @@ Perform rollout restart of the critical services using the script [`rr_critical_
 Example usage:
 
 ```bash
-python /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
+python3 /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
 ```
 
-Example Output:
+Truncated example output (the actual output will be larger):
 
 ```text
 Restarted deployment/cilium-operator in namespace kube-system
