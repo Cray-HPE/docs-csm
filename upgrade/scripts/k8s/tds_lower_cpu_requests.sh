@@ -83,6 +83,10 @@ yaml_path="$base.cray-dhcp-kea.cray-postgresql.sqlCluster.resources.requests.cpu
 cray_dhcp_kea_postgres_new_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_dhcp_kea_postgres_new_request
 
+yaml_path="$base.cray-dhcp-kea.cray-service.containers.cray-dhcp-kea.resources.requests.cpu"
+cray_dhcp_kea_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_dhcp_kea_new_cpu_request
+
 yaml_path="$base.cray-hms-capmc.cray-service.containers.cray-capmc.resources.requests.cpu"
 cray_capmc_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_capmc_new_cpu_request
@@ -170,6 +174,10 @@ fail_if_empty $yaml_path $cray_kyverno_background_new_cpu_request
 yaml_path="$base.cray-opa.opa.resources.requests.cpu"
 cray_opa_new_cpu_request=$(yq r $yaml -pv $yaml_path)
 fail_if_empty $yaml_path $cray_opa_new_cpu_request
+
+yaml_path="$base.cray-dns-unbound.resources.cray-dns-unbound.requests.cpu"
+cray_dns_unbound_new_cpu_request=$(yq r $yaml -pv $yaml_path)
+fail_if_empty $yaml_path $cray_dns_unbound_new_cpu_request
 
 if kubectl get postgresqls -n spire cray-spire-postgres > /dev/null 2>&1; then
   if [ ! -z $cray_spire_postgres_new_request ]; then
@@ -451,6 +459,25 @@ if [[ $crayOpaHmnDeployed -ne 0 ]]; then
     kubectl rollout status daemonset -n opa cray-opa-ingressgateway-hmn
     echo ""
   fi
+fi
+
+crayDnsUnboundDeployed=$(kubectl -n services get deployment cray-dns-unbound --no-headers | wc -l)
+if [[ $crayDnsUnboundDeployed -ne 0 ]]; then
+  if [ ! -z $cray_dns_unbound_new_cpu_request ]; then
+    current_req=$(kubectl -n services get deployment cray-dns-unbound -o json | jq -r '.spec.template.spec.containers[] | select(.name=="cray-dns-unbound") | .resources.requests.cpu')
+    echo "Patching cray-dns-unbound deployment with new cpu request of $cray_dns_unbound_new_cpu_request (from $current_req)"
+    kubectl patch deployment cray-dns-unbound -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_dns_unbound_new_cpu_request\" }]"
+    kubectl rollout status deployment -n services cray-dns-unbound
+    echo ""
+  fi
+fi
+
+if [ ! -z $cray_dhcp_kea_new_cpu_request ]; then
+  current_req=$(kubectl get deployment -n services cray-dhcp-kea -o json | jq -r '.spec.template.spec.containers[] | select(.name== "cray-dhcp-kea") | .resources.requests.cpu')
+  echo "Patching cray-dhcp-kea deployment with new cpu request of $cray_dhcp_kea_new_cpu_request (from $current_req)"
+  kubectl patch deployment cray-dhcp-kea -n services --type=json -p="[{'op' : 'replace', 'path':'/spec/template/spec/containers/0/resources/requests/cpu', 'value' : \"$cray_dhcp_kea_new_cpu_request\" }]"
+  kubectl rollout status deployment -n services cray-dhcp-kea
+  echo ""
 fi
 
 # push updated customizations.yaml to k8s
