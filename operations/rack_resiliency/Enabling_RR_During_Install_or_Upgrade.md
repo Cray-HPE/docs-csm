@@ -12,9 +12,8 @@
 
 At the same time that Rack Resiliency is enabled, administrators also have the option
 to customize the [Zone names](Zones.md#zone-names) for the zones that will be created
-during [Setup of Rack Resiliency](Setup_of_Rack_Resiliency.md). Like with the
-decision to enable Rack Resiliency, the decision made here about prefixes
-**cannot be changed later**.
+during [Setup of Rack Resiliency](Setup_of_Rack_Resiliency.md). The decisions made here
+about prefixes **cannot be changed later**.
 
 ## Fresh install of CSM 1.7
 
