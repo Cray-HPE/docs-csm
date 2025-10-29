@@ -121,7 +121,7 @@ Example `hmn_connections.json` row representing an application node with SourceN
 
     To add additional HSM SubRole for a given prefix, add a new mapping under the `prefix_hsm_subroles` field. Where the key is the application node prefix and the value is the HSM SubRole.
 
-    Valid HSM SubRoles values are: `Worker`, `Master`, `Storage`, `UAN`, `Gateway`, `LNETRouter`, `Visualization`, and `UserDefined`.
+    Valid HSM SubRoles values are: `Worker`, `Master`, `Storage`, `UAN`, `Gateway`, `LNETRouter`, `Visualization`, `UserDefined`, and `FabricManager`.
 
     From the HMN example above, the following additional prefix HSM SubRole mappings are required:
 
