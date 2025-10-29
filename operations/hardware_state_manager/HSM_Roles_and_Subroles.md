@@ -39,6 +39,7 @@ The following is a list of all pre-defined subroles:
 * `LNETRouter`
 * `Visualization`
 * `UserDefined`
+* `FabricManager`
 
 The `Master`, `Worker`, and `Storage` subroles are generally used with the `Management` role to indicate NCN types.
 
@@ -78,7 +79,8 @@ data:
              "Gateway",
              "LNETRouter",
              "Visualization",
-             "UserDefined"
+             "UserDefined",
+             "FabricManager"
           ]
        }
     }
