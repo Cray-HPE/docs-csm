@@ -35,11 +35,12 @@ on the master and storage nodes.
 
 It checks if any Master or Storage NCN has the Rack Resiliency layer configured
 in CFS. If at least one node in either category has the layer, it proceeds to
-remove that layer from all Master and Storage NCNs’ CFS states so that CFS can
+remove that layer from all Master and Storage NCNs' CFS states so that CFS can
 automatically reapply it, ensuring the configuration is refreshed.
 
 Behavior:
   - If none of the Master or Storage NCNs have the Rack Resiliency layer → abort.
+  - If any Master or Storage NCN has a CFS component with "pending" status → abort.
   - If any Master or Storage NCN has the layer → refresh the CFS state for both roles.
 """
 
