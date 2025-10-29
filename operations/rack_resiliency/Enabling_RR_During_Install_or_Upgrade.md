@@ -8,7 +8,7 @@
 * This page documents the procedures for enabling and configuring Rack Resiliency during
   a CSM install or upgrade. For information on how to do this on a running system, see
   [Enable Rack Resiliency on a Running System](Enabling_RR_on_running_system.md).
-* Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
+* Rack Resiliency cannot be disabled after it has been enabled.
 
 At the same time that Rack Resiliency is enabled, administrators also have the option
 to customize the [Zone names](Zones.md#zone-names) for the zones that will be created
