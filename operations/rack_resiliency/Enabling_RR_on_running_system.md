@@ -6,17 +6,16 @@
   [Rack Resiliency is experimental](README.md#attention-rr-is-experimental).
 * By default, Rack Resiliency is disabled.
 * This page documents the procedures for enabling and configuring Rack Resiliency on a running system.
+  For information on how to do this during an install or upgrade to CSM 1.7, see
+  [Enable Rack Resiliency During Install or Upgrade](Enabling_RR_During_Install_or_Upgrade.md).
 * Rack Resiliency cannot be disabled after it has been enabled.
-
-Rack Resiliency can be enabled and configured any time on a system running on CSM 1.7+.
-> Note: For details on doing this during an install or upgrade to CSM 1.7, see
-[Enable Rack Resiliency During Install or Upgrade](Enabling_RR_During_Install_or_Upgrade.md).
+* Rack Resiliency can be enabled and configured any time on a system running on CSM 1.7+.
 
 1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
-1. [Check the Helm chart](#3-check-the-cray-rrs-helm-chart)
+1. [Check `cray-rrs` Helm chart](#3-check-cray-rrs-helm-chart)
 1. [Restart critical services](#4-restart-critical-services)
-1. [Verify the status of `cray-rrs` deployment](#5-verify-the-status-of-cray-rrs-deployment)
+1. [Verify `cray-rrs` deployment](#5-verify-cray-rrs-deployment)
 
 ## 1. Enable and customize
 
@@ -99,8 +98,8 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
 
 ## 2. Run Ansible plays
 
-Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on Ansible Roles to setup rack resiliency.
-Follow the below procedure to deploy the RR Ansible plays post install or upgrade of CSM:
+Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on the Ansible roles that are used to configure Rack Resiliency.
+Run the RR Ansible plays by performing the following procedure:
 
 Since Rack Resiliency was disabled earlier and has just been enabled in the previous step,
 the next step is to configure CFS to rerun the Ansible plays for Rack Resiliency. This is done using the script
@@ -134,12 +133,12 @@ All updates completed successfully. CFS batcher should soon reconfigure these NC
 SUCCESS
 ```
 
-## 3. Check the `cray-rrs` Helm chart
+## 3. Check `cray-rrs` Helm chart
 
 The `cray-rrs` Helm chart should already be installed in the `rack-resiliency` namespace.
 Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace using the following procedure:
 
-1. (`ncn-mw#`) List the Helm charts.
+1. (`ncn-mw#`) List the Helm charts in the `rack-resiliency` namespace.
 
     ```bash
     helm ls -n rack-resiliency
@@ -174,9 +173,10 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
     replicaset.apps/cray-rrs-86d4465c9d   1         0         0       19h
     ```
 
-    > Refer to [`cray rrs pod is in init state`](Troubleshooting.md#cray-rrs-pod-is-in-init-state) to understand why the `cray-rrs` deployment is not in `Ready` state.
+    > For an explanation of why the `cray-rrs` deployment is not ready, see [`cray rrs pod is in init state`](Troubleshooting.md#cray-rrs-pod-is-in-init-state).
 
 1. (`ncn-mw#`) Check the `clusterpolicy`.
+    Ensure that the following command shows the `insert-labels-topology-constraints` in `Ready` state.
 
     ```bash
     kubectl get clusterpolicy insert-labels-topology-constraints
@@ -188,8 +188,6 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
     NAME                                 ADMISSION   BACKGROUND   READY   AGE   MESSAGE
     insert-labels-topology-constraints   true        true         True    19h   Ready
     ```
-
-    Ensure that the `clusterpolicy` `insert-labels-topology-constraints` is in `Ready` state.
 
 ## 4. Restart critical services
 
@@ -221,13 +219,19 @@ Set rollout_complete=true in ConfigMap 'rrs-mon-dynamic'
 Done!
 ```
 
-## 5. Verify the status of `cray-rrs` deployment
+## 5. Verify `cray-rrs` deployment
 
 (`ncn-mw#`) List the resources in the `rack-resiliency` namespace:
 
 ```bash
 kubectl get all -n rack-resiliency
 ```
+
+In the command output, verify that all of the following are true:
+
+* The pod should have have status `Ready`.
+* The pod should show `2/2` in the `READY` column.
+* The deployment should show `1/1` in the `READY` column.
 
 Example output:
 
@@ -244,5 +248,3 @@ deployment.apps/cray-rrs   1/1     1            1           19h
 NAME                                  DESIRED   CURRENT   READY   AGE
 replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
 ```
-
-The pod should have have status `Ready`. The pod should show `2/2` in the `READY` column, and the deployment should show `1/1` in the `READY` column.

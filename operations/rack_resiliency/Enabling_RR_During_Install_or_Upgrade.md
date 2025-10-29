@@ -6,7 +6,7 @@
   [Rack Resiliency is experimental](README.md#attention-rr-is-experimental).
 * By default, Rack Resiliency is disabled.
 * This page documents the procedures for enabling and configuring Rack Resiliency during
-  a CSM install or upgrade. For information on how to do this on a running system, see
+  a CSM install or upgrade. For information on how to do this outside of an install or upgrade context, see
   [Enable Rack Resiliency on a Running System](Enabling_RR_on_running_system.md).
 * Rack Resiliency cannot be disabled after it has been enabled.
 
