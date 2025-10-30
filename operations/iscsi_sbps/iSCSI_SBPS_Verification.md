@@ -419,7 +419,7 @@ The above `targetcli ls` command output shows the following:
 * These iSCSI `LUNs` are ready for projection
 
 **Note:**
-Please ensure to have only the images tagged for projection and recommend to remove the tag for unused images. If the unused images left untagged, the iSCSI clients may result in shortage of memory. For details on image tagging see [Image Tagging](README.md#4-ims-image-tagging)
+Ensure that only images intended for projection are tagged, and it is recommend to remove the tag from any unused images. If the unused images are left untagged, the iSCSI clients may result in a shortage of memory. For details on image tagging, see [Image Tagging](README.md#4-ims-image-tagging).
 
 ## `multipath` command
 
