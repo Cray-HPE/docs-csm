@@ -406,7 +406,7 @@ successful scheduling and execution of user jobs.
 
 - [Rack Resiliency](rack_resiliency/README.md)
 - [Enabling Rack Resiliency During Install or Upgrade](rack_resiliency/Enabling_RR_During_Install_or_Upgrade.md)
-- [Enable Rack Resiliency on a Running System](rack_resiliency/Enabling_RR_on_running_system.md)
+- [Enabling Rack Resiliency on a Running System](rack_resiliency/Enabling_RR_on_running_system.md)
 - [Manage Critical Services](rack_resiliency/Manage_Critical_Services.md)
 - [Critical Services](rack_resiliency/Critical_Services.md)
 - [Zones](rack_resiliency/Zones.md)
