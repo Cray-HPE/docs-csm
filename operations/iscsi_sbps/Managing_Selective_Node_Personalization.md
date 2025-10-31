@@ -401,7 +401,7 @@ Hence removal of this stale iSCSI session need to be done for the above mentione
 
 1. List the iSCSI sessions:
 
-   Command to list the iSCSI sessions and example output using the same:
+   Example command with output:
 
    ```bash
    nid000001:~ # iscsiadm -m session
@@ -446,7 +446,7 @@ Hence removal of this stale iSCSI session need to be done for the above mentione
    # iscsiadm -m session
    ```
 
-   Example command:
+   Example command with output:
 
    ```bash
    nid000001:~ # iscsiadm -m session
