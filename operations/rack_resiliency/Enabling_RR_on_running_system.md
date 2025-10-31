@@ -133,7 +133,7 @@ All updates completed successfully. CFS batcher should soon reconfigure these NC
 SUCCESS
 ```
 
-## 3. Check `cray-rrs` Helm chart
+## 3. Check the `cray-rrs` Helm chart and resources
 
 The `cray-rrs` Helm chart should already be installed in the `rack-resiliency` namespace.
 Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace using the following procedure:
@@ -189,14 +189,39 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
     insert-labels-topology-constraints   true        true         True    19h   Ready
     ```
 
+    Ensure that the `clusterpolicy` `insert-labels-topology-constraints` is in `Ready` state.
+
+1.  (`ncn-mw#`) Check the ConfigMaps.
+
+    ```bash
+    kubectl get configmaps -n rack-resiliency
+    ```
+
+    Example output:
+
+    ```text
+    NAME                 DATA   AGE
+    istio-ca-root-cert   1      11d
+    kube-root-ca.crt     1      11d
+    rrs-mon-dynamic      2      11d
+    rrs-mon-static       11     11d
+    ```
+
+    > **Note:** All the ConfigMaps shown in the example output should be present on the system.
+
 ## 4. Restart critical services
 
 Perform rollout restart of the critical services using the script [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
 
+### What this script does?
+The `rr_critical_service_restart.py` script performs a controlled restart of services listed in `rrs-mon-static` to apply Rack Resiliency label `rrflag=`.
+It skips services already labeled, restarts remaining services one-by-one, and waits for each restart to complete.
+The script requires the `insert-labels-topology-constraints` ClusterPolicy to be present before it proceeds.
+
 Example usage:
 
 ```bash
-python3 /usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
+/usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
 ```
 
 Truncated example output (the actual output will be larger):
