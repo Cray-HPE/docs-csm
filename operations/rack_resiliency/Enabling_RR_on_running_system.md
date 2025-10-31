@@ -13,7 +13,7 @@
 
 1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
-1. [Check `cray-rrs` Helm chart](#3-check-cray-rrs-helm-chart)
+1. [Check `cray-rrs` Helm chart and resources](#3-check-the-cray-rrs-helm-chart-and-resources)
 1. [Restart critical services](#4-restart-critical-services)
 1. [Verify `cray-rrs` deployment](#5-verify-cray-rrs-deployment)
 
@@ -191,7 +191,7 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
 
     Ensure that the `clusterpolicy` `insert-labels-topology-constraints` is in `Ready` state.
 
-1.  (`ncn-mw#`) Check the ConfigMaps.
+1. (`ncn-mw#`) Check the ConfigMaps.
 
     ```bash
     kubectl get configmaps -n rack-resiliency
@@ -214,9 +214,10 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
 Perform rollout restart of the critical services using the script [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
 
 ### What this script does?
+
 The `rr_critical_service_restart.py` script performs a controlled restart of services listed in `rrs-mon-static` to apply Rack Resiliency label `rrflag=`.
 It skips services already labeled, restarts remaining services one-by-one, and waits for each restart to complete.
-The script requires the `insert-labels-topology-constraints` ClusterPolicy to be present before it proceeds.
+The script requires the `insert-labels-topology-constraints` Cluster Policy to be present before it proceeds.
 
 Example usage:
 
