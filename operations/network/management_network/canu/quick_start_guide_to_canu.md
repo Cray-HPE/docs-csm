@@ -18,10 +18,10 @@ To run, type `canu`. It should run and display help.
 
 To see a list of commands and arguments, just append `--help`.
 
-When running CANU, the Shasta version is required; it can be specified with either `-s` or `--shasta`. For example:
+When running CANU, CSM version is required; it can be specified with `--csm`. For example:
 
 ```bash
-canu -s 1.5
+canu --csm 1.5
 ```
 
 ## Validate a fresh system using CSI and CANU
@@ -44,25 +44,19 @@ canu -s 1.5
 ### Check network firmware
 
 ```bash
-canu -s 1.5 network firmware --ips-file ips.txt
+canu report network firmware --csm 1.4 --ips-file ips.txt
 ```
 
 ### Check network cabling
 
 ```bash
-canu -s 1.5 network cabling --ips-file ips.txt
-```
-
-### Validate BGP status
-
-```bash
-canu -s 1.5 validate bgp --ips-file ips.txt –verbose
+canu report network cabling --ips-file ips.txt
 ```
 
 ### Validate cabling
 
 ```bash
-canu -s 1.5 validate cabling --ips-file ips.txt
+canu validate network cabling --ips-file ips.txt
 ```
 
 ### Validation using the system's SHCD
@@ -72,17 +66,18 @@ With the system's SHCD, CANU can also validate the configuration and cabling.
 #### Validate the SHCD
 
 ```bash
-canu -s 1.5 validate shcd --shcd SHCD.xlsx
+canu validate shcd-cabling --shcd SHCD.xlsx
 ```
 
 #### Validate the SHCD against network cabling
 
 ```bash
-canu -s 1.5 validate shcd-cabling --shcd SHCD.xlsx --ips-file ips.txt
+canu validate shcd-cabling --shcd SHCD.xlsx --ips-file ips.txt
+
 ```
 
 #### Generate switch configuration for the network
 
 ```bash
-canu -s 1.5 network config --shcd SHCD.xlsx --csi-folder /var/www/prep/SYSTEMNAME/ --folder configs
+canu generate network config --ccj ccj.json --sls-file sls_dumpstate.json  --folder configs
 ```
