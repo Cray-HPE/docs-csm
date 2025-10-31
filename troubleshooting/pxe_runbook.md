@@ -8,11 +8,12 @@ This guide runs through the most common issues and shows what is needed in order
     1. [Verify DHCP packets can be forwarded from the workers to the MTL network (VLAN1)](#21-verify-dhcp-packets-can-be-forwarded-from-the-workers-to-the-mtl-network-vlan1)
     1. [Verify BGP](#22-verify-bgp)
     1. [Verify route to TFTP](#23-verify-route-to-tftp)
-    1. [Test TFTP traffic (Aruba only)](#23-verify-route-to-tftp)
-    1. [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
-    1. [Verify the DHCP traffic on the workers](#26-verify-the-dhcp-traffic-on-the-workers)
-    1. [Verify the switches are forwarding DHCP traffic.](#27-verify-the-switches-are-forwarding-dhcp-traffic)
-    1. [Verify the iPXE binary is valid](#28-verify-the-ipxe-binary-is-valid)
+    1. [Verify TFTP `Conntrack` helper](#24-verify-tftp-conntrack-helper)
+    1. [Test TFTP traffic (Aruba only)](#25-test-tftp-traffic-aruba-only)
+    1. [Check DHCP lease is getting allocated](#26-check-dhcp-lease-is-getting-allocated)
+    1. [Verify the DHCP traffic on the workers](#27-verify-the-dhcp-traffic-on-the-workers)
+    1. [Verify the switches are forwarding DHCP traffic.](#28-verify-the-switches-are-forwarding-dhcp-traffic)
+    1. [Verify the iPXE binary is valid](#29-verify-the-ipxe-binary-is-valid)
 1. [Computes/UANs/Application Nodes](#3-compute-nodesuansapplication-nodes)
 
 ## 1. NCNs on install
@@ -224,7 +225,42 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 * Verify that the next hop of this route can be pinged.
 * For the example above, try to ping `10.252.1.9`. If this is not reachable, then this is the problem.
 
-## 2.4. Test TFTP traffic (Aruba only)
+## 2.4. Verify TFTP `Conntrack` Helper
+
+* The TFTP protocol requires stateful tracking of network connections, which is provided by the Linux kernel `Conntrack` "helper" feature.
+  As of kernel version 6.0, the automatic creation of helpers has been removed; they must now be explicitly declared using `iptables` rules.
+
+  Every NCN Worker node should have a `Conntrack` helper declared; otherwise, TFTP traffic routed to that node will not be handled correctly.
+
+  1. (`ncn-w#`) List the TFTP helper `iptables` rules.
+
+     ```console
+     iptables -L -t raw
+     ```
+
+     ```text
+     Chain PREROUTING (policy ACCEPT)
+     target     prot opt source               destination
+     CT         udp  --  anywhere             anywhere             udp dpt:tftp CT helper tftp
+
+     Chain OUTPUT (policy ACCEPT)
+     target     prot opt source               destination
+     CT         udp  --  anywhere             anywhere             udp dpt:tftp CT helper tftp
+     ```
+
+     Each NCN Worker node should have two TFTP rules: one in the PREROUTING chain and one in the OUTPUT chain.
+
+     **`NOTE`** If the system has been migrated to the Cilium Container Network Interface, there will be extra rules in the above output.
+
+  2. (`ncn-w#`) Restart the `metal-iptables` service on any worker that has missing `Conntrack` helpers.
+
+     ```console
+     systemctl restart metal-iptables
+     ```
+
+     This command will produce no output. Once it completes, verify that the TFTP helpers are now present by rerunning `iptables -L -t raw`.
+
+## 2.5. Test TFTP traffic (Aruba only)
 
 * Administrators can test the TFTP traffic by trying to download the `ipxe.efi` binary.
 * Log into the leaf switch and try to download the iPXE binary.
@@ -252,7 +288,7 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 
     1. Repeat the previous step several times. There have been issues with ECMP hashing that result in intermittent transfer failures.
 
-## 2.5. Check DHCP lease is getting allocated
+## 2.6. Check DHCP lease is getting allocated
 
 * Check the KEA logs and verify that the lease is getting allocated.
 
@@ -272,7 +308,7 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
     2021-06-21 16:44:31.124 INFO  [kea-dhcp4.leases/18.139837089017472] DHCP4_LEASE_ADVERT [hwtype=1 14:02:ec:d9:79:88], cid=[no info], tid=0xe87fad10: lease 10.252.1.16 will be advertised
     ```
 
-## 2.6. Verify the DHCP traffic on the workers
+## 2.7. Verify the DHCP traffic on the workers
 
 * Issues have been observed on HPE servers and Aruba switches where the source address of the DHCP offer is the MetalLB address
   of KEA (`10.92.100.222`). The source address of the DHCP reply/offer **needs** to be the address of the VLAN interface on the
@@ -309,7 +345,7 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 * If this issue is encountered, the only solution that has been found is restarting KEA and making sure that it gets moved to a different
   worker. It is believed that this has something to do with `conntrack`.
 
-## 2.7. Verify the switches are forwarding DHCP traffic
+## 2.8. Verify the switches are forwarding DHCP traffic
 
 * If still unable to PXE boot, the `IP-Helper` may be breaking on the switch.
 * On Aruba, Dell, and Mellanox switches there have been cases where the `IP-Helpers` get stuck and stop forwarding DHCP traffic to the client.
@@ -318,7 +354,7 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
     * On a Dell switch, do a reboot in order to restore DHCP traffic.
 * The underlying cause of `IP-Helper` breaking is not yet known.
 
-## 2.8. Verify the iPXE binary is valid
+## 2.9. Verify the iPXE binary is valid
 
 * If the node obtains an IP address and downloads the iPXE binary successfully but still fails to boot, the iPXE binary may be invalid.
 * (`ncn-mw#`) Determine the hardware architecture of the node.
@@ -405,11 +441,12 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 * The following are required for compute node PXE booting.
     * [Verify BGP](#1-ncns-on-install)
     * [Verify route to TFTP](#23-verify-route-to-tftp)
-    * [Test TFTP traffic](#24-test-tftp-traffic-aruba-only)
-    * [Check DHCP lease is getting allocated](#25-check-dhcp-lease-is-getting-allocated)
-    * [Verify the DHCP traffic on the workers](#26-verify-the-dhcp-traffic-on-the-workers)
-    * [Verify the switches are forwarding DHCP traffic](#27-verify-the-switches-are-forwarding-dhcp-traffic)
-    * [Verify the iPXE binary is valid](#28-verify-the-ipxe-binary-is-valid)
+    * [Verify TFTP `Conntrack` helper](#24-verify-tftp-conntrack-helper)
+    * [Test TFTP traffic](#25-test-tftp-traffic-aruba-only)
+    * [Check DHCP lease is getting allocated](#26-check-dhcp-lease-is-getting-allocated)
+    * [Verify the DHCP traffic on the workers](#27-verify-the-dhcp-traffic-on-the-workers)
+    * [Verify the switches are forwarding DHCP traffic](#28-verify-the-switches-are-forwarding-dhcp-traffic)
+    * [Verify the iPXE binary is valid](#29-verify-the-ipxe-binary-is-valid)
 * Verify the `IP-Helpers` on the VLAN the computes nodes are booting over. This is typically `VLAN 2` or `VLAN 2xxx` (MTN Computes).
 * (`iPXE>`) If the compute nodes make it past PXE and go into the PXE shell, then verify DNS and connectivity.
 
