@@ -213,7 +213,7 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
 ## 4. Patch the `clusterpolicy`
 
 As specified in [Kyverno Policy](Kyverno_Policy.md#policy-details), the `exclude` section of Kyverno
-policy will have to be removed manually if Rack Resiliency is enabled on a running system.
+policy has to be removed if Rack Resiliency is enabled on a running system.
 
 (`ncn-mw#`) Use the below command to remove the `exclude` section:
 
@@ -223,6 +223,7 @@ kubectl patch clusterpolicy insert-labels-topology-constraints --type=json \
 ```
 
 Example Output:
+
 ```text
 clusterpolicy.kyverno.io/insert-labels-topology-constraints patched
 ```
