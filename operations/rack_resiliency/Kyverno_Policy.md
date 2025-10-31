@@ -91,8 +91,8 @@ spec:
 
 **Note:** The `exclude` section of the policy shown in the above example is present when the policy is applied initially using Helm.
 If Rack Resiliency is enabled during the install or upgrade, then the `exclude` section is removed from
-the policy (using a post-install/post-upgrade hook), but if it is enabled in a running system then we
-have to remove the exclude section as specified in [Enabling Rack Resiliency on a running system](Enabling_RR_on_running_system.md).
+the policy (using a post-install/post-upgrade hook). Otherwise, the `exclude` section is removed manually as part of the
+procedure for [Enabling Rack Resiliency on a Running System](Enabling_RR_on_running_system.md).
 
 ## Restart critical services
 

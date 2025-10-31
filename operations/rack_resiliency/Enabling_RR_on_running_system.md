@@ -13,10 +13,10 @@
 
 1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
-1. [Check `cray-rrs` Helm chart and resources](#3-check-the-cray-rrs-helm-chart-and-resources)
-1. [Patch the Cluster Policy](#4-patch-the-clusterpolicy)
+1. [Check Helm chart and Kubernetes resources](#3-check-helm-chart-and-kubernetes-resources)
+1. [Patch cluster policy](#4-patch-cluster-policy)
 1. [Restart critical services](#5-restart-critical-services)
-1. [Verify `cray-rrs` deployment](#6-verify-cray-rrs-deployment)
+1. [Verify deployment](#6-verify-deployment)
 
 ## 1. Enable and customize
 
@@ -134,12 +134,12 @@ All updates completed successfully. CFS batcher should soon reconfigure these NC
 SUCCESS
 ```
 
-## 3. Check the `cray-rrs` Helm chart and resources
+## 3. Check Helm chart and Kubernetes resources
 
-The `cray-rrs` Helm chart should already be installed in the `rack-resiliency` namespace.
-Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace using the following procedure:
+1. (`ncn-mw#`) Verify that the `cray-rrs` Helm chart is present in the `rack-resiliency` namespace.
 
-1. (`ncn-mw#`) List the Helm charts in the `rack-resiliency` namespace.
+    The `cray-rrs` Helm chart should already be installed in the `rack-resiliency` namespace.
+    Verify this by listing the Helm charts in the `rack-resiliency` namespace.
 
     ```bash
     helm ls -n rack-resiliency
@@ -176,8 +176,8 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
 
     > For an explanation of why the `cray-rrs` deployment is not ready, see [`cray rrs pod is in init state`](Troubleshooting.md#cray-rrs-pod-is-in-init-state).
 
-1. (`ncn-mw#`) Check the `clusterpolicy`.
-    Ensure that the following command shows the `insert-labels-topology-constraints` in `Ready` state.
+1. (`ncn-mw#`) Check the cluster policy.
+    Ensure that the following command shows that `insert-labels-topology-constraints` is in `Ready` state.
 
     ```bash
     kubectl get clusterpolicy insert-labels-topology-constraints
@@ -190,15 +190,13 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
     insert-labels-topology-constraints   true        true         True    19h   Ready
     ```
 
-    Ensure that the `clusterpolicy` `insert-labels-topology-constraints` is in `Ready` state.
-
 1. (`ncn-mw#`) Check the ConfigMaps.
 
     ```bash
     kubectl get configmaps -n rack-resiliency
     ```
 
-    Example output:
+    Verify that all of the ConfigMaps shown in the following example output are present on the system:
 
     ```text
     NAME                 DATA   AGE
@@ -208,9 +206,7 @@ Verify that the `cray-rrs` Helm chart is present in `rack-resiliency` namespace 
     rrs-mon-static       11     11d
     ```
 
-    > **Note:** All the ConfigMaps shown in the example output should be present on the system.
-
-## 4. Patch the `clusterpolicy`
+## 4. Patch cluster policy
 
 As specified in [Kyverno Policy](Kyverno_Policy.md#policy-details), the `exclude` section of Kyverno
 policy has to be removed if Rack Resiliency is enabled on a running system.
@@ -222,7 +218,7 @@ kubectl patch clusterpolicy insert-labels-topology-constraints --type=json \
   -p='[{"op": "remove", "path": "/spec/rules/0/exclude"}]'
 ```
 
-Example Output:
+Example output:
 
 ```text
 clusterpolicy.kyverno.io/insert-labels-topology-constraints patched
@@ -234,9 +230,9 @@ Perform rollout restart of the critical services using the script [`rr_critical_
 
 ### What this script does?
 
-The `rr_critical_service_restart.py` script performs a controlled restart of services listed in `rrs-mon-static` to apply Rack Resiliency label `rrflag=rr-<service-name>`.
+The `rr_critical_service_restart.py` script performs a controlled restart of the services listed in the `rrs-mon-static` `ConfigMap`, in order to apply Kubernetes label `rrflag=rr-<service-name>`.
 It skips services already labeled, restarts remaining services one-by-one, and waits for each restart to complete.
-The script requires the `insert-labels-topology-constraints` Cluster Policy to be present before it proceeds.
+The script requires the `insert-labels-topology-constraints` cluster policy to be present before it proceeds.
 
 Example usage:
 
@@ -264,7 +260,7 @@ Set rollout_complete=true in ConfigMap 'rrs-mon-dynamic'
 Done!
 ```
 
-## 6. Verify `cray-rrs` deployment
+## 6. Verify deployment
 
 (`ncn-mw#`) List the resources in the `rack-resiliency` namespace:
 
