@@ -19,7 +19,8 @@ completes its upgrade, then quorum would be lost.
 **Warning#2:** With CSM 1.6 installed, if any of the [compute nodes](../glossary.md#compute-node-cn) and
 [application nodes](../glossary.md#application-node-an) were booted with DVS/CPS 
 [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs)/[Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps), then it is required to boot those nodes with [iSCSI SBPS](../../glossary.md#scalable-boot-projection-service-sbps)
-as DVS/CPS is deprecated in CSM 1.7. If the nodes are with DVS/CPS, they may experience a hang or any issue during upgrade.
+as DVS/CPS is deprecated in CSM 1.7. If the nodes are with DVS/CPS, they may experience a hang or any issue during
+upgrade.
 
 ## Preparation steps
 
