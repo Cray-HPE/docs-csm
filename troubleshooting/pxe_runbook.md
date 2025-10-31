@@ -9,7 +9,7 @@ This guide runs through the most common issues and shows what is needed in order
     1. [Verify BGP](#22-verify-bgp)
     1. [Verify route to TFTP](#23-verify-route-to-tftp)
     1. [Verify TFTP `Conntrack` helper](#24-verify-tftp-conntrack-helper)
-    1. [Test TFTP traffic (Aruba only)](25-test-tftp-traffic-aruba-only)
+    1. [Test TFTP traffic (Aruba only)](#25-test-tftp-traffic-aruba-only)
     1. [Check DHCP lease is getting allocated](#26-check-dhcp-lease-is-getting-allocated)
     1. [Verify the DHCP traffic on the workers](#27-verify-the-dhcp-traffic-on-the-workers)
     1. [Verify the switches are forwarding DHCP traffic.](#28-verify-the-switches-are-forwarding-dhcp-traffic)
