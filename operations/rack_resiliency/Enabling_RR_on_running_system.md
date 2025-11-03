@@ -1,4 +1,4 @@
-# Enable Rack Resiliency on a Running System
+# Enabling Rack Resiliency on a Running System
 
 ## Overview
 
