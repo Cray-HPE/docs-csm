@@ -175,7 +175,7 @@ SUCCESS
     ```
 
     Verify that the `cray-rrs` Pod, Service, Deployment, and ReplicaSet all exist. Since `cray-rrs` helm chart is present(as confirmed from previous step),
-    the pod is expected to show `Init:0/2` status at this point(this is normal).
+    the pod is expected to show `Init:0/2` status at this point.
 
     > For an explanation of why the `cray-rrs` deployment is not ready, see [`cray rrs pod is in init state`](Troubleshooting.md#cray-rrs-pod-is-in-init-state).
 
@@ -235,10 +235,10 @@ The `rr_critical_service_restart.py` script performs a controlled restart of the
 It skips services already labeled, restarts remaining services one-by-one, and waits for each restart to complete.
 The script requires the `insert-labels-topology-constraints` cluster policy to be present before it proceeds.
 
-**Important**: This step restarts critical infrastructure services (including `cilium-operator`, `coredns`, CFS,
+**Important**: This step restarts critical services (including `cilium-operator`, `coredns`, CFS,
 and other essential CSM services). While Kubernetes performs rolling restarts to maintain service availability, there may be brief
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry. It is recommended to perform
-this step during a planned maintenance window or at a time when temporary service interruptions will not impact running workloads.
+this step during a planned maintenance window.
 
 Example usage:
 
