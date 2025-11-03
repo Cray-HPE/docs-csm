@@ -2,14 +2,14 @@
 
 ## Issue Description
 
-During the CSM upgrade, IUF reports that multiple sessions are in progress for an activity. The next stage for the activity does not run due to above error.
+During the CSM upgrade, IUF warns that multiple sessions are in progress for an activity. The next stage for the activity does not run due to this warning.
 This issue is seen after pre-install-check stage or management-nodes-rollout stage of `iuf` run.
 
 This issue causes the session associated with the activity to continue to be in "in progress" even after workflow associated with the stage has successfully completed.
 
-## Error Identification
+## Issue Identification
 
-When the issue occurs the following errors are emitted by `iuf-cli`:
+When the issue occurs the following messages are emitted by `iuf-cli`:
 
 ```sh
 iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
@@ -25,7 +25,7 @@ INFO [IUF SESSION:                                             ] END Completed a
 INFO [ACTIVITY: update-csm-1.6.0                               ] END Completed in 0:00:08
 ```
 
-## Error Conditions
+## Issue Conditions
 
 There is a race condition in `cray-nls` that is hit when multiple `cray-nls` pods are starting at the same time.
 This happens during a `cray-nls` chart upgrade and sometimes when a node with multiple `cray-nls` pods is drained, which causes these pods to start simultaneously on another node.
@@ -55,4 +55,12 @@ Step 4: Edit the `configmap` to modify `"current_state"` to "completed" if `"cur
 
 ```bash
 kubectl edit configmap -n argo <session_name> -o json
+```
+
+Step 5: Re-run workflow using the same IUF command.
+
+With the previous session set to "completed", the multiple sessions warning should not be seen and the workflow should run as expected.
+
+```sh
+iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
 ```
