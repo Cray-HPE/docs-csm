@@ -99,9 +99,7 @@ Follow these steps to enable (and optionally customize) Rack Resiliency.
 
 ## 2. Run Ansible plays
 
-Refer to [setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on the Ansible roles that are used to configure Rack Resiliency.
-Run the RR Ansible plays by performing the following procedure:
-
+Refer to [Setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information on the Ansible roles that are used to configure Rack Resiliency.
 Since Rack Resiliency was disabled earlier and has just been enabled in the previous step,
 the next step is to configure CFS to rerun the Ansible plays for Rack Resiliency. This is done using the script
 [`refresh_master_storage_rack_resiliency_config.py`](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py).
@@ -158,6 +156,11 @@ SUCCESS
     kubectl get all -n rack-resiliency
     ```
 
+    In the command output, verify that the `cray-rrs` Pod, Service, Deployment, and ReplicaSet all exist.
+
+    > The pod is expected to show `Init:0/2` status at this point. For details on why the pod and deployment are not ready,
+    > see [`cray rrs` pod is in `init` state](Troubleshooting.md#cray-rrs-pod-is-in-init-state).
+
     Example output:
 
     ```text
@@ -174,17 +177,14 @@ SUCCESS
     replicaset.apps/cray-rrs-86d4465c9d   1         0         0       19h
     ```
 
-    Verify that the `cray-rrs` Pod, Service, Deployment, and ReplicaSet all exist. Since `cray-rrs` helm chart is present(as confirmed from previous step),
-    the pod is expected to show `Init:0/2` status at this point.
-
-    > For an explanation of why the `cray-rrs` deployment is not ready, see [`cray rrs pod is in init state`](Troubleshooting.md#cray-rrs-pod-is-in-init-state).
 
 1. (`ncn-mw#`) Check the cluster policy.
-    Ensure that the following command shows that the `READY` column is `True` for `insert-labels-topology-constraints`.
 
     ```bash
     kubectl get clusterpolicy insert-labels-topology-constraints
     ```
+
+    Ensure that the command output shows `True` in the `READY` column for `insert-labels-topology-constraints`.
 
     Example output:
 

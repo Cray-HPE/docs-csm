@@ -34,10 +34,10 @@ the Rack Resiliency playbook entry. It also sets the error count for the compone
 This will cause CFS batcher to schedule new CFS sessions to run that playbook
 on the master and storage nodes.
 
-It checks if any Master NCN has the Rack Resiliency layer configured in CFS and if
-any Storage NCN has the layer. Both validations must pass for the script to proceed.
-If successful, it removes the layer from all Master and Storage NCNs' CFS states so
-that CFS can automatically reapply it to all nodes, ensuring the configuration is refreshed.
+As an initial check, the script verifies that at least one Master NCN and at least one Storage NCN
+have the Rack Resiliency layer in the current state of their CFS components. If that is not the case,
+then the script will abort. Otherwise, the script removes the Rack Resiliency layer from the current state of
+the CFS components for all Master and Storage NCNs.
 
 Behavior:
   - If no Master NCNs have the Rack Resiliency layer → abort.
