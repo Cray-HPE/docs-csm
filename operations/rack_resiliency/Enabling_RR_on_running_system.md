@@ -177,7 +177,6 @@ SUCCESS
     replicaset.apps/cray-rrs-86d4465c9d   1         0         0       19h
     ```
 
-
 1. (`ncn-mw#`) Check the cluster policy.
 
     ```bash
@@ -235,10 +234,12 @@ The `rr_critical_service_restart.py` script performs a controlled restart of the
 It skips services already labeled, restarts remaining services one-by-one, and waits for each restart to complete.
 The script requires the `insert-labels-topology-constraints` cluster policy to be present before it proceeds.
 
-**Important**: This step restarts critical services (including `cilium-operator`, `coredns`, CFS,
-and other essential CSM services). While Kubernetes performs rolling restarts to maintain service availability, there may be brief
+**Important**: This step restarts critical services (including `cilium-operator`, `coredns` and other essential CSM services).
+While Kubernetes performs rolling restarts to maintain service availability, there may be brief
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry. It is recommended to perform
 this step during a planned maintenance window.
+To know about all the services going to restart in this step refer
+to[cray-rrs critical services list](https://github.com/Cray-HPE/cray-rrs/blob/b503cd2617d88ccc52b6ff5c3a951b9c11833d0b/kubernetes/cray-rrs/values.yaml#L197C1-L374C21).
 
 Example usage:
 
