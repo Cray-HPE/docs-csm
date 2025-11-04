@@ -29,9 +29,10 @@ Once this step has completed:
 > **NOTE**  
 > As part of the `deploy-product` stage during upgrades from CSM 1.6 to CSM 1.7,
 > the `deploy-product-onexit` hook will launch a Kubernetes upgrade job that runs outside of IUF, in the `argo` namespace.
+>
 > - The job will upgrade Kubernetes from version 1.26 to 1.32 in two hops. The first hop will be to version 1.29 and the second hop to version 1.32.
 > - This job must be monitored manually and must complete successfully before proceeding to the next stage.
-> - The job will restart when upgrading the master nodes to 1.32 and kubelet is restarted. The restart will create a new output log.
+> - The job will restart when upgrading the master nodes to 1.32 and `kubelet` restarts. When the job restarts, a new output log will be created.
 >
 > The output from the `deploy-product` stage will look like:
 >
@@ -51,13 +52,13 @@ Once this step has completed:
 >
 > Below is a table of estimated upgrade time in minutes:
 >
-> | Num Workers | Time (m) |
-> | ----------- | -------- |
-> | 4           | 110      |
-> | 12          | 270      |
-> | 16          | 350      |
-> | 20          | 430      |
-> | 28          | 590      |
+> | # Workers | Time (m) |
+> | --------- | -------- |
+> | 4         | 110      |
+> | 12        | 270      |
+> | 16        | 350      |
+> | 20        | 430      |
+> | 28        | 590      |
 
 - New versions of product microservices have been deployed
 - Per-stage product hooks have executed for the `deploy-product` stage
