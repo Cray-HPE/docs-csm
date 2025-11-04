@@ -9,7 +9,9 @@
   For information on how to do this during an install or upgrade to CSM 1.7, see
   [Enabling Rack Resiliency During Install or Upgrade](Enabling_RR_During_Install_or_Upgrade.md).
 * Rack Resiliency cannot be disabled after it has been enabled.
-* Rack Resiliency can be enabled and configured any time on a system running on CSM 1.7+.
+* Rack Resiliency can be enabled and configured any time on a system
+  running on CSM 1.7+.
+  However, it is recommended to perform the critical service restart step during a planned maintenance window.
 
 1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
@@ -239,7 +241,7 @@ While Kubernetes performs rolling restarts to maintain service availability, the
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry. It is recommended to perform
 this step during a planned maintenance window.
 To know about all the services going to restart in this step refer
-to[cray-rrs critical services list](https://github.com/Cray-HPE/cray-rrs/blob/b503cd2617d88ccc52b6ff5c3a951b9c11833d0b/kubernetes/cray-rrs/values.yaml#L197C1-L374C21).
+to [critical services list](https://github.com/Cray-HPE/cray-rrs/blob/b503cd2617d88ccc52b6ff5c3a951b9c11833d0b/kubernetes/cray-rrs/values.yaml#L197C1-L374C21).
 
 Example usage:
 
