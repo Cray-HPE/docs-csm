@@ -105,8 +105,7 @@ Refer to [Setup flows](Setup_of_Rack_Resiliency.md#setup-flows) for information 
 Since Rack Resiliency was disabled earlier and has just been enabled in the previous step,
 the next step is to configure CFS to rerun the Ansible plays for Rack Resiliency. This is done using the script
 [`refresh_master_storage_rack_resiliency_config.py`](../../scripts/operations/configuration/refresh_master_storage_rack_resiliency_config.py).
-This script applies the necessary configuration and sets up Kubernetes and Ceph [zones](Zones.md)
-on Master and Storage nodes, respectively.
+This script applies the necessary configuration and sets up [zones](Zones.md).
 
 (`ncn-mw#`) Example usage:
 
