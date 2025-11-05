@@ -32,35 +32,35 @@ This happens during a `cray-nls` chart upgrade and sometimes when a node with mu
 
 ## Workaround Description
 
-Step 1: Identify the session for the previous stage which ran successfully for the activity being run.
+1. Identify the session for the previous stage which ran successfully for the activity being run.
 
-```bash
-2024-10-21T01:40:09.731277Z INFO [IUF SESSION: update-csm-1-6-0-h0y63                 ] BEG Started at 2024-10-21 01:40:09.731167
-2024-10-21T01:40:13.585718Z DBG  Next workflow update-csm-1-6-0-h0y63-management-nodes-rollout-wnbpb
-```
+    ```bash
+    2024-10-21T01:40:09.731277Z INFO [IUF SESSION: update-csm-1-6-0-h0y63                 ] BEG Started at 2024-10-21 01:40:09.731167
+    2024-10-21T01:40:13.585718Z DBG  Next workflow update-csm-1-6-0-h0y63-management-nodes-rollout-wnbpb
+    ```
 
-Step 2: Find the `configmap` associated with the session from previous step in `argo` namespace.
+2. Find the `configmap` associated with the session from previous step in `argo` namespace.
 
-```bash
-kubectl get cm -n argo --selector type=iuf_session |grep <session_name>
-```
+    ```bash
+    kubectl get cm -n argo --selector type=iuf_session |grep <session_name>
+    ```
 
-Step 3: Make a backup of the `configmap` since it will be edited in the next step.
+3. Make a backup of the `configmap` since it will be edited in the next step.
 
-```bash
-kubectl get cm -n argo <session_name> -o yaml > <session_name>_cm_backup.yaml
-```
+    ```bash
+    kubectl get cm -n argo <session_name> -o yaml > <session_name>_cm_backup.yaml
+    ```
 
-Step 4: Edit the `configmap` to modify `"current_state"` to "completed" if `"current_state"` is "in_progress".
+4. Edit the `configmap` to modify `"current_state"` to "completed" if `"current_state"` is "in_progress".
 
-```bash
-kubectl edit configmap -n argo <session_name> -o json
-```
+    ```bash
+    kubectl edit configmap -n argo <session_name> -o json
+    ```
 
-Step 5: Re-run workflow using the same IUF command.
+5. Re-run workflow using the same IUF command.
 
-With the previous session set to "completed", the multiple sessions warning should not be seen and the workflow should run as expected.
+    With the previous session set to "completed", the multiple sessions warning should not be seen and the workflow should run as expected.
 
-```sh
-iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
-```
+    ```sh
+    iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
+    ```
