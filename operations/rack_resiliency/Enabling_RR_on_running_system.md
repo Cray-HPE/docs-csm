@@ -231,11 +231,11 @@ clusterpolicy.kyverno.io/insert-labels-topology-constraints patched
 
 Perform rollout restart of the critical services using the script [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
 
-The `rr_critical_service_restart.py` script performs a controlled restart of the services listed in the `rrs-mon-static` `ConfigMap`, in order to apply Kubernetes label `rrflag=rr-<service-name>`.
-It skips services already labeled, restarts remaining services one-by-one, and waits for each restart to complete.
+The `rr_critical_service_restart.py` script performs a controlled restart of the services listed in the `rrs-mon-static` ConfigMap, in order to apply Kubernetes label `rrflag=rr-<service-name>`.
+It skips services already labeled, restarts the remaining services one-by-one, and waits for each restart to complete.
 The script requires the `insert-labels-topology-constraints` cluster policy to be present before it proceeds.
 
-**Important**: This step restarts critical services (including `cilium-operator`, `coredns` and other essential CSM services).
+**Important**: This step restarts critical services (including `cilium-operator`, `coredns`, and other essential CSM services).
 While Kubernetes performs rolling restarts to maintain service availability, there may be brief
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry. It is recommended to perform
 this step during a planned maintenance window.
