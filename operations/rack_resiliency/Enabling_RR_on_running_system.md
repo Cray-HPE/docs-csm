@@ -240,7 +240,7 @@ While Kubernetes performs rolling restarts to maintain service availability, the
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry. It is recommended to perform
 this step during a planned maintenance window.
 To know about all the services going to restart in this step refer
-to [critical services list](https://github.com/Cray-HPE/cray-rrs/blob/b503cd2617d88ccc52b6ff5c3a951b9c11833d0b/kubernetes/cray-rrs/values.yaml#L197C1-L374C21).
+to [List critical services in ConfigMap](Manage_Critical_Services.md#list-services-in-configmap).
 
 Example usage:
 
