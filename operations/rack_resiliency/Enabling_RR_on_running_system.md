@@ -272,7 +272,7 @@ Done!
 ## 6. Verify deployment
 
 This step verifies that the `cray-rrs` pod has transitioned to the `Ready` state. The pod performs initialization checks
-to ensure that the rollout restart is completed and the required configuration is available before becoming ready.
+to ensure that the critical service rollout restart is completed and the required configuration is available.
 These checks are performed periodically, so the pod may remain in `Init` state for a short time after the previous steps are completed.
 
 (`ncn-mw#`) List the resources in the `rack-resiliency` namespace:
