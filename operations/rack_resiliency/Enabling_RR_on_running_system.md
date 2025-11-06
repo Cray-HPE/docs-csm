@@ -11,7 +11,7 @@
 * Rack Resiliency cannot be disabled after it has been enabled.
 * Rack Resiliency can be enabled and configured on a system running on CSM 1.7+.
 * **Important**: This entire procedure must be performed during a planned maintenance window.
-  The critical service restart step [step 5](#5-restart-critical-services) will restart essential CSM services,
+  The [Restart critical services](#5-restart-critical-services) step will restart essential CSM services,
   which may cause brief service disruptions. It is not safe
   to complete this procedure without scheduling a maintenance window.
 
