@@ -242,6 +242,17 @@ this step during a planned maintenance window.
 For information on how to identify all of the critical services, see
 [List services in ConfigMap](Manage_Critical_Services.md#list-services-in-configmap).
 
+**Note**: It is safe to complete steps 1-4 and then wait for a maintenance window before performing this step.
+There are no negative consequences to leaving the system in this intermediate state for an extended period.
+However, you should be aware of the following rack resiliency functionality limitations until this step is completed:
+
+* **Zone monitoring**: The `cray rrs zones ...` commands will work properly and can be used to retrieve zone information.
+* **Critical service monitoring**: The `cray rrs criticalservices ...` commands will **not**
+provide accurate output until this step is completed.
+
+If only zone information is needed, you may proceed with steps 1-4 and use rack resiliency for zone monitoring purposes.
+However, for complete rack resiliency functionality including critical service monitoring, all steps must be completed.
+
 Example usage:
 
 ```bash
