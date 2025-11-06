@@ -17,8 +17,8 @@
 1. [Run Ansible plays](#2-run-ansible-plays)
 1. [Check Helm chart and Kubernetes resources](#3-check-helm-chart-and-kubernetes-resources)
 1. [Patch cluster policy](#4-patch-cluster-policy)
-1. [Restart critical services](#5-restart-critical-services)
-1. [Verify deployment](#6-verify-deployment)
+1. [Verify deployment](#5-verify-deployment)
+1. [Restart critical services](#6-restart-critical-services)
 
 ## 1. Enable and customize
 
@@ -227,7 +227,37 @@ Example output:
 clusterpolicy.kyverno.io/insert-labels-topology-constraints patched
 ```
 
-## 5. Restart critical services
+## 5. Verify deployment
+
+(`ncn-mw#`) List the resources in the `rack-resiliency` namespace:
+
+```bash
+kubectl get all -n rack-resiliency
+```
+
+In the command output, verify that all of the following are true:
+
+* The pod should have have status `Ready`.
+* The pod should show `2/2` in the `READY` column.
+* The deployment should show `1/1` in the `READY` column.
+
+Example output:
+
+```text
+NAME                            READY   STATUS     RESTARTS   AGE
+pod/cray-rrs-86d4465c9d-qf6f5   2/2     Ready      0          19h
+
+NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
+service/cray-rrs   ClusterIP   10.18.164.23   <none>        80/TCP,8551/TCP   19h
+
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/cray-rrs   1/1     1            1           19h
+
+NAME                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
+```
+
+## 6. Restart critical services
 
 Perform rollout restart of the critical services using the script [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
 
@@ -271,34 +301,4 @@ RR critical services rollout restart successful.
 configmap/rrs-mon-dynamic patched (no change)
 Set rollout_complete=true in ConfigMap 'rrs-mon-dynamic'
 Done!
-```
-
-## 6. Verify deployment
-
-(`ncn-mw#`) List the resources in the `rack-resiliency` namespace:
-
-```bash
-kubectl get all -n rack-resiliency
-```
-
-In the command output, verify that all of the following are true:
-
-* The pod should have have status `Ready`.
-* The pod should show `2/2` in the `READY` column.
-* The deployment should show `1/1` in the `READY` column.
-
-Example output:
-
-```text
-NAME                            READY   STATUS     RESTARTS   AGE
-pod/cray-rrs-86d4465c9d-qf6f5   2/2     Ready      0          19h
-
-NAME               TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)           AGE
-service/cray-rrs   ClusterIP   10.18.164.23   <none>        80/TCP,8551/TCP   19h
-
-NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/cray-rrs   1/1     1            1           19h
-
-NAME                                  DESIRED   CURRENT   READY   AGE
-replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
 ```
