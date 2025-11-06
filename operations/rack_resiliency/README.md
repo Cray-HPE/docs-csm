@@ -17,11 +17,12 @@
     - [RRS CLI](#rrs-cli)
     - [RRS API](#rrs-api)
 - [Architecture](#architecture)
+- [Enable and configure](#enable-and-configure)
 - [Troubleshooting](#troubleshooting)
 
 ## Attention: RR is experimental
 
-In CSM 1.7.0, Rack Resiliency is **experimental** and **use-at-your-own-risk**. It is offered
+Rack Resiliency is **experimental** and **use-at-your-own-risk**. It is offered
 as a technology preview for administrators who wish to evaluate it in a test environment.
 It has not undergone sufficient validation to be considered stable for production use.
 
@@ -41,9 +42,7 @@ scheduling new ones.
 **NOTE**:
 
 - Rack Resiliency is disabled by default.
-- Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an upgrade from CSM 1.6
-  to CSM 1.7.
-- Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
+- Rack Resiliency cannot be disabled after it has been enabled.
 
 ## Terminology and components
 
@@ -130,9 +129,17 @@ See [Rack Resiliency Service v1](../../api/rrs.md) for more information.
 
 The Rack Resiliency solution is implemented in multiple stages. These stages are:
 
-1. [Enabling Rack Resiliency](Enabling_Rack_Resiliency.md)
+1. [Enable and configure](#enable-and-configure)
 1. [Setup of Rack Resiliency](Setup_of_Rack_Resiliency.md)
 1. [Resiliency Monitoring Service](Resiliency_Monitoring_Service.md)
+
+## Enable and configure
+
+How to enable and configure Rack Resiliency depends on the context.
+See the following links:
+
+- [Enabling Rack Resiliency During Install or Upgrade](Enabling_RR_During_Install_or_Upgrade.md)
+- [Enabling Rack Resiliency on a Running System](Enabling_RR_on_running_system.md)
 
 ## Troubleshooting
 
