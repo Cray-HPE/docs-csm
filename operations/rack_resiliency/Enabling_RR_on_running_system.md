@@ -306,7 +306,7 @@ NAME                                  DESIRED   CURRENT   READY   AGE
 replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
 ```
 
-**Note**: If the pod remains in `Init:0/2` state for longer than a few minutes, this may indicate a configuration issue.
+(`ncn-mw#`) If the pod remains in `Init:0/2` state for longer than a few minutes, this may indicate a configuration issue.
 Check the pod logs to investigate:
 
 ```bash
