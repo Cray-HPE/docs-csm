@@ -211,7 +211,7 @@ SUCCESS
 
 ## 4. Patch cluster policy
 
-As specified in [policy details](Kyverno_Policy.md#policy-details), the `exclude` section of Kyverno
+As specified in [Policy details](Kyverno_Policy.md#policy-details), the `exclude` section of Kyverno
 policy has to be removed if Rack Resiliency is enabled on a running system.
 
 (`ncn-mw#`) Use the below command to remove the `exclude` section:
