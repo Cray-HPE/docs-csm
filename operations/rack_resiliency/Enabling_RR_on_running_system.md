@@ -271,19 +271,26 @@ Done!
 
 ## 6. Verify deployment
 
+This step verifies that the `cray-rrs` pod has transitioned to the `Ready` state. The pod performs initialization checks
+to ensure that the rollout restart is completed and the required configuration is available before becoming ready.
+These checks are performed periodically, so the pod may remain in `Init` state for a short time after the previous steps are completed.
+
 (`ncn-mw#`) List the resources in the `rack-resiliency` namespace:
 
 ```bash
 kubectl get all -n rack-resiliency
 ```
 
-In the command output, verify that all of the following are true:
+Wait for the pod to transition to `Ready` state. This typically takes up to 1-2 minutes. If the pod is still in `Init:0/2` state,
+wait and retry the command above periodically.
 
-* The pod should have have status `Ready`.
+Once ready, verify that all of the following are true in the command output:
+
+* The pod should have status `Ready`.
 * The pod should show `2/2` in the `READY` column.
 * The deployment should show `1/1` in the `READY` column.
 
-Example output:
+Example output when ready:
 
 ```text
 NAME                            READY   STATUS     RESTARTS   AGE
@@ -298,3 +305,12 @@ deployment.apps/cray-rrs   1/1     1            1           19h
 NAME                                  DESIRED   CURRENT   READY   AGE
 replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
 ```
+
+**Note**: If the pod remains in `Init:0/2` state for longer than a few minutes, this may indicate a configuration issue.
+Check the pod logs to investigate:
+
+```bash
+kubectl logs -n rack-resiliency <pod-name> -c <init-container-name>
+```
+
+For troubleshooting assistance, see [`cray rrs` pod is in `init` state](Troubleshooting.md#cray-rrs-pod-is-in-init-state).
