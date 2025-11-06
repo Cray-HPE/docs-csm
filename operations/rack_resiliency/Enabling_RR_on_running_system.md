@@ -9,16 +9,18 @@
   For information on how to do this during an install or upgrade to CSM 1.7, see
   [Enabling Rack Resiliency During Install or Upgrade](Enabling_RR_During_Install_or_Upgrade.md).
 * Rack Resiliency cannot be disabled after it has been enabled.
-* Rack Resiliency can be enabled and configured any time on a system
-  running on CSM 1.7+.
-  However, it is recommended to perform the critical service restart step during a planned maintenance window.
+* Rack Resiliency can be enabled and configured on a system running on CSM 1.7+.
+* **Important**: This entire procedure must be performed during a planned maintenance window.
+  The critical service restart step [step 5](#5-restart-critical-services) will restart essential CSM services,
+  which may cause brief service disruptions. It is not safe
+  to complete this procedure without scheduling a maintenance window.
 
 1. [Enable and customize](#1-enable-and-customize)
 1. [Run Ansible plays](#2-run-ansible-plays)
 1. [Check Helm chart and Kubernetes resources](#3-check-helm-chart-and-kubernetes-resources)
 1. [Patch cluster policy](#4-patch-cluster-policy)
-1. [Verify deployment](#5-verify-deployment)
-1. [Restart critical services](#6-restart-critical-services)
+1. [Restart critical services](#5-restart-critical-services)
+1. [Verify deployment](#6-verify-deployment)
 
 ## 1. Enable and customize
 
@@ -227,7 +229,47 @@ Example output:
 clusterpolicy.kyverno.io/insert-labels-topology-constraints patched
 ```
 
-## 5. Verify deployment
+## 5. Restart critical services
+
+Perform rollout restart of the critical services using the script [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
+
+The `rr_critical_service_restart.py` script performs a controlled restart of the services listed in the `rrs-mon-static` ConfigMap, in order to apply Kubernetes label `rrflag=rr-<service-name>`.
+It skips services already labeled, restarts the remaining services one-by-one, and waits for each restart to complete.
+The script requires the `insert-labels-topology-constraints` cluster policy to be present before it proceeds.
+
+**Important**: This step restarts critical services (including `cilium-operator`, `coredns`, and other essential CSM services).
+While Kubernetes performs rolling restarts to maintain service availability, there may be brief
+disruptions as pods are restarted. In-flight requests to these services may fail and require retry.
+For information on how to identify all of the critical services, see
+[List services in ConfigMap](Manage_Critical_Services.md#list-services-in-configmap).
+
+Example usage:
+
+```bash
+/usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
+```
+
+Truncated example output (the actual output will be larger):
+
+```text
+Restarted deployment/cilium-operator in namespace kube-system
+Restarted deployment/coredns in namespace kube-system
+Skipping deployment/cray-activemq-artemis-operator-controller-manager: 'rrflag' label is already set in namespace dvs
+Skipping deployment/cray-capmc: 'rrflag' label is already set in namespace services
+Skipping deployment/cray-ceph-csi-cephfs-provisioner: 'rrflag' label is already set in namespace ceph-cephfs
+Skipping deployment/cray-ceph-csi-rbd-provisioner: 'rrflag' label is already set in namespace ceph-rbd
+Skipping deployment/cray-certmanager-cert-manager: 'rrflag' label is already set in namespace cert-manager
+Skipping deployment/cray-certmanager-cert-manager-cainjector: 'rrflag' label is already set in namespace cert-manager
+...
+Skipping deployment/slurmdbd-backup: 'rrflag' label is already set in namespace user
+Skipping deployment/sshot-net-operator: 'rrflag' label is already set in namespace sshot-net-operator
+RR critical services rollout restart successful.
+configmap/rrs-mon-dynamic patched (no change)
+Set rollout_complete=true in ConfigMap 'rrs-mon-dynamic'
+Done!
+```
+
+## 6. Verify deployment
 
 (`ncn-mw#`) List the resources in the `rack-resiliency` namespace:
 
@@ -255,50 +297,4 @@ deployment.apps/cray-rrs   1/1     1            1           19h
 
 NAME                                  DESIRED   CURRENT   READY   AGE
 replicaset.apps/cray-rrs-86d4465c9d   1         1         1       19h
-```
-
-## 6. Restart critical services
-
-Perform rollout restart of the critical services using the script [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py).
-
-The `rr_critical_service_restart.py` script performs a controlled restart of the services listed in the `rrs-mon-static` ConfigMap, in order to apply Kubernetes label `rrflag=rr-<service-name>`.
-It skips services already labeled, restarts the remaining services one-by-one, and waits for each restart to complete.
-The script requires the `insert-labels-topology-constraints` cluster policy to be present before it proceeds.
-
-**Important**: This step restarts critical services (including `cilium-operator`, `coredns`, and other essential CSM services).
-While Kubernetes performs rolling restarts to maintain service availability, there may be brief
-disruptions as pods are restarted. In-flight requests to these services may fail and require retry. It is recommended to perform
-this step during a planned maintenance window.
-For information on how to identify all of the critical services, see
-[List services in ConfigMap](Manage_Critical_Services.md#list-services-in-configmap).
-
-> Note: It is safe to complete the previous steps and then wait for a maintenance window before performing this step
-> (to restart the critical services). There are no negative consequences to leaving the system in this intermediate state for
-> an extended period. During this period, zone monitoring will work properly, but critical service monitoring will not.
-> For complete Rack Resiliency functionality, including critical service monitoring, all steps must be completed.
-
-Example usage:
-
-```bash
-/usr/share/doc/csm/upgrade/scripts/k8s/rr_critical_service_restart.py
-```
-
-Truncated example output (the actual output will be larger):
-
-```text
-Restarted deployment/cilium-operator in namespace kube-system
-Restarted deployment/coredns in namespace kube-system
-Skipping deployment/cray-activemq-artemis-operator-controller-manager: 'rrflag' label is already set in namespace dvs
-Skipping deployment/cray-capmc: 'rrflag' label is already set in namespace services
-Skipping deployment/cray-ceph-csi-cephfs-provisioner: 'rrflag' label is already set in namespace ceph-cephfs
-Skipping deployment/cray-ceph-csi-rbd-provisioner: 'rrflag' label is already set in namespace ceph-rbd
-Skipping deployment/cray-certmanager-cert-manager: 'rrflag' label is already set in namespace cert-manager
-Skipping deployment/cray-certmanager-cert-manager-cainjector: 'rrflag' label is already set in namespace cert-manager
-...
-Skipping deployment/slurmdbd-backup: 'rrflag' label is already set in namespace user
-Skipping deployment/sshot-net-operator: 'rrflag' label is already set in namespace sshot-net-operator
-RR critical services rollout restart successful.
-configmap/rrs-mon-dynamic patched (no change)
-Set rollout_complete=true in ConfigMap 'rrs-mon-dynamic'
-Done!
 ```
