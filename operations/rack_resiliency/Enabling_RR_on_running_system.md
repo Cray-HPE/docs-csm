@@ -282,9 +282,7 @@ kubectl get all -n rack-resiliency
 ```
 
 Wait for the pod to transition to `Ready` state. This typically takes up to 1-2 minutes. If the pod is still in `Init:0/2` state,
-wait and retry the command above periodically.
-
-Once ready, verify that all of the following are true in the command output:
+wait and retry the command, until all of the following are true in the command output:
 
 * The pod should have status `Ready`.
 * The pod should show `2/2` in the `READY` column.
