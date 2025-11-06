@@ -239,8 +239,8 @@ The script requires the `insert-labels-topology-constraints` cluster policy to b
 While Kubernetes performs rolling restarts to maintain service availability, there may be brief
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry. It is recommended to perform
 this step during a planned maintenance window.
-To know about all the services going to restart in this step refer
-to [List critical services in ConfigMap](Manage_Critical_Services.md#list-services-in-configmap).
+For information on how to identify all of the critical services, see
+[List services in ConfigMap](Manage_Critical_Services.md#list-services-in-configmap).
 
 Example usage:
 
