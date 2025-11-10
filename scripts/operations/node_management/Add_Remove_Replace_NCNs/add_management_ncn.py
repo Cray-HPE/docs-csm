@@ -54,6 +54,7 @@ KEA_URL = None
 
 CLOUD_INIT_NETWORKS = ["NMN", "CAN", "CMN", "MTL", "HMN"]
 NETWORKS = CLOUD_INIT_NETWORKS + ["CHN"]
+IS_FMN = False
 
 #
 # HTTP Action stuff
@@ -243,7 +244,7 @@ def get_sls_networks(session: requests.Session, validate: bool):
         temp_networks[sls_network["Name"]] = sls_network
 
     if validate:
-        action_log(action, "Not validating SLS network data against schema")
+        action_log(action, "Validating SLS network data against schema")
     return action, NetworkManager(temp_networks, validate=validate)
 
 def create_sls_hardware(session: requests.Session, hardware: dict):
@@ -482,31 +483,55 @@ class ExhaustedAvailableIPAddressSpace(Exception):
 class AllocatedIPIsOutsideStaticRange(Exception):
     pass
 
-def find_next_available_ip(sls_subnet: SLSSubnet, cidr_override: IPv4Address=None, starting_ip: netaddr.IPAddress=None) -> netaddr.IPAddress:
-    subnet = netaddr.IPNetwork(str(sls_subnet.ipv4_address()))
+def find_next_available_ip(sls_subnet: SLSSubnet, cidr_override: IPv4Address=None, starting_ip: netaddr.IPAddress=None, is_fmn_vip: bool=False) -> netaddr.IPAddress:
+    # Get all existing IP reservations from the subnet
+    existing_ips = []
 
-    # Override the CIDR if one was provided
+    # Collect all allocated IPs from the subnet reservations
+    for _, reservation in sls_subnet.reservations().items():
+        ip_addr = netaddr.IPAddress(str(reservation.ipv4_address()))
+        existing_ips.append(ip_addr)
+
+    # Also add the gateway IP to avoid conflicts
+    gateway_ip = netaddr.IPAddress(str(sls_subnet.ipv4_gateway()))
+    existing_ips.append(gateway_ip)
+
+    # Sort the IPs to find the pattern
+    existing_ips.sort()
+
+     # Determine which subnet range to use
     if cidr_override is not None:
         subnet = netaddr.IPNetwork(str(cidr_override))
+    else:
+        subnet = netaddr.IPNetwork(str(sls_subnet.ipv4_address()))
 
-    existing_ip_reservations = netaddr.IPSet()
-    existing_ip_reservations.add(str(sls_subnet.ipv4_gateway()))
-    for ip_reservation in sls_subnet.reservations().values():
-        existing_ip_reservations.add(str(ip_reservation.ipv4_address()))
+    if not existing_ips:
+        # If no IPs are allocated, start from the first usable IP (after network and gateway)
+        subnet = netaddr.IPNetwork(str(sls_subnet.ipv4_address()))
+        next_ip = subnet[2]  # Skip network address and gateway
+        print(f"No existing IPs found, starting with: {next_ip}")
+        return next_ip
 
-    # Start looking for IPs after the gateway of the beginning of the subnet
-    for available_ip in list(subnet[2:-2]):
-        # If a starting IP was provided
-        if starting_ip is not None and available_ip < starting_ip:
+    if not is_fmn_vip:
+        # Find the next available IP after the highest allocated IP
+        candidate_ip = max(existing_ips) + 1
+    else:
+        # For an FMN VIP, find the second next available IP after the highest allocated IP
+        # as first is usually taken by the FMN node itself
+        candidate_ip = max(existing_ips) + 2
+
+    # Make sure we don't exceed the subnet boundary
+    while candidate_ip in subnet and candidate_ip != subnet.broadcast:
+        if starting_ip is not None and candidate_ip < starting_ip:
             continue
-
-        if available_ip not in existing_ip_reservations:
-            return available_ip
+        if candidate_ip not in existing_ips:
+            return candidate_ip
+        candidate_ip += 1
 
     # Exhausted available IP address
     raise ExhaustedAvailableIPAddressSpace()
 
-def allocate_ip_address_in_subnet(action: dict, networks: NetworkManager, network_name: str, subnet_name: str, networks_allowed_in_dhcp_range: list=[]):
+def allocate_ip_address_in_subnet(action: dict, networks: NetworkManager, network_name: str, subnet_name: str, networks_allowed_in_dhcp_range: list=[], is_fmn_vip: bool=False):
 
     network = networks[network_name]
     subnets = network.subnets()
@@ -540,7 +565,7 @@ def allocate_ip_address_in_subnet(action: dict, networks: NetworkManager, networ
             starting_ip = existing_ips[0]
 
     # As the function says, find the next available IP in the bootstrap_dhcp subnet
-    next_free_ip = find_next_available_ip(bootstrap_dhcp_subnet, cidr_override=unhacked_cidr, starting_ip=starting_ip)
+    next_free_ip = find_next_available_ip(bootstrap_dhcp_subnet, cidr_override=unhacked_cidr, starting_ip=starting_ip, is_fmn_vip=is_fmn_vip)
 
     action_log(action, f'Allocated IP {next_free_ip} on the {network_name} network')
 
@@ -653,6 +678,7 @@ class State:
         self.global_bootparameters = None
         self.sls_networks = None
 
+        self.fmn_image = ""
         self.use_existing_ip_addresses = None
         self.log_directory = log_directory
         self.perform_changes = perform_changes
@@ -773,6 +799,15 @@ class State:
             try:
                 new_ip = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp", self.networks_allowed_in_dhcp_range)
                 ncn_ips[network_name] = Reservation(name=self.ncn_alias, ipv4_address=new_ip, comment=self.ncn_xname)
+                if network_name in ["NMN", "HMN"] and IS_FMN:
+                    if "fmn-vip" in self.sls_networks:
+                        action_log(action, f'Virtual IP already allocated for FMN systems, skipping additional NCN IP allocation on the {network_name} network')
+                        print_action(action)
+                    else:
+                        # Allocate a second IP for NMN and HMN on FMN systems for virtual IP use
+                        action_log(action, f'Allocating additional NCN IP address on the {network_name} network for FMN virtual IP use')
+                        new_ip = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp", self.networks_allowed_in_dhcp_range, True)
+                        ncn_ips[network_name+"-fmn-vip"] = Reservation(name="fmn-vip", ipv4_address=new_ip, comment="fmn-virtual-ip")
             except (AllocatedIPIsOutsideStaticRange, ExhaustedAvailableIPAddressSpace):
                 print_action(action)
                 sys.exit(1)
@@ -808,6 +843,12 @@ class State:
                         if ip_reservation.ipv4_address() == allocated_ip:
                             fail_sls_network_check = True
                             action_log(action, f'Error found allocated NCN IP {allocated_ip} in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
+                        if sls_network.name() in ["HMN", "NMN"] and IS_FMN:
+                            # For FMN systems, check both the regular and VIP NCN IP reservations
+                            vip_ip = ncn_ips[network_name+"-fmn-vip"].ipv4_address()
+                            if ip_reservation.ipv4_address() == vip_ip:
+                                fail_sls_network_check = True
+                                action_log(action, f'Error found allocated VIP IP {vip_ip} in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
 
                     # Verify no IP Reservations exist with the NCN BMC IP
                     if sls_network.name() == "HMN" and ip_reservation.ipv4_address() == bmc_ip:
@@ -899,6 +940,8 @@ class State:
             fail_host_records = False
             for host_record in self.global_bootparameters["cloud-init"]["meta-data"]["host_records"]:
                 for network_name, ip in self.ncn_ips.items():
+                    if "vip" in network_name.lower():
+                        continue
                     # Verify each NCN IP is associated with correct NCN
                     expected_alias = f'{self.ncn_alias}.{network_name.lower()}'
                     if str(ip.ipv4_address()) == host_record["ip"]:
@@ -961,6 +1004,9 @@ class State:
     def update_sls_networking(self, session: requests.Session):
         # Add IP Reservations for all of the networks that make sense
         for network_name, ip_reservation in self.ncn_ips.items():
+            network_name_orig = network_name
+            if "vip" in network_name.lower():
+                network_name = network_name.replace("-fmn-vip", "")
             sls_network = self.sls_networks[network_name]
             # CAN
             # Master:  {"Aliases":["ncn-m002-can","time-can","time-can.local"],"Comment":"x3000c0s3b0n0","IPAddress":"10.101.5.134","Name":"ncn-m002"}
@@ -1012,22 +1058,33 @@ class State:
             #   - ncn-{*}-{network}
             #   - time-{network}
             #   - time-{network}.local
-            aliases = [
-                f'{self.ncn_alias}-{network_name.lower()}',
-                f'time-{network_name.lower()}',
-                f'time-{network_name.lower()}.local'
-            ]
 
-            # Storage nodes on the HMN have additional alias rgw-vip.hmn
-            if network_name == "HMN" and self.ncn_subrole == "Storage":
-                aliases.append("rgw-vip.hmn")
+            # For HMN, NMN networks on FMNs there is an additional VIP reservation created
+            # The aliases for the VIP reservation is different
+            #   - fmn-vip.local
 
-            # All NCNs on the NMN have the additional aliases:
-            # - xname
-            # - ncn-{*}.local
-            if network_name == "NMN":
-                aliases.append(self.ncn_xname)
-                aliases.append(f'{self.ncn_alias}.local')
+            # Build the aliases
+            if not "vip" in network_name_orig.lower():
+                aliases = [
+                    f'{self.ncn_alias}-{network_name.lower()}',
+                    f'time-{network_name.lower()}',
+                    f'time-{network_name.lower()}.local'
+                ]
+
+                # Storage nodes on the HMN have additional alias rgw-vip.hmn
+                if network_name == "HMN" and self.ncn_subrole == "Storage":
+                    aliases.append("rgw-vip.hmn")
+
+                # All NCNs on the NMN have the additional aliases:
+                # - xname
+                # - ncn-{*}.local
+                if network_name == "NMN":
+                    aliases.append(self.ncn_xname)
+                    aliases.append(f'{self.ncn_alias}.local')
+
+            else:
+                # Aliases for FMNs in HMN and NMN networks
+                aliases = ["fmn-vip.local"]
 
             ip_reservation.aliases(aliases)
             print(f"Adding NCN IP reservation to bootstrap_dhcp subnet in the {network_name} network")
@@ -1078,7 +1135,9 @@ class State:
             # HMN: {"aliases":["ncn-w001.hmn"],"ip":"10.254.1.10"}
             # NMN: {"aliases":["ncn-m001.nmn","ncn-m001"],"ip":"10.252.1.4"}
             # MTL: {"aliases":["ncn-w001.mtl"],"ip":"10.1.1.5"}
-
+            if "vip" in network_name.lower():
+                # Skip VIP IPs from being added to BSS host records
+                continue
             host_record = {
                 "aliases": [f'{self.ncn_alias}.{network_name.lower()}'],
                 "ip": str(ip.ipv4_address()),
@@ -1110,10 +1169,52 @@ class State:
         else:
             print("Skipping due to dry run!")
 
+
+    def validate_hsm_inventory(self, session: requests.Session, args, call_from_ncn_data=False):
+        # Validate HSM does not contain any EthernetInterfaces for the NCN to be added
+        action = verify_hsm_inventory_ethernet_interface_not_found(session, component_id=self.ncn_xname)
+        action_log(action, f'Pass no EthernetInterfaces are associated with {args.xname} in HSM')
+        print_action(action)
+
+        # Validate HSM does not contain any EthernetInterfaces for the NCN BMC to be added
+        action = verify_hsm_inventory_ethernet_interface_not_found(session, component_id=self.bmc_xname)
+        action_log(action, f'Pass no EthernetInterfaces are associated with {self.bmc_xname} in HSM')
+        print_action(action)
+
+        # Validate allocated IPs are not in use in the HSM EthernetInterfaces table
+        for network, ip in self.ncn_ips.items():
+            action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip.ipv4_address())
+            if len(found_ethernet_interfaces) == 0:
+                action_log(action, f"Pass {network} IP address {ip.ipv4_address()} is not currently in use in HSM Ethernet Interfaces")
+            else:
+                # An IP address that has been allocated for the NCN is present in HSM.
+                # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely
+                # cruft from the past that was not cleaned up.
+                for found_ie in found_ethernet_interfaces:
+                    if found_ie["ComponentID"] == "":
+                        print(f'Removing stale Ethernet Interface from HSM: {found_ie}')
+                        if self.perform_changes:
+                            delete_hsm_inventory_ethernet_interfaces(session, found_ie)
+                        else:
+                            print("Skipping due to dry run!")
+                    else:
+                        action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip.ipv4_address()} in HSM: {found_ie}')
+                        print_action(action)
+                        sys.exit(1)
+
+            print_action(action)
+
+        # Validate NCN does not exist under state components
+        verify_hsm_state_components_not_found(session, self.ncn_xname)
+
+        # Validate the BMC of the NCN does not exist under state components
+        verify_hsm_state_components_not_found(session, self.bmc_xname)
+
+        # Validate the BMC of the NCN does not exist under inventory redfish endpoints
+        verify_hsm_inventory_redfish_endpoints_not_found(session, self.bmc_xname)
 #
 # Sub commands
 #
-
 def allocate_ips_command(session: requests.Session, args, state: State):
     print("Allocating NCN IP addresses")
 
@@ -1126,21 +1227,6 @@ def allocate_ips_command(session: requests.Session, args, state: State):
     print("Performing validation checks against SLS")
     # Verify that the NCN xname does not exist in SLS. This could be an no-op if what is in SLS matches what we want to put in
     verify_sls_hardware_not_found(session, args.xname)
-
-    # Retrieve all Management NCNs from SLS
-    action, existing_management_ncns = get_sls_management_ncns(session)
-
-    # Verify that the alias is unique
-    existing_management_ncns = sorted(existing_management_ncns, key=lambda d: d["ExtraProperties"]["Aliases"][0])
-    for node in existing_management_ncns:
-        for alias in node["ExtraProperties"]["Aliases"]:
-            if alias == args.alias:
-                action_log(action, f'Error the provided alias {state.ncn_alias} is already in use by {node["Xname"]}')
-                print_action(action)
-                sys.exit(1)
-
-    action_log(action, f"Pass the alias {state.ncn_alias} is unique to {state.ncn_xname} in SLS Hardware")
-    print_action(action)
 
     # Retrieve all Management NCNs from SLS
     action, existing_management_ncns = get_sls_management_ncns(session)
@@ -1183,93 +1269,13 @@ def allocate_ips_command(session: requests.Session, args, state: State):
 
 
     state.action_log_ncn_ips(action)
-
-    if not state.use_existing_ip_addresses:
-        # Only for new IP addresses that have been allocated:
-        # Validate the NCN and its BMC to be added does not have an IP reservation already defined for it
-        # Also validate that none of the IP addresses we have allocated are currently in use in SLS.
-        fail_sls_network_check = False
-        for network_name, sls_network in sls_networks.items():
-            for subnet in sls_network.subnets().values():
-                for ip_reservation in subnet.reservations().values():
-                    # Verify no IP Reservations exist for the NCN
-                    if ip_reservation.name() == state.ncn_alias:
-                        fail_sls_network_check = True
-                        action_log(action, f'Error found existing NCN IP Reservation in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
-
-                    # Verify no IP Reservations exist for the NCN BMC
-                    if ip_reservation.name() == state.bmc_xname:
-                        fail_sls_network_check = True
-                        action_log(action, f'Error found existing NCN BMC IP Reservation in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
-
-                    # Verify no IP Reservations exist with any NCN IP
-                    if sls_network.name() in state.ncn_ips:
-                        allocated_ip = state.ncn_ips[network_name]
-                        if ip_reservation.ipv4_address() == allocated_ip:
-                            fail_sls_network_check = True
-                            action_log(action, f'Error found allocated NCN IP {allocated_ip} in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
-
-                    # Verify no IP Reservations exist with the NCN BMC IP
-                    if sls_network.name() == "HMN" and ip_reservation.ipv4_address() == state.bmc_ip:
-                        fail_sls_network_check = True
-                        action_log(action, f'Error found allocated NCN BMC IP {allocated_ip} in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
-
-        if fail_sls_network_check:
-            print_action(action)
-            sys.exit(1)
-        action_log(action, f'Pass {state.ncn_xname} ({state.ncn_alias}) does not currently exist in SLS Networks')
-        action_log(action, f'Pass {state.bmc_xname} ({state.bmc_alias}) does not currently exist in SLS Networks')
-        action_log(action, f'Pass allocated IPs for NCN {state.ncn_xname} ({state.ncn_alias}) are not currently in use in SLS Networks')
-        action_log(action, f'Pass allocated IP for NCN BMC {state.bmc_xname} ({state.bmc_alias}) are not currently in use in SLS Networks')
-
     print_action(action)
 
     #
     # Validate contents of HSM
     #
     print("Performing validation checks against HSM")
-
-    # Validate HSM does not contain any EthernetInterfaces for the NCN to be added
-    action = verify_hsm_inventory_ethernet_interface_not_found(session, component_id=state.ncn_xname)
-    action_log(action, f'Pass no EthernetInterfaces are associated with {args.xname} in HSM')
-    print_action(action)
-
-    # Validate HSM does not contain any EthernetInterfaces for the NCN BMC to be added
-    action = verify_hsm_inventory_ethernet_interface_not_found(session, component_id=state.bmc_xname)
-    action_log(action, f'Pass no EthernetInterfaces are associated with {state.bmc_xname} in HSM')
-    print_action(action)
-
-    # Validate allocated IPs are not in use in the HSM EthernetInterfaces table
-    for network, ip in state.ncn_ips.items():
-        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip.ipv4_address())
-        if len(found_ethernet_interfaces) == 0:
-            action_log(action, f"Pass {network} IP address {ip.ipv4_address()} is not currently in use in HSM Ethernet Interfaces")
-        else:
-            # An IP address that has been allocated for the NCN is present in HSM.
-            # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely
-            # cruft from the past that was not cleaned up.
-            for found_ie in found_ethernet_interfaces:
-                if found_ie["ComponentID"] == "":
-                    print(f'Removing stale Ethernet Interface from HSM: {found_ie}')
-                    if state.perform_changes:
-                        delete_hsm_inventory_ethernet_interfaces(session, found_ie)
-                    else:
-                        print("Skipping due to dry run!")
-                else:
-                    action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip.ipv4_address()} in HSM: {found_ie}')
-                    print_action(action)
-                    sys.exit(1)
-
-        print_action(action)
-
-    # Validate NCN does not exist under state components
-    verify_hsm_state_components_not_found(session, state.ncn_xname)
-
-    # Validate the BMC of the NCN does not exist under state components
-    verify_hsm_state_components_not_found(session, state.bmc_xname)
-
-    # Validate the BMC of the NCN does not exist under inventory redfish endpoints
-    verify_hsm_inventory_redfish_endpoints_not_found(session, state.bmc_xname)
+    state.validate_hsm_inventory(session, args)
 
     #
     # Validate contents of BSS
@@ -1350,7 +1356,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
     # Validate provided MAC address
     # - Verify MAC addresses are in expected format
-    # - Verify that mgmt0 and mgmt3, or mgmt0 and mgm1 are provided.
+    # - Verify that mgmt0 and mgmt3, or mgmt0 and mgmt1 are provided.
 
     # MAC Address problem
     # metal-ipxe finds all MAC addresses via and gives then names like mgmt0, lan0 or hsn0
@@ -1493,13 +1499,14 @@ def ncn_data_command(session: requests.Session, args, state: State):
     print("Allocated NID: ", nid)
 
     # Retrieve all Network data from SLS
-    action, global_bootparameters = get_bss_bootparameters(session, "Global")
-    state.global_bootparameters = global_bootparameters
-    print_action(action)
-
     validate_sls = False
     action, sls_networks = get_sls_networks(session, validate=validate_sls)
     state.sls_networks = sls_networks
+
+    # Retrieve the global boot parameters
+    action, global_bootparameters = get_bss_bootparameters(session, "Global")
+    state.global_bootparameters = global_bootparameters
+    print_action(action)
 
     #
     # Determine NCN IPs
@@ -1522,16 +1529,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
     # Validate contents of HSM
     #
     print("Performing validation checks against HSM")
-
-    # Validate HSM does not contain any EthernetInterfaces for the NCN to be added
-    action = verify_hsm_inventory_ethernet_interface_not_found(session, component_id=args.xname)
-    action_log(action, f'Pass no EthernetInterfaces are associated with {args.xname} in HSM')
-    print_action(action)
-
-    # Validate HSM does not contain any EthernetInterfaces for the NCN BMC to be added
-    action = verify_hsm_inventory_ethernet_interface_not_found(session, component_id=state.bmc_xname)
-    action_log(action, f'Pass no EthernetInterfaces are associated with {state.bmc_xname} in HSM')
-    print_action(action)
+    state.validate_hsm_inventory(session, args, True)
 
     # Validate HSM does not contain any EthernetInterfaces for the provided NCN MAC Addresses
     for interface, mac in macs.items():
@@ -1539,28 +1537,6 @@ def ncn_data_command(session: requests.Session, args, state: State):
         action_log(action, f"Pass {interface} MAC address {mac} is not currently present in HSM Ethernet Interfaces")
         print_action(action)
 
-    # Validate allocated IPs are not in use in the HSM EthernetInterfaces table
-    for network, ip in state.ncn_ips.items():
-        action, found_ethernet_interfaces = search_hsm_inventory_ethernet_interfaces(session, ip_address=ip.ipv4_address())
-        if len(found_ethernet_interfaces) == 0:
-            action_log(action, f"Pass {network} IP address {ip.ipv4_address()} is not currently in use in HSM Ethernet Interfaces")
-        else:
-            # An IP address that has been allocated for the NCN is present in HSM.
-            # If the component ID is not set, then this is not a real IP reservation and can be removed, as it is most likely
-            # cruft from the past that was not cleaned up.
-            for found_ie in found_ethernet_interfaces:
-                if found_ie["ComponentID"] == "":
-                    print(f'Removing stale Ethernet Interface from HSM: {found_ie}')
-                    if state.perform_changes:
-                        delete_hsm_inventory_ethernet_interfaces(session, found_ie)
-                    else:
-                        print("Skipping due to dry run!")
-                else:
-                    action_log(action, f'Error found EthernetInterfaces with allocated IP address {ip.ipv4_address()} in HSM: {found_ie}')
-                    print_action(action)
-                    sys.exit(1)
-
-        print_action(action)
 
     # Check to see if the BMC MAC address exists in HSM
     existing_bmc_ip = None
@@ -1602,14 +1578,6 @@ def ncn_data_command(session: requests.Session, args, state: State):
     else:
         print("         Pass the BMC MAC address is currently associated with the allocated IP Address")
 
-    # Validate NCN does not exist under state components
-    verify_hsm_state_components_not_found(session, state.ncn_xname)
-
-    # Validate the BMC of the NCN does not exist under state components
-    verify_hsm_state_components_not_found(session, state.bmc_xname)
-
-    # Validate the BMC of the NCN does not exist under inventory redfish endpoints
-    verify_hsm_inventory_redfish_endpoints_not_found(session, state.bmc_xname)
 
     # Validate the NID is not in use by HSM
     action, components = search_hsm_state_components(session, nid)
@@ -1631,20 +1599,26 @@ def ncn_data_command(session: requests.Session, args, state: State):
     # Validate the NCN has no bootparameters
     verify_bss_bootparameters_not_found(session, args.xname)
 
-    # Retrieve the global boot parameters
-    action, global_bootparameters = get_bss_bootparameters(session, "Global")
-    state.global_bootparameters = global_bootparameters
-
     state.validate_global_bss_bootparameters(action)
 
     #
     # Validate BSS contains bootparameters for an NCN of a similar type
     #
     donor_ncn = None
+
     for ncn in existing_management_ncns:
         if ncn["ExtraProperties"]["SubRole"] == state.ncn_subrole:
             donor_ncn = ncn
             break
+
+    # For FMN, fallback to a worker node if no FMN donor was found
+    if donor_ncn is None and IS_FMN:
+        for ncn in existing_management_ncns:
+            if ncn["ExtraProperties"].get("SubRole") == "Worker":
+                print(f"No FMN donor found, falling back to Worker NCN {ncn['Xname']}")
+                donor_ncn = ncn
+                break
+
     if donor_ncn is None:
         print(f"Failed to find a Management NCN with subrole {state.ncn_subrole} to donate bootparameters")
         sys.exit(1)
@@ -1684,7 +1658,13 @@ def ncn_data_command(session: requests.Session, args, state: State):
             # Ignore MAC specific params.
             pass
         elif param.startswith("metal.no-wipe"):
-            kernel_params.append("metal.no-wipe=0")
+            if IS_FMN:
+                kernel_params.append("metal.no-wipe=1")
+            else:
+                kernel_params.append("metal.no-wipe=0")
+        elif IS_FMN and param.startswith("metal.server"):
+            # For FMN we need to point to the FMN specific rootfs image
+            kernel_params.append("s3://boot-images/"+state.fmn_image+"/rootfs")
         else:
             kernel_params.append(param)
 
@@ -1692,12 +1672,27 @@ def ncn_data_command(session: requests.Session, args, state: State):
     # Update BSS bootparameters
     ncn_cidrs = {}
     for network_name, ip in state.ncn_ips.items():
-        bootstrap_dhcp_subnet = sls_networks[network_name].subnets()["bootstrap_dhcp"]
-        ncn_cidrs[network_name] = f'{ip.ipv4_address()}/{bootstrap_dhcp_subnet.ipv4_network().prefixlen}'
+        if not "vip" in network_name.lower():
+            bootstrap_dhcp_subnet = sls_networks[network_name].subnets()["bootstrap_dhcp"]
+            ncn_cidrs[network_name] = f'{ip.ipv4_address()}/{bootstrap_dhcp_subnet.ipv4_network().prefixlen}'
 
     bootparams = copy.deepcopy(donor_bootparameters)
     bootparams["hosts"] = [state.ncn_xname]
     bootparams["params"] = " ".join(kernel_params)
+    if IS_FMN:
+        bootparams["kernel"]  = "s3://boot-images/"+state.fmn_image+"/kernel"
+        bootparams["initrd"] =  "s3://boot-images/"+state.fmn_image+"/initrd"
+        # update runcmd to exclude kubernetes-cloudinit.sh and join-spire-on-storage.sh scripts from the list
+        runcmd_output = bootparams["cloud-init"]["user-data"]["runcmd"]
+        remove_scripts = {
+            "/srv/cray/scripts/common/kubernetes-cloudinit.sh",
+            "/srv/cray/scripts/common/join-spire-on-storage.sh"
+        }
+        filtered_runcmd = [cmd for cmd in runcmd_output if cmd not in remove_scripts]
+        bootparams["cloud-init"]["user-data"]["runcmd"] = filtered_runcmd
+        bootparams["cloud-init"]["user-data"]["packages"] = ["libcsm", "craycli"]
+        bootparams["cloud-init"]["meta-data"]["shasta-role"] = "ncn-fabricManager"
+
     bootparams["cloud-init"]["user-data"]["hostname"] = state.ncn_alias
     bootparams["cloud-init"]["user-data"]["local_hostname"] = state.ncn_alias
     if "ntp" in bootparams["cloud-init"]["user-data"]:
@@ -1894,7 +1889,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
     #
     # Create an entry under HSM State Components for ncn-m001.
-    # The other NCNs will be populated by the normal HSM Discovery/Invnetory process, but since
+    # The other NCNs will be populated by the normal HSM Discovery/Inventory process, but since
     # the BMC of ncn-m001 is not connected to the HMN, we need to manually do this.
     #
     if is_m001:
@@ -2007,6 +2002,7 @@ def main():
     ncn_data_parser.add_argument("--mac-lan3",  type=str, required=False, help="MAC address of lan3")
     ncn_data_parser.add_argument("--mac-hsn0",  type=str, required=False, help="MAC address of hsn0")
     ncn_data_parser.add_argument("--mac-hsn1",  type=str, required=False, help="MAC address of hsn1")
+    ncn_data_parser.add_argument("--fmn-image-id", type=str, required=False, help="Boot image ID to use for FMN nodes (aliases matching fmn00*)")
     ncn_data_parser.set_defaults(func=ncn_data_command, show_help=False)
 
     args = parser.parse_args()
@@ -2021,8 +2017,8 @@ def main():
     KEA_URL = args.url_kea
 
     # Validate provide node alias
-    if re.match("^ncn-[mws][0-9][0-9][0-9]$", args.alias) is None:
-        print("Invalid alias was provided: ", args.alias, ", expected in the format of ncn-m001, ncn-s001, or ncn-w001")
+    if re.match("^(ncn-[mws][0-9][0-9][0-9]|fmn[0-9][0-9][0-9])$", args.alias) is None:
+        print("Invalid alias was provided: ", args.alias, ", expected in the format of ncn-m001, ncn-s001, ncn-w001 or fmn001")
         sys.exit(1)
 
     subrole = None
@@ -2032,6 +2028,8 @@ def main():
         subrole = "Worker"
     elif args.alias.startswith("ncn-s"):
         subrole = "Storage"
+    elif args.alias.startswith("fmn"):
+        subrole = "FabricManager"
     if subrole is None:
         print("Failed to determine NCN subrole from alias ", args.alias)
         sys.exit(1)
@@ -2040,6 +2038,16 @@ def main():
     if re.match("^x([0-9]{1,4})c[0,4]s([0-9]+)b0n0$", args.xname) is None:
         print("Invalid node xname provided: ", args.xname, ", expected format xXc0sSb0n0")
         sys.exit(1)
+
+    fmn_image_id = getattr(args, "fmn_image_id", None)
+    if args.func == ncn_data_command:
+        if args.alias.startswith("fmn00"):
+            if not fmn_image_id:
+                print("Error --fmn-image-id must be provided when alias matches fmn00*")
+                sys.exit(1)
+        elif fmn_image_id:
+            print("Warning --fmn-image-id is only supported for aliases matching fmn00*")
+
 
     # Create log directory
     log_directory = os.path.join(args.log_dir, args.xname)
@@ -2055,6 +2063,8 @@ def main():
         perform_changes=args.perform_changes,
         networks_allowed_in_dhcp_range=args.network_allowed_in_dhcp_range
     )
+    if fmn_image_id:
+        state.fmn_image = fmn_image_id
     with requests.Session() as session:
         session.verify = False
         if token is not None:

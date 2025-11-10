@@ -25,7 +25,6 @@
 from kubernetes import client, config
 import base64
 import sys
-import yaml
 import json
 import requests
 import os
@@ -37,7 +36,6 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import ipaddress
 from datetime import datetime
-from packaging import version
 
 # logger setup
 log = logging.getLogger(__name__)
@@ -193,6 +191,25 @@ def integer_question(question):
 
     return answer
 
+
+def boolean_question(question):
+    """Ask for a yes/no response and return True or False."""
+    valid_answers = {
+        "y": True,
+        "yes": True,
+        "n": False,
+        "no": False,
+    }
+
+    while True:
+        print('\nPlease answer with yes or no.')
+        raw_answer = input(question + ' [y/N]\n').strip().lower()
+        if raw_answer == "":
+            return False
+        if raw_answer in valid_answers:
+            return valid_answers[raw_answer]
+        print('ERROR: invalid answer. Please respond with yes or no.\n')
+
 def confirmation_question():
     """
     Ask for user input to confirm they want to proceed.
@@ -265,6 +282,18 @@ def post_api_request(url, api_header, json={}):
 
     return resp.json()
 
+def patch_api_request(url, api_header, json={}):
+    """
+    PATCH api query
+    :param url:
+    :param api_header:
+    :param json:
+    :return:
+    """
+    resp = ingress_api('PATCH', url, headers=api_header, json=json)
+
+    return resp.json()
+
 def put_api_request(url, api_header, data={}):
     """
     POST api query
@@ -330,7 +359,7 @@ def delete_kea_lease(ip, token):
     kea_request_header = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
     kea_delete_data = {'command': 'lease4-del', 'service': ['dhcp4'], "arguments": {"ip-address": ip}}
 
-    kea_resp = ingress_api('POST', kea_url, headers=kea_request_header, json=kea_delete_data)
+    ingress_api('POST', kea_url, headers=kea_request_header, json=kea_delete_data)
 
 
 def delete_smd_record(smd_id, token):
@@ -344,10 +373,31 @@ def delete_smd_record(smd_id, token):
     smd_url = '/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + smd_id
     smd_request_header = {'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
 
-    smd_resp = ingress_api('DELETE', smd_url, headers=smd_request_header)
+    ingress_api('DELETE', smd_url, headers=smd_request_header)
 
+def required_ip_counts(add_ncn_count, adding_fmns, network):
+    """Calculate how many new static IPs are required for a network.
 
-def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks):
+    Returns the number of additional IP reservations needed for the supplied
+    network, accounting for whether the nodes being added are Fabric Manager
+    NCNs. FMN nodes consume extra addresses for virtual IPs on NMN/HMN
+    networks, while non-FMN nodes only require the NCN and its BMC on HMN.
+    """
+    if adding_fmns:
+        if network == "HMN":
+            # BMC + NCN + VIP for each node
+            return add_ncn_count * 2 + 1
+        if network == "NMN":
+            # NCN + VIP for each node
+            return add_ncn_count + 1
+        # other networks only need one IP per NCN
+        return add_ncn_count
+    # non-FMN
+    if network == "HMN":
+        return add_ncn_count * 2
+    return add_ncn_count
+
+def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks, adding_fmns=False):
     """
     Updates SLS networks by expanding static IP range and moving DHCP IP pool.
     :param add_ncn_count:
@@ -362,6 +412,7 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
     ip_dhcp_pool_end = {}
     new_ip_dhcp_pool_start = {}
     ips_to_delete_from_smd = {}
+    network_has_fmn_vip = {}
 
     for network in sls_networks:
         if network['Name'] in network_list:
@@ -374,6 +425,11 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
                 ip_reservation[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['IPReservations']
                 ip_dhcp_pool_start[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['DHCPStart']
                 ip_dhcp_pool_end[name] = networks_data[name]['ExtraProperties']['Subnets'][i]['DHCPEnd']
+                network_has_fmn_vip[name] = any(
+                    reservation.get('Name') == 'fmn-vip'
+                    or 'fmn-vip' in reservation.get('Aliases', [])
+                    for reservation in ip_reservation[name]
+                )
 
     for network in network_list:
         ip_set = set()
@@ -392,6 +448,13 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         print()
         print(f'Checking {network}.')
         print(f'last_reserved_ip: {last_reserved_ip}    start_dhcp_pool:{start_dhcp_pool}')
+        if adding_fmns:
+            has_fmn_vip = network_has_fmn_vip.get(network, False)
+            if has_fmn_vip:
+                log.info(f"{network} already has an existing fmn-vip reservation. Not adding additional VIP")
+                adding_fmns = False
+            else:
+                log.info(f"{network} does not have an existing fmn-vip reservation. Will add VIP along with FMN NCN(s)")
         if ip_white_space < 0:
             print(f'FATAL last_reserved_ip {last_reserved_ip} exceeds start_dhcp_pool {start_dhcp_pool}')
             print(f'Verify DHCPStart and DHCPEnd are correct for the {network} network in SLS.')
@@ -409,22 +472,12 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         ip_shift = 0
         if add_ncn_count >= ip_white_space-1:
             print('There is not enough static IP space to add an NCN. Adjusting DHCP pool start.')
-            # for all networks other than HMN
-            if network != 'HMN':
-                for i in range(1, add_ncn_count + 1):
-                    # create list of ips to check for conflicts in SMD
-                    ip = ipaddress.IPv4Address(last_reserved_ip) + i
-                    ips_to_delete_from_smd[network].add(str(ip))
-                # number of ips to add to shift the start of the dhcp pool
-                ip_shift = add_ncn_count +  1
-            # HMN networks needs an extra HMN IP since the NCN BMC and NCN node each need an HMN IP
-            if network == 'HMN':
-                for i in range(1, add_ncn_count * 2 + 1):
-                    # create list of ips to check for conflicts in SMD
-                    ip = ipaddress.IPv4Address(last_reserved_ip) + i
-                    ips_to_delete_from_smd[network].add(str(ip))
-                # number of ips to add to shift the start of the dhcp pool
-                ip_shift = add_ncn_count * 2 + 1
+            ips_needed = required_ip_counts(add_ncn_count, adding_fmns, network)
+            for offset in range(1, ips_needed + 1):
+                ip = ipaddress.IPv4Address(last_reserved_ip) + offset
+                ips_to_delete_from_smd[network].add(str(ip))
+            ip_shift = ips_needed
+
             temp = ipaddress.IPv4Address(start_dhcp_pool) + ip_shift
             new_ip_dhcp_pool_start[network] = str(temp)
 
@@ -436,6 +489,7 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         else:
             new_ip_dhcp_pool_start[network] = str(temp)
 
+            print("IPs to be removed from SMD EthernetInterfaces and Kea active leases:")
             print(ips_to_delete_from_smd)
             print()
             print(f'add_ncn_count: {add_ncn_count}\n'
@@ -483,13 +537,13 @@ def update_smd_and_kea(ips_update_in_smd, api_header, token):
                 smd_id = search_result[0]['ID']
                 smd_mac = search_result[0]['MACAddress']
                 smd_xname = search_result[0]['ComponentID']
-                post_data = {'ID': smd_id, 'MACAddress': smd_mac, 'IPAddress':[]}
+                post_data = {'IPAddresses': []}
                 if smd_xname != '':
                     xname_list.append(smd_xname)
                 # placeholder print out
-                log.info (f"post_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + {smd_id}, {api_header}, {json.dumps(post_data)}")
+                log.info (f"patch_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + {smd_id}, {api_header}, {json.dumps(post_data)}")
                 # smd update
-                post_result = post_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + smd_id, api_header, post_data)
+                patch_api_request('/apis/smd/hsm/v2/Inventory/EthernetInterfaces/' + smd_id, api_header, post_data)
                 # placeholder print out
                 log.warning (f'Deleting {json.dumps(post_data)} from SMD EthernetInterfaces.')
                 # delete SMD ethernetInterfaces record
@@ -520,6 +574,7 @@ def main():
 
     question = 'How many NCNs would you like to add? Do not include NCNs to be removed or moved.'
     add_ncn_count = integer_question(question)
+    adding_fmns = boolean_question('Are the NCNs to be added are Fabric Manager Nodes (FMNs)?')
 
     # get token
     token = get_token()
@@ -556,12 +611,13 @@ def main():
               f'{json.dumps(smd_ethernet_interfaces)}')
     log.info(f'add_ncn_count: {add_ncn_count}')
     log.info(f'network_list {network_list}')
+    log.info(f'adding_fmns: {adding_fmns}')
 
     # make changes to network data for NCN add
     if add_ncn_count > 0:
         confirmation_question()
-        ips_update_in_smd = add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks)
-        xname_list = update_smd_and_kea(ips_update_in_smd, api_header, token)
+        ips_update_in_smd = add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks, adding_fmns)
+        update_smd_and_kea(ips_update_in_smd, api_header, token)
     else:
         stop_log()
         print(f'prerequisite to prepare NCNs for removal, move and add\n'
