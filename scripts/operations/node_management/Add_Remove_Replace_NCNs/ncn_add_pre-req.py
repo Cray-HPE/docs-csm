@@ -451,10 +451,10 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         if adding_fmns:
             has_fmn_vip = network_has_fmn_vip.get(network, False)
             if has_fmn_vip:
-                log.info(f"{network} already has an existing fmn-vip reservation. Not adding additional VIP")
+                print(f"{network} already has an existing fmn-vip reservation. Not adding additional VIP")
                 adding_fmns = False
             else:
-                log.info(f"{network} does not have an existing fmn-vip reservation. Will add VIP along with FMN NCN(s)")
+                print(f"{network} does not have an existing fmn-vip reservation. Will add VIP along with FMN NCN(s)")
         if ip_white_space < 0:
             print(f'FATAL last_reserved_ip {last_reserved_ip} exceeds start_dhcp_pool {start_dhcp_pool}')
             print(f'Verify DHCPStart and DHCPEnd are correct for the {network} network in SLS.')

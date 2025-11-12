@@ -801,11 +801,10 @@ class State:
                 ncn_ips[network_name] = Reservation(name=self.ncn_alias, ipv4_address=new_ip, comment=self.ncn_xname)
                 if network_name in ["NMN", "HMN"] and IS_FMN:
                     if "fmn-vip" in self.sls_networks:
-                        action_log(action, f'Virtual IP already allocated for FMN systems, skipping additional NCN IP allocation on the {network_name} network')
-                        print_action(action)
+                        print(f"Virtual IP already allocated for FMN systems, skipping additional NCN IP allocation on the {network_name} network")
                     else:
                         # Allocate a second IP for NMN and HMN on FMN systems for virtual IP use
-                        action_log(action, f'Allocating additional NCN IP address on the {network_name} network for FMN virtual IP use')
+                        print("Allocating additional NCN IP address on the {network_name} network for FMN virtual IP use")
                         new_ip = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp", self.networks_allowed_in_dhcp_range, True)
                         ncn_ips[network_name+"-fmn-vip"] = Reservation(name="fmn-vip", ipv4_address=new_ip, comment="fmn-virtual-ip")
             except (AllocatedIPIsOutsideStaticRange, ExhaustedAvailableIPAddressSpace):
@@ -1664,7 +1663,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
                 kernel_params.append("metal.no-wipe=0")
         elif IS_FMN and param.startswith("metal.server"):
             # For FMN we need to point to the FMN specific rootfs image
-            kernel_params.append("s3://boot-images/"+state.fmn_image+"/rootfs")
+            kernel_params.append("metal.server=s3://boot-images/"+state.fmn_image+"/rootfs")
         else:
             kernel_params.append(param)
 
@@ -1716,12 +1715,23 @@ def ncn_data_command(session: requests.Session, args, state: State):
 
             bootstrap_dhcp_subnet = sls_networks[network_name].subnets()["bootstrap_dhcp"]
 
-            bootparams["cloud-init"]["meta-data"]["ipam"][network_name.lower()] = {
-                "gateway": str(bootstrap_dhcp_subnet.ipv4_gateway()),
-                "ip": ip_cidr,
-                "parent_device": "bond0",
-                "vlanid": bootstrap_dhcp_subnet.vlan(),
-            }
+            # For MTL network which is used as a throwaway network, 
+            # the VLAN ID should be 0 (untagged) even though the SLS subnet may have a different VLAN ID assigned
+
+            if network_name.lower() == "mtl":
+                bootparams["cloud-init"]["meta-data"]["ipam"][network_name.lower()] = {
+                    "gateway": str(bootstrap_dhcp_subnet.ipv4_gateway()),
+                    "ip": ip_cidr,
+                    "parent_device": "bond0",
+                    "vlanid": 0,
+                }
+            else:                
+                bootparams["cloud-init"]["meta-data"]["ipam"][network_name.lower()] = {
+                    "gateway": str(bootstrap_dhcp_subnet.ipv4_gateway()),
+                    "ip": ip_cidr,
+                    "parent_device": "bond0",
+                    "vlanid": bootstrap_dhcp_subnet.vlan(),
+                }
 
     print(f'Generated BSS bootparameters for {state.ncn_xname} ({state.ncn_alias}) from donor bootparameters')
     print(json.dumps(bootparams, indent=2))
@@ -2030,6 +2040,8 @@ def main():
         subrole = "Storage"
     elif args.alias.startswith("fmn"):
         subrole = "FabricManager"
+        global IS_FMN
+        IS_FMN = True
     if subrole is None:
         print("Failed to determine NCN subrole from alias ", args.alias)
         sys.exit(1)
@@ -2041,7 +2053,7 @@ def main():
 
     fmn_image_id = getattr(args, "fmn_image_id", None)
     if args.func == ncn_data_command:
-        if args.alias.startswith("fmn00"):
+        if IS_FMN:
             if not fmn_image_id:
                 print("Error --fmn-image-id must be provided when alias matches fmn00*")
                 sys.exit(1)
