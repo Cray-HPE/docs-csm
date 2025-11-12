@@ -1182,3 +1182,6 @@ Infiniband
 - operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md
 FRUID
 FRUIDs
+
+- troubleshooting/known_issues/iuf_management_rollout_last_worker_dvs_errors.md
+cos-prechecks-for-worker-reboots

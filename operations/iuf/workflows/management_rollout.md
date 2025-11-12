@@ -464,6 +464,33 @@ rolling it out to the other NCN worker nodes. Modify the procedure as necessary 
 The images and CFS configurations used are created by the `prepare-images` and `update-cfs-config` stages respectively; see the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation
 for details on how to query the images and CFS configurations and see the [update-cfs-config](../stages/update_cfs_config.md) documentation for details about how the CFS configuration is updated.
 
+### Note when upgrading from CSM 1.6 to CSM 1.7.0 only
+
+- Before starting management rollout for worker nodes, manually check and remove the `cos-prechecks-for-worker-reboots` IUF hook from the cluster as a pre-check step by running the following commands:
+
+    Verify the cos-prechecks-for-worker-reboots hook exists:
+
+    ```bash
+    kubectl -n argo get hooks -l app.kubernetes.io/name=cos-prechecks-for-worker-reboots
+    ```
+
+    Delete the hook:
+
+    ```bash
+    kubectl -n argo delete hook cos-prechecks-for-worker-reboots --ignore-not-found=true
+    ```
+
+    **Example session:**
+
+    ```console
+    root@ncn-m001# kubectl -n argo get hooks
+    NAME                               AGE
+    cos-prechecks-for-worker-reboots   197d
+    ...
+    root@ncn-m001# kubectl -n argo delete hook cos-prechecks-for-worker-reboots --ignore-not-found=true
+    hook.cray-nls.hpe.com "cos-prechecks-for-worker-reboots" deleted
+    ```
+
 **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
