@@ -1700,6 +1700,20 @@ def ncn_data_command(session: requests.Session, args, state: State):
             if  network_name in sls_networks:
                 subnet_cidr = str(sls_networks[network_name].ipv4_address())
                 bootparams["cloud-init"]["user-data"]["ntp"]["allow"].append(subnet_cidr)
+    bootparams["cloud-init"]["user-data"]["bootcmd"] = [
+        ["cloud-init-per", "once", "create_PV", "pvcreate", "-ff", "-y", "-M", "lvm2", "/dev/md/AUX"],
+        ["cloud-init-per", "once", "create_VG", "vgcreate", "metalvg0", "/dev/md/AUX"],
+        ["cloud-init-per", "once", "create_LV_sc_firmware", "lvcreate", "-L", "80GB", "-n", "SCFIRMWARE", "-y", "metalvg0"],
+        ["cloud-init-per", "once", "create_LV_slingshot", "lvcreate", "-L", "120GB", "-n", "SLINGSHOT", "-y", "metalvg0"]
+    ]
+    bootparams["cloud-init"]["user-data"]["fs_setup"] = [
+        {"device": "/dev/disk/by-id/dm-name-metalvg0-SCFIRMWARE", "filesystem": "ext4", "label": "SCFIRMWARE", "overwrite": false, "partition": "auto"},
+        {"device": "/dev/disk/by-id/dm-name-metalvg0-SLINGSHOT", "filesystem": "ext4", "label": "SLINGSHOT", "overwrite": false, "partition": "auto"}
+    ]
+    bootparams["cloud-init"]["user-data"]["mounts"] = [
+        ["LABEL=SCFIRMWARE", "/opt/cray/FW/sc-firmware", "ext4", "defaults,nofail"],
+        ["LABEL=SLINGSHOT", "/opt/slingshot", "ext4", "defaults,nofail"]
+    ]
     bootparams["cloud-init"]["meta-data"]["availability-zone"] = cabinet_xname
     bootparams["cloud-init"]["meta-data"]["instance-id"] = generate_instance_id()
     bootparams["cloud-init"]["meta-data"]["local-hostname"] = state.ncn_alias
