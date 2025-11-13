@@ -646,6 +646,7 @@ nondefault
 nonexistent
 nonzero
 nvram
+onexit
 orch
 organize
 organized
@@ -670,6 +671,7 @@ plugin
 plugins
 post-Ceph
 post-Ceph-install
+posthook
 pre-LiveCD
 pre-NCN
 pre-uprade
@@ -681,6 +683,7 @@ preconfigures
 preconfiguring
 preempted
 preemptively
+prehook
 prepopulate
 prepopulated
 prepopulates
@@ -1182,3 +1185,6 @@ Infiniband
 - operations/hardware_state_manager/Remove_Duplicate_Detected_Events_From_HSM_Postgres_Database.md
 FRUID
 FRUIDs
+
+- operations/iuf/workflows/management_rollout.md
+cos-prechecks-for-worker-reboots
