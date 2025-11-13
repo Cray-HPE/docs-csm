@@ -5,7 +5,8 @@
     - [Tenant schema](#tenant-schema)
     - [Reconcile operations](#reconcile-operations)
     - [Tenant states](#tenant-states)
-    - [Webhook payload](#webhook-payload)
+    - [Tenant Key Rotation](#tenant-key-rotation)
+    - [Webhook Payload](#webhook-payload)
 
 ## Overview
 
@@ -71,6 +72,32 @@ When a tenant CR is applied, `tapms` will:
 | `Deploying` | `tapms` is in the process of deploying the tenant.                       |
 | `Deployed`  | The tenant reconciliation is complete (from the perspective of `tapms`). |
 | `Deleting`  | `tapms` has begun deleting the tenant.                                   |
+
+## Tenant Key Rotation
+
+Note that rotation of the transit engine key pair is possible by using the rotate endpoint. CLI example:
+
+```bash
+vault write -f transit/keys/mykey/rotate
+```
+
+A transit engine can have multiple key pair versions.  At rotation time, a new version of the key pair is created. It is also possible to rewrap (convert) data encrypted with a previous key pair version to the latest using the rewrap endpoint. CLI example:
+
+```bash
+vault write transit/rewrap/mykey ciphertext=<previous-version-ciphertext>
+```
+
+The minimum decryption version can also be set after rotation when it is decided that the previous version is no longer needed. CLI example:
+
+```bash
+vault write transit/keys/my-key/config min_decryption_version=2
+```
+
+Rotation will require some coordination around disabling older key versions and rewrapping any previous ciphertext as required.
+
+```bash
+kubectl patch tenant <TENNANT-NAME> type=merge -p '{"spec":{"requiresVaultKeyUpdate":true}}'
+```
 
 ## Webhook Payload
 
