@@ -75,7 +75,9 @@ When a tenant CR is applied, `tapms` will:
 
 ## Tenant Key Rotation
 
-Note that rotation of the transit engine key pair is possible by using the rotate endpoint. CLI example:
+To rotate the key in vault you will need to authenticate with Vault and send commands with the Vault CLI. This is done by following [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md)
+
+The rotation of the transit engine key pair is possible by using the rotate endpoint. CLI example:
 
 ```bash
 vault write -f transit/keys/mykey/rotate
