@@ -252,10 +252,11 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 
      **`NOTE`** If the system has been migrated to the Cilium Container Network Interface, there will be extra rules in the above output.
 
-  2. (`ncn-w#`) Restart the `metal-iptables` service on any worker that has missing `Conntrack` helpers.
+  1. (`ncn-w#`) Apply the TFTP helper `iptables` rules to any worker that has missing `Conntrack` helpers.
 
      ```console
-     systemctl restart metal-iptables
+     iptables -t raw -A PREROUTING -p udp -m udp --dport 69 -j CT --helper tftp
+     iptables -t raw -A OUTPUT -p udp -m udp --dport 69 -j CT --helper tftp
      ```
 
      This command will produce no output. Once it completes, verify that the TFTP helpers are now present by rerunning `iptables -L -t raw`.

@@ -34,11 +34,12 @@ The specific scripts executed as part of this hook are `/srv/cray/scripts/common
 Once this step has completed:
 
 > **NOTE**  
-> As part of the `deploy-product` stage during upgrades from CSM 1.6 to CSM 1.7:  
+> As part of the `deploy-product` stage during upgrades from CSM 1.6 to CSM 1.7,
+> the `deploy-product-onexit` hook will launch a Kubernetes upgrade job that runs outside of IUF, in the `argo` namespace.
 >
-> - Kubernetes will be upgraded from version 1.26 to 1.32.5.  
-> - The `deploy-product-onexit` hook will launch a Kubernetes upgrade job that runs outside of IUF, in the `argo` namespace.  
-> - This job must be monitored manually and must complete successfully before proceeding to the next stage.  
+> - The job will upgrade Kubernetes from version 1.26 to 1.32 in two hops. The first hop will be to version 1.29 and the second hop to version 1.32.
+> - This job must be monitored manually and must complete successfully before proceeding to the next stage.
+> - The job will restart when upgrading the master nodes to 1.32 and `kubelet` restarts. When the job restarts, a new output log will be created.
 >
 > The output from the `deploy-product` stage will look like:
 >
@@ -52,6 +53,19 @@ Once this step has completed:
 > ```bash
 > kubectl wait job -n argo upgrade-k8s-job-zm55x --for=condition=complete --timeout=120m
 > ```
+>
+> The amount of time the `upgrade-k8s-job` runs is directly related to the number of worker nodes in a system.
+> The more worker nodes the longer it takes to complete the Kubernetes upgrade.
+>
+> Below is a table of estimated upgrade time in minutes:
+>
+> | # Workers | Time (m) |
+> | --------- | -------- |
+> | 4         | 110      |
+> | 12        | 270      |
+> | 16        | 350      |
+> | 20        | 430      |
+> | 28        | 590      |
 
 - New versions of product microservices have been deployed
 - Per-stage product hooks have executed for the `deploy-product` stage

@@ -522,6 +522,7 @@ Get cfs-api health details.
 |Status|Meaning|Description|Schema|
 |---|---|---|---|
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|Status information for the service|[Healthz](#schemahealthz)|
+|500|[Internal Server Error](https://tools.ietf.org/html/rfc7231#section-6.6.1)|Status information for the service|[Healthz](#schemahealthz)|
 |503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|Status information for the service|[Healthz](#schemahealthz)|
 
 <aside class="warning">
