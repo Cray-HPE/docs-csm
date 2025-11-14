@@ -110,7 +110,7 @@ rest of this section can be skipped. Otherwise, follow these steps to enable
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `process-media` or `pre-install-check` stages.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. <I>pre-install-check prehook:</I> When upgrading CSM, a script named `pre-install-check-prehook.sh` runs before `pre-install-check` stage. This hook executes prerequisite operations that are dependencies for later CSM upgrade steps.
+1. *pre-install-check prehook:* When upgrading CSM, a script named `pre-install-check-prehook.sh` runs before `pre-install-check` stage. This hook executes prerequisite operations that are dependencies for later CSM upgrade steps.
 This prerequisite operations includes service chart upgrades, updating the `cray-product-catalog`and uploading base NCN images to be used later in `prepare-images` stage.
 The specific script executed as part of this hook is `/usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh`.
 
