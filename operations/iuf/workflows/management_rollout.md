@@ -177,7 +177,7 @@ Follow the steps below to upgrade all management nodes.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. *management-nodes-rollout prehook:* A script named `management-nodes-rollout-prehook.sh` runs before `management-nodes-rollout` stage. This hook is only executed before the first NCN is upgraded(i.e `STORAGE_CANARY`).  
+1. _management-nodes-rollout prehook:_ A script named `management-nodes-rollout-prehook.sh` runs before `management-nodes-rollout` stage. This hook is only executed before the first NCN is upgraded(i.e `STORAGE_CANARY`).  
 This hook executes operations includes CSM applications and services and validation of CSM health post-service upgrade.
 The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh` and `/opt/cray/tests/install/ncn/automated/ncn-k8s-combined-healthcheck iuf` .
 
