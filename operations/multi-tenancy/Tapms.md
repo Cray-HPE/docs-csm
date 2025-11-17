@@ -75,31 +75,57 @@ When a tenant CR is applied, `tapms` will:
 
 ## Tenant Key Rotation
 
-To rotate the key in vault you will need to authenticate with Vault and send commands with the Vault CLI. This is done by following [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md)
+To rotate the key in vault you will need to authenticate with Vault and send commands with the Vault CLI.  In order to run vault commands as an administrator first aquire a vault token and define the vault_cmd function. A more in depth explination of this can be found in the [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md)
+
+```bash
+VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
+function vault_cmd() { kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "VAULT_ADDR=http://localhost:8200 VAULT_TOKEN=$VAULT_TOKEN vault $*"; }
+```
+
+To test that this operation worked run the following command
+
+```bash
+vault_cmd secrets list
+```
+
+Once `vault_cmd` is working define the following variables in preperation for the key rotation.
+
+```bash
+TENANT_NAME="tenant-name" # add your specific tenant name
+TRANSIT_PATH=$(kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r '.status.tenantkms.transitname')
+TENANT_KEYNAME=$(kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r '.status.tenantkms.keyname')
+```
 
 The rotation of the transit engine key pair is possible by using the rotate endpoint. CLI example:
 
 ```bash
-vault write -f transit/keys/mykey/rotate
+vault_cmd write -f $TRANSIT_PATH/keys/$TENANT_KEYNAME/rotate
 ```
+
+Finally patch the tenant with the following command
+
+```bash
+kubectl patch tenant -n tenants $TENANT_NAME --type=merge -p '{"spec":{"requiresVaultKeyUpdate":true}}'
+```
+
+Done.
+
+**NOTE**: These next steps are not required for standard key rotation, but may help if you have multiple key pair versions
 
 A transit engine can have multiple key pair versions.  At rotation time, a new version of the key pair is created. It is also possible to rewrap (convert) data encrypted with a previous key pair version to the latest using the rewrap endpoint. CLI example:
 
 ```bash
-vault write transit/rewrap/mykey ciphertext=<previous-version-ciphertext>
+vault_cmd write transit/rewrap/mykey ciphertext=<previous-version-ciphertext>
 ```
 
 The minimum decryption version can also be set after rotation when it is decided that the previous version is no longer needed. CLI example:
 
 ```bash
-vault write transit/keys/my-key/config min_decryption_version=2
+vault_cmd write transit/keys/my-key/config min_decryption_version=2
 ```
 
 Rotation will require some coordination around disabling older key versions and rewrapping any previous ciphertext as required.
 
-```bash
-kubectl patch tenant <TENNANT-NAME> type=merge -p '{"spec":{"requiresVaultKeyUpdate":true}}'
-```
 
 ## Webhook Payload
 
