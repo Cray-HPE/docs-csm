@@ -13,6 +13,13 @@ Refer to that table and any corresponding product documents before continuing to
 
     See [Check for latest documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
+1. _deploy-product onexit hook:_ When upgrading CSM, a script named `deploy-product-onexit.sh` runs after all other products have completed their `post-deploy-product` hooks after `deploy-product` stage.
+This hook executes application of networking changes, CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane.
+The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
+
+   > **NOTE** During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
+   configuration changes will be lost as the audit log configuration will be reset to defaults defined in [Audit Logs](../../security_and_authentication/Audit_Logs.md).
+
 1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-r` to execute the [`deploy-product`](../stages/deploy_product.md) stage. Perform the upgrade using product content found in `${MEDIA_DIR}`.
    Additional arguments are available to control the behavior of the `deploy-product` stage (for example, `-rv`).
    See the [`deploy-product` stage documentation](../stages/deploy_product.md) for details and adjust the following example if necessary.

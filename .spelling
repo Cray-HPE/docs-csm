@@ -648,6 +648,7 @@ nondefault
 nonexistent
 nonzero
 nvram
+onexit
 orch
 organize
 organized
@@ -680,6 +681,7 @@ prebuilt
 preempted
 Preemptive
 preemptively
+prehook
 provisioners
 PXEboot
 qemu-user-static
