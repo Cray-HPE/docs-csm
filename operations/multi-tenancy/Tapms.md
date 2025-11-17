@@ -77,7 +77,7 @@ When a tenant CR is applied, `tapms` will:
 
 To rotate the key in vault you will need to authenticate with Vault and send
 commands with the Vault CLI.  In order to run vault commands as an administrator
-first acquire a vault token and define the vault_cmd function. A more in depth
+first acquire a vault token and define the `vault_cmd` function. A more in depth
 explanation of this can be found in the [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md)
 
 ```bash
