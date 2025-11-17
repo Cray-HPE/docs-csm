@@ -85,13 +85,13 @@ VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.
 function vault_cmd() { kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "VAULT_ADDR=http://localhost:8200 VAULT_TOKEN=$VAULT_TOKEN vault $*"; }
 ```
 
-To test that this operation worked run the following command
+To test that this operation worked, run the following command:
 
 ```bash
 vault_cmd secrets list
 ```
 
-Once the function is working define the following variables in preparation for the key rotation.
+Once the function is working, define the following variables in preparation for the key rotation:
 
 ```bash
 TENANT_NAME="tenant-name" # add your specific tenant name
@@ -99,29 +99,27 @@ TRANSIT_PATH=$(kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson 
 TENANT_KEYNAME=$(kubectl get tenants.tapms.hpe.com -n tenants $TENANT_NAME -ojson | jq -r '.status.tenantkms.keyname')
 ```
 
-The rotation of the transit engine key pair is possible by using the rotate endpoint. CLI example:
+The rotation of the transit engine key pair can be initiated by using the following command:
 
 ```bash
 vault_cmd write -f $TRANSIT_PATH/keys/$TENANT_KEYNAME/rotate
 ```
 
-Finally patch the tenant with the following command
+Finally patch the tenant with the following command:
 
 ```bash
 kubectl patch tenant -n tenants $TENANT_NAME --type=merge -p '{"spec":{"requiresVaultKeyUpdate":true}}'
 ```
 
-Done.
+**NOTE**: These next steps are not required for standard key rotation, but may help if you have multiple key pair versions.
 
-**NOTE**: These next steps are not required for standard key rotation, but may help if you have multiple key pair versions
-
-A transit engine can have multiple key pair versions.  At rotation time, a new version of the key pair is created. It is also possible to rewrap (convert) data encrypted with a previous key pair version to the latest using the rewrap endpoint. CLI example:
+A transit engine can have multiple key pair versions.  At rotation time, a new version of the key pair is created. It is also possible to rewrap (convert) data encrypted with a previous key pair version to the latest using the rewrap endpoint by running the following command:
 
 ```bash
 vault_cmd write transit/rewrap/mykey ciphertext=<previous-version-ciphertext>
 ```
 
-The minimum decryption version can also be set after rotation when it is decided that the previous version is no longer needed. CLI example:
+The minimum decryption version can also be set after rotation when it is decided that the previous version is no longer needed by running the following command:
 
 ```bash
 vault_cmd write transit/keys/my-key/config min_decryption_version=2
