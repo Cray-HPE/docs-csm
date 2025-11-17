@@ -1704,8 +1704,8 @@ def ncn_data_command(session: requests.Session, args, state: State):
         ["cloud-init-per", "once", "create_LV_slingshot", "lvcreate", "-L", "120GB", "-n", "SLINGSHOT", "-y", "metalvg0"]
     ]
     bootparams["cloud-init"]["user-data"]["fs_setup"] = [
-        {"device": "/dev/disk/by-id/dm-name-metalvg0-SCFIRMWARE", "filesystem": "ext4", "label": "SCFIRMWARE", "overwrite": false, "partition": "auto"},
-        {"device": "/dev/disk/by-id/dm-name-metalvg0-SLINGSHOT", "filesystem": "ext4", "label": "SLINGSHOT", "overwrite": false, "partition": "auto"}
+        {"device": "/dev/disk/by-id/dm-name-metalvg0-SCFIRMWARE", "filesystem": "ext4", "label": "SCFIRMWARE", "overwrite": False, "partition": "auto"},
+        {"device": "/dev/disk/by-id/dm-name-metalvg0-SLINGSHOT", "filesystem": "ext4", "label": "SLINGSHOT", "overwrite": False, "partition": "auto"}
     ]
     bootparams["cloud-init"]["user-data"]["mounts"] = [
         ["LABEL=SCFIRMWARE", "/opt/cray/FW/sc-firmware", "ext4", "defaults,nofail"],
