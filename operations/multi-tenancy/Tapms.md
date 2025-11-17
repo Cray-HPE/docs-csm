@@ -75,7 +75,10 @@ When a tenant CR is applied, `tapms` will:
 
 ## Tenant Key Rotation
 
-To rotate the key in vault you will need to authenticate with Vault and send commands with the Vault CLI.  In order to run vault commands as an administrator first aquire a vault token and define the vault_cmd function. A more in depth explination of this can be found in the [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md)
+To rotate the key in vault you will need to authenticate with Vault and send
+commands with the Vault CLI.  In order to run vault commands as an administrator
+first acquire a vault token and define the vault_cmd function. A more in depth
+explanation of this can be found in the [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md)
 
 ```bash
 VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
@@ -88,7 +91,7 @@ To test that this operation worked run the following command
 vault_cmd secrets list
 ```
 
-Once `vault_cmd` is working define the following variables in preperation for the key rotation.
+Once the function is working define the following variables in preparation for the key rotation.
 
 ```bash
 TENANT_NAME="tenant-name" # add your specific tenant name
@@ -125,7 +128,6 @@ vault_cmd write transit/keys/my-key/config min_decryption_version=2
 ```
 
 Rotation will require some coordination around disabling older key versions and rewrapping any previous ciphertext as required.
-
 
 ## Webhook Payload
 
