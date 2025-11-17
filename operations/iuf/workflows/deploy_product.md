@@ -34,12 +34,24 @@ Once this step has completed:
 > - This job must be monitored manually and must complete successfully before proceeding to the next stage.
 > - The job will restart when upgrading the master nodes to 1.32 and `kubelet` restarts. When the job restarts, a new output log will be created.
 >
+> (`ncn-mw#`) To tail the log file and see the progress, run:
+>
+> ```bash
+> tail -f /root/upgrade_k8s_output_2025-10-31_11-30-25.log
+> ```
+>
 > The output from the `deploy-product` stage will look like:
 >
 > ```text
 > INFO Job upgrade-k8s-job-zm55x has been created in the argo namespace. This is performing k8s upgrade from 1.26 to 1.32
 > INFO Monitor the job and ensure it is successful before proceeding to next stage.
 > ```  
+>
+>(`ncn-mw#`) To get the job name, run:
+>
+> ```bash
+> kubectl get jobs -n argo | grep upgrade-k8s
+> ```
 >
 > (`ncn-mw#`) To monitor the job, run:
 >
@@ -59,6 +71,25 @@ Once this step has completed:
 > | 16        | 350      |
 > | 20        | 430      |
 > | 28        | 590      |
+>
+> **IMPORTANT**  
+> If the following error appears in the job execution logs and `cray-fox` pods show errors like below:
+>
+> ```text
+> error when evicting pods/"cray-fox-bitnami-etcd-1" -n "services" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
+> evicting pod services/cray-fox-bitnami-etcd-1
+>```
+>
+> ```bash
+> (ncn-mw#) kubectl get pods -A | grep fox
+>services             cray-fox-6678f46c85-gdmt9                                         0/2     Init:0/2           0                 3d1h
+>services             cray-fox-bitnami-etcd-0                                           1/2     CrashLoopBackOff   840 (119s ago)    3d1h
+>services             cray-fox-bitnami-etcd-1                                           1/2     CrashLoopBackOff   823 (22s ago)     3d1h
+>services             cray-fox-bitnami-etcd-2                                           1/2     CrashLoopBackOff   835 (4m52s ago)   3d1h
+> ```
+>
+> Resolve this issue using the CSM Diagnostics installation guide to fix the `cray-fox` problem.
+> The `upgrade-k8s-job` will only succeed after resolving this issue.
 
 - New versions of product microservices have been deployed
 - Per-stage product hooks have executed for the `deploy-product` stage
