@@ -113,7 +113,10 @@ kubectl patch tenant -n tenants $TENANT_NAME --type=merge -p '{"spec":{"requires
 
 **NOTE**: These next steps are not required for standard key rotation, but may help if you have multiple key pair versions.
 
-A transit engine can have multiple key pair versions.  At rotation time, a new version of the key pair is created. It is also possible to rewrap (convert) data encrypted with a previous key pair version to the latest using the rewrap endpoint by running the following command:
+A transit engine can have multiple key pair versions.  At rotation time, a new
+version of the key pair is created. It is also possible to rewrap (convert) data
+encrypted with a previous key pair version to the latest using the rewrap
+endpoint by running the following command:
 
 ```bash
 vault_cmd write transit/rewrap/mykey ciphertext=<previous-version-ciphertext>
