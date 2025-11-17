@@ -1657,10 +1657,7 @@ def ncn_data_command(session: requests.Session, args, state: State):
             # Ignore MAC specific params.
             pass
         elif param.startswith("metal.no-wipe"):
-            if IS_FMN:
-                kernel_params.append("metal.no-wipe=1")
-            else:
-                kernel_params.append("metal.no-wipe=0")
+            kernel_params.append("metal.no-wipe=0")
         elif IS_FMN and param.startswith("metal.server"):
             # For FMN we need to point to the FMN specific rootfs image
             kernel_params.append("metal.server=s3://boot-images/"+state.fmn_image+"/rootfs")
