@@ -9,8 +9,8 @@
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `post-install-service-check` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. _post-install-service-check posthook:_ When upgrading CSM, a script named `post-install-service-check-posthook.sh` runs after `post-install-service-check` stage. This hook ensures the Kubernetes upgrade is completed successfully
-and the cluster is at the expected Kubernetes version and there are no residual `.done` marker files under `/etc/cray/upgrade/csm/${CSM_REL_NAME}` .
+1. _post-install-service-check posthook:_ When upgrading CSM, a script named `post-install-service-check-posthook.sh` runs after `post-install-service-check` stage. This hook ensures the Kubernetes upgrade completed successfully
+the cluster is at the expected Kubernetes version and there are no residual `.done` marker files under `/etc/cray/upgrade/csm/${CSM_REL_NAME}` .
 
 1. Invoke `iuf run` with `-r` to execute the [`post-install-service-check`](../stages/post_install_service_check.md) stage.
 
