@@ -76,9 +76,9 @@ When a tenant CR is applied, `tapms` will:
 ## Tenant Key Rotation
 
 To rotate the key in vault you will need to authenticate with Vault and send
-commands with the Vault CLI.  In order to run vault commands as an administrator
+commands with the Vault CLI.  In order to run vault commands as an administrator,
 first acquire a vault token and define the `vault_cmd` function. A more in depth
-explanation of this can be found in the [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md)
+explanation of this can be found in the [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md).
 
 ```bash
 VAULT_TOKEN=$(kubectl get secrets cray-vault-unseal-keys -n vault -o jsonpath={.data.vault-root} | base64 -d)
@@ -105,7 +105,7 @@ The rotation of the transit engine key pair can be initiated by using the follow
 vault_cmd write -f $TRANSIT_PATH/keys/$TENANT_KEYNAME/rotate
 ```
 
-Finally patch the tenant with the following command:
+Finally, patch the tenant with the following command:
 
 ```bash
 kubectl patch tenant -n tenants $TENANT_NAME --type=merge -p '{"spec":{"requiresVaultKeyUpdate":true}}'
