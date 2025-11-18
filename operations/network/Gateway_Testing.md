@@ -176,7 +176,6 @@ PASS - [cray-scsd]: https://api-gw-service-nmn.local/apis/scsd/v1/health - 200
 PASS - [cray-sls]: https://api-gw-service-nmn.local/apis/sls/v1/health - 200
 PASS - [cray-smd]: https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/ready - 200
 PASS - [cray-sts]: https://api-gw-service-nmn.local/apis/sts/healthz - 200
-PASS - [cray-uas-mgr]: https://api-gw-service-nmn.local/apis/uas-mgr/v1/images - 200
 SKIP - [nmdv2-service]: https://api-gw-service-nmn.local/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api-gw-service-nmn.local/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/v1/ping - virtual service not found
@@ -199,7 +198,6 @@ PASS - [cray-scsd]: https://api.cmn.eniac.dev.cray.com/apis/scsd/v1/health - 200
 PASS - [cray-sls]: https://api.cmn.eniac.dev.cray.com/apis/sls/v1/health - 200
 PASS - [cray-smd]: https://api.cmn.eniac.dev.cray.com/apis/smd/hsm/v2/service/ready - 200
 PASS - [cray-sts]: https://api.cmn.eniac.dev.cray.com/apis/sts/healthz - 200
-PASS - [cray-uas-mgr]: https://api.cmn.eniac.dev.cray.com/apis/uas-mgr/v1/images - 200
 SKIP - [nmdv2-service]: https://api.cmn.eniac.dev.cray.com/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api.cmn.eniac.dev.cray.com/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api.cmn.eniac.dev.cray.com/apis/sma-telemetry-api/v1/ping - virtual service not found
@@ -227,7 +225,6 @@ PASS - [cray-scsd]: https://api.chn.eniac.dev.cray.com/apis/scsd/v1/health - 404
 PASS - [cray-sls]: https://api.chn.eniac.dev.cray.com/apis/sls/v1/health - 404
 PASS - [cray-smd]: https://api.chn.eniac.dev.cray.com/apis/smd/hsm/v2/service/ready - 404
 PASS - [cray-sts]: https://api.chn.eniac.dev.cray.com/apis/sts/healthz - 404
-PASS - [cray-uas-mgr]: https://api.chn.eniac.dev.cray.com/apis/uas-mgr/v1/images - 404
 SKIP - [nmdv2-service]: https://api.chn.eniac.dev.cray.com/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api.chn.eniac.dev.cray.com/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api.chn.eniac.dev.cray.com/apis/sma-telemetry-api/v1/ping - virtual service not found
@@ -254,7 +251,6 @@ PASS - [cray-scsd]: https://api-gw-service-nmn.local/apis/scsd/v1/health - 200
 PASS - [cray-sls]: https://api-gw-service-nmn.local/apis/sls/v1/health - 200
 PASS - [cray-smd]: https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/ready - 200
 PASS - [cray-sts]: https://api-gw-service-nmn.local/apis/sts/healthz - 200
-PASS - [cray-uas-mgr]: https://api-gw-service-nmn.local/apis/uas-mgr/v1/images - 200
 SKIP - [nmdv2-service]: https://api-gw-service-nmn.local/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api-gw-service-nmn.local/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/v1/ping - virtual service not found
@@ -277,7 +273,6 @@ PASS - [cray-scsd]: https://api.cmn.eniac.dev.cray.com/apis/scsd/v1/health - 200
 PASS - [cray-sls]: https://api.cmn.eniac.dev.cray.com/apis/sls/v1/health - 200
 PASS - [cray-smd]: https://api.cmn.eniac.dev.cray.com/apis/smd/hsm/v2/service/ready - 200
 PASS - [cray-sts]: https://api.cmn.eniac.dev.cray.com/apis/sts/healthz - 200
-PASS - [cray-uas-mgr]: https://api.cmn.eniac.dev.cray.com/apis/uas-mgr/v1/images - 200
 SKIP - [nmdv2-service]: https://api.cmn.eniac.dev.cray.com/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api.cmn.eniac.dev.cray.com/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api.cmn.eniac.dev.cray.com/apis/sma-telemetry-api/v1/ping - virtual service not found
@@ -305,7 +300,6 @@ PASS - [cray-scsd]: https://api.chn.eniac.dev.cray.com/apis/scsd/v1/health - 404
 PASS - [cray-sls]: https://api.chn.eniac.dev.cray.com/apis/sls/v1/health - 404
 PASS - [cray-smd]: https://api.chn.eniac.dev.cray.com/apis/smd/hsm/v2/service/ready - 404
 PASS - [cray-sts]: https://api.chn.eniac.dev.cray.com/apis/sts/healthz - 404
-PASS - [cray-uas-mgr]: https://api.chn.eniac.dev.cray.com/apis/uas-mgr/v1/images - 404
 SKIP - [nmdv2-service]: https://api.chn.eniac.dev.cray.com/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api.chn.eniac.dev.cray.com/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api.chn.eniac.dev.cray.com/apis/sma-telemetry-api/v1/ping - virtual service not found
@@ -336,7 +330,6 @@ PASS - [cray-scsd]: https://api-gw-service-nmn.local/apis/scsd/v1/health - 403
 PASS - [cray-sls]: https://api-gw-service-nmn.local/apis/sls/v1/health - 403
 PASS - [cray-smd]: https://api-gw-service-nmn.local/apis/smd/hsm/v2/service/ready - 403
 PASS - [cray-sts]: https://api-gw-service-nmn.local/apis/sts/healthz - 403
-PASS - [cray-uas-mgr]: https://api-gw-service-nmn.local/apis/uas-mgr/v1/images - 403
 SKIP - [nmdv2-service]: https://api-gw-service-nmn.local/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api-gw-service-nmn.local/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api-gw-service-nmn.local/apis/sma-telemetry-api/v1/ping - virtual service not found
@@ -359,7 +352,6 @@ PASS - [cray-scsd]: https://api.cmn.eniac.dev.cray.com/apis/scsd/v1/health - 403
 PASS - [cray-sls]: https://api.cmn.eniac.dev.cray.com/apis/sls/v1/health - 403
 PASS - [cray-smd]: https://api.cmn.eniac.dev.cray.com/apis/smd/hsm/v2/service/ready - 403
 PASS - [cray-sts]: https://api.cmn.eniac.dev.cray.com/apis/sts/healthz - 403
-PASS - [cray-uas-mgr]: https://api.cmn.eniac.dev.cray.com/apis/uas-mgr/v1/images - 403
 SKIP - [nmdv2-service]: https://api.cmn.eniac.dev.cray.com/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api.cmn.eniac.dev.cray.com/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api.cmn.eniac.dev.cray.com/apis/sma-telemetry-api/v1/ping - virtual service not found
@@ -387,7 +379,6 @@ PASS - [cray-scsd]: https://api.chn.eniac.dev.cray.com/apis/scsd/v1/health - 404
 PASS - [cray-sls]: https://api.chn.eniac.dev.cray.com/apis/sls/v1/health - 404
 PASS - [cray-smd]: https://api.chn.eniac.dev.cray.com/apis/smd/hsm/v2/service/ready - 404
 PASS - [cray-sts]: https://api.chn.eniac.dev.cray.com/apis/sts/healthz - 404
-PASS - [cray-uas-mgr]: https://api.chn.eniac.dev.cray.com/apis/uas-mgr/v1/images - 404
 SKIP - [nmdv2-service]: https://api.chn.eniac.dev.cray.com/apis/v2/nmd/dumps - virtual service not found
 SKIP - [slingshot-fabric-manager]: https://api.chn.eniac.dev.cray.com/apis/fabric-manager/fabric/port-policies - virtual service not found
 SKIP - [sma-telemetry]: https://api.chn.eniac.dev.cray.com/apis/sma-telemetry-api/v1/ping - virtual service not found
