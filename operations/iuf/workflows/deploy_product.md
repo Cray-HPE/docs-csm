@@ -14,7 +14,7 @@ Refer to that table and any corresponding product documents before continuing to
     See [Check for latest documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
 1. _deploy-product onexit hook:_ When upgrading CSM, a script named `deploy-product-onexit.sh` runs after all other products have completed their `post-deploy-product` hooks after `deploy-product` stage.
-This hook executes application of networking changes, CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane.
+This hook executes application of networking changes, CoreDNS anti-affinity changes, upgrade of the Kubernetes control plane and initiates a Kubernetes job named `upgrade-k8s-job` .  
 The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
 
    > **NOTE** During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
