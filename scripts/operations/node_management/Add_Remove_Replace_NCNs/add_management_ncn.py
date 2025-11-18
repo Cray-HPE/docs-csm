@@ -791,6 +791,7 @@ class State:
         action_log(action, "")
         action_log(action, "Allocating NCN IP addresses")
 
+        fmn_vip_exists = False
         ncn_ips = {}
         for network_name in NETWORKS:
             if network_name not in self.sls_networks:
@@ -800,11 +801,16 @@ class State:
                 new_ip = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp", self.networks_allowed_in_dhcp_range)
                 ncn_ips[network_name] = Reservation(name=self.ncn_alias, ipv4_address=new_ip, comment=self.ncn_xname)
                 if network_name in ["NMN", "HMN"] and IS_FMN:
-                    if "fmn-vip" in self.sls_networks:
-                        print(f"Virtual IP already allocated for FMN systems, skipping additional NCN IP allocation on the {network_name} network")
+                    if self.sls_networks is not None and network_name in self.sls_networks:
+                        subnet = self.sls_networks[network_name].subnets().get("bootstrap_dhcp")
+                        if subnet is not None and "fmn-vip" in subnet.reservations():
+                            fmn_vip_exists = True
+
+                    if fmn_vip_exists:
+                        action_log(action, f"Virtual IP already allocated for FMN systems, skipping additional NCN IP allocation on the {network_name} network")
                     else:
                         # Allocate a second IP for NMN and HMN on FMN systems for virtual IP use
-                        print("Allocating additional NCN IP address on the {network_name} network for FMN virtual IP use")
+                        action_log(action, f"Allocating additional NCN IP address on the {network_name} network for FMN virtual IP use")
                         new_ip = allocate_ip_address_in_subnet(action, self.sls_networks, network_name, "bootstrap_dhcp", self.networks_allowed_in_dhcp_range, True)
                         ncn_ips[network_name+"-fmn-vip"] = Reservation(name="fmn-vip", ipv4_address=new_ip, comment="fmn-virtual-ip")
             except (AllocatedIPIsOutsideStaticRange, ExhaustedAvailableIPAddressSpace):
@@ -842,7 +848,7 @@ class State:
                         if ip_reservation.ipv4_address() == allocated_ip:
                             fail_sls_network_check = True
                             action_log(action, f'Error found allocated NCN IP {allocated_ip} in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
-                        if sls_network.name() in ["HMN", "NMN"] and IS_FMN:
+                        if not fmn_vip_exists:
                             # For FMN systems, check both the regular and VIP NCN IP reservations
                             vip_ip = ncn_ips[network_name+"-fmn-vip"].ipv4_address()
                             if ip_reservation.ipv4_address() == vip_ip:
