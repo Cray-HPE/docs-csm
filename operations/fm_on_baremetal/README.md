@@ -13,10 +13,9 @@
 
 ## Introduction
 
-HPE Cray Supercomputing EX systems are designed to maintain high availability (HA) for...
+The Fabric Manager (FM) bare-metal enablement within the Cray System Management (CSM) framework introduces dedicated Fabric Manager Nodes (FMNs) that manage and monitor Slingshot fabric operations outside of a Kubernetes environment. While the overall bare-metal Fabric Manager solution is described in the Slingshot Fabric Manager HA documentation <reference>, this CSM detail design document focuses specifically on the CSM-level enhancements required to integrate and support FMNs.
 
-To address these issues, CSM 1.7.1 includes FM on baremetal, which provides ...
-to maintain HA of ...
+CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment.
 
 **NOTE**:
 
