@@ -5,7 +5,7 @@ Before beginning an upgrade from CSM 1.6 to CSM 1.7, there are a few things to d
 
 ## Reduced resiliency during upgrade
 
-**Warning:** Management service resiliency is reduced during the upgrade.
+**Warning #1:** Management service resiliency is reduced during the upgrade.
 
 Although it is expected that [compute nodes](../glossary.md#compute-node-cn) and
 [application nodes](../glossary.md#application-node-an) will continue to provide their
@@ -15,6 +15,11 @@ same type has an unplanned fault that removes it from service, then this may res
 example, if there are three Kubernetes master nodes and one is being upgraded, the quorum is
 maintained by the remaining two nodes. If one of those two nodes has a fault before the third node
 completes its upgrade, then quorum would be lost.
+
+**Warning #2:** With CSM 1.6 installed, if any of the [compute nodes](../glossary.md#compute-node-cn) and
+[application nodes](../glossary.md#application-node-an) were booted with the [Data Virtualization Service (DVS)](../glossary.md#data-virtualization-service-dvs) or [Content Projection Service (CPS)](../glossary.md#content-projection-service-cps), then it is required to boot those nodes with [iSCSI SBPS](../glossary.md#scalable-boot-projection-service-sbps)
+as DVS/CPS is deprecated in CSM 1.7. If the nodes are with DVS/CPS, they may experience a hang or any issue during
+upgrade.
 
 ## Preparation steps
 
