@@ -9,6 +9,13 @@
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `deploy-product` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
+1. _deploy-product onexit hook:_ When upgrading CSM, a script named `deploy-product-onexit.sh` runs after all other products have completed their `post-deploy-product` hooks after `deploy-product` stage.
+This hook executes application of networking changes, CoreDNS anti-affinity changes, upgrade of the Kubernetes control plane and initiates a Kubernetes job named `upgrade-k8s-job` .  
+The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
+
+   > **NOTE** During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
+   configuration changes will be lost as the audit log configuration will be reset to defaults defined in [Audit Logs](../../security_and_authentication/Audit_Logs.md).
+
 1. Ensure that the latest documentation is installed for the target CSM version being installed or upgraded.
 
     See [Check for latest documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
