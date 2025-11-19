@@ -76,7 +76,7 @@ When a tenant CR is applied, `tapms` will:
 ## Tenant Key Rotation
 
 To rotate the key in vault you will need to authenticate with Vault and send
-commands with the Vault CLI.  In order to run vault commands as an administrator,
+commands with the Vault CLI. In order to run vault commands as an administrator,
 first acquire a vault token and define the `vault_cmd` function. A more in depth
 explanation of this can be found in the [Vault Documentation](../security_and_authentication/HashiCorp_Vault.md).
 
@@ -119,13 +119,13 @@ encrypted with a previous key pair version to the latest using the rewrap
 endpoint by running the following command:
 
 ```bash
-vault_cmd write transit/rewrap/mykey ciphertext=<previous-version-ciphertext>
+vault_cmd write $TRANSIT_PATH/rewrap/$TENANT_KEYNAME ciphertext=<previous-version-ciphertext>
 ```
 
 The minimum decryption version can also be set after rotation when it is decided that the previous version is no longer needed by running the following command:
 
 ```bash
-vault_cmd write transit/keys/my-key/config min_decryption_version=2
+vault_cmd write $TRANSIT_PATH/keys/$TENANT_KEYNAME/config min_decryption_version=2
 ```
 
 Rotation will require some coordination around disabling older key versions and rewrapping any previous ciphertext as required.
