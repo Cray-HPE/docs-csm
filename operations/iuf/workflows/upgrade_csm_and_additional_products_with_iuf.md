@@ -25,7 +25,6 @@ The upgrade workflow comprises the following procedures. The diagram shows the w
 the steps below it provide detailed instructions which must be executed in the order shown.
 
 The CSM upgrade steps are run automatically, either directly through IUF stages or by a hook automatically executed at the beginning or end of an IUF stage.
-For more detail about about the CSM upgrade hooks, see the section [Description of CSM upgrade hooks](#description-of-csm-upgrade-hooks).
 
 ![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_04022025.png)
 
@@ -44,8 +43,6 @@ For more detail about about the CSM upgrade hooks, see the section [Description 
    1. Download the desired HPE product media defined by the HPC CSM Software Recipe to `${MEDIA_DIR}`, which was defined in the previous step.
 
 1. Product delivery
-
-   > **NOTE** The CSM upgrade prerequisites are automatically executed in a hook run before `pre-install-check`.
 
    Follow the IUF [Product Delivery](product_delivery.md) instructions.
 
@@ -67,16 +64,9 @@ For more detail about about the CSM upgrade hooks, see the section [Description 
 
 1. Management rollout
 
-   > **NOTE** The upgrade of CSM services and validation of CSM health occur automatically in a hook executed before the first management node is rolled out.
-
    Follow the IUF [Management Rollout](management_rollout.md) instructions.
 
 1. Deploy product
-
-   > **NOTE** The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the
-   Kubernetes control plane is performed in a hook automatically executed after `deploy-product`.
-   During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
-   configuration changes will be lost as the audit log configuration will be reset to defaults defined in [Audit Logs](../../security_and_authentication/Audit_Logs.md).
 
    Follow these IUF instructions in order:
 
@@ -90,26 +80,3 @@ For more detail about about the CSM upgrade hooks, see the section [Description 
 
 The IUF upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
 procedure and remove any installation artifacts, if desired.
-
-## Description of CSM upgrade hooks
-
-The hooks below are automatically executed when CSM is being upgraded with IUF.
-
-- CSM upgrade prerequisites
-
-   CSM upgrade prerequisites are executed in a hook run before `pre-install-check`. This executes steps that are dependencies for later CSM upgrade steps.
-   This includes some service chart upgrades, uploading base NCN images to be used later in `prepare-images`, and other setup steps.
-   The specific script that is being executed is `/usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh`.
-
-- Upgrade of CSM services and validation of CSM health
-
-   The upgrade of CSM services and validation of CSM health are performed in a hook executed before `management-nodes-rollout`. This hook is only executed before the first NCN is upgraded.
-   The specific script that executes the CSM services upgrade is `/usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh`.
-
-- Application of networking changes, CoreDNS anti-affinity, upgrade of the Kubernetes control plane
-
-   The application of networking changes and CoreDNS anti-affinity changes along with the upgrade of the Kubernetes control plane is performed in a hook executed after `deploy-product`.
-   The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
-
-   > **NOTE** During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
-   configuration changes will be lost as the audit log configuration will be reset to defaults defined in [Audit Logs](../../security_and_authentication/Audit_Logs.md).

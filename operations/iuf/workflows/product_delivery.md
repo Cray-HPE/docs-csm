@@ -23,6 +23,9 @@ Refer to that table and any corresponding product documents before continuing to
     /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
     ```
 
+1. _pre-install-check prehook:_ When upgrading CSM, a script named `pre-install-check-prehook.sh` runs before `pre-install-check` stage. This hook executes prerequisite operations that are dependencies for later CSM upgrade steps.
+The prerequisite operations include upgrading service charts, updating the `cray-product-catalog`, and uploading base NCN images to be used later in the `prepare-images` stage. The specific script executed as part of this hook is `/usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh`.
+
 1. Invoke `iuf run` with activity identifier `${ACTIVITY_NAME}` and use `-e` to execute the [`process-media`](../stages/process_media.md) and [`pre-install-check`](../stages/pre_install_check.md) stages. Perform the upgrade
    using product content found in `${MEDIA_DIR}`.
 
