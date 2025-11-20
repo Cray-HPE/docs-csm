@@ -78,9 +78,28 @@ spec:
                     exit 1
                   fi
                   echo "INFO All checked workers $(echo "$workers" | paste -sd',' -) below ${THRESHOLD}%"
-        - name: drain
+        - name: get-csm-release
           dependencies:
             - check-disk-space
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  if [ -f /etc/cray/upgrade/csm/myenv ]; then
+                    source /etc/cray/upgrade/csm/myenv
+                    echo $CSM_RELEASE
+                  else
+                    echo "ERROR Unable to find /etc/cray/upgrade/csm/myenv"
+                    exit 1
+                  fi
+        - name: drain
+          dependencies:
+            - get-csm-release
           templateRef:
             name: kubectl-and-curl-template
             template: shell-script
@@ -157,7 +176,8 @@ spec:
                   echo "INFO setting metal.no-wipe=0 in BSS"
                   csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
                   csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
- 
+
+                  CSM_RELEASE={{tasks.get-csm-release.outputs.result}}
                   # As boot parameters are added or removed, update these arrays.
                   # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
                   bootparameters_to_set=("split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" "rd.live.overlay.thin=0" "rd.live.dir=${CSM_RELEASE}")
@@ -169,7 +189,7 @@ spec:
                   for bootparameter in "${bootparameters_to_set[@]}"; do
                     csi handoff bss-update-param --set "${bootparameter}" --limit $TARGET_XNAME
                   done
-        - name: update_kernel_parameters
+        - name: update-kernel-parameters
           dependencies:
           - update-bss
           templateRef:
@@ -201,11 +221,11 @@ spec:
                     echo "ERROR - Failed to update boot parameters for $xname! Skipping ..."
                     exit 1
                   else
-                    echo "Successfully updated boot parameters for  xname(s): $TARGET_XNAME "
+                    echo "Successfully updated boot parameters for xname(s): $TARGET_XNAME "
                   fi
         - name: set-bss-image-and-cfs-config
           dependencies:
-          - update_kernel_parameters
+          - update-kernel-parameters
           templateRef:
             name: set-bss-image-cfs-config
             template: main
