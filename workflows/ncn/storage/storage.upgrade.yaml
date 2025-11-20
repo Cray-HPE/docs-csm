@@ -112,7 +112,7 @@ spec:
             arguments:
               parameters:
                 - name: dryRun
-                  value: "{{inputs.parameters.dryRun}}"
+                  value: "{{$.DryRun}}"
                 - name: scriptContent
                   value: |
                     if [ -f /etc/cray/upgrade/csm/myenv ]; then
