@@ -1,16 +1,18 @@
 # Enabling Fabric Manager (FM) On baremetal post CSM Upgrade
 
 ## Overview
-* The new Fabric Manager Nodes (FMNs) would be added only after the CSM upgrade is complete.
-* By default, FM on baremetal is disabled.
-* This page documents the procedures for enabling and configuring FM on baremetal post CSM upgrade.
-* FM on baremetal cannot be disabled after it has been enabled.
+
+* Fabric Manager Nodes (FMNs) can be added only after the CSM upgrade has been completed.
+* By default, Fabric Manager on baremetal is disabled.
+* This document describes the procedures for providing the base OS image, provisioning storage LUNs, and configuring the necessary networking to support
+  Fabric Manager on  baremetal following the CSM upgrade.
+* Once enabled, Fabric Manager on baremetal cannot be disabled.
   
 ## Post upgrade of CSM from 1.7.0 to 1.7.1
 
 Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow below procedure.
 
-## FMN Node Image Customization, Creation, and Deployment Procedure
+## Prerequisites
 
 ### Update SHCD with FMN (Fabric Manager Node) Information
 
@@ -46,21 +48,21 @@ Verify that the Fabric Manager nodes are present in the output CCJ file.
 jq -c '.topology[] | select(.common_name|contains("fmn"))' surtur-ccj.json
 ```
 
+## FMN Node Image Customization and Deployment Procedure
+
+The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to `ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts. This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host. The following steps detail the process for generating the FMN base image with the required components and deploying it to FMN nodes.
+
 ### Create the base image (only base OS; no Fabric Manager) for FMN
 
-#### The FMN node customization ansible roles
+Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements [../../operations/configuration_management/Management_Node_Image_Customization.md]
 
-Perform image customization on the existing NCN Kubernetes images for using it for FMN nodes 
-[../../operations/configuration_management/Management_Node_Image_Customization.md]
+#### Fabric Manager Boot Preparation
 
-### FabricManager Boot Preparation
+Create `sat bootprep` configuration file (`fmn_bootprep.yaml`) for FMN as below.
 
-Create sat bootprep configuration file for FMN as below 
+**Note:** Ensure that the `fmn_bootprep.yaml` configuration file is updated with the official released versions before proceeding.
 
-Update below sat bootprep configuration file with official/released versions.
-set bootprep file path: BOOTPREP_FILE_PATH=/tmp/fmn_bootpre.yaml
-
-fmn_bootprep.yaml
+For Example:
 
 ```yaml
 schema_version: 1.0.2
@@ -82,7 +84,7 @@ images:
   base:
     product:
       name: csm
-      version: 1.7.0
+      version: 1.7.1
       type: image
       filter:
         prefix: secure-kubernetes
@@ -91,17 +93,19 @@ images:
   - Management_Fabric
 ```
 
-Ansible role : csm.fm.baremetal
+#### New FMN image creation and uploade to S3 
 
-**Note:**
+Execute the commands below on any master node to generate the new FMN image and upload it to the S3 storage.
 
-### New FMN image creation and uploade to S3 
-BOOTPREP_FILE_PATH=./
+First set `bootprep` file path:
+ 
+```bash
+# BOOTPREP_FILE_PATH=./fmn_bootpre.yaml
+```
 
-Use below command on any of the master node to create the new FMN image and uploading the image to S3
+Now execute the `sat bootprep run` command below to generate the new base image and upload it to S3.
 
 ```bash
-sat bootprep
 sat bootprep run \
       --limit images --limit configurations \
       --overwrite-images --overwrite-configs \
@@ -111,8 +115,7 @@ sat bootprep run \
       $BOOTPREP_FILE_PATH
 ```
 
-**Note:**
-The overwrite option "--overwrite-images" overwrites the previous/old image in S3
+**Note:** Using the `--overwrite-images` option in the command above will overwrite any previously uploaded images in S3.
 
 ## FMN add procedure
 
