@@ -66,7 +66,7 @@ The SLS address is by default set to `api-gw-service-nmn.local`. If needed, a di
 To check the firmware of a single switch, run the following:
 
 ```ShellSession
-canu report switch firmware --csm 1.4 --ip 192.168.1.1 --username USERNAME --password PASSWORD
+canu report switch firmware --csm 1.5 --ip 192.168.1.1 --username USERNAME --password PASSWORD
 ```
 
 Expected output:
@@ -80,11 +80,11 @@ Expected output:
 Multiple Aruba switches on a network can be checked for their firmware versions. An example of checking the firmware of multiple switches:
 
 ```ShellSession
-canu report network firmware --csm 1.4 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
+canu report network firmware --csm 1.5 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 ```ShellSession
-canu report network firmware --csm 1.4 --ips 192.168.1.1,192.168.1.2,192.168.1.3,192.168.1.4 --username USERNAME --password PASSWORD
+canu report network firmware --csm 1.5 --ips 192.168.1.1,192.168.1.2,192.168.1.3,192.168.1.4 --username USERNAME --password PASSWORD
 ```
 
 Expected Output
@@ -119,7 +119,7 @@ When using the `network firmware` commands, the table will show either: `🛶 Pa
 To get the JSON output from a single switch, or from multiple switches, make sure to use the `--json` flag. An example JSON output is below.
 
 ```ShellSession
-canu report network firmware --csm 1.6 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD –json
+canu report network firmware --csm 1.5 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD –json
 ```
 
 ```json
@@ -200,7 +200,7 @@ There are two different `--view` options: `switch` and `equipment`:
 An example of checking the cabling of multiple switches and displaying with the equipment view:
 
 ```ShellSession
-canu report network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD --view equipment`
+canu report network cabling --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD --view switch
 ```
 
 ```ShellSession
@@ -261,11 +261,6 @@ In order to validate the cabling, run the following:
 ```ShellSession
 canu validate network cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
-
-```ShellSession
-canu validate network cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
-```
-
 Expected results:
 
 ```text
@@ -307,10 +302,6 @@ In order to validate an SHCD against the cabling, run the following:
 
 ```ShellSession
 canu validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN --corners I14,S49,I16,S22 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD`
-```
-
-```ShellSession
-canu validate shcd-cabling -a tds --shcd FILENAME.xlsx --tabs 25G_10G,NMN --corners I14,S49,I16,S22 --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
 
 Expected results:
