@@ -250,10 +250,6 @@ if __name__ == '__main__':
       reachnets.append("nmnlb")
     elif NODE_TYPE == "outside":
       reachnets.append("cmn")
-    elif NODE_TYPE != "uai":
-      print("Invalid node type {}".format(NODE_TYPE))
-      logging.critical("Invalid node type {}".format(NODE_TYPE))
-      sys.exit(1)
 
     print("Reachable networks: {}".format(reachnets))
 

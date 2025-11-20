@@ -646,6 +646,7 @@ nondefault
 nonexistent
 nonzero
 nvram
+onexit
 orch
 organize
 organized
@@ -670,6 +671,7 @@ plugin
 plugins
 post-Ceph
 post-Ceph-install
+posthook
 pre-LiveCD
 pre-NCN
 pre-uprade
@@ -681,6 +683,7 @@ preconfigures
 preconfiguring
 preempted
 preemptively
+prehook
 prepopulate
 prepopulated
 prepopulates
@@ -1184,4 +1187,7 @@ FRUID
 FRUIDs
 
 - troubleshooting/known_issues/iuf_management_rollout_last_worker_dvs_errors.md
+cos-prechecks-for-worker-reboots
+
+- operations/iuf/workflows/management_rollout.md
 cos-prechecks-for-worker-reboots
