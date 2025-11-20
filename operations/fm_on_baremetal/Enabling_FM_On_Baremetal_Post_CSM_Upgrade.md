@@ -12,6 +12,13 @@
 
 Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow below procedure.
 
+* Step 1: [Prerequisites and Planning](#prerequisites)
+* step 2: [FMN Base Image Creation](#fmn-node-image-customization-and-deployment-procedure)
+* Step 3: [Add FMN Nodes to CSM](#fmn-add-procedure)
+* step 4: [Network Configuration](#update-switch-configuration-using-canu)
+* Step 5: [Boot FMN Nodes](#boot-fmn-nodes-with-ipxe)
+* step 6: [Cleanup](#cleanup)
+
 ## Prerequisites
 
 ### Update SHCD with FMN (Fabric Manager Node) Information
