@@ -15,8 +15,33 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 **NOTE**:
 
 * FM on baremetal is disabled by default.
+* FM cannot be disabled after it has been enabled.
 
-## Terminology and components
+## Terminology and dependency components
+
+### SHS
+[Slingshot Host Software](../../glossary.md#slingshot-host-software-shs)
+
+### FM
+[Fabric Manager](...)
+
+### FMN
+[Fabric Manager Node](...)
+
+### SLS 
+[System Layout Service](../../glossary.md#system-layout-service-sls)
+
+### HSM 
+[Hardware State Manager](../../glossary.md#hardware-state-manager-hsm)
+
+### BSS
+[Boot Script Service](../../glossary.md#boot-script-service-bss)
+
+### SAT
+[System Admon Toolkit](../../glossary.md#system-admin-toolkit-sat)
+
+### SMA
+[System Monitoring Application](../../glossary.md#system-monitoring-application-sma)
 
 ## Architecture
 
