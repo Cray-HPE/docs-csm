@@ -2,11 +2,6 @@
 
 - [Introduction](#introduction)
 - [Terminology and components](#terminology-and-components)
-    - [1](#1)
-    - [2](#2)
-        - [2.1](#2.1)
-        - [2.2](#2.2)
-    - [3](#3)
 - [Architecture](#architecture)
 - [Enable and configure](#enable-and-configure)
 - [Troubleshooting](#troubleshooting)
@@ -22,10 +17,6 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 - FM on baremetal is disabled by default.
 
 ## Terminology and components
-
-### 1
-### 2
-### 3
 
 ## Architecture
 
