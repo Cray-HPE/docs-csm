@@ -173,6 +173,43 @@ cray bss bootparameters list --format json --name x3000c0s28b0n0
 cray bss bootparameters list --hosts Global --format json
 ```
 
+## Update switch configuration using CANU
+
+**Note: ** This step cannot be performed until the Fabric Manager nodes have been added to SLS.
+
+In order to generate new configuration the following is required:
+
+* A CCJ file
+* Any custom config file specific to the system
+* A SLS file that contains the FMNs (`cray sls dumpstate list --format json` may be used to obtain this once SLS has been updated on the running system)
+* Knowledge of whether the system has the NMN Isolation feature enabled or not
+
+### Generate the switch configuration
+
+For Example: 
+
+```bash
+canu generate network config -a TDS --csm 1.7 --custom-config custom_switch_config.yaml --edge Arista --sls-file sls_input_file.json --ccj surtur-ccj.json --folder output (--enable-nmn-isolation --nmn-pvlan <pvid>)
+```
+
+### Validate the generated switch configuration against the network switches
+
+* TDS style systems have the management nodes plugged directly into the spine switches, most will only have a single leaf-bmc switch.
+* Systems that use the "Full" architecture will have the management nodes plugged into the leaf switches.
+
+The configuration generated here will contain updates for the leaf-bmc switch(es) for the Fabric Manager node BMCs and updates to either the spine switches or the leaf switches for the bonded connection.
+
+For Example:
+
+```bash
+canu validate switch config --ip 10.254.0.4 --generated output/sw-leaf-bmc-001.cfg
+```
+
+**Note:** CANU will likely suggest the removal of the snmpv3 user, this is because the SNMP configuration is not held in the `custom_config.yaml` file because it's not permitted to store secrets in GitHub. Do NOT remove this configuration from the switch.
+
+Take extreme care when manipulating ACLs, if CANU suggests moving a "permit any ..." rule be sure to create the new rule before removing the old one. It is possible to lose access to the switch if the ACLs are not applied in the correct order.
+
+
 ## Boot FMN Nodes with iPXE
 
 Once the FMNs have been added to the CSM, proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image.
@@ -214,7 +251,7 @@ ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis bootdev pxe options=efiboot
 ```
 
-### Poer off the chassis 
+### Power off the chassis 
 
 Power off the chassis:
 
@@ -239,3 +276,7 @@ Check the chassis power status:
 ```bash
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
 ```
+
+## Cleanup 
+
+Uninstall existing FM helm chart
