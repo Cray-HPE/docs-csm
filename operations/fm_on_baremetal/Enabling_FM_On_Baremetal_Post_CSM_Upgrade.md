@@ -2,9 +2,9 @@
 
 ## Overview
 
-* Fabric Manager Nodes (FMNs) can be added only after the CSM upgrade has been completed.
+* Fabric Manager Nodes (`FMNs`) can be added only after the CSM upgrade has been completed.
 * By default, Fabric Manager on baremetal is disabled.
-* This document describes the procedures for providing the base OS image, provisioning storage LUNs, and configuring the necessary networking to support
+* This document describes the procedures for providing the base OS image, provisioning storage LUNs, and configuring the necessary networking to support.
   Fabric Manager on  baremetal following the CSM upgrade.
 * Once enabled, Fabric Manager on baremetal cannot be disabled.
   
@@ -25,8 +25,8 @@ Verify that the BMC of each FMN is configured with the correct root user credent
 ### Perform CANU validation
 
 * Validate SHCD with respect to FMNs
-* Map FMNs in the SHCD to the node type:Management_FabricManager when building the CCJ file
-* Generate switch configuration for the node based on the new Role: Management , SubRole: FabricManager pairing
+* Map FMNs in the SHCD to the node type: `Management_FabricManager` when building the CCJ file
+* Generate switch configuration for the node based on the new Role: `Management` , SubRole: `FabricManager` pairing
 
 Validate the SHCD.
 
@@ -52,11 +52,11 @@ jq -c '.topology[] | select(.common_name|contains("fmn"))' surtur-ccj.json
 
 The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to `ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts. This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host. The following steps detail the process for generating the FMN base image with the required components and deploying it to FMN nodes.
 
-### Create the base image (only base OS; no Fabric Manager) for FMN
+### Create FMN base image (only base OS; no Fabric Manager)
 
-Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements [../../operations/configuration_management/Management_Node_Image_Customization.md]
+Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements. See (../../operations/configuration_management/Management_Node_Image_Customization.md)
 
-#### Fabric Manager Boot Preparation
+#### FMN Boot Preparation
 
 Create `sat bootprep` configuration file (`fmn_bootprep.yaml`) for FMN as below.
 
@@ -93,7 +93,7 @@ images:
   - Management_Fabric
 ```
 
-#### New FMN image creation and uploade to S3 
+#### New FMN base image creation and uploade to S3 
 
 Execute the commands below on any master node to generate the new FMN image and upload it to the S3 storage.
 
@@ -119,61 +119,123 @@ sat bootprep run \
 
 ## FMN add procedure
 
-Follow NCN add procedure to add FMN nodes to CSM:
+After creating the FMN base image, add FMN nodes to CSM by following the [NCN add procedure](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md)
 
-https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md
-Scripts source (HSM/ SLS/ BSS): Cray-HPE/docs-csm at CASM-5647-5739
-Note: Interface level differences to be considered while following NCN add procedure for FMNs
+**Note:** 
 
-https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#prerequisites
-As part of the above prerequisites, there is a new prompt added to confirm if the node getting added is an FMN or not.
+* Below are the Interface level differences to be considered while following NCN add procedure for FMNs:
+    * As part of the [prerequisites](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#prerequisites), there is a new prompt added to
+      confirm if the node getting added is an FMN or not.
+    * As part of the [step](../../operations/node_management/Add_Remove_Replace_NCNs/Add_NCN_Data.md#add-the-ncn-to-bss-hsm-and-sls, include the new parameter
+      `--fmn-image-id` only for the FM node. The value for this parameter should be the image ID generated in the FMN base image creation stage above.
 
-https://github.com/Cray-HPE/docs-csm/blob/release/1.7/operations/node_management/Add_Remove_Replace_NCNs/Add_NCN_Data.md#add-the-ncn-to-bss-hsm-and-sls
- As part of the above step, include the new parameter --fmn-image-id only for the FM node. The value for this parameter should be the image ID generated in Step 6.4. 
+After completion of the NCN add procedure, SLS, HSM, and BSS will contain the corresponding FMN data. 
 
-By the end of this procedure, SLS, HSM, BSS would be FMN data. Following validations could be performed if needed for confirmations -
+The following checks can be used to verify that the updates have been correctly applied:
 
-SLS hardware should list the new nodes
-Eg - cray sls hardware describe x3000c0s28b0n0 
+### SLS hardware should list the new nodes
 
-IPs should be allocated and made available for FMNs in all of SLS networks
-Note - NMN and HMN should be having additional FMN VIPs also allocated
+For Example:
 
-Eg - cray sls search networks list --name NMN --format json 
+```bash
+cray sls hardware describe x3000c0s28b0n0
+```
 
-HSM ethernet interfaces should be updated with the same allocated IPs.
-Eg - cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --format json 
+### IPs should be allocated and made available for FMNs in all of SLS networks
 
-BSS should be updated with new hosts entries for FMN with proper configurations
-Note - BSS global parameters also needs to be updated with FMN IPs(VIP not included)
+**Note:** NMN and HMN should be having additional FMN VIPs also allocated.
 
-Eg - cray bss bootparameters list --format json --name x3000c0s28b0n0 
+For Example:
 
-Eg - cray bss bootparameters list --hosts Global --format json 
+```bash
+cray sls search networks list --name NMN --format json
+```
 
+### HSM ethernet interfaces should be updated with the same allocated IPs
+
+For Example:
+
+```bash
+cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --format json
+```
+
+### BSS should be updated with new hosts entries for FMN with proper configurations
+
+**Note:** BSS global parameters also needs to be updated with FMN IPs(VIP not included).
+
+For Example:
+
+```bash
+cray bss bootparameters list --format json --name x3000c0s28b0n0
+```
+
+```bash
+cray bss bootparameters list --hosts Global --format json
+```
 
 ## Boot FMN Nodes with iPXE
 
-Example:
+Once the FMNs have been added to the CSM, proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image.
 
-iPXE boot commands
-NODE=fmn001 (or) fmn002
- 
-fmn001 - x3000c0s28b0n0
- 
-fmn002 - x3000c0s29b0n0
- 
- BMC="${NODE}-mgmt"; echo $BMC
+### Set BMC with node name
+
+```bash
+BMC="${NODE}-mgmt"; echo $BMC
+```
+
+**Note: ** Here the NODE can be `fmn001` (or) `fmn002`. For example, consider `fmn001` with xname `x3000c0s28b0n0` and `fmn002`  with xname `x3000c0s29b0n0`.
+
+### Get and export IPMI credentials
+
+```bash
 read -r -s -p "${BMC} root password: " IPMI_PASSWORD
 export IPMI_PASSWORD
-cray console interact <xname>       (In a different screen to check the progress of the boot)
+```
+
+### Open console to check the progress of the upcoming boot 
+
+Run below command in a different screen to check the progress of the boot which we are going to initiate in the next step.
+
+**Note: ** Here `xname` can be `fmn001 or `fmn002` based on which FMN is getting booted with.
+
+```bash
+cray console interact <xname> 
 echo ${BMC}
+```
+
+### Check the current chassis power status 
 
 ```bash
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
+```
+### Set the boot option 
+
+```bash
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis bootdev pxe options=efiboot
+```
+
+### Poer off the chassis 
+
+Power off the chassis:
+
+```bash
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis power off
+```
+Check the chassis power status:
+
+```bash
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
+```
+### Power on the chassis 
+
+Power on the chassis:
+
+```bash
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis power on
+```
+
+Check the chassis power status:
+
+```bash
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
 ```
