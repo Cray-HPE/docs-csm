@@ -14,7 +14,7 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 
 **NOTE**:
 
-- FM on baremetal is disabled by default.
+* FM on baremetal is disabled by default.
 
 ## Terminology and components
 
@@ -22,7 +22,7 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 
 ![FM On Baremetal Solution Overview](../../img/fm_on_baremetal.png)
 
-The FM HA solution is implemented in following stages. These stages are:
+The FM on baremetal solution is implemented in following stages. These stages are:
 
 1. [Enable and configure](#enable-and-configure)
 1. [Setup of FM HA](Setup_of_FM_HA.md)
