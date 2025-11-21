@@ -62,18 +62,9 @@ To address these issues, CSM 1.7.1 includes FM on baremetal support, which provi
 
 ![FM On Baremetal Solution Overview](../../img/fm_on_baremetal.png)
 
-The FM on baremetal solution is implemented in following stages. These stages are:
-
-1. [Enable and configure](#enable-and-configure)
-1. [Setup of FM HA](Setup_of_FM_HA.md)
-
 ## Enable and configure
 
-How to enable and configure FM on baremetal depends on the context.
-See the following links:
-
-- [Enabling FM On BaremetalPost CSM Install](Enabling_FM_On_Baremetal_Post_CSM_Install.md)
-- [Enabling FM On BaremetalPost CSM Upgrade](Enabling_FM_On_Baremetal_Post_CSM_Upgrade.md)
+[Enabling FM On BaremetalPost CSM Upgrade](Enabling_FM_On_Baremetal_Post_CSM_Upgrade.md)
 
 ## Troubleshooting
 
