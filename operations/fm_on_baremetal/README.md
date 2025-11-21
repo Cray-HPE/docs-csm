@@ -16,13 +16,9 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 
 * FM on baremetal is disabled by default.
 * FM cannot be disabled after it has been enabled.
-
-
-## Assumptions
-
-* FMNs are considered Management nodes.
-* The two FMNs are part of different racks to support Rack Resiliency.
-* This feature will not be supported on systems with Dell/Mellanox based management networks.
+* `FMNs` are considered Management nodes.
+* The two `FMNs` must be part of two different management racks to support Rack Resiliency.
+* This feature will not be supported on systems with Dell/ Mellanox based management networks.
 
 ## Terminology and dependency components
 
@@ -36,6 +32,7 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 [Fabric Manager Node](...)
 
 ### SLS 
+
 [System Layout Service](../../glossary.md#system-layout-service-sls)
 
 ### HSM 
