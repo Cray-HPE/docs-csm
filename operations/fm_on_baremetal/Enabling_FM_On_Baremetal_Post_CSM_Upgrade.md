@@ -133,7 +133,7 @@ After creating the FMN base image, add FMN nodes to CSM by following the [NCN ad
 * Below are the Interface level differences to be considered while following NCN add procedure for FMNs:
     * As part of the [prerequisites](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#prerequisites), there is a new prompt added to
       confirm if the node getting added is an FMN or not.
-    * As part of the [step](../../operations/node_management/Add_Remove_Replace_NCNs/Add_NCN_Data.md#add-the-ncn-to-bss-hsm-and-sls, include the new parameter
+    * As part of the [step](../../operations/node_management/Add_Remove_Replace_NCNs/Add_NCN_Data.md#add-the-ncn-to-bss-hsm-and-sls), include the new parameter
       `--fmn-image-id` only for the FM node. The value for this parameter should be the image ID generated in the FMN base image creation stage above.
 
 After completion of the NCN add procedure, SLS, HSM, and BSS will contain the corresponding FMN data. 
@@ -238,7 +238,7 @@ export IPMI_PASSWORD
 
 ### Open console to check the progress of the upcoming boot 
 
-Run below command in a different screen to check the progress of the boot which we are going to initiate in the next step.
+Run below command in a different terminal to check the progress of the boot which we are going to initiate in the next step.
 
 **Note: ** Here `xname` can be `fmn001 or `fmn002` based on which FMN is getting booted with.
 
@@ -284,6 +284,10 @@ Check the chassis power status:
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
 ```
 
-## Cleanup 
+## Install/ Upgrade Fabric Manager on FM baremetal nodes
 
-Uninstall existing FM helm chart
+[Refer FabricManager Upgrade(...)
+
+## Uninstall FM helm chart (FM k8s pod) on the management nodes
+
+After FMNs have comeup healthy and Running,  uninstall existing FM helm chart `slingshot-fabric-manager`
