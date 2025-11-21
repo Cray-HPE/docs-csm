@@ -52,6 +52,14 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 
 ## Architecture
 
+In CSM versions < 1.7.0, the deployment of the Fabric Manager within CSM uses native Kubernetes capabilities—both during upgrades and in failure/HA scenarios. Kubernetes itself provides health checks and a scheduler that can rebalance workloads across nodes based on load, administrative policies, and other criteria. The Fabric Manager is deployed as a single pod in Kubernetes. A traditional HA model for Fabric Manager doesn’t map cleanly into Kubernetes, so instead, Kubernetes’ built-in mechanisms detect failures and spin up a replacement pod, minimizing downtime.
+
+In theory, this model should satisfy HA requirements: if the pod fails (or needs to be moved during an upgrade), Kubernetes can detect the fault and recreate the Fabric Manager on another node, providing continuity.
+
+In practice, however, this approach does not meet the contractual HA obligations. Because of Kubernetes’ “best‑effort” scheduling and the resource demands of the Fabric Manager, real service outages can exceed 5 minutes.
+
+To address these issues, CSM 1.7.1 includes FM on baremetal support, which provides which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment to achieve HA.
+
 ![FM On Baremetal Solution Overview](../../img/fm_on_baremetal.png)
 
 The FM on baremetal solution is implemented in following stages. These stages are:
