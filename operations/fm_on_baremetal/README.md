@@ -17,6 +17,13 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 * FM on baremetal is disabled by default.
 * FM cannot be disabled after it has been enabled.
 
+
+## Assumptions
+
+* FMNs are considered Management nodes.
+* The two FMNs are part of different racks to support Rack Resiliency.
+* This feature will not be supported on systems with Dell/Mellanox based management networks.
+
 ## Terminology and dependency components
 
 ### SHS
@@ -36,6 +43,9 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 
 ### BSS
 [Boot Script Service](../../glossary.md#boot-script-service-bss)
+
+### CANU
+[CSM Automatic Network Utility](../../glossary.md#csm-automatic-network-utility-canu)
 
 ### SAT
 [System Admon Toolkit](../../glossary.md#system-admin-toolkit-sat)
