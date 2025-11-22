@@ -106,10 +106,10 @@ Example output:
 ids = [ "x3000c0s5b0n0", "x3001c0s35b0n0", "x3000c0s18b0n0",]
 ```
 
-### Removing a worker node from the group
+### Removing a worker from the group
 
 **Note:** Ensure the iSCSI session for this worker node is removed before removing it from
-the group. See [Remove iSCSI session](#remove-iscsi-session) 
+the group. See [Remove iSCSI session](#remove-iscsi-session)
 
 (`ncn-mw#`) Remove a worker node from the `iscsi_worker` group.
 
