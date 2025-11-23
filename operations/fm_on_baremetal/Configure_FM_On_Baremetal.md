@@ -21,7 +21,7 @@ Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable F
 * Step 1: [FMN Prerequisites](#fmn-prerequisites)
 * step 2: [FMN Pre Boot](#fmn-pre-boot)
     * [FMN Base Image Creation](#fmn-base-image-creation)
-    * [Add FMN Nodes to CSM](#add-fmn-to-csm)
+    * [Add FMN Nodes to CSM](#add-fmn-nodes-to-csm)
     * [Update Switch Configuration With CANU](#update-switch-configuration-with-canu)
 * Step 3: [FMN Booting](#fmn-booting)
 * Step 4: [FMN Post Boot](#fmn-post-boot)
@@ -297,7 +297,12 @@ ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
 ```
 ## FMN Post Boot
 
-### Validaiton
+### Validation
+
+#### Validate FMN nodes base OS bring up successful completion
+#### Validate FMN required networking configuration
+#### Validate FMN required storage configuration (LVM partitions)
+#### Validate addition of FM required repositories
 
 ### Install Fabric Manager on FM baremetal nodes
 
