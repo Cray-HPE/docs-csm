@@ -64,4 +64,5 @@ be listed here.
 
 ## FM On Baremetal
 
-After completing the CSM upgrade, if user  wish to enable FM on bare he can follow the [procedure](../operations/fm_on_baremetal/README.md#fm-fabric-manager-on-baremetal).
+Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow the
+[procedure](../operations/fm_on_baremetal/README.md#fm-fabric-manager-on-baremetal).
