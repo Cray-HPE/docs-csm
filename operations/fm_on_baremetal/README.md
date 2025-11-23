@@ -1,9 +1,9 @@
 # FM (Fabric Manager) on baremetal
 
 - [Introduction](#introduction)
-- [Terminology and components](#terminology-and-components)
+- [Terminology and Components](#terminology-and-components)
 - [Architecture](#architecture)
-- [Configure FM on baremetal(#configure-fm-on-baremetal)
+- [Configure FM on baremetal](#configure-fm-on-baremetal)
 - [Troubleshooting](#troubleshooting)
 
 ## Introduction
@@ -20,7 +20,7 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 * The two `FMNs` must be part of two different management racks to support Rack Resiliency.
 * This feature will not be supported on systems with Dell/ Mellanox based management networks.
 
-## Terminology and dependency components
+## Terminology and Components
 
 ### SHS
 [Slingshot Host Software](../../glossary.md#slingshot-host-software-shs)
