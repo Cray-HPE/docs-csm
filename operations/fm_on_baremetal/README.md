@@ -61,7 +61,7 @@ In practice, however, this approach does not meet the contractual HA obligations
 
 To address these issues, CSM 1.7.1 includes FM on baremetal support, which provides which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment to achieve HA.
 
-![FM On Baremetal Solution Overview](../../img/fm_on_baremetal.png)
+![FM On Baremetal](FM-HA-1.png)
 
 ## Configure FM on baremetal
 
