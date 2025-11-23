@@ -4,6 +4,7 @@
 - [Terminology and Components](#terminology-and-components)
 - [Architecture](#architecture)
 - [Configure FM on baremetal](#configure-fm-on-baremetal)
+- [Slngshot Switch Firmware Update](#slngshot-switch-firmware-update)
 - [Troubleshooting](#troubleshooting)
 
 ## Introduction
@@ -65,6 +66,11 @@ To address these issues, CSM 1.7.1 includes FM on baremetal support, which provi
 ## Configure FM on baremetal
 
 To configure FM on baremetal please follow the [procedure](Configure_FM_On_Baremetal.md).
+
+## Slngshot Switch Firmware Update
+
+* For clusters using the FM pod: CSM will continue to handle switch firmware uploads and updates as before. No changes are required in this workflow.
+* For clusters with bare-metal FM: FMN will host the switch firmware, and FM will be responsible for managing switch updates. [See](...)
 
 ## Troubleshooting
 
