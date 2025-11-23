@@ -1,25 +1,35 @@
-# Enabling Fabric Manager (FM) On baremetal post CSM Upgrade
+# Configure FM (Fabric Manager) On Baremetal
 
-## Overview
+This document describes the procedure for customizing and deploying the base FMN OS image along with provisioning storage LUNs, 
+and configuring the necessary networking to support Fabric Manager on  baremetal following the CSM upgrade.
+  
+## Requirements
+
+* Hardware requirements - 2 bare-metal nodes with dedicated boot and data disks
+* Software requirements - OS (SLES SP7), CSM services like CANU, HSM, SLS, BSS, CSI, CFS, ansible playbooks for FMN
+
+## Note:
 
 * Fabric Manager Nodes (`FMNs`) can be added only after the CSM upgrade has been completed.
 * By default, Fabric Manager on baremetal is disabled.
-* This document describes the procedures for providing the base OS image, provisioning storage LUNs, and configuring the necessary networking to support.
-  Fabric Manager on  baremetal following the CSM upgrade.
 * Once enabled, Fabric Manager on baremetal cannot be disabled.
   
 ## Post upgrade of CSM from 1.7.0 to 1.7.1
 
 Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow below procedure.
 
-* Step 1: [Prerequisites and Planning](#prerequisites)
-* step 2: [FMN Base Image Creation](#fmn-node-image-customization-and-deployment-procedure)
-* Step 3: [Add FMN Nodes to CSM](#fmn-add-procedure)
-* step 4: [Network Configuration](#update-switch-configuration-using-canu)
-* Step 5: [Boot FMN Nodes](#boot-fmn-nodes-with-ipxe)
-* step 6: [Cleanup](#cleanup)
+* Step 1: [FMN Prerequisites](#fmn-prerequisites)
+* step 2: [FMN Pre Boot](#fmn-pre-boot)
+    * [FMN Base Image Creation](#fmn-base-image-creation)
+    * [Add FMN Nodes to CSM](#add-fmn-to-csm)
+    * [Update Switch Configuration With CANU](#update-switch-configuration-with-canu)
+* Step 3: [FMN Booting](#fmn-booting)
+* Step 4: [FMN Post Boot](#fmn-post-boot)
+    * [Validation](#validation)
+    * [Install Fabric Manager on FM baremetal nodes](#install-fabric-manager-on-fm-baremetal-nodes)
+* Step 5: [Uninstall FMN Helm Chart](#uninstall-fmn-helm-chart)
 
-## Prerequisites
+## FMN Prerequisites
 
 ### Update SHCD with FMN (Fabric Manager Node) Information
 
@@ -55,15 +65,17 @@ Verify that the Fabric Manager nodes are present in the output CCJ file.
 jq -c '.topology[] | select(.common_name|contains("fmn"))' surtur-ccj.json
 ```
 
-## FMN Node Image Customization and Deployment Procedure
+## FMN Pre Boot
+
+### FMN Base Image Creation
 
 The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to `ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts. This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host. The following steps detail the process for generating the FMN base image with the required components and deploying it to FMN nodes.
 
-### Create FMN base image (only base OS; no Fabric Manager)
+#### Create FMN base image (only base OS; no Fabric Manager)
 
 Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements. See (../../operations/configuration_management/Management_Node_Image_Customization.md)
 
-#### FMN Boot Preparation
+##### FMN Boot Preparation
 
 Create `sat bootprep` configuration file (`fmn_bootprep.yaml`) for FMN as below.
 
@@ -100,7 +112,7 @@ images:
   - Management_Fabric
 ```
 
-#### New FMN base image creation and uploade to S3 
+##### New FMN base image creation and uploade to S3 
 
 Execute the commands below on any master node to generate the new FMN image and upload it to the S3 storage.
 
@@ -124,7 +136,7 @@ sat bootprep run \
 
 **Note:** Using the `--overwrite-images` option in the command above will overwrite any previously uploaded images in S3.
 
-## FMN add procedure
+### Add FMN Nodes to CSM
 
 After creating the FMN base image, add FMN nodes to CSM by following the [NCN add procedure](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md)
 
@@ -140,7 +152,7 @@ After completion of the NCN add procedure, SLS, HSM, and BSS will contain the co
 
 The following checks can be used to verify that the updates have been correctly applied:
 
-### SLS hardware should list the new nodes
+#### SLS hardware should list the new nodes
 
 For Example:
 
@@ -148,7 +160,7 @@ For Example:
 cray sls hardware describe x3000c0s28b0n0
 ```
 
-### IPs should be allocated and made available for FMNs in all of SLS networks
+#### IPs should be allocated and made available for FMNs in all of SLS networks
 
 **Note:** NMN and HMN should be having additional FMN VIPs also allocated.
 
@@ -158,7 +170,7 @@ For Example:
 cray sls search networks list --name NMN --format json
 ```
 
-### HSM ethernet interfaces should be updated with the same allocated IPs
+#### HSM ethernet interfaces should be updated with the same allocated IPs
 
 For Example:
 
@@ -166,7 +178,7 @@ For Example:
 cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --format json
 ```
 
-### BSS should be updated with new hosts entries for FMN with proper configurations
+#### BSS should be updated with new hosts entries for FMN with proper configurations
 
 **Note:** BSS global parameters also needs to be updated with FMN IPs(VIP not included).
 
@@ -180,7 +192,7 @@ cray bss bootparameters list --format json --name x3000c0s28b0n0
 cray bss bootparameters list --hosts Global --format json
 ```
 
-## Update switch configuration using CANU
+### Update Switch Configuration With CANU
 
 **Note: ** This step cannot be performed until the Fabric Manager nodes have been added to SLS.
 
@@ -191,7 +203,7 @@ In order to generate new configuration the following is required:
 * A SLS file that contains the FMNs (`cray sls dumpstate list --format json` may be used to obtain this once SLS has been updated on the running system)
 * Knowledge of whether the system has the NMN Isolation feature enabled or not
 
-### Generate the switch configuration
+#### Generate the switch configuration
 
 For Example: 
 
@@ -199,7 +211,7 @@ For Example:
 canu generate network config -a TDS --csm 1.7 --custom-config custom_switch_config.yaml --edge Arista --sls-file sls_input_file.json --ccj surtur-ccj.json --folder output (--enable-nmn-isolation --nmn-pvlan <pvid>)
 ```
 
-### Validate the generated switch configuration against the network switches
+#### Validate the generated switch configuration against the network switches
 
 * TDS style systems have the management nodes plugged directly into the spine switches, most will only have a single leaf-bmc switch.
 * Systems that use the "Full" architecture will have the management nodes plugged into the leaf switches.
@@ -217,7 +229,7 @@ canu validate switch config --ip 10.254.0.4 --generated output/sw-leaf-bmc-001.c
 Take extreme care when manipulating ACLs, if CANU suggests moving a "permit any ..." rule be sure to create the new rule before removing the old one. It is possible to lose access to the switch if the ACLs are not applied in the correct order.
 
 
-## Boot FMN Nodes with iPXE
+## FMN Booting
 
 Once the FMNs have been added to the CSM, proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image.
 
@@ -283,11 +295,14 @@ Check the chassis power status:
 ```bash
 ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
 ```
+## FMN Post Boot
 
-## Install/ Upgrade Fabric Manager on FM baremetal nodes
+### Validaiton
 
-[Refer FabricManager Upgrade(...)
+### Install Fabric Manager on FM baremetal nodes
 
-## Uninstall FM helm chart (FM k8s pod) on the management nodes
+For install/ upgrade Fabric Manager on the FMNs please refer [FabricManager Upgrade](...)
 
-After FMNs have comeup healthy and Running,  uninstall existing FM helm chart `slingshot-fabric-manager`
+## Uninstall FMN Helm Chart
+
+After FMNs have comeup healthy and Running,  uninstall existing FM helm chart (FM K8s pod) `slingshot-fabric-manager`.
