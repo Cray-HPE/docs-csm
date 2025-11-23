@@ -9,6 +9,7 @@ software. Choose the appropriate procedure from the sections below.
     * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
     * [Option 3: Upgrade only CSM](#option-3-upgrade-only-csm)
 * [CSM patch version upgrade](#csm-patch-version-upgrade)
+* [FM On Baremetal](#fm_on_baremetal)
 
 ## Release Notes
 
@@ -60,3 +61,7 @@ CSM 1.7 patch upgrades. Instead, consider upgrading to the latest CSM 1.7 patch 
 
 There are no CSM 1.7 patch versions currently available. When any become available, they will
 be listed here.
+
+## FM On Baremetal
+
+After completing the CSM upgrade, if user  wish to enable FM on bare he can follow the [procedure](../operations/fm_on_baremetal/README.md#fm-fabric-manager-on-baremetal).
