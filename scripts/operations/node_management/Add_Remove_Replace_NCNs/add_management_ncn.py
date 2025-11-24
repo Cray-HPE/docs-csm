@@ -1140,16 +1140,25 @@ class State:
             # HMN: {"aliases":["ncn-w001.hmn"],"ip":"10.254.1.10"}
             # NMN: {"aliases":["ncn-m001.nmn","ncn-m001"],"ip":"10.252.1.4"}
             # MTL: {"aliases":["ncn-w001.mtl"],"ip":"10.1.1.5"}
-            if "vip" in network_name.lower():
-                # Skip VIP IPs from being added to BSS host records
-                continue
-            host_record = {
-                "aliases": [f'{self.ncn_alias}.{network_name.lower()}'],
-                "ip": str(ip.ipv4_address()),
-            }
-
-            if network_name == "NMN":
-                host_record["aliases"].append(self.ncn_alias)
+            # For FMN systems there is an additional VIP reservation created of the format:
+            # FMN VIP on NMN: {"aliases":["fmn-vip.nmn","fmn-vip"],"ip":"10.252.1.12"}
+            # FMN VIP on HMN: {"aliases":["fmn-vip.hmn"],"ip":"10.254.1.15"}
+            if "fmn-vip" in network_name.lower():
+                # network_name in self.ncn_ips is of the format NMN-fmn-vip or HMN-fmn-vip
+                network = network_name.split("-fmn-vip")[0]
+                host_record = {
+                    "aliases": [f'fmn-vip.{network.lower()}'],
+                    "ip": str(ip.ipv4_address()),
+                }
+                if network == "NMN":
+                    host_record["aliases"].append("fmn-vip")
+            else:
+                host_record = {
+                    "aliases": [f'{self.ncn_alias}.{network_name.lower()}'],
+                    "ip": str(ip.ipv4_address()),
+                }
+                if network_name == "NMN":
+                    host_record["aliases"].append(self.ncn_alias)
 
             print(f"Adding NCN IP reservation for the {network_name} network to Global host_records in BSS")
             print(json.dumps(host_record, indent=2))
