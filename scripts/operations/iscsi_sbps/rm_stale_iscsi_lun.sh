@@ -7,6 +7,7 @@ lsscsi -t | grep iscsi | awk '{print $4}' > iscsi_devs
 input="iscsi_devs"
 
 # Issue Report Luns command to each of the iSCSI Luns.
+# Report Luns command fails if stale lun.
 
 while IFS= read -r line
 do
