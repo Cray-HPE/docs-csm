@@ -26,19 +26,19 @@
 
 lsscsi -t | grep iscsi | awk '{print $4}' > iscsi_devs
 	
-input="iscsi_devs"
+input = "iscsi_devs"
 
 # Issue Report Luns command to each of the iSCSI Luns.
 # Report Luns command fails if stale lun.
 
-while IFS= read -r line
+while IFS = read -r line
 do
-    sg_luns --readonly -q "$line" &> /dev/null
+    sg_luns --readonly -q "$line" & > /dev/null
 
-    if [ "$?" -ne 0 ]; then
+    if [ "$?" -ne 0 ] ; then
 	blockdev --flushbufs $line
         echo "report luns command failed for $line"
-	lun=$(lsscsi | grep $line | awk '{print $1}' | tr -d '[' | tr -d ']')
+	lun = $(lsscsi | grep $line | awk '{print $1}' | tr -d '[' | tr -d ']')
 	echo "lun = $lun"
         echo 1 > /sys/class/scsi_device/$lun/device/delete 
     fi
@@ -50,7 +50,7 @@ rm iscsi_devs
 
 echo "Check for multipath devices with no active paths..."
 
-MULTIPATH_DEVICES=$(multipath -l | grep dm-* | awk '{print $1}')
+MULTIPATH_DEVICES=$(multipath -l | grep "dm-*" | awk '{print $1}')
 
 for dev in $MULTIPATH_DEVICES; do
 
