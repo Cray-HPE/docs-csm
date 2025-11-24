@@ -31,7 +31,7 @@ rm iscsi_devs
 
 echo "Check for multipath devices with no active paths..."
 
-MULTIPATH_DEVICES=$(multipath -l | grep dm-* | awk '{print $1}')
+MULTIPATH_DEVICES=$(multipath -l | grep "dm-*" | awk '{print $1}')
 
 for dev in $MULTIPATH_DEVICES; do
 
