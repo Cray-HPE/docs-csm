@@ -31,7 +31,7 @@ input="iscsi_devs"
 # Issue Report Luns command to each of the iSCSI Luns.
 # Report Luns command fails if stale lun.
 
-while IFS=read -r line
+while IFS= read -r line
 do
     sg_luns --readonly -q "$line" &> /dev/null
 
