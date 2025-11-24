@@ -24,8 +24,6 @@
 
 # Script to remove stale iSCSI LUNs
 
-set -euo pipefail'
-
 lsscsi -t | grep iscsi | awk '{print $4}' > iscsi_devs
 
 input="iscsi_devs"
