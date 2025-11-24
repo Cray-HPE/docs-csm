@@ -36,10 +36,10 @@ do
     sg_luns --readonly -q "$line" &> /dev/null
 
     if [ "$?" -ne 0 ]; then
-	blockdev --flushbufs $line
+        blockdev --flushbufs $line
         echo "report luns command failed for $line"
-	lun=$(lsscsi | grep $line | awk '{print $1}' | tr -d '[' | tr -d ']')
-	echo "lun = $lun"
+        lun=$(lsscsi | grep $line | awk '{print $1}' | tr -d '[' | tr -d ']')
+        echo "lun = $lun"
         echo 1 > /sys/class/scsi_device/$lun/device/delete 
     fi
 done < "$input"
