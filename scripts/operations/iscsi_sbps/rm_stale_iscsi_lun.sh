@@ -24,8 +24,10 @@
 
 # Script to remove stale iSCSI LUNs
 
+set -euo pipefail'
+
 lsscsi -t | grep iscsi | awk '{print $4}' > iscsi_devs
-	
+
 input="iscsi_devs"
 
 # Issue Report Luns command to each of the iSCSI Luns.
@@ -40,7 +42,7 @@ do
         echo "report luns command failed for $line"
         lun=$(lsscsi | grep $line | awk '{print $1}' | tr -d '[' | tr -d ']')
         echo "lun = $lun"
-        echo 1 > /sys/class/scsi_device/$lun/device/delete 
+        echo 1 > /sys/class/scsi_device/$lun/device/delete
     fi
 done < "$input"
 
