@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Script to delete stale iSCSI Lun's which can be seen 
-# in scenario's like after unused image deletion. 
+# in scenario's like after unused image deletion on the cluster. 
 
 # Get the list of iSCSI Luns
 lsscsi -t | grep iscsi | awk '{print $4}' > iscsi_devs
