@@ -1709,7 +1709,6 @@ def ncn_data_command(session: requests.Session, args, state: State):
         bootparams["cloud-init"]["user-data"]["runcmd"] = filtered_runcmd
         bootparams["cloud-init"]["user-data"]["packages"] = ["libcsm", "craycli"]
         bootparams["cloud-init"]["meta-data"]["shasta-role"] = "ncn-fabricManager"
-        
         bootparams["cloud-init"]["user-data"]["bootcmd"] = [
             ["cloud-init-per", "once", "create_PV", "pvcreate", "-ff", "-y", "-M", "lvm2", "/dev/md/AUX"],
             ["cloud-init-per", "once", "create_VG", "vgcreate", "metalvg0", "/dev/md/AUX"],
