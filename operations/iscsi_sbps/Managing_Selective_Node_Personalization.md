@@ -373,17 +373,15 @@ Once these CFS sessions complete successfully, then the iSCSI configuration has 
 
 Removal of the iSCSI session is required in following scenarios:
 
-1. During the upgrade from CSM 1.6 to CSM 1.7, prior to creating the iSCSI HSM group for the   selected worker nodes
-1. After the CSM 1.7 installation but before creating the iSCSI HSM group for selected
-   worker nodes
-1. After the CSM 1.7 installation but before removing the worker nodes from the existing
-   iSCSI HSM group.
+1. During the upgrade from CSM 1.6 to CSM 1.7, prior to creating the iSCSI HSM group for the selected worker nodes
+1. After the CSM 1.7 installation but before creating the iSCSI HSM group for selected worker nodes
+1. After the CSM 1.7 installation but before removing the worker nodes from the existing iSCSI HSM group
 
-If an HSM group is being created for a subset of worker nodes, or if a worker node is being removed from an existing iSCSI HSM group, the corresponding iSCSI session between the
-affected worker node and the iSCSI client node (compute/UAN node) must be removed first.
-This is necessary because the iSCSI client will have the information about previously
-established sessions and will attempt to reconnect to the target node. Due to this,
-following flood of messages may be seen in the console log of target node:
+If an HSM group is being created for a subset of worker nodes, or if a worker node is being removed from an
+existing iSCSI HSM group, the corresponding iSCSI session between the affected worker node and the iSCSI client
+node (compute/UAN node) must be removed first. This is necessary because the iSCSI client will have the information
+about previously established sessions and will attempt to reconnect to the target node. Due to this, following
+flood of messages may be seen in the console log of target node:
 
 ```text
 2025-10-09 20:26:13 [ 1872.517113][T241717] Unable to locate Target Portal Group on iqn.2023-06.csm.iscsi:ncn-w004
@@ -430,7 +428,7 @@ Hence removal of this stale iSCSI session need to be done for the above mentione
    ```
 
 1. Log out of the iSCSI session(s) associated with any target node that will not be part
-   of `iscsi_worker` HSM group. For example, if `ncn-w004` is excluded from this HSM group
+   of `iscsi_worker` HSM group. For example, if `ncn-w004` is excluded from this HSM group,
    log out of the corresponding session:"
 
    Command:
