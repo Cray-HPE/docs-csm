@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # MIT License
 #
-# (C) Copyright [2022] Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022, 2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -331,11 +331,11 @@ def create_sls_actions(session, state):
             type_string = hardware.get('TypeString')
             role = extra_properties.get('Role')
             sub_role = extra_properties.get('SubRole')
-            if type_string != 'Node' or role != 'Management' or sub_role not in ['Worker', 'Storage', 'Master']:
+            if type_string != 'Node' or role != 'Management' or sub_role not in ['Worker', 'Storage', 'Master', 'FabricManager']:
                 log_error_and_exit(
                     actions,
                     f'{state.xname} is Type: {type_string}, Role: {role}, SubRole: {sub_role}. ' +
-                    'The node must be Type: Node, Role: Management, SubRole: one of Worker, Storage, or Master.')
+                    'The node must be Type: Node, Role: Management, SubRole: one of Worker, Storage, Master or FabricManager.')
 
             found_hardware_for_xname = True
             state.save(f'sls-hardware-{state.xname}', hardware)
@@ -377,7 +377,7 @@ def create_sls_actions(session, state):
         type_string = hardware.get('TypeString')
         role = extra_properties.get('Role')
         sub_role = extra_properties.get('SubRole')
-        if type_string == 'Node' and role == 'Management' and sub_role in ['Worker', 'Storage', 'Master']:
+        if type_string == 'Node' and role == 'Management' and sub_role in ['Worker', 'Storage', 'Master', 'FabricManager']:
             aliases = extra_properties.get('Aliases', [])
             for alias in aliases:
                 if alias not in state.aliases:
