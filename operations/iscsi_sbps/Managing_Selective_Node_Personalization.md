@@ -17,6 +17,7 @@
         * [Removing worker NCN when `iscsi_sbps` group exists](#removing-worker-ncn-when-iscsi_sbps-group-exists)
     * [After initial CSM 1.7 install or upgrade](#after-initial-csm-17-install-or-upgrade)
 * [Refresh iSCSI configuration](#refresh-iscsi-configuration)
+* [Remove iSCSI session](#remove-iscsi-session)
 
 ## Overview
 
@@ -52,6 +53,9 @@ For more in-depth information on managing HSM groups in general, see
 * [Deleting the group](#deleting-the-group)
 
 ### Creating the group
+
+**Note:** Before creating the group, ensure if removal of iSCSI session is required. See
+[Remove iSCSI session](#remove-iscsi-session)
 
 (`ncn-mw#`) Create the `iscsi_worker` group.
 
@@ -103,6 +107,9 @@ ids = [ "x3000c0s5b0n0", "x3001c0s35b0n0", "x3000c0s18b0n0",]
 ```
 
 ### Removing a worker from the group
+
+**Note:** Ensure the iSCSI session for this worker node is removed before removing it from
+the group. See [Remove iSCSI session](#remove-iscsi-session)
 
 (`ncn-mw#`) Remove a worker node from the `iscsi_worker` group.
 
@@ -308,6 +315,8 @@ for iSCSI can be changed. To do this, use the following procedure:
           See [Adding a worker to the group](#adding-a-worker-to-the-group) and
           [Removing a worker from the group](#removing-a-worker-from-the-group).
 
+**NOTE:**
+
 1. Refresh the iSCSI configuration.
 
     See [Refresh iSCSI configuration](#refresh-iscsi-configuration).
@@ -359,3 +368,111 @@ For more information, see
 [`CFS-Batcher` scheduling](../configuration_management/Automatic_Configuration_Management.md#cfs-batcher-scheduling).
 
 Once these CFS sessions complete successfully, then the iSCSI configuration has been refreshed.
+
+## Remove iSCSI session
+
+Removal of the iSCSI session is required in following scenarios:
+
+1. During the upgrade from CSM 1.6 to CSM 1.7, prior to creating the iSCSI HSM group for the selected worker nodes
+1. After the CSM 1.7 installation but before creating the iSCSI HSM group for selected worker nodes
+1. After the CSM 1.7 installation but before removing the worker nodes from the existing iSCSI HSM group
+
+If an HSM group is being created for a subset of worker nodes, or if a worker node is being removed from an
+existing iSCSI HSM group, the corresponding iSCSI session between the affected worker node and the iSCSI client
+node (compute/UAN node) must be removed first. This is necessary because the iSCSI client will have the information
+about previously established sessions and will attempt to reconnect to the target node. Due to this, following
+flood of messages may be seen in the console log of target node:
+
+```text
+2025-10-09 20:26:13 [ 1872.517113][T241717] Unable to locate Target Portal Group on iqn.2023-06.csm.iscsi:ncn-w004
+2025-10-09 20:26:13 [ 1872.525585][T241717] iSCSI Login negotiation failed.
+```
+
+Hence removal of this stale iSCSI session need to be done for the above mentioned scenarios and steps are below:  
+
+1. Login to iSCSI client (Compute/UAN node):
+
+   Example command:
+
+   ```bash
+   ncn-m001:~ # ssh x3000c0s15b1n0
+   ```
+
+1. List the iSCSI sessions:
+
+   Example command:
+
+   ```bash
+   nid000001:~ # iscsiadm -m session
+   ```
+
+   Example command output:
+
+   ```text
+   tcp: [1] 10.153.0.2:3260,1 iqn.2023-06.csm.iscsi:ncn-w001 (non-flash)
+   tcp: [2] 10.153.0.4:3260,1 iqn.2023-06.csm.iscsi:ncn-w005 (non-flash)
+   tcp: [3] 10.153.0.14:3260,1 iqn.2023-06.csm.iscsi:ncn-w003 (non-flash)
+   tcp: [4] 10.153.0.10:3260,1 iqn.2023-06.csm.iscsi:ncn-w002 (non-flash)
+   tcp: [5] 10.153.0.16:3260,1 iqn.2023-06.csm.iscsi:ncn-w004 (non-flash)
+   ```
+
+1. Edit `/etc/iscsi/iscsid.conf`, set the following parameter from 'Yes' to 'No', and
+   then save it.
+
+   `iscsid.safe_logout` = No
+
+1. Restart `iscsid` service.
+
+   ```bash
+   nid000001:~ # systemctl restart iscsid.service
+   ```
+
+1. Log out of the iSCSI session(s) associated with any target node that will not be part
+   of `iscsi_worker` HSM group. For example, if `ncn-w004` is excluded from this HSM group,
+   log out of the corresponding session:"
+
+   Command:
+
+   ```bash
+   iscsiadm -m node -T <iqn> -p <ip address>:<port number> -u
+   ```
+
+   Example command:
+
+   ```bash
+   nid000001:~ # iscsiadm -m node -T iqn.2023-06.csm.iscsi:ncn-w004 --portal 10.153.0.16:3260 -u
+   ```
+
+   Example command output:
+
+   ```text
+   Logging out of session [sid: 5, target: iqn.2023-06.csm.iscsi:ncn-w004, portal: 10.153.0.16,3260]
+   Logout of [sid: 5, target: iqn.2023-06.csm.iscsi:ncn-w004, portal: 10.153.0.16,3260] successful.
+   ```
+
+1. Verify that the session is no longer listed:
+
+   Example command:
+
+   ```bash
+   nid000001:~ # iscsiadm -m session
+   ```
+  
+   Example command output:
+
+   ```text
+   tcp: [1] 10.153.0.2:3260,1 iqn.2023-06.csm.iscsi:ncn-w001 (non-flash)
+   tcp: [2] 10.153.0.4:3260,1 iqn.2023-06.csm.iscsi:ncn-w005 (non-flash)
+   tcp: [3] 10.153.0.14:3260,1 iqn.2023-06.csm.iscsi:ncn-w003 (non-flash)
+   tcp: [4] 10.153.0.10:3260,1 iqn.2023-06.csm.iscsi:ncn-w002 (non-flash)
+   ```
+
+1. Revert back the changes done to `/etc/iscsi/iscsid.conf`, set `iscsid.safe_logout` to 'Yes'.
+
+   `iscsid.safe_logout` = Yes
+
+1. Restart `iscsid` service.
+
+   ```bash
+   nid000001:~ # systemctl restart iscsid.service
+   ```

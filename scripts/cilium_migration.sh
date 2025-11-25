@@ -26,9 +26,14 @@
 echo "INFO Checking current k8s-primary-cni value in BSS"
 CNI_VALUE=$(cray bss bootparameters list --hosts Global --format json | jq -r '.[]."cloud-init"."meta-data"."k8s-primary-cni"')
 
+if [[ $? -ne 0 ]]; then
+  echo "ERROR Failed to retrieve k8s-primary-cni value from BSS"
+  exit 1
+fi
+
 if [[ $CNI_VALUE == "cilium" ]]; then
   echo "INFO k8s-primary-cni is already set to 'cilium'. Skipping migration workflow."
-else
+elif [[ $CNI_VALUE == "weave" ]]; then
   echo "INFO k8s-primary-cni is '$CNI_VALUE'. Proceeding with migration workflow."
 
   if ! kubectl get jobs -n argo | grep upgrade-k8s-job | grep Complete; then
@@ -91,4 +96,7 @@ else
     sleep 120
   done
   echo "INFO Cilium workflow completed"
+else
+  echo "ERROR Unsupported k8s-primary-cni value: '$CNI_VALUE'. Only migration from 'weave' to 'cilium' is supported."
+  exit 1
 fi
