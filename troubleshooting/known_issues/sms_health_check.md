@@ -30,7 +30,9 @@ transfer subtest, as noted in the previous paragraph).
     - `artifacts.tgz` - Test artifacts archive in case of failure
     - Subdirectory naming format: `YYMMDD_HHMMSS_microseconds_PID`
     - Example: `/opt/cray/tests/install/logs/cmsdev/20251012_050305_414367785_990773/`
-    - **Note**: In CSM releases prior to 1.4, the log file location was `/opt/cray/tests/cmsdev.log`. Starting with CSM 1.4 until CSM 1.7, logs moved to `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`, and in later CSM releases each run creates its own timestamped subdirectory.
+    - **Note**: In CSM releases prior to 1.4, the log file location was `/opt/cray/tests/cmsdev.log`.
+    Starting with CSM 1.4 until CSM 1.7, logs moved to `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`,
+    and in later CSM releases each run creates its own timestamped subdirectory.
 - The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
     - The same amount of data is written to the log file in either case.
 
