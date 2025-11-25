@@ -2,6 +2,8 @@
 
 - [SMS test execution](#sms-test-execution)
 - [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
+- [Version](#version)
+- [Log file migration](#log-file-migration)
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
     - [Cray CLI](#cray-cli)
     - [Invalid CFS component](#invalid-cfs-component)
@@ -23,8 +25,12 @@ transfer subtest, as noted in the previous paragraph).
 /usr/local/bin/cmsdev test -q all
 ```
 
-- The `cmsdev` tool logs to `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`
-    - This was a change in CSM 1.4. In CSM releases prior to 1.4, the log file location was `/opt/cray/tests/cmsdev.log`
+- Each `cmsdev` test run creates a timestamped subdirectory in `/opt/cray/tests/install/logs/cmsdev/` containing:
+    - `cmsdev.log` - The test execution log file
+    - `artifacts.tgz` - Test artifacts archive in case of failure
+    - Subdirectory naming format: `YYMMDD_HHMMSS_microseconds_PID`
+    - Example: `/opt/cray/tests/install/logs/cmsdev/20251012_050305_414367785_990773/`
+    - **Note**: In CSM releases prior to 1.4, the log file location was `/opt/cray/tests/cmsdev.log`. Starting with CSM 1.4 until CSM 1.7, logs moved to `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`, and in later CSM releases each run creates its own timestamped subdirectory.
 - The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
     - The same amount of data is written to the log file in either case.
 
@@ -41,7 +47,7 @@ transfer subtest, as noted in the previous paragraph).
     - After remediating a test failure for a particular service, just that single service test can be rerun by replacing
       `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
-Additional test execution details can be found in `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`.
+Additional test execution details can be found in the `cmsdev.log` file within the timestamped subdirectory created for that specific test run (e.g., `/opt/cray/tests/install/logs/cmsdev/20251012_050305_414367785_990773/cmsdev.log`).
 
 ## Version
 
@@ -50,6 +56,20 @@ Additional test execution details can be found in `/opt/cray/tests/install/logs/
 ```bash
 /usr/local/bin/cmsdev version
 ```
+
+## Log file migration
+
+When upgrading from an earlier release of CSM that used a single log file, the post-install RPM process automatically migrates existing logs into the new timestamped subdirectory structure. The migration process:
+
+1. Scans the legacy `cmsdev.log` file and identifies all unique run tags
+2. For each run tag:
+   - Identifies the earliest timestamp in `cmsdev.log` for that tag
+   - Creates a subdirectory using the timestamp (without PID as it's unknown for legacy runs)
+   - Extracts log entries for that run tag and writes the filtered results to `cmsdev.log` in the new subdirectory
+   - If the artifact file exists for this run tag, moves it into the subdirectory and renames it to `artifacts.tgz`
+3. Remove the original `cmsdev.log` file located at `/opt/cray/tests/install/logs/cmsdev/`
+
+This ensures backward compatibility and preserves historical test data in the new organized structure.
 
 ## Known issues with SMS tests
 
