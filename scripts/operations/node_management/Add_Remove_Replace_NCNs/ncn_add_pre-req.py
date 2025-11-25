@@ -195,15 +195,13 @@ def integer_question(question):
 def boolean_question(question):
     """Ask for a yes/no response and return True or False."""
     valid_answers = {
-        "y": True,
         "yes": True,
-        "n": False,
         "no": False,
     }
 
     while True:
         print('\nPlease answer with yes or no.')
-        raw_answer = input(question + ' [y/N]\n').strip().lower()
+        raw_answer = input(question + ' [yes/no]\n').strip().lower()
         if raw_answer == "":
             return False
         if raw_answer in valid_answers:
@@ -535,7 +533,6 @@ def update_smd_and_kea(ips_update_in_smd, api_header, token):
             log.debug(f'Number of results found: {len(search_result)}')
             if len(search_result) == 1:
                 smd_id = search_result[0]['ID']
-                smd_mac = search_result[0]['MACAddress']
                 smd_xname = search_result[0]['ComponentID']
                 post_data = {'IPAddresses': []}
                 if smd_xname != '':

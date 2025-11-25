@@ -532,6 +532,12 @@ def find_next_available_ip(sls_subnet: SLSSubnet, cidr_override: IPv4Address=Non
     raise ExhaustedAvailableIPAddressSpace()
 
 def allocate_ip_address_in_subnet(action: dict, networks: NetworkManager, network_name: str, subnet_name: str, networks_allowed_in_dhcp_range: list=[], is_fmn_vip: bool=False):
+    """
+    Allocate the next available IP address in the specified subnet of a network.
+
+    This function finds the next free IP address in a subnet's bootstrap_dhcp range by examining
+    existing IP reservations and the gateway address.
+    """
 
     network = networks[network_name]
     subnets = network.subnets()
