@@ -325,6 +325,25 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="BACKUP_BSS_DATA"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+
+    cray bss bootparameters list --format json > "bss-backup-$(date +%Y-%m-%d).json"
+
+    backupBucket="config-data"
+    cray artifacts list "${backupBucket}" || backupBucket="vbis"
+
+    cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json" "bss-backup-$(date +%Y-%m-%d).json"
+
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="CHECK_WEAVE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
@@ -1125,25 +1144,6 @@ else
 fi
 
 do_upgrade_csm_chart trustedcerts-operator platform.yaml
-
-state_name="BACKUP_BSS_DATA"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    cray bss bootparameters list --format json > "bss-backup-$(date +%Y-%m-%d).json"
-
-    backupBucket="config-data"
-    cray artifacts list "${backupBucket}" || backupBucket="vbis"
-
-    cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json" "bss-backup-$(date +%Y-%m-%d).json"
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
 
 state_name="UPDATE_BSS_DATA_NCNS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
