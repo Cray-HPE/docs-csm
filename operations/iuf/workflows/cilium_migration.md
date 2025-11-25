@@ -7,7 +7,7 @@ This describes how to migrate Kubernetes CNI from Weave to Cilium during a CSM u
     - [Node drain blocked by Kafka](#node-drain-blocked-by-kafka)
     - [Node drain blocked by an `etcd` cluster](#node-drain-blocked-by-an-etcd-cluster)
 
-> **Note:** This migration process applies only to upgrades from CSM 1.6 to CSM 1.7.0.
+> **Note:** This migration process applies only to upgrades from CSM 1.6 to CSM 1.7
 
 ## Steps
 
