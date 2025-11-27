@@ -803,7 +803,7 @@ update_cray_postgres_operator_crds() {
         exit 1
       fi
       # check if file exists before applying crds, needed for backwards compatibility
-      postgres_crd_file=postgres-operator-crds-1.10.1.yaml
+      postgres_crd_file=postgres-operator-crds-1.14.0.yaml
       postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file}" 2> /dev/null)
       if [ -n "${postgres_crd_path}" ]; then
         # Remove the "last-applied-configuration" and "preserveUnknownFields" fields
