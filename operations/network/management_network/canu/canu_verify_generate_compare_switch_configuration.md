@@ -14,7 +14,6 @@
 * [Validate Cabling](#validate-cabling)
 * [Validate SHCD and Cabling](#validate-shcd-and-cabling)
 * [Validate BGP](#validate-bgp)
-* [Configuration Creation For BGP](#configuration-creation-for-bgp)
 * [Generate Switch Configurations](#generate-switch-configurations)
 
 ## Common CANU Arguments
@@ -261,6 +260,7 @@ In order to validate the cabling, run the following:
 ```ShellSession
 canu validate network cabling -a tds --ips 192.168.1.1,192.168.1.2 --username USERNAME --password PASSWORD
 ```
+
 Expected results:
 
 ```text
@@ -376,6 +376,32 @@ The output of the `validate shcd-cabling` command will show the results for `val
 A node will be displayed in blue if it is found in the SHCD but not the network, or vice versa. If a node is found on both the network and in the SHCD,
 but the connections are not the same, that node will be shown in green, and the missing connections will be shown.
 
+## Validate BGP
+
+CANU can be used to validate BGP neighbors. All neighbors of a switch must return status `Established` or the verification will fail.
+
+The default `asn` is set to `65533`. If needed, use the `--asn` flag to set a different number.
+
+In order to see the individual status of all the neighbors of a switch, use the `--verbose` flag.
+
+In order to validate BGP, run the following command:
+
+```ShellSession
+canu validate network bgp --username USERNAME --password PASSWORD
+```
+
+Expected results:
+
+```text
+    BGP Neighbors Established
+    --------------------------------------------------
+    PASS - IP: 192.168.1.1 Hostname: sw-spine01
+    PASS - IP: 192.168.1.2 Hostname: sw-spine02
+```
+
+If any of the spine switch neighbors for a connection other than `Established`, the switch will fail validation.
+
+If a switch that is not a **spine** switch is tested, it will show in the results table as `SKIP`.
 
 ## Generate Switch Configurations
 

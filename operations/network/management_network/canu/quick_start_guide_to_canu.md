@@ -43,7 +43,7 @@ canu --csm 1.5
     cd ips_folder
     ```
 
-1. Parse the CSI-generated sls_input_file.json and save switch IP addresses.
+2. Parse the CSI generated sls_input_file.json and save switch IP addresses.
 
     ```bash
     canu init --sls-file sls_input_file.json --out ips.txt
