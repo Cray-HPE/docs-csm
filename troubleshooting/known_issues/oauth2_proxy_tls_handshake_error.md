@@ -2,7 +2,7 @@
 
 ## Description
 
-There is a known issue where the `cray-oauth2-proxies-customer-management-ingress` pod experiences TLS handshake errors that prevent proper SSL/TLS communication. These errors manifest as "bad record MAC" messages in the pod logs and can impact authentication and access to services through the customer management ingress.
+There is a known issue where the `cray-oauth2-proxies-customer-management-ingress` pod experiences TLS handshake errors that prevent proper SSL/TLS communication. These errors manifest as "bad record MAC" messages in the pod logs. They can impact authentication and access to services through the customer management ingress.
 
 The issue appears to be related to corrupted TLS state or configuration within the pod, and can be resolved by restarting the affected pod.
 
@@ -65,3 +65,4 @@ The issue appears to be related to corrupted TLS state or configuration within t
    ```
 
 The pod restart will clear any corrupted TLS state and restore normal functionality. The Kubernetes deployment will automatically create a new pod to replace the deleted one.
+
