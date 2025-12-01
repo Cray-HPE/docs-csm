@@ -58,6 +58,7 @@ The following IUF topics are discussed in the sections below.
         - [restart](#restart)
         - [activity](#activity)
         - [list-activities](#list-activities)
+        - [delete-activity](#delete-activity)
         - [list-stages](#list-stages)
         - [workflow](#workflow)
 - [Output and log files](#output-and-log-files)
@@ -222,6 +223,7 @@ The `iuf` command-line interface is used to invoke all IUF operations. The `iuf`
 | `restart`         | Restart the most recently aborted or failed IUF session |
 | `activity`        | Display IUF activity details, annotate IUF activity     |
 | `list-activities` | List all activities present on the system               |
+| `delete-activity` | Delete an activity and all associated cluster resources |
 | `list-stages`     | Display stages and status for a given IUF activity      |
 | `workflow`        | List workflows or information for a particular workflow |
 
@@ -274,7 +276,7 @@ options:
   -v, --verbose         generate more verbose messages
 
 subcommands:
-  {run,activity,list-stages|ls,resume,restart,abort,list-activities|la,workflow}
+  {run,activity,list-stages|ls,resume,restart,abort,list-activities|la,delete-activity|da,workflow}
 ```
 
 ### Input file
@@ -577,6 +579,44 @@ options:
 ```
 
 These [examples](examples/iuf_list_activities.md) highlight common use cases of `iuf list-activities`.
+
+#### `delete-activity`
+
+The `delete-activity` subcommand permanently deletes an IUF activity and all associated cluster resources including log files.
+This action cannot be undone and should be used with discretion.
+
+**`NOTE`** No IUF commands should be running using the same activity name during deletion.
+
+```text
+usage: iuf delete-activity [-h] activity_name
+
+Delete an activity along with its metadata and logs.
+
+positional arguments:
+  activity_name  Name of the activity to delete
+
+options:
+  -h, --help     show this help message and exit
+```
+
+**What gets deleted:**
+
+- **Kubernetes Resources:**
+    - **ConfigMaps:** Activity ConfigMap, history entries, and sessions
+    - **Argo Workflows:** All associated workflow instances and metadata
+- **Filesystem:** Log directory `/etc/cray/upgrade/csm/iuf/{activity}/`
+
+**Examples:**
+
+```bash
+# Delete an activity
+iuf delete-activity admin-230127
+
+# Delete using alias
+iuf da admin-230127
+```
+
+These [examples](examples/iuf_activity.md) highlight common use cases of `iuf delete-activity`.
 
 #### `list-stages`
 

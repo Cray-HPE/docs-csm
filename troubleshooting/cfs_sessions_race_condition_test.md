@@ -1,6 +1,9 @@
 # CFS Sessions Race Condition Test
 
-The CFS sessions race condition test validates the robustness and reliability of the Configuration Framework Service (CFS) API when handling concurrent operations on CFS sessions. This test is designed to detect race conditions, verify proper handling of parallel requests, and ensure data consistency when multiple API operations execute simultaneously.
+The CFS sessions race condition test validates the robustness and reliability of the Configuration
+Framework Service (CFS) API when handling concurrent operations on CFS sessions. This test is designed
+to detect race conditions, verify proper handling of parallel requests, and ensure data consistency when
+multiple API operations execute simultaneously.
 
 This page provides information about the CFS sessions race condition test and describes how the test script works.
 
@@ -8,12 +11,12 @@ This page provides information about the CFS sessions race condition test and de
 * [Test prerequisites](#test-prerequisites)
 * [Test overview](#test-overview)
 * [Test subtypes](#test-subtypes)
-    * [single_delete](#single_delete)
-    * [multi_delete](#multi_delete)
-    * [single_delete_single_get](#single_delete_single_get)
-    * [single_delete_multi_get](#single_delete_multi_get)
-    * [multi_delete_single_get](#multi_delete_single_get)
-    * [multi_delete_multi_get](#multi_delete_multi_get)
+    * [`single_delete`](#single_delete)
+    * [`multi_delete`](#multi_delete)
+    * [`single_delete_single_get`](#single_delete_single_get)
+    * [`single_delete_multi_get`](#single_delete_multi_get)
+    * [`multi_delete_single_get`](#multi_delete_single_get)
+    * [`multi_delete_multi_get`](#multi_delete_multi_get)
 * [Test options](#test-options)
     * [Controlling which subtests run](#controlling-which-subtests-run)
     * [Controlling session creation](#controlling-session-creation)
@@ -59,7 +62,7 @@ If no parameters are specified, this script performs the following steps:
 1. **CFS version configuration**:
    * If using CFS v2, retrieves the current global page-size setting and calculates an appropriate value based on the test parameters.
    * Sets the global page-size if needed (for v2 only) and records the original value for restoration.
-   * For CFS v3, calculates an appropriate page size for API requests (defaults to 10 × max-sessions).
+   * For CFS v3, calculates an appropriate page size for API requests (defaults to 10 `×` max-sessions).
 
 1. **Pre-existing session cleanup**:
    * Checks for any existing CFS sessions with the test name prefix (`cfs-race-condition-test-` by default).
@@ -88,97 +91,111 @@ Each subtest may take several seconds to minutes, depending on the number of par
 
 ## Test subtypes
 
-The CFS sessions race condition test includes six distinct subtests, each designed to test different concurrent operation patterns. By default, all subtests are executed. You can control which subtests run using the `--run-subtests` or `--skip-subtests` options (see [Controlling which subtests run](#controlling-which-subtests-run)).
+The CFS sessions race condition test includes six distinct subtests, each designed to test different concurrent operation patterns.
+By default, all subtests are executed. You can control which subtests run using the `--run-subtests` or `--skip-subtests`
+options (see [Controlling which subtests run](#controlling-which-subtests-run)).
 
-### single_delete
+### `single_delete`
 
 **Purpose**: Tests concurrent deletion of the same individual CFS session by multiple parallel requests.
 
 **Behavior**:
+
 * Creates a single CFS session.
 * Executes multiple parallel DELETE requests (default: 4) targeting the same session.
 * Each request attempts to delete the session by its specific name.
 
 **Expected results**:
-* Exactly one DELETE request should succeed with a 2xx status code.
+
+* Exactly one DELETE request should succeed with a `2xx` status code.
 * All other DELETE requests should receive HTTP 404 (Not Found) status codes.
 * No requests should time out or return unexpected error codes.
 
-### multi_delete
+### `multi_delete`
 
 **Purpose**: Tests concurrent batch deletion operations using the CFS multi-delete API endpoint.
 
 **Behavior**:
+
 * Creates multiple CFS sessions (default: 20).
 * Executes multiple parallel DELETE requests (default: 4) to the sessions endpoint with query parameters.
 * Each request attempts to delete all sessions matching the test name prefix and pending status.
 
 **Expected results**:
+
 * All DELETE requests should complete successfully with appropriate status codes.
 * Sessions should be properly deleted without orphaned resources.
 * For CFS v3, the response should include the list of deleted sessions.
 * No requests should time out or return unexpected error codes.
 
-### single_delete_single_get
+### `single_delete_single_get`
 
 **Purpose**: Tests concurrent operations combining single-session deletion with single-session retrieval.
 
 **Behavior**:
+
 * Creates a single CFS session.
 * Executes parallel operations with two types of requests:
-  * Single DELETE requests targeting the specific session (default: 4 parallel).
-  * Single GET requests retrieving the specific session (default: 4 parallel).
+    * Single DELETE requests targeting the specific session (default: 4 parallel).
+    * Single GET requests retrieving the specific session (default: 4 parallel).
 
 **Expected results**:
+
 * Exactly one DELETE request should succeed.
 * GET requests may succeed (returning session data) or fail with 404 (if executed after deletion).
 * The combination of GET and DELETE operations should not cause data inconsistencies.
 * No requests should time out or return unexpected error codes.
 
-### single_delete_multi_get
+### `single_delete_multi_get`
 
 **Purpose**: Tests concurrent operations combining single-session deletion with multi-session retrieval.
 
 **Behavior**:
+
 * Creates a single CFS session.
 * Executes parallel operations with two types of requests:
-  * Single DELETE requests targeting the specific session (default: 4 parallel).
-  * Multi-GET requests retrieving all sessions matching the test prefix (default: 4 parallel).
+    * Single DELETE requests targeting the specific session (default: 4 parallel).
+    * Multi-GET requests retrieving all sessions matching the test prefix (default: 4 parallel).
 
 **Expected results**:
+
 * Exactly one DELETE request should succeed.
 * Multi-GET requests should return consistent data (session list may or may not include the target session depending on timing).
 * The session should not appear in GET results after successful deletion.
 * No requests should time out or return unexpected error codes.
 
-### multi_delete_single_get
+### `multi_delete_single_get`
 
 **Purpose**: Tests concurrent operations combining batch deletion with single-session retrieval.
 
 **Behavior**:
+
 * Creates multiple CFS sessions (default: 20).
 * Selects one session as the target for GET operations.
 * Executes parallel operations with two types of requests:
-  * Multi-DELETE requests targeting all test sessions (default: 4 parallel).
-  * Single GET requests retrieving the specific target session (default: 4 parallel).
+    * Multi-DELETE requests targeting all test sessions (default: 4 parallel).
+    * Single GET requests retrieving the specific target session (default: 4 parallel).
 
 **Expected results**:
+
 * All DELETE requests should complete successfully.
 * GET requests may succeed (returning session data) or fail with 404 (if executed after deletion).
 * All sessions should be properly deleted.
 * No requests should time out or return unexpected error codes.
 
-### multi_delete_multi_get
+### `multi_delete_multi_get`
 
 **Purpose**: Tests concurrent operations combining batch deletion with multi-session retrieval.
 
 **Behavior**:
+
 * Creates multiple CFS sessions (default: 20).
 * Executes parallel operations with two types of requests:
-  * Multi-DELETE requests targeting all test sessions (default: 4 parallel).
-  * Multi-GET requests retrieving all sessions matching the test prefix (default: 4 parallel).
+    * Multi-DELETE requests targeting all test sessions (default: 4 parallel).
+    * Multi-GET requests retrieving all sessions matching the test prefix (default: 4 parallel).
 
 **Expected results**:
+
 * All DELETE requests should complete successfully.
 * Multi-GET requests should return consistent session lists.
 * After all operations complete, no test sessions should remain.
@@ -223,6 +240,7 @@ By default, the test runs all six subtests. You can control which subtests execu
 ```
 
 Valid subtest names are:
+
 * `single_delete`
 * `multi_delete`
 * `single_delete_single_get`
@@ -261,11 +279,13 @@ The `--cfs-version` argument specifies which CFS API version to use for the test
 ```
 
 Valid values are:
+
 * `v2` - Uses CFS API version 2
 * `v3` - Uses CFS API version 3 (default)
 
 **Important considerations for CFS v2**:
-* The global CFS page-size option may be temporarily modified during the test and restored afterward.
+
+* The global CFS page-size option may be temporarily modified during the test and restored afterwards.
 * The minimum page-size for v2 should be equal to `--max-sessions` to prevent GET request failures.
 * If you specify a `--page-size` value less than `--max-sessions` when using v2, the test will fail with an error.
 
@@ -312,8 +332,9 @@ Several arguments control the maximum number of parallel requests for different 
 The `--page-size` argument specifies the page size for CFS API multi-get requests.
 
 **Default behavior**:
-* For CFS v3: Defaults to 10 × `--max-sessions` (minimum: 1)
-* For CFS v2: Defaults to the greater of (10 × `--max-sessions`) or the current global page-size (minimum: equal to `--max-sessions`)
+
+* For CFS v3: Defaults to 10 `× --max-sessions` (minimum: 1)
+* For CFS v2: Defaults to the greater of (10 `× --max-sessions`) or the current global page-size (minimum: equal to `--max-sessions`)
 
 (`ncn-mw#`) Example of specifying a custom page size:
 
@@ -322,15 +343,24 @@ The `--page-size` argument specifies the page size for CFS API multi-get request
 ```
 
 **Important considerations**:
+
 * For CFS v2, if you specify `--page-size`, it must be at least equal to `--max-sessions`.
 * For CFS v3, page size can be as low as 1, but should generally be higher for efficiency.
 * When using CFS v2, the global CFS page-size option will be temporarily modified if needed and restored after the test completes.
 
 ### Controlling test script output level
 
-Output is directed to both the console calling the script as well as a log file that will hold more detailed information on the run and any potential problems found. The log file is written to `/opt/cray/tests/integration/logs/csm/cmstools/cfs_sessions_rc_test/` with a timestamp-based filename (e.g., `20250101_120000.log`). Each test run creates a new log file, preserving the history of previous test executions.
+Output is directed to both the console calling the script as well as a log file that will hold more detailed information
+on the run and any potential problems found. The log file is written to
+`/opt/cray/tests/integration/logs/csm/cmstools/cfs_sessions_rc_test/` with a
+timestamp-based filename (e.g., `20250101_120000.log`). Each test run creates a new log file,
+preserving the history of previous test executions.
 
-The messages output to the console and the log file may be controlled separately through environment variables. To control the information being sent to the console, set the variable `CONSOLE_LOG_LEVEL`. To control the information being sent to the log file, set the variable `FILE_LOG_LEVEL`. Valid values in increasing levels of detail are: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`. The default for the console output is `INFO` and the default for the log file is `DEBUG`.
+The messages output to the console and the log file may be controlled separately through environment variables.
+To control the information being sent to the console, set the variable `CONSOLE_LOG_LEVEL`.
+To control the information being sent to the log file, set the variable `FILE_LOG_LEVEL`.
+Valid values in increasing levels of detail are: `CRITICAL`, `ERROR`, `WARNING`, `INFO`, `DEBUG`.
+The default for the console output is `INFO` and the default for the log file is `DEBUG`.
 
 (`ncn-mw#`) Here is an example of running the script with more information displayed on the console during the execution of the test:
 
@@ -352,7 +382,6 @@ The `--delete-previous-sessions` flag instructs the test to automatically delete
 
 **Note**: Only sessions in pending state with the specified name prefix will be deleted. Sessions in other states or with different names are not affected.
 
-
 ## Troubleshooting
 
 ### Test fails with "Pre-existing CFS sessions found"
@@ -360,6 +389,7 @@ The `--delete-previous-sessions` flag instructs the test to automatically delete
 This error occurs when sessions with the configured name prefix already exist in pending state.
 
 **Solutions**:
+
 * Run the test with `--delete-previous-sessions` to automatically clean them up.
 * Manually delete the sessions using the CFS CLI or API.
 * Use a different `--name` prefix that doesn't conflict with existing sessions.
@@ -369,6 +399,7 @@ This error occurs when sessions with the configured name prefix already exist in
 This error occurs when the specified `--page-size` is less than `--max-sessions` when using CFS v2.
 
 **Solutions**:
+
 * Increase `--page-size` to at least equal `--max-sessions`.
 * Decrease `--max-sessions` to match your desired page size.
 * Omit `--page-size` to let the test calculate an appropriate value automatically.
@@ -378,6 +409,7 @@ This error occurs when the specified `--page-size` is less than `--max-sessions`
 This can occur if the CFS operator is not properly scaled down or if there are connectivity issues.
 
 **Solutions**:
+
 * Check that the `cray-cfs-operator` deployment can be scaled (sufficient permissions).
 * Verify network connectivity to the CFS API endpoints.
 * Reduce the number of parallel requests and sessions for troubleshooting.
@@ -388,15 +420,20 @@ This can occur if the CFS operator is not properly scaled down or if there are c
 If the test is interrupted or fails unexpectedly, the CFS operator may remain scaled to 0 replicas.
 
 **Solutions**:
+
 * Manually check the current replica count:
+
   ```bash
   kubectl get deployment -n services cray-cfs-operator
   ```
+
 * Manually restore the replica count (typically 1):
+
   ```bash
   kubectl scale deployment -n services cray-cfs-operator --replicas=1
   ```
-* If the global page-size was modified (CFS v2 only), it may need to be manually restored through the `cray` cli.
+  
+* If the global page-size was modified (CFS v2 only), it may need to be manually restored through the `cray cli`.
   
   (`ncn-mw#`) Example of restoring the default page size to 1000:
   
@@ -404,7 +441,7 @@ If the test is interrupted or fails unexpectedly, the CFS operator may remain sc
   cray cfs v3 options update --default-page-size 1000
   ```
   
-  Eample output:
+  Example output:
   
   ```text
   additional_inventory_source = ""
