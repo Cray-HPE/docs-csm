@@ -1,10 +1,10 @@
 # Use CANU to Verify, Generate, or Compare Switch Configurations
 
 * [Common CANU Arguments](#common-canu-arguments)
-  * [SHCD-Related Arguments](#shcd-related-arguments)
-  * [CSI and SLS API Input to CANU](#csi-and-sls-api-input-to-canu)
-    * [CSI Input](#csi-input)
-    * [SLS API Input](#sls-api-input)
+    * [SHCD-Related Arguments](#shcd-related-arguments)
+    * [CSI and SLS API Input to CANU](#csi-and-sls-api-input-to-canu)
+        * [CSI Input](#csi-input)
+        * [SLS API Input](#sls-api-input)
 * [Check Single Switch Firmware](#check-single-switch-firmware)
 * [Check Firmware of Multiple Switches](#check-firmware-of-multiple-switches)
 * [JSON Output](#json-output)
