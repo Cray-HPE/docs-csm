@@ -9,6 +9,7 @@ This instance is accessible only within the HPE Cray EX system.
 - [Restart Unbound](#restart-unbound)
 - [Clear bad data in the Unbound ConfigMap](#clear-bad-data-in-the-unbound-configmap)
 - [Change the site DNS server](#change-the-site-dns-server)
+- [Configure stub zones for non-default network subnets](#configure-stub-zones-for-non-default-network-subnets)
 - [Increase the number of Unbound pods](#increase-the-number-of-unbound-pods)
 - [Change which HSN NIC is used for the node alias](#change-which-hsn-nic-is-used-for-the-node-alias)
 - [Create custom DNS records](#create-custom-dns-records)
@@ -240,6 +241,214 @@ Use the following procedure to change the site DNS server that Unbound forwards 
       kubectl delete secret -n loftsman site-init
       kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
       ```
+
+## Configure stub zones for non-default network subnets
+
+The Unbound DNS resolver is configured by default to forward reverse DNS lookups for the `10.in-addr.arpa.` zone to PowerDNS.
+This configuration works correctly when all CSM networks (NMN, HMN, HSN, MTL, CMN, CAN, CHN) use IP addresses within the
+default `10.0.0.0/8` range.
+
+If any network has been configured to use IP addresses outside of `10.0.0.0/8`, the stub zone configuration must be updated to
+include the appropriate reverse DNS zones for those networks. Otherwise, reverse DNS lookups for those IP addresses will fail
+or be forwarded incorrectly.
+
+### Determine required reverse DNS zones
+
+For each network subnet that is outside of `10.0.0.0/8`, calculate the corresponding reverse DNS zone name using the following method:
+
+1. Identify the network subnet in CIDR notation (e.g., `172.16.0.0/16`, `192.168.100.0/24`).
+
+1. Determine the reverse DNS zone based on the subnet mask:
+
+   - For a `/8` network (e.g., `172.0.0.0/8`): Use `172.in-addr.arpa.`
+   - For a `/16` network (e.g., `172.16.0.0/16`): Use `16.172.in-addr.arpa.`
+   - For a `/24` network (e.g., `192.168.100.0/24`): Use `100.168.192.in-addr.arpa.`
+   - For other subnet masks, consult RFC 1035 or use an online reverse DNS zone calculator.
+
+### Example scenarios
+
+**Scenario 1:** The NMN has been changed from `10.252.0.0/17` to `172.16.0.0/16`.
+
+- **Required reverse zone:** `16.172.in-addr.arpa.`
+
+**Scenario 2:** The CMN has been configured as `192.168.100.0/24`.
+
+- **Required reverse zone:** `100.168.192.in-addr.arpa.`
+
+**Scenario 3:** The HSN has been changed from `10.253.0.0/16` to `192.168.0.0/16`.
+
+- **Required reverse zone:** `168.192.in-addr.arpa.`
+
+**Scenario 4:** The system has been configured using a mix of default and custom subnets:
+
+- NMN: `172.16.0.0/16` (non-default)
+- HMN: `10.254.0.0/17` (default, covered by `10.in-addr.arpa.`)
+- HSN: `192.168.50.0/24` (non-default)
+
+In this case, the following reverse zones would be needed:
+
+- `16.172.in-addr.arpa.` (for NMN)
+- `50.168.192.in-addr.arpa.` (for HSN)
+- `10.in-addr.arpa.` (existing default, for HMN and other `10.x` networks)
+
+### Update the stub zone configuration
+
+Use the following procedure to update the stub zone configuration to include reverse DNS zones for non-default network subnets.
+
+**IMPORTANT:** This procedure must be performed if network subnets were customized during installation or if they are being changed post-installation.
+
+1. (`ncn-mw#`) Extract `customizations.yaml` from the `site-init` secret in the `loftsman` namespace.
+
+   ```bash
+   kubectl -n loftsman get secret site-init -o json | jq -r '.data."customizations.yaml"' | base64 -d > customizations.yaml
+   ```
+
+1. (`ncn-mw#`) Identify the IP address of the PowerDNS server.
+
+   The PowerDNS server IP address is typically `10.92.100.85` for the NMN load balancer. Verify this value:
+
+   ```bash
+   kubectl -n services get service cray-dns-powerdns-nmn-udp -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+   ```
+
+   Example output:
+
+   ```text
+   10.92.100.85
+   ```
+
+1. Update the `stubZones` configuration in `customizations.yaml`.
+
+   Locate the `spec.kubernetes.services.cray-dns-unbound.stubZones` section and add entries for each non-default reverse DNS zone.
+
+   **Example for Scenario 1** (NMN changed to `172.16.0.0/16`):
+
+   ```yaml
+   spec:
+     kubernetes:
+       services:
+         cray-dns-unbound:
+           stubZones:
+             - name: 10.in-addr.arpa.
+               stubIps:
+                 - "10.92.100.85"
+             - name: 16.172.in-addr.arpa.
+               stubIps:
+                 - "10.92.100.85"
+   ```
+
+   **Example for Scenario 4** (Multiple non-default networks):
+
+   ```yaml
+   spec:
+     kubernetes:
+       services:
+         cray-dns-unbound:
+           stubZones:
+             - name: 10.in-addr.arpa.
+               stubIps:
+                 - "10.92.100.85"
+             - name: 16.172.in-addr.arpa.
+               stubIps:
+                 - "10.92.100.85"
+             - name: 50.168.192.in-addr.arpa.
+               stubIps:
+                 - "10.92.100.85"
+   ```
+
+   **Note:** If the PowerDNS server IP address identified in step 2 is different from `10.92.100.85`, use the correct IP address in the `stubIps` field.
+
+1. Update the `localZones` configuration in `customizations.yaml` if necessary.
+
+   The `localZones` configuration prevents Unbound from using default behavior for certain zones. If adding stub zones for non-default networks, add corresponding entries to `localZones` with `localType: nodefault`.
+
+   **Example:**
+
+   ```yaml
+   spec:
+     kubernetes:
+       services:
+         cray-dns-unbound:
+           localZones:
+             - name: "10.in-addr.arpa."
+               localType: nodefault
+             - name: "16.172.in-addr.arpa."
+               localType: nodefault
+             - name: "50.168.192.in-addr.arpa."
+               localType: nodefault
+   ```
+
+1. (`ncn-mw#`) Update the `site-init` secret in the `loftsman` namespace.
+
+   ```bash
+   kubectl delete secret -n loftsman site-init
+   kubectl create secret -n loftsman generic site-init --from-file=customizations.yaml
+   ```
+
+1. (`ncn-mw#`) Reinstall the `cray-dns-unbound` Helm chart using the [Redeploying a Chart](../../CSM_product_management/Redeploying_a_Chart.md) procedure.
+
+   - Name of chart to be redeployed: `cray-dns-unbound`
+   - Base name of manifest: `core-services`
+
+1. (`ncn-mw#`) Verify the stub zone configuration is correct.
+
+   Check that the Unbound ConfigMap contains the new stub zones:
+
+   ```bash
+   kubectl -n services get configmap cray-dns-unbound -o yaml | grep -A 10 "stub-zone:"
+   ```
+
+   Example output:
+
+   ```yaml
+   stub-zone:
+       name: 10.in-addr.arpa.
+       stub-addr: 10.92.100.85
+
+   stub-zone:
+       name: 16.172.in-addr.arpa.
+       stub-addr: 10.92.100.85
+
+   stub-zone:
+       name: 50.168.192.in-addr.arpa.
+       stub-addr: 10.92.100.85
+   ```
+
+1. (`ncn-mw#`) Test reverse DNS resolution for IP addresses in the non-default networks.
+
+   Use an IP address from one of the custom network ranges to verify reverse DNS is working:
+
+   ```bash
+   dig -x 172.16.0.5 @10.92.100.225
+   ```
+
+   Example output:
+
+   ```console
+   ; <<>> DiG 9.18.33 <<>> -x 172.16.0.5 @10.92.100.225
+   ;; global options: +cmd
+   ;; Got answer:
+   ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 65337
+   ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 4, AUTHORITY: 0, ADDITIONAL: 1
+
+   ;; OPT PSEUDOSECTION:
+   ; EDNS: version: 0, flags:; udp: 1232
+   ;; QUESTION SECTION:
+   ;5.0.16.172.in-addr.arpa.    IN    PTR
+
+   ;; ANSWER SECTION:
+   5.0.16.172.in-addr.arpa. 3600    IN    PTR    test.local.
+   5.0.16.172.in-addr.arpa. 3600    IN    PTR    test.local.local.
+   5.0.16.172.in-addr.arpa. 3600    IN    PTR    test.test.
+   5.0.16.172.in-addr.arpa. 3600    IN    PTR    test.test.local.
+
+   ;; Query time: 0 msec
+   ;; SERVER: 10.92.100.225#53(10.92.100.225) (UDP)
+   ;; WHEN: Mon Dec 01 11:21:02 UTC 2025
+   ;; MSG SIZE  rcvd: 143
+   ```
+
+   A successful response should include an `ANSWER SECTION` with a PTR record or a `NOERROR` status. An error status would indicate the stub zone is not configured correctly.
 
 ## Increase the number of Unbound pods
 
