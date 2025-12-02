@@ -35,6 +35,7 @@ To successfully PXE boot nodes, the following is required:
     There will be an `active-gateway` and `ip helper-address` configured.
 
     ```console
+    conf t
     int vlan 1,2,4,7
     show run current-context
     ```

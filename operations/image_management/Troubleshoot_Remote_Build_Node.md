@@ -7,6 +7,7 @@ are times that problems crop up with running these remote jobs.
 * [Jobs fail to launch on remote nodes](#jobs-fail-to-launch-on-remote-nodes)
 * [Clean up orphaned jobs](#clean-up-orphaned-jobs)
 * [Jobs fail due to lack of resources on the remote node](#jobs-fail-due-to-lack-of-resources-on-the-remote-node)
+* [Jobs fail due to heartbeat timeouts](#jobs-fail-due-to-heartbeat-timeouts)
 
 ## Prerequisites
 
@@ -377,3 +378,12 @@ There are two directories that are used by the remote builds and require the mos
 1. Add volume space if needed.
 
     For more information, see [Adding storage to a remote build node](Configure_a_Remote_Build_Node.md#adding-storage-to-a-remote-build-node).
+
+## Jobs fail due to heartbeat timeouts
+
+When a remote job is running, IMS checks that the job is still active on the remote build node. If IMS
+fails to interact with the job for a specified number of attempts, the job is considered failed and will be
+terminated. The default number of attempts is `12`.
+
+For information about determining if the heartbeat is terminating the job or configuring the heartbeat timeout,
+see [Configure heartbeat timeouts](Configure_a_Remote_Build_Node.md#configure-heartbeat-timeouts).

@@ -110,7 +110,17 @@ spec:
                   value: 'ncn-m001'
                 - name: scriptContent
                   value: |
-                    if [ ! -f /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done ]; then
+                    . /etc/cray/upgrade/csm/myenv
+                    source /usr/share/doc/csm/upgrade/scripts/common/upgrade-state.sh
+
+                    HOSTNAME=$(hostname)
+
+                    ### STEP 1: BACKUP_ARTIFACTS
+                    STATE_NAME="BACKUP_ARTIFACTS"
+                    state_recorded=$(is_state_recorded "${STATE_NAME}" "${HOSTNAME}")
+                    if [[ "${state_recorded}" == "0" ]]; then
+                      echo "INFO ====> ${STATE_NAME} starting..."
+
                       BACKUP_TARFILE="csm_upgrade.pre_m001_reboot_artifacts.$(date +%Y%m%d_%H%M%S).tgz"
                       ls -d \
                           /root/apply_csm_configuration.* \
@@ -126,8 +136,18 @@ spec:
                         exit 1
                       else
                         echo "INFO Successfully completed master node ncn-m001 backup"
+                        record_state "${STATE_NAME}" "${HOSTNAME}"
                       fi
-                    
+                    else
+                      echo "INFO ====> ${STATE_NAME} has previously been completed"
+                    fi
+
+                    ### STEP 2: FETCH_CFS_AND_IMAGE
+                    STATE_NAME="FETCH_CFS_AND_IMAGE"
+                    state_recorded=$(is_state_recorded "${STATE_NAME}" "${HOSTNAME}")
+                    if [[ "${state_recorded}" == "0" ]]; then
+                      echo "INFO ====> ${STATE_NAME} starting..."
+
                       cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration_management')}}"
                       ims_image="{{=jsonpath(inputs.parameters.global_params,'$.input_params.boot_image_management')}}"
 
@@ -142,11 +162,39 @@ spec:
                         IMAGE_ID=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id')
                       fi
 
+                      record_state "${STATE_NAME}" "${HOSTNAME}"
+                    else
+                      echo "INFO ====> ${STATE_NAME} has previously been completed"
+                    fi
+
+                    ### STEP 3: APPLY_CFS_CONFIGURATION
+                    STATE_NAME="APPLY_CFS_CONFIGURATION"
+                    state_recorded=$(is_state_recorded "${STATE_NAME}" "${HOSTNAME}")
+                    if [[ "${state_recorded}" == "0" ]]; then
+                      echo "INFO ====> ${STATE_NAME} starting..."
+
                       XNAME=$(cat /etc/cray/xname)
                       # Check for the XNAME variable
                       echo "DEBUG Setting CFS config $config on ncn-m001 ($XNAME)"
                       /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
                       --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames "${XNAME}" --no-enable --no-clear-err
+
+                      if [[ $? -ne 0 ]]; then
+                        echo "ERROR applying CFS configuration"
+                        exit 1
+                      else
+                        echo "INFO Successfully applied CFS configuration"
+                        record_state "${STATE_NAME}" "${HOSTNAME}"
+                      fi
+                    else
+                      echo "INFO ====> ${STATE_NAME} has previously been completed"
+                    fi
+
+                    ### STEP 4: BOOTPARAMETERS_UPDATE
+                    STATE_NAME="BOOTPARAMETERS_UPDATE"
+                    state_recorded=$(is_state_recorded "${STATE_NAME}" "${HOSTNAME}")
+                    if [[ "${state_recorded}" == "0" ]]; then
+                      echo "INFO ====> ${STATE_NAME} starting..."
 
                       IMS_RESULTANT_IMAGE_ID=${IMAGE_ID}
                       METAL_SERVER=$(cray bss bootparameters list --hosts "${XNAME}" --format json | jq '.[] |."params"' \
@@ -164,24 +212,20 @@ spec:
                       echo "${PARAMS}"
 
                       cray bss bootparameters update --hosts "${XNAME}" \
-                          --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
-                          --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
-                          --params "${PARAMS}"
+                         --kernel "s3://${S3_ARTIFACT_PATH}/kernel" \
+                         --initrd "s3://${S3_ARTIFACT_PATH}/initrd" \
+                         --params "${PARAMS}"
                       if [[ $? -ne 0 ]]; then
                         echo "ERROR master node ncn-m001 bootparameters update has failed"
                         exit 1
                       else
-                        echo "INFO Successfully completed master node ncn-m001 bootparameters update" 
-                        touch /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done
+                        echo "INFO Successfully completed master node ncn-m001 bootparameters update"
+                        record_state "${STATE_NAME}" "${HOSTNAME}"
                       fi
                     else
-                      echo "WARNING "
-                      echo "WARNING Note: master node ncn-m001 has not been successfully upgraded during previous run." 
-                      echo "WARNING To Re-run ncn-m001 upgrade, run the command: 'rm -f /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done' "
-                      echo "WARNING This should be done only if the conditions causing upgrade failure during previous run has been fixed."
-                      echo "WARNING "
-                      exit 1
+                      echo "INFO ====> ${STATE_NAME} has previously been completed"
                     fi
+                    echo "WARNING To re-run any step, manually remove the entry from the state file '/etc/cray/upgrade/csm/${CSM_REL_NAME}/ncn-m001/state' ."
           - name: upgrade-m001
             dependencies:
               - backup-m001
@@ -235,9 +279,7 @@ spec:
                     if [[ $? -ne 0 ]]; then
                         echo "ERROR master node ncn-m001 upgrade has failed"
                         exit 1
-                    else
-                        rm /etc/cray/upgrade/csm/iuf/ncn-m001-bootparameters-update.done
-                    fi          
+                    fi
           - name: rebuild-config-image-update
             dependencies:
               - upgrade-m001

@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -61,8 +61,8 @@ spec:
         exit 1
     fi
     export PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    installed=$(pdsh -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url" | grep "cray-site-init.*done\|Nothing to do." | wc -l)
-    if [[ $installed -lt $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | wc -l) ]]; then
+    installed=$(pdsh -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url" | grep "cray-site-init.*done\|Nothing to do." | wc -l)
+    if [[ $installed -lt $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u | wc -l) ]]; then
       echo "ERROR installing csi on master nodes. Make sure valid SSH keys exist from ncn-m001 to other master nodes. Manually run - zypper install -y $csi_url on master nodes."
       exit 1
     else

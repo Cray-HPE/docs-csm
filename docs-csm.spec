@@ -55,4 +55,6 @@ cat INSTALLED_FILES | xargs -i sh -c 'test -L {} && exit || test -f $RPM_BUILD_R
 
 %post
 /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
+# Return zero as exit code to avoid failures when installing docs-csm on PIT node
+exit 0
 

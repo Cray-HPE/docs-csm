@@ -2,6 +2,11 @@
 
 - [SMS test execution](#sms-test-execution)
 - [Interpreting `cmsdev` Results](#interpreting-cmsdev-results)
+- [Version](#version)
+- [Logging](#logging)
+    - [Log changes](#log-changes)
+        - [Log file migration](#log-file-migration)
+        - [Run tags](#run-tags)
 - [Known issues with SMS tests](#known-issues-with-sms-tests)
     - [Cray CLI](#cray-cli)
     - [Invalid CFS component](#invalid-cfs-component)
@@ -23,10 +28,8 @@ transfer subtest, as noted in the previous paragraph).
 /usr/local/bin/cmsdev test -q all
 ```
 
-- The `cmsdev` tool logs to `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`
-    - This was a change in CSM 1.4. In CSM releases prior to 1.4, the log file location was `/opt/cray/tests/cmsdev.log`
-- The -q (quiet) and -v (verbose) flags can be used to decrease or increase the amount of information sent to the screen.
-    - The same amount of data is written to the log file in either case.
+The -q (quiet) or -v (verbose) flags can be added to decrease or increase the amount of information sent to the screen.
+The same amount of data is written to the log file in either case. For more details on the log file, see [Logging](#logging).
 
 ## Interpreting `cmsdev` results
 
@@ -41,7 +44,8 @@ transfer subtest, as noted in the previous paragraph).
     - After remediating a test failure for a particular service, just that single service test can be rerun by replacing
       `all` in the `cmsdev` command line with the name of the service. For example: `/usr/local/bin/cmsdev test -q cfs`
 
-Additional test execution details can be found in `/opt/cray/tests/install/logs/cmsdev/cmsdev.log`.
+Additional test execution details can be found in the log file.
+For more details on the log file, see [Logging](#logging).
 
 ## Version
 
@@ -50,6 +54,52 @@ Additional test execution details can be found in `/opt/cray/tests/install/logs/
 ```bash
 /usr/local/bin/cmsdev version
 ```
+
+## Logging
+
+> NOTE: `cmsdev` logging changed in `cmsdev` version 1.34.0. See [Log changes](#log-changes) for details.
+
+Each `cmsdev` test run creates a timestamped subdirectory in `/opt/cray/tests/install/logs/cmsdev/`,
+with a naming format of `YYMMDD_HHMMSS_microseconds_PID`. Inside of that directory, `cmsdev` logs to
+a file named `cmsdev.log`. For example: `/opt/cray/tests/install/logs/cmsdev/20251012_050305_414367785_990773/cmsdev.log`.
+In the case of a failure, a file named `artifacts.tgz` will also be saved to that directory.
+It contains additional information that can help to debug the failures, if necessary.
+For example, logs from relevant Kubernetes pods.
+
+### Log changes
+
+The logging behavior of `cmsdev` depends on the version of `cmsdev` being run.
+See the [Version](#version) section above for details on how to find the version.
+
+| *CSM versions*     | `cmsdev` *versions* | *Logging*                                                         |
+| ------------------ | ------------------- | ----------------------------------------------------------------- |
+| >= 1.7.0           | >= 1.34.0           | Timestamped log directories, as described above. Previous log file converted using [Log file migration](#log-file-migration) |
+| >= 1.4.0, <= 1.7.0 | >= 1.12.0, < 1.34.0 | Single log file: `/opt/cray/tests/install/logs/cmsdev/cmsdev.log` |
+| < 1.4.0            | < 1.12.0            | Single log file: `/opt/cray/tests/cmsdev.log`                     |
+
+#### Log file migration
+
+The upgrade to `cmsdev` 1.34.0 or later automatically migrates the single log file into the new format,
+if needed. It performs the following procedure if it finds the legacy single log file.
+
+1. Scans the legacy `cmsdev.log` file and identifies all unique [run tags](#run-tags)
+1. For each run tag:
+    1. Identifies the earliest timestamp in `cmsdev.log` for that tag
+    1. Creates a subdirectory using the timestamp (without PID, because it is unknown for legacy runs)
+    1. Extracts log entries for that run tag and writes the filtered results to `cmsdev.log` in the new subdirectory
+    1. If an artifact file exists for this run tag, moves it into the subdirectory and renames it to `artifacts.tgz`
+1. Remove the original `cmsdev.log` file located at `/opt/cray/tests/install/logs/cmsdev/`
+
+This ensures backward compatibility and preserves historical test data in the new organized structure.
+
+#### Run tags
+
+Prior to `cmsdev` 1.34.0, every execution of `cmsdev` had an associated "run tag", which was just a short, random
+alphanumeric string. Every line in the log file had this run tag included. This allowed users to extract the logs
+for an individual test run from the monolithic log file. Run tags are used in the [Log file migration](#log-file-migration)
+procedure to automatically convert the monolithic log file into the new per-execution format.
+
+With the move to separate log files per execution, this tag no longer serves a purpose, and is no longer generated or logged.
 
 ## Known issues with SMS tests
 

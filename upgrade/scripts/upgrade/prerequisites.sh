@@ -325,6 +325,25 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
+state_name="BACKUP_BSS_DATA"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+
+    cray bss bootparameters list --format json > "bss-backup-$(date +%Y-%m-%d).json"
+
+    backupBucket="config-data"
+    cray artifacts list "${backupBucket}" || backupBucket="vbis"
+
+    cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json" "bss-backup-$(date +%Y-%m-%d).json"
+
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 state_name="CHECK_WEAVE"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
@@ -784,8 +803,18 @@ update_cray_postgres_operator_crds() {
         exit 1
       fi
       # check if file exists before applying crds, needed for backwards compatibility
-      postgres_crd_file=postgres-operator-crds-1.10.1.yaml
-      postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file}" 2> /dev/null)
+      # Support both 1.10.1 and 1.14.0 versions of postgres-operator
+      postgres_crd_file_1101=postgres-operator-crds-1.10.1.yaml
+      postgres_crd_file_1140=postgres-operator-crds-1.14.0.yaml
+      postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file_1101}" 2> /dev/null || true)
+      if [ -n "${postgres_crd_path}" ]; then
+        postgres_crd_file="${postgres_crd_file_1101}"
+      else
+        postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file_1140}" 2> /dev/null || true)
+        if [ -n "${postgres_crd_path}" ]; then
+          postgres_crd_file="${postgres_crd_file_1140}"
+        fi
+      fi
       if [ -n "${postgres_crd_path}" ]; then
         # Remove the "last-applied-configuration" and "preserveUnknownFields" fields
         postgres_crds=$(kubectl get crd -l app.kubernetes.io/name=postgres-operator -o jsonpath='{.items[*].metadata.name}')
@@ -1081,71 +1110,6 @@ else
   echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
 fi
 
-state_name="UPDATE_NCN_KERNEL_PARAMETERS"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    # As boot parameters are added or removed, update these arrays.
-    # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
-    bootparameters_to_set=("split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" "rd.live.overlay.thin=0" "rd.live.dir=${CSM_RELEASE}")
-    bootparameters_to_delete=("rd.live.squashimg" "rd.live.overlay.thin" "rd.live.dir")
-
-    for bootparameter in "${bootparameters_to_delete[@]}"; do
-      csi handoff bss-update-param --delete "${bootparameter}"
-    done
-
-    for bootparameter in "${bootparameters_to_set[@]}"; do
-      csi handoff bss-update-param --set "${bootparameter}"
-    done
-
-    # Get a list of NCNs.
-    if IFS=$'\n' read -rd '' -a NCN_XNAMES; then
-      :
-    fi <<< "$(cray hsm state components list --role Management --subrole Worker --type Node --format json | jq -r '.Components | map(.ID) | join("\n")')"
-    # If no NCNs are found we should exit, otherwise if forces its way forward then NCNs will be missing critical packages.
-    if [ "${#NCN_XNAMES[@]}" -eq '0' ]; then
-      echo >&2 'No NCN xnames were found in HSM! Aborting.'
-      exit 1
-    fi
-
-    params=""
-    error=0
-
-    # Loop through one at a time. If `--hosts` isn't provided, we will error out on the 'Global' key.
-    for ncn_xname in "${NCN_XNAMES[@]}"; do
-      printf "% -15s: " "${ncn_xname}"
-
-      params=$(cray bss bootparameters list --hosts "${ncn_xname}" --format json | jq '.[] |."params"' \
-        | sed -E \
-          -e 's/ip=hsn[0-9]+:auto6\s?//g' \
-          -e 's/ifname=hsn[0-9]+:[0-9a-fA-F:]{17}\s?//g' \
-          -e 's/\"//g')
-
-      if ! cray bss bootparameters update --hosts "${ncn_xname}" \
-        --params "${params}" > /dev/null 2>&1; then
-        echo "ERROR - Failed to update boot parameters for $xname! Skipping ..."
-        error=1
-        continue
-      fi
-      echo 'OK'
-    done
-    if [ "$error" -ne 0 ]; then
-      echo >&2 "Errors were detected, please inspect the scripts output."
-      exit 1
-    else
-      echo "Successfully updated boot parameters for [${#NCN_XNAMES[@]}] xname(s):"
-      printf "\t%s\n" "${NCN_XNAMES[@]}"
-    fi
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-  echo
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
-
 state_name="UPGRADE_PRECACHE_CHART"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
 if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
@@ -1190,25 +1154,6 @@ else
 fi
 
 do_upgrade_csm_chart trustedcerts-operator platform.yaml
-
-state_name="BACKUP_BSS_DATA"
-state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
-if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
-  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
-  {
-
-    cray bss bootparameters list --format json > "bss-backup-$(date +%Y-%m-%d).json"
-
-    backupBucket="config-data"
-    cray artifacts list "${backupBucket}" || backupBucket="vbis"
-
-    cray artifacts create "${backupBucket}" "bss-backup-$(date +%Y-%m-%d).json" "bss-backup-$(date +%Y-%m-%d).json"
-
-  } >> "${LOG_FILE}" 2>&1
-  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
-else
-  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
-fi
 
 state_name="UPDATE_BSS_DATA_NCNS"
 state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")

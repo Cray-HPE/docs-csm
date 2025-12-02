@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -38,7 +38,68 @@ spec:
           - name: desiredCfsConfig
       dag:
         tasks:
+        - name: check-disk-space
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  set -euo pipefail
+                  TARGET="{{inputs.parameters.targetNcn}}"
+                  THRESHOLD=80
+                  NAME_WORKER_REGEX='^ncn-w[0-9]+$'
+
+                  echo "INFO Checking /var/lib/containerd usage (threshold ${THRESHOLD}%) excluding ${TARGET}"
+                  workers=$(kubectl get nodes --no-headers 2>/dev/null | awk '{print $1}' | grep -E "${NAME_WORKER_REGEX}" | grep -v "^${TARGET}$" || true)
+                  if [ -z "${workers}" ]; then
+                    echo "DEBUG No other worker nodes found; continuing drain for ${TARGET}."
+                    exit 0
+                  fi
+                  risk_nodes=()
+                  for worker in $workers; do
+                    disk_usage_percentage=$(ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@"$worker" "df -P /var/lib/containerd 2>/dev/null | tail -1 | awk '{print \$5}'" 2>/dev/null || true)
+                    disk_usage_percentage=${disk_usage_percentage%\%}
+                    if [ -z "$disk_usage_percentage" ] || ! [[ "$disk_usage_percentage" =~ ^[0-9]+$ ]]; then
+                      echo "WARN Unable to determine usage on $worker"
+                      continue
+                    fi
+                    if [ "$disk_usage_percentage" -ge "$THRESHOLD" ]; then
+                      echo "DEBUG Node $worker at ${disk_usage_percentage}% (>= ${THRESHOLD}%)"
+                      risk_nodes+=("$worker")
+                    fi
+                  done
+                  if [ "${#risk_nodes[@]}" -gt 0 ]; then
+                    echo "ERROR Threshold exceeded on: ${risk_nodes[*]}"
+                    echo "INFO Refer to operations > kubernetes > containerd section of the CSM documentation to cleanup /var/lib/containerd on the affected nodes and then re-run the IUF stage"
+                    exit 1
+                  fi
+                  echo "INFO All checked workers $(echo "$workers" | paste -sd',' -) below ${THRESHOLD}%"
+        - name: get-csm-release
+          dependencies:
+            - check-disk-space
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  if [ -f /etc/cray/upgrade/csm/myenv ]; then
+                    source /etc/cray/upgrade/csm/myenv
+                    echo $CSM_RELEASE
+                  else
+                    echo "ERROR Unable to find /etc/cray/upgrade/csm/myenv"
+                    exit 1
+                  fi
         - name: drain
+          dependencies:
+            - get-csm-release
           templateRef:
             name: kubectl-and-curl-template
             template: shell-script
@@ -115,9 +176,56 @@ spec:
                   echo "INFO setting metal.no-wipe=0 in BSS"
                   csi handoff bss-update-param --delete metal.no-wipe --limit $TARGET_XNAME
                   csi handoff bss-update-param --set metal.no-wipe=0 --limit $TARGET_XNAME
-        - name: set-bss-image-and-cfs-config
+
+                  CSM_RELEASE={{tasks.get-csm-release.outputs.result}}
+                  # As boot parameters are added or removed, update these arrays.
+                  # NOTE: bootparameters_to_delete should contain keys only, nothing should have "=<value>" appended to it.
+                  bootparameters_to_set=("split_lock_detect=off" "psi=1" "rd.live.squashimg=rootfs" "rd.live.overlay.thin=0" "rd.live.dir=${CSM_RELEASE}")
+                  bootparameters_to_delete=("rd.live.squashimg" "rd.live.overlay.thin" "rd.live.dir")
+                  for bootparameter in "${bootparameters_to_delete[@]}"; do
+                    csi handoff bss-update-param --delete "${bootparameter}" --limit $TARGET_XNAME
+                  done
+
+                  for bootparameter in "${bootparameters_to_set[@]}"; do
+                    csi handoff bss-update-param --set "${bootparameter}" --limit $TARGET_XNAME
+                  done
+        - name: update-kernel-parameters
           dependencies:
           - update-bss
+          templateRef:
+            name: ssh-template
+            template: shell-script
+          arguments:
+            parameters:
+              - name: dryRun
+                value: "{{inputs.parameters.dryRun}}"
+              - name: scriptContent
+                value: |
+                  TOKEN=$(curl -k -s -S -d grant_type=client_credentials \
+                    -d client_id=admin-client \
+                    -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+                    https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+
+                  TARGET_NCN={{inputs.parameters.targetNcn}}
+                  TARGET_XNAME=$(curl -s -k -H "Authorization: Bearer ${TOKEN}" "https://api-gw-service-nmn.local/apis/sls/v1/search/hardware?extra_properties.Role=Management" | \
+                      jq -r ".[] | select(.ExtraProperties.Aliases[] | contains(\"$TARGET_NCN\")) | .Xname")
+
+                  params=$(cray bss bootparameters list --hosts "${TARGET_XNAME}" --format json | jq '.[] |."params"' \
+                          | sed -E \
+                            -e 's/ip=hsn[0-9]+:auto6\s?//g' \
+                            -e 's/ifname=hsn[0-9]+:[0-9a-fA-F:]{17}\s?//g' \
+                            -e 's/\"//g')
+
+                  if ! cray bss bootparameters update --hosts "${TARGET_XNAME}" \
+                    --params "${params}" > /dev/null 2>&1; then
+                    echo "ERROR - Failed to update boot parameters for $xname! Skipping ..."
+                    exit 1
+                  else
+                    echo "Successfully updated boot parameters for xname(s): $TARGET_XNAME "
+                  fi
+        - name: set-bss-image-and-cfs-config
+          dependencies:
+          - update-kernel-parameters
           templateRef:
             name: set-bss-image-cfs-config
             template: main

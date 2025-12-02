@@ -167,6 +167,10 @@ Once this step has completed:
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of
 the _HPE Slingshot Installation Guide for Bare Metal_ for details on how to update NIC firmware on managed nodes.
 
+Reboot the managed nodes for which Slingshot NIC firmware has been updated.
+Administrators should determine the best approach for rebooting
+managed nodes that aligns with site preferences.
+
 Once this step has completed:
 
 - Slingshot NIC firmware has been updated on managed nodes
