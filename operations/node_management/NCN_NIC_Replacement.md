@@ -4,6 +4,11 @@ This procedure is for re-adding a non-compute node (NCN) after NIC replacement. 
 [Replace NCN procedure](Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#replace-ncn-procedure) but many of
 the steps can be skipped because only the NIC and its MAC addresses changed.
 
+This procedure can also be used to boot an NCN using the second interface if the primary NIC has failed. The
+DHCP service only assigns the designated IP address to the `mgmt0` interface. If it becomes necessary to boot
+the node using the other NIC, use this procedure to swap the MAC addresses of the `mgmt0` and `mgmt1` interfaces
+in the boot parameters.
+
 * [Prerequisites](#prerequisites)
 * [Procedure](#procedure)
   1. [Collect the new MAC addresses](#1-collect-the-new-mac-addresses)

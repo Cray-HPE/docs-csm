@@ -204,3 +204,24 @@ waiting_admin: 17:10:16
 
   Total time: 17:28:53
 ```
+
+---
+
+(`ncn-m001#`) Remove activity `test-7090-2611`.
+
+```bash
+iuf delete-activity test-7090-2611
+```
+
+Example output:
+
+```text
+This will delete all activity metadata and log files.
+
+IMPORTANT: Ensure no IUF commands are currently running for this activity.
+This action cannot be undone.
+
+Permanently delete activity 'test-7090-2611'. Do you want to continue? (y/n/exit): y
+STATUS test-7090-2611: Successfully deleted activity test-7090-2611 and all related resources
+Deleted log folder: /etc/cray/upgrade/csm/iuf/test-7090-2611'
+```
