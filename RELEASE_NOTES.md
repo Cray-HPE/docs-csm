@@ -487,6 +487,7 @@ CASMSEC-590 DOCS: Point kyverno document under noteworthy-changes in the docs-CS
 CASM-5240 Upgrade external-dns for 1.7
 CASM-5241 Upgrade vault-operator for CSM 1.7
 CASM-5285 Update prodmgr to use 1.0.1 version of product-deletion-utility
+CASM-5650 Update cray-iuf helm chart to  latest (5.1.2)
 CASM-5651 Update cray-nexus-setup image in cray-nexus helm chart to latest
 CASMHMS-6512 Update cray-etcd-base chart version for CSM 1.7.0
 CASMMON-481 Upgrade latest Victoriametrics version in cray-sysmgmt-health
