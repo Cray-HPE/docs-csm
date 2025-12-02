@@ -150,6 +150,45 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
     Restarting cray-dhcp-kea
    ```
 
+2. Optional: For adding FMNs (Fabric Manager Nodes) to CSM there is a new prompt added to confirm if the node getting added is an FMN or not:
+    
+   The script `ncn_add_pre-req.py` will ask the following questions:
+
+   Existing prompt to add number of NCN nodes:
+   
+   ```text
+   How many NCNs would you like to add? Do not include NCNs to be removed or moved.
+   ```
+  
+   Additional new prompt to consider these NCN node(s) as FMN(s):
+
+   ```text
+   Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
+   ```
+
+   Example output:
+   
+   ```text
+   The prerequisite script prepares adding NCNs by adjusting SLS network configurations.
+
+   Please enter answer as an integer.
+   How many NCNs would you like to add? Do not include NCNs to be removed or moved.
+   1
+
+   Please answer with yes or no.
+   Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
+   y
+   
+   You are about to make DESTRUCTIVE changes to the system.
+
+   If you are sure you want to proceed.  Please type: PROCEED
+
+   If you want to stop.  Type: exit or press ctrl-c
+
+   PROCEED
+   ...
+   ```
+    
 ## Add worker, storage, master or FMN(Fabric Manager Node) NCNs
 
 Use this procedure to add a worker, storage, master or FMN NCN.
@@ -198,25 +237,6 @@ XNAME=<xname>
     * This does not apply to the BMC for `ncn-m001`, because it is statically configured for the site.
 * Ensure that the NCN is configured to boot over the PCIe NICs instead of the Onboard 1 Gig NICs.
     * See the [Switch PXE Boot from Onboard NIC to PCIe](../Switch_PXE_Boot_From_Onboard_NICs_to_PCIe.md) procedure.
-
-**Note: **
-
-For adding FMN (Fabric Manager Node) to CSM there is a new prompt added to confirm if the node getting added is an FMN or not:
-
-    ```bash
-    ncn-m001:/usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCN # ./ncn_add_pre-req.py
-    ```  
-    ```text
-    The prerequisite script prepares adding NCNs by adjusting SLS network configurations.
-
-    Please enter answer as an integer.
-    How many NCNs would you like to add? Do not include NCNs to be removed or moved.
-    1
-
-    Please answer with yes or no.
-    Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
-    y
-    ```
 
 ### Add NCN procedure
 
