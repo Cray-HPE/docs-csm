@@ -803,8 +803,18 @@ update_cray_postgres_operator_crds() {
         exit 1
       fi
       # check if file exists before applying crds, needed for backwards compatibility
-      postgres_crd_file=postgres-operator-crds-1.14.0.yaml
-      postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file}" 2> /dev/null)
+      # Support both 1.10.1 and 1.14.0 versions of postgres-operator
+      postgres_crd_file_1101=postgres-operator-crds-1.10.1.yaml
+      postgres_crd_file_1140=postgres-operator-crds-1.14.0.yaml
+      postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file_1101}" 2> /dev/null || true)
+      if [ -n "${postgres_crd_path}" ]; then
+        postgres_crd_file="${postgres_crd_file_1101}"
+      else
+        postgres_crd_path=$(tar -tf "${postgres_chart_path}" --no-anchored "${postgres_crd_file_1140}" 2> /dev/null || true)
+        if [ -n "${postgres_crd_path}" ]; then
+          postgres_crd_file="${postgres_crd_file_1140}"
+        fi
+      fi
       if [ -n "${postgres_crd_path}" ]; then
         # Remove the "last-applied-configuration" and "preserveUnknownFields" fields
         postgres_crds=$(kubectl get crd -l app.kubernetes.io/name=postgres-operator -o jsonpath='{.items[*].metadata.name}')
