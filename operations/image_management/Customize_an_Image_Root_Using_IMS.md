@@ -571,6 +571,6 @@ The image root has been modified, compressed, and uploaded to S3, along with its
 
 ## Troubleshooting
 
-For troubleshooting and debugging IMS image customization jobs, administrators can adjust the log level to obtain more 
-detailed diagnostic information. This is particularly useful when investigating customization failures or unexpected behavior. 
+For troubleshooting and debugging IMS image customization jobs, administrators can adjust the log level to obtain more
+detailed diagnostic information. This is particularly useful when investigating customization failures or unexpected behavior.
 See [Change IMS Job Log Level](Change_IMS_Job_Log_Level.md) for detailed instructions.

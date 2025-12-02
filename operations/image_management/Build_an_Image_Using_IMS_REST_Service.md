@@ -660,6 +660,6 @@ base level of customization is provided by the default Ansible plays used by CFS
 
 ## Troubleshooting
 
-For troubleshooting and debugging IMS image creation jobs, administrators can adjust the log level to obtain more detailed 
-diagnostic information. This is particularly useful when investigating build failures or unexpected behavior. 
+For troubleshooting and debugging IMS image creation jobs, administrators can adjust the log level to obtain more detailed
+diagnostic information. This is particularly useful when investigating build failures or unexpected behavior.
 See [Change IMS Job Log Level](Change_IMS_Job_Log_Level.md) for detailed instructions.

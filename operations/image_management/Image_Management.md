@@ -47,6 +47,6 @@ x86 image. For more information see [Working With aarch64 Images](Working_With_a
 
 ## Troubleshooting and Debugging
 
-For troubleshooting IMS image creation and customization jobs, administrators can adjust the log level to get more detailed 
-information. See [Change IMS Job Log Level](Change_IMS_Job_Log_Level.md) for instructions on enabling DEBUG logging for 
+For troubleshooting IMS image creation and customization jobs, administrators can adjust the log level to get more detailed
+information. See [Change IMS Job Log Level](Change_IMS_Job_Log_Level.md) for instructions on enabling DEBUG logging for
 IMS jobs.
