@@ -487,7 +487,6 @@ CASMSEC-590 DOCS: Point kyverno document under noteworthy-changes in the docs-CS
 CASM-5240 Upgrade external-dns for 1.7
 CASM-5241 Upgrade vault-operator for CSM 1.7
 CASM-5285 Update prodmgr to use 1.0.1 version of product-deletion-utility
-CASM-5650 Update cray-iuf helm chart to  latest (5.1.2)
 CASM-5651 Update cray-nexus-setup image in cray-nexus helm chart to latest
 CASMHMS-6512 Update cray-etcd-base chart version for CSM 1.7.0
 CASMMON-481 Upgrade latest Victoriametrics version in cray-sysmgmt-health
@@ -969,6 +968,7 @@ CASMHMS-6568 CAST-38383: Prevent redundant "Detected" events in hardware invento
 
 ```text
 CASMINST-3816 manually copying large files into s3fs cache directory prevents prune from pruning them
+CASMINST-6462 Upgrade metacontroller from v4.10.3 to v4.11.25 in cray-iuf helm chart
 CASMINST-6734 As a System Admin, I do not want to pass SW_ADMIN_PASSWORD  as a parameter to IUF/NLS workflows as goss test do not require it
 CASMINST-6900 Complete a Comparison of CSM V1.4.x and CSM V1.5.x/1.6.x Node Resource Usage
 CASMINST-7104 As a Sys Admin, I want to pass image and CFS config for management nodes in management-nodes-rollout stage
