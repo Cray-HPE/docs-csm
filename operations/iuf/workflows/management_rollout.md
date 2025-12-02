@@ -334,6 +334,50 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
+### Note check whether `/etc/cray/upgrade/csm/myenv` file is present before starting management rollout for worker nodes
+
+- Verify `/etc/cray/upgrade/csm/myenv` file is present:
+
+    ```bash
+    cat /etc/cray/upgrade/csm/myenv
+    ```
+
+- If the file is not found, follow the below procedure to create the file:
+
+    Get the list of CSM versions:
+
+    ```bash
+    csm_version_list=$(sat showrev --products --filter product_name=csm --fields product_version --sort-by product_version --reverse --no-headings --no-borders)
+    ```
+
+    Find the latest CSM version from the list:
+
+    ```bash
+    CSM_RELEASE=$(echo "$csm_version_list" | head -n 1 | awk '{print $1}' | grep -Eo '^[^ ]+')
+    ```
+
+    Verify the latest CSM version:
+
+    ```bash
+    echo $CSM_RELEASE
+    ```
+
+    Write the `CSM_RELEASE` variable into `myenv` file:
+
+    ```bash
+    echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
+    ```
+
+    **Example session:**
+
+    ```console
+    root@ncn-m001# csm_version_list=$(sat showrev --products --filter product_name=csm --fields product_version --sort-by product_version --reverse --no-headings --no-borders)
+    root@ncn-m001# CSM_RELEASE=$(echo "$csm_version_list" | head -n 1 | awk '{print $1}' | grep -Eo '^[^ ]+')
+    root@ncn-m001# echo $CSM_RELEASE
+    1.7.0
+    root@ncn-m001# echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
+    ```
+
 1. Rebuild the NCN worker nodes. Follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
 1. Configure NCN master nodes.
