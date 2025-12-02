@@ -1,6 +1,6 @@
 # Quick start guide to CANU
 
-* [Usage]
+* [Usage](#usage)
 * [Validate a fresh system using CSI and CANU](#validate-a-fresh-system-using-csi-and-canu)
     * [Preparation](#preparation)
     * [Check network firmware](#check-network-firmware)
@@ -20,7 +20,8 @@ To see a list of commands and arguments, just append `--help`. For example:
 ```bash
 canu --help
 ```
-or for a specific command:
+
+or for a specific command like validating network cabling:
 
 ```bash
 canu validate network cabling --help
