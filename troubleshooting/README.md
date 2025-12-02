@@ -157,6 +157,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 ## Image management
 
 * [Image Job Performance](../operations/image_management/Image_Job_Performance.md)
+* [Change IMS Job Log Level](../operations/image_management/Change_IMS_Job_Log_Level.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
