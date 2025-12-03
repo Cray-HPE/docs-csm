@@ -41,6 +41,10 @@ For issues where the `cfs-debugger` is not available or not able to diagnose an 
 * For sessions that are not starting, see [Troubleshoot Session Failing to Start](Troubleshoot_CFS_Sessions_Failing_to_Start.md).
 * For sessions that are stuck and will not complete, see [Troubleshoot Session Failing to Complete](Troubleshoot_CFS_Session_Failing_to_Complete.md).
 
+## Testing and validation
+
+* To test CFS robustness under concurrent operations and detect race conditions, see [CFS Sessions Race Condition Test](../../troubleshooting/cfs_sessions_race_condition_test.md).
+
 ## Debug on failure
 
 > **`NOTE`** This feature is only available in the v3 CFS API.
