@@ -12,17 +12,25 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 ## Additions and improvements
 
+* Added `baremetal` support for Slingshot fabric manager
+
 ### Hardware support
 
 ### General
 
+* Updated SLES base OS to SLES 15 SP7
+
 ### Security
+
+* Many SLES security vulnerabilities remediated
 
 ### Tests
 
 ## Customer-requested
 
 ## Bug fixes
+
+* Enhanced management of `iptables` rules for TFTP traffic
 
 ## Known issues
 
