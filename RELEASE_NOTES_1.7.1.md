@@ -24,9 +24,9 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 ## Bug fixes
 
-* After upgrading to Kubernetes 1.32 in CSM 1.7.0, some PodSecurityPolicy (PSP) RoleBindings and Service Accounts still exist.
+* After upgrading to Kubernetes 1.32 in CSM 1.7.0, some Pod Security Policy (PSP) Role Bindings and Service Accounts still exist.
 
-  Since PSP is not supported in Kubernetes 1.25+, these unneeded RoleBindings and Service Accounts are removed after Kubernetes
+  Since PSP is not supported in Kubernetes 1.25+, these unneeded Role Bindings and Service Accounts are removed after Kubernetes
   is upgraded to 1.32.
 
 ## Known issues
