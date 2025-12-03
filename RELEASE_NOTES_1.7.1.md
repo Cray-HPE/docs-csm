@@ -16,19 +16,22 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 ### General
 
+* Added new `FabricManager` subrole to SMD.
+
 ### Security
 
 * Updated several HMS services to point to latest upstream image and Go module dependencies.
 
 ### Tests
 
-* Fixed several issues in HMS services that resulted in false positives when CT tests are run.
+* Fixed several issues in HMS services that resulted in false positives when CT tests were run.
 
 ## Customer-requested
 
 ## Bug fixes
 
-* Fixed bug in SMD where HTTP code 400 was returned if a GET on the lock status API found no matching components.  HTTP code 200 is now returned along with an empty list.
+* Fixed a bug in SMD where HTTP code 400 was returned if a GET on the lock status API found no matching components.  HTTP code 200 is now returned along with an empty list.
+* Fixed a bug in CAPMC where power requests would fail if too many xnames were specified.
 
 ## Known issues
 
