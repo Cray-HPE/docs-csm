@@ -20,9 +20,32 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 ### Tests
 
+* Many improvements were made to automated SAT functional tests included in the `csm-testing` RPM.
+  This includes the following:
+    * Created additional functional tests for `sat status`, `sat bootprep`, and `sat hwinv`
+    * Split `sat bootprep` tests into separate test cases that can run in parallel
+    * Added cleanup of deleted images and completed IMS jobs created by `sat bootprep` tests
+    * Added dynamic generation of SAT Goss tests
+    * Fixed bugs and improved resiliency of tests for `sat version`, `sat nid2xname`, `sat
+      firmware`, and `sat bootprep`
+    * Extended timeout to 30m for SAT functional tests
+
 ## Customer-requested
 
+* Updated the `sat bmccreds` command to log a warning and prompt whether the user wants to continue
+  if the provided password is longer than 20 characters. This is the maximum password length
+  supported by `ipmitool`, which is required to control management nodes during system boot and
+  shutdown procedures.
+
 ## Bug fixes
+
+* Fixed a bug in `sat hwinv` that caused values in multi-value fields to be printed in a
+  non-deterministic order. Such fields are now always printed in sorted order.
+* Fixed a bug in `sat bootsys` that resulted in an `AttributeError` exception when the `known_hosts`
+  file contains invalid lines with the incorrect number of fields.
+* Fixed `sat bootprep` to no longer perform its own resolution of branch names to commit hashes when
+  creating CFS configurations with CFS v3. This allows the use of external repositories with branch
+  names for CFS configurations created by `sat bootprep`.
 
 ## Known issues
 
