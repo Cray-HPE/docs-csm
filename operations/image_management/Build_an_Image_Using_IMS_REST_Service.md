@@ -657,3 +657,9 @@ image root using `chroot` \(or if using a \`jailed\`
 environment\), the image will only have access to whatever configuration the image already contains. In order to talk to
 services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. That
 base level of customization is provided by the default Ansible plays used by CFS to enable DNS resolution.
+
+## Troubleshooting
+
+For troubleshooting and debugging IMS image creation jobs, administrators can adjust the log level to obtain more detailed
+diagnostic information. This is particularly useful when investigating build failures or unexpected behavior.
+See [Change IMS Job Log Level](Change_IMS_Job_Log_Level.md) for detailed instructions.
