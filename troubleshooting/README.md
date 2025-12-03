@@ -200,6 +200,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Troubleshoot Kyverno configuration manually](../operations/security_and_authentication/Troubleshoot_Kyverno_Configuration_manually.md)
 * [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+* [OAuth2 Proxy TLS Handshake Error](known_issues/oauth2_proxy_tls_handshake_error.md)
 
 ## Rack Resiliency
 
