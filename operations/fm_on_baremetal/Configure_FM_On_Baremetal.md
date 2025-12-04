@@ -430,6 +430,94 @@ Name = "fmn001"
 
 #### Validate FMN required storage configuration (LVM partitions)
 
+Check if both LVM partiions `/dev/mapper/metalvg0-SCFIRMWARE` and `/dev/mapper/metalvg0-SLINGSHOT` created and mounted under "/opt/cray/FW/sc-firmware" and "/opt/slingshot" rescpectively.
+
+```bash
+fmn001:~ # lsblk
+```
+
+```text
+NAME                      MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
+loop0                       7:0    0   2.2G  1 loop  /run/rootfsbase
+sda                         8:0    0   3.5T  0 disk
+├─sda1                      8:1    0   476M  0 part
+│ └─md127                   9:127  0 475.9M  0 raid1 /metal/recovery
+├─sda2                      8:2    0  22.8G  0 part
+│ └─md125                   9:125  0  22.8G  0 raid1 /run/initramfs/live
+├─sda3                      8:3    0 139.7G  0 part
+│ └─md124                   9:124  0 139.6G  0 raid1 /run/initramfs/overlayfs
+└─sda4                      8:4    0 139.7G  0 part
+  └─md126                   9:126  0 279.1G  0 raid0
+    ├─metalvg0-SCFIRMWARE 254:0    0    80G  0 lvm   /opt/cray/FW/sc-firmware
+    └─metalvg0-SLINGSHOT  254:1    0   120G  0 lvm   /opt/slingshot
+sdb                         8:16   0   3.5T  0 disk
+├─sdb1                      8:17   0   476M  0 part
+│ └─md127                   9:127  0 475.9M  0 raid1 /metal/recovery
+├─sdb2                      8:18   0  22.8G  0 part
+│ └─md125                   9:125  0  22.8G  0 raid1 /run/initramfs/live
+├─sdb3                      8:19   0 139.7G  0 part
+│ └─md124                   9:124  0 139.6G  0 raid1 /run/initramfs/overlayfs
+└─sdb4                      8:20   0 139.7G  0 part
+  └─md126                   9:126  0 279.1G  0 raid0
+    ├─metalvg0-SCFIRMWARE 254:0    0    80G  0 lvm   /opt/cray/FW/sc-firmware
+    └─metalvg0-SLINGSHOT  254:1    0   120G  0 lvm   /opt/slingshot
+sdc                         8:32   0   3.5T  0 disk
+sdd                         8:48   0   3.5T  0 disk
+```
+
+```bash
+fmn001:~ # mount | grep /opt/cray/FW/sc-firmware
+/dev/mapper/metalvg0-SCFIRMWARE on /opt/cray/FW/sc-firmware type ext4 (rw,relatime,stripe=256)
+```
+
+```bash
+fmn001:~ # mount | grep /opt/slingshot
+/dev/mapper/metalvg0-SLINGSHOT on /opt/slingshot type ext4 (rw,relatime,stripe=256)
+```
+
+```bash
+fmn002:~ # lsblk
+```
+
+```text
+NAME                      MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
+loop0                       7:0    0   2.2G  1 loop  /run/rootfsbase
+sda                         8:0    0   3.5T  0 disk
+├─sda1                      8:1    0   476M  0 part
+│ └─md127                   9:127  0 475.9M  0 raid1 /metal/recovery
+├─sda2                      8:2    0  22.8G  0 part
+│ └─md126                   9:126  0  22.8G  0 raid1 /run/initramfs/live
+├─sda3                      8:3    0 139.7G  0 part
+│ └─md125                   9:125  0 139.6G  0 raid1 /run/initramfs/overlayfs
+└─sda4                      8:4    0 139.7G  0 part
+  └─md124                   9:124  0 279.1G  0 raid0
+    ├─metalvg0-SCFIRMWARE 254:0    0    80G  0 lvm   /opt/cray/FW/sc-firmware
+    └─metalvg0-SLINGSHOT  254:1    0   120G  0 lvm   /opt/slingshot
+sdb                         8:16   0   3.5T  0 disk
+├─sdb1                      8:17   0   476M  0 part
+│ └─md127                   9:127  0 475.9M  0 raid1 /metal/recovery
+├─sdb2                      8:18   0  22.8G  0 part
+│ └─md126                   9:126  0  22.8G  0 raid1 /run/initramfs/live
+├─sdb3                      8:19   0 139.7G  0 part
+│ └─md125                   9:125  0 139.6G  0 raid1 /run/initramfs/overlayfs
+└─sdb4                      8:20   0 139.7G  0 part
+  └─md124                   9:124  0 279.1G  0 raid0
+    ├─metalvg0-SCFIRMWARE 254:0    0    80G  0 lvm   /opt/cray/FW/sc-firmware
+    └─metalvg0-SLINGSHOT  254:1    0   120G  0 lvm   /opt/slingshot
+sdc                         8:32   0   3.5T  0 disk
+sdd                         8:48   0   3.5T  0 disk
+```
+
+```bash
+fmn002:~ # mount | grep /opt/cray/FW/sc-firmware
+/dev/mapper/metalvg0-SCFIRMWARE on /opt/cray/FW/sc-firmware type ext4 (rw,relatime,stripe=256)
+```
+
+```bash
+fmn002:~ # mount | grep /opt/slingshot
+/dev/mapper/metalvg0-SLINGSHOT on /opt/slingshot type ext4 (rw,relatime,stripe=256)
+```
+
 #### Validate addition of FM required repositories
 
 ### Install Fabric Manager on FM baremetal nodes
