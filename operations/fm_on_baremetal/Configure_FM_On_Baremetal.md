@@ -83,6 +83,10 @@ Create `sat bootprep` configuration file (`fmn_bootprep.yaml`) for FMN as below.
 
 For Example:
 
+```bash
+ncn-m001:~ # cat fmn_bootprep.yaml
+```
+
 ```yaml
 schema_version: 1.0.2
 configurations:
@@ -91,19 +95,19 @@ configurations:
   - name: fmn-nodes-bm
     playbook: ncn_nodes.yml
     git:
-     commit: <commit-id-from-csm-config>
+     commit: 64c8753fbc3143ec8b889a755a445b5bbc8007fd
      url: https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git
   - name: fmn-initrd-bm
     playbook: ncn-initrd.yml
     git:
-     commit: <commit-id-from-csm-config>
+     commit: 64c8753fbc3143ec8b889a755a445b5bbc8007fd
      url: https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git
 images:
 - name: fabricmanager-bm-node-image-1.0.0
   base:
     product:
       name: csm
-      version: 1.7.1
+      version: 1.7.1-beta.10
       type: image
       filter:
         prefix: secure-kubernetes
@@ -299,14 +303,138 @@ ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
 
 ### Validation
 
-#### Validate FMN nodes base OS bring up successful completion
+#### Validate base FMN nodes bring up successful completion
+
+1. Check if we are able to access both FMN nodes (`fmn001` and `fmn002`):
+
+```bash
+ncn-m001:~ # ssh fmn001
+Last login: Thu Dec  4 11:25:30 2025 from 10.252.1.10
+...
+```
+
+```bash
+ncn-m001:~ # ssh fmn002
+Last login: Thu Dec  4 05:03:46 2025 from 10.252.1.10
+...
+```
+
+2. Check if both FMN nodes are shown under `sat status`:
+
+```bash
+ncn-m001:~ # sat status | grep fmn
+```
+
+```text
+INFO: All values for 'Most Recent Session Template' are 'MISSING', omitting key.
+| x3000c0s28b0n0 | fmn001    | Node | 100011   | On        | OK   | True    | X86  | River | Management  | FabricManager | Sling    | True    | fmn-bm-default-configuration | configured           | 0           | stable      | MISSING                              | MISSING                              |
+| x3000c0s29b0n0 | fmn002    | Node | 100012   | On        | OK   | True    | X86  | River | Management  | FabricManager | Sling    | True    | fmn-bm-default-configuration | configured           | 0           | stable      | MISSING                              | MISSING                              |
+```
+
+3. Optionally check more details on the FMN nodes
+
+For Example:
+
+```bash
+ncn-m001:~ # XNAME=x3000c0s28b0n0
+```
+
+```bash
+ncn-m001:~ # cray hsm state components describe "${XNAME}" --format toml
+```
+
+```text
+ID = "x3000c0s28b0n0"
+Type = "Node"
+State = "On"
+Flag = "OK"
+Enabled = true
+Role = "Management"
+SubRole = "FabricManager"
+NID = 100011
+NetType = "Sling"
+Arch = "X86"
+Class = "River"
+```
+
+```bash
+ncn-m001:~ # XNAME=x3000c0s29b0n0
+```
+
+```bash
+ncn-m001:~ # cray hsm state components describe "${XNAME}" --format toml
+```
+
+```text
+ID = "x3000c0s29b0n0"
+Type = "Node"
+State = "On"
+Flag = "OK"
+Enabled = true
+Role = "Management"
+SubRole = "FabricManager"
+NID = 100012
+NetType = "Sling"
+Arch = "X86"
+Class = "River"
+```
+
 #### Validate FMN required networking configuration
+
+```bash
+ncn-m001:~/sav/csm-config # cray sls networks list
+```
+
+```text
+...
+[[results.ExtraProperties.Subnets.IPReservations]]
+Aliases = [ "fmn001-cmn", "time-cmn", "time-cmn.local",]
+Comment = "x3000c0s28b0n0"
+IPAddress = "10.102.193.42"
+Name = "fmn001"
+
+...
+[[results.ExtraProperties.Subnets.IPReservations]]
+Aliases = [ "fmn001-mtl", "time-mtl", "time-mtl.local",]
+Comment = "x3000c0s28b0n0"
+IPAddress = "10.1.1.10"
+Name = "fmn001"
+...
+
+[[results.ExtraProperties.Subnets.IPReservations]]
+Aliases = [ "fmn-vip.local",]
+Comment = "fmn-virtual-ip"
+IPAddress = "10.252.1.13"
+Name = "fmn-vip"
+
+[[results.ExtraProperties.Subnets.IPReservations]]
+Aliases = [ "fmn001-nmn", "time-nmn", "time-nmn.local", "x3000c0s28b0n0", "fmn001.local",]
+Comment = "x3000c0s28b0n0"
+IPAddress = "10.252.1.12"
+Name = "fmn001"
+
+[[results.ExtraProperties.Subnets.IPReservations]]
+Aliases = [ "fmn001-hmn", "time-hmn", "time-hmn.local",]
+Comment = "x3000c0s28b0n0"
+IPAddress = "10.254.1.21"
+Name = "fmn001"
+...
+
+[[results.ExtraProperties.Subnets.IPReservations]]
+Aliases = [ "fmn001-chn", "time-chn", "time-chn.local",]
+Comment = "x3000c0s28b0n0"
+IPAddress = "10.102.193.206"
+Name = "fmn001"
+
+```
+
 #### Validate FMN required storage configuration (LVM partitions)
+
 #### Validate addition of FM required repositories
 
 ### Install Fabric Manager on FM baremetal nodes
 
-For install/ upgrade Fabric Manager on the FMNs please refer [FabricManager Upgrade](...)
+For install/ upgrade Fabric Manager on the FMNs please refer [FabricManager Install/ Upgrade](...)
 
 ## Uninstall FMN Helm Chart
 
