@@ -146,7 +146,7 @@ After creating the FMN base image, add FMN nodes to CSM by following the [NCN ad
     * As part of the [NCNs add prerequisites](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#prerequisites), there is a       new
       prompt added to confirm if the node getting added is an FMN or not.
     * As part of the [add NCN to BSS, HSM, and SLS step](../../operations/node_management/Add_Remove_Replace_NCNs/Add_NCN_Data.md#add-the-ncn-to-bss-hsm-and-sls), include
-      the new parameter `--fmn-image-id` only for the FM node. The value for this parameter should be the image ID generated in the FMN base image creation stage above.
+      the new parameter `--fmn-image-id` only for the FM node. The value for this parameter should be the image ID generated in the [FMN base image creation stage](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/fm_on_baremetal/Configure_FM_On_Baremetal.md#fmn-base-image-creation).
 
 After completion of the NCN add procedure, SLS, HSM, and BSS will contain the corresponding FMN data. 
 
