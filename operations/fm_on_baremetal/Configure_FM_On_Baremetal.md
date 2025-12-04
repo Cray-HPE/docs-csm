@@ -69,7 +69,7 @@ jq -c '.topology[] | select(.common_name|contains("fmn"))' surtur-ccj.json
 
 ### FMN Base Image Creation
 
-The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to `ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts. This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host. The following steps detail the process for generating the FMN base image with the required components and deploying it to FMN nodes.
+The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to `ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts. This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host. The following steps details the process for generating the FMN image.
 
 #### Create FMN base image (only base OS; no Fabric Manager)
 
@@ -123,7 +123,7 @@ Execute the commands below on any master node to generate the new FMN image and 
 First set `bootprep` file path:
  
 ```bash
-# BOOTPREP_FILE_PATH=./fmn_bootpre.yaml
+# BOOTPREP_FILE_PATH=./fmn_bootprep.yaml
 ```
 
 Now execute the `sat bootprep run` command below to generate the new base image and upload it to S3.
