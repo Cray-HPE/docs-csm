@@ -381,6 +381,8 @@ Class = "River"
 
 #### Validate FMN required networking configuration
 
+Check NMN, CMN, HMN, CHN, metal and virtual IP configuration for both FMN nodes (`fmn001` and `fmn002`).
+
 ```bash
 ncn-m001:~/sav/csm-config # cray sls networks list
 ```
@@ -430,7 +432,7 @@ Name = "fmn001"
 
 #### Validate FMN required storage configuration (LVM partitions)
 
-Check if both LVM partiions `/dev/mapper/metalvg0-SCFIRMWARE` and `/dev/mapper/metalvg0-SLINGSHOT` created and mounted under "/opt/cray/FW/sc-firmware" and "/opt/slingshot" rescpectively.
+Check if both LVM partiions `/dev/mapper/metalvg0-SCFIRMWARE` and `/dev/mapper/metalvg0-SLINGSHOT` created and mounted under `/opt/cray/FW/sc-firmware` and `/opt/slingshot` rescpectively on both FMN nodes (`fmn001` and `fmn002`).
 
 ```bash
 fmn001:~ # lsblk
@@ -519,6 +521,29 @@ fmn002:~ # mount | grep /opt/slingshot
 ```
 
 #### Validate addition of FM required repositories
+
+Check if all the required repos are added on both FMN nodes (`fmn001` and `fmn002`) in order to install prerequisite OS RPMs 
+required during Slingshot Sftware installation.
+
+For Example:
+
+```bash
+fmn001:~ # zypper lr
+```
+
+```text
+Repository priorities are without effect. All enabled repositories share the same priority.
+
+#  | Alias                                                                 | Name                                             | Enabled | GPG Check | Refresh
+---+-----------------------------------------------------------------------+--------------------------------------------------+---------+-----------+--------
+ 1 | SUSE-25.7.250709-SLE-Module-Development-Tools-15-SP6-x86_64-Pool      | SUSE-25.7.250709-SLE-Module-Development-Tools--> | Yes     | (  ) No   | Yes
+ 2 | SUSE-25.7.250709-SLE-Module-Legacy-15-SP7-x86_64-Updates              | SUSE-25.7.250709-SLE-Module-Legacy-15-SP7-x86_-> | Yes     | (  ) No   | Yes
+ 3 | SUSE-25.7.250709-SLE-Module-Server-Applications-15-SP7-x86_64-Pool    | SUSE-25.7.250709-SLE-Module-Server-Application-> | Yes     | (  ) No   | Yes
+ 4 | SUSE-SLE-Module-Basesystem-15-SP6-x86_64-Pool                         | SUSE-SLE-Module-Basesystem-15-SP6-x86_64-Pool    | Yes     | (  ) No   | Yes
+ 5 | SUSE-SLE-Module-Containers-15-SP7-x86_64-Updates                      | SUSE-SLE-Module-Containers-15-SP7-x86_64-Updates | Yes     | (  ) No   | Yes
+ 6 | csm-embedded                                                          | csm-embedded                                     | Yes     | (  ) No   | Yes
+ ...
+```
 
 ### Install Fabric Manager on FM baremetal nodes
 
