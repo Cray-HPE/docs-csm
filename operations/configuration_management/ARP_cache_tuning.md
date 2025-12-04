@@ -148,7 +148,7 @@ The following steps describe how to use the Configuration Framework Service (CFS
      - name: net.ipv4.neigh.default.base_reachable_time_ms
        value: 1500000
    ```
-   
+
    > **`NOTE`** If IPv6 neighbor cache table is also required for a system, add them to the `sysctl_config` list as well.
 
 1. Commit the change and push it back up to the VCS.
@@ -303,8 +303,8 @@ The following steps describe how to use the Configuration Framework Service (CFS
       ncn-m001: net.ipv4.neigh.default.gc_thresh2 = 4096
       ncn-m001: net.ipv4.neigh.default.gc_thresh3 = 8192
       ```
-   
-2. (`ncn-m001`) Verify IPv6 neighbor table cache settings (if configured).
+
+1. (`ncn-m001`) Verify IPv6 neighbor table cache settings (if configured).
 
       ```bash
       pdsh -w ${NCNS} "sysctl -a | grep -E 'net.ipv6.neigh.default.gc_thresh[1-3]|net.ipv6.route.gc_thresh|net.ipv6.xfrm6_gc_thresh'" | dshbak -c
