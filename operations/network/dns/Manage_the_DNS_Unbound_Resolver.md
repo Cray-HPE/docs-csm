@@ -256,7 +256,7 @@ or be forwarded incorrectly.
 
 For each network subnet that is outside of `10.0.0.0/8`, calculate the corresponding reverse DNS zone name using the following method:
 
-1. Identify the network subnet in CIDR notation (e.g., `172.16.0.0/16`, `192.168.100.0/24`).
+1. Identify the network subnet in CIDR notation (For example, `172.16.0.0/16` or `192.168.100.0/24`).
 
 1. Determine the reverse DNS zone based on the subnet mask:
 
