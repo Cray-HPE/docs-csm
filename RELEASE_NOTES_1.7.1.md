@@ -12,7 +12,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 ## Additions and improvements
 
-* Added `baremetal` support for Slingshot fabric manager
+* Added `baremetal` support for the HPE Slingshot Fabric Manager
 
 ### Hardware support
 
