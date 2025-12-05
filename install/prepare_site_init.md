@@ -415,6 +415,11 @@ with system-specific customizations.
        in the [IPv6 Configuration Guide](../operations/network/customer_accessible_networks/ipv6_configuration_guide.md)
        for more information.
 
+    > **Important** If any CSM networks (NMN, HMN, HSN, MTL, CMN, CAN, CHN, and so on) have been configured to use IP addresses outside
+    > the default `10.0.0.0/8` range, DNS stub zones must be configured for reverse DNS lookups to function correctly.
+    > See [Configure stub zones for non-default network subnets](../operations/network/dns/Manage_the_DNS_Unbound_Resolver.md#configure-stub-zones-for-non-default-network-subnets)
+    > for detailed instructions on updating the stub zone configuration in `customizations.yaml`.
+
     See the following documentation regarding known issues when operating with no upstream DNS server.
     - [Spire Database Cluster DNS Lookup Failure](../troubleshooting/known_issues/spire_database_lookup_error.md)
     - [Spire database connection pool configuration in an air-gapped environment](../troubleshooting/known_issues/spire_database_airgap_configuration.md)
