@@ -73,7 +73,7 @@ The FabricManager subrole has been introduced to facilitate FMN node discovery a
 
 #### Create FMN base image (only base OS; no Fabric Manager)
 
-Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements. See (../../operations/configuration_management/Management_Node_Image_Customization.md)
+Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements. [See] (../../operations/configuration_management/Management_Node_Image_Customization.md)
 
 ##### FMN Boot Preparation
 
