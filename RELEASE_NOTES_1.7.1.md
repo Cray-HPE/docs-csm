@@ -13,6 +13,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 ## Additions and improvements
 
 * Added `baremetal` support for the HPE Slingshot Fabric Manager
+* Updated `ims-python-helper` to support logging level configuration as part of IMS configuration for image create/build
 
 ### Hardware support
 
@@ -39,6 +40,24 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   * Fixed bugs and improved resiliency of tests for `sat version`, `sat nid2xname`, `sat
     firmware`, and `sat bootprep`
   * Extended timeout to 30m for SAT functional tests
+* Added comprehensive automated testing improvements for CMS:
+  * Added new `cmsdev` testing options and CRUD tests for CFS and BOS services
+  * Added multitenancy BOS CRUD tests to `cmsdev`
+  * Added multitenancy CFS CRUD tests to `cmsdev`
+  * Added read-only multitenancy CFS tests to `cmsdev`
+  * Added CFS Sessions Race Condition Test to validate concurrent session handling. See [CFS Sessions Race Condition Test](troubleshooting/cfs_sessions_race_condition_test.md
+)
+  * Added timeouts for `cli` commands and API calls in `cmsdev`
+  * Updated `cmsdev` to put logs and artifacts in separate timestamped directories. See [Logging](troubleshooting/known_issues/sms_health_check.md#logging)
+  * Updated `cmsdev` to not run CFS and BOS tenant tests by default; added `--include-tenant` flag to include them.
+  * Updated `cmsdev` to not run CLI commands by default; added `--include-cli` flag to include them
+  * Fixed `cmsdev` BOS test failure to properly capture artifacts
+  * Fixed `cmsdev` to retry 503s a limited number of times
+  * Fixed `cmsdev` to avoid skipped CFS tests due to product catalog failure
+  * Fixed `cmsdev` to avoid repeated product catalog lookup
+  * Fixed `cmsdev` TFTP test that could report false errors
+  * Fixed `cmsdev` to correctly report pods as Running that are in CLBO status
+  * Updated tests to log a warning instead of failure if a pod is in `Succeeded` state
 
 
 ## Customer-requested
