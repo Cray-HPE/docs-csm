@@ -45,7 +45,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
     * Added `multitenancy` BOS CRUD tests to `cmsdev`
     * Added `multitenancy` CFS CRUD tests to `cmsdev`
     * Added read-only `multitenancy` CFS tests to `cmsdev`
-    * Added CFS Sessions Race Condition Test to validate concurrent session handling. See [CFS Sessions Race Condition Test](troubleshooting/`cfs_sessions_race_condition_test.md`)
+    * Added CFS Sessions Race Condition Test to validate concurrent session handling. See [CFS Sessions Race Condition Test](troubleshooting/cfs_sessions_race_condition_test.md)
 * Added timeouts for `cli` commands and API calls in `cmsdev`
 * Updated `cmsdev` to put logs and artifacts in separate timestamped directories. See [Logging](troubleshooting/known_issues/sms_health_check.md#logging)
 * Updated `cmsdev` to not run CFS and BOS tenant tests by default; added `--include-tenant` flag to include them.
@@ -58,7 +58,6 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * Fixed `cmsdev` to correctly report pods as Running that are in CLBO status
 * Updated tests to log a warning instead of failure if a pod is in `Succeeded` state
 
-
 ## Customer-requested
 
 * Updated the `sat bmccreds` command to log a warning and prompt whether the user wants to continue
@@ -67,7 +66,9 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   shutdown procedures.
 
 ## Bug fixes
+
 * After upgrading to Kubernetes 1.32 in CSM 1.7.0, some Pod Security Policy (PSP) Role Bindings and Service Accounts still exist.
+
   Since PSP is not supported in Kubernetes 1.25+, these unneeded Role Bindings and Service Accounts are removed after Kubernetes
   is upgraded to 1.32.
 * Fixed a bug in SMD where HTTP code 400 was returned if a GET on the lock status API found no matching components.  HTTP code 200 is now returned along with an empty list.
