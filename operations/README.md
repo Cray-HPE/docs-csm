@@ -88,6 +88,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 - [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
 - [Working With `aarch64` Images](image_management/Working_With_aarch64_Images.md)
+- [Change IMS Job Log Level](image_management/Change_IMS_Job_Log_Level.md)
 - [Troubleshoot Large Image](image_management/Troubleshoot_Large_Image.md)
 - [Troubleshoot Remote Build Node](image_management/Troubleshoot_Remote_Build_Node.md)
 - [Troubleshoot zypper interaction](image_management/Troubleshoot_zypper_interaction.md)

@@ -568,3 +568,9 @@ to boot a node\) to the artifact repository.
     insufficient resouces errors.
 
 The image root has been modified, compressed, and uploaded to S3, along with its associated `initrd` and kernel files. The image customization environment has also been cleaned up.
+
+## Troubleshooting
+
+For troubleshooting and debugging IMS image customization jobs, administrators can adjust the log level to obtain more
+detailed diagnostic information. This is particularly useful when investigating customization failures or unexpected behavior.
+See [Change IMS Job Log Level](Change_IMS_Job_Log_Level.md) for detailed instructions.

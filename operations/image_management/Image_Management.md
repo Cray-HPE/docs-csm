@@ -44,3 +44,9 @@ IMS Kiwi-NG recipe, the repository source path should be modified to the URI for
 IMS has the ability to create and customize aarch64 images even though the management nodes are running on x86 hardware. This
 is done through hardware emulation so be aware that it will be quite a bit slower than the same operations being done on an
 x86 image. For more information see [Working With aarch64 Images](Working_With_aarch64_Images.md).
+
+## Troubleshooting and Debugging
+
+For troubleshooting IMS image creation and customization jobs, administrators can adjust the log level to get more detailed
+information. See [Change IMS Job Log Level](Change_IMS_Job_Log_Level.md) for instructions on enabling DEBUG logging for
+IMS jobs.
