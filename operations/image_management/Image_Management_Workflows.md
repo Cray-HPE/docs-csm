@@ -234,3 +234,9 @@ of images that IMS maintains.
     created = "2024-06-27T15:41:22.467177"
     id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
     ```
+
+## Troubleshooting IMS Jobs
+
+For troubleshooting and debugging IMS image creation and customization jobs, administrators can adjust the log level to get
+more detailed diagnostic information. This is particularly useful when investigating failures or unexpected behavior during
+image builds or customizations. See [Change IMS Job Log Level](Change_IMS_Job_Log_Level.md) for detailed instructions.
