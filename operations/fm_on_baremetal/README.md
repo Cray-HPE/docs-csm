@@ -9,14 +9,14 @@
 
 ## Introduction
 
-The Fabric Manager (FM) bare-metal enablement within the Cray System Management (CSM) framework introduces dedicated Fabric Manager Nodes (FMNs) that manage and monitor Slingshot fabric operations outside of a Kubernetes environment. While the overall bare-metal Fabric Manager solution is described in the Slingshot Fabric Manager HA documentation <reference>, this CSM detail design document focuses specifically on the CSM-level enhancements required to integrate and support FMNs.
+The Fabric Manager (FM) bare-metal enablement within the Cray System Management (CSM) framework introduces dedicated Fabric Manager Nodes (FMNs) that manage and monitor Slingshot fabric operations outside of a Kubernetes environment. The overall bare-metal Fabric Manager solution is described in the Slingshot Fabric Manager HA documentation <reference>.
 
 CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment.
 
 **NOTE**:
 
 * `FMNs` are considered Management nodes.
-* FM cannot be disabled after it has been enabled.
+* After Fabric Manager is migrated from a Kubernetes pod to bare-metal infrastructure, it cannot be reverted.
 * The two `FMNs` must be part of two different management racks to support Rack Resiliency.
 * This feature will not be supported on systems with Dell/ Mellanox based management networks.
 
