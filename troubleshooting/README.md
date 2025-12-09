@@ -71,6 +71,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Spire pods stuck in `PodInitializing`](known_issues/spire_pod_initializing.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [IUF CLI reports false error that `management-nodes-rollout` failed](known_issues/iuf_cli_false_error_management_rollout_failed.md)
+* [IUF Storage Node Upgrade Stuck in Loop During `cleanup-live-images`](known_issues/iuf_storage_node_cleanup_live_images_loop.md)
 * [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
