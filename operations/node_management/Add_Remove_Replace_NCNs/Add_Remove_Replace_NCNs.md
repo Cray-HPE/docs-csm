@@ -38,7 +38,15 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
    ./ncn_add_pre-req.py 
    ```
 
-   The script will ask the following question:
+   Note: For adding FMNs (Fabric Manager Nodes) to CSM there is a new prompt added to confirm if the node getting added is an FMN or not:
+    
+  ```text
+   Please answer with yes or no.
+   Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
+   y
+   ```
+
+   Overall, the script `ncn_add_pre-req.py` will ask the following question:
 
    ```text
    How many NCNs would you like to add? Do not include NCNs to be removed or moved.
@@ -52,6 +60,10 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
     Please enter answer as an integer.
     How many NCNs would you like to add? Do not include NCNs to be removed or moved.
     10
+
+    Please answer with yes or no.
+    Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
+    N
 
     You are about to make DESTRUCTIVE changes to the system.
 
@@ -148,45 +160,6 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
     Log and backup of SLS, BSS and SMD can be found at: /tmp/ncn_task_backups2022-04-01_21-21-04
 
     Restarting cray-dhcp-kea
-   ```
-
-2. Optional: For adding FMNs (Fabric Manager Nodes) to CSM there is a new prompt added to confirm if the node getting added is an FMN or not:
-    
-   The script `ncn_add_pre-req.py` will ask the following questions:
-
-   Existing prompt to add number of NCN nodes:
-   
-   ```text
-   How many NCNs would you like to add? Do not include NCNs to be removed or moved.
-   ```
-  
-   Additional new prompt to consider these NCN node(s) as FMN(s):
-
-   ```text
-   Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
-   ```
-
-   Example output:
-   
-   ```text
-   The prerequisite script prepares adding NCNs by adjusting SLS network configurations.
-
-   Please enter answer as an integer.
-   How many NCNs would you like to add? Do not include NCNs to be removed or moved.
-   1
-
-   Please answer with yes or no.
-   Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
-   y
-   
-   You are about to make DESTRUCTIVE changes to the system.
-
-   If you are sure you want to proceed.  Please type: PROCEED
-
-   If you want to stop.  Type: exit or press ctrl-c
-
-   PROCEED
-   ...
    ```
     
 ## Add worker, storage, master or FMN(Fabric Manager Node) NCNs
