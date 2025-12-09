@@ -262,3 +262,6 @@ Follow [Add Ceph Node](../../utility_storage/Add_Ceph_Node.md) to join the added
 
 Proceed to [Redeploy Services](Redeploy_Services.md) or return to the main
 [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.
+
+**Note: **
+* For FMN nodes we can skip rest of the steps.
