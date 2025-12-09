@@ -1,4 +1,4 @@
-# `cray-vault-operator` chart upgrade error
+# `cray-vault-operator` Chart Upgrade Error
 
 ## Description
 
@@ -28,8 +28,15 @@ Releasing cray-vault-operator v1.5.2
 
 The `cray-vault-operator-pre-upgrade-crd-upgrade-crd-hook` pods in `vault` namespace will be in Error status:
 
+(`ncn-m#`)
+
+```bash
+kubectl get pods -n vault
+```
+
+Example Output:
+
 ```console
-ncn-m001:~ # kubectl get pods -n vault
 NAME                                             READY   STATUS      RESTARTS   AGE
 cray-vault-0                                     5/5     Running     0          6d6h
 cray-vault-1                                     5/5     Running     0          6d6h
@@ -47,18 +54,25 @@ cray-vault-operator-pre-upgrade-crd-hook-twdt5   0/1     Error       0          
 
 The logs of the `cray-vault-operator-pre-upgrade-crd-hook` pods will contain this message:
 
+(`ncn-m#`)
+
+```bash
+kubectl logs -n vault cray-vault-operator-pre-upgrade-crd-hook-6trs8
+```
+
+Example Output:
+
 ```console
-ncn-m001:~ # kubectl logs -n vault cray-vault-operator-pre-upgrade-crd-hook-6trs8
-The CustomResourceDefinition "vaults.vault.banzaicloud.com" is invalid: spec.preserveUnknownFields: Invalid value: true: must be false in order to use defaults in the schema 
+The CustomResourceDefinition "vaults.vault.banzaicloud.com" is invalid: spec.preserveUnknownFields: Invalid value: true: must be false in order to use defaults in the schema
 ```
 
 ## Solution
 
-Because the `apiextenstion.k8s.io/v1` CRD API in the new chart doesn't know what to do with the
+Because the `apiextenstion.k8s.io/v1` CRD API in the new chart does not know what to do with the
 `spec.preserveUnknownFields` field in the CRD on the system, delete the CRD on the system and re-run
 the IUF Management Nodes Rollout.
 
-1. (`ncn-m#`) Delete the `vaults.vault.banzaicloud.com` CRD
+1. (`ncn-m#`) Delete the `vaults.vault.banzaicloud.com` CRD.
 
    ```bash
    kubectl delete crd vaults.vault.banzaicloud.com
@@ -71,6 +85,6 @@ the IUF Management Nodes Rollout.
    customresourcedefinition.apiextensions.k8s.io "vaults.vault.banzaicloud.com" deleted
    ```
 
-1. (`ncn-m001`) Re-run the IUF [Management Nodes Rollout](../../operations/iuf/workflows/management_rollout.md)
+1. (`ncn-m001`) Re-run the IUF [Management Nodes Rollout](../../operations/iuf/workflows/management_rollout.md).
 
    When the `cray-vault-operator` is deployed as part of the `management-nodes-rollout-prehook`, it should succeed.
