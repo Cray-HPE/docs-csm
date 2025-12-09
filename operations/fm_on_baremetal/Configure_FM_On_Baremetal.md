@@ -11,8 +11,8 @@ and configuring the necessary networking to support Fabric Manager on  baremetal
 ## Note:
 
 * Fabric Manager Nodes (`FMNs`) can be added only after the CSM upgrade has been completed.
-* By default, Fabric Manager on baremetal is disabled.
-* Once enabled, Fabric Manager on baremetal cannot be disabled.
+* By default, Fabric Manager would be running on kubernetes as a Kuberetes pod
+* After Fabric Manager is migrated from a Kubernetes pod to bare-metal infrastructure, it cannot be reverted.
   
 ## Post upgrade of CSM from 1.7.0 to 1.7.1
 
@@ -38,32 +38,6 @@ The administrator must update the SHCD to include the placement and cabling deta
 ### Configure FMN BMC
 
 Verify that the BMC of each FMN is configured with the correct root user credentials.
-
-### Perform CANU validation
-
-* Validate SHCD with respect to FMNs
-* Map FMNs in the SHCD to the node type: `Management_FabricManager` when building the CCJ file
-* Generate switch configuration for the node based on the new Role: `Management` , SubRole: `FabricManager` pairing
-
-Validate the SHCD.
-
-**For example:**
-
-``` bash
-canu validate shcd -a TDS --shcd "System5 Surtur Shasta River RevA27.xlsx" --tabs edge,25G_10G,NMN,HMN --corners J1,T3,I14,Q55,I16,S21,J20,U41 --edge Arista
-```
-
-If the output looks good (Warnings about the CAN switch and SITE connections can be discounted) then generate the CCJ file.
-
-```bash
-canu validate shcd -a TDS --shcd "System5 Surtur Shasta River RevA27.xlsx" --tabs edge,25G_10G,NMN,HMN --corners J1,T3,I14,Q55,I16,S21,J20,U41 --edge Arista --json --out surtur-ccj.json
-```
-
-Verify that the Fabric Manager nodes are present in the output CCJ file.
-
-```bash
-jq -c '.topology[] | select(.common_name|contains("fmn"))' surtur-ccj.json
-```
 
 ## FMN Pre Boot
 
@@ -142,70 +116,9 @@ sat bootprep run \
 
 ### Add FMN Nodes to CSM
 
-After creating the FMN base image, add FMN nodes to CSM by following the [NCN add procedure](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md)
-
-**Note:** 
-
-* Below are the Interface level differences to be considered while following NCN add procedure for FMNs:
-    * As part of the [NCNs add prerequisites](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#prerequisites), there is a       new
-      prompt added to confirm if the node getting added is an FMN or not.
-    * As part of the [add NCN to BSS, HSM, and SLS step](../../operations/node_management/Add_Remove_Replace_NCNs/Add_NCN_Data.md#add-the-ncn-to-bss-hsm-and-sls), include
-      the new parameter `--fmn-image-id` only for the FM node. The value for this parameter should be the image ID generated in the [FMN base image creation stage](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/fm_on_baremetal/Configure_FM_On_Baremetal.md#fmn-base-image-creation).
+After creating the FMN base image, add FMN nodes to CSM by following the Follow step 1 to step in  [NCN add procedure](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-worker-storage-master-or-fmnfabric-manager-node-ncns)
 
 After completion of the NCN add procedure, SLS, HSM, and BSS will contain the corresponding FMN data. 
-
-The following checks can be used to verify that the updates have been correctly applied:
-
-#### SLS hardware should list the new nodes
-
-For Example:
-
-```bash
-cray sls hardware describe x3000c0s28b0n0
-```
-
-#### IPs should be allocated and made available for FMNs in all of SLS networks
-
-**Note:** NMN and HMN should be having additional FMN VIPs also allocated.
-
-For Example:
-
-```bash
-cray sls search networks list --name NMN --format json
-```
-
-#### HSM ethernet interfaces should be updated with the same allocated IPs
-
-For Example:
-
-```bash
-cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --format json
-```
-
-#### BSS should be updated with new hosts entries for FMN with proper configurations
-
-**Note:** BSS global parameters also needs to be updated with FMN IPs(VIP not included).
-
-For Example:
-
-```bash
-cray bss bootparameters list --format json --name x3000c0s28b0n0
-```
-
-```bash
-cray bss bootparameters list --hosts Global --format json
-```
-
-### Update Switch Configuration With CANU
-
-**Note: ** This step cannot be performed until the Fabric Manager nodes have been added to SLS.
-
-In order to generate new configuration the following is required:
-
-* A CCJ file
-* Any custom config file specific to the system
-* A SLS file that contains the FMNs (`cray sls dumpstate list --format json` may be used to obtain this once SLS has been updated on the running system)
-* Knowledge of whether the system has the NMN Isolation feature enabled or not
 
 #### Generate the switch configuration
 
@@ -232,73 +145,11 @@ canu validate switch config --ip 10.254.0.4 --generated output/sw-leaf-bmc-001.c
 
 Take extreme care when manipulating ACLs, if CANU suggests moving a "permit any ..." rule be sure to create the new rule before removing the old one. It is possible to lose access to the switch if the ACLs are not applied in the correct order.
 
-
 ## FMN Booting
 
-Once the FMNs have been added to the CSM, proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image.
+Once the FMNs have been added to the CSM, proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image. [See]
+(../../operations/node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn)
 
-### Set BMC with node name
-
-```bash
-BMC="${NODE}-mgmt"; echo $BMC
-```
-
-**Note: ** Here the NODE can be `fmn001` (or) `fmn002`. For example, consider `fmn001` with xname `x3000c0s28b0n0` and `fmn002`  with xname `x3000c0s29b0n0`.
-
-### Get and export IPMI credentials
-
-```bash
-read -r -s -p "${BMC} root password: " IPMI_PASSWORD
-export IPMI_PASSWORD
-```
-
-### Open console to check the progress of the upcoming boot 
-
-Run below command in a different terminal to check the progress of the boot which we are going to initiate in the next step.
-
-**Note: ** Here `xname` can be `fmn001 or `fmn002` based on which FMN is getting booted with.
-
-```bash
-cray console interact <xname> 
-echo ${BMC}
-```
-
-### Check the current chassis power status 
-
-```bash
-ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
-```
-### Set the boot option 
-
-```bash
-ipmitool -I lanplus -U root -E -H "${BMC}" chassis bootdev pxe options=efiboot
-```
-
-### Power off the chassis 
-
-Power off the chassis:
-
-```bash
-ipmitool -I lanplus -U root -E -H "${BMC}" chassis power off
-```
-Check the chassis power status:
-
-```bash
-ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
-```
-### Power on the chassis 
-
-Power on the chassis:
-
-```bash
-ipmitool -I lanplus -U root -E -H "${BMC}" chassis power on
-```
-
-Check the chassis power status:
-
-```bash
-ipmitool -I lanplus -U root -E -H "${BMC}" chassis power status
-```
 ## FMN Post Boot
 
 ### Validation
@@ -384,7 +235,7 @@ Class = "River"
 Check NMN, CMN, HMN, CHN, metal and virtual IP configuration for both FMN nodes (`fmn001` and `fmn002`).
 
 ```bash
-ncn-m001:~/sav/csm-config # cray sls networks list
+ncn-m001:~ # cray sls networks list
 ```
 
 ```text
@@ -428,6 +279,46 @@ Comment = "x3000c0s28b0n0"
 IPAddress = "10.102.193.206"
 Name = "fmn001"
 
+```
+
+#### SLS hardware should list the new nodes
+
+For Example:
+
+```bash
+cray sls hardware describe x3000c0s28b0n0
+```
+
+#### IPs should be allocated and made available for FMNs in all of SLS networks
+
+**Note:** NMN and HMN should be having additional FMN VIPs also allocated.
+
+For Example:
+
+```bash
+cray sls search networks list --name NMN --format json
+```
+
+#### HSM ethernet interfaces should be updated with the same allocated IPs
+
+For Example:
+
+```bash
+cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --format json
+```
+
+#### BSS should be updated with new hosts entries for FMN with proper configurations
+
+**Note:** BSS global parameters also needs to be updated with FMN IPs(VIP not included).
+
+For Example:
+
+```bash
+cray bss bootparameters list --format json --name x3000c0s28b0n0
+```
+
+```bash
+cray bss bootparameters list --hosts Global --format json
 ```
 
 #### Validate FMN required storage configuration (LVM partitions)
@@ -548,7 +439,3 @@ Repository priorities are without effect. All enabled repositories share the sam
 ### Install Fabric Manager on FM baremetal nodes
 
 For install/ upgrade Fabric Manager on the FMNs please refer [FabricManager Install/ Upgrade](...)
-
-## Uninstall FMN Helm Chart
-
-After FMNs have comeup healthy and Running,  uninstall existing FM helm chart (FM K8s pod) `slingshot-fabric-manager`.
