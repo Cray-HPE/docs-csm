@@ -30,6 +30,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 * Added `baremetal` support for the HPE Slingshot Fabric Manager
 * Updated `ims-python-helper` to support logging level configuration as part of IMS configuration for image create/build
+* IMS jobs run on remote build nodes have performance improvements and can better recover from errors regarding the remote execution.
 
 ### General
 
@@ -110,6 +111,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   sidecars and unintended `cray-console-node` SSH attempts to NCNs on vShasta.
 * Corrected Rack Resiliency automation playbooks that were disruptive, restarted wrong deployments,
   overwrote Kyverno policy, or assumed kubectl on storage nodes.
+* Victoria metrics can now be collected for BOS and CFS database pods.
 
 ## Known issues
 
