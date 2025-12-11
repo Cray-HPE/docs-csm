@@ -88,6 +88,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 - [Configure IMS to Validate RPMs](image_management/Configure_IMS_to_validate_rpms.md)
 - [Exporting and Importing IMS Data](image_management/Exporting_and_Importing_IMS_Data.md)
 - [Working With `aarch64` Images](image_management/Working_With_aarch64_Images.md)
+- [Change IMS Job Log Level](image_management/Change_IMS_Job_Log_Level.md)
 - [Troubleshoot Large Image](image_management/Troubleshoot_Large_Image.md)
 - [Troubleshoot Remote Build Node](image_management/Troubleshoot_Remote_Build_Node.md)
 - [Troubleshoot zypper interaction](image_management/Troubleshoot_zypper_interaction.md)
@@ -405,7 +406,8 @@ services due to a single rack failure. This feature prevents system-wide outages
 successful scheduling and execution of user jobs.
 
 - [Rack Resiliency](rack_resiliency/README.md)
-- [Enabling Rack Resiliency](rack_resiliency/Enabling_Rack_Resiliency.md)
+- [Enabling Rack Resiliency During Install or Upgrade](rack_resiliency/Enabling_RR_During_Install_or_Upgrade.md)
+- [Enabling Rack Resiliency on a Running System](rack_resiliency/Enabling_RR_on_running_system.md)
 - [Manage Critical Services](rack_resiliency/Manage_Critical_Services.md)
 - [Critical Services](rack_resiliency/Critical_Services.md)
 - [Zones](rack_resiliency/Zones.md)

@@ -1,19 +1,19 @@
-# Enabling Rack Resiliency
+# Enabling Rack Resiliency During Install or Upgrade
 
 ## Overview
 
 * Rack Resiliency **should not** be used in a production environment. For more details, see
   [Rack Resiliency is experimental](README.md#attention-rr-is-experimental).
 * By default, Rack Resiliency is disabled.
-* Rack Resiliency can be enabled only during fresh install of CSM 1.7 or an
-  upgrade from CSM 1.6 to CSM 1.7.
-* Rack Resiliency cannot be disabled after it has been enabled during the install or upgrade.
+* This page documents the procedures for enabling and configuring Rack Resiliency during
+  a CSM install or upgrade. For information on how to do this outside of an install or upgrade context, see
+  [Enabling Rack Resiliency on a Running System](Enabling_RR_on_running_system.md).
+* Rack Resiliency cannot be disabled after it has been enabled.
 
 At the same time that Rack Resiliency is enabled, administrators also have the option
 to customize the [Zone names](Zones.md#zone-names) for the zones that will be created
-during [Setup of Rack Resiliency](Setup_of_Rack_Resiliency.md). Like with the
-decision to enable Rack Resiliency, the decision made here about prefixes
-**cannot be changed later**.
+during [Setup of Rack Resiliency](Setup_of_Rack_Resiliency.md). The decisions made here
+about prefixes **cannot be changed later**.
 
 ## Fresh install of CSM 1.7
 

@@ -75,6 +75,19 @@ net.ipv4.neigh.default.gc_stale_time = 240
 net.ipv4.neigh.default.base_reachable_time_ms = 1500000
 ```
 
+## IPv6 Considerations
+
+If your environment uses IPv6, you may also want to set the equivalent IPv6 neighbor cache settings. Just like the IPv4 ARP cache, IPv6 maintains a Neighbor Cache table to map IPv6 addresses to MAC addresses.  
+The following parameters can be set using the same calculated values from the IPv4 ARP cache settings:
+
+```ini
+net.ipv6.neigh.default.gc_thresh1 = 25000
+net.ipv6.neigh.default.gc_thresh2 = 37500
+net.ipv6.neigh.default.gc_thresh3 = 75000
+net.ipv6.route.gc_thresh = 1024
+net.ipv6.xfrm6_gc_thresh = 32768
+```
+
 ## Host configuration
 
 The following steps describe how to use the Configuration Framework Service (CFS) to configure ARP cache settings for NCNs.
@@ -135,6 +148,8 @@ The following steps describe how to use the Configuration Framework Service (CFS
      - name: net.ipv4.neigh.default.base_reachable_time_ms
        value: 1500000
    ```
+
+   > **`NOTE`** If IPv6 neighbor cache table is also required for a system, add them to the `sysctl_config` list as well.
 
 1. Commit the change and push it back up to the VCS.
 
@@ -287,6 +302,25 @@ The following steps describe how to use the Configuration Framework Service (CFS
       ncn-m001: net.ipv4.neigh.default.gc_thresh1 = 2048
       ncn-m001: net.ipv4.neigh.default.gc_thresh2 = 4096
       ncn-m001: net.ipv4.neigh.default.gc_thresh3 = 8192
+      ```
+
+1. (`ncn-m001`) Verify IPv6 neighbor table cache settings (if configured).
+
+      ```bash
+      pdsh -w ${NCNS} "sysctl -a | grep -E 'net.ipv6.neigh.default.gc_thresh[1-3]|net.ipv6.route.gc_thresh|net.ipv6.xfrm6_gc_thresh'" | dshbak -c
+      ```
+
+      Example output:
+
+      ```ini
+      ----------------
+      ncn-m[001-003],ncn-s[001-003],ncn-w[001-006]
+      ----------------
+      net.ipv6.neigh.default.gc_thresh1 = 128
+      net.ipv6.neigh.default.gc_thresh2 = 512
+      net.ipv6.neigh.default.gc_thresh3 = 1024
+      net.ipv6.route.gc_thresh = 1024
+      net.ipv6.xfrm6_gc_thresh = 32768
       ```
 
 ## Troubleshooting

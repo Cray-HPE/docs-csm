@@ -115,6 +115,22 @@ spec:
 
                     HOSTNAME=$(hostname)
 
+                    ### FETCH_CFS_CONFIG_AND_IMAGE
+                    cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration_management')}}"
+                    ims_image="{{=jsonpath(inputs.parameters.global_params,'$.input_params.boot_image_management')}}"
+
+                    if [[ -n $cfs_config && -n $ims_image ]]; then
+                      echo "INFO Rebuilding using passed parameters $ims_image and $cfs_config"
+                      CFS_CONFIG_NAME=$cfs_config
+                      IMAGE_ID=$ims_image
+                    else
+                      echo "INFO Starting rebuild using image built in the prepare images stage"
+                      prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
+                      CFS_CONFIG_NAME=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration')
+                      IMAGE_ID=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id')
+                    fi
+                    echo "DEBUG CFS_CONFIG_NAME=${CFS_CONFIG_NAME}, IMAGE_ID=${IMAGE_ID}"
+
                     ### STEP 1: BACKUP_ARTIFACTS
                     STATE_NAME="BACKUP_ARTIFACTS"
                     state_recorded=$(is_state_recorded "${STATE_NAME}" "${HOSTNAME}")
@@ -142,32 +158,7 @@ spec:
                       echo "INFO ====> ${STATE_NAME} has previously been completed"
                     fi
 
-                    ### STEP 2: FETCH_CFS_AND_IMAGE
-                    STATE_NAME="FETCH_CFS_AND_IMAGE"
-                    state_recorded=$(is_state_recorded "${STATE_NAME}" "${HOSTNAME}")
-                    if [[ "${state_recorded}" == "0" ]]; then
-                      echo "INFO ====> ${STATE_NAME} starting..."
-
-                      cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration_management')}}"
-                      ims_image="{{=jsonpath(inputs.parameters.global_params,'$.input_params.boot_image_management')}}"
-
-                      if [[ -n $cfs_config && -n $ims_image ]]; then
-                        echo "INFO Rebuilding $rebuild_set using passed parameters $ims_image and $cfs_config"
-                        CFS_CONFIG_NAME=$cfs_config
-                        IMAGE_ID=$ims_image
-                      else
-                        echo "INFO Starting rebuild of $rebuild_set using image built in the prepare images stage"
-                        prepare_images_output=$(echo '{{inputs.parameters.global_params}}' | jq -r '.stage_params["prepare-images"].global["prepare-management-images"]["sat-bootprep-run"].script_stdout')
-                        CFS_CONFIG_NAME=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].configuration')
-                        IMAGE_ID=$(echo $prepare_images_output | jq -r '.images | map(select(.configuration_group_names[] == "Management_Master")) | .[].final_image_id')
-                      fi
-
-                      record_state "${STATE_NAME}" "${HOSTNAME}"
-                    else
-                      echo "INFO ====> ${STATE_NAME} has previously been completed"
-                    fi
-
-                    ### STEP 3: APPLY_CFS_CONFIGURATION
+                    ### STEP 2: APPLY_CFS_CONFIGURATION
                     STATE_NAME="APPLY_CFS_CONFIGURATION"
                     state_recorded=$(is_state_recorded "${STATE_NAME}" "${HOSTNAME}")
                     if [[ "${state_recorded}" == "0" ]]; then
@@ -190,7 +181,7 @@ spec:
                       echo "INFO ====> ${STATE_NAME} has previously been completed"
                     fi
 
-                    ### STEP 4: BOOTPARAMETERS_UPDATE
+                    ### STEP 3: BOOTPARAMETERS_UPDATE
                     STATE_NAME="BOOTPARAMETERS_UPDATE"
                     state_recorded=$(is_state_recorded "${STATE_NAME}" "${HOSTNAME}")
                     if [[ "${state_recorded}" == "0" ]]; then
@@ -279,6 +270,7 @@ spec:
                     if [[ $? -ne 0 ]]; then
                         echo "ERROR master node ncn-m001 upgrade has failed"
                         exit 1
+                    fi
           - name: rebuild-config-image-update
             dependencies:
               - upgrade-m001

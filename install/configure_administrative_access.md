@@ -227,7 +227,7 @@ will generate the full CFS configuration including additional CSM layers and all
 ## 10. Restart Rack Resiliency critical services
 
 > Skip this step if the Rack Resiliency feature is not enabled.
-> For more information, see [Enabling Rack Resiliency](../operations/rack_resiliency/Enabling_Rack_Resiliency.md).
+> For more information, see [Enabling Rack Resiliency During Install or Upgrade](../operations/rack_resiliency/Enabling_RR_During_Install_or_Upgrade.md).
 
 (`ncn-mw#`) Restart the critical services for Rack Resiliency.
 

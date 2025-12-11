@@ -25,6 +25,8 @@
 
 set -eo pipefail
 
+SCRIPT_DIR=$(dirname "$(realpath ${BASH_SOURCE[0]})")
+
 availRGW=$(ceph df -f json | jq '.stats.total_avail_bytes' | awk '{printf "%.0f", ($1/1024/1024/1024)}')
 echo "Gibibytes available in cluster: $availRGW"
 
@@ -82,7 +84,7 @@ EOF
   fi
 fi
 
-source nexus_helper.sh
+source ${SCRIPT_DIR}/nexus_helper.sh
 alpine_version=$(get_latest_alpine)
 echo "Pulling the latest alpine version: $alpine_version"
 cache_alpine

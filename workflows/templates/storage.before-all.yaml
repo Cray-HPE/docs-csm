@@ -54,7 +54,7 @@ spec:
                     source /srv/cray/scripts/metal/metal-lib.sh
                     csi_url=$(paginate "https://packages.local/service/rest/v1/components?repository=csm-noos" \
                       | jq -r  '.items[] | .assets[] | .downloadUrl' | grep "cray-site-init" | sort -V | tail -1)
-                    pdsh -S -w $(grep -oP 'ncn-\m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
+                    pdsh -S -w $(grep -oP 'ncn-m\d+' /etc/hosts | sort -u | tr -t '\n' ',') "zypper install -y $csi_url"
           - name: add-admin-label-to-ncn-s002
             templateRef:
               name: ssh-template
