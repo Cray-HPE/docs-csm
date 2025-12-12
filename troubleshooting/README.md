@@ -37,6 +37,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Known issues
 
+* [`cray-vault-operator` Chart Upgrade Error](known_issues/cray-vault-operator_chart_upgrade_error.md)
 * [SAT/HSM/PCS Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
