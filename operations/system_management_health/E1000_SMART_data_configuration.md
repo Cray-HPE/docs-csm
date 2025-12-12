@@ -2,7 +2,7 @@
 
 This is a `VictoriaMetrics` Exporter for extracting metrics from a server using the Redfish API. The hostname of the server has to be passed as target parameter in the http call.
 
-NOTE: This is only compatible with `NEO 7.2` and below due the Redfish API design changes.
+> ***NOTE:*** This is only compatible with `NEO 7.2` and below due the Redfish API design changes.
 
 All these steps need to be followed after installing or upgrading CSM services.
 
