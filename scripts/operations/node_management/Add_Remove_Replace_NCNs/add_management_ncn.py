@@ -854,7 +854,7 @@ class State:
                         if ip_reservation.ipv4_address() == allocated_ip:
                             fail_sls_network_check = True
                             action_log(action, f'Error found allocated NCN IP {allocated_ip} in subnet {subnet.name()} network {network_name} in SLS: {ip_reservation.to_sls()}')
-                        if not fmn_vip_exists:
+                        if sls_network.name() in ["HMN", "NMN"] and not fmn_vip_exists:
                             # For FMN systems, check both the regular and VIP NCN IP reservations
                             vip_ip = ncn_ips[network_name+"-fmn-vip"].ipv4_address()
                             if ip_reservation.ipv4_address() == vip_ip:
