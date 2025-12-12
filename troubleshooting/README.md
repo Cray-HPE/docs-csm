@@ -37,6 +37,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Known issues
 
+* [`cray-vault-operator` Chart Upgrade Error](known_issues/cray-vault-operator_chart_upgrade_error.md)
 * [SAT/HSM/PCS Component Power State Mismatch](known_issues/component_power_state_mismatch.md)
 * [HMS Discovery job not creating `RedfishEndpoint`s in Hardware State Manager](known_issues/discovery_job_not_creating_redfish_endpoints.md)
 * [SSL Certificate Validation Issues](known_issues/ssl_certificate_validation_issues.md)
@@ -99,6 +100,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 ## Configuration management
 
 * [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
+* [CFS Sessions Race Condition Test](cfs_sessions_race_condition_test.md)
 * [Incrementally Configuring Images](incrementally_configuring_images.md)
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
@@ -157,6 +159,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 ## Image management
 
 * [Image Job Performance](../operations/image_management/Image_Job_Performance.md)
+* [Change IMS Job Log Level](../operations/image_management/Change_IMS_Job_Log_Level.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
 * [IMS Image Customization Job Status Stuck at `waiting_on_user`](known_issues/ims_image_customization_job_status_stuck_at_waiting_on_user.md)
@@ -199,6 +202,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Troubleshoot Kyverno configuration manually](../operations/security_and_authentication/Troubleshoot_Kyverno_Configuration_manually.md)
 * [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
+* [OAuth2 Proxy TLS Handshake Error](known_issues/oauth2_proxy_tls_handshake_error.md)
 
 ## Rack Resiliency
 
