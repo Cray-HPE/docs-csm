@@ -4,6 +4,7 @@ This describes how to migrate Kubernetes CNI from Weave to Cilium during a CSM u
 
 - [Steps](#steps)
 - [Known issues](#known-issues)
+    - [Missing BSS Global Metadata Parameter](#missing-bss-global-metadata-parameter)
     - [Node drain blocked by Kafka](#node-drain-blocked-by-kafka)
     - [Node drain blocked by an `etcd` cluster](#node-drain-blocked-by-an-etcd-cluster)
 
@@ -41,6 +42,12 @@ This describes how to migrate Kubernetes CNI from Weave to Cilium during a CSM u
     Replace `<workflow-name>` with the actual name of the workflow created by the cilium_migration.sh script.
 
 ## Known issues
+
+### Missing BSS Global Metadata Parameter
+
+On systems originally installed with CSM 1.3 or earlier, the Cilium migration process may fail if the `k8s-primary-cni` BSS Global meta-data parameter is not set.
+
+See [Cilium Migration Failure Due to Missing BSS Global Metadata Parameter](../../../troubleshooting/known_issues/cilium_migration_k8s_primary_cni_not_set.md) for details and resolution steps.
 
 ### Node drain blocked by Kafka
 

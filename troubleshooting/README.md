@@ -80,6 +80,7 @@ to the exiting problem seen into the existing search. (The example searches for 
   made in the [Cray Site Init (CSI)](../glossary.md#cray-site-init-csi) tool.
     * Systems upgrading from CSM 1.6 to CSM 1.7 **may ignore** this issue until the next
       CSM 1.7+ reinstall.
+* [Cilium Migration Failure Due to Missing BSS Global Metadata Parameter](known_issues/cilium_migration_k8s_primary_cni_not_set.md)
 
 ## Booting
 
