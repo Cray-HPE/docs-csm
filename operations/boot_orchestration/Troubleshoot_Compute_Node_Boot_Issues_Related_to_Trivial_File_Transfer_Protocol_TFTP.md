@@ -88,7 +88,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     - DATA packets from server
     - ACK packets from client
 
-    If a pcap file was created, it can be analyzed with:
+    If a `pcap` file was created, it can be analyzed with:
 
     ```bash
     tcpdump -r /tmp/tftp-capture.pcap -nn -vv
