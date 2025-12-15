@@ -183,6 +183,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
 * [`etcd` Pods in CLBO State](known_issues/etcd_pods_in_CLBO_state.md)
 * [Cilium Network Troubleshooting Runbook](Cilium_Network_Troubleshooting_Runbook.md)
+* [Node Unable to Join Kubernetes Cluster During NCN Rebuild](known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md)
 
 ## MetalLB
 
