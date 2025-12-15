@@ -8,7 +8,7 @@ token list or the `cluster-info` ConfigMap. The join scripts are created during 
 that have since expired or been removed from the cluster.
 
 Bootstrap tokens should be automatically refreshed by the `cray-k8s-token-certs-refresh` cronjob, which runs hourly
-(`0 */1 * * *`) on the first-master node. If this cronjob is not running or has failed, tokens may become stale, causing
+on the first-master node. If this cronjob is not running or has failed, tokens may become stale, causing
 node join failures.
 
 ## Symptoms
