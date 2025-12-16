@@ -378,7 +378,7 @@ This procedure can be performed on any master or worker NCN.
         kubectl logs -f -n sysmgmt-health pod/cray-sysmgmt-health-redfish-exporter-86f7596c5-g6lxl
         ```
 
-1. (`ncn-mw#`) Enable the `cray-sysmgmt-health-redfish-cron` Cronjob to get the updated data every 6 hours.
+1. (`ncn-mw#`) Enable the `cray-sysmgmt-health-redfish-cron` Cronjob to get the updated data every six hours.
 
     1. Edit the Cronjob.
 
@@ -400,14 +400,12 @@ This procedure can be performed on any master or worker NCN.
     1. (`ncn-mw#`) Valide the Cronjob, `SUSPEND` should be set to `False` similar to below output.
 
         ```text
-
-        ncn-m001:~ # kubectl get cronjobs.batch -n sysmgmt-health
+        kubectl get cronjobs.batch -n sysmgmt-health
         ```
 
         Example Output:
 
         ```text
-
         NAME                               SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
         cray-sysmgmt-health-redfish-cron   0 */6 * * *   <none>     False     4        5h45m           58d
         ```
@@ -439,7 +437,7 @@ This procedure can be performed on any master or worker NCN.
         name: redfish-exporter
     ```
 
-Note: Now `kubectl logs -n sysmgmt-health <redfish-exporer pod name>` will show more detailed DEBUG level logging.
+> ***NOTE:*** Now `kubectl logs -n sysmgmt-health <redfish-exporer pod name>` will show more detailed DEBUG level logging.
 
 Metrics Information:
 
