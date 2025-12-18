@@ -41,6 +41,16 @@ including `goss-switch-bgp-neighbor-aruba-or-mellanox` use these credentials to 
 is not required to configure the management network. If Vault is unavailable, this step can be temporarily skipped. Any
 automated tests that depend on the switch credentials being in Vault will fail until they are added.
 
+**`NOTE`** For fresh installations, this script should be run on one of the deployed master or worker nodes (e.g., `ncn-m002`, `ncn-w001`),
+**NOT** on the PIT (Pre-Install Toolkit) node. The PIT does not have access to Vault. You may need to install the `docs-csm` RPM on the
+target node first if the script is not already present.
+
+(`ncn-mw#`) If needed, install the `docs-csm` RPM to make the script available:
+
+```bash
+zypper install -y docs-csm
+```
+
 (`ncn-mw#`) The following script will prompt for the password, write it to Vault, and then read it back
 to verify that it was written correctly.
 
