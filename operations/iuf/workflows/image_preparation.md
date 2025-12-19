@@ -5,12 +5,18 @@ This section creates CFS configurations and bootable images that will be used by
 Before proceeding, ensure any site customizations to product content stored in VCS have been made per [Perform manual product configuration operations](configuration.md#2-perform-manual-product-configuration-operations) to ensure CFS configurations
 and images are created with the correct content and configuration values.
 
-- [1. Execute the IUF `update-cfs-config` and `prepare-images` stages](#1-execute-the-iuf-update-cfs-config-and-prepare-images-stages)
-- [2. Manually prepare additional images](#2-manually-prepare-additional-images)
-    - [2.1 ARM images](#21-arm-images)
+- [1. Prepare additional images](#1-prepare-additional-images)
+    - [1.1 ARM images](#11-arm-images)
+- [2. Execute the IUF `update-cfs-config` and `prepare-images` stages](#2-execute-the-iuf-update-cfs-config-and-prepare-images-stages)
 - [3. Next steps](#3-next-steps)
 
-## 1. Execute the IUF `update-cfs-config` and `prepare-images` stages
+## 1. Prepare additional images
+
+### 1.1 ARM images
+
+If it is necessary to build `aarch64` images, modify the sat bootprep files to include ARM image configuration **before** running the `prepare-images` stage. See [ARM images](../IUF.md#arm-images) for configuration details.
+
+## 2. Execute the IUF `update-cfs-config` and `prepare-images` stages
 
 **`NOTE`** Additional arguments are available to control the behavior of the `update-cfs-config` and `prepare-images` stages, for example `-bc`, `-bm`, and `-rv`. See the [`update-cfs-config` stage
 documentation](../stages/update_cfs_config.md) and the [`prepare-images` stage documentation](../stages/prepare_images.md) for details and adjust the examples below if necessary.
@@ -38,12 +44,6 @@ Once this step has completed:
 - New images have been created for management NCNs and managed compute and application (UAN, etc.) nodes
 - New BOS session templates have been created to boot managed compute and application (UAN, etc.) nodes with the new images and CFS configurations
 - Per-stage product hooks have executed for the `update-cfs-config` and `prepare-images` stages
-
-## 2. Manually prepare additional images
-
-### 2.1 ARM images
-
-If it is necessary to build `aarch64` images, then see [ARM images](../IUF.md#arm-images).
 
 ## 3. Next steps
 
