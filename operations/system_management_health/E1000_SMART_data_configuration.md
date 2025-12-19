@@ -2,6 +2,8 @@
 
 This is a `VictoriaMetrics` Exporter for extracting metrics from a server using the Redfish API. The hostname of the server has to be passed as target parameter in the http call.
 
+> ***NOTE:*** This is only compatible with `NEO 7.2` and below due the Redfish API design changes.
+
 All these steps need to be followed after installing or upgrading CSM services.
 
 ## Configure domain name for ClusterStor management node
@@ -375,6 +377,67 @@ This procedure can be performed on any master or worker NCN.
         ```bash
         kubectl logs -f -n sysmgmt-health pod/cray-sysmgmt-health-redfish-exporter-86f7596c5-g6lxl
         ```
+
+1. (`ncn-mw#`) Enable the `cray-sysmgmt-health-redfish-cron` Cronjob to get the updated data every six hours.
+
+    1. Edit the Cronjob.
+
+        ```bash
+        kubectl edit cronjob -n sysmgmt-health cray-sysmgmt-health-redfish-cron
+        ```
+
+    1. (`ncn-mw#`) Set `.spec.suspend` from true to false at the end of the file.
+
+        ```yaml
+          schedule: 0 */6 * * *
+          successfulJobsHistoryLimit: 3
+          suspend: false
+        status:
+          active:
+          - apiVersion: batch/v1
+        ```
+
+    1. (`ncn-mw#`) Valide the Cronjob, `SUSPEND` should be set to `False` similar to below output.
+
+        ```text
+        kubectl get cronjobs.batch -n sysmgmt-health
+        ```
+
+        Example Output:
+
+        ```text
+        NAME                               SCHEDULE      TIMEZONE   SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+        cray-sysmgmt-health-redfish-cron   0 */6 * * *   <none>     False     4        5h45m           58d
+        ```
+
+## Optional step for DEBUG level advance logging
+
+To enable `DEBUG` level logging add `-d` to the Redfish-Exporter Deployment.
+
+This procedure can be performed on any master or worker NCN.
+
+1. (`ncn-mw#`) Edit the Redfish-Exporter Deployment.
+
+    ```bash
+    kubectl edit deployment -n sysmgmt-health cray-sysmgmt-health-redfish-exporter
+    ```
+
+1. In `.spec.template.spec.containers.` add `-d` option and save the file.
+
+    ```yaml
+    containers:
+      - args:
+        - --config.file=/config/config.yml
+        command:
+        - python3
+        - /redfish_exporter/main.py
+        - "-d"                          // This line needs to be added.
+        image: artifactory.algol60.net/csm-docker/stable/redfish-exporter:1.1.3
+        imagePullPolicy: IfNotPresent
+        name: redfish-exporter
+    ```
+
+> ***NOTE:*** Now `kubectl logs -n sysmgmt-health <redfish-exporer pod name>` will show more detailed DEBUG level logging.
 
 Metrics Information:
 
