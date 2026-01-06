@@ -2,7 +2,7 @@
 
 The following procedure deploys Linux and Kubernetes software to the management NCNs.
 Deployment of the nodes starts with booting the storage nodes, followed by the master nodes
-and worker nodes together.
+and worker nodes together. Optionally, HPE Slingshot Fabric Manager nodes can also be deployed.
 
 After the operating system boots on each node, there are some configuration actions which
 take place. Watching the console or the console log for certain nodes can help to understand
@@ -26,7 +26,8 @@ the number of storage and worker nodes.
 1. [Deploy management nodes](#2-deploy-management-nodes)
     1. [Deploy storage NCNs](#21-deploy-storage-ncns)
     1. [Deploy Kubernetes NCNs](#22-deploy-kubernetes-ncns)
-    1. [Configure `kubectl` on the PIT](#23-configure-kubectl-on-the-pit)
+    1. [Deploy HPE Slingshot Fabric Manager nodes (optional)](#23-deploy-hpe-slingshot-fabric-manager-nodes-optional)
+    1. [Configure `kubectl` on the PIT](#24-configure-kubectl-on-the-pit)
 1. [Validate deployment](#3-validate-deployment)
 1. [Next topic](#next-topic)
 
@@ -52,8 +53,10 @@ Preparation of the environment must be done before attempting to deploy the mana
       > These values do not need to be altered from what is shown.
 
       ```bash
-      export IPMI_PASSWORD ; mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt'
+      export IPMI_PASSWORD ; mtoken='ncn-m(?!001)\w+-mgmt' ; stoken='ncn-s\w+-mgmt' ; wtoken='ncn-w\w+-mgmt' ; ftoken='fmn\w+-mgmt'
       ```
+
+      > **NOTE:** The `ftoken` variable is used for HPE Slingshot Fabric Manager nodes, which are optional and not present on all systems.
 
 ### 1.2. BIOS baseline
 
@@ -68,14 +71,16 @@ Preparation of the environment must be done before attempting to deploy the mana
 1. (`pit#`) Check power status of all NCNs.
 
     ```bash
-    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+    grep -oP "(${mtoken}|${stoken}|${wtoken}|${ftoken})" /etc/dnsmasq.d/statics.conf | sort -u |
           xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power status
     ```
+
+    > **NOTE:** If the system does not have HPE Slingshot Fabric Manager nodes, the `ftoken` pattern will not match any entries.
 
 1. (`pit#`) Power off all NCNs.
 
     ```bash
-    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+    grep -oP "(${mtoken}|${stoken}|${wtoken}|${ftoken})" /etc/dnsmasq.d/statics.conf | sort -u |
           xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
     ```
 
@@ -89,16 +94,16 @@ Preparation of the environment must be done before attempting to deploy the mana
    - Disable VT-x, AMD-V, SVM, VT-d, and AMD IOMMU for Virtualization, on both AMD and Intel CPUs; there is no way to enable at this time.
 
     ```bash
-    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+    grep -oP "(${mtoken}|${stoken}|${wtoken}|${ftoken})" /etc/dnsmasq.d/statics.conf | sort -u |
           xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev none options=clear-cmos
     ```
 
 1. (`pit#`) Boot NCNs to BIOS to allow the CMOS to reinitialize.
 
     ```bash
-    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+    grep -oP "(${mtoken}|${stoken}|${wtoken}|${ftoken})" /etc/dnsmasq.d/statics.conf | sort -u |
           xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev bios options=efiboot
-    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+    grep -oP "(${mtoken}|${stoken}|${wtoken}|${ftoken})" /etc/dnsmasq.d/statics.conf | sort -u |
           xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
     ```
 
@@ -113,7 +118,7 @@ Preparation of the environment must be done before attempting to deploy the mana
 1. (`pit#`) Power off the nodes.
 
     ```bash
-    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u |
+    grep -oP "(${mtoken}|${stoken}|${wtoken}|${ftoken})" /etc/dnsmasq.d/statics.conf | sort -u |
           xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
     ```
 
@@ -134,8 +139,8 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) Set each node to always UEFI network boot, and ensure that they are powered off.
 
     ```bash
-    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=efiboot,persistent
-    grep -oP "(${mtoken}|${stoken}|${wtoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
+    grep -oP "(${mtoken}|${stoken}|${wtoken}|${ftoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} chassis bootdev pxe options=efiboot,persistent
+    grep -oP "(${mtoken}|${stoken}|${wtoken}|${ftoken})" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power off
     ```
 
     > **NOTE:** The NCN boot order is further explained in [NCN Boot Workflow](../background/ncn_boot_workflow.md).
@@ -243,7 +248,54 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 
     > **NOTE:** To exit a conman console, press `&` followed by a `.` (e.g. keystroke `&.`)
 
-### 2.3 Configure `kubectl` on the PIT
+### 2.3 Deploy HPE Slingshot Fabric Manager nodes (optional)
+
+> **NOTE:** This section only applies to systems with HPE Slingshot Fabric Manager nodes. If the system does not have Fabric Manager nodes, skip this section and proceed to [Configure `kubectl` on the PIT](#24-configure-kubectl-on-the-pit).
+
+HPE Slingshot Fabric Manager nodes have hostnames like `fmn001`, `fmn002`, etc., with corresponding BMC names like `fmn001-mgmt`, `fmn002-mgmt`, etc.
+
+1. (`pit#`) Verify that Fabric Manager nodes are present in the system.
+
+    ```bash
+    grep -oP "${ftoken}" /etc/dnsmasq.d/statics.conf | sort -u
+    ```
+
+    If this command returns no output, there are no Fabric Manager nodes to deploy. Skip the remaining steps in this section.
+
+1. (`pit#`) Check power status of Fabric Manager nodes.
+
+    ```bash
+    grep -oP "${ftoken}" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power status
+    ```
+
+1. (`pit#`) Boot the **Fabric Manager nodes**.
+
+    ```bash
+    grep -oP "${ftoken}" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
+    ```
+
+1. (`pit#`) Observe the installation through the console of the first Fabric Manager node.
+
+    ```bash
+    conman -j fmn001-mgmt
+    ```
+
+    > **NOTES:**
+    >
+    > - If the nodes have PXE boot issues (e.g. getting PXE errors, not pulling the `ipxe.efi` binary), then see [Troubleshooting PXE Boot](troubleshooting_pxe_boot.md).
+    > - To exit a conman console, press `&` followed by a `.` (e.g. keystroke `&.`)
+
+1. (`pit#`) Wait for the Fabric Manager nodes to complete `cloud-init`.
+
+    The following text should appear in the console:
+
+    ```text
+    The system is finally up, after XXXX.XX seconds cloud-init has come to completion.
+    ```
+
+    > **NOTE:** The duration reported will vary.
+
+### 2.4 Configure `kubectl` on the PIT
 
 1. (`pit#`) This was done in a previous step, but if the user is resuming/starting here then the first master needs to be
     redefined.
