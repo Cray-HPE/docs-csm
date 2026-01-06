@@ -1,6 +1,6 @@
-# `cmsdev` Test Suite Documentation
+# `cmsdev` Tests
 
-The `cmsdev` test suite is a comprehensive validation tool in CSM (Cray System Management). It verifies the health, functionality, and API operations of critical system services including BOS, CFS, Conman, IMS, iPXE/TFTP, and VCS.
+The `cmsdev` test tool verifies the health, functionality, and API operations of critical system services, including BOS, CFS, console services, IMS, iPXE, TFTP, and VCS.
 
 This document provides detailed information about the `cmsdev` test tool, including the tests available for each service, command-line options, and usage examples.
 
@@ -8,8 +8,9 @@ This document provides detailed information about the `cmsdev` test tool, includ
 * [Test execution](#test-execution)
 * [Interpreting results](#interpreting-results)
 * [Command-line options](#command-line-options)
-    * [Service selection](#service-selection)
+    * [List available tests](#list-available-tests)
     * [Test control options](#test-control-options)
+        * [Retry behavior](#retry-behavior)
     * [Output control options](#output-control-options)
 * [Service-specific tests](#service-specific-tests)
     * [BOS tests](#bos-tests)
@@ -32,11 +33,16 @@ This document provides detailed information about the `cmsdev` test tool, includ
 
 The `cmsdev` test suite validates the health and functionality of Software Management Services by performing the following types of checks:
 
-* **Kubernetes resource validation**: Verifies that pods, persistent volume claims (PVCs), and other Kubernetes resources are in expected states.
-* **API operation testing**: Tests CRUD (Create, Read, Update, Delete) operations via REST APIs to ensure services respond correctly.
-* **CLI operation testing**: Validates Cray CLI commands for services (when `--include-cli` flag is used).
-* **Multi-tenancy testing**: Tests tenant-specific operations (when `--include-tenant` flag is used).
-* **Service-specific functionality**: Runs specialized tests unique to each service (e.g., TFTP file transfers, VCS repository operations).
+* Kubernetes resource validation
+    * Verifies that pods, persistent volume claims (PVCs), and other Kubernetes resources exist and are in expected states.
+* API operation testing
+    * Tests CRUD (Create, Read, Update, Delete) operations via REST APIs to ensure services respond correctly.
+* CLI operation testing
+    * Validates Cray CLI commands for services (when `--include-cli` flag is used).
+* Multi-tenancy testing
+    * Tests tenant-specific operations (when `--include-tenant` flag is used).
+* Service-specific functionality
+    * Specialized tests unique to each service (e.g., TFTP file transfers, VCS repository operations).
 
 ## Test execution
 
@@ -77,17 +83,15 @@ For more details on the log file, see [Logging](#logging).
 
 The `cmsdev test` command supports various options to control test execution, output, and logging.
 
-### Service selection
+### List available tests
 
-**Listing available tests**:
-
-(`ncn-mw#`) To list all available service tests:
+(`ncn-mw#`) To list all available service tests, run the following command:
 
 ```bash
 /usr/local/bin/cmsdev test --list
 ```
 
-**Output example**:
+Example output:
 
 ```text
 all bos cfs conman ims ipxe tftp vcs gitea
@@ -97,14 +101,16 @@ all bos cfs conman ims ipxe tftp vcs gitea
 
 | Option | Short | Description |
 |--------|-------|-------------|
-| `--include-cli` | | Run both CLI and API tests for applicable services |
-| `--include-tenant` | | Run tenant-specific tests (multi-tenancy validation) |
+| `--include-cli` | | Include CLI tests for applicable services |
+| `--include-tenant` | | Include tenant-specific tests (multi-tenancy validation) for applicable services |
 | `--retry` | `-r` | Retry failed tests with exponential backoff until timeout |
 | `--no-cleanup` | | Do not remove temporary test files after execution |
 
-**Default behavior**: By default, only API tests are run. CLI and tenant tests are optional.
+By default, only API tests are run. CLI and tenant tests are optional.
 
-**Retry behavior**: When `--retry` is specified, tests will retry on failure with increasing sleep intervals:
+#### Retry behavior
+
+When `--retry` is specified, tests will retry on failure with increasing sleep intervals:
 
 * Initial retry: 5 seconds
 * Each subsequent retry: Previous interval + 5 seconds (max: timeout/6)
@@ -125,50 +131,43 @@ all bos cfs conman ims ipxe tftp vcs gitea
 
 ### BOS tests
 
-**Service**: Boot Orchestration Service (BOS)
+Validate the Boot Orchestration Service (BOS) service health, API operations, and CLI functionality using the following tests:
 
-**Purpose**: Validates BOS service health, API operations, and CLI functionality.
-
-**Tests performed**:
-
-1. **Pod status verification**:
+* Pod status verification (always run)
    * Verifies at least 3 BOS pods are running
    * Checks for BOS API, operator, and other component pods
    * Ensures migration pods (if present) have "Succeeded" status
    * Validates that all non-migration pods are in "Running" state
-
-2. **API tests** (always run):
-   * **Version endpoint**: Validates BOS version information retrieval
-   * **`Healthz` endpoint**: Checks BOS health status endpoint
-   * **Options CRUD**: Tests creation, retrieval, update, and deletion of BOS global options
-   * **Session templates CRUD**:
-     * Retrieves image IDs from CSM product catalog for multiple architectures (`x86_64`, aarch64)
+* API tests (always run)
+   * Version endpoint: Validates BOS version information retrieval
+   * `healthz` endpoint: Checks BOS health status endpoint
+   * Options CRUD: Tests creation, retrieval, update, and deletion of BOS global options
+   * Session templates CRUD
+     * Retrieves image IDs from CSM product catalog for multiple architectures (`x86_64`, `aarch64`)
      * Creates session templates with architecture-specific configurations
      * Validates template structure and content
      * Retrieves templates by name and lists all templates
      * Updates template parameters (image IDs, CFS configurations)
      * Deletes templates and verifies removal
-   * **Sessions CRUD**:
+   * Sessions CRUD
      * Creates BOS sessions with different operation types (boot, reboot, shutdown)
      * Tests both staged and non-staged session creation
      * Retrieves session status and details
      * Lists all sessions
      * Deletes sessions and validates cleanup
-   * **Components operations**: Tests BOS component listing and status retrieval
-
-3. **CLI tests** (when `--include-cli` is specified):
+   * Components operations: Tests BOS component listing and status retrieval
+* CLI tests (only run when `--include-cli` is specified)
    * Validates all API operations using the Cray CLI (`cray bos` commands)
    * Tests session template operations via CLI
    * Verifies session operations via CLI
    * Ensures CLI output format consistency (JSON)
-
-4. **Tenant tests** (when `--include-tenant` is specified):
-   * Tests BOS operations with both real and dummy tenant contexts
+* Tenant tests (only run when `--include-tenant` is specified)
+   * Tests BOS operations with both real and fake tenant contexts
    * Validates multi-tenancy isolation
    * Verifies tenant-scoped session templates and sessions
-   * Tests operations with non-existent tenants (using dummy tenant name)
+   * Tests operations with non-existent tenants (using fake tenant name)
 
-**Artifacts collected on failure**:
+The following information is collected on failure:
 
 * Kubernetes cluster state
 * Pod descriptions for all BOS pods
@@ -176,26 +175,21 @@ all bos cfs conman ims ipxe tftp vcs gitea
 
 ### CFS tests
 
-**Service**: Configuration Framework Service (CFS)
+Validates Configuration Framework Service (CFS) service health, API operations, and configuration management using the following tests:
 
-**Purpose**: Validates CFS service health, API operations, and configuration management.
-
-**Tests performed**:
-
-1. **Pod status verification**:
+* Pod status verification (always run)
    * Verifies at least 2 CFS pods are running (API and operator)
    * Identifies and validates CFS API pod
    * Identifies and validates CFS operator pod
    * Checks that all CFS service pods are in "Running" state
    * Allows "Succeeded" status with warning (for completed jobs)
-
-2. **API tests** (always run):
-   * **`Healthz` endpoint**: Validates CFS service health status
-   * **Version endpoints**: Tests multiple version endpoints (/, /versions, /v2, /v3)
-   * **Options endpoint**: Tests CFS global options retrieval for v2 and v3
-   * **Components endpoint**: Lists and retrieves CFS components for v2 and v3
-   * **Sessions endpoint**: Lists and retrieves CFS sessions for v2 and v3
-   * **CFS configurations CRUD**:
+* API tests (always run)
+   * `healthz` endpoint: Validates CFS service health status
+   * Version endpoints: Tests multiple version endpoints
+   * Options endpoint: Tests CFS global options retrieval for v2 and v3
+   * Components endpoint: Lists and retrieves CFS components for v2 and v3
+   * Sessions endpoint: Lists and retrieves CFS sessions for v2 and v3
+   * CFS configurations CRUD:
      * Creates CFS configurations with single and multiple layers
      * Retrieves configurations by name
      * Lists all configurations (with pagination support in v3)
@@ -203,29 +197,27 @@ all bos cfs conman ims ipxe tftp vcs gitea
      * Deletes configurations and verifies removal
      * Tests configurations with VCS repository references
      * Validates configuration layer commit, branch, and playbook settings
-   * **CFS sources CRUD** (v3 only):
+   * CFS sources CRUD (v3 only):
      * Creates CFS sources (Git repository references)
      * Retrieves source details
      * Updates source credentials and URLs
      * Deletes sources and validates cleanup
-   * **Product catalog integration**: Retrieves and validates CSM configuration from product catalog
-
-3. **CLI tests** (when `--include-cli` is specified):
+   * Product catalog integration: Retrieves and validates CSM configuration from product catalog
+* CLI tests (only run when `--include-cli` is specified)
    * Validates CFS configuration operations via Cray CLI
    * Tests CFS source operations via CLI
    * Ensures CLI and API consistency
    * Tests both v2 and v3 API versions where applicable
-
-4. **Tenant tests** (when `--include-tenant` is specified):
+* Tenant tests (only run when `--include-tenant` is specified)
    * Tests tenant-scoped CFS configurations (v3 only)
    * Validates multi-tenant isolation:
-     * Verifies tenant A cannot see/modify tenant B's configurations
+     * Verifies tenant A cannot see or modify tenant B's configurations
      * Tests admin ability to create configurations for specific tenants
      * Tests configurations with same name but different tenant ownership
-   * Uses both real tenants and dummy tenant for validation
+   * Uses both real tenants and fake tenant for validation
    * Verifies tenant-specific configuration CRUD operations
 
-**Artifacts collected on failure**:
+The following information is collected on failure:
 
 * Kubernetes cluster state
 * Pod descriptions for CFS API and operator pods
@@ -233,83 +225,65 @@ all bos cfs conman ims ipxe tftp vcs gitea
 
 ### Conman tests
 
-**Service**: Console Management Service (Conman)
+Validates console services infrastructure and pod health by performing the following tests:
 
-**Purpose**: Validates console management infrastructure and pod health.
-
-**Tests performed**:
-
-1. **Persistent Volume Claims (PVC) verification**:
+* Persistent Volume Claims (PVC) verification
    * Validates `cray-console-operator-data-claim` PVC status (should be "Bound")
    * Validates `cray-console-node-agg-data-claim` PVC status (should be "Bound")
-
-2. **Console data pod verification**:
+* Console data pod verification
    * Verifies exactly 1 main `cray-console-data-` pod (Running)
    * Verifies 1-3 `cray-console-data-postgres-#` pods (Running)
    * Allows 0 or more `cray-console-data-wait-for-postgres-#` pods (Succeeded)
-   * Total: At least 4 console-data pods expected
-
-3. **Console node pod verification**:
+   * Total: At least 4 `console-data` pods expected
+* Console node pod verification
    * Verifies at least 2 `cray-console-node-#` pods (Running)
    * These pods aggregate console connections from compute nodes
-
-4. **Console operator pod verification**:
+* Console operator pod verification
    * Verifies exactly 1 `cray-console-operator` pod (Running)
    * This pod manages console service operations
 
-**Artifacts collected on failure**:
+The following information is collected on failure:
 
 * Kubernetes cluster state
 * Pod descriptions for all console-related pods
 * PVC descriptions
 
-**Notes**:
-
-* This test does not perform API or CLI operations
-* Focuses on Kubernetes resource health and availability
+**Note**: These tests do not perform API or CLI operations; they focus on Kubernetes resource health and availability.
 
 ### IMS tests
 
-**Service**: Image Management Service (IMS)
+Validates Image Management Service (IMS) health, image management operations, and recipe handling by performing the following tests:
 
-**Purpose**: Validates IMS service health, image management operations, and recipe handling.
-
-**Tests performed**:
-
-1. **Pod status verification**:
+* Pod status verification (always run)
    * Verifies exactly 1 IMS service pod is running
    * Checks pod status is "Running"
-
-2. **Persistent Volume Claims (PVC) verification**:
+* Persistent Volume Claims (PVC) verification (always run)
    * Validates IMS-related PVC status (should be "Bound")
-
-3. **Recipe pod verification**:
+* Recipe pod verification (always run)
    * Checks for `cray-init-recipe` pods
    * Verifies default recipe pods have "Succeeded" status
    * Validates recipe environment variables (if `IMS_RECIPE_NAME` and `IMS_RECIPE_DISTRO` are set)
-
-4. **API tests** (always run):
-   * **Images CRUD**:
+* API tests (always run)
+   * Images CRUD
      * Creates IMS images with various parameters
      * Links images to S3 artifacts
      * Retrieves image details by ID
      * Lists all images
      * Updates image metadata (name, description)
      * Deletes images and verifies S3 artifact cleanup
-   * **Recipes CRUD**:
+   * Recipes CRUD
      * Creates IMS recipes with `recipe_type` and `linux_distribution`
      * Retrieves recipe details
      * Lists all recipes with filtering
      * Updates recipe parameters
      * Deletes recipes and validates removal
-   * **Public keys CRUD**:
+   * Public keys CRUD
      * Creates SSH public keys for image customization
      * Retrieves public key details
      * Lists all public keys
      * Updates public key metadata
      * Deletes public keys
-
-5. **CLI tests** (when `--include-cli` is specified):
+* CLI tests (only run when `--include-cli` is specified)
    * Validates all image operations via Cray CLI (`cray ims images` commands)
    * Tests recipe operations via CLI
    * Tests public key operations via CLI
@@ -317,8 +291,10 @@ all bos cfs conman ims ipxe tftp vcs gitea
 
 **Environment variables**:
 
-* `IMS_RECIPE_NAME`: Optional - Specifies expected default IMS recipe name to verify
-* `IMS_RECIPE_DISTRO`: Optional - Specifies expected default IMS recipe distribution (defaults to `sles15`)
+| Environment variable | Description | Default if unset |
+| ----- | ----- | ---- |
+| `IMS_RECIPE_NAME` | Specifies the expected default IMS recipe name to verify | 
+| `IMS_RECIPE_DISTRO` | Specifies expected default IMS recipe distribution |  `sles15` |
 
 **Artifacts collected on failure**:
 
@@ -328,31 +304,23 @@ all bos cfs conman ims ipxe tftp vcs gitea
 
 ### iPXE/TFTP tests
 
-**Services**: iPXE boot service and TFTP file transfer service
+Validates iPXE binary build process and TFTP file transfer functionality by performing the following tests:
 
-**Purpose**: Validates iPXE binary build process and TFTP file transfer functionality.
-
-**Tests performed**:
-
-1. **iPXE pod verification** (per architecture):
+* iPXE pod verification
    * Verifies iPXE build pods for supported architectures:
      * `x86_64` (`amd64`)
-     * aarch64 (arm64)
+     * `aarch64` (`arm64`)
    * Checks that iPXE containers are ready
    * Validates pod status is "Running"
-
-2. **TFTP pod verification**:
+* TFTP pod verification
    * Verifies at least 1 TFTP service pod is running
    * Checks pod status is "Running"
-
-3. **Persistent Volume Claims (PVC) verification**:
+* Persistent Volume Claims (PVC) verification
    * Validates `cray-tftp-shared-pvc` PVC status (should be "Bound")
-
-4. **iPXE binary `configmap` validation**:
-   * Retrieves iPXE binary names from Kubernetes `configmap`
-   * Validates `configmap` structure and content
-
-5. **TFTP file transfer test** (worker NCNs only):
+* iPXE binary ConfigMap validation
+   * Retrieves iPXE binary names from Kubernetes ConfigMap
+   * Validates ConfigMap structure and content
+* TFTP file transfer test (only run on worker NCNs)
    * Tests file transfer from TFTP services:
      * `cray-tftp` (NMN network)
      * `cray-tftp-hmn` (HMN network)
@@ -362,70 +330,50 @@ all bos cfs conman ims ipxe tftp vcs gitea
      * Verifies file content integrity
    * **Note**: This test is automatically skipped on master NCNs
 
-**Services tested**:
-
-* `cray-tftp` - TFTP service on Node Management Network (NMN)
-* `cray-tftp-hmn` - TFTP service on Hardware Management Network (HMN)
-
-**Artifacts collected on failure**:
+The following information is collected on failure:
 
 * Kubernetes cluster state
 * Pod descriptions for iPXE and TFTP pods
 * PVC descriptions
 
-**Architecture support**:
-
-* `x86_64` (`amd64`)
-* aarch64 (arm64)
-
 ### VCS tests
 
-**Service**: Version Control Service (VCS) - Gitea
+Validates the Version Control Service (VCS) health and Gitea repository operations by performing the following tests:
 
-**Purpose**: Validates VCS/Gitea service health and repository operations.
-
-**Tests performed**:
-
-1. **Pod status verification**:
+* Pod status verification
    * Verifies at least 2 VCS pods are present
    * Expected pods:
      * Exactly 1 main `gitea-vcs` pod (Running)
      * 1 or more `gitea-vcs-postgres-#` pods (Running)
      * 0 or more `gitea-vcs-wait-for-postgres-#` pods (Succeeded)
      * 0 or more `logical-backup-gitea-vcs-postgres-` pods (Succeeded, Running, or Pending)
-
-2. **Persistent Volume Claims (PVC) verification**:
+* Persistent Volume Claims (PVC) verification
    * Validates `gitea-vcs-data-claim` PVC status (should be "Bound")
    * For each `postgres` pod, validates corresponding `pgdata-gitea-vcs-postgres-#` PVC
-
-3. **Backup pod validation**:
+* Backup pod validation
    * Identifies the most recent backup pod
    * Verifies backup pod status is acceptable (Succeeded, Running, or Pending)
    * Warns if backup pod has unexpected status
-
-4. **VCS repository operations**:
-   * **Repository creation**:
+* VCS repository operations
+   * Repository creation
      * Creates a new Git repository in VCS using API
      * Validates repository creation response
-   * **Repository cloning**:
+   * Repository cloning
      * Clones the repository using Git client
      * Tests VCS authentication (username/password from secrets)
-   * **File operations**:
+   * File operations
      * Creates and commits new files to repository
      * Pushes changes to VCS
-   * **Repository listing**:
+   * Repository listing
      * Lists all repositories via VCS API
      * Verifies created repository appears in list
-   * **Repository deletion**:
+   * Repository deletion
      * Deletes test repository via API
      * Validates repository removal
 
-**VCS authentication**:
+VCS authentication is required for the tests. The tests retrieve the VCS credentials from the `vcs-user-credentials` Kubernetes secret. The credentials are used for Git operations and API calls.
 
-* Retrieves VCS credentials from Kubernetes secret: `vcs-user-credentials`
-* Uses credentials for Git operations and API calls
-
-**Artifacts collected on failure**:
+The following information is collected on failure:
 
 * Kubernetes cluster state
 * Pod descriptions for all VCS pods
@@ -438,31 +386,31 @@ all bos cfs conman ims ipxe tftp vcs gitea
 
 ### Basic test execution
 
-**Run all tests (API only)**:
+#### Run all tests (API only)
 
 ```bash
 /usr/local/bin/cmsdev test -q all
 ```
 
-**Run a single service test**:
+#### Run a single service test (API only, no multi-tenancy tests)
 
 ```bash
 /usr/local/bin/cmsdev test -q bos
 ```
 
-**Run multiple specific services**:
+#### Run multiple specific services
 
 ```bash
 /usr/local/bin/cmsdev test -q bos cfs ims
 ```
 
-**Run with retry on failure**:
+#### Run with retry on failure
 
 ```bash
 /usr/local/bin/cmsdev test -q all -r
 ```
 
-**Run in verbose mode**:
+#### Run in verbose mode
 
 ```bash
 /usr/local/bin/cmsdev test -v conman
@@ -470,37 +418,37 @@ all bos cfs conman ims ipxe tftp vcs gitea
 
 ### Advanced test scenarios
 
-**Run BOS tests including CLI operations**:
+#### Run BOS tests including CLI operations
 
 ```bash
 /usr/local/bin/cmsdev test bos --include-cli
 ```
 
-**Run CFS tests with both CLI and tenant tests**:
+#### Run CFS tests with both CLI and tenant tests
 
 ```bash
 /usr/local/bin/cmsdev test cfs --include-cli --include-tenant
 ```
 
-**Run all tests with CLI, tenant support, and retry**:
+#### Run all tests with CLI, tenant support, and retry
 
 ```bash
 /usr/local/bin/cmsdev test all --include-cli --include-tenant --retry
 ```
 
-**Run tests without logging to file**:
+#### Run tests without logging to file
 
 ```bash
 /usr/local/bin/cmsdev test tftp --no-log -q
 ```
 
-**Run tests with custom log directory**:
+#### Run tests with custom log directory
 
 ```bash
 /usr/local/bin/cmsdev test all --log-dir /tmp/my-cmsdev-logs
 ```
 
-**Run tests in verbose mode with retry and keep temporary files**:
+#### Run tests in verbose mode with retry and keep temporary files
 
 ```bash
 /usr/local/bin/cmsdev test vcs --verbose --retry --no-cleanup
@@ -514,7 +462,7 @@ all bos cfs conman ims ipxe tftp vcs gitea
 /usr/local/bin/cmsdev version
 ```
 
-**Output example**:
+Example output:
 
 ```text
 cmsdev version 1.34.0

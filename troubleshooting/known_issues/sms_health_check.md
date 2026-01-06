@@ -6,19 +6,19 @@ This document describes known issues and troubleshooting guidance for the `cmsde
 
 ## Quick Reference
 
-**Run SMS health checks:**
+(`ncn-mw#`) The following command runs the SMS health checks:
 
 ```bash
 /usr/local/bin/cmsdev test -q all
 ```
 
-**Check version:**
+(`ncn-mw#`) Show the `cmsdev` version by running the following command:
 
 ```bash
 /usr/local/bin/cmsdev version
 ```
 
-**Log location:** `/opt/cray/tests/install/logs/cmsdev/YYMMDD_HHMMSS_microseconds_PID/cmsdev.log`
+The test log location is: `/opt/cray/tests/install/logs/cmsdev/YYMMDD_HHMMSS_microseconds_PID/cmsdev.log`
 
 For detailed usage information, see the [`cmsdev` Test Suite Documentation](../cmsdev_tests.md).
 
@@ -43,7 +43,7 @@ Configure the Cray CLI before running tests. See:
 * [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface)
 * [Configure the Cray CLI](../../operations/configure_cray_cli.md)
 
-**Note**: CLI tests are only run when using the `--include-cli` flag. See the [`cmsdev` Test Suite Documentation](../cmsdev_tests.md#test-control-options) for details.
+**Note**: CLI tests are only run when using the `--include-cli` flag. See [Test control options](../cmsdev_tests.md#test-control-options) for details.
 
 ### Invalid CFS component
 
@@ -51,7 +51,7 @@ Configure the Cray CLI before running tests. See:
 
 **Cause**: A CFS component exists with a zero-length string for its `id` field.
 
-**Error messages vary by `cmsdev` version**:
+The error messages vary by `cmsdev` version:
 
 * **`cmsdev` versions 1.25 or higher**:
 
@@ -82,13 +82,13 @@ See [CFS Component With Zero-Length ID](CFS_Component_With_Zero_Length_ID.md) fo
 
 **Symptom**: The VCS subtest fails with a command error.
 
-**Error message**:
+The error message resembles the following:
 
 ```text
 ERROR (run tag Xe9tC-vcs): Command failed
 ```
 
-**Detailed error** (visible in verbose mode or log file):
+If the test is run in verbose mode, or the `cmsdev` log file is examined, a line similar to the following is found:
 
 ```text
 fatal: unable to access 'https://crayvcs:BPuN/M846JL5XKTTWVqcV2mhuZfzOC64nnZ/e54ri1M=@api-gw-service-nmn.local/vcs/test-cmsdev-zvkEP50G/harf-zEK1SuiP.git/': URL using bad/illegal format or missing URL
@@ -105,9 +105,9 @@ See [VCS Password With Illegal Characters](VCS_Password_With_Illegal_Characters.
 * Run test in verbose mode: `/usr/local/bin/cmsdev test -v vcs`
 * Or examine the log file: `/opt/cray/tests/install/logs/cmsdev/YYMMDD_HHMMSS_microseconds_PID/cmsdev.log`
 
-See the [`cmsdev` Test Suite Documentation](../cmsdev_tests.md#logging) for more information on logging.
+See [Logging](../cmsdev_tests.md#logging) for more information on logging.
 
-## Additional Resources
+## Additional resources
 
 * [`cmsdev` Test Suite Documentation](../cmsdev_tests.md) - Complete test suite reference
 * [Configure the Cray CLI](../../operations/configure_cray_cli.md)
