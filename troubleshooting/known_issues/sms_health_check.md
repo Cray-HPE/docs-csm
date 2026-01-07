@@ -4,6 +4,13 @@ This document describes known issues and troubleshooting guidance for the `cmsde
 
 > **See also**: [`cmsdev` Test Suite Documentation](../cmsdev_tests.md) - Comprehensive documentation including all available tests, command-line options, and usage examples.
 
+* [Quick Reference](#quick-reference)
+* [Known Issues](#known-issues)
+    * [Cray CLI not configured](#cray-cli-not-configured)
+    * [Invalid CFS component](#invalid-cfs-component)
+    * [VCS subtest command failure](#vcs-subtest-command-failure)
+* [Additional resources](#additional-resources)
+
 ## Quick Reference
 
 (`ncn-mw#`) The following command runs the SMS health checks:
