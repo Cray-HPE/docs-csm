@@ -246,10 +246,10 @@ the timeout period. Please retry the `rr_critical_service_restart` script after 
 the services that failed continue to be imbalanced.
 To see the list of imbalanced services the user can check the logs of `cray-rrs-rms` container
 in `cray-rrs` pod as explained in
-[Steps to view RMS logs](Troubleshooting.md#steps-to-view-rms-logs) in [Troubleshooting guide](Troubleshooting.md).
+[Steps to view RMS logs](../rack_resiliency/Troubleshooting.md#steps-to-view-rms-logs) in [Troubleshooting guide](Troubleshooting.md).
 
 For information on how to identify all of the critical services, see
-[List services in ConfigMap](Manage_Critical_Services.md#list-services-in-configmap).
+[List services in ConfigMap](../rack_resiliency/Manage_Critical_Services.md#list-services-in-configmap).
 
 Example usage:
 
