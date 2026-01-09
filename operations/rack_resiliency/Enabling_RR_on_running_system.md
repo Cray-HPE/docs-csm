@@ -241,7 +241,7 @@ The script requires the `insert-labels-topology-constraints` cluster policy to b
 While Kubernetes performs rolling restarts to maintain service availability, there may be brief
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry.
 
-**Note**: Due to conditions outside the control of Rack Resiliency, some services may fail to restart within
+**Note**: Due to Kubernetes conditions outside the control of Rack Resiliency, some services may fail to restart within
 the timeout period. Please retry the `rr_critical_service_restart` script after ensuring that
 the services that failed continue to be imbalanced.
 To see the list of imbalanced services the user can check the logs of `cray-rrs-rms` container
