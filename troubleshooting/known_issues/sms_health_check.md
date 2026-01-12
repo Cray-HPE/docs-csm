@@ -2,7 +2,7 @@
 
 This document describes known issues and troubleshooting guidance for the `cmsdev` test suite used to validate Software Management Services (SMS) in CSM.
 
-> For comprehensive documentation including all available tests, command-line options, and usage examples, see 
+> For comprehensive documentation including all available tests, command-line options, and usage examples, see
 [`cmsdev` Tests](../cmsdev_tests.md).
 
 * [Quick reference](#quick-reference)
@@ -57,8 +57,6 @@ Configure the Cray CLI before running tests. For information on how to do this, 
 
 **Symptom**: The `cmsdev` CFS subtest fails with errors related to component ID validation.
 
-**Cause**: A CFS component exists with a zero-length string for its `id` field.
-
 The error messages vary by `cmsdev` version:
 
 * **`cmsdev` versions 1.25 or higher**:
@@ -81,6 +79,8 @@ The error messages vary by `cmsdev` version:
     ```text
     ERROR (run tag fhn3C-cfs): First list item has empty value for "id" field
     ```
+
+**Cause**: A CFS component exists with a zero-length string for its `id` field.
 
 **Resolution**:
 
