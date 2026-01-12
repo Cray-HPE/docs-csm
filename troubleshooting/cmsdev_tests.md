@@ -44,7 +44,7 @@ The `cmsdev` test suite validates the health and functionality of Software Manag
 * CLI operation testing
     * Validates Cray CLI commands for services (when `--include-cli` flag is used).
 * Multi-tenancy testing
-    * Tests tenant-specific operations (when `--include-tenant` flag is used). See [Multi-Tenancy Support](../operations/multi-tenancy/Overview.md) for more information.
+    * Tests tenant-specific operations (when `--include-tenant` flag is used). See [Multi-Tenancy Support](../operations/multi-tenancy/Overview.md) for more information on multi-tenancy in CSM.
 * Service-specific functionality
     * Specialized tests unique to each service (e.g., TFTP file transfers, VCS repository operations).
 
@@ -57,9 +57,9 @@ This test can be run on any Kubernetes NCN (any master or worker NCN, but **not*
 When run on a Kubernetes master NCN, the TFTP file transfer subtest is omitted. However, that TFTP subtest is
 run on a worker NCN as part of the Goss NCN health checks.
 
-(`ncn-mw#`) The following command runs the `cmsdev` test suite for all services. By default, this runs only API tests;
-CLI tests (use `--include-cli`) and tenant tests (use `--include-tenant`) are optional. Additionally, the TFTP file
-transfer subtest is omitted on master NCNs, as noted in the previous paragraph.
+(`ncn-mw#`) The following command runs the `cmsdev` test suite for all services.
+CLI and multi-tenancy subtests will be excluded (see [Test control options](#test-control-options) for details on how to include them).
+Additionally, the TFTP file transfer subtest is omitted on master NCNs, as noted earlier.
 
 ```bash
 /usr/local/bin/cmsdev test -q all
@@ -115,11 +115,14 @@ By default, only API tests are run. CLI and tenant tests are optional.
 
 #### Retry behavior
 
-When `--retry` is specified, tests will retry on failure with increasing sleep intervals:
+When `--retry` is specified, tests will retry on failure after waiting for an interval of time.
 
-* Initial retry: 5 seconds
-* Each subsequent retry: Previous interval + 5 seconds (max: timeout/6)
-* timeout: Service-specific maximum timeout (default: 120 seconds, BOS/CFS/Conman/iPXE/TFTP/VCS: 300 seconds)
+* After the first failure, the initial retry interval is 5 seconds
+* Each subsequent interval is 5 seconds longer than the previous interval
+* The interval is capped at a maximum of 1/6 of the test timeout value
+* The test timeout is the time after which the test will no longer retry on failure. This value varies for the different services.
+    * For BOS, CFS, console services, iPXE/TFTP, and VCS, the timeout is 300 seconds
+    * Otherwise, the timeout is 120 seconds
 
 ### Output control options
 
@@ -298,8 +301,8 @@ The following environment variables control the behavior of the IMS tests (they 
 
 | Environment variable | Description | Default if unset |
 | ----- | ----- | ---- |
-| `IMS_RECIPE_NAME` | Specifies the expected default IMS recipe name to verify |
-| `IMS_RECIPE_DISTRO` | Specifies expected default IMS recipe distribution |  `sles15` |
+| `IMS_RECIPE_NAME` | Specifies the IMS recipe name to verify | No recipe verification is performed if this is unset |
+| `IMS_RECIPE_DISTRO` | Specifies the distribution of the IMS recipe being validated |  `sles15` |
 
 The following information is collected on failure:
 
@@ -380,7 +383,8 @@ Validates the Version Control Service (VCS) health and Gitea repository operatio
         * Deletes test repository via API
         * Validates repository removal
 
-VCS authentication is required for the tests. The tests retrieve the VCS credentials from the `vcs-user-credentials` Kubernetes secret. The credentials are used for Git operations and API calls.
+VCS authentication is required for the tests. The tests retrieve the VCS credentials from the `vcs-user-credentials` Kubernetes secret.
+The credentials are used for Git operations and API calls.
 
 The following information is collected on failure:
 
@@ -393,57 +397,45 @@ The following information is collected on failure:
 
 ### Basic test execution
 
-#### Run all tests (API only) in quiet mode
+#### Run tests for all services in quiet mode
+
+> This excludes CLI and multi-tenancy tests.
 
 ```bash
 /usr/local/bin/cmsdev test -q all
 ```
 
-#### Run a single service test (API only, no multi-tenancy tests) in quiet mode
+#### Run tests for a specific single service in verbose mode
+
+> This excludes CLI and multi-tenancy tests.
 
 ```bash
-/usr/local/bin/cmsdev test -q bos
+/usr/local/bin/cmsdev test -v bos
 ```
 
-#### Run multiple specific services
+#### Run tests for multiple specific services with retries on failure
+
+> This excludes CLI and multi-tenancy tests.
 
 ```bash
-/usr/local/bin/cmsdev test -q bos cfs ims
-```
-
-#### Run with retry on failure
-
-```bash
-/usr/local/bin/cmsdev test -q all -r
-```
-
-#### Run in verbose mode
-
-```bash
-/usr/local/bin/cmsdev test -v conman
+/usr/local/bin/cmsdev test bos cfs ims -r
 ```
 
 ### Advanced test scenarios
 
-#### Run BOS tests including CLI operations
+#### Run BOS tests including CLI tests
 
 ```bash
 /usr/local/bin/cmsdev test bos --include-cli
 ```
 
-#### Run CFS tests with both CLI and tenant tests
-
-```bash
-/usr/local/bin/cmsdev test cfs --include-cli --include-tenant
-```
-
-#### Run all tests with CLI, tenant support, and retry
+#### Run all service tests including both CLI and multi-tenancy tests, with retry on failure
 
 ```bash
 /usr/local/bin/cmsdev test all --include-cli --include-tenant --retry
 ```
 
-#### Run tests without logging to file
+#### Run tests in quiet mode without logging to a file
 
 ```bash
 /usr/local/bin/cmsdev test tftp --no-log -q

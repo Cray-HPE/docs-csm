@@ -2,16 +2,17 @@
 
 This document describes known issues and troubleshooting guidance for the `cmsdev` test suite used to validate Software Management Services (SMS) in CSM.
 
-> **See also**: [`cmsdev` Test Suite Documentation](../cmsdev_tests.md) - Comprehensive documentation including all available tests, command-line options, and usage examples.
+> For comprehensive documentation including all available tests, command-line options, and usage examples, see 
+[`cmsdev` Tests](../cmsdev_tests.md).
 
-* [Quick Reference](#quick-reference)
-* [Known Issues](#known-issues)
+* [Quick reference](#quick-reference)
+* [Known issues](#known-issues)
     * [Cray CLI not configured](#cray-cli-not-configured)
     * [Invalid CFS component](#invalid-cfs-component)
     * [VCS subtest command failure](#vcs-subtest-command-failure)
 * [Additional resources](#additional-resources)
 
-## Quick Reference
+## Quick reference
 
 (`ncn-mw#`) The following command runs the SMS health checks:
 
@@ -27,9 +28,9 @@ This document describes known issues and troubleshooting guidance for the `cmsde
 
 The test log location is: `/opt/cray/tests/install/logs/cmsdev/YYMMDD_HHMMSS_microseconds_PID/cmsdev.log`
 
-For detailed usage information, see the [`cmsdev` Test Suite Documentation](../cmsdev_tests.md).
+For detailed usage information, see [`cmsdev` Tests](../cmsdev_tests.md).
 
-## Known Issues
+## Known issues
 
 This section documents common issues that may occur when running the `cmsdev` test suite.
 
@@ -45,7 +46,7 @@ This section documents common issues that may occur when running the `cmsdev` te
 
 **Resolution**:
 
-Configure the Cray CLI before running tests. See:
+Configure the Cray CLI before running tests. For information on how to do this, see the following resources:
 
 * [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface)
 * [Configure the Cray CLI](../../operations/configure_cray_cli.md)
@@ -116,6 +117,6 @@ See [Logging](../cmsdev_tests.md#logging) for more information on logging.
 
 ## Additional resources
 
-* [`cmsdev` Test Suite Documentation](../cmsdev_tests.md) - Complete test suite reference
+* [`cmsdev` Tests](../cmsdev_tests.md) - Complete test suite reference
 * [Configure the Cray CLI](../../operations/configure_cray_cli.md)
 * [Validate CSM health](../../operations/validate_csm_health.md)
