@@ -242,8 +242,8 @@ While Kubernetes performs rolling restarts to maintain service availability, the
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry.
 
 **Note**: Due to Kubernetes conditions outside the control of Rack Resiliency, some services may fail to restart within
-the timeout period. Retry the `rr_critical_service_restart` script after ensuring that
-the services that failed continue to be imbalanced.
+the timeout period. Retry the [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py)
+script after ensuring that the services that failed continue to be imbalanced.
 To see the list of imbalanced services, the user can check the logs of `cray-rrs-rms` container
 in `cray-rrs` pod as explained in
 [Steps to view RMS logs](../rack_resiliency/Troubleshooting.md#steps-to-view-rms-logs) in [Troubleshooting guide](Troubleshooting.md).
