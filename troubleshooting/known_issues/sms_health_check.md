@@ -7,9 +7,9 @@ This document describes known issues and troubleshooting guidance for the `cmsde
 
 * [Quick reference](#quick-reference)
 * [Known issues](#known-issues)
-    * [Cray CLI not configured](#cray-cli-not-configured)
-    * [Invalid CFS component](#invalid-cfs-component)
-    * [VCS subtest command failure](#vcs-subtest-command-failure)
+    1. [Cray CLI not configured](#1-cray-cli-not-configured)
+    1. [Invalid CFS component](#2-invalid-cfs-component)
+    1. [VCS subtest command failure](#3-vcs-subtest-command-failure)
 * [Additional resources](#additional-resources)
 
 ## Quick reference
@@ -34,38 +34,46 @@ For detailed usage information, see [`cmsdev` Tests](../cmsdev_tests.md).
 
 This section documents common issues that may occur when running the `cmsdev` test suite.
 
-* [Cray CLI not configured](#cray-cli-not-configured)
-* [Invalid CFS component](#invalid-cfs-component)
-* [VCS subtest command failure](#vcs-subtest-command-failure)
+1. [Cray CLI not configured](#1-cray-cli-not-configured)
+1. [Invalid CFS component](#2-invalid-cfs-component)
+1. [VCS subtest command failure](#3-vcs-subtest-command-failure)
 
-### Cray CLI not configured
+### 1. Cray CLI not configured
 
-**Symptom**: Some subtests fail with CLI-related errors.
+#### 1.1 Symptom
 
-**Cause**: The Cray CLI is not properly configured on the management NCN where `cmsdev` is executed.
+Some subtests fail with CLI-related errors.
 
-**Resolution**:
+#### 1.2 Cause
+
+The Cray CLI is not properly configured on the management NCN where `cmsdev` is executed.
+
+#### 1.3 Resolution
 
 Configure the Cray CLI before running tests. For information on how to do this, see the following resources:
 
 * [Cray command line interface](../../operations/validate_csm_health.md#0-cray-command-line-interface)
 * [Configure the Cray CLI](../../operations/configure_cray_cli.md)
 
-**Note**: CLI tests are only run when using the `--include-cli` flag. See [Test control options](../cmsdev_tests.md#test-control-options) for details.
+> Note: CLI tests are only run when using the `--include-cli` flag. See [Test control options](../cmsdev_tests.md#test-control-options) for details.
 
-### Invalid CFS component
+### 2. Invalid CFS component
 
-**Symptom**: The `cmsdev` CFS subtest fails with errors related to component ID validation.
+#### 2.1 Symptom
+
+The `cmsdev` CFS subtest fails with errors related to component ID validation.
 
 The error messages vary by `cmsdev` version:
 
-* **`cmsdev` versions 1.25 or higher**:
+> See [Quick reference](#quick-reference) for details on how to check the `cmsdev` version
+
+* `cmsdev` versions 1.25 or higher:
 
     ```text
     ERROR (run tag fhn3C-cfs): In first item listed, 'id' field maps to a 0-length string, but it should have non-0 length
     ```
 
-* **`cmsdev` versions 1.16.2 to 1.24**:
+* `cmsdev` versions 1.16.2 to 1.24:
 
     ```text
     ERROR (run tag sosdD-cfs): GET https://api-gw-service-nmn.local/apis/cfs/v3/components/: expected status code 200, got 404
@@ -74,21 +82,25 @@ The error messages vary by `cmsdev` version:
     ERROR (run tag sosdD-cfs): CLI command (cfs v2 components describe  --format json) failed with exit code 2
     ```
 
-* **`cmsdev` versions less than 1.16.2**:
+* `cmsdev` versions less than 1.16.2:
 
     ```text
     ERROR (run tag fhn3C-cfs): First list item has empty value for "id" field
     ```
 
-**Cause**: A CFS component exists with a zero-length string for its `id` field.
+#### 2.2 Cause
 
-**Resolution**:
+A CFS component exists with a zero-length string for its `id` field.
+
+#### 2.3 Resolution
 
 See [CFS Component With Zero-Length ID](CFS_Component_With_Zero_Length_ID.md) for detailed remediation steps.
 
-### VCS subtest command failure
+### 3. VCS subtest command failure
 
-**Symptom**: The VCS subtest fails with a command error.
+#### 3.1 Symptom
+
+The VCS subtest fails with a command error.
 
 The error message resembles the following:
 
@@ -102,21 +114,20 @@ If the test is run in verbose mode, or the `cmsdev` log file is examined, a line
 fatal: unable to access 'https://crayvcs:BPuN/M846JL5XKTTWVqcV2mhuZfzOC64nnZ/e54ri1M=@api-gw-service-nmn.local/vcs/test-cmsdev-zvkEP50G/harf-zEK1SuiP.git/': URL using bad/illegal format or missing URL
 ```
 
-**Cause**: The VCS administrative password contains illegal characters that are not properly URL-encoded.
+* In order to run the test in verbose mode, include the `-v` flag (e.g.`/usr/local/bin/cmsdev test -v vcs`)
+* The log file is located in a timestamped subdirectory: `/opt/cray/tests/install/logs/cmsdev/YYMMDD_HHMMSS_microseconds_PID/cmsdev.log`
+    * See [Logging](../cmsdev_tests.md#logging) for more information on `cmsdev` logging
 
-**Resolution**:
+#### 3.2 Cause
+
+The VCS administrative password contains illegal characters that are not properly URL-encoded.
+
+#### 3.3 Resolution
 
 See [VCS Password With Illegal Characters](VCS_Password_With_Illegal_Characters.md) for detailed remediation steps.
 
-**To view detailed errors**:
-
-* Run test in verbose mode: `/usr/local/bin/cmsdev test -v vcs`
-* Or examine the log file: `/opt/cray/tests/install/logs/cmsdev/YYMMDD_HHMMSS_microseconds_PID/cmsdev.log`
-
-See [Logging](../cmsdev_tests.md#logging) for more information on logging.
-
 ## Additional resources
 
-* [`cmsdev` Tests](../cmsdev_tests.md) - Complete test suite reference
+* [`cmsdev` Tests](../cmsdev_tests.md): Complete `cmsdev` reference
 * [Configure the Cray CLI](../../operations/configure_cray_cli.md)
 * [Validate CSM health](../../operations/validate_csm_health.md)
