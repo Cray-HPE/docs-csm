@@ -33,7 +33,6 @@ BOS depends on each of the following services to complete its tasks:
 
 | *Service* | *Description* |
 | --------- | ------------- |
-| [BOA](Sessions.md#boot-orchestration-agent-boa) | Handles any action type submitted to the BOS v1 API. BOA jobs are created and launched by BOS. |
 | [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) | Stores the configuration information that is used to boot each hardware component. Nodes consult BSS for their boot artifacts and boot parameters when they boot or reboot. |
 | [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) | BOS uses CFS to apply configuration to the nodes in its boot sets \(node personalization\). |
 | [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) | Used to power nodes on and off, as well as query current power status. |
@@ -75,6 +74,5 @@ The source code for BOS is located in the following open source GitHub repositor
 | *Repository* | *Contents* |
 | ------------ | ---------- |
 | [`Cray-HPE/bos`](https://github.com/Cray-HPE/bos/) | BOS API server |
-| [`Cray-HPE/boa`](https://github.com/Cray-HPE/boa/) | BOA |
 | [`Cray-HPE/craycli`](https://github.com/Cray-HPE/craycli/) | The Cray CLI, including the BOS subcommands. |
 | [`Cray-HPE/cms-tools`](https://github.com/Cray-HPE/cms-tools/) | Health checks and utilities for several CSM services, including BOS. |
