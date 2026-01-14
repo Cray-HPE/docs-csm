@@ -136,6 +136,8 @@ After the Fabric Manager nodes have been successfully redeployed and are running
 
 After the Fabric Manager nodes have been redeployed and are running with the new image, join them to Spire to avoid issues with Spire tokens.
 
-```bash
-/opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
-```
+1. (`ncn-mw#`) Join Spire on the Fabric Manager nodes.
+
+    ```bash
+    /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
+    ```
