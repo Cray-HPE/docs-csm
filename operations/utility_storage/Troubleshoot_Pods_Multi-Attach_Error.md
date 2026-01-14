@@ -1,4 +1,4 @@
-# Troubleshoot Pods Failing to Restart on Other Worker Nodes
+# Troubleshoot Pods Multi-Attach Error
 
 Troubleshoot an issue where pods cannot restart on another worker node because of the
 "Volume is already exclusively attached to one node and can't be attached to another" error.
@@ -18,7 +18,7 @@ This procedure requires administrative privileges.
 
 ## Procedure
 
-1. Force delete the pod.
+1. (`ncn-mw#`) Force delete the pod.
 
     This may not be successful, but it is important to try before proceeding.
 
@@ -28,9 +28,9 @@ This procedure requires administrative privileges.
     kubectl delete pod -n $NAMESPACE $POD_NAME --force --grace-period=0
     ```
 
-1. Log in to a manager node and proceed if the previous step did not fix the issue.
+    If this does not resolve the issue, then continuing following this procedure.
 
-1. Describe the pod experiencing issues.
+1. (`ncn-mw#`) Describe the pod experiencing issues.
 
     The returned Persistent Volume Claim \(PVC\) information will be needed in future steps.
 
@@ -38,22 +38,19 @@ This procedure requires administrative privileges.
     kubectl -n services describe pod $POD_NAME
     ```
 
-    Example output:
+    Excerpt of example output:
 
     ```text
-    [...]
-
     Events:
       Type     Reason              Age   From                     Message
       ----     ------              ----  ----                     -------
       Normal   Scheduled           23s   default-scheduler        Successfully assigned services/cray-vault-0 to ncn-w003
       Warning  FailedAttachVolume  23s   attachdetach-controller  Multi-Attach error for volume "**pvc-186dc7a5-9c9a-450b-b856-4308c331b37**" Volume is already exclusively attached to one node and can't be attached to another
-
     ```
 
-    In this example, pvc-186dc7a5-9c9a-450b-b856-4308c331b37 is the PVC information required for the next step.
+    In this example, `pvc-186dc7a5-9c9a-450b-b856-4308c331b37` is the PVC information required for the next step.
 
-1. Retrieve the Ceph volume.
+1. (`ncn-mw#`) Retrieve the Ceph volume.
 
     ```bash
     PVC_NAME=pvc-186dc7a5-9c9a-450b-b856-4308c331b37
@@ -100,7 +97,7 @@ This procedure requires administrative privileges.
     jq -r '"\(.spec.csi.volumeAttributes.pool)/\(.spec.csi.volumeAttributes.imageName)"')
     ```
 
-1. Find the worker node that has the RBD locked.
+1. (`ncn-m#`) Find the worker node that has the RBD locked.
 
     1. Find the RBD status.
 
@@ -113,12 +110,12 @@ This procedure requires administrative privileges.
         For example:
 
         ```bash
-        rbd status $RBD_NAME
+        rbd status kube/kubernetes-dynamic-pvc-3ce9ec37-846b-11ea-acae-86f521872f4c
         ```
 
-        Output:
+        Example output:
 
-        ```bash
+        ```text
         Watchers:
                 watcher=10.252.1.11:0/3628969487 client.74826 cookie=18446462598732840963
         ```
@@ -134,7 +131,7 @@ This procedure requires administrative privileges.
 
         Example output:
 
-        ```bash
+        ```text
         10.252.1.11     ncn-w005.nmn ncn-w005
         ```
 
@@ -144,19 +141,19 @@ This procedure requires administrative privileges.
     HOST_NAME=ncn-w005
     ```
 
-1. Unmap the device.
+1. (`ncn#`) Unmap the device.
 
     1. Find the RBD number.
 
-        Use the CEPH\_IMAGE\_NAME value returned.
+        Use the `CEPH_IMAGE_NAME` value identified earlier.
 
         ```bash
-        ssh $HOST_NAME rbd showmapped|grep $CEPH_IMAGE_NAME
+        ssh "${HOST_NAME}" rbd showmapped | grep "${CEPH_IMAGE_NAME}"
         ```
 
         Example output:
 
-        ```bash
+        ```text
         2   kube             csi-vol-5a91ee3d-4539-11ef-a44c-2629c446168b  -     /dev/rbd2
         ```
 
@@ -172,10 +169,10 @@ This procedure requires administrative privileges.
     1. Verify it is not in use by an unstopped container.
 
         ```bash
-        mount|grep $RBD_NUMBER
+        mount | grep "${RBD_NUMBER}"
         ```
 
-        If no mount points are returned, proceed to the next step. If mount points are returned, run the following command for each mount point:
+        If no mount points are returned, proceed to the next step. If mount points are returned, then run the following command for each mount point:
 
         ```bash
         unmount MOUNT_POINT
@@ -197,13 +194,13 @@ This procedure requires administrative privileges.
         exit
         ```
 
-1. Check the status of the pod.
+1. (`ncn-mw#`) Check the status of the pod.
 
     ```bash
     kubectl get pod -n $NAMESPACE $POD_NAME
     ```
 
-    **Troubleshooting:** If the pod status has not changes, try deleting the pod to restart it.
+    **Troubleshooting:** If the pod status has not changed, try deleting the pod to restart it.
 
     ```bash
     kubectl delete pod -n $NAMESPACE $POD_NAME
