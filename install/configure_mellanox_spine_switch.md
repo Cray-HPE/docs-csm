@@ -2,358 +2,384 @@
 
 This page describes how Mellanox spine switches are configured.
 
-Depending on the size of the HPE Cray EX system, the spine switches will serve different purposes. On TDS systems, the NCNs will plug directly into the spine switches. On larger systems with aggregation switches, the spine switches will provide connection between the aggregation switches.
+Depending on the size of the HPE Cray EX system, the spine switches serve different purposes.
+On Test and Development Systems (TDS), the NCNs plug directly into the spine switches.
+On larger systems with aggregation switches, the spine switches provide connection between the aggregation switches.
 
 ## Prerequisites
 
-- One connection between the switches is used for the Inter switch link (ISL).
+- One connection between the switches is used for the Inter-Switch Link (ISL).
 - Connectivity to the switch is established.
 
-Here is an example snippet about a spine switch from the SHCD.
-
+Here is an example of spine switch data in an excerpt from the SHCD.
 The ISL ports are port 32 on both spine switches.
 
-| Source | Source Label Info | Destination Label Info | Destination | Description |
-| --- | --- | --- | --- | --- |
-| sw-100g01 | x3105u40-j32 | x3105u41-j32 | sw-100g02 | 100g-1m-DAC |
-
+| Source      | Source Label Info | Destination Label Info | Destination | Description   |
+| ----------- | ----------------- | ---------------------- | ----------- | ------------- |
+| `sw-100g01` | `x3105u40-j32`    | `x3105u41-j32`         | `sw-100g02` | `100g-1m-DAC` |
 
 ## Configure VLAN
 
-**Cray Site Init (CSI) generates the IP addresses used by the system, below are samples only.**
-The VLAN information is located in the network YAML files. The following are examples.
+Cray Site Init (CSI) generates the IP addresses used by the system; **below are examples only.**
+The VLAN information is located in the network YAML files.
 
-1. Verify the spine switches have VLAN interfaces in NMN, HMN, and CAN networks.
+Verify the spine switches have VLAN interfaces in NMN, HMN, and CAN networks.
 
-   Example NMN.yaml:
+### Excerpt from `/var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml`
 
-   ```bash
-   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/NMN.yaml
-   SNIPPET
-     - ip_address: 10.252.0.2
-       name: sw-spine-001
-       comment: x3000c0h12s1
-       aliases: []
-     - ip_address: 10.252.0.3
-       name: sw-spine-002
-       comment: x3000c0h13s1
-       aliases: []
-     name: network_hardware
-     net-name: NMN
-     vlan_id: 2
-     comment: ""
-     gateway: 10.252.0.1
+```yaml
+  - ip_address: 10.252.0.2
+    name: sw-spine-001
+    comment: x3000c0h12s1
+    aliases: []
+  - ip_address: 10.252.0.3
+    name: sw-spine-002
+    comment: x3000c0h13s1
+    aliases: []
+  name: network_hardware
+  net-name: NMN
+  vlan_id: 2
+  comment: ""
+  gateway: 10.252.0.1
+```
+
+### Excerpt from `/var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml`
+
+```yaml
+  - ip_address: 10.254.0.2
+    name: sw-spine-001
+    comment: x3000c0h12s1
+    aliases: []
+  - ip_address: 10.254.0.3
+    name: sw-spine-002
+    comment: x3000c0h13s1
+    aliases: []
+  name: network_hardware
+  net-name: HMN
+  vlan_id: 4
+  comment: ""
+  gateway: 10.254.0.1
+```
+
+### Excerpt from `/var/www/ephemeral/prep/${SYSTEM_NAME}/networks/CAN.yaml`
+
+```yaml
+  - ip_address: 10.102.11.2
+    name: can-switch-1
+    comment: ""
+    aliases: []
+  - ip_address: 10.102.11.3
+    name: can-switch-2
+    comment: ""
+    aliases: []
+  net-name: CAN
+  vlan_id: 7
+  comment: ""
+  gateway: 10.102.11.1
+```
+
+### Spine switch IP addressing
+
+The following is an example of spine switch IP addressing based on the network YAML example excerpts from above.
+
+| VLAN | `sw-spine-001`  | `sw-spine-002`   | Purpose                   |
+| ---- | --------------- | ---------------- | ------------------------- |
+| 2    | `10.252.0.2/17` | `10.252.0.3/17`  | River node management     |
+| 4    | `10.254.0.2/17` | `10.254.0.3/17`  | River hardware management |
+| 7    | `10.102.11.2/24`| `10.102.11.3/24` | Customer access           |
+
+## Configure MAGP on Mellanox spine switches
+
+This should be set for every VLAN interface (1, 2, 4, 7, 10).
+
+> For more information, see [How To Configure MAGP on Mellanox Switches](https://enterprise-support.nvidia.com/s/article/howto-configure-magp-on-mellanox-switches).
+
+1. Enable the MAGP protocol on `sw-spine-01`.
+
+   ```console
+   sw-spine-001 (config) # protocol magp
    ```
 
-   Example HMN.yaml:
+1. Enable the MAGP protocol on `sw-spine-02`.
 
-   ```bash
-   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/HMN.yaml
-   SNIPPET
-     - ip_address: 10.254.0.2
-       name: sw-spine-001
-       comment: x3000c0h12s1
-       aliases: []
-     - ip_address: 10.254.0.3
-       name: sw-spine-002
-       comment: x3000c0h13s1
-       aliases: []
-     name: network_hardware
-     net-name: HMN
-     vlan_id: 4
-     comment: ""
-     gateway: 10.254.0.1
-   ```
-
-   Example CAN.yaml:
-
-   ```bash
-   pit# cat /var/www/ephemeral/prep/${SYSTEM_NAME}/networks/CAN.yaml
-   SNIPPET
-     - ip_address: 10.102.11.2
-       name: can-switch-1
-       comment: ""
-       aliases: []
-     - ip_address: 10.102.11.3
-       name: can-switch-2
-       comment: ""
-       aliases: []
-     net-name: CAN
-     vlan_id: 7
-     comment: ""
-     gateway: 10.102.11.1
-   ```
-
-   The following is an example of spine switch IP addressing based on the network .yaml files from above.
-
-   | VLAN | Spine01 | Spine02 | Purpose |
-   | --- | --- | ---| --- |
-   | 2 | 10.252.0.2/17| 10.252.0.3/17 | River Node Management |
-   | 4 | 10.254.0.2/17| 10.254.0.3/17 | River Hardware Management |
-   | 7 | 10.102.11.2/24| 10.102.11.3/24 | Customer Access |
-
-
-## Configure MAGP
-
-MAGP setup for Mellanox spine switches. This should be set for every VLAN interface (1,2,4,7,10).
-
-See https://community.mellanox.com/s/article/howto-configure-magp-on-mellanox-switches for more information.
-
-1. Enable MAGP protocol.
-
-   ```bash
-   sw-spine-001 & sw-spine-002 (config)#
-   protocol magp
-   ```
+   Repeat the same commands from the previous step on `sw-spine-02`.
 
 ## Configure DHCP
 
-IP-Helpers will reside on VLANs 1,2,4, and 7.
+`IP-Helpers` will reside on VLANs 1, 2, 4, and 7.
 
-1. Add DHCP configuration.
+1. Add DHCP relay configuration on `sw-spine-01`.
 
-   ```bash
-   ## DHCP relay configuration
-   ##
-      ip dhcp relay instance 2 vrf default
-      ip dhcp relay instance 4 vrf default
-      ip dhcp relay instance 2 address 10.92.100.222
-      ip dhcp relay instance 4 address 10.94.100.222
-      interface vlan 1 ip dhcp relay instance 2 downstream
-      interface vlan 2 ip dhcp relay instance 2 downstream
-      interface vlan 4 ip dhcp relay instance 4 downstream
-      interface vlan 7 ip dhcp relay instance 2 downstream
+   ```console
+   sw-spine-001 (config) # 
+         ip dhcp relay instance 2 vrf default
+         ip dhcp relay instance 4 vrf default
+         ip dhcp relay instance 2 address 10.92.100.222
+         ip dhcp relay instance 4 address 10.94.100.222
+         interface vlan 1 ip dhcp relay instance 2 downstream
+         interface vlan 2 ip dhcp relay instance 2 downstream
+         interface vlan 4 ip dhcp relay instance 4 downstream
+         interface vlan 7 ip dhcp relay instance 2 downstream
    ```
+
+1. Add DHCP relay configuration on `sw-spine-02`.
+
+   Repeat the same commands from the previous step on `sw-spine-02`.
 
 ## Configure OSPF
 
 OSPF is a dynamic routing protocol used to exchange routes.
 It provides reachability from the MTN networks to NMN/Kubernetes networks.
-The router-id used here is the NMN IP address (VLAN 2 IP).
+The `router-id` used here is the NMN IP address (VLAN 2 IP address).
 
 1. Configure OSPF.
 
-   ```bash
-   sw-spine-001 & sw-spine-002 (config)#
-   protocol ospf
-   router ospf 1 vrf default
-   interface vlan 2 ip ospf area 0.0.0.2
-   interface vlan 4 ip ospf area 0.0.0.4
-   interface vlan 2 ip ospf priority 254
-   interface vlan 4 ip ospf priority 254
-   ```
+   1. Configure OSPF on `sw-spine-01`.
+
+      ```console
+      sw-spine-01 (config) #
+      protocol ospf
+      router ospf 1 vrf default
+      interface vlan 2 ip ospf area 0.0.0.2
+      interface vlan 4 ip ospf area 0.0.0.4
+      interface vlan 2 ip ospf priority 254
+      interface vlan 4 ip ospf priority 254
+      ```
+
+   1. Configure OSPF on `sw-spine-02`.
+
+      Use the same commands as in the previous step.
 
 1. Set the NMN VLAN configuration.
 
-   ```bash
-   sw-spine-001(config)#
-         vlan 2
-         interface vlan 2
-         interface vlan 2 ip address 10.252.0.2/17 primary
-         interface vlan 2 ipv4 port access-group nmn-hmn
-         interface vlan 2 ip ospf area 0.0.0.2
-         interface vlan 2 ip ospf priority 254
-         interface vlan 2 ip dhcp relay instance 2 downstream
-         interface vlan 2 magp 2
-         interface vlan 2 magp 2 ip virtual-router address 10.252.0.1
-         interface vlan 2 magp 2 ip virtual-router mac-address 00:00:5E:00:01:02
+   1. Set the NMN VLAN configuration on `sw-spine-01`.
 
-   sw-spine-002(config)#
-         vlan 2
-         interface vlan 2
-         interface vlan 2 ip address 10.252.0.3/17 primary
-         interface vlan 2 ipv4 port access-group nmn-hmn
-         interface vlan 2 ip ospf area 0.0.0.2
-         interface vlan 2 ip ospf priority 254
-         interface vlan 2 ip dhcp relay instance 2 downstream
-         interface vlan 2 magp 2
-         interface vlan 2 magp 2 ip virtual-router address 10.252.0.1
-         interface vlan 2 magp 2 ip virtual-router mac-address 00:00:5E:00:01:02
-   ```
+      ```console
+      sw-spine-001(config) #
+            vlan 2
+            interface vlan 2
+            interface vlan 2 ip address 10.252.0.2/17 primary
+            interface vlan 2 ipv4 port access-group nmn-hmn
+            interface vlan 2 ip ospf area 0.0.0.2
+            interface vlan 2 ip ospf priority 254
+            interface vlan 2 ip dhcp relay instance 2 downstream
+            interface vlan 2 magp 2
+            interface vlan 2 magp 2 ip virtual-router address 10.252.0.1
+            interface vlan 2 magp 2 ip virtual-router mac-address 00:00:5E:00:01:02
+      ```
+
+   1. Set the NMN VLAN configuration on `sw-spine-02`.
+
+      ```console
+      sw-spine-002(config) #
+            vlan 2
+            interface vlan 2
+            interface vlan 2 ip address 10.252.0.3/17 primary
+            interface vlan 2 ipv4 port access-group nmn-hmn
+            interface vlan 2 ip ospf area 0.0.0.2
+            interface vlan 2 ip ospf priority 254
+            interface vlan 2 ip dhcp relay instance 2 downstream
+            interface vlan 2 magp 2
+            interface vlan 2 magp 2 ip virtual-router address 10.252.0.1
+            interface vlan 2 magp 2 ip virtual-router mac-address 00:00:5E:00:01:02
+      ```
 
 1. Set the HMN VLAN configuration.
 
-   ```bash
-   sw-spine-001(config)#
-         vlan 4
-         interface vlan 4
-         interface vlan 4 ip address 10.254.0.2/17 primary
-         interface vlan 4 ipv4 port access-group nmn-hmn
-         interface vlan 4 ip ospf area 0.0.0.4
-         interface vlan 4 ip ospf priority 254
-         interface vlan 4 ip dhcp relay instance 4 downstream
-         interface vlan 4 magp 4
-         interface vlan 4 magp 4 ip virtual-router address 10.254.0.1
-         interface vlan 4 magp 4 ip virtual-router mac-address 00:00:5E:00:01:04
+   1. Set the HMN VLAN configuration on `sw-spine-001`.
 
-   sw-spine-002(config)#
-         vlan 4
-         interface vlan 4
-         interface vlan 4 ip address 10.254.0.3/17 primary
-         interface vlan 4 ipv4 port access-group nmn-hmn
-         interface vlan 4 ip ospf area 0.0.0.4
-         interface vlan 4 ip ospf priority 254
-         interface vlan 4 ip dhcp relay instance 4 downstream
-         interface vlan 4 magp 4
-         interface vlan 4 magp 4 ip virtual-router address 10.254.0.1
-         interface vlan 4 magp 4 ip virtual-router mac-address 00:00:5E:00:01:04
-       exit
-   ```
+      ```console
+      sw-spine-001(config) #
+            vlan 4
+            interface vlan 4
+            interface vlan 4 ip address 10.254.0.2/17 primary
+            interface vlan 4 ipv4 port access-group nmn-hmn
+            interface vlan 4 ip ospf area 0.0.0.4
+            interface vlan 4 ip ospf priority 254
+            interface vlan 4 ip dhcp relay instance 4 downstream
+            interface vlan 4 magp 4
+            interface vlan 4 magp 4 ip virtual-router address 10.254.0.1
+            interface vlan 4 magp 4 ip virtual-router mac-address 00:00:5E:00:01:04
+      ```
+
+   1. Set the HMN VLAN configuration on `sw-spine-002`.
+
+      ```console
+      sw-spine-002(config) #
+            vlan 4
+            interface vlan 4
+            interface vlan 4 ip address 10.254.0.3/17 primary
+            interface vlan 4 ipv4 port access-group nmn-hmn
+            interface vlan 4 ip ospf area 0.0.0.4
+            interface vlan 4 ip ospf priority 254
+            interface vlan 4 ip dhcp relay instance 4 downstream
+            interface vlan 4 magp 4
+            interface vlan 4 magp 4 ip virtual-router address 10.254.0.1
+            interface vlan 4 magp 4 ip virtual-router mac-address 00:00:5E:00:01:04
+      ```
 
 1. Set the CAN VLAN configuration.
 
-   ```bash
-   sw-spine-001(config)#
-         vlan 7
-         interface vlan 7 ip address 10.101.8.2/24 primary
-         interface vlan 7 ip dhcp relay instance 2 downstream
-         interface vlan 7 magp 7
-         interface vlan 7 magp 7 ip virtual-router address 10.101.8.1
-         interface vlan 7 magp 7 ip virtual-router mac-address 00:00:5E:00:01:07
+   1. Set the CAN VLAN configuration on `sw-spine-001`.
 
-   sw-spine-002(config)#
-         vlan 7
-         interface vlan 7 ip address 10.101.8.3/24 primary
-         interface vlan 7 ip dhcp relay instance 2 downstream
-         interface vlan 7 magp 7
-         interface vlan 7 magp 7 ip virtual-router address 10.101.8.1
-         interface vlan 7 magp 7 ip virtual-router mac-address 00:00:5E:00:01:07
-   ```
+      ```console
+      sw-spine-001(config) #
+            vlan 7
+            interface vlan 7 ip address 10.101.8.2/24 primary
+            interface vlan 7 ip dhcp relay instance 2 downstream
+            interface vlan 7 magp 7
+            interface vlan 7 magp 7 ip virtual-router address 10.101.8.1
+            interface vlan 7 magp 7 ip virtual-router mac-address 00:00:5E:00:01:07
+      ```
+
+   1. Set the CAN VLAN configuration on `sw-spine-002`.
+
+      ```console
+      sw-spine-002(config) #
+            vlan 7
+            interface vlan 7 ip address 10.101.8.3/24 primary
+            interface vlan 7 ip dhcp relay instance 2 downstream
+            interface vlan 7 magp 7
+            interface vlan 7 magp 7 ip virtual-router address 10.101.8.1
+            interface vlan 7 magp 7 ip virtual-router mac-address 00:00:5E:00:01:07
+      ```
 
 ## Configure MLAG
 
 These two ports are cabled between the Mellanox switches.
 
+1. Configure MLAG on `sw-spine-001`.
 
-#### Spine01
+   ```console
+   sw-spine-001(config) # protocol mlag
+               (config) # interface port-channel 100
+               (config) # interface ethernet 1/14 channel-group 100 mode active
+               (config) # interface ethernet 1/13 channel-group 100 mode active
+               (config) # interface ethernet 1/13 dcb priority-flow-control mode on force
+               (config) # interface ethernet 1/14 dcb priority-flow-control mode on force
+               (config) # vlan 4000
+               (config) # interface vlan 4000
+               (config) # interface port-channel 100 ipl 1
+               (config) # interface port-channel 100 dcb priority-flow-control mode on force
+               (config interface vlan 4000) # ip address 192.168.255.254 255.255.255.252
+               (config interface vlan 4000) # ipl 1 peer-address 192.168.255.253
+               (config) # mlag system-mac 00:00:5E:00:01:5D
+               (config) # no mlag shutdown
+   ```
 
+1. Configure MLAG on `sw-spine-002`.
 
-```bash
-(config) # protocol mlag
-(config) # interface port-channel 100
-(config) # interface ethernet 1/14 channel-group 100 mode active
-(config) # interface ethernet 1/13 channel-group 100 mode active
-(config) # interface ethernet 1/13 dcb priority-flow-control mode on force
-(config) # interface ethernet 1/14 dcb priority-flow-control mode on force
-(config) # vlan 4000
-(config) # interface vlan 4000
-(config) # interface port-channel 100 ipl 1
-(config) # interface port-channel 100 dcb priority-flow-control mode on force
-(config interface vlan 4000) # ip address 192.168.255.254 255.255.255.252
-(config interface vlan 4000) # ipl 1 peer-address 192.168.255.253
-(config) # mlag system-mac 00:00:5E:00:01:5D
-(config) # no mlag shutdown
-```
+   ```console
+   sw-spine-002(config) # protocol mlag
+               (config) # interface port-channel 100
+               (config) # interface ethernet 1/14 channel-group 100 mode active
+               (config) # interface ethernet 1/13 channel-group 100 mode active
+               (config) # interface ethernet 1/13 dcb priority-flow-control mode on force
+               (config) # interface ethernet 1/14 dcb priority-flow-control mode on force
+               (config) # vlan 4000
+               (config) # interface vlan 4000
+               (config) # interface port-channel 100 ipl 1
+               (config) # interface port-channel 100 dcb priority-flow-control mode on force
+               (config interface vlan 4000) # ip address 192.168.255.253 255.255.255.252
+               (config interface vlan 4000) # ipl 1 peer-address 192.168.255.254
+               (config) # mlag system-mac 00:00:5E:00:01:5D
+               (config) # no mlag shutdown
+   ```
 
-#### Spine02
+## Add MLAG ports
 
+These ports go to NCNs/UANs/switch downlinks.
 
-```bash
-(config) # protocol mlag
-(config) # interface port-channel 100
-(config) # interface ethernet 1/14 channel-group 100 mode active
-(config) # interface ethernet 1/13 channel-group 100 mode active
-(config) # interface ethernet 1/13 dcb priority-flow-control mode on force
-(config) # interface ethernet 1/14 dcb priority-flow-control mode on force
-(config) # vlan 4000
-(config) # interface vlan 4000
-(config) # interface port-channel 100 ipl 1
-(config) # interface port-channel 100 dcb priority-flow-control mode on force
-(config interface vlan 4000) # ip address 192.168.255.253 255.255.255.252
-(config interface vlan 4000) # ipl 1 peer-address 192.168.255.254
-(config) # mlag system-mac 00:00:5E:00:01:5D
-(config) # no mlag shutdown
-```
+1. Add MLAG ports to `sw-spine-001`.
 
-Adding MLAG ports (these ports go to NCNs/UANs/switch downlinks).
+   ```console
+   sw-spine-001(config) # int mlag-port-channel 1
+               (config interface mlag-port-channel 1) # mtu 9216 force
+               (config interface mlag-port-channel 1) # switchport mode hybrid
+               (config interface mlag-port-channel 1) # no shutdown
+               (config interface mlag-port-channel 1) # lacp-individual enable force
+               (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 2
+               (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 4
+               (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 7
+               (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 10
+   ```
 
+1. Add MLAG ports to `sw-spine-002`.
 
-#### Spine01
+   **NOTE:** LACP fallback is only on one of the spines; disable `lacp-individual enable force` on `sw-spine-002` if it was set previously.
 
+   ```console
+   sw-spine-002(config)# int mlag-port-channel 1
+               (config interface mlag-port-channel 1) # mtu 9216 force
+               (config interface mlag-port-channel 1) # switchport mode hybrid
+               (config interface mlag-port-channel 1) # no shutdown
+               (config interface mlag-port-channel 1) # no lacp-individual enable force
+               (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 2
+               (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 4
+               (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 7
+               (config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 10
+   ```
 
-```bash
-(config) # int mlag-port-channel 1
-(config interface mlag-port-channel 1) # mtu 9216 force
-(config interface mlag-port-channel 1) # switchport mode hybrid
-(config interface mlag-port-channel 1) # no shutdown
-(config interface mlag-port-channel 1) # lacp-individual enable force
-(config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 2
-(config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 4
-(config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 7
-(config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 10
-```
+## Add ports to the MLAG after it is created
 
-#### Spine02
-
-**NOTE:** 'lacp fallback' is only on one of the Spines.
-Disable "lacp-individual enable force" on Spine02 if it was set previously.
-
-```bash
-(config) # int mlag-port-channel 1
-(config interface mlag-port-channel 1) # mtu 9216 force
-(config interface mlag-port-channel 1) # switchport mode hybrid
-(config interface mlag-port-channel 1) # no shutdown
-(config interface mlag-port-channel 1) # no lacp-individual enable force
-(config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 2
-(config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 4
-(config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 7
-(config interface mlag-port-channel 1) # switchport hybrid allowed-vlan add 10
-```
-
-Add ports to the MLAG after it is created:
-
-```bash
+```console
 (config) # interface ethernet 1/1
 (config interface ethernet 1/1) # mlag-channel-group 1 mode active
 (config interface ethernet 1/1) # interface ethernet 1/1 speed 40G force
 (config interface ethernet 1/1) # interface ethernet 1/1 mtu 9216 force
 ```
 
-Configuration with Recommended MLAG-VIP cable.
+## Configuration with recommended MLAG-VIP cable
 
 - This is recommended by Mellanox but not required.
 - Its purpose is to prevent "split brain" which is where both spines think they are the active gateway.
-- It requires an RJ45 cable between the mgmt0 ports on both switches.
-- https://community.mellanox.com/s/article/how-to-configure-mlag-on-mellanox-switches#jive_content_id_MLAG_VIP
+- It requires an RJ45 cable between the `mgmt0` ports on both switches.
+- For more information, see [How To Configure MAGP on Mellanox Switches](https://enterprise-support.nvidia.com/s/article/howto-configure-magp-on-mellanox-switches).
 
-**NOTE:** Replace the SYSTEM_NAME value that is part of the mlag-vip name in the following examples with the actual name of the system.
+**NOTE:** In the following examples, replace the `SYSTEM_NAME` value with the actual name of the system.
 
+1. Configure MLAG-VIP on `sw-spine-001`.
 
-#### Spine01
+   ```console
+   sw-spine-001(config) #
+         no interface mgmt0 dhcp
+            interface mgmt0 ip address 192.168.255.241 /29
+         no mlag shutdown
+            mlag system-mac 00:00:5E:00:01:5D
+         mlag-vip SYSTEM_NAME-mlag-domain ip 192.168.255.242 /29 force
+   ```
 
-```
-no interface mgmt0 dhcp
-   interface mgmt0 ip address 192.168.255.241 /29
-no mlag shutdown
-   mlag system-mac 00:00:5E:00:01:5D
-mlag-vip SYSTEM_NAME-mlag-domain ip 192.168.255.242 /29 force
-```
+1. Configure MLAG-VIP on `sw-spine-002`.
 
-#### Spine02
+   ```console
+   sw-spine-002(config) #
+         no interface mgmt0 dhcp
+            interface mgmt0 ip address 192.168.255.243 /29
+         no mlag shutdown
+            mlag system-mac 00:00:5E:00:01:5D
+         mlag-vip SYSTEM_NAME-mlag-domain ip 192.168.255.242 /29 force
+   ```
 
-```
-no interface mgmt0 dhcp
-   interface mgmt0 ip address 192.168.255.243 /29
-no mlag shutdown
-   mlag system-mac 00:00:5E:00:01:5D
-mlag-vip SYSTEM_NAME-mlag-domain ip 192.168.255.242 /29 force
-```
+1. Verify the `mlag-vip`.
 
-Verify the mlag-vip:
+   ```console
+   sw-spine-001 [SYSTEM_NAME-mlag-domain: master] # show mlag-vip
+   ```
 
-```bash
-sw-spine-001 [SYSTEM_NAME-mlag-domain: master] # show mlag-vip
-MLAG-VIP:
- MLAG group name: SYSTEM_NAME-mlag-domain
- MLAG VIP address: 192.168.255.242/29
- Active nodes: 2
+   Example output:
 
-----------------------------------------------------------------------------------
-Hostname                                 VIP-State            IP Address
-----------------------------------------------------------------------------------
-sw-spine-001                               master               192.168.255.241
-sw-spine-002                               standby              192.168.255.243
-```
+   ```text
+   MLAG-VIP:
+    MLAG group name: SYSTEM_NAME-mlag-domain
+    MLAG VIP address: 192.168.255.242/29
+    Active nodes: 2
+
+   ----------------------------------------------------------------------------------
+   Hostname                                 VIP-State            IP Address
+   ----------------------------------------------------------------------------------
+   sw-spine-001                               master               192.168.255.241
+   sw-spine-002                               standby              192.168.255.243
+   ```
 
 ## Configure ACL
 
@@ -363,7 +389,7 @@ These ACLs are designed to block traffic from the Node Management Network (NMN) 
 
    **NOTE:** The following are examples only. The IP addresses below need to match what was generated by CSI.
 
-   ```bash
+   ```console
    sw-spine-001 & sw-spine-002 (config)#
    sw-spine-001(config) # ipv4 access-list nmn-hmn
    sw-spine-001(config ipv4 access-list nmn-hmn) # bind-point rif
@@ -381,21 +407,20 @@ These ACLs are designed to block traffic from the Node Management Network (NMN) 
 
 1. Apply ACL to VLANs.
 
-   ```bash
+   ```console
    sw-spine-001(config) # interface vlan 2 ipv4 port access-group nmn-hmn
    sw-spine-001(config) # interface vlan 4 ipv4 port access-group nmn-hmn
    ```
 
-## Configure Spanning-Tree
+## Configure spanning-tree
 
-Spanning-tree will need to be applied to each MAGP pair. Spine01 will have a lower priority making it the root bridge.
-Spanning-tree configuration has not changed from 1.3 to 1.5.
+Spanning-tree will need to be applied to each MAGP pair. `sw-spine-001` will have a lower priority making it the root bridge.
 
 1. Apply the following configuration to the Mellanox spine switches.
 
    This is an example of a switch-to-switch connection.
 
-   ```bash
+   ```console
    sw-spine-001 & sw-spine-002 (config)#
    spanning-tree mode rpvst
    spanning-tree port type edge default
@@ -417,11 +442,11 @@ Spanning-tree configuration has not changed from 1.3 to 1.5.
 
 ## Configure NTP
 
-The IP addresses used here will be the first three worker nodes on the NMN network. These can be found in NMN.yaml.
+The IP addresses used here will be the first three worker nodes on the NMN network. These can be found in `NMN.yaml`.
 
 1. Get current NTP configuration.
 
-   ```bash
+   ```console
    sw-spine-001 [standalone: master] (config) # show running-config | include ntp
    no ntp server 10.252.1.9 disable
       ntp server 10.252.1.9 keyID 0
@@ -439,7 +464,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 1. Delete any current NTP configuration.
 
-   ```bash
+   ```console
    sw-spine-001# configure terminal
    sw-spine-001 [standalone: master] (config) # no ntp server 10.252.1.9
    sw-spine-001 [standalone: master] (config) # no ntp server 10.252.1.10
@@ -448,7 +473,7 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 1. Add new NTP server configuration.
 
-   ```bash
+   ```console
    sw-spine-001 [standalone: master] (config) # ntp server 10.252.1.12
    sw-spine-001 [standalone: master] (config) # ntp server 10.252.1.13
    sw-spine-001 [standalone: master] (config) # ntp server 10.252.1.14
@@ -456,9 +481,13 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
 1. Verify NTP status.
 
-   ```bash
+   ```console
    sw-spine-001 [standalone: master] # show ntp
+   ```
 
+   Example output:
+
+   ```text
    NTP is administratively            : enabled
    NTP Authentication administratively: disabled
    NTP server role                    : enabled
@@ -505,16 +534,20 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
 
    This will point to the unbound DNS server.
 
-   ```bash
+   ```console
    sw-spine-001 & sw-spine-002 (config)#
    ip name-server 10.92.100.225
    ```
 
 1. Verify the configuration.
 
-   ```bash
+   ```console
    sw-spine-002 [standalone: master] # show ip dhcp relay
+   ```
 
+   Example output:
+
+   ```text
    Instance ID 2:
      VRF Name: default
 
@@ -552,22 +585,19 @@ The IP addresses used here will be the first three worker nodes on the NMN netwo
      vlan4       N/A               downstream
    ```
 
+## Save configuration
 
-## Save Configuration
+Save the changes made during this configuration session.
 
-1. Save the changes made during this configuration session.
+```console
+sw-spine-001(config)# exit
+sw-spine-001# write memory
+```
 
-   ```bash
-   sw-spine-001(config)# exit
-   sw-spine-001# write memory
-   ```
+## Show running configuration
 
+Show the current configuration
 
-## Show Running Configuration
-
-1. Show the current configuration
-
-   ```bash
-   sw-spine-001# show running-config
-   ```
-
+```console
+sw-spine-001# show running-config
+```

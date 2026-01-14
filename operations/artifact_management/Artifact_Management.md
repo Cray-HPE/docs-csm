@@ -1,15 +1,17 @@
 # Artifact Management
 
-The Ceph Object Gateway Simple Storage Service \(S3\) API is used for artifact management. The RESTful API that Ceph provides via the gateway is compatible with the basic data access model of the Amazon S3 API. See the [https://docs.ceph.com/docs/mimic/radosgw/s3/](https://docs.ceph.com/docs/mimic/radosgw/s3/) for more information about compatibility. The object gateway is also referred to as the RADOS gateway or simply RGW.
+The Ceph Object Gateway Simple Storage Service \(S3\) API is used for artifact management.
+The RESTful API that Ceph provides via the gateway is compatible with the basic data access model of the Amazon S3 API.
+See [Ceph Object Gateway S3 API](https://docs.ceph.com/en/octopus/radosgw/s3/) for more information about compatibility.
 
-S3 is an object storage service that provides high-level performance, scalability, security, and data availability. S3 exposes a rudimentary data model, similar to a file system, where buckets \(directories\) store objects \(files\). Bucket- and object-level Access Control Lists \(ACL\) can be provided for flexible access authorization to artifacts stored in S3.
+The object gateway is also referred to as the RADOS gateway or simply RGW.
 
-### RGW on HPE Cray EX Systems
+S3 is an object storage service that provides high-level performance, scalability, security, and data availability.
+S3 exposes a rudimentary data model, similar to a file system, where buckets \(directories\) store objects \(files\).
+Bucket- and object-level Access Control Lists \(ACL\) can be provided for flexible access authorization to artifacts stored in S3.
 
-RGW is installed as a part of the HPE Cray EX Stage 3 deployment. The S3 API is available on systems at the following location:
+## RGW on HPE Cray EX Systems
 
-```bash
-https://rgw-vip.local
-```
+RGW is installed as a part of the HPE Cray EX stage 3 deployment. The S3 API is available on systems at the following location: `https://rgw-vip.local`
 
 The RGW administrative interface \(`radosgw-admin`\) is available on non-compute nodes \(NCNs\).
