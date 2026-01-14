@@ -67,7 +67,7 @@ pods. Work is ongoing to correct these issues in a future release.
 
 ### Nexus pod
 
-The nexus pod is a single pod deployment and serves as the image repository.
+The Nexus pod is a single pod deployment and serves as the image repository.
 If it is on an NCN worker node that goes down, then it will attempt to start up on another NCN worker node.
 However, it is likely that it can also encounter a `Multi-Attach error for volume` error;
 this error can be seen in the `kubectl describe` output for the pod that is trying to come up on the new node.
