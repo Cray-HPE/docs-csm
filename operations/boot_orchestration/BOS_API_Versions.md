@@ -3,6 +3,20 @@
 The Boot Orchestration Service \(BOS\) currently supports two API versions, v1 and v2, that have different APIs and underlying mechanisms for performing operations on nodes.
 The following is a summary of the changes, and the upgrade path, for users wishing to compare the two.
 
+- [BOS v1 removal](#bos-v1-removal)
+- [BOS v2 improvements](#bos-v2-improvements)
+- [API differences](#api-differences)
+- [Upgrading from v1 to v2](#upgrading-from-v1-to-v2)
+- [Mechanical differences](#mechanical-differences)
+- [The CLI](#the-cli)
+
+## BOS v1 removal
+
+BOS v1 is deprecated in CSM 1.3 and removed in CSM 1.6. During the upgrade to CSM 1.6, all BOS v1 session data is deleted. Other BOS data
+may be modified or, in rare cases, deleted.
+
+See [Deprecated Features](../../introduction/deprecated_features/README.md) for more details.
+
 ## BOS v2 improvements
 
 BOS v2 makes significant improvements to boot times, retries, and error handling, by allowing nodes to proceed through the boot process at their own pace.
