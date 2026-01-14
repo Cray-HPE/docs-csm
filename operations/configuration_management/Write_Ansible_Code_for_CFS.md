@@ -45,7 +45,7 @@ Moving image customizations tasks to their own playbook can remove the need to e
 ### Disable fact gathering
 
 * Turn off facts that are not needed in a playbook by setting `gather_facts: false`. If only a few facts are required, it is also possible to limit fact gathering by setting `gather_subset`.
-For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/ansible/4/modules/setup_module.html) documentation.
+For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/projects/ansible/2.9/modules/setup_module.html) documentation.
 * Avoid importing playbooks in other playbooks.  This will trigger fact gathering for each imported playbook, potentially collecting the same information multiple times.
 
 ### Reduce wasted time
