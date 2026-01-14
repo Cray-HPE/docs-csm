@@ -8,6 +8,7 @@ Glossary of terms used in CSM documentation.
 * [Baseboard Management Controller (BMC)](#baseboard-management-controller-bmc)
 * [Bifurcated CAN (BICAN)](#bifurcated-can-bican)
 * [Blade Switch Controller (sC)](#blade-switch-controller-sc)
+* [Boot Orchestration Agent (BOA)](#boot-orchestration-agent-boa)
 * [Boot Orchestration Service (BOS)](#boot-orchestration-service-bos)
 * [Boot Script Service (BSS)](#boot-script-service-bss)
 * [Cabinet Cooling Group](#cabinet-cooling-group)
@@ -143,6 +144,13 @@ The [Slingshot blade switch](#slingshot-blade-switch) embedded controller (sC) p
 REST endpoint to monitor environmental conditions and manage the blade power, switch
 ASIC, FPGA buffer/interfaces, and firmware.
 
+## Boot Orchestration Agent (BOA)
+
+One component of the [Boot Orchestration Service (BOS)](#boot-orchestration-service-bos),
+responsible for executing [sessions](operations/boot_orchestration/Sessions.md) in BOS v1.
+
+For more information, see [Boot Orchestration Agent (BOA)](operations/boot_orchestration/Sessions.md#boot-orchestration-agent-boa).
+
 ## Boot Orchestration Service (BOS)
 
 The Boot Orchestration Service (BOS) is responsible for booting, configuring, and shutting down
@@ -153,7 +161,7 @@ power control ([CAPMC](#cray-advanced-platform-monitoring-and-control-capmc)),
 node status ([HSM](#hardware-state-manager-hsm)),
 and configuration ([CFS](#configuration-framework-service-cfs)).
 
-* For more information on BOS, see [Boot Orchestration](operations/boot_orchestration/Boot_Orchestration.md).
+* For more information on BOS, see [Boot Orchestration](operations/boot_orchestration/README.md).
 * For more information on the BOS API, see [BOS API](api/bos.md).
 
 ## Boot Script Service (BSS)
