@@ -22,8 +22,8 @@ Contact HPE Cray service in order to obtain the default usernames and passwords 
 - [HPE Cray EX liquid-cooled cabinet hardware](#hpe-cray-ex-liquid-cooled-cabinet-hardware)
 - [Gigabyte](#gigabyte)
 - [Passwords managed in other product streams](#passwords-managed-in-other-product-streams)
-  - [Cray Operating System (COS)](#cray-operating-system-cos)
-  - [User Access Node (UAN)](#user-access-node-uan)
+  - [Compute nodes](#compute-nodes)
+  - [User Access Nodes (UANs)](#user-access-nodes-uans)
 
 ## Keycloak
 
@@ -32,7 +32,7 @@ Default Keycloak admin user login credentials:
 - Username: `admin`
 - The password can be obtained with the following command:
 
-  ```bash
+  ```console
   ncn-mw# kubectl get secret -n services keycloak-master-admin-auth --template={{.data.password}} | base64 --decode
   ```
 
@@ -45,7 +45,7 @@ To create new accounts, refer to [Create Internal User Accounts in the Keycloak 
 The default Gitea/VCS administrative user name is `crayvcs`.
 The password is randomly generated at install time and can be found in the `vcs-user-credentials` secret.
 
-```bash
+```console
 ncn-mw# kubectl get secret -n services vcs-user-credentials --template={{.data.vcs_password}} | base64 --decode
 ```
 
@@ -121,9 +121,9 @@ Refer to [Set BMC Credentials](../system_configuration_service/Set_BMC_Credentia
 
 The account database is automatically saved to the non-volatile settings partition
 \(`/nvram/redfish/redfish-accounts`\) any time an account or account policy is modified.
-The file is stored as a `redis` command dump and is replayed \(if it exists\) anytime the core Redfish
+The file is stored as a Redis command dump and is replayed \(if it exists\) anytime the core Redfish
 schema is loaded via the `init` script. If default accounts must be restored,
-delete the `redis` command dump and reboot the controller.
+delete the Redis command dump and reboot the controller.
 
 ### List accounts
 
@@ -131,21 +131,21 @@ Use the following API path to list all accounts: `GET /redfish/v1/AccountService
 
 ```json
 {
-"@odata.context": "/redfish/v1/$metadata#ManagerAccountCollection.ManagerAccountCollection",
-"@odata.etag": "W/\"1559675674\"",
-"@odata.id": "/redfish/v1/AccountService/Accounts",
-"@odata.type": "#ManagerAccountCollection.ManagerAccountCollection",
-"Description": "Collection for Manager Accounts",
-"Members": [
-{
-    "@odata.id": "/redfish/v1/AccountService/Accounts/1"
-},
-{
-    "@odata.id": "/redfish/v1/AccountService/Accounts/2"
-}
-],
-"Members@odata.count": 2,
-"Name": "Accounts Collection"
+    "@odata.context": "/redfish/v1/$metadata#ManagerAccountCollection.ManagerAccountCollection",
+    "@odata.etag": "W/\"1559675674\"",
+    "@odata.id": "/redfish/v1/AccountService/Accounts",
+    "@odata.type": "#ManagerAccountCollection.ManagerAccountCollection",
+    "Description": "Collection for Manager Accounts",
+    "Members": [
+        {
+            "@odata.id": "/redfish/v1/AccountService/Accounts/1"
+        },
+        {
+            "@odata.id": "/redfish/v1/AccountService/Accounts/2"
+        }
+    ],
+    "Members@odata.count": 2,
+    "Name": "Accounts Collection"
 }
 ```
 
@@ -219,15 +219,17 @@ Be sure to note the `Id` value in the response (`5` in the above example).
 
 ### Delete accounts
 
-Delete an account with the `curl` command:
+Use the following API path to delete an account: `DELETE /redfish/v1/AccountService/Accounts/ACCOUNT_ID`
+
+For example:
 
 ```bash
-curl -u root:xxx -X DELETE https://x0c0s0b0/redfish/v1/AccountService/Accounts/ACCOUNT_ID
+curl -u root:xxx -X DELETE https://x0c0s0b0/redfish/v1/AccountService/Accounts/5
 ```
 
 ### Update passwords
 
-Update the password for an account with the `curl` command:
+Use the following API path to update the password for an account: `PATCH /redfish/v1/AccountService/Accounts/ACCOUNT_ID`
 
 > **WARNING**: Changing Redfish credentials outside of Cray System Management (CSM) services may cause the Redfish device to be no longer manageable under CSM.
 
@@ -241,6 +243,14 @@ curl -u root:xxx -X PATCH -H 'Content-Type: application/json' -d '{"Name": "Test
 > - To change air-cooled node BMC credentials, refer to [Change Air-Cooled Node BMC Credentials](../security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md).
 > - To change Slingshot switch BMC credentials, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
 
+For example:
+
+```bash
+curl -u root:xxx -X PATCH -H 'Content-Type: application/json' \
+  -d '{"Name": "Test"}' \
+  https://x0c0s0b0/redfish/v1/AccountService/Accounts/5
+```
+
 ## System controllers
 
 For SSH access, the system controllers have the following default credentials:
@@ -250,12 +260,12 @@ For SSH access, the system controllers have the following default credentials:
 | Node controller \(nC\)                       | `root`   |
 | Chassis controller \(cC\)                    | `root`   |
 | Switch controller \(sC\)                     | `root`   |
-| sC minimal recovery firmware image \(`rec`\) | `root`   |
+| sC minimal recovery firmware image \(rec\)   | `root`   |
 
 > **NOTE:** Contact HPE Cray service in order to obtain the default passwords.
 
 Passwords for nC, cC, and sC controllers are all managed with the following process.
-The `cfgsh` tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as root via SSH:
+The `cfgsh` tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as `root` via SSH:
 
 ```console
 x0c1# config
@@ -311,13 +321,11 @@ The default username is `admin`.
 
 ## Passwords managed in other product streams
 
-Refer to the following product stream documentation for detailed procedures about updating passwords for compute nodes and User Access Nodes (UANs).
+### Compute nodes
 
-### Cray Operating System (COS)
+To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the Cray Operating System (COS) product stream documentation for more information.
 
-To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the COS product stream documentation for more information.
+### User Access Nodes (UANs)
 
-### User Access Node (UAN)
-
-Refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required to change the password on UANs.
+To update the root password on UANs, refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required.
 The `uan_shadow` header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.

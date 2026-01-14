@@ -54,8 +54,8 @@ rel = "self"
 This is a notice of the following changes to the BOS API in CSM 1.2.0:
 
 * The `--template-body` option for the Cray CLI BOS command is deprecated.
-* The status code for a successful GET on the session status for a boot set (i.e. `/v1/session/{session_id}/status/{boot_set_name}`) is now 200.
-  * This is a change from CSM 1.0, where the status code was 201.
+* The status code for a successful GET on the session status for a boot set (i.e. `/v1/session/{session_id}/status/{boot_set_name}`) is 200.
+  * This is a change from CSM 1.0, where the status code is 201.
 
 ## Source code
 
