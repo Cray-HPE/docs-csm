@@ -100,39 +100,17 @@ Once the new FMN image has been built and uploaded to S3, update the boot parame
 
 ### 3. Redeploy the FMNs
 
-After updating BSS with the new image and setting `metal.no-wipe=0`, reboot the FMNs to apply the new image.
+After updating BSS with the new image and setting `metal.no-wipe=0`, redeploy the FMNs to apply the new image.
 
-See [Reboot NCNs](../node_management/Reboot_NCNs_manual.md) for the procedure to reboot management nodes.
+Follow the [Boot NCN](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md) procedure for each Fabric Manager node. This procedure will:
 
-### 4. Set `metal.no-wipe=1` after redeployment
+- Set the PXE boot option and power on the node
+- Monitor the boot process
+- Set `metal.no-wipe=1` after successful boot to preserve data on future reboots
 
-After the Fabric Manager nodes have been successfully redeployed and are running with the new image, set `metal.no-wipe=1` to preserve data on future reboots.
+**Note:** Skip the sections in Boot NCN that are specific to master, worker, or storage nodes (such as verifying cluster membership or Ceph operations).
 
-1. (`ncn-mw#`) For each Fabric Manager node, set `metal.no-wipe=1`:
-
-    ```bash
-    TARGET_XNAME=<fmn-xname>
-    csi handoff bss-update-param --set metal.no-wipe=1 --limit ${TARGET_XNAME}
-    ```
-
-    For example:
-
-    ```bash
-    TARGET_XNAME=x3000c0s28b0n0
-    csi handoff bss-update-param --set metal.no-wipe=1 --limit ${TARGET_XNAME}
-    ```
-
-    Repeat for each Fabric Manager node.
-
-1. (`ncn-mw#`) Verify the change:
-
-    ```bash
-    cray bss bootparameters list --name ${TARGET_XNAME} --format=json | jq -r '.[0].params' | grep metal.no-wipe
-    ```
-
-    The output should show `metal.no-wipe=1`.
-
-### 5. Join Fabric Manager nodes to Spire
+### 4. Join Fabric Manager nodes to Spire
 
 After the Fabric Manager nodes have been redeployed and are running with the new image, join them to Spire to avoid issues with Spire tokens.
 
