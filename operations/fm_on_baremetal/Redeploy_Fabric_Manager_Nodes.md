@@ -2,7 +2,7 @@
 
 > **OPTIONAL:** This procedure is only applicable if Fabric Manager nodes were deployed during the CSM installation.
 
-Although Fabric Manager nodes (FMNs) were deployed during the CSM installation, the initial deployment did not include the final image with all necessary components. Once the other HPE Cray EX software products have been installed via the Install and Upgrade Framework (IUF), the Fabric Manager nodes need to be redeployed with the new customized image.
+Although Fabric Manager Nodes (FMNs) were deployed during the CSM installation, the initial deployment did not include the final image with all necessary components. Once the other HPE Cray EX software products have been installed via the Install and Upgrade Framework (IUF), the FMNs need to be redeployed with the new customized image.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ This procedure will:
 
 ### 2. Update BSS with the new FMN image
 
-Once the new FMN image has been built and uploaded to S3, update the boot parameters in the Boot Script Service (BSS) to point the Fabric Manager nodes to the new image.
+Once the new FMN image has been built and uploaded to S3, update the boot parameters in the Boot Script Service (BSS) to point the FMNs to the new image.
 
 1. (`ncn-mw#`) Set an environment variable for the new IMS image ID.
 
@@ -35,7 +35,7 @@ Once the new FMN image has been built and uploaded to S3, update the boot parame
     NEW_IMS_IMAGE_ID="<IMS_IMAGE_ID_FROM_BOOTPREP>"
     ```
 
-1. (`ncn-mw#`) Determine the component names (xnames) of the Fabric Manager nodes.
+1. (`ncn-mw#`) Determine the component names (xnames) of the FMNs.
 
     ```bash
     cray hsm state components list --role Management --subrole FabricManager --format json | jq -r '.Components[].ID'
@@ -48,9 +48,9 @@ Once the new FMN image has been built and uploaded to S3, update the boot parame
     x3000c0s29b0n0
     ```
 
-1. (`ncn-mw#`) Update the boot parameters for the Fabric Manager nodes.
+1. (`ncn-mw#`) Update the boot parameters for the FMNs.
 
-    Replace the `<xname>` placeholders with the actual xnames of the Fabric Manager nodes:
+    Replace the `<xname>` placeholders with the actual xnames of the FMNs.
 
     ```bash
     /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh \
@@ -74,7 +74,7 @@ Once the new FMN image has been built and uploaded to S3, update the boot parame
 
 1. (`ncn-mw#`) Set `metal.no-wipe=0` to allow the disk to be wiped during redeployment.
 
-    For each Fabric Manager node, set `metal.no-wipe=0`:
+    For each FMN, set `metal.no-wipe=0`:
 
     ```bash
     TARGET_XNAME=<fmn-xname>
@@ -88,7 +88,7 @@ Once the new FMN image has been built and uploaded to S3, update the boot parame
     csi handoff bss-update-param --set metal.no-wipe=0 --limit ${TARGET_XNAME}
     ```
 
-    Repeat for each Fabric Manager node.
+    Repeat for each FMN.
 
 1. (`ncn-mw#`) Verify the change:
 
@@ -98,9 +98,9 @@ Once the new FMN image has been built and uploaded to S3, update the boot parame
 
     The output should show `metal.no-wipe=0`.
 
-### 3. Redeploy the Fabric Manager nodes
+### 3. Redeploy the FMNs
 
-After updating BSS with the new image and setting `metal.no-wipe=0`, reboot the Fabric Manager nodes to apply the new image.
+After updating BSS with the new image and setting `metal.no-wipe=0`, reboot the FMNs to apply the new image.
 
 See [Reboot NCNs](../node_management/Reboot_NCNs_manual.md) for the procedure to reboot management nodes.
 
