@@ -206,6 +206,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Disaster Recovery for Postgres](../operations/kubernetes/Disaster_Recovery_Postgres.md)
 * [Postgres Database is in Recovery](known_issues/postgres_database_recovery.md)
 * [Weave Container Network Interface Troubleshooting](weave_runbook.md)
+* [Node Unable to Join Kubernetes Cluster During NCN Rebuild](known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md)
 
 ## MetalLB
 
