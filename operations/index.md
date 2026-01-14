@@ -69,7 +69,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 
 Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down collections of nodes.
 
-- [Boot Orchestration Service (BOS)](boot_orchestration/Boot_Orchestration.md)
+- [Boot Orchestration Service (BOS)](boot_orchestration/index.md)
 - [BOS Workflows](boot_orchestration/BOS_Workflows.md)
 - [BOS Session Templates](boot_orchestration/Session_Templates.md)
   - [Manage a Session Template](boot_orchestration/Manage_a_Session_Template.md)
