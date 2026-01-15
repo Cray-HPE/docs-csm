@@ -436,6 +436,14 @@ Repository priorities are without effect. All enabled repositories share the sam
  ...
 ```
 
+#### Join Fabric Manager nodes to Spire
+
+After the Fabric Manager nodes have been deployed and are running, join them to Spire to avoid issues with Spire tokens.
+
+```bash
+ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
+```
+
 ### Install Fabric Manager on FM baremetal nodes
 
 For install/ upgrade Fabric Manager on the FMNs please refer [FabricManager Install/ Upgrade](...)
