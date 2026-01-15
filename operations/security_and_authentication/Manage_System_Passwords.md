@@ -121,9 +121,9 @@ Refer to [Set BMC Credentials](../system_configuration_service/Set_BMC_Credentia
 
 The account database is automatically saved to the non-volatile settings partition
 \(`/nvram/redfish/redfish-accounts`\) any time an account or account policy is modified.
-The file is stored as a Redis command dump and is replayed \(if it exists\) anytime the core Redfish
+The file is stored as a Redis command dump and is replayed \(if it exists\) any time the core Redfish
 schema is loaded via the `init` script. If default accounts must be restored,
-delete the Redis command dump and reboot the controller.
+then delete the Redis command dump and reboot the controller.
 
 ### List accounts
 
