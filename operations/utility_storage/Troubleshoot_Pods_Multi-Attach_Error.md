@@ -22,7 +22,7 @@ This procedure requires administrative privileges.
     ncn-m# kubectl delete pod -n NAMESPACE POD_NAME --force --grace-period=0
     ```
 
-    If this does not resolve the issue, then continuing following this procedure.
+    If this does not resolve the issue, then continue following this procedure.
 
 1. Describe the pod experiencing issues.
 
