@@ -74,6 +74,6 @@ The source code for BOS is located in the following open source GitHub repositor
 | *Repository* | *Contents* |
 | ------------ | ---------- |
 | [`Cray-HPE/bos`](https://github.com/Cray-HPE/bos/) | BOS API server |
-| [`Cray-HPE/bos-reporter`](https://github.com/Cray-HPE/bos-bos-reporter/) | `bos-reporter` RPM |
+| [`Cray-HPE/bos-reporter`](https://github.com/Cray-HPE/bos-reporter/) | `bos-reporter` RPM |
 | [`Cray-HPE/craycli`](https://github.com/Cray-HPE/craycli/) | The Cray CLI, including the BOS subcommands. |
 | [`Cray-HPE/cms-tools`](https://github.com/Cray-HPE/cms-tools/) | Health checks and utilities for several CSM services, including BOS. |

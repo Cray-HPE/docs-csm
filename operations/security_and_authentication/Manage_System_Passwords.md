@@ -104,7 +104,7 @@ However, if the user gets locked out attempting to change the password or the co
 
 ## Redfish credentials
 
-Redfish accounts are only valid with the Redfish API. They do not allow system logins via `ssh` or serial console.
+Redfish accounts are only valid with the Redfish API. They do not allow system logins using `ssh` or serial console.
 
 Three accounts are created by default:
 
@@ -120,9 +120,9 @@ The System Configuration Service (SCSD) is used to set the credentials for Redfi
 Refer to [Set BMC Credentials](../system_configuration_service/Set_BMC_Credentials.md) for more information.
 
 The account database is automatically saved to the non-volatile settings partition
-\(`/nvram/redfish/redfish-accounts`\) any time an account or account policy is modified.
-The file is stored as a Redis command dump and is replayed \(if it exists\) any time the core Redfish
-schema is loaded via the `init` script. If default accounts must be restored,
+(`/nvram/redfish/redfish-accounts`) any time an account or account policy is modified.
+The file is stored as a Redis command dump and is replayed (if it exists) any time the core Redfish
+schema is loaded by the `init` script. If default accounts must be restored,
 then delete the Redis command dump and reboot the controller.
 
 ### List accounts
@@ -255,17 +255,17 @@ curl -u root:xxx -X PATCH -H 'Content-Type: application/json' \
 
 For SSH access, the system controllers have the following default credentials:
 
-| Controller                                   | Username |
-|----------------------------------------------|----------|
-| Node controller \(nC\)                       | `root`   |
-| Chassis controller \(cC\)                    | `root`   |
-| Switch controller \(sC\)                     | `root`   |
-| sC minimal recovery firmware image \(rec\)   | `root`   |
+| Controller                                 | Username |
+|--------------------------------------------|----------|
+| Node controller (nC)                       | `root`   |
+| Chassis controller (cC)                    | `root`   |
+| Switch controller (sC)                     | `root`   |
+| sC minimal recovery firmware image (rec)   | `root`   |
 
 > **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
 
 Passwords for nC, cC, and sC controllers are all managed with the following process.
-The `cfgsh` tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as `root` via SSH:
+The `cfgsh` tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as `root` using SSH:
 
 ```console
 config
@@ -283,7 +283,7 @@ cfgsh copy running-config startup-config
 ```
 
 In both cases, a `running-config` must be saved out to non-volatile storage in a startup configuration file.
-If it is not, the password will revert to default on the next boot. This is the exact same behavior as standard managed Ethernet switches.
+If it is not, then the password will revert to default on the next boot. This is the same behavior as standard managed Ethernet switches.
 
 ## SNMP credentials
 
@@ -325,9 +325,9 @@ The default username is `admin`.
 
 > USS has replaced the deprecated Cray Operating System (COS) for compute nodes.
 
-To update the root password for compute nodes, refer to "Set Root Password for Compute Nodes" in the USS product stream documentation for more information.
+To update the `root` password for compute nodes, refer to "Set Root Password for Compute Nodes" in the USS product stream documentation for more information.
 
 ### User Access Nodes (UANs)
 
-To update the root password on UANs, refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required.
-The `uan_shadow` header in the "UAN Ansible Roles" section includes more context on setting the root password on UANS.
+To update the `root` password on UANs, refer to "Create UAN Boot Images" in the UAN product stream documentation for the steps required.
+The `uan_shadow` header in the "UAN Ansible Roles" section includes more context on setting the `root` password on UANS.
