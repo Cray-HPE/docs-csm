@@ -69,7 +69,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 
 Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down collections of nodes.
 
-- [Boot Orchestration Service (BOS)](boot_orchestration/Boot_Orchestration.md)
+- [Boot Orchestration Service (BOS)](boot_orchestration/index.md)
 - [BOS Workflows](boot_orchestration/BOS_Workflows.md)
 - [BOS Session Templates](boot_orchestration/Session_Templates.md)
   - [Manage a Session Template](boot_orchestration/Manage_a_Session_Template.md)
@@ -386,12 +386,12 @@ services running on Kubernetes, as well as for telemetry data coming from the co
 - [Troubleshoot System Clock Skew](utility_storage/Troubleshoot_System_Clock_Skew.md)
 - [Troubleshoot an Unresponsive S3 Endpoint](utility_storage/Troubleshoot_an_Unresponsive_S3_Endpoint.md)
 - [Troubleshoot Ceph-Mon Processes Stopping and Exceeding Max Restarts](utility_storage/Troubleshoot_Ceph-Mon_Processes_Stopping_and_Exceeding_Max_Restarts.md)
+- [Troubleshoot Pods Multi-Attach Error](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
 - [Troubleshoot Large Object Map Objects in Ceph Health](utility_storage/Troubleshoot_Large_Object_Map_Objects_in_Ceph_Health.md)
 - [Troubleshoot Failure of RGW Health Check](utility_storage/Troubleshoot_RGW_Health_Check_Fail.md)
 - [Troubleshooting Ceph MDS Reporting Slow Requests and Failure on Client](utility_storage/Troubleshoot_Ceph_MDS_reporting_slow_requests_and_failure_on_client.md)
 - [Troubleshoot Ceph Services Not Starting After a Server Crash](utility_storage/Troubleshoot_Ceph_Services_Not_Starting.md)
 - [Troubleshoot Insufficient Standby MDS Daemons Available](utility_storage/Troubleshoot_Insufficient_Standby_MDS_Daemons_Available.md)
-- [Troubleshoot Pods Failing to Restart on Other Worker Nodes](utility_storage/Troubleshoot_Pods_Multi-Attach_Error.md)
 - [Utility storage known issues](../troubleshooting/index.md#utility-storage)
 
 ## System management health

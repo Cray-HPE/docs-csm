@@ -2,31 +2,48 @@
 
 Rebuild a master, worker, or storage non-compute node (NCN). Use this procedure in the event that a node has a hardware failure, or some other issue with the node has occurred that warrants rebuilding the node.
 
+## Overview
+
 The following is a high-level overview of the NCN rebuild workflow:
 
-1. Prepare Node
-    * There is a different procedure for each type of node (worker, master, and storage).
-2. Identify Node and Update Metadata
-    * Same procedure for all node types.
-3. Wipe Disks
-    * Same for master and worker nodes, but different for storage nodes.
-4. Power Cycle Node
-    * Same procedure for all node types.
-5. Rebuild Storage Node
-    * Only needed for storage nodes
-6. Validate `BOOTRAID` artifacts
-    * Run from ncn-m001
-7. Validation
-    * There is a different procedure for each type of node (worker, master, and storage).
+1. Prepare node
+
+    This step uses a different procedure for each type of node (worker, master, and storage).
+
+1. Identify node and update metadata
+
+    This step uses the same procedure for all node types.
+
+1. Wipe disks
+
+    This step uses the same procedure for master and worker nodes, but different for storage nodes.
+
+1. Power cycle node
+
+    This step uses the same procedure for all node types.
+
+1. Rebuild storage node
+
+    This step is only needed for storage nodes.
+
+1. Validate `BOOTRAID` artifacts
+
+    This step is run from `ncn-m001`.
+
+1. Validation
+
+    This step uses a different procedure for each type of node (worker, master, and storage).
 
 ## Prerequisites
 
 The system is fully installed and has transitioned off of the LiveCD.
 
-For several of the commands in this section, you will need to have variables set with the name of the node being rebuilt and its component name (xname).
+Several of the commands in this section require shell variables set with the name of the node being rebuilt and its component name (xname).
 
-Set NODE to the hostname of the node being rebuilt (e.g. `ncn-w001`, `ncn-w002`, etc).
+Set `NODE` to the hostname of the node being rebuilt (e.g. `ncn-w001`, `ncn-w002`, etc).
 Set `XNAME` to the component name (xname) of that node.
+
+For example:
 
 ```bash
 ncn# NODE=ncn-w00n
@@ -36,16 +53,10 @@ ncn# echo $XNAME
 
 ## Procedure
 
-Choose the appropriate node type in the **Prepare Node** section
-
-### Prepare Node (prepare_node)
-
-Only follow the steps in the section for the node type that is being rebuilt:
-
-* [Worker node](Rebuild_NCNs/Prepare_Worker_Nodes.md)
-* [Master node](Rebuild_NCNs/Prepare_Master_Nodes.md)
-* [Storage node](Rebuild_NCNs/Prepare_Storage_Nodes.md)
+* [Rebuild worker node](Rebuild_NCNs/Prepare_Worker_Nodes.md)
+* [Rebuild master node](Rebuild_NCNs/Prepare_Master_Nodes.md)
+* [Rebuild storage node](Rebuild_NCNs/Prepare_Storage_Nodes.md)
 
 ## Validation
 
-After completing all of the steps, run the [Final Validation](Final_Validation_Steps.md) steps.
+After completing all of the steps, perform the [Final Validation](Rebuild_NCNs/Final_Validation_Steps.md) procedure.
