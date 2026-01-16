@@ -4,6 +4,12 @@ The Boot Orchestration Service (BOS) creates a session when it is asked to perfo
 Sessions provide a way to track the status of many nodes at once as they perform the same operation with the same session template information.
 When creating a session, both the operation and session template are required parameters.
 
+* [Operations](#operations)
+* [Sessions and status](#sessions-and-status)
+* [BOS sessions and HSM locks](#bos-sessions-and-hsm-locks)
+
+## Operations
+
 BOS v2 supports these operations:
 
 * Reboot - Reboot a designated collection of nodes into the desired state. This will always force a reboot.
@@ -36,5 +42,4 @@ If a node is locked in HSM, then BOS will not be directly aware of that. Instead
 [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) for that node will fail.
 The associated error message in BOS for that component is generally not specific about the true cause of the problem.
 
-In CSM 1.7, this behavior is improved by having locked nodes removed by the `session-setup` operator as part of its
-initial filtering.
+In CSM 1.7, this behavior is improved by having the `session-setup` operator remove locked nodes as part of its initial filtering.
