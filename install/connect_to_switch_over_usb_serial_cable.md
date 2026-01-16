@@ -56,13 +56,6 @@ If there is no device in `/dev/tty*`, follow `dmesg -w` and try reseating the US
 
 Observe the `dmesg -w` output. Does it show errors pertaining to USB? The cable may be bad, or a reboot may be required.
 
-## Additional external references
-
-- [USB-B to RJ-45 RS-232 Cable][4]
-- [USB-B to USB-C adapter][5]
-
 [1]: https://asp.arubanetworks.com/downloads;search=8325;fileContents=User%20Guide
 [2]: https://www.dell.com/support/article/en-us/sln316328/dell-emc-networking-os10-info-hub?lang=en#bs_One
 [3]: https://docs.nvidia.com/networking/software/switch-software/index.html#mlnx-os-infiniband
-[4]: https://www.amazon.com/OIKWAN-Essential-Accesory-Ubiquity-Switches/dp/B082VZTB57/ref=sr_1_5?dchild=1&keywords=usb+to+rj-45+serial&qid=1605474086&sr=8-5
-[5]: https://www.amazon.com/dp/B086JKTYCR/ref=cm_sw_em_r_mt_dp_FEzSFbE6MSPHW?_encoding=UTF8&psc=1
