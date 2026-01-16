@@ -240,8 +240,16 @@ The script requires the `insert-labels-topology-constraints` cluster policy to b
 **Important**: This step restarts critical services (including `cilium-operator`, `coredns`, and other essential CSM services).
 While Kubernetes performs rolling restarts to maintain service availability, there may be brief
 disruptions as pods are restarted. In-flight requests to these services may fail and require retry.
+
+**Note**: Due to Kubernetes conditions outside the control of Rack Resiliency, some services may fail to restart within
+the timeout period. Retry the [`rr_critical_service_restart.py`](../../upgrade/scripts/k8s/rr_critical_service_restart.py)
+script after ensuring that the services that failed continue to be imbalanced.
+To see the list of imbalanced services, the user can check the logs of `cray-rrs-rms` container
+in `cray-rrs` pod as explained in
+[Steps to view RMS logs](../rack_resiliency/Troubleshooting.md#steps-to-view-rms-logs) in [Troubleshooting guide](Troubleshooting.md).
+
 For information on how to identify all of the critical services, see
-[List services in ConfigMap](Manage_Critical_Services.md#list-services-in-configmap).
+[List services in ConfigMap](../rack_resiliency/Manage_Critical_Services.md#list-services-in-configmap).
 
 Example usage:
 
