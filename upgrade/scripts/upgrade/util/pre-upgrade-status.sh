@@ -201,6 +201,8 @@ function sdu_status() {
   fi
   execute "sdu bash cat /etc/opt/cray/sdu/sdu.conf" "sdu.conf"
   execute "sdu bash cat /etc/rda/rda.conf" "rda.conf"
+  execute "sdu bash cat /etc/rda/acl-rda.dat" "acl-rda.dat"
+  execute "sdu bash cat /etc/rda/prodinfo.dat" "prodinfo.dat"
 }
 
 function cfs_backup() {
