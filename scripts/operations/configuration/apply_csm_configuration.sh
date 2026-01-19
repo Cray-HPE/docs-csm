@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -196,7 +196,8 @@ BACKUP_NCN_CONFIG_FILE=$(run_mktemp --tmpdir="${TMPDIR}" "backup-${CONFIG_NAME}-
 
 if [[ -z ${XNAMES} ]]; then
   echo "Retrieving a list of all management node component names (xnames)"
-  XNAMES=$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(.ID) | join(",")')
+  echo "NOTE: FabricManager nodes are excluded from configuration"
+  XNAMES=$(cray hsm state components list --role Management --type Node --format json | jq -r '.Components | map(select(.SubRole != "FabricManager")) | map(.ID) | join(",")')
   [[ -n ${XNAMES} ]] || err_exit "No management nodes found in HSM"
 fi
 XNAME_LIST=${XNAMES//,/ }
