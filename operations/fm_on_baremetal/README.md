@@ -56,7 +56,7 @@ In CSM versions < 1.7.0, the deployment of the Fabric Manager within CSM uses na
 
 In theory, this model should satisfy HA requirements: if the pod fails (or needs to be moved during an upgrade), Kubernetes can detect the fault and recreate the Fabric Manager on another node, providing continuity.
 
-In practice, however, this approach does not meet the contractual HA obligations. Because of Kubernetes “best‑effort” scheduling and the resource demands of the Fabric Manager, real service outages can exceed 5 minutes.
+In practice, however, this approach does not meet the contractual HA obligations. Because of Kubernetes "best‑effort" scheduling and the resource demands of the Fabric Manager, real service outages can exceed 5 minutes.
 
 To address these issues, CSM 1.7.1 includes FM on baremetal support, which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment to achieve HA.
 
