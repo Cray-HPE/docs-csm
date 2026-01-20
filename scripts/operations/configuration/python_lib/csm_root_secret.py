@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -26,7 +26,7 @@
 import logging
 import traceback
 from typing import NoReturn, Union
-from typing_extensions import Literal, TypedDict
+from typing_extensions import TypedDict
 
 from . import common
 from . import k8s
@@ -51,12 +51,10 @@ class CsmUserSecretUpdateData(TypedDict, total=False):
     ssh_public_key: Union[str, None]
 
 
-CsmUserSecretFields = Literal['password', 'ssh_config', 'ssh_private_key', 'ssh_public_key']
-
-SSH_CONFIG_FIELD: CsmUserSecretFields = 'ssh_config'
-SSH_PRI_KEY_FIELD: CsmUserSecretFields = 'ssh_private_key'
-SSH_PUB_KEY_FIELD: CsmUserSecretFields = 'ssh_public_key'
-PW_FIELD: CsmUserSecretFields = 'password'
+SSH_CONFIG_FIELD: str = 'ssh_config'
+SSH_PRI_KEY_FIELD: str = 'ssh_private_key'
+SSH_PUB_KEY_FIELD: str = 'ssh_public_key'
+PW_FIELD: str = 'password'
 
 
 def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
