@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2025-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -64,7 +64,7 @@ def parse_args() -> CsmUserSecretUpdateData:
                        dest='ssh_config', default=CONFIG_PATH,
                        help=f"Path to root SSH config file (default: {CONFIG_PATH})")
     parsed_args = parser.parse_args()
-    update = CsmUserSecretUpdateData()
+    update: CsmUserSecretUpdateData = dict()
     update[SSH_CONFIG_FIELD] = None if parsed_args.ssh_config is DELETE else parsed_args.ssh_config
     return update
 
