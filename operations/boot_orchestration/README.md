@@ -1,11 +1,13 @@
 # Boot Orchestration Service (BOS)
 
 * [Overview[(#overview)
+* [Terminology](#terminology)
+* [Services](#services)
+* [CLI](#cli)
 * [Versions](#versions)
     * [BOS v1](#bos-v1)
     * [BOS v2](#bos-v2)
 * [Dependencies](#dependencies)
-* [CLI commands](#cli-commands)
 * [Source code](#source-code)
 
 ## Overview
@@ -13,14 +15,81 @@
 The Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes.
 This is accomplished using BOS session templates and sessions.
 
-BOS users create a BOS session template using the REST API (or using the [Cray CLI](../../glossary.md#cray-cli-cray), which is a front-end for the REST API).
-A session template is a collection of metadata for a group of nodes and their desired boot artifacts and configuration.
-A BOS session can then be created by applying an action to a session template. The available actions are boot, reboot, shutdown, and configure.
+BOS users create a BOS session template, and then create a BOS session, which applies an action to the session template.
+The available actions are boot, reboot, shutdown, and configure.
 The session can be monitored to determine the status of the request.
 
 > The configure action is only available in [BOS v1](#bos-v1) sessions.
 
 For more information, see [BOS Workflows](BOS_Workflows.md).
+
+## Terminology
+
+* [Boot Orchestration Agent (BOA)](BOS_Services.md#boot-Orchestration-agent-boa): A Kubernetes job that manages a single BOS v1 session.
+    * BOAs are only used in BOS v1.
+* [Component](Components.md): A node (such as a [compute node](../../glossary.md#compute-node-cn) or [UAN](../../glossary.md#user-access-node-uan)).
+    * Components are only used in BOS v2.
+* [Operator](BOS_Services.md#bos-operators): Permanent BOS sub-service responsible for performing a specific task when necessary.
+    * Operators are only used in BOS v2.
+* [Options](Options.md): Adjustable parameters to control how BOS operates.
+    * These options were introduced in BOS v2.
+    * The options can only be viewed or modified using BOS v2.
+    * Most of the options only impact the behavior of BOS v2 and not BOS v1.
+* [Session](Sessions.md): A request for BOS to perform an action on a specified set of components, bringing them to a specified desired state.
+    * Sessions exist in both v1 and v2, but they are significantly different.
+* [Session template](Session_Templates.md): A collection of metadata for a group of nodes and their desired boot artifacts and configuration.
+    * The same set of session templates is used for both v1 and v2. In general, fields that are specific to one BOS version are ignored when
+      the template is used for a session of the other BOS version.
+
+## Services
+
+BOS is made up of a number of different sub-services that combine to provide its functionality.
+For details, see [BOS Services](BOS_Services.md).
+
+## CLI
+
+The [Cray CLI](../../glossary.md#cray-cli-cray) supports BOS commands, providing a more user friendly front-end for the
+[BOS API](BOS_Services.md#bos-api).
+
+The first CLI argument specifies the BOS version.
+For ease of interactive CLI use, specifying the BOS version is optional; it defaults to `v2`.
+However, explicitly specifying the version in scripts or documentation is **highly recommended**,
+because the default BOS version for the CLI is subject to change.
+
+For context-specific usage information, append `--help` to the CLI command. For example:
+
+* `cray bos --help`
+* `cray bos v1 --help`
+* `cray bos sessions --help`
+* `cray bos v2 components list --help`
+
+(`ncn-mw#`) API information, including the version, can be found with the following command:
+
+```bash
+cray bos list --format json
+```
+
+Example output:
+
+```json
+{
+  "links": [
+    {
+      "href": "https://api-gw-service-nmn.local/apis/bos/",
+      "rel": "self"
+    },
+    {
+      "href": "https://api-gw-service-nmn.local/apis/bos/v2",
+      "rel": "versions"
+    }
+  ],
+  "major": "2",
+  "minor": "0",
+  "patch": "30"
+}
+```
+
+For more information, see [BOS Commands Cheat Sheet](Cheatsheet.md).
 
 ## Versions
 
@@ -37,7 +106,7 @@ After a BOS v1 session is created, BOS will create a Kubernetes BOA job to apply
 
 ### BOS v2
 
-BOS v2 takes a more flexible approach and relies on a number of permanent operators to guide components through state transitions in an independent manner.
+BOS v2 takes a more flexible approach and relies on a number of permanent [operators](BOS_Services.md#bos-operators) to guide components through state transitions in an independent manner.
 The BOS v2 session can be used to track progress of the operation, but there is no centralized Kubernetes pod in which the session resides.
 
 ## Dependencies
@@ -52,42 +121,13 @@ BOS depends on each of the following services to complete its tasks:
 | [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc) | Used to power on and off the nodes. |
 | [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) | Tracks the state of each node, and the node membership of groups and roles. |
 
-## CLI commands
-
-The Cray CLI supports BOS commands. The first argument specifies the BOS version.
-For ease of interactive CLI use, specifying the BOS version is optional; it defaults to v2.
-However, explicitly specifying the version in scripts or documentation is **highly recommended**,
-because the default BOS version for the CLI is subject to change.
-
-(`ncn-mw#`) API information, including the default API version, can be found with the following command:
-
-```bash
-cray bos list --format toml
-```
-
-Example output:
-
-```toml
-[[results]]
-major = "2"
-minor = "0"
-patch = "0"
-[[links]]
-href = "https://api-gw-service-nmn.local/apis/bos/"
-rel = "self"
-
-[[links]]
-href = "https://api-gw-service-nmn.local/apis/bos/v2"
-rel = "versions"
-```
-
 ## Source code
 
 The source code for BOS is located in the following open source GitHub repositories:
 
 | *Repository* | *Contents* |
 | ------------ | ---------- |
-| [`Cray-HPE/bos`](https://github.com/Cray-HPE/bos/) | BOS API server |
-| [`Cray-HPE/boa`](https://github.com/Cray-HPE/boa/) | BOA |
+| [`Cray-HPE/bos`](https://github.com/Cray-HPE/bos/) | BOS API server, API specification, database, operators, and `bos-reporter` RPM. |
+| [`Cray-HPE/boa`](https://github.com/Cray-HPE/boa/) | BOA. |
 | [`Cray-HPE/craycli`](https://github.com/Cray-HPE/craycli/) | The Cray CLI, including the BOS subcommands. |
 | [`Cray-HPE/cms-tools`](https://github.com/Cray-HPE/cms-tools/) | Health checks and utilities for several CSM services, including BOS. |
