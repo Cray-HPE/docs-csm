@@ -37,6 +37,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * Added new `FabricManager` subrole to SMD.
 * Updated SLES base OS to SLES 15 SP7.
 * Added a procedure to [Enable Rack Resiliency on running system](operations/rack_resiliency/Enabling_RR_on_running_system.md).
+* Refactored Rack Resiliency workflows to use native Ansible execution with centralized fact management for zone prefixes and Kubernetes label application via `kubernetes.core.k8s` module.
 
 ### Security
 
@@ -114,6 +115,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   sidecars and unintended `cray-console-node` SSH attempts to NCNs on vShasta.
 * Corrected Rack Resiliency automation playbooks that were disruptive, restarted wrong deployments,
   overwrote Kyverno policy, or assumed kubectl on storage nodes.
+* Fixed Rack Resiliency Ceph HAProxy script to properly handle config generation, backups, and conditional restarts, improving idempotency and debuggability.
 * Victoria metrics can now be collected for BOS and CFS database pods.
 
 ## Known issues
