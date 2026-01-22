@@ -35,7 +35,8 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 ### General
 
 * Added new `FabricManager` subrole to SMD.
-* Updated SLES base OS to SLES 15 SP7
+* Updated SLES base OS to SLES 15 SP7.
+* Added a procedure to [Enable Rack Resiliency on running system](operations/rack_resiliency/Enabling_RR_on_running_system.md).
 
 ### Security
 
@@ -76,6 +77,8 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * Fixed `cmsdev` TFTP test that could report false errors
 * Fixed `cmsdev` to correctly report pods as Running that are in CLBO status
 * Updated tests to log a warning instead of failure if a pod is in `Succeeded` state
+* Added Goss tests for Rack Resiliency
+* Added CI Unit testcases for [Resiliency Monitoring Service](operations/rack_resiliency/Resiliency_Monitoring_Service.md)
 
 ## Customer-requested
 
