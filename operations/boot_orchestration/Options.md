@@ -1,18 +1,27 @@
 # BOS Options
 
-> **`NOTE`** This section is for Boot Orchestration Service \(BOS\) v2 only.
+> **`NOTE`** This section is for Boot Orchestration Service (BOS) v2 only.
 
-BOS provides a global service options endpoint for modifying the base configuration of the service itself. These options are available only for the BOS v2 API and only affect v2 functionality.
+BOS provides a global service options endpoint for modifying the base configuration of the service itself.
+These options are available only for the BOS v2 API and only affect v2 functionality.
 
-* [Viewing the current option values](#viewing-the-current-option-values)
-* [Updating the option values](#updating-the-option-values)
-* [BOS options details](#bos-options-details)
+* [View options](#view-options)
+* [Update options](#update-options)
+* [Individual option details](#individual-option-details)
+  * [`cleanup_completed_session_ttl`](#cleanup_completed_session_ttl)
+  * [`component_actual_state_ttl`](#component_actual_state_ttl)
+  * [`default_retry_policy`](#default_retry_policy)
+  * [`disable_components_on_completion`](#disable_components_on_completion)
+  * [`discovery_frequency`](#discovery_frequency)
+  * [`logging_level`](#logging_level)
+  * [`max_boot_wait_time`](#max_boot_wait_time)
+  * [`max_power_off_wait_time`](#max_power_off_wait_time)
+  * [`max_power_on_wait_time`](#max_power_on_wait_time)
+  * [`polling_frequency`](#polling_frequency)
 
-## Viewing the current option values
+## View options
 
-View the options with the following command:
-
-(`ncn-mw#`)
+(`ncn-mw#`) View the current option values with the following command:
 
 ```bash
 cray bos v2 options list --format json
@@ -35,61 +44,104 @@ Example output:
 }
 ```
 
-## Updating the option values
+## Update options
 
-The values for all BOS global options can be modified with the `cray bos v2 options update` command.
+(`ncn-mw#`) The values for all BOS global options can be modified with the `cray bos v2 options update` command.
+For example:
 
-## BOS options details
+```bash
+cray bos v2 options update --polling-frequency 12 --format json
+```
 
-The following are the BOS global options:
+Example output:
 
-* `cleanup_completed_session_ttl`
+```json
+{
+  "cleanup_completed_session_ttl": "7d",
+  "component_actual_state_ttl": "4h",
+  "default_retry_policy": 3,
+  "disable_components_on_completion": true,
+  "discovery_frequency": 300,
+  "logging_level": "INFO",
+  "max_boot_wait_time": 600,
+  "max_power_off_wait_time": 180,
+  "max_power_on_wait_time": 30,
+  "polling_frequency": 12
+}
+```
 
-    Delete complete sessions that are older than `cleanup_completed_session_ttl` (in hours). `0h` disables cleanup behavior.
+## Individual option details
 
-* `clear_stage`
+### `cleanup_completed_session_ttl`
 
-    Allows components staged information to be cleared when the requested staging action has been started. Defaults to false.
+The amount of time that a completed [BOS session](Sessions.md) can exist without being
+cleaned up by the [`session-cleanup` operator](Operators.md#session-cleanup).
 
-* `component_actual_state_ttl`
+The value can either be `0` or else be a non-negative integer following by a character indicating the
+units: minutes (`m`or `M`), hours (`h` or `H`), days (`d` or `D`), or weeks (`w` or `W`).
+For example, `3d` means three days.
 
-    The maximum amount of time a component's `actual_state` is considered valid (in hours).
-    `0h` disables cleanup behavior for newly booted nodes and instructs `bos-state-reporter` to report once instead of periodically.
-    BOS relies on a reporter built into the boot image to determine the actual state.
-    If a node boots with a boot image that does not contain a reporter, the node's `actual_state` will not be updated and will be incorrect.
-    When the maximum amount of time has been exceeded, BOS clears the `actual_state` so as to trigger a reboot back into the desired image.
+The cleanup behavior is disabled if the option is set to `0`, `0m`, `0h`, `0d`, or `0w`.
 
-* `default_retry_policy`
+### `component_actual_state_ttl`
 
-    The default maximum number of attempts per node for failed actions.
+This option defines two things:
 
-* `disable_components_on_completion`
+* The amount of time that a component's `actual_state` is considered valid; if the actual state was last
+  updated longer ago than this time, then the [`actual-state-cleanup` operator](Operators.md#actual-state-cleanup)
+  will clear the actual state of the component.
+* 4/3 (133%) of the amount of time that the [BOS reporter](Reporter.md) waits between sending state updates to BOS.
+  * The BOS reporter does not read the BOS options during its execution, so changes to this
+    option will not be reflected in the behavior of the BOS reporter on booted nodes.
+  * For more details, see [Reporting interval](Reporter.md#reporting-interval).
 
-    Determines if a component will be marked as disabled after its desired state matches its current state.
-    If false, BOS will continue to maintain the state of the nodes declaratively.
-    This is an experimental feature and is not fully supported.
-    This option is [removed in CSM 1.7](../../introduction/deprecated_features/README.md#removed-in-csm-17).
+The value can either be `0` or else be a non-negative integer following by a character indicating the
+units: minutes (`m`or `M`), hours (`h` or `H`), days (`d` or `D`), or weeks (`w` or `W`).
+For example, `3d` means three days.
 
-* `discovery_frequency`
+> **WARNING**:
+> Unlike [`cleanup_completed_session_ttl`](#cleanup_completed_session_ttl), a zero value for this
+> option will **not** disable the cleanup behavior; instead it will result in undesirable behavior. Specifically,
+> component actual states will be cleared every time the `actual-state-cleanup` operator runs, and the
+> BOS reporter will have no pauses between reporting the component status to BOS. This will effectively
+> render BOS unable to properly manage the nodes.
+>
+> To avoid problems, **never set this option to a value less than 1 hour**.
 
-    The frequency with which BOS checks HSM for new components and adds them to the BOS component database.
+### `default_retry_policy`
 
-* `logging_level`
+The default maximum number of attempts per node for failed actions.
 
-    The logging level for all BOS services. Valid values for this option are `DEBUG`, `INFO`, and `WARN`.
+### `disable_components_on_completion`
 
-* `max_boot_wait_time`
+> This is an experimental feature and is not fully supported.
+> This option is [removed in CSM 1.7](../../introduction/deprecated_features/README.md#removed-in-csm-17).
 
-    How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds).
+Determines if a component will be marked as disabled after its desired state matches its current state.
+If false, BOS will continue to maintain the state of the nodes declaratively.
 
-* `max_power_off_wait_time`
+### `discovery_frequency`
 
-    How long BOS will wait for a node to power off before forcefully powering it off (in seconds).
+The frequency with which BOS checks the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm)
+for new components and adds them to the BOS component database.
 
-* `max_power_on_wait_time`
+### `logging_level`
 
-    How long BOS will wait for a node to power on before calling power on again (in seconds).
+The logging level for the [BOS API](API.md) server and the [BOS Operators](Operators.md).
+Valid values for this option are `DEBUG`, `INFO`, and `WARN`.
 
-* `polling_frequency`
+### `max_boot_wait_time`
 
-    How frequently the BOS operators check component state for needed actions (in seconds).
+How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds).
+
+### `max_power_off_wait_time`
+
+How long BOS will wait for a node to power off before forcefully powering it off (in seconds).
+
+### `max_power_on_wait_time`
+
+How long BOS will wait for a node to power on before calling power on again (in seconds).
+
+### `polling_frequency`
+
+How frequently the BOS operators check component state for needed actions (in seconds).

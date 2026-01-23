@@ -92,7 +92,10 @@ Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down col
 
 - [Boot Orchestration Service (BOS)](boot_orchestration/README.md)
   - [BOS Cheat Sheet](boot_orchestration/Cheatsheet.md)
-  - [BOS Services](boot_orchestration/BOS_Services.md)
+  - [BOS API](boot_orchestration/API.md)
+  - [BOS Database](boot_orchestration/Database.md)
+  - [BOS Operators](boot_orchestration/Operators.md)
+  - [BOS Reporter](boot_orchestration/Reporter.md)
   - [BOS API Versions](boot_orchestration/BOS_API_Versions.md)
 - [BOS Workflows](boot_orchestration/BOS_Workflows.md)
 - [BOS Components](boot_orchestration/Components.md)
