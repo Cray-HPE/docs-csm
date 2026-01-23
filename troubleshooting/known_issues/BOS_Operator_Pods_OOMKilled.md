@@ -8,7 +8,7 @@
 ## Summary
 
 On large scale systems with thousands of nodes, if the [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos)
-has debug logging enabled, then it is possible for some [BOS operator](../../operations/boot_orchestration/BOS_Services.md#bos-operators)
+has debug logging enabled, then it is possible for some [BOS operator](../../operations/boot_orchestration/Operators.md)
 Kubernetes pods to be `OOMKilled` when trying to log particularly large API responses.
 
 On large enough systems, it is possible for this to happen even without debug logging enabled.
