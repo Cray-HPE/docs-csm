@@ -58,7 +58,7 @@ In the example Cray Product Catalog output above, the two compute barebones imag
 These images include everything necessary to fully boot a compute node to a login prompt. However,
 [Boot Orchestration Service (BOS)](../glossary.md#boot-orchestration-service-bos) sessions used to boot them
 **will never report success**. This is because they do not have the necessary credentials built-in to allow the
-BOS state reporter to notify BOS of the successful boot.
+[BOS reporter](../operations/boot_orchestration/Reporter.md) to notify BOS of the successful boot.
 These credentials can be added by customizing the image using the
 [Configuration Framework Service (CFS)](../glossary.md#configuration-framework-service-cfs)
 (the `compute_nodes.yaml` playbook from the CSM
