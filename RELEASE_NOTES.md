@@ -204,11 +204,11 @@ resiliency by offering protection to the management plane against rack-level fai
 ## Bug fixes
 
 * The [Boot Orchestration Service (BOS)](glossary.md#boot-orchestration-service-bos)
-  [`session-setup` operator](operations/boot_orchestration/BOS_Services.md#session-setup) now ignores invalid
+  [`session-setup` operator](operations/boot_orchestration/Operators.md#session-setup) now ignores invalid
   [xnames](glossary.md#xname) referenced by [session templates](operations/boot_orchestration/Session_Templates.md),
   fixing a bug that caused BOS [sessions](operations/boot_orchestration/Sessions.md) to be stuck in `pending` state.
 * BOS logging is significantly more memory efficient, fixing a problem where logging on large scale systems
-  could cause [BOS operator](operations/boot_orchestration/BOS_Services.md#bos-operators) Kubernetes pods to be `OOMKilled`.
+  could cause [BOS operator](operations/boot_orchestration/Operators.md) Kubernetes pods to be `OOMKilled`.
 * When using the API or CLI to [Modify a BOS session template](operations/boot_orchestration/Manage_a_Session_Template.md#modify-a-session-template),
   it is no longer required to specify `boot_sets` in the update data (this fixes a regression bug present in CSM 1.6).
 * Previously, the CSM 1.5.3 and CSM 1.6.1 releases included changes
