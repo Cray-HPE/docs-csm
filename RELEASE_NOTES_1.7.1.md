@@ -31,6 +31,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * Added `baremetal` support for the HPE Slingshot Fabric Manager
 * Updated `ims-python-helper` to support logging level configuration as part of IMS configuration for image create/build
 * IMS jobs run on remote build nodes have performance improvements and can better recover from errors regarding the remote execution.
+* Added IUF to support for the deletion of existing activities (existing activity deletion functionality) so users can clean up or re-run workflows without manual intervention.
 
 ### General
 
@@ -47,7 +48,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * Addressed Kyverno deployment and policy enforcement issues, including version alignment in platform
   manifests, webhook timeout handling, and baseline policy violations in IUF automation tests.
 * Remediated KEVs and CVEs across platform components (cray-sts, IMS kiwi-ng builder, CFS operator,
-  argoexec, kubectl), updated Kata for security fixes, and addressed kernel CVE-2025-38083.
+  argoexec, kubectl, product-deletion-utility), updated Kata for security fixes, and addressed kernel CVE-2025-38083.
 
 ### Tests
 
@@ -87,6 +88,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   if the provided password is longer than 20 characters. This is the maximum password length
   supported by `ipmitool`, which is required to control management nodes during system boot and
   shutdown procedures.
+* Updated the CSM Upgrade documentation to better describe the CSM actions that run via IUF hooks. Added notes into the corresponding stage documentation.
 
 ## Bug fixes
 
