@@ -92,6 +92,8 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   supported by `ipmitool`, which is required to control management nodes during system boot and
   shutdown procedures.
 * Updated the CSM Upgrade documentation to better describe the CSM actions that run via IUF hooks. Added notes into the corresponding stage documentation.
+* Documentation for Clean old Nexus repositories
+* Add iuf_unable_to_run_next_stage.md documentation in CSM 1.7
 
 ## Bug fixes
 
@@ -141,38 +143,30 @@ For a full list of known issues, see [Known issues](troubleshooting/README.md#kn
 ### IUF
 
 ```text
-CASM-5749 DOCS: WAR doc for "multiple sessions of IUF running"
-CASM-4543 docs-csm RPM runs the wrong IUF install script
-CASM-5756 DOCS :  getting list of old nexus repositories
-CASM-5744 Update CSM hooks to remove cos-prechecks-for-worker-reboots on cluster while Upgrading to CSM 1.7.1
+CASM-5749 CAST-38971 DOCS: WAR doc for "multiple sessions of IUF running"
+CASM-4543 docs-csm RPM install should run IUF script upload-rebuild-templates.sh
+CASM-5756 CAST-38483 DOCS : Getting list of old nexus repositories
+CASM-5744 CAST-38982 Update CSM hooks to remove cos-prechecks-for-worker-reboots on cluster while Upgrading to CSM 1.7.1
 CASM-5743 DOCS: Return zero as exit code to avoid failures when installing docs-csm on PIT node
 CASM-4290 IUF: list-stages shows failed stage as paused and not failed
 CASMINST-6636 IUF: iuf cli should display log name when failure occurs
 CASMINST-7090 IUF: existing activity removal functionality
-CASMTRIAGE-8902 DOCS: Storage node rollout silently fails (unrecognized function inputs)
-CASMTRIAGE-8917 DOCS: Cilium migration procedure incorrectly documented for 1.7.0 → 1.7.1 upgrade, causing unintended migration and node isolation
-CASMTRIAGE-8916 DOCS: Groot:: During the rollout, DNS stopped working on ncn-m002. The DNS VIP 10.92.100.225 is reachable, but the DNS service behind it is not running, so queries fail.
-CASMTRIAGE-8903 vinland: management-nodes-rollout in Error
+CASMTRIAGE-8916/CASMTRIAGE-8917 DOCS: Cilium migration procedure incorrectly documented for 1.7.0 → 1.7.1 upgrade, causing unintended migration and node isolation
 CASMTRIAGE-8860 DOCS: upgrade-k8s-job after IUF deploy-product documentation improvements
-CASMTRIAGE-8843 DOCS: need link from IUF update-vcs-config to procedure handling merge conflicts
-CASMTRIAGE-8791 DOCS: vShasta: docs-csm RPM install exits with non zero exit code
-CASMTRIAGE-8792 DOCS: vShasta: upgrade-m001 fails with ncn-m001-bootparameters-update.done': No such file or directory
+CASMTRIAGE-8843/CASMTRIAGE-6297 DOCS: IUF update-vcs-config to procedure handling merge conflicts
 CASMTRIAGE-8729 DOCS: Reboot Managed nodes after Update managed host Slingshot NIC firmware
 CASMTRIAGE-8687 autotriage: 11 failures in CSM-1.7.0 detected on: tyr
-CASMTRIAGE-8606 DOCS: IUF managment-rollout for ncn-m001 hard to recover from failures (backup-m001)
-CASMTRIAGE-8605 DOCS: IUF management-rollout for ncn-m001 does not preserve /etc/motd or /root/.bashrc
+CASMTRIAGE-8606 CAST-38666 DOCS: IUF managment-rollout for ncn-m001 hard to recover from failures (backup-m001)
+CASMTRIAGE-8605 CAST-38666 DOCS: IUF management-rollout for ncn-m001 does not preserve /etc/motd or /root/.bashrc
 CASMTRIAGE-8604 DOCS: 100% full /var/lib/containerd prevents services starting during IUF worker node rolling upgrade
 CASMTRIAGE-8584 DOCS: CSM actions in IUF hooks poorly described
-CASMTRIAGE-6297 DOCS: COS and UAN merge conflicts from iuf update-vcs-config Papaya upgrade to Alice
+CASMTRIAGE-8869 DOCS: IUF managed-nodes-rollout CANARY_LNET fails boot to get ipxe.efi from tftp server
+CASMTRIAGE-8863 DOCS: Kubernetes upgrade time estimate NOTE after IUF deploy-product 
 MTL-2572 DOCS: Move kernel parameters update from prerequisites to node rebuild workflows
 CAST-38982 IUF CSM 1.7.0 upgrade - management rollout stuck with last worker
-CAST-38971 IUF iuf_unable_to_run_next_stage.md disappeared in CSM 1.7 doc
-CAST-38347 IUF iuf-skopeo-sync script failure on deliver-product.sh
+CAST-38971 IUF Add iuf_unable_to_run_next_stage.md in CSM 1.7 doc
 CAST-38666 IUF management rollout dependency on state of the node
 CAST-38483 IUF Clean old Nexus repositories
-CAST-38767 IUF Case iuf deliver-product not uploading all repos up to nexus
-CAST-38738 IUF pre-install-check stuck
-CAST-38657 IUF management rollout storage nodes permission error
 ```
 
 ### iSCSI SBPS
@@ -189,7 +183,7 @@ CASMTRIAGE-8999 Recurrence of LUN assigments messages seen in compute node
 CASMPET-7500 DOCS: Update iSCSI SBPS top level document with latest flow diagram
 ```
 
-###  Rack Resiliency
+### Rack Resiliency
 
 ```text
 CASM-5717 DOCS: Document lack of RR support for some dynamic NCN changes
@@ -224,7 +218,6 @@ CASM-5735 Confirm on the type of FMN node - Application or Management
 CASM-5723 [FM on baremetal] DEV: Update CANU to support FMN
 CASM-5722 [FM on baremetal] As a developer, I need to provide new subrole for FMN in CSM
 CASM-5721 [FM on baremetal] As a developer, perform POC Fabric Manager Node (FMN) bring up
-CASM-5720 Rack Resiliency : CAST ,Bugs and CVE-related Bugs
 CASM-5716 CASTS fixes in CSM 1.7.1 release for MON
 CASM-5715 CSM 1.7.1 release activities for SMA
 CASM-5714 Support for SLES15-SP7 for MON
@@ -346,7 +339,6 @@ CASMINST-7458 SP7: secrets-seed-customizations.sh fails at platform_ca
 CASMINST-7445 Include IPv6 neighbor table in ARP cache tuning guidance
 CASMINST-7433 CMN ip6 entry present in every ipam entry in cloud-init
 CASMINST-6937 identify low-hanging fruit from P0's in Automation Scope for CSM
-CASMINST-6636 IUF: iuf cli should display log name when failure occurs
 CASMINST-6462 Fix CVE's in artifactory.algol60.net/csm-docker/stable/docker.io/metacontrollerio/metacontroller:v4.10.3
 CASMINST-6253 Suggestion to include remediation step for libcsm
 CASMINST-5980 Create/update tool to customize NCN timezones
@@ -454,7 +446,6 @@ CASMSMF-8679 Investigate CVE for SMA MLflow
 ### CASMTRIAGE
 
 ```text
-CASMTRIAGE-8959 fanta: iuf problem with process-media
 CASMTRIAGE-8953 Prepare images error
 CASMTRIAGE-8932 starlord: cray-kyverno helm chart/manifest mismatch
 CASMTRIAGE-8906 NMN ip allocation during FM node addition failing even though it is in range
@@ -468,7 +459,6 @@ CASMTRIAGE-8684 cray-nexus deployment fails on nexus-set-admin-password post-ins
 CASMTRIAGE-8678 uas etcd endpoints not getting cleared as part of upgrade
 CASMTRIAGE-8675 autotriage: 1 failures in CSM-1.7.0-rc.7 detected on: vinland
 CASMTRIAGE-8670 cray-nexus deployment fails on nexus-setup post-install hook - default admin credential not changed (again)
-CASMTRIAGE-8660 IUF - autotriage: 11 failures in CSM-1.7.0 detected on: tyr
 CASMTRIAGE-8638 RR k8s zone prefix is not getting applied correctly
 CASMTRIAGE-8622 cray-nexus deployment fails on nexus-setup post-install hook - default admin credential not changed
 CASMTRIAGE-8592 pre-install-check stuck waiting for keycloak pod to come up
@@ -520,8 +510,6 @@ CASMTRIAGE-8940 DOCS: state tracking for m001 backup conflicts with Argo retry s
 CASMTRIAGE-8935 DOCS: cray-vault-operator upgrade failing due to crd vaults.vault.banzaicloud.com
 CASMTRIAGE-8931 DOCS: Add Note in management nodes rollout check whether /etc/cray/upgrade/csm/myenv file is present before starting management rollout for worker nodes
 CASMTRIAGE-8912 DOCS: CA for CAST-39136 for cleanup of unused Luns
-CASMTRIAGE-8869 DOCS: IUF managed-nodes-rollout CANARY_LNET fails boot to get ipxe.efi from tftp server
-CASMTRIAGE-8863 DOCS: Kubernetes upgrade after IUF deploy-product needs time estimate NOTE
 CASMTRIAGE-8856 DOCS: CSM 1.7.0 cray-upload-recovery-images fails for ChassisBMC and NodeBMC .itb files
 CASMTRIAGE-8853 DOCS: Add TFTP Conntrack helper debugging steps to PXE runbook
 CASMTRIAGE-8829 DOCS: nexus-export.sh missing path to nexus-helper.sh
