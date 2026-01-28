@@ -9,6 +9,7 @@ These options are available only for the BOS v2 API and only affect v2 functiona
 * [Update options](#update-options)
 * [Individual option details](#individual-option-details)
   * [`cleanup_completed_session_ttl`](#cleanup_completed_session_ttl)
+  * [`clear_stage`](#clear_stage)
   * [`component_actual_state_ttl`](#component_actual_state_ttl)
   * [`default_retry_policy`](#default_retry_policy)
   * [`disable_components_on_completion`](#disable_components_on_completion)
@@ -32,6 +33,7 @@ Example output:
 ```json
 {
   "cleanup_completed_session_ttl": "7d",
+  "clear_stage": false,
   "component_actual_state_ttl": "4h",
   "default_retry_policy": 3,
   "disable_components_on_completion": true,
@@ -58,6 +60,7 @@ Example output:
 ```json
 {
   "cleanup_completed_session_ttl": "7d",
+  "clear_stage": false,
   "component_actual_state_ttl": "4h",
   "default_retry_policy": 3,
   "disable_components_on_completion": true,
@@ -82,6 +85,12 @@ units: minutes (`m`or `M`), hours (`h` or `H`), days (`d` or `D`), or weeks (`w`
 For example, `3d` means three days.
 
 The cleanup behavior is disabled if the option is set to `0`, `0m`, `0h`, `0d`, or `0w`.
+
+### `clear_stage`
+
+Allows staged information for [BOS components](Components.md) to be cleared when the requested staging action has been started. Defaults to false.
+
+For more information on staging, see [Stage Changes with BOS](Stage_Changes_with_BOS.md).
 
 ### `component_actual_state_ttl`
 
