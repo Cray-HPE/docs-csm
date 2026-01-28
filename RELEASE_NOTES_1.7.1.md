@@ -34,7 +34,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * Added `baremetal` support for the HPE Slingshot Fabric Manager
 * Updated `ims-python-helper` to support logging level configuration as part of IMS configuration for image create/build
 * IMS jobs run on remote build nodes have performance improvements and can better recover from errors regarding the remote execution.
-* Added IUF to support for the deletion of existing activities (existing activity deletion functionality) so users can clean up or re-run workflows without manual intervention.
+* IUF supports deletion of activities.
 
 ### General
 
@@ -91,9 +91,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   if the provided password is longer than 20 characters. This is the maximum password length
   supported by `ipmitool`, which is required to control management nodes during system boot and
   shutdown procedures.
-* Updated the CSM Upgrade documentation to better describe the CSM actions that run via IUF hooks. Added notes into the corresponding stage documentation.
-* Documentation for Clean old Nexus repositories
-* Add iuf_unable_to_run_next_stage.md documentation in CSM 1.7
+* Enhanced the CSM Upgrade documentation to describe the procedures done during CSM Upgrade through IUF hooks.
 
 ## Bug fixes
 
@@ -143,24 +141,19 @@ For a full list of known issues, see [Known issues](troubleshooting/README.md#kn
 ### IUF
 
 ```text
-CASM-5749 CAST-38971 DOCS: WAR doc for "multiple sessions of IUF running"
-CASM-4543 docs-csm RPM install should run IUF script upload-rebuild-templates.sh
-CASM-5756 CAST-38483 DOCS : Getting list of old nexus repositories
+CASM-4543 docs-csm rpm installation now executes IUF upload-rebuild-templates.sh script to update workflowtemplates
+CASM-5756 CAST-38483 DOCS : Get list of old nexus repositories
 CASM-5744 CAST-38982 Update CSM hooks to remove cos-prechecks-for-worker-reboots on cluster while Upgrading to CSM 1.7.1
-CASM-5743 DOCS: Return zero as exit code to avoid failures when installing docs-csm on PIT node
 CASM-4290 IUF: list-stages shows failed stage as paused and not failed
 CASMINST-6636 IUF: iuf cli should display log name when failure occurs
 CASMINST-7090 IUF: existing activity removal functionality
 CASMTRIAGE-8916/CASMTRIAGE-8917 DOCS: Cilium migration procedure incorrectly documented for 1.7.0 → 1.7.1 upgrade, causing unintended migration and node isolation
-CASMTRIAGE-8860 DOCS: upgrade-k8s-job after IUF deploy-product documentation improvements
 CASMTRIAGE-8843/CASMTRIAGE-6297 DOCS: IUF update-vcs-config to procedure handling merge conflicts
 CASMTRIAGE-8729 DOCS: Reboot Managed nodes after Update managed host Slingshot NIC firmware
-CASMTRIAGE-8687 autotriage: 11 failures in CSM-1.7.0 detected on: tyr
-CASMTRIAGE-8606 CAST-38666 DOCS: IUF managment-rollout for ncn-m001 hard to recover from failures (backup-m001)
+CASMTRIAGE-8606 CAST-38666 DOCS: IUF managment-rollout management rollout dependency on state of the node
 CASMTRIAGE-8605 CAST-38666 DOCS: IUF management-rollout for ncn-m001 does not preserve /etc/motd or /root/.bashrc
 CASMTRIAGE-8604 DOCS: 100% full /var/lib/containerd prevents services starting during IUF worker node rolling upgrade
 CASMTRIAGE-8584 DOCS: CSM actions in IUF hooks poorly described
-CASMTRIAGE-8869 DOCS: IUF managed-nodes-rollout CANARY_LNET fails boot to get ipxe.efi from tftp server
 CASMTRIAGE-8863 DOCS: Kubernetes upgrade time estimate NOTE after IUF deploy-product 
 MTL-2572 DOCS: Move kernel parameters update from prerequisites to node rebuild workflows
 CAST-38982 IUF CSM 1.7.0 upgrade - management rollout stuck with last worker
