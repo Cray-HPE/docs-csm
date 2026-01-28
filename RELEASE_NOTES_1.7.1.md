@@ -11,6 +11,9 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * [Bug fixes](#bug-fixes)
 * [Known issues](#known-issues)
 * [All resolved issues](#all-resolved-issues)
+    * [IUF](#iuf)
+    * [iSCSI SBPS](#iscsi-sbps)
+    * [Rack Resiliency](#rack-resiliency)
     * [CASM](#casm)
     * [CASMCMS](#casmcms)
     * [CASMDIAG](#casmdiag)
@@ -135,6 +138,73 @@ For a full list of known issues, see [Known issues](troubleshooting/README.md#kn
 
 ## All resolved issues
 
+### IUF
+
+```text
+CASM-5749 DOCS: WAR doc for "multiple sessions of IUF running"
+CASM-4543 docs-csm RPM runs the wrong IUF install script
+CASM-5756 DOCS :  getting list of old nexus repositories
+CASM-5744 Update CSM hooks to remove cos-prechecks-for-worker-reboots on cluster while Upgrading to CSM 1.7.1
+CASM-5743 DOCS: Return zero as exit code to avoid failures when installing docs-csm on PIT node
+CASM-4290 IUF: list-stages shows failed stage as paused and not failed
+CASMINST-6636 IUF: iuf cli should display log name when failure occurs
+CASMINST-7090 IUF: existing activity removal functionality
+CASMTRIAGE-8902 DOCS: Storage node rollout silently fails (unrecognized function inputs)
+CASMTRIAGE-8917 DOCS: Cilium migration procedure incorrectly documented for 1.7.0 → 1.7.1 upgrade, causing unintended migration and node isolation
+CASMTRIAGE-8916 DOCS: Groot:: During the rollout, DNS stopped working on ncn-m002. The DNS VIP 10.92.100.225 is reachable, but the DNS service behind it is not running, so queries fail.
+CASMTRIAGE-8903 vinland: management-nodes-rollout in Error
+CASMTRIAGE-8860 DOCS: upgrade-k8s-job after IUF deploy-product documentation improvements
+CASMTRIAGE-8843 DOCS: need link from IUF update-vcs-config to procedure handling merge conflicts
+CASMTRIAGE-8791 DOCS: vShasta: docs-csm RPM install exits with non zero exit code
+CASMTRIAGE-8792 DOCS: vShasta: upgrade-m001 fails with ncn-m001-bootparameters-update.done': No such file or directory
+CASMTRIAGE-8729 DOCS: Reboot Managed nodes after Update managed host Slingshot NIC firmware
+CASMTRIAGE-8687 autotriage: 11 failures in CSM-1.7.0 detected on: tyr
+CASMTRIAGE-8606 DOCS: IUF managment-rollout for ncn-m001 hard to recover from failures (backup-m001)
+CASMTRIAGE-8605 DOCS: IUF management-rollout for ncn-m001 does not preserve /etc/motd or /root/.bashrc
+CASMTRIAGE-8604 DOCS: 100% full /var/lib/containerd prevents services starting during IUF worker node rolling upgrade
+CASMTRIAGE-8584 DOCS: CSM actions in IUF hooks poorly described
+CASMTRIAGE-6297 DOCS: COS and UAN merge conflicts from iuf update-vcs-config Papaya upgrade to Alice
+MTL-2572 DOCS: Move kernel parameters update from prerequisites to node rebuild workflows
+CAST-38982 IUF CSM 1.7.0 upgrade - management rollout stuck with last worker
+CAST-38971 IUF iuf_unable_to_run_next_stage.md disappeared in CSM 1.7 doc
+CAST-38347 IUF iuf-skopeo-sync script failure on deliver-product.sh
+CAST-38666 IUF management rollout dependency on state of the node
+CAST-38483 IUF Clean old Nexus repositories
+CAST-38767 IUF Case iuf deliver-product not uploading all repos up to nexus
+CAST-38738 IUF pre-install-check stuck
+CAST-38657 IUF management rollout storage nodes permission error
+```
+
+### iSCSI SBPS
+
+```text
+CASMTRIAGE-7844 DOCS: Missing files remain inaccessible when bringing iscsi targets back online
+CASMTRIAGE-8523 DOCS: Investigate why iSCSI client is consuming a lot of memory
+CASMTRIAGE-8834 DOCS: Provide documenation to remove iSCSI sessions for the nodes not part of  HSM group for iSCSI
+CASMTRIAGE-8835 DOCS: Document about necessary action if the compute/UANs are booted with DVS during upgrade from 1.6.x to 1.7.x
+CASMTRIAGE-8848 SQUASHFS error occurred for booted computes while worker nodes were rebuilt
+CASMTRIAGE-8912 DOCS: CA for CAST-39136 for cleanup of unused Luns
+CASMTRIAGE-8984 After worker node 1 rollout, its path is not active in compute node
+CASMTRIAGE-8999 Recurrence of LUN assigments messages seen in compute node
+CASMPET-7500 DOCS: Update iSCSI SBPS top level document with latest flow diagram
+```
+
+###  Rack Resiliency
+
+```text
+CASM-5717 DOCS: Document lack of RR support for some dynamic NCN changes
+CASM-5705 DOCS: Need to document (@csm-docs) steps on enabling Rack Resiliency post install/ upgrade
+CASM-5662/CASM-5649 RR CFS Ansible plays: Need to address mentioned review comments for RR ansible plays
+CASM-5644 TESTS: Add more unit tests for RRS/RMS
+CASM-5643 TESTS: Add bad path unit tests for RRS/RMS
+CASMINST-7369 TESTS: Create RRS/RMS health checks in csm-testing
+CASMTRIAGE-8975 BUG: Issue faced while rebuilding cray-rrs images/charts
+CASMTRIAGE-8945 RR cfs issues for master nodes
+CASMTRIAGE-8926 Wrong file name for RR goss-test
+CASMTRIAGE-8730 DOCS: Rack Resiliency logic in CSM 1.6 to 1.7 upgrades
+CASMTRIAGE-8450 DOCS: Rack-Resiliency : RMS is not picking up node being moved from one rack to another
+```
+
 ### CASM
 
 ```text
@@ -147,7 +217,6 @@ CASM-5750 [FM on baremetal] As an administrator, I should be able to remove FMNs
 CASM-5748 [FM on baremetal] As a developer, create CSM HLD for FM migration to baremetal
 CASM-5747 [FM on baremetal] As an administrator, I want to add FMNs to SLS/BSS/HSM during CSM upgrade
 CASM-5746 [FM on baremetal] As an administrator, I should be able to run a script for configuring storage LUNs for FMNs during CSM upgrade
-CASM-5744 Update CSM hooks to remove cos-prechecks-for-worker-reboots on cluster while Upgrading to CSM 1.7.1
 CASM-5739 [FM on baremetal] As an administrator, I should be able to run a script for configuring network(static/virtual IPs) for FMNs during CSM upgrade
 CASM-5738 [FM on baremetal]DEV: Update CSI to support FMN during CSM install
 CASM-5736 POC for creating and applying Management type FMN image on #surtur
@@ -169,16 +238,12 @@ CASM-5676 RR playbook needlessly restarts deployments
 CASM-5670 kernel CVE-2025-38083 for SLES 15 SP6 / SP7
 CASM-5669 Modify csm-supplemental to handle different target repos
 CASM-5662 RR Ansible Playbook should make better use of Ansible
-CASM-5649 RR CFS Ansible plays: Need to address mentioned review comments for RR ansible plays
-CASM-5644 TESTS: Add more unit tests for RRS/RMS
-CASM-5643 TESTS: Add bad path unit tests for RRS/RMS
 CASM-5624 HMS: Specific Scaling Improvements for CSM 1.7.1
 CASM-5617 MTLNET: CAST and CVE-related Bugs
 CASM-5367 SLE-15-SP7 CSM Images
 CASM-5283 [FM on baremetal] DEV: Allow communication from k8s services(WLM) to FMN via NMN
 CASM-5282 [FM on baremetal] As an administrator, I should be able to create an Fabric Manager Node (FMN) image
 CASM-5281 [FM on baremetal] Allow FM to populate CSM with DNS entries
-CASM-4543 docs-csm RPM runs the wrong IUF install script
 ```
 
 ### CASMCMS
@@ -280,8 +345,6 @@ CASMINST-7459 SP7: cray-sls-init-load job fails during fresh install
 CASMINST-7458 SP7: secrets-seed-customizations.sh fails at platform_ca
 CASMINST-7445 Include IPv6 neighbor table in ARP cache tuning guidance
 CASMINST-7433 CMN ip6 entry present in every ipam entry in cloud-init
-CASMINST-7369 TESTS: Create RRS/RMS health checks in csm-testing
-CASMINST-7090 IUF: existing activity removal functionality
 CASMINST-6937 identify low-hanging fruit from P0's in Automation Scope for CSM
 CASMINST-6636 IUF: iuf cli should display log name when failure occurs
 CASMINST-6462 Fix CVE's in artifactory.algol60.net/csm-docker/stable/docker.io/metacontrollerio/metacontroller:v4.10.3
@@ -393,18 +456,14 @@ CASMSMF-8679 Investigate CVE for SMA MLflow
 ```text
 CASMTRIAGE-8959 fanta: iuf problem with process-media
 CASMTRIAGE-8953 Prepare images error
-CASMTRIAGE-8945 RR cfs issues for master nodes
 CASMTRIAGE-8932 starlord: cray-kyverno helm chart/manifest mismatch
-CASMTRIAGE-8926 Wrong file name for RR goss-test
 CASMTRIAGE-8906 NMN ip allocation during FM node addition failing even though it is in range
-CASMTRIAGE-8903 vinland: management-nodes-rollout in Error
 CASMTRIAGE-8900 CANU validate shcd cabling and paddle cabling are failing
 CASMTRIAGE-8892 ncn-s001 rollout error
 CASMTRIAGE-8890 tyr: SMD giving inappropriate 400 bad request response
 CASMTRIAGE-8859 Image customization error
 CASMTRIAGE-8815 starlord: ssh access test over can network, should not succeed, but is.
 CASMTRIAGE-8696 autotriage: 16 failures in CSM-1.7.0, CSM-1.7.0-rc.7 detected on: tyr
-CASMTRIAGE-8687 autotriage: 11 failures in CSM-1.7.0 detected on: tyr
 CASMTRIAGE-8684 cray-nexus deployment fails on nexus-set-admin-password post-install hook
 CASMTRIAGE-8678 uas etcd endpoints not getting cleared as part of upgrade
 CASMTRIAGE-8675 autotriage: 1 failures in CSM-1.7.0-rc.7 detected on: vinland
@@ -456,43 +515,24 @@ CRAYSAT-1962 Ensure SAT functional tests are run automatically on vShasta
 ```text
 MTL-2606 DOCS: Update grep PCRE1 regexes that are no longer compliant
 MTL-2592 DOCS: Document CSM 1.7.1 kernel version
-MTL-2572 DOCS: Move kernel parameters update from prerequisites to node rebuild workflows
 CRAYSAT-2042 DOCS: Update "System Power On Procedure" to show master and worker nodes booted simultaneously
 CASMTRIAGE-8940 DOCS: state tracking for m001 backup conflicts with Argo retry strategy
 CASMTRIAGE-8935 DOCS: cray-vault-operator upgrade failing due to crd vaults.vault.banzaicloud.com
 CASMTRIAGE-8931 DOCS: Add Note in management nodes rollout check whether /etc/cray/upgrade/csm/myenv file is present before starting management rollout for worker nodes
-CASMTRIAGE-8917 DOCS: Cilium migration procedure incorrectly documented for 1.7.0 → 1.7.1 upgrade, causing unintended migration and node isolation
-CASMTRIAGE-8916 DOCS: Groot:: During the rollout, DNS stopped working on ncn-m002. The DNS VIP 10.92.100.225 is reachable, but the DNS service behind it is not running, so queries fail.
 CASMTRIAGE-8912 DOCS: CA for CAST-39136 for cleanup of unused Luns
-CASMTRIAGE-8902 DOCS: Storage node rollout silently fails (unrecognized function inputs)
 CASMTRIAGE-8869 DOCS: IUF managed-nodes-rollout CANARY_LNET fails boot to get ipxe.efi from tftp server
 CASMTRIAGE-8863 DOCS: Kubernetes upgrade after IUF deploy-product needs time estimate NOTE
-CASMTRIAGE-8860 DOCS: upgrade-k8s-job after IUF deploy-product documentation improvements
 CASMTRIAGE-8856 DOCS: CSM 1.7.0 cray-upload-recovery-images fails for ChassisBMC and NodeBMC .itb files
 CASMTRIAGE-8853 DOCS: Add TFTP Conntrack helper debugging steps to PXE runbook
-CASMTRIAGE-8843 DOCS: need link from IUF update-vcs-config to procedure handling merge conflicts
-CASMTRIAGE-8835 DOCS: Document about necessary action if the compute/UANs are booted with DVS during upgrade from 1.6.x to 1.7.x
-CASMTRIAGE-8834 DOCS: Provide documenation to remove iSCSI sessions for the nodes not part of  HSM group for iSCSI
 CASMTRIAGE-8829 DOCS: nexus-export.sh missing path to nexus-helper.sh
 CASMTRIAGE-8826 DOCS: CSM upgrade process fails to warn about checking and cleaning Nexus space usage
-CASMTRIAGE-8792 DOCS: vShasta: upgrade-m001 fails with ncn-m001-bootparameters-update.done': No such file or directory
-CASMTRIAGE-8791 DOCS: vShasta: docs-csm RPM install exits with non zero exit code
-CASMTRIAGE-8730 DOCS: Rack Resiliency logic in CSM 1.6 to 1.7 upgrades
-CASMTRIAGE-8729 DOCS: Reboot Managed nodes after Update managed host Slingshot NIC firmware
+
 CASMTRIAGE-8706 DOCS: LOKI> Orange Phase upgrade> cilium_migration.sh shows Errors
 CASMTRIAGE-8646 DOCS: baldar-cfs-ara-postgres member is stopped and fails to renit with error code 503
 CASMTRIAGE-8627 DOCS: vShasta: control plane upgrade logs are written onto filesystem instead of kubernetes logging
 CASMTRIAGE-8614 DOCS: Vidar : Purple testing : Error releasing chart cray-nexus v0.14.2
-CASMTRIAGE-8606 DOCS: IUF managment-rollout for ncn-m001 hard to recover from failures (backup-m001)
-CASMTRIAGE-8605 DOCS: IUF management-rollout for ncn-m001 does not preserve /etc/motd or /root/.bashrc
-CASMTRIAGE-8604 DOCS: 100% full /var/lib/containerd prevents services starting during IUF worker node rolling upgrade
-CASMTRIAGE-8584 DOCS: CSM actions in IUF hooks poorly described
-CASMTRIAGE-8523 DOCS: Investigate why iSCSI client is consuming a lot of memory
 CASMTRIAGE-8509 DOCS:Rack Resiliency: Criticalservices pods are not spread properly over zones on odin
-CASMTRIAGE-8450 DOCS: Rack-Resiliency : RMS is not picking up node being moved from one rack to another
-CASMTRIAGE-7844 DOCS: Missing files remain inaccessible when bringing iscsi targets back online
 CASMTRIAGE-7386 DOCS: Seeing error in the compute node after removal of the tag "sbps-project" from the metadata section
-CASMTRIAGE-6297 DOCS: COS and UAN merge conflicts from iuf update-vcs-config Papaya upgrade to Alice
 CASMSEC-415 DOCS: CIS: Ensure that the --audit-log-maxsize argument is set to 100 or as appropriate
 CASMSEC-413 DOCS: CIS: Ensure that the --audit-log-maxage argument is set to 30 or as appropriate
 CASMPET-7696 DOCS: create a known issue to restart oauth2-proxy pod
@@ -501,7 +541,6 @@ CASMPET-7674 DOCS: upgrade_control_plane.sh clobbers kube-apiserver options with
 CASMPET-7665 DOCS: Run remove_psp.sh script after manifests deployed at k8s 1.32
 CASMPET-7657 DOCS: provide instructions for moving unmanaged OSDs
 CASMPET-7540 DOCS: add master node promotion instructions to ncn reboot procedure
-CASMPET-7500 DOCS: Update iSCSI SBPS top level document with latest flow diagram
 CASMPET-7461 DOCS: add instructions to clean up s3fs cache manually
 CASMPET-6523 DOCS: Multia-Tenancy: Document key rotation
 CASMNET-2368 DOCS: Procedures to replace an NCN NIC and boot an NCN using its secondary NIC
@@ -527,12 +566,7 @@ CASMCMS-9521 DOCS: Console cli for MT will display password on screen if logging
 CASMCMS-9520 DOCS: Improve documentation around increasing Ansible verbosity
 CASMCMS-9517 DOCS: Update CSM 1.7.0 release notes for bug fix of CASMCMS-9512
 CASMCMS-9516 DOCS: Known issue cfs session for image customization running on remote node is stuck in "running" status if ims job container is killed
-CASM-5756 DOCS :  getting list of old nexus repositories
-CASM-5749 DOCS: WAR doc for "multiple sessions of IUF running"
-CASM-5743 DOCS: Return zero as exit code to avoid failures when installing docs-csm on PIT node
 CASM-5718 DOCS: Evaluate RR support for CSM features/operations
-CASM-5717 DOCS: Document lack of RR support for some dynamic NCN changes
-CASM-5705 DOCS: Need to document (@csm-docs) steps on enabling Rack Resiliency post install/ upgrade
 CASM-5279 [FM on baremetal] DOCS: Align Switch and Fabric Manager Credentials to be stored in HPCM/standalone way
 ```
 
