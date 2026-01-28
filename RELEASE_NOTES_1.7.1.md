@@ -188,7 +188,7 @@ CASMPET-7500 DOCS: Update iSCSI SBPS top level document with latest flow diagram
 ```text
 CASM-5717 DOCS: Document lack of RR support for some dynamic NCN changes
 CASM-5705 DOCS: Need to document (@csm-docs) steps on enabling Rack Resiliency post install/ upgrade
-CASM-5662/CASM-5649 RR CFS Ansible plays: Need to address mentioned review comments for RR ansible plays
+CASM-5662/CASM-5649 RR CFS Ansible plays: Fixes for RR Ansible plays and improvements to use Ansible modules
 CASM-5644 TESTS: Add more unit tests for RRS/RMS
 CASM-5643 TESTS: Add bad path unit tests for RRS/RMS
 CASMINST-7369 TESTS: Create RRS/RMS health checks in csm-testing
