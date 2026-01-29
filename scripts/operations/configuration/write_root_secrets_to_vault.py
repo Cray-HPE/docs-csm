@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -212,7 +212,7 @@ def parse_args() -> CsmUserSecretUpdateData:
 
     parsed_args = parser.parse_args()
 
-    field_changes = CsmUserSecretUpdateData()
+    field_changes: CsmUserSecretUpdateData = dict()
 
     if parsed_args.pw_remove:
         # Clear the field in Vault, if it is set
