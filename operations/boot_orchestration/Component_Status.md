@@ -37,7 +37,7 @@ The possible values for this field are:
 ## Last actions
 
 The `last_action` field stores information on the last action that was taken by BOS for this component. This field is automatically updated by the operators as they take actions.
-For more information on the BOS operators see [BOS operators](BOS_Services.md#bos-operators).
+For more information on the BOS operators see [BOS operators](Operators.md).
 
 The possible values for this field are:
 
@@ -141,4 +141,4 @@ However, typically `on_hold` will be the result of a `stable` of `failed` compon
 
 ![Status Transitions](../../img/operations/boot_orchestration/bos_v2_status_transitions.png)
 
-For more information on the BOS operators that act on components to move them from state to state, see [BOS operators](BOS_Services.md#bos-operators)
+For more information on the BOS operators that act on components to move them from state to state, see [BOS operators](Operators.md)
