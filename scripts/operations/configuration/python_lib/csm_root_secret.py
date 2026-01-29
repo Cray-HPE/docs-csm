@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -25,38 +25,27 @@
 
 import logging
 import traceback
-from typing import NoReturn, Union
-from typing_extensions import Literal, TypedDict
+from typing import Dict, NoReturn, Union
 
 from . import common
 from . import k8s
 from . import vault
 
 
-class CsmUserSecretData(TypedDict, total=False):
-    password: str
-    ssh_config: str
-    ssh_private_key: str
-    ssh_public_key: str
+SSH_CONFIG_FIELD: str = 'ssh_config'
+SSH_PRI_KEY_FIELD: str = 'ssh_private_key'
+SSH_PUB_KEY_FIELD: str = 'ssh_public_key'
+PW_FIELD: str = 'password'
 
+# Mapping from user secret field names to their string values
+# Valid keys: 'password', 'ssh_config', 'ssh_private_key', 'ssh_public_key'
+CsmUserSecretData = Dict[str, str]
 
-class CsmUserSecretUpdateData(TypedDict, total=False):
-    """
-    A value of None in the update dict means the field should be deleted
-    as part of the update
-    """
-    password: Union[str, None]
-    ssh_config: Union[str, None]
-    ssh_private_key: Union[str, None]
-    ssh_public_key: Union[str, None]
-
-
-CsmUserSecretFields = Literal['password', 'ssh_config', 'ssh_private_key', 'ssh_public_key']
-
-SSH_CONFIG_FIELD: CsmUserSecretFields = 'ssh_config'
-SSH_PRI_KEY_FIELD: CsmUserSecretFields = 'ssh_private_key'
-SSH_PUB_KEY_FIELD: CsmUserSecretFields = 'ssh_public_key'
-PW_FIELD: CsmUserSecretFields = 'password'
+# Mapping from user secret field names to the desired new string values
+# Valid keys: 'password', 'ssh_config', 'ssh_private_key', 'ssh_public_key'
+# If the target value is None, it means the corresponding key should be deleted
+# as part of the update
+CsmUserSecretUpdateData = Dict[str, Union[str, None]]
 
 
 def log_error_raise_exception(msg: str, parent_exception: Exception = None) -> NoReturn:
@@ -124,7 +113,7 @@ class CsmUserSecret:
             return
         root_secret = self.get(must_exist=False)
         if root_secret is None:
-            new_root_secret = CsmUserSecretData()
+            new_root_secret: CsmUserSecretData = dict()
             # Get the update fields that are not set to None
             for field, value in secret_update_data.items():
                 if value is not None:
