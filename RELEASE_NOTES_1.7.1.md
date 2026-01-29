@@ -141,25 +141,24 @@ For a full list of known issues, see [Known issues](troubleshooting/README.md#kn
 ### IUF
 
 ```text
-CASM-4543 docs-csm rpm installation now executes IUF upload-rebuild-templates.sh script to update workflowtemplates
-CASM-5756 CAST-38483 DOCS : Get list of old nexus repositories
-CASM-5744 CAST-38982 Update CSM hooks to remove cos-prechecks-for-worker-reboots on cluster while Upgrading to CSM 1.7.1
-CASM-4290 IUF: list-stages shows failed stage as paused and not failed
-CASMINST-6636 IUF: iuf cli should display log name when failure occurs
-CASMINST-7090 IUF: existing activity removal functionality
-CASMTRIAGE-8916/CASMTRIAGE-8917 DOCS: Cilium migration procedure incorrectly documented for 1.7.0 → 1.7.1 upgrade, causing unintended migration and node isolation
-CASMTRIAGE-8843/CASMTRIAGE-6297 DOCS: IUF update-vcs-config to procedure handling merge conflicts
-CASMTRIAGE-8729 DOCS: Reboot Managed nodes after Update managed host Slingshot NIC firmware
-CASMTRIAGE-8606 CAST-38666 DOCS: IUF managment-rollout management rollout dependency on state of the node
-CASMTRIAGE-8605 CAST-38666 DOCS: IUF management-rollout for ncn-m001 does not preserve /etc/motd or /root/.bashrc
-CASMTRIAGE-8604 DOCS: 100% full /var/lib/containerd prevents services starting during IUF worker node rolling upgrade
-CASMTRIAGE-8584 DOCS: CSM actions in IUF hooks poorly described
-CASMTRIAGE-8863 DOCS: Kubernetes upgrade time estimate NOTE after IUF deploy-product 
-MTL-2572 DOCS: Move kernel parameters update from prerequisites to node rebuild workflows
-CAST-38982 IUF CSM 1.7.0 upgrade - management rollout stuck with last worker
-CAST-38971 IUF Add iuf_unable_to_run_next_stage.md in CSM 1.7 doc
-CAST-38666 IUF management rollout dependency on state of the node
-CAST-38483 IUF Clean old Nexus repositories
+CASM-4543 docs-csm rpm installation now updates tags and uploads workflow templates to Argo.
+CASM-5756 CAST-38483 DOCS: How to identify old Nexus repositories for cleanup during upgrades.
+The documentation now includes steps to retrieve a list of older Nexus repositories that are safe candidates for deletion, so administrators can free space and resume the upgrade if Nexus storage becomes full.
+CASM-5744 CAST-38982 Upgrade fix: prevent the legacy cos-prechecks-for-worker-reboots hook from running during CSM 1.7.x upgrades
+CASMINST-6636 IUF CLI enhancement: display the log file name on failures
+When an IUF command fails, the iuf CLI now prints the relevant log file name, making it easier to locate detailed error output and troubleshoot the failure.
+CASMINST-7090 IUF now supports deletion of activities.
+CASMTRIAGE-8916/CASMTRIAGE-8917 DOCS: Corrected Cilium migration guidance to prevent unintended migration and node isolation
+Note: This Cilium migration guidance is applicable to upgrades from CSM 1.6 → 1.7, and is not intended for 1.7.0 → 1.7.1 in-place upgrades.
+CASMTRIAGE-8843/CASMTRIAGE-6297 DOCS: Added documentation for resolving merge conflicts during iuf update-vcs-config.
+CASMTRIAGE-8729 DOCS: Reboot Managed nodes after updating managed host Slingshot NIC firmware, ensuring the firmware update is fully applied.
+CASMTRIAGE-8606 CAST-38666 DOCS: IUF management-rollout behavior is dependent on the current state of the node and does not re-run those backup steps on subsequent runs.
+CASMTRIAGE-8605 CAST-38666 DOCS: IUF preserves local customizations in /etc/motd and /root/.bashrc during management-rollout on ncn-m001.
+CASMTRIAGE-8604 DOCS: Mitigate disk-pressure during IUF worker rolling upgrades when /var/lib/containerd is highly utilized.
+CASMTRIAGE-8584 DOCS: Enhanced the CSM upgrade documentation to better describe the actions performed during upgrade by IUF hooks.
+CASMTRIAGE-8863 DOCS: Added Kubernetes upgrade time estimates after IUF deploy-product.
+MTL-2572 DOCS: Moved the kernel-parameter update into the NCN rebuild workflow step where kernel/initramfs/rootfs are updated immediately before reboot.
+CAST-38971 DOCS: Restored IUF troubleshooting documentation for “iuf_unable_to_run_next_stage.md”.
 ```
 
 ### iSCSI SBPS
