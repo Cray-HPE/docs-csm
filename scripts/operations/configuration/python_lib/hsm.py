@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2023-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2023-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -26,7 +26,6 @@
 import logging
 import traceback
 from typing import List, NoReturn, Optional
-from typing_extensions import Literal
 
 from . import api_requests
 from . import common
@@ -34,8 +33,6 @@ from .types import JSONDecodeError
 
 SMD_BASE_URL = f"{api_requests.API_GW_BASE_URL}/apis/smd"
 SMD_HSM_COMPONENTS_URL = f"{SMD_BASE_URL}/hsm/v2/State/Components"
-
-MGMT_NCN_HSM_SUBROLE = Literal['Master', 'Storage', 'Worker']
 
 def log_error_raise_exception(msg: str, parent_exception: Optional[Exception] = None) -> NoReturn:
     """
@@ -52,9 +49,11 @@ def log_error_raise_exception(msg: str, parent_exception: Optional[Exception] = 
     raise common.ScriptException(msg) from parent_exception
 
 
-def get_management_ncn_xnames(subrole: Optional[MGMT_NCN_HSM_SUBROLE] = None) -> List[str]:
+def get_management_ncn_xnames(subrole: Optional[str] = None) -> List[str]:
     """
     Return a sorted list of the xnames of the management NCNs
+
+    Valid subrole values: 'Master', 'Storage', 'Worker'
     """
     params = {"type": "Node", "role": "Management"}
     if subrole is not None:
