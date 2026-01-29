@@ -34,7 +34,7 @@ See [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md) for 
 
 ### BOS v2 sessions and HSM locks
 
-As part of a `pending` BOS v2 session being started, the BOS [`session-setup` operator](BOS_Services.md#session-setup)
+As part of a `pending` BOS v2 session being started, the BOS [`session-setup` operator](Operators.md#session-setup)
 determines which nodes are targeted for the session. For example, it removes nodes whose architectures are not compatible with
 the boot sets in the session template, and this is also when it applies the
 [session limit](Limit_the_Scope_of_a_BOS_Session.md) (if one was specified).
