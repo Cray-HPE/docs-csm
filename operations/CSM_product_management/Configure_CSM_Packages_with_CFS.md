@@ -1,8 +1,10 @@
 # Configure CSM packages with CFS
 
 CSM includes a playbook that should be applied to Compute and Application node images.
-The `csm_packages.yml` playbook installs the packages for both the CFS and BOS reporters.
-These packages are necessary for CFS and BOS to run, so a configuration layer containing the
+Among other things, the `csm_packages.yml` playbook installs the packages for both the
+CFS state reporter and the [BOS reporter](../boot_orchestration/Reporter.md).
+These packages are necessary for [CFS](../../glossary.md#configuration-framework-service-cfs) and
+[BOS](../../glossary.md#boot-orchestration-service-bos) to operate on a node, so a configuration layer containing the
 playbook must be included in the image customization for any nodes that are expected to be
 managed with CFS and BOS.
 
@@ -22,41 +24,46 @@ To setup the compute configuration layer, first gather the following information
 | `playbook` | `compute_nodes.yml` | Default Ansible playbook for CSM configuration of compute nodes |
 
 1. (`ncn-mw#`) Retrieve the commit in the repository to use for configuration.
+
    * If changes have been made to the default branch that was imported during a CSM
      installation or upgrade, use the commit containing the changes.
 
    * If no changes have been made, the latest commit on the default branch for
      this version of CSM should be used. Find the commit in the
-     `cray-product-catalog` for the current version of CSM. For example:
+     `cray-product-catalog` for the current version of CSM.
 
-       ```bash
-       kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
-       ```
+     (`ncn-mw#`) For example:
 
-       Part of the output will be a section resembling the following:
+     ```bash
+     kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+     ```
 
-       ```yaml
-       1.2.0:
-          configuration:
-             clone_url: https://vcs.cmn.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
-             commit: 43ecfa8236bed625b54325ebb70916f55884b3a4
-             import_branch: cray/csm/1.9.24
-             import_date: 2021-07-28 03:26:01.869501
-             ssh_url: git@vcs.cmn.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
-       ```
+     Part of the output will be a section resembling the following:
+
+     ```yaml
+     1.2.0:
+        configuration:
+           clone_url: https://vcs.cmn.SYSTEM_DOMAIN_NAME/vcs/cray/csm-config-management.git
+           commit: 43ecfa8236bed625b54325ebb70916f55884b3a4
+           import_branch: cray/csm/1.9.24
+           import_date: 2021-07-28 03:26:01.869501
+           ssh_url: git@vcs.cmn.SYSTEM_DOMAIN_NAME:cray/csm-config-management.git
+     ```
 
      The commit will be different for each system and version of CSM. In the above
-     example it is `43ecfa8236bed625b54325ebb70916f55884b3a4`.
+     example, it is `43ecfa8236bed625b54325ebb70916f55884b3a4`.
 
-1. Craft a new configuration layer entry for CSM using the procedure in [Update a CFS Configuration](../configuration_management/Update_a_CFS_Configuration.md):
+1. Craft a new configuration layer entry for CSM.
 
-    The following is an example entry for the JSON configuration file:
+   Use the procedure in [Update a CFS Configuration](../configuration_management/Update_a_CFS_Configuration.md).
 
-    ```json
-    {
-        "name": "csm-<version>",
-        "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
-        "playbook": "csm_packages.yml",
-        "commit": "<retrieved git commit>"
-    }
-    ```
+   The following is an example entry for the JSON configuration file:
+
+   ```json
+   {
+       "name": "csm-<version>",
+       "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+       "playbook": "csm_packages.yml",
+       "commit": "<retrieved git commit>"
+   }
+   ```
