@@ -26,10 +26,12 @@ Component records are created automatically and will include any components foun
 
 ### `actual_state`
 
-Stores information on what BOS believes is the current boot artifacts the component is booted with. This is updated by the BOS state reporter, which runs on the booted node.
-For more information, see [BOS state reporter](BOS_Services.md#bos-state-reporter).
-See [Options](Options.md) for more information on setting the `component_actual_state_ttl` option, which controls how long this data is valid if it is not updated.
-Information stored in other locations, such as the current configuration which is stored in CFS, is not included here.
+Stores information on what BOS believes are the current boot artifacts that the component is booted with.
+This is updated by the [BOS reporter](Reporter.md), which runs on the booted node.
+The [`component_actual_state_ttl`](Options.md#component_actual_state_ttl) option controls how long this data is valid if it is not updated.
+See [Options](Options.md) for more information on viewing or setting BOS options.
+
+> Information stored in other locations, such as the current configuration which is stored in CFS, is not included here.
 
 ### `desired_state`
 
@@ -47,10 +49,13 @@ Even if the BOS session is deleted, the nodes remain enabled in BOS, and BOS wil
 Because of this, if an administrator wishes to stop BOS from taking such actions on a node, then they must disable it (enabled == False).
 Thus, while it is still uncommon, it is more likely that users will disable nodes than enable them.
 
-Even if a node is disabled in BOS, if it is booted, then BOS may receive status updates for it. However, BOS will not issue power commands to the nodes while they are disabled. These status updates come from the `bos-reporter`, small program running
-periodically on the nodes, that updates the nodes' actual status.
+Even if a node is disabled in BOS, if it is booted, then BOS may receive status updates for it from the
+[BOS reporter](Reporter.md) running on the node.
+However, BOS will not issue power commands to the nodes while they are disabled.
 
-Both BOS and the Hardware State Manager (HSM) use the term disabled, but not in a consistent fashion. When the HSM says a node is disabled, it is out of service. This definition should not be confused with BOS' definition of disabled.
+Both BOS and the HSM use the term disabled, but not in a consistent fashion.
+When the HSM says a node is disabled, it is out of service.
+This definition should not be confused with BOS' definition of disabled.
 
 ### `error`
 
@@ -69,7 +74,8 @@ The stored data includes the number of power on and power off attempts that have
 }
 ```
 
-The number of attempts is limited by the `default_retry_policy` found in BOS options endpoint. See [Options](Options.md) for more information.
+The number of attempts is limited by the [`default_retry_policy`](Options.md#default_retry_policy) option.
+See [Options](Options.md) for more information on viewing or setting BOS options.
 
 ### `last_action`
 
@@ -94,9 +100,7 @@ To find the API versions of any commands listed, add `-vvv` to the end of the CL
 
 ### List all components
 
-List all BOS components with the following command:
-
-(`ncn-mw#`)
+(`ncn-mw#`) List all BOS components.
 
 ```bash
 cray bos v2 components list --format json
@@ -153,9 +157,7 @@ Example output:
 
 ### Show details for a component
 
-Get details for a BOS session using the component `xname`.
-
-(`ncn-mw#`):
+(`ncn-mw#`) Get details for a BOS component.
 
 ```bash
 cray bos v2 components describe <XNAME> --format json
@@ -210,10 +212,11 @@ Example output:
 
 ### Update a component
 
-Update a BOS component using `xname`. While most fields can be updated manually, users should restrict themselves to updating the `desired_state` and `enabled`. Altering other fields such as `status` or `last_action` may result in unintended behavior.
+While most fields can be updated manually, users should restrict themselves to updating the `desired_state` and `enabled`.
+Altering other fields such as `status` or `last_action` may result in unintended behavior.
 See the [`enabled`](#enabled) section for cautions about updating a component's `enabled` state.
 
-(`ncn-mw#`):
+(`ncn-mw#`) Update a BOS component.
 
 ```bash
 cray bos v2 components update <XNAME> --enabled False --format json

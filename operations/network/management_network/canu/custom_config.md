@@ -1,15 +1,27 @@
-# Generate Switch Configs Including Custom Configurations
+# Generate Switch Configurations Including Custom Configurations
 
-Pass in a switch config file that CANU will inject into the generated config. A use case would be to add custom site
-connections. This config file will overwrite previously generate config.
+* [Overview](#overview)
+* [Custom configuration file examples](#custom-configuration-file-examples)
+    * [Aruba custom configuration file example](#aruba-custom-configuration-file-example)
+    * [Mellanox/Dell custom configuration file example](#mellanoxdell-custom-configuration-file-example)
+* [Generate switch configuration with custom configuration injection](#generate-switch-configuration-with-custom-configuration-injection)
+* [Generate network configuration](#generate-network-configuration)
+* [Generate network configuration with custom configuration injection](#generate-network-configuration-with-custom-configuration-injection)
 
-The custom-config file type is YAML and a single file can be used for multiple switches. You will need to specify the
-switch name and what config inject. The custom-config feature is using the hierarchical configuration library,
-documentation can be [found here](https://netdevops.io/hier_config/).
+## Overview
 
-Custom config file examples:
+Pass in a switch configuration file that CANU will inject into the generated configuration.
+A use case would be to add custom site connections.
+This configuration file will overwrite previously generate configuration.
 
-Aruba
+The custom configuration file type is YAML and a single file can be used for multiple switches.
+The switch name and custom configuration to be injected must be specified.
+The custom configuration feature uses the hierarchical configuration library.
+For more information, see [Hierarchical Configuration](https://hier-config.readthedocs.io/en/latest/).
+
+## Custom configuration file examples
+
+### Aruba custom configuration file example
 
 ```text
 sw-spine-001:  |
@@ -48,7 +60,7 @@ sw-leaf-bmc-001:  |
     snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 ```
 
-Mellanox/Dell
+### Mellanox/Dell custom configuration file example
 
 ```text
 sw-spine-001:  |
@@ -99,7 +111,9 @@ sw-leaf-bmc-001:  |
     snmp-server view cray-reds-view 1.3.6.1.2 included
 ```
 
-To generate switch configuration with custom config injection.
+## Generate switch configuration with custom configuration injection
+
+Use the following command to generate switch configuration with custom configuration injection.
 
 > ***NOTE*** The `--corners` and `--tabs` arguments are often provided in the SHCD Excel file. The example below uses
 > example values.
@@ -108,7 +122,8 @@ To generate switch configuration with custom config injection.
 * Use the `--tabs` flag to select which tabs on the spreadsheet will be included.
     * These are commonly named `10G_25G_100G`, `NMN`, `HMN`, `Mountain-Management`
 * The `--corners` flag is used to input the upper left and lower right corners of the table on each tab of the worksheet.
-    * The table should contain the 11 headers: **Source, Rack, Location, Slot, (Blank), Port, Destination, Rack, Location, (Blank), Port**. If the corners are not specified, you will be prompted to enter them for each tab.
+    * The table should contain the 11 headers: **Source, Rack, Location, Slot, (Blank), Port, Destination, Rack, Location, (Blank), Port**.
+      If the corners are not specified, CANU will prompt for them.
 
 ```bash
 canu generate switch config \
@@ -122,16 +137,21 @@ canu generate switch config \
     --custom-config CUSTOM_CONFIG_FILE.yaml
 ```
 
-## Generate Network Config
+## Generate network configuration
 
-CANU can also generate switch config for all the switches on a network.
+CANU can also generate switch configurations for all the switches on a network.
 
-In order to generate network config, a valid SHCD or CCJ must be passed in and system variables must be read in from
-either CSI output or the SLS API. The instructions are exactly the same as the
-above `generate Switch Config](#generate-switch-config)` except there will not be a hostname and a folder must be
-specified for config output using the `--folder FOLDERNAME` flag.
+In order to generate network configuration, a valid SHCD or CCJ must be passed in; also,
+system variables must be read in from either CSI output or the SLS API.
 
-To generate switch config from a CCJ paddle run:
+The instructions are exactly the same as for
+[Generate switch configuration with custom configuration injection](#generate-switch-configuration-with-custom-configuration-injection),
+with the following exceptions:
+
+* There will not be a hostname
+* A folder must be specified for configuration output using the `--folder FOLDERNAME` argument.
+
+To generate a network configuration from a CCJ paddle run:
 
 ```bash
 canu generate network config \
@@ -141,7 +161,7 @@ canu generate network config \
     --folder FOLDERNAME
 ```
 
-To generate switch config from SHCD run:
+To generate a network configuration from SHCD run:
 
 ```bash
 canu generate network config \
@@ -168,18 +188,19 @@ sw-cdu-002 Config Generated
 sw-leaf-bmc-001 Config Generated
 ```
 
-## Generate Network Config With Custom Config Injection
+## Generate network configuration with custom configuration injection
 
 This option allows extension and maintenance of switch configurations beyond plan-of-record. A YAML file expresses
 custom configurations across the network and these configurations are merged with the plan-of-record configurations.
 
 > ***WARNING:*** Extreme diligence should be used applying custom configurations which override plan-of-record generated
-configurations. Custom configurations will overwrite generated configurations! Override/overwrite is by design to
-support and document cases where site-interconnects demand "non-standard" configurations or a bug must be worked around.
+> configurations. Custom configurations will overwrite generated configurations! Override/overwrite is by design to
+> support and document cases where site-interconnects demand "non-standard" configurations or a bug must be worked around.
 
-The instructions are exactly the same as Generate Switch Config with Custom Config Injection
+The instructions are exactly the same as
+[Generate switch configuration with custom configuration injection](#generate-switch-configuration-with-custom-configuration-injection).
 
-To generate network configuration with custom config injection run
+To generate network configuration with custom configuration injection run
 
 ```bash
 canu generate network config \
