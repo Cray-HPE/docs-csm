@@ -146,7 +146,7 @@ This operator calls PCS to power on components for components that have a `power
 
 ### `session-cleanup`
 
-This operator deletes sessions from BOS that are older than a specified age.
+This operator deletes completed sessions from BOS that are older than a specified age.
 
 The age is controlled by the [`cleanup_completed_session_ttl`](Options.md#cleanup_completed_session_ttl) option.
 If that option has a zero value, then this cleanup behavior is disabled.
@@ -161,22 +161,24 @@ This happens when all components that a session is responsible for have been dis
 This operator monitors for pending sessions and moves them into the running state.
 It uses the [session template](Session_Templates.md) and the session limit (if any) to determine the target components
 for the session. It uses the session template to determine the appropriate boot artifacts and
-(optionally) CFS configuration. It then updates the target components with the desired
-target state, boot artifacts, and configuration.
+(optionally) CFS configuration. It then [enables](Components.md#enabled) target components in BOS
+and updates them with the desired target state, boot artifacts, and configuration.
 
 Related: [BOS sessions and HSM locks](Sessions.md#bos-sessions-and-hsm-locks).
 
 ### `status`
 
-This operator is the workhorse that updates the state of BOS components.
-For each component that is enabled in BOS, the status operator uses the
-following information to determine the correct state for the component:
+This operator is the workhorse that updates the status of components in BOS.
+For each component that is enabled in BOS, the status operator collects the
+following information:
 
 * Component desired state
 * Component current state
 * Node power state (as reported by PCS)
 * Node configuration status (as reported by CFS)
 
+The above information is used to determine whether or not the component
+should be disabled in BOS, and what the new component status should be.
 This determination is also impacted by the following options:
 
 * [`default_retry_policy`](Options.md#default_retry_policy)
