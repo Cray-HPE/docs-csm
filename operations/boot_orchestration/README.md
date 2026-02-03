@@ -27,7 +27,7 @@ For more information, see [BOS Workflows](BOS_Workflows.md).
 ## Terminology
 
 * [Component](Components.md): A managed node (such as a [compute node](../../glossary.md#compute-node-cn) or [UAN](../../glossary.md#user-access-node-uan)).
-    * BOS is not used for management NCNs.
+    * BOS is not used for [management nodes](../../glossary.md#management-nodes).
 * [Options](Options.md): Adjustable parameters to control how BOS operates.
 * [Session](Sessions.md): A request for BOS to perform an action on a specified set of components, bringing them to a specified desired state.
 * [Session template](Session_Templates.md): A collection of metadata for a group of nodes and their desired boot artifacts and configuration.
