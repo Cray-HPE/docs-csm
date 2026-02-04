@@ -150,7 +150,8 @@ BOS depends on each of the following services to complete its tasks:
       [HSM locks](../hardware_state_manager/Manage_HMS_Locks.md).
 * [Image Management Service (IMS)](../../glossary.md#image-management-service-ims)
     * Manages metadata records of the images used to boot nodes.
-    * BOS sets and checks [IMS image tagging](../iscsi_sbps/README.md#4-ims-image-tagging) for SBPS projection to nodes.
+    * BOS sets and checks [IMS image tagging](../iscsi_sbps/README.md#4-ims-image-tagging) to enable
+      [SBPS](../../glossary.md#scalable-boot-projection-service-sbps) projection to nodes.
 * [Tenant and Partition Management System (TAPMS)](../../glossary.md#tenant-and-partition-management-system-tapms)
     * Manages tenant information for [Multi-tenancy](../README.md#multi-tenancy).
     * BOS queries TAPMS to determine which nodes belong to a given tenant.
