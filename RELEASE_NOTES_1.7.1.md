@@ -31,14 +31,12 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 ## Additions and improvements
 
-* Added `baremetal` support for the HPE Slingshot Fabric Manager
 * Updated `ims-python-helper` to support logging level configuration as part of IMS configuration for image create/build
 * IMS jobs run on remote build nodes have performance improvements and can better recover from errors regarding the remote execution.
 * IUF supports deletion of activities.
 
 ### General
 
-* Added new `FabricManager` subrole to SMD.
 * Updated SLES base OS to SLES 15 SP7.
 * Added a procedure to [Enable Rack Resiliency on running system](operations/rack_resiliency/Enabling_RR_on_running_system.md).
 * Refactored Rack Resiliency workflows to use native Ansible execution with centralized fact management for zone prefixes and Kubernetes label application via `kubernetes.core.k8s` module.
@@ -194,22 +192,6 @@ CASMTRIAGE-8450 DOCS: Rack-Resiliency : RMS is not picking up node being moved f
 ### CASM
 
 ```text
-CASM-5758 [FM on baremetal] As a developer, I need to add the repo for installing prerequisite OS RPMs required during Slingshot software installation.
-CASM-5755 [FM on baremetal] As a developer, I need to get FMN ansible plays in csm-config added into CSM 1.7.1
-CASM-5754 [FM on baremetal] As a developer, I need to get docs-csm scripts added into CSM 1.7.1
-CASM-5752 Create SAT bootprep command for Fabric Manager Node Image creation
-CASM-5751 Create bootprep file for Fabric Manager Node image creation
-CASM-5750 [FM on baremetal] As an administrator, I should be able to remove FMNs from CSM
-CASM-5748 [FM on baremetal] As a developer, create CSM HLD for FM migration to baremetal
-CASM-5747 [FM on baremetal] As an administrator, I want to add FMNs to SLS/BSS/HSM during CSM upgrade
-CASM-5746 [FM on baremetal] As an administrator, I should be able to run a script for configuring storage LUNs for FMNs during CSM upgrade
-CASM-5739 [FM on baremetal] As an administrator, I should be able to run a script for configuring network(static/virtual IPs) for FMNs during CSM upgrade
-CASM-5738 [FM on baremetal]DEV: Update CSI to support FMN during CSM install
-CASM-5736 POC for creating and applying Management type FMN image on #surtur
-CASM-5735 Confirm on the type of FMN node - Application or Management
-CASM-5723 [FM on baremetal] DEV: Update CANU to support FMN
-CASM-5722 [FM on baremetal] As a developer, I need to provide new subrole for FMN in CSM
-CASM-5721 [FM on baremetal] As a developer, perform POC Fabric Manager Node (FMN) bring up
 CASM-5716 CASTS fixes in CSM 1.7.1 release for MON
 CASM-5715 CSM 1.7.1 release activities for SMA
 CASM-5714 Support for SLES15-SP7 for MON
@@ -226,9 +208,6 @@ CASM-5662 RR Ansible Playbook should make better use of Ansible
 CASM-5624 HMS: Specific Scaling Improvements for CSM 1.7.1
 CASM-5617 MTLNET: CAST and CVE-related Bugs
 CASM-5367 SLE-15-SP7 CSM Images
-CASM-5283 [FM on baremetal] DEV: Allow communication from k8s services(WLM) to FMN via NMN
-CASM-5282 [FM on baremetal] As an administrator, I should be able to create an Fabric Manager Node (FMN) image
-CASM-5281 [FM on baremetal] Allow FM to populate CSM with DNS entries
 ```
 
 ### CASMCMS
@@ -352,8 +331,6 @@ CASMMON-550 metallb-speaker alert should not be firing for master nodes
 ### CASMNET
 
 ```text
-CASMNET-2383 fmn-virtual-ip is created on systems that do not have fabric manager nodes
-CASMNET-2381 dhcp-helper.py is crashing following bare-metal fabric manager node addition
 CASMNET-2366 cray-dns-unbound-manager should not remove records if Kea response is empty
 CASMNET-2315 csi config init generates invalid EX2500 configuration if vlans are not set
 CASMNET-2313 Tenant - need documentation for Compute-to-NCN connectivity
@@ -440,7 +417,6 @@ CASMSMF-8679 Investigate CVE for SMA MLflow
 ```text
 CASMTRIAGE-8953 Prepare images error
 CASMTRIAGE-8932 starlord: cray-kyverno helm chart/manifest mismatch
-CASMTRIAGE-8906 NMN ip allocation during FM node addition failing even though it is in range
 CASMTRIAGE-8900 CANU validate shcd cabling and paddle cabling are failing
 CASMTRIAGE-8892 ncn-s001 rollout error
 CASMTRIAGE-8890 tyr: SMD giving inappropriate 400 bad request response
@@ -547,15 +523,12 @@ CASMCMS-9520 DOCS: Improve documentation around increasing Ansible verbosity
 CASMCMS-9517 DOCS: Update CSM 1.7.0 release notes for bug fix of CASMCMS-9512
 CASMCMS-9516 DOCS: Known issue cfs session for image customization running on remote node is stuck in "running" status if ims job container is killed
 CASM-5718 DOCS: Evaluate RR support for CSM features/operations
-CASM-5279 [FM on baremetal] DOCS: Align Switch and Fabric Manager Credentials to be stored in HPCM/standalone way
 ```
 
 ### MTL
 
 ```text
-MTL-2612 Add fmn nodes to Apache2 default-server.conf
 MTL-2610 Pending NCN Security update in CSM V1.7.1-beta.10
-MTL-2609 [FM on baremetal] add fmn as valid hostname prefix to metal-lib.sh
 MTL-2605 metal-ipmitool: resolve CVE-2020-5208 by bumping version/release
 MTL-2604 Locate/install/test mft and kernel-mft-mlnx-kmp-default RPMs
 MTL-2603 Package update sweep / mitigate CVEs
