@@ -109,6 +109,7 @@ BOS session templates or BOS options can also be manually exported and imported 
       {
         "boot_sets": {
           "uan": {
+            "arch": "X86",
             "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=340M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=nmn0:dhcp numa_interleave_omit=headless numa_zonelist_order=node oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y quiet rd.neednet=1 rd.retry=10 rd.shell turbo_boost_limit=999 ifmap=net2:nmn0,lan0:hsn0,lan1:hsn1 spire_join_token=${SPIRE_JOIN_TOKEN}",
             "node_list": [
               "x3000c0s15b0n0"
@@ -124,7 +125,7 @@ BOS session templates or BOS options can also be manually exported and imported 
         },
         "enable_cfs": true,
         "name": "uan-sessiontemplate-2.0.27",
-        "tenant": null
+        "tenant": ""
       }
       ```
 
