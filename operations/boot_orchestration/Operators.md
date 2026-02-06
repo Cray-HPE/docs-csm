@@ -35,10 +35,10 @@ that handled everything associated with that v1 session.
 
 Each operator follows the same basic execution loop:
 
-1. Search the [BOS v2 database](Database.md#bos-v2-database) (using the [BOS API](API.md))
+1. Search the [BOS v2 database](Database.md#bos-v2-databases) (using the [BOS API](API.md))
    for any potential work for this operator.
 1. Process that work, if any.
-1. Update the [BOS v2 database](Database.md#bos-v2-database) (using the [BOS API](API.md))
+1. Update the [BOS v2 database](Database.md#bos-v2-databases) (using the [BOS API](API.md))
    based on the work that was done, if applicable.
 1. Sleep for an interval, then go back to the top of the loop.
 
@@ -119,8 +119,11 @@ The time limit is controlled by the [`component_actual_state_ttl`](Options.md#co
 This operator is responsible for setting the desired configuration in the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
 for components that are in the `configuring` phase of the boot process.
-Because the [`power-on` operator](#power-on) sets the desired configuration prior to booting components,
-this is typically only needed when booting to the same boot artifacts, but with a different configuration.
+
+Typically, this operator has nothing to do, because the [`power-on` operator](#power-on) sets the desired configuration prior
+to booting components. The exception is when a node is already booted and configured, and a BOS session is created to boot
+(*not* reboot) the node using the same boot artifacts, but a different CFS configuration. In this case, the `power-on` operator
+will never be called, and instead the `configuration` operator will take care of it.
 
 ### `discovery`
 
@@ -141,41 +144,73 @@ This operator calls CAPMC to gracefully power off components for components that
 
 ### `power-on`
 
-This operator calls CAPMC to power on components for components that have a `power-on-pending` status.
+For each enabled BOS component that has a `power-on-pending` status, this operator does the following:
+
+1. Writes the kernel, kernel parameters, and `initrd` to [BSS](../../glossary.md#boot-script-service-bss)
+   and records the `bss-referral-token` that is sent back by BSS.
+
+    For more information on the information that is being written to BSS, see
+    [Upload Node Boot Information to Boot Script Service (BSS)](Upload_Node_Boot_Information_to_Boot_Script_Service_BSS.md).
+
+1. Patches the node in CFS to disable it, clear its state, and set its desired configuration.
+
+1. Calls CAPMC to power on the node.
+
+> Unlike all parts of BOS other than the [API server](API.md), this operator directly accesses a
+> [BOS database](Database.md). Specifically, after the BSS step in the above procedure,
+> the operator writes an entry in the boot artifacts database. The key for the entry is the BSS
+> token. The value of the entry is a dictionary containing the kernel, kernel, parameters, and `initrd`.
+> This is the only case where this operator directly interacts with any BOS database; all other
+> interactions go through the BOS API, like usual.
 
 ### `session-cleanup`
 
-This operator deletes v2 sessions from BOS that are older than a specified age.
+This operator deletes completed v2 sessions from BOS that are older than a specified age.
 
 The age is controlled by the [`cleanup_completed_session_ttl`](Options.md#cleanup_completed_session_ttl) option.
 If that option has a zero value, then this cleanup behavior is disabled.
 
 ### `session-completion`
 
-This operator marks v2 sessions as complete and saves a final status for the session.
-This happens when all components that a v2 session is responsible for have been disabled.
+For each running BOS v2 session, this operator checks to see if any BOS components are associated with
+that session and still have work (or [staged work](Stage_Changes_with_BOS.md)) to be done.
+If not, then it marks the session as complete and saves a final status for the session.
+
+More specifically, for a given running session, the operator looks for all components which meet
+either of the following criteria:
+
+* The component is enabled and its `session` field is set to the name of the session
+    * These represent components that BOS is still working to get into their desired state
+* The component has its `staged_state`.`session` field set to the name of the session
+    * These represent components that have been staged in BOS
+
+If the [`clear_stage`](Options.md#clear_stage) is set to true, then BOS will not clear the staged
+state of nodes after [applying the staged state](Stage_Changes_with_BOS.md#apply-a-staged-state). This in turn
+will mean that the associated staged session will never be marked complete by the `session-completion` operator.
 
 ### `session-setup`
 
 This operator monitors for pending v2 sessions and moves them into the running state.
 It uses the [session template](Session_Templates.md) and the session limit (if any) to determine the target components
 for the session. It uses the session template to determine the appropriate boot artifacts and
-(optionally) CFS configuration. It then updates the target components with the desired
-target state, boot artifacts, and configuration.
+(optionally) CFS configuration. It then [enables](Components.md#enabled) target components in BOS
+and updates them with the desired target state, boot artifacts, and configuration.
 
 Related: [BOS v2 sessions and HSM locks](Sessions.md#bos-sessions-and-hsm-locks).
 
 ### `status`
 
-This operator is the workhorse that updates the state of BOS components.
-For each component that is enabled in BOS, the status operator uses the
-following information to determine the correct state for the component:
+This operator is the workhorse that updates the status of components in BOS.
+For each component that is enabled in BOS, the status operator collects the
+following information:
 
 * Component desired state
 * Component current state
 * Node power state (as reported by CAPMC)
 * Node configuration status (as reported by CFS)
 
+The above information is used to determine whether or not the component
+should be disabled in BOS, and what the new component status should be.
 This determination is also impacted by the following options:
 
 * [`default_retry_policy`](Options.md#default_retry_policy)
