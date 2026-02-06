@@ -1,6 +1,7 @@
 # BOS database
 
 * [Overview](#overview)
+* [Access](#access)
 * [Source](#source)
 
 ## Overview
@@ -19,6 +20,10 @@ cray-bos-etcd-0   2/2     Running   0          4d
 cray-bos-etcd-1   2/2     Running   0          4d
 cray-bos-etcd-2   2/2     Running   0          4d
 ```
+
+## Access
+
+All access to the BOS database is done by the [BOS API server](API.md).
 
 ## Source
 

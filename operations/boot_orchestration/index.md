@@ -1,6 +1,6 @@
 # Boot Orchestration Service (BOS)
 
-* [Overview[(#overview)
+* [Overview](#overview)
 * [Terminology](#terminology)
 * [Services](#services)
   * [API](#api)
