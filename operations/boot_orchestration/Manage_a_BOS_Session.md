@@ -37,7 +37,8 @@ Example output:
     "start_time": "2022-08-22T14:44:27",
     "status": "pending"
   },
-  "template_name": "TEMPLATE_NAME"
+  "template_name": "TEMPLATE_NAME",
+  "tenant": null
 }
 ```
 
@@ -72,7 +73,8 @@ Example output:
       "start_time": "2022-08-22T14:44:27",
       "status": "pending"
     },
-    "template_name": "cle-1.1.0"
+    "template_name": "cle-1.1.0",
+    "tenant": null
   }
 ]
 ```
@@ -100,7 +102,8 @@ Example output:
     "start_time": "2022-08-22T14:44:27",
     "status": "pending"
   },
-  "template_name": "cle-1.1.0"
+  "template_name": "cle-1.1.0",
+  "tenant": null
 }
 ```
 
