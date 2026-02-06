@@ -10,13 +10,16 @@
 
 ## Overview
 
-This page describes how to configure a user as a `Tenant Administrator`, allowing that person to perform administrative functions on one or more tenants,
-without giving them the same permissions an `Infrastructure Administrator` would have.
+This page describes how to configure a user as a Tenant Administrator, allowing that person to perform administrative functions on one or more tenants,
+without giving them the same permissions an Infrastructure Administrator would have.
 
 ## Cray CLI integration
 
-When using the `cray` CLI for various operations specific to tenant-owned resources (Compute/Application Nodes), the CLI should be scoped to the appropriate tenant when `cray init` is executed.
-The CLI supports the optional `--tenant <tenant-name>` argument, which subsequently passes the `cray-tenant-name` value in the header for API requests to the respective service.
+When using the [`cray` CLI](../../glossary.md#cray-cli-cray) for various operations specific to tenant-owned resources
+([compute nodes](../../glossary.md#compute-node-cn) or [application nodes](../../glossary.md#application-node-an),
+the CLI should be scoped to the appropriate tenant. In order to do this, execute `cray init` with the optional
+`--tenant <tenant-name>` argument. This will cause the CLI to include the tenant identification in the header of the
+API calls it makes. Specifically, the header will include the `Cray-Tenant-Name` key, with the tenant name as the value.
 
 ## Kubernetes OIDC API integration
 
@@ -37,11 +40,15 @@ The Kubernetes API server is then configured to reference this client for token 
 
 ## Tenant-specific Keycloak groups
 
-When a tenant is created, `tapms` will create a Keycloak group specific for that tenant. In the below example, `vcluster-blue` is the name of the tenant, and `tapms` has created a group with the name `vcluster-blue-tenant-admin`:
+When a tenant is created, TAPMS will create a Keycloak group specific for that tenant.
+In the below example, `vcluster-blue` is the name of the tenant, and TAPMS has created a group with the name `vcluster-blue-tenant-admin`.
+
+> **NOTE** Logging into the Keycloak UI may not automatically display the realm in which the tenant groups are created.
+> Ensure that the correct realm is selected if the expected groups are not present.
 
 ![UserGroups](images/usergroups.png)
 
-For the initial release of multi-tenancy, assigning this group to a user is a manual process. Select the desired user and add them as a member of the new group as follows:
+Assigning this group to a user is a manual process. Select the desired user and add them as a member of the new group as follows:
 
 ![GroupMembership](images/groupmembership.png)
 
@@ -49,9 +56,10 @@ Users can be added to more than one tenant using the same procedure.
 
 ## `Roles` and `Rolebindings`
 
-Ultimately, the operations the tenant administrator is authorized to perform are controlled by [Kubernetes RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
+Ultimately, the operations the tenant administrator is authorized to perform are controlled by
+[Kubernetes RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 By default when a tenant is created and a Keycloak user is added to a tenant's Keycloak group, that user will have no permissions configured.
-The `Infrastructure Administrator` needs to create the desired/appropriate `Roles` and `RoleBindings` for the tenant administrator.
+The Infrastructure Administrator needs to create the desired/appropriate `Roles` and `RoleBindings` for the tenant administrator.
 Below is an example of a YAML file which will give a user some basic permissions for both the `tenants` and `vcluster-blue` namespaces:
 
 ```yaml
@@ -96,7 +104,8 @@ subjects:
   apiGroup: rbac.authorization.k8s.io
 ```
 
-Note the reference to the Keycloak group `vcluster-blue-tenant-admin` in each of the `RoleBinding` sections. Administrators can create the appropriate `rules` in the `ClusterRole` which control the actions the tenant administrator is allowed to perform.
+Note the reference to the Keycloak group `vcluster-blue-tenant-admin` in each of the `RoleBinding` sections.
+Administrators can create the appropriate rules in the `ClusterRole` in order to control the actions the tenant administrator is allowed to perform.
 
 ## Retrieve an OIDC token
 

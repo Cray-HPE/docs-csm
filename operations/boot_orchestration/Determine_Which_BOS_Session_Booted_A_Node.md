@@ -108,7 +108,8 @@ node is listed in this description.
         "start_time": "2023-06-27T00:33:17",
         "status": "complete"
       },
-      "template_name": "gdr-tmpl"
+      "template_name": "gdr-tmpl",
+      "tenant": null
     }
     ```
 
