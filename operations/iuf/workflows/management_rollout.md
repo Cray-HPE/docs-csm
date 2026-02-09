@@ -519,7 +519,7 @@ for details on how to query the images and CFS configurations and see the [updat
     Verify the cos-prechecks-for-worker-reboots hook exists:
 
     ```bash
-    kubectl -n argo get hooks -l app.kubernetes.io/name=cos-prechecks-for-worker-reboots
+    kubectl get hooks -n argo cos-prechecks-for-worker-reboots
     ```
 
     Delete the hook:
