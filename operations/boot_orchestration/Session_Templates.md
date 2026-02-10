@@ -21,29 +21,26 @@ The following is an example BOS session template:
 
 ```json
 {
-  "name": "session-template-example",
-  "description": "session template example",
   "boot_sets": {
     "boot_set1": {
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
-      "rootfs_provider": "cpss3",
-      "node_list": [
-        "x3000c0s19b1n0"
-      ],
       "etag": "foo",
-      "path": "s3://boot-images/e06530f1-fde2-4ca5-9148-7e84f4857d17/manifest_sans_boot_parameters.json",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
+      "node_roles_groups": [
+        "Compute"
+      ],
+      "path": "s3://boot-images/e06530f1-fde2-4ca5-9148-7e84f4857d17/manifest.json",
+      "rootfs_provider": "cpss3",
       "rootfs_provider_passthrough": "66666666:dvs:api-gw-service-nmn.local:300:eth0",
       "type": "s3"
     },
     "boot_set2": {
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
-      "rootfs_provider": "cpss3",
-      "node_list": [
-        "x3000c0s21b1n0",
-        "x3000c0s22b1n0"
-      ],
       "etag": "bar",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
+      "node_roles_groups": [
+        "Compute"
+      ],
       "path": "s3://boot-images/f17631a1-fed1-5cb5-0aa8-7aaaf4123411/manifest.json",
+      "rootfs_provider": "cpss3",
       "rootfs_provider_passthrough": "66666666:dvs:api-gw-service-nmn.local:300:eth0",
       "type": "s3"
     }
@@ -51,7 +48,9 @@ The following is an example BOS session template:
   "cfs": {
       "configuration": "example-configuration"
   },
+  "description": "session template example",
   "enable_cfs": true,
+  "name": "session-template-example"
 }
 ```
 
@@ -63,12 +62,18 @@ The following is an example BOS session template:
 * The `configuration` field (under `cfs`) is the name of the
   [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration to apply.
 * The `enable_cfs` field indicates whether or not CFS should be invoked.
+* The `boot_sets` field is discussed in the following section: [Boot sets](#boot-sets).
 
 ## Boot sets
 
-BOS session templates contain one or more boot sets, which each contain information on the kernel parameters that nodes should boot with,
+A boot set in a BOS session template contains information on the boot artifacts and kernel parameters that nodes should boot with,
 as well as information on the nodes the boot set should apply to.
 Optionally, with BOS v2, configuration information can also be overwritten on a per boot set basis.
+
+Every BOS session template is required to include at least one boot set entry.
+As the example in the [Session template structure](#session-template-structure) section shows,
+it is legal to have multiple boot set entries in a single session template;
+however, many session templates only have a single boot set.
 
 ### Boot artifacts
 
@@ -86,8 +91,8 @@ This boot artifact information from the files stored in S3 is then written to th
 
 ### Specifying nodes
 
-Each boot set also specifies a set of nodes to be applied to. There are three different ways to specify the nodes.
-The `node_list`, `node_groups`, or `node_role` values can each be specified as a comma-separated list.
+Each boot set also specifies a set of nodes that are the targets of the boot set.
+There are three different fields used to specify the nodes: `node_list`, `node_groups`, or `node_roles_groups`.
 
 #### Node list
 
@@ -101,7 +106,8 @@ For example:
 
 #### Node groups
 
-`node_groups` maps to a list of groups defined by the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
+`node_groups` maps to a list of [component groups](../hardware_state_manager/Component_Groups_and_Partitions.md) defined by the
+[Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
 Each group may contain zero or more nodes. Groups can be arbitrarily defined by users.
 
 For example:
@@ -120,8 +126,10 @@ For more information on HSM groups, see [Manage Component Groups](../hardware_st
 
 #### Node roles groups
 
-`node_roles_groups` is a list of groups based on a node's designated role. Each node's role is specified in the HSM database.
-`node_roles_groups` also supports node sub-roles, which are specified as a combination of the node role and sub-role (for example, `Application_UAN`).
+`node_roles_groups` is a list of [HSM roles and sub-roles](../hardware_state_manager/HSM_Roles_and_Subroles.md).
+Each node's role and sub-role is specified in the HSM database.
+An entry in this list may be just a role (for example, `Compute`)
+or it may be a role and sub-role joined by an underscore character (for example, `Application_UAN`).
 
 For example:
 
@@ -129,9 +137,9 @@ For example:
 "node_roles_groups": ["Compute"]
 ```
 
-See [HSM Roles and Subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md) for more information.
-
 Consult the `cray-hms-base-config` Kubernetes ConfigMap in the `services` namespace for a listing of the available roles and sub-roles on the system.
+
+See [HSM Roles and Subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md) for more information.
 
 ### `rootfs` providers
 
@@ -195,5 +203,8 @@ The DVS configuration files determine which interface to use (NMN or HSN). Howev
 
 ### Overriding configuration (BOS v2 only)
 
-It is also possible to specify CFS configuration in the boot set. If specified, this will override whatever value is set in the base session template.
+It is also possible to specify CFS configuration in the boot set. This is done by setting the `cfs` field inside the boot set.
+It follows the same format as the `cfs` field at the top level of the session template.
+If specified, this will override (for that boot set entry) whatever value is set in the base session template.
+
 This feature is not supported for BOS v1.
