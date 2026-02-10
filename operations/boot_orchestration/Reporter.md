@@ -22,6 +22,9 @@ BOS to know that a node has successfully booted into the correct state.
 The `bos-reporter` RPM must be installed on nodes in order for BOS to operate on them properly;
 it typically is installed in node images when they are being customized.
 
+> The BOS reporter RPM is not installed on [management nodes](../../glossary.md#management-nodes),
+> because BOS sessions should not include them as targets.
+
 (`linux#`) The reporter itself runs as a SystemD service.
 
 ```bash

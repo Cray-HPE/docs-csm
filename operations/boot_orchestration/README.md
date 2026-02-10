@@ -1,6 +1,6 @@
 # Boot Orchestration Service (BOS)
 
-* [Overview[(#overview)
+* [Overview](#overview)
 * [Terminology](#terminology)
 * [Services](#services)
     * [API](#api)
@@ -27,6 +27,7 @@ For more information, see [BOS Workflows](BOS_Workflows.md).
 ## Terminology
 
 * [Component](Components.md): A node (such as a [compute node](../../glossary.md#compute-node-cn) or [UAN](../../glossary.md#user-access-node-uan)).
+    * Although [management nodes](../../glossary.md#management-nodes) have corresponding BOS components, BOS should not be used on them.
 * [Options](Options.md): Adjustable parameters to control how BOS operates.
 * [Session](Sessions.md): A request for BOS to perform an action on a specified set of components, bringing them to a specified desired state.
 * [Session template](Session_Templates.md): A collection of metadata for a group of nodes and their desired boot artifacts and configuration.
@@ -139,15 +140,22 @@ BOS depends on each of the following services to complete its tasks:
 * [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
     * BOS uses CFS to apply configuration to the nodes in its boot sets (node personalization).
 * [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs)
-    * Used to power nodes on and off, as well as query current power status.
+    * Used by BOS to power nodes on and off, as well as query current power status.
 * [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm)
-    * Tracks the state of each node, and the node membership of
-      [groups](../hardware_state_manager/Component_Groups_and_Partitions.md)
-      and [roles](../hardware_state_manager/HSM_Roles_and_Subroles.md).
+    * BOS queries HSM to determine if a node is enabled or disabled.
+    * BOS queries HSM to get the node membership lists for
+      [HSM groups](../hardware_state_manager/Component_Groups_and_Partitions.md)
+      and [HSM roles](../hardware_state_manager/HSM_Roles_and_Subroles.md).
 * [Image Management Service (IMS)](../../glossary.md#image-management-service-ims)
     * Manages metadata records of the images used to boot nodes.
+    * BOS sets and checks [IMS image tagging](../iscsi_sbps/README.md#4-ims-image-tagging) to enable
+      [SBPS](../../glossary.md#scalable-boot-projection-service-sbps) projection to nodes.
+        * This is not done for boot artifacts using the
+          [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps)
+          as the [`rootfs` provider](Session_Templates.md#rootfs-providers).
 * [Tenant and Partition Management System (TAPMS)](../../glossary.md#tenant-and-partition-management-system-tapms)
     * Manages tenant information for [Multi-tenancy](../README.md#multi-tenancy).
+    * BOS queries TAPMS to determine which nodes belong to a given tenant.
     * For more information, see [Multi-tenancy with BOS](Multi_tenancy_with_BOS.md).
 * [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3)
     * Contains the actual data for the node images.
