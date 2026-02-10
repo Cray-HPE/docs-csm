@@ -9,7 +9,7 @@
 ## Overview
 
 This page provides information about how to create a tenant.
-This procedure involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR), for both `tapms` and the `slurm` operator.
+This procedure involves creating a Custom Resource Definition (CRD) and then applying the Custom Resource (CR), for both TAPMS and the `slurm` operator.
 
 ## TAPMS CRD
 
@@ -44,7 +44,9 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
         - x1000c0s0b0n0
     ```
 
-**`IMPORTANT`** In order to keep nodes for different tenants separate, `enforceexclusivehsmgroups` must be set to true, and `hsmgrouplabel` must be set to a unique label for the tenant. Without these, it is possible for tenants to share nodes.
+**IMPORTANT** In order to keep nodes for different tenants separate, `enforceexclusivehsmgroups` must be set to true,
+and `hsmgrouplabel` must be set to a unique label for the tenant. Without these, it is possible for tenants to share nodes, which
+is not supported.
 
 ## Apply the TAPMS CR
 
@@ -62,7 +64,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
     tenant.tapms.hpe.com/vcluster-blue created
     ```
 
-- (`ncn-mw#`) It can take up to a minute for `tapms` to fully create the tenant. The following command can be used to monitor the status of the tenant:
+- (`ncn-mw#`) It can take up to a minute for TAPMS to fully create the tenant. The following command can be used to monitor the status of the tenant:
 
     ```bash
     kubectl get tenant -n tenants vcluster-blue -o yaml
@@ -122,7 +124,8 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
         - x1000c0s0b0n0
     ```
 
-- (`ncn-mw#`) The `cray` command can now be used to display the HSM group:
+- (`ncn-mw#`) The [`cray` CLI](../../glossary.md#cray-cli-cray) can now be used to display the
+  [HSM component group](../hardware_state_manager/Component_Groups_and_Partitions.md):
 
     ```bash
     cray hsm groups describe blue --format toml
@@ -157,7 +160,7 @@ Tenant provisioning is handled in a declarative fashion, by creating a CR with t
 
 ## `slurm` operator CRD
 
-Slurm provisioning is similar to tenant creation, using a CR.
+Slurm provisioning uses a CR, similar to tenant creation.
 
 (`ncn-mw#`) To see all possible configuration settings for the custom resource, run this command:
 
@@ -334,7 +337,8 @@ slurmd_options: "--conf-server <spec.slurmctld.ip>,<spec.slurmctld.backupIP>"
 ```
 
 Where values in angle brackets correspond to values from the `mycluster.yaml` file.
-For example, if using the example `mycluster.yaml` file from the previous section, create a `group_vars/blue/slurm.yaml` file in the `uss-config-management` VCS repository with the following content:
+For example, if using the example `mycluster.yaml` file from the previous section,
+create a `group_vars/blue/slurm.yaml` file in the `uss-config-management` VCS repository with the following content:
 
 ```yaml
 munge_vault_path: secret/slurm/vcluster-blue-slurm/mycluster/munge

@@ -18,6 +18,9 @@ coordinate the progress of sessions, and so on. Its essential purpose is to act 
 [BOS database](Database.md), allowing callers to safely create, read, modify, and delete entries in the database.
 All of the core BOS work is done by the [BOS operators](Operators.md) and the [BOS reporter](Reporter.md).
 
+> Other than the API server, the only other part of BOS that directly accesses the database is
+> the [`power-on` operator](Operators.md#power-on).
+
 ## Kubernetes deployment
 
 (`ncn-mw#`) The BOS API server runs in multiple Kubernetes pods in the `services` namespace.

@@ -11,6 +11,7 @@ Session templates can be created via the API by providing JSON data or via the C
         * [Node list](#node-list)
         * [Node groups](#node-groups)
         * [Node roles groups](#node-roles-groups)
+    * [Architecture](#architecture)
     * [`rootfs` providers](#rootfs-providers)
         * [`root` kernel parameter example](#root-kernel-parameter-example)
     * [Overriding configuration](#overriding-configuration)
@@ -21,29 +22,28 @@ The following is an example BOS session template:
 
 ```json
 {
-  "name": "session-template-example",
-  "description": "session template example",
   "boot_sets": {
-    "boot_set1": {
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
-      "rootfs_provider": "sbps",
-      "node_list": [
-        "x3000c0s19b1n0"
-      ],
+    "arm_boot_set": {
+      "arch": "ARM"
       "etag": "foo",
-      "path": "s3://boot-images/e06530f1-fde2-4ca5-9148-7e84f4857d17/manifest_sans_boot_parameters.json",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
+      "node_roles_groups": [
+        "Compute"
+      ],
+      "path": "s3://boot-images/e06530f1-fde2-4ca5-9148-7e84f4857d17/manifest.json",
+      "rootfs_provider": "sbps",
       "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300",
       "type": "s3"
     },
-    "boot_set2": {
-      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
-      "rootfs_provider": "sbps",
-      "node_list": [
-        "x3000c0s21b1n0",
-        "x3000c0s22b1n0"
-      ],
+    "x86_boot_set": {
+      "arch": "X86",
       "etag": "bar",
+      "kernel_parameters": "console=ttyS0,115200 bad_page=panic crashkernel=360M hugepagelist=2m-2g intel_iommu=off intel_pstate=disable iommu=pt ip=dhcp numa_interleave_omit=headless numa_zonelist_order=node  oops=panic pageblock_order=14 pcie_ports=native printk.synchronous=y rd.neednet=1 rd.retry=10 rd.shell k8s_gw=api-gw-service-nmn.local quiet turbo_boost_limit=999",
+      "node_roles_groups": [
+        "Compute"
+      ],
       "path": "s3://boot-images/f17631a1-fed1-5cb5-0aa8-7aaaf4123411/manifest.json",
+      "rootfs_provider": "sbps",
       "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300",
       "type": "s3"
     }
@@ -51,7 +51,10 @@ The following is an example BOS session template:
   "cfs": {
       "configuration": "example-configuration"
   },
-  "enable_cfs": true
+  "description": "session template example",
+  "enable_cfs": true,
+  "name": "session-template-example",
+  "tenant": ""
 }
 ```
 
@@ -63,12 +66,21 @@ The following is an example BOS session template:
 * The `configuration` field (under `cfs`) is the name of the
   [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration to apply.
 * The `enable_cfs` field indicates whether or not CFS should be invoked.
+* The `tenant` field indicates which tenant owns this session template.
+    * An empty or null value indicates that the template is not owned by a tenant.
+    * For more information on tenants, see [Multi-tenancy with BOS](Multi_tenancy_with_BOS.md).
+* The `boot_sets` field is discussed in the following section: [Boot sets](#boot-sets).
 
 ## Boot sets
 
-BOS session templates contain one or more boot sets, which each contain information on the kernel parameters that nodes should boot with,
+A boot set in a BOS session template contains information on the boot artifacts and kernel parameters that nodes should boot with,
 as well as information on the nodes the boot set should apply to.
 Optionally, configuration information can also be overwritten on a per boot set basis.
+
+Every BOS session template is required to include at least one boot set entry.
+As the example in the [Session template structure](#session-template-structure) section shows,
+it is legal to have multiple boot set entries in a single session template;
+however, many session templates only have a single boot set.
 
 ### Boot artifacts
 
@@ -91,10 +103,14 @@ The following S3 parameters are used to specify this file:
 This boot artifact information from the files stored in S3 is then written to the
 [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) where it is retrieved when these nodes boot.
 
+> Also see the [Architecture](#architecture) section for information on how that field relates to the boot artifacts.
+
 ### Specifying nodes
 
-Each boot set also specifies a set of nodes to be applied to. There are three different ways to specify the nodes.
-The `node_list`, `node_groups`, or `node_role` values can each be specified as a comma-separated list.
+Each boot set also specifies a set of nodes that are the targets of the boot set.
+There are three different fields used to specify the nodes: `node_list`, `node_groups`, or `node_roles_groups`.
+
+> Also see the [Architecture](#architecture) section for information on how that field relates to specifying nodes.
 
 #### Node list
 
@@ -107,11 +123,12 @@ For example:
 ```
 
 NIDs are not supported.
-The `reject_nids` [BOS Option](Options.md) can be enabled in order to prevent accidental creation of session templates that reference NIDs.
+The [`reject_nids` option](Options.md#reject-nids) can be enabled in order to prevent accidental creation of session templates that reference NIDs.
 
 #### Node groups
 
-`node_groups` maps to a list of groups defined by the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
+`node_groups` maps to a list of [component groups](../hardware_state_manager/Component_Groups_and_Partitions.md) defined by the
+[Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
 Each group may contain zero or more nodes. Groups can be arbitrarily defined by users.
 
 For example:
@@ -130,8 +147,10 @@ For more information on HSM groups, see [Manage Component Groups](../hardware_st
 
 #### Node roles groups
 
-`node_roles_groups` is a list of groups based on a node's designated role. Each node's role is specified in the HSM database.
-`node_roles_groups` also supports node sub-roles, which are specified as a combination of the node role and sub-role (for example, `Application_UAN`).
+`node_roles_groups` is a list of [HSM roles and sub-roles](../hardware_state_manager/HSM_Roles_and_Subroles.md).
+Each node's role and sub-role is specified in the HSM database.
+An entry in this list may be just a role (for example, `Compute`)
+or it may be a role and sub-role joined by an underscore character (for example, `Application_UAN`).
 
 For example:
 
@@ -139,9 +158,23 @@ For example:
 "node_roles_groups": ["Compute"]
 ```
 
+Consult the `cray-hms-base-config` Kubernetes ConfigMap in the `services` namespace for a listing of the available roles and sub-roles on the system.
+
 See [HSM Roles and Subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md) for more information.
 
-Consult the `cray-hms-base-config` Kubernetes ConfigMap in the `services` namespace for a listing of the available roles and sub-roles on the system.
+### Architecture
+
+The `arch` field is the only boot set field which plays a role in both the [boot artifacts](#boot-artifacts)
+and [specifying nodes](#specifying-nodes). It specifies the hardware architecture both of the target nodes
+and of the boot artifacts. Supported values are `X86` and `ARM`.
+
+When a boot set is validated, it will contact IMS to make sure that the boot image being used has an architecture matching
+what is specified in the boot set. Boot set validation happens when creating a session template, validating a session template, or
+creating a session. In cases where BOS is unable to perform this validation, the behavior of BOS is controlled by
+the [`ims_errors_fatal` option](Options.md#ims-errors-fatal) and [`ims_images_must_exist` option](Options.md#ims-images-must-exist).
+
+Unlike the fields discussed in the [Specifying nodes](#specifying-nodes) section, the `arch` field is not used to specify additional
+nodes. Instead, it acts as a filter, removing any specified nodes that do not have a matching architecture.
 
 ### `rootfs` providers
 
@@ -187,4 +220,6 @@ The following table explains the different pieces in the preceding example.
 
 ### Overriding configuration
 
-It is also possible to specify CFS configuration in the boot set. If specified, this will override whatever value is set in the base session template.
+It is also possible to specify CFS configuration in the boot set. This is done by setting the `cfs` field inside the boot set.
+It follows the same format as the `cfs` field at the top level of the session template.
+If specified, this will override (for that boot set entry) whatever value is set in the base session template.

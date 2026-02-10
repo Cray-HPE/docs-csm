@@ -30,7 +30,8 @@ UAN boot images and a BOS session template have been created. See [Image Prepara
         "start_time": "2022-08-22T14:44:27",
         "status": "pending"
       },
-      "template_name": "cle-1.1.0"
+      "template_name": "cle-1.1.0",
+      "tenant": null
     }
     ```
 
