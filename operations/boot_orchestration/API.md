@@ -20,6 +20,9 @@ coordinate the progress of sessions, and so on. Its essential purpose is to act 
 All of the core BOS v2 work is done by the [BOS operators](Operators.md) and the [BOS reporter](Reporter.md).
 For BOS v1, the work is done by [BOA](README.md#boot-orchestration-agent-boa).
 
+> Other than the API server, the only other part of BOS that directly accesses the database is
+> the [`power-on` operator](Operators.md#power-on).
+
 ## Kubernetes deployment
 
 (`ncn-mw#`) The BOS API server runs in multiple Kubernetes pods in the `services` namespace.

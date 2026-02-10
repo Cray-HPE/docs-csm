@@ -1,6 +1,6 @@
 # Boot Orchestration Service (BOS)
 
-* [Overview[(#overview)
+* [Overview](#overview)
 * [Terminology](#terminology)
 * [Services](#services)
   * [API](#api)
@@ -32,6 +32,7 @@ For more information, see [BOS Workflows](BOS_Workflows.md).
 
 * [Component](Components.md): A node (such as a [compute node](../../glossary.md#compute-node-cn) or [UAN](../../glossary.md#user-access-node-uan)).
   * Components are only used in BOS v2.
+  * Although [management nodes](../../glossary.md#management-nodes) have corresponding BOS components, BOS should not be used on them.
 * [Options](Options.md): Adjustable parameters to control how BOS operates.
   * These options were introduced in BOS v2.
   * The options can only be viewed or modified using BOS v2.
@@ -167,9 +168,10 @@ BOS depends on each of the following services to complete its tasks:
 * [Cray Advanced Platform Monitoring and Control (CAPMC)](../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc)
   * Used to power nodes on and off, as well as query current power status.
 * [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm)
-  * Tracks the state of each node, and the node membership of
-    [groups](../hardware_state_manager/Component_Groups_and_Partitions.md)
-    and [roles](../hardware_state_manager/HSM_Roles_and_Subroles.md).
+  * BOS queries HSM to determine if a node is enabled or disabled.
+  * BOS queries HSM to get the node membership lists for
+    [HSM groups](../hardware_state_manager/Component_Groups_and_Partitions.md)
+    and [HSM roles](../hardware_state_manager/HSM_Roles_and_Subroles.md).
 * [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3)
   * Contains the actual data for the node images.
 

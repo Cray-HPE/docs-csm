@@ -1,19 +1,21 @@
 # BOS databases
 
 * [Overview](#overview)
-* [BOS v2 database](#bos-v2-database)
+* [BOS v2 databases](#bos-v2-databases)
+  * [Data organization](#data-organization)
 * [BOS v1 database](#bos-v1-database)
+* [Access](#access)
 * [Source](#source)
 
 ## Overview
 
 BOS v1 and BOS v2 store data in two different databases.
 [Session templates](Session_Templates.md) are common between both BOS versions;
-they are stored in the [BOS v2 database](#bos-v2-database).
+they are stored in the [BOS v2 databases](#bos-v2-databases).
 
-## BOS v2 database
+## BOS v2 databases
 
-(`ncn-mw#`) All BOS v2 data is stored in a Redis database running in a pod in the `services` namespace.
+(`ncn-mw#`) All BOS v2 data is stored in Redis databases running in a pod in the `services` namespace.
 
 ```bash
 kubectl get pods -n services -l app.kubernetes.io/name=cray-bos-db
@@ -25,6 +27,21 @@ Example output:
 NAME                           READY   STATUS    RESTARTS   AGE
 cray-bos-db-58f4967657-rdj9l   2/2     Running   0          70d
 ```
+
+### Data organization
+
+Within the Redis pod, the BOS v2 data is divided into 6 databases:
+
+| *Database*                                                                 | *Key*                                                               |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| [Components](Components.md)                                                | Node xname                                                          |
+| Boot artifacts (`initrd`, kernel, and kernel parameters)                   | [BSS](../../glossary.md#boot-script-service-bss) token              |
+| [Options](Options.md)                                                      | `options`                                                           |
+| [Session templates](Session_Templates.md)                                  | Template name                                                       |
+| [Sessions](Sessions.md)                                                    | Session name                                                        |
+| [Session statuses](View_the_Status_of_a_BOS_Session.md#bos-session-status) | Session name                                                        |
+
+The options database has a single entry with a fixed key. This entry contains a dictionary of current BOS option values.
 
 ## BOS v1 database
 
@@ -42,6 +59,11 @@ cray-bos-etcd-0   2/2     Running   0          4d
 cray-bos-etcd-1   2/2     Running   0          4d
 cray-bos-etcd-2   2/2     Running   0          4d
 ```
+
+## Access
+
+All access to the BOS databases is done by the [BOS API server](API.md), with a single exception;
+The [`power-on` operator](Operators.md#power-on) directly writes to the BOS v2 boot artifacts database.
 
 ## Source
 
