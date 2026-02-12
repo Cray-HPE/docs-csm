@@ -79,7 +79,8 @@ This wipe erases the magic bits on the disk to prevent them from being recognize
 
 ## Advanced wipe
 
-An advanced wipe includes handling storage node specific items before running the [Basic wipe](#basic-wipe).
+An advanced wipe includes handling items that are storage node specific,
+following by running the [Basic wipe](#basic-wipe).
 
 1. (`ncn-s#`) Stop Ceph on all of the storage nodes.
 

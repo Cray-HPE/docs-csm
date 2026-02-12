@@ -1,6 +1,7 @@
 # Ceph Orchestrator Usage
 
-The Ceph orchestrator provides a centralized interface for the management of the Ceph cluster. It orchestrates ceph-mgr modules that interface with external orchestration services.
+The Ceph orchestrator provides a centralized interface for the management of the Ceph cluster.
+It orchestrates `ceph-mgr` modules that interface with external orchestration services.
 
 Refer to the external [Ceph documentation](https://docs.ceph.com/en/latest/mgr/orchestrator/) for more information.
 
@@ -8,12 +9,11 @@ The orchestrator manages Ceph clusters with the following capabilities:
 
 * Single command upgrades (assuming all images are in place)
 * Reduces the need to be on the physical server to address a large number of ceph service restarts or configuration changes
-* Better integration with the Ceph Dashboard (coming soon)
 * Ability to write custom orchestration modules
 
 ## Troubleshoot Ceph Orchestrator
 
-### Watch `cephadm` Log Messages
+### Watch `cephadm` log messages
 
 Watching log messages is useful when making changes with the orchestrator, such as add/remove/scale services or upgrades.
 
@@ -30,11 +30,11 @@ ceph -W cephadm --watch-debug
 
 > **`NOTE`** For use with orchestration tasks, this can be typically run from a node running the ceph mon process. In most cases, this is ncn-s00(1/2/3). There may be cases where a cephadm is run locally on a host and it will be more efficient to tail `/var/log/ceph/cephadm.log`.
 
-## Usage Examples
+## Usage examples
 
 This section will provide some in-depth usage with examples of the more commonly used `ceph orch` subcommands.
 
-### List Service Deployments
+### List service deployments
 
 ```bash
 ceph orch ls
@@ -63,7 +63,7 @@ rgw.site1                      3/3  6m ago     4h   ncn-s001;ncn-s002;ncn-s003;c
 1. PLACEMENT - Represents a service deployed on all nodes. Otherwise the listed placement is where it is expected to be deployed.
 2. NAME - The deployment name. This is a generalized name to reference the deployment. This is being noted as additional subcommands the name is more specific to the actual deployed daemon.
 
-### List Deployed Daemons
+### List deployed daemons
 
 ```bash
 ceph orch ps
@@ -107,7 +107,7 @@ rgw.site1.ncn-s003.tzkxya        ncn-s003  running (5h)  5m ago     5h   15.2.8 
 
 **`FILTERS:`** Apply filters by adding any or all of [--hostname \<hostname\> --service_name <service_name> --daemon_type <daemon_type> --daemon_id <daemon_id>].
 
-### Ceph Daemon start|stop|restart|reconfig
+### Ceph daemon start|stop|restart|reconfig
 
 > **`NOTE`** The service name is from `ceph orch ps` **NOT** `ceph orch ls`.
 
@@ -119,7 +119,7 @@ A message stating "Scheduled to restart alertmanager.ncn-s001 on host 'ncn-s001'
 
 Monitor the restart using the `ceph orch ps` command and the time associated with the `STATUS` should be reset and show "running (time since started)."
 
-### Deploy or Scale Services
+### Deploy or scale services
 
 > **`NOTE`** The service name is from `ceph orch ls` **NOT** `ceph orch ps`.
 
@@ -136,7 +136,7 @@ A message stating "Scheduled alertmanager update..." will be returned.
 > **IMPORTANT:** There are several combinations available when working with the placement. For example, a placement of 1 can be specified, but then a list of a sub-set of nodes can be used. This is a good way to contain the process to those nodes.
 > **IMPORTANT:** This is not available for any deployments with a `PLACEMENT` of *
 
-### List Hosts Known to Ceph Orchestrator
+### List hosts known to Ceph Orchestrator
 
 ```bash
 ceph orch host ls
@@ -151,7 +151,7 @@ ncn-s002  ncn-s002
 ncn-s003  ncn-s003
 ```
 
-### List Drives on Hosts Known to Ceph Orchestrator
+### List drives on hosts known to Ceph Orchestrator
 
 ```bash
 ceph orch device ls
@@ -174,7 +174,7 @@ ncn-s003  /dev/vdd  hdd   3b2c090d-37a0-403b-a   107G  Unknown  N/A    N/A    No
 
 > **IMPORTANT:** If `--wide` is used, it will give the reasons a drive is not `Available`. This **DOES NOT** mean something is wrong. If Ceph already has the drive provisioned, there may be similar reasons.
 
-## General Use
+## General use
 
 Update the size or placement for a service or apply a large YAML spec:
 
@@ -200,7 +200,7 @@ Scale an NFS service:
 ceph orch apply nfs <svc_id> <pool> [<namespace>] [<placement>] [--dry-run] [plain|json|json-pretty|yaml] [--unmanaged]
 ```
 
-Create OSD daemon(s) using a drive group spec:
+Create OSD daemons using a drive group spec:
 
 ```bash
 ceph orch apply osd [--all-available-devices] [--dry-run] [--unmanaged] [plain|json|json-pretty|yaml]
@@ -218,25 +218,25 @@ Cancel ongoing operations:
 ceph orch cancel
 ```
 
-Add daemon(s):
+Add daemons:
 
 ```bash
 ceph orch daemon add [mon|mgr|rbd-mirror|crash|alertmanager|grafana|node-exporter|prometheus] [<placement>]
 ```
 
-Start iscsi daemon(s):
+Start iSCSI daemons:
 
 ```bash
 ceph orch daemon add iscsi <pool> <api_user> <api_password> [<trusted_ip_list>] [<placement>]
 ```
 
-Start MDS daemon(s):
+Start MDS daemons:
 
 ```bash
 ceph orch daemon add mds <fs_name> [<placement>]
 ```
 
-Start NFS daemon(s):
+Start NFS daemons:
 
 ```bash
 ceph orch daemon add nfs <svc_id> <pool> [<namespace>] [<placement>]
@@ -244,13 +244,13 @@ ceph orch daemon add nfs <svc_id> <pool> [<namespace>] [<placement>]
 
 Create an OSD service:
 
-Either --svc_arg=host:drives
+Either `--svc_arg=host:drives`
 
 ```bash
 ceph orch daemon add osd [<svc_arg>]
 ```
 
-Start RGW daemon(s):
+Start RGW daemons:
 
 ```bash
 ceph orch daemon add rgw <realm_name> <zone_name> [<subcluster>] [<port:int>] [--ssl] [<placement>]
@@ -262,13 +262,13 @@ Redeploy a daemon (with a specific image):
 ceph orch daemon redeploy <name> [<image>]
 ```
 
-Remove specific daemon(s):
+Remove specific daemons:
 
 ```bash
 ceph orch daemon rm <names>... [--force]
 ```
 
-Start, stop, restart, (redeploy,) or reconfig a specific daemon:
+Start, stop, restart, or reconfigure a specific daemon:
 
 ```bash
 ceph orch daemon start|stop|restart|reconfig <name>
