@@ -1,4 +1,4 @@
-# Troubleshoot Compute Node Boot Issues Related to Trivial File Transfer Protocol \(TFTP\)
+# Troubleshoot Compute Node Boot Issues Related to Trivial File Transfer Protocol (TFTP)
 
 TFTP issues can result in node boot failures. Use this procedure to investigate and resolve such issues.
 
@@ -47,6 +47,10 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
 ## Troubleshooting
 
-If the TFTP request is not visible on the NCN, it may be caused by a firewall issue. If the TFTP request is not visible inside the pod,
-then double check that the request was issued over the correct interface for the Node Management Network \(NMN\). If it was, then the
-underlying issue could be related to the firewall.
+If the TFTP request is not visible in the packet capture, consider the following:
+
+- **Firewall issues**: The TFTP traffic (UDP port 69) may be blocked by firewall rules on the NCN or network.
+- **Wrong interface**: Ensure the TFTP request was issued over the correct interface for the
+  [Node Management Network (NMN)](../../glossary.md#node-management-network-nmn).
+- **Network routing**: Verify that routing is configured correctly between the client and the TFTP server.
+- **Pod network issues**: If traffic reaches the worker node but not the pod, there may be issues with the pod network or Kubernetes networking components.

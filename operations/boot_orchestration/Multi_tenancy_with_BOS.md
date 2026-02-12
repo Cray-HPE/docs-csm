@@ -2,11 +2,13 @@
 
 * [Overview](#overview)
 * [Roles](#roles)
-    * [Tenant administrators](#tenant-administrators)
     * [System administrators](#system-administrators)
+    * [Tenant administrators](#tenant-administrators)
 * [Components](#components)
 * [Sessions and session templates](#sessions-and-session-templates)
     * [Session templates with tenancy](#session-templates-with-tenancy)
+        * [Tenant-owned session templates](#tenant-owned-session-templates)
+        * [Session templates not owned by tenants](#session-templates-not-owned-by-tenants)
     * [Sessions with tenancy](#sessions-with-tenancy)
     * [Staged sessions with tenancy](#staged-sessions-with-tenancy)
 * [BOS API access with tenancy](#bos-api-access-with-tenancy)
@@ -22,15 +24,10 @@ specific tenant.
 
 ## Roles
 
-### Tenant administrators
-
-[Tenant administrators](../multi-tenancy/TenantAdminConfig.md) should be able to view their
-[components](Components.md), [session templates](Session_Templates.md), and [sessions](Sessions.md) normally.
-Tenant administrators are not be able to view the resources of another tenant.
-Tenant administrators have restricted or no access to some BOS endpoints, such as the components endpoint
-(which can be viewed but not patched), and the options endpoint (which is blocked entirely).
-
 ### System administrators
+
+The overall administrator of a CSM system is referred to as the system administrator; that role is also
+sometimes referred to as the infrastructure administrator or global administrator.
 
 Systems administrators have complete access to the [BOS API](../../api/bos.md), and can view and edit all resources for all
 tenants, as well as resources that are not assigned to a tenant. However, some endpoints require the administrator to masquerade
@@ -38,6 +35,16 @@ as a tenant in order to update resources. This can mean passing the tenant ID in
 specific tenant. See [Tenant Admin Configuration](../multi-tenancy/TenantAdminConfig.md) for information on authenticating to the CLI
 as a specific tenant. While masquerading as a tenant, the system administrator will only have the ability to view and update
 resources specific to that tenant.
+
+### Tenant administrators
+
+A tenant administrator is a role that is only able to manage resources belong to a specific tenant.
+
+[Tenant administrators](../multi-tenancy/TenantAdminConfig.md) should be able to view their
+[components](Components.md), [session templates](Session_Templates.md), and [sessions](Sessions.md) normally.
+Tenant administrators are not be able to view the resources of another tenant.
+Tenant administrators have restricted or no access to some BOS endpoints, such as the components endpoint
+(which can be viewed but not patched), and the options endpoint (which is blocked entirely).
 
 ## Components
 
@@ -63,13 +70,27 @@ administrator will need to masquerade as that tenant.
 
 ### Session templates with tenancy
 
-Compared to session templates that are not owned by a tenant, session templates owned by tenants have no extra restrictions
-on their content. A session template owned by a tenant is even permitted to include [components](#components) that are not
-assigned to the tenant in TAPMS. However, sessions created by a tenant will automatically exclude any components that
-are not assigned to that tenant in TAPMS. For each [boot set](Session_Templates.md#boot-sets) in the session template, the set
-of target components for a session will be the intersection of the set of components determined by the boot set and the set
-of components assigned to the tenant in TAPMS (also intersected with the [session limit](Limit_the_Scope_of_a_BOS_Session.md),
-if applicable).
+#### Tenant-owned session templates
+
+Compared to session templates that are not owned by a tenant, session templates owned by tenants have only one
+extra restriction on their content. Specifically, a session template owned by a tenant should not directly specify
+any [components](#components) that are not assigned to them in TAPMS. That is, if the
+[`node_list`](Session_Templates.md#node-list) field is used, it should only include components that are assigned to
+the tenant in TAPMS. If this restriction is not followed, then while BOS will allow the template to be created,
+sessions using that template will fail when the
+[`session-setup` operator](Operators.md#session-setup) runs. This will happen even if a
+[session limit](Limit_the_Scope_of_a_BOS_Session.md) is specified that restricts the
+session to components owned by the tenant.
+
+A session template owned by a tenant is permitted to *indirectly* include components that are not
+assigned to the tenant in TAPMS. This can be done using the
+[`node_groups`](Session_Templates.md#node-groups) or
+[`node_roles_groups`](Session_Templates.md#node-roles-groups) fields.
+For example, the `Compute` role could be specified in the `node_roles_groups` field of the boot set. However,
+sessions created by a tenant will automatically exclude any components that are not assigned to that tenant in
+TAPMS. For each [boot set](Session_Templates.md#boot-sets) in the session template, the set of target components
+for a session will be the intersection of the set of components determined by the boot set and the set of components
+assigned to the tenant in TAPMS (also intersected with the session limit, if applicable).
 
 For example, consider the following session template:
 
@@ -98,10 +119,50 @@ For example, consider the following session template:
 }
 ```
 
-This template is owned by the `vcluster-harf` tenant, and it targets all compute nodes (as seen by the
+This template is owned by the `vcluster-harf` tenant, and it targets all X86 compute nodes (as seen by the
 [`node_roles_groups` field](Session_Templates.md#node-roles-groups)
 in the boot set). However, when the `vcluster-harf` tenant creates a session using this template,
 the session will be limited to the compute nodes which are assigned to `vcluster-harf` in TAPMS.
+
+#### Session templates not owned by tenants
+
+The restriction and behavior of [Tenant-owned session templates](#tenant-owned-session-templates) does not
+apply to session templates that are not owned by a tenant
+
+* A session template that is not owned by a tenant is free to include tenant-owned components in the `node_list` field.
+  This will not cause failures in the `session-setup` operator.
+* No filtering of components is done on the basis of tenancy for session templates that are not owned by a tenant.
+  In other words, such session templates are not limited to components that do not belong to any tenant.
+
+For example, consider the following session template:
+
+```json
+{
+  "boot_sets": {
+      "compute": {
+        "arch": "X86",
+        "etag": "316c0976fda0ea4c229c132f1ea00af3",
+        "kernel_parameters": "ip=dhcp quiet spire_join_token=${SPIRE_JOIN_TOKEN}",
+        "node_roles_groups": [
+          "Compute"
+        ],
+        "path": "s3://boot-images/6afda9c4-297f-4d35-b104-f20ed12c4d08/manifest.json",
+        "rootfs_provider": "sbps",
+        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.fanta.hpc.amslabs.hpecorp.net:300",
+        "type": "s3"
+      }
+  },
+  "cfs": {
+    "configuration": "harf-compute-config"
+  },
+  "enable_cfs": true,
+  "name": "harf-x86-computes",
+  "tenant": ""
+}
+```
+
+This template is not owned by a tenant, and it targets all X86 compute nodes. When the system administrator creates
+a session using this tenant, it will include all X86 compute nodes, regardless of tenant ownership.
 
 ### Sessions with tenancy
 
@@ -121,28 +182,7 @@ described in [Sessions with tenancy](#sessions-with-tenancy). In addition, the r
 
 ## BOS API access with tenancy
 
-> This section talks about accessing the BOS API, but it also applies to requests made using the
-> [Cray CLI](../../glossary.md#cray-cli-cray). For details on using the Cray CLI with multi-tenancy, see
-> [Cray CLI integration](../multi-tenancy/TenantAdminConfig.md#cray-cli-integration).
+For details on how to make BOS v2 API or CLI calls on behalf of a tenant, see
+[Interacting with services as a tenant](../multi-tenancy/TenantAdminConfig.md#interacting-with-services-as-a-tenant).
 
-The BOS v2 API identifies the tenant based on information passed in the request. A tenant must always pass information
-identifying itself -- their tenant ID -- when making a request. If you have tenant information forwarded to the BOS
-API service through use of the Cray CLI `init` command, BOS will contextually operate on behalf of that tenant. Otherwise,
-if you are interacting with the API directly or are scripting against it, the same information may be provided with your
-request as part of a header that accompanies your request.
-
-Note: HPE-authored OPA rules prevent unauthorized tenant requests from accessing the BOS API, so the value
-chosen for `Cray-Tenant-Name` must match the user-provided access token within a request. If the user access
-token is not part of the tenant name being used, then the command will fail. Because it is possible for one user to
-be a part of multiple tenant groups, this allows users to select the specific tenant that they are operating under.
-In the case of BOS, even if a user is part of multiple individual tenant groups, only the
-resources that are allocated to a specifically provided tenant, as referenced by name, are affected.
-
-Administrators may provide tenant information via an HTTP verb in the form of a header to affect resources
-that are part of a specific TAPMS tenant.
-
-(`ncn-mw#`)
-
-```bash
-curl -H "Cray-Tenant-Name: red" -H "Authorization: Bearer ${TOKEN}" -H 'Content-Type: application/json' https://api-gw-service-nmn.local/apis/bos/v2/components/
-```
+For details on which BOS v2 API calls support being called on behalf of a tenant, see [BOS API](../../api/bos.md).

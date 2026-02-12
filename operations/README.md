@@ -946,3 +946,4 @@ these backups.
 - [Slurm Operator](multi-tenancy/SlurmOperator.md)
 - [Tenant and Partition Management System (TAPMS) Overview](multi-tenancy/Tapms.md)
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
+- [Multi-tenancy with BOS](boot_orchestration/Multi_tenancy_with_BOS.md)
