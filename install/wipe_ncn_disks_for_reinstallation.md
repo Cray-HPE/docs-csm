@@ -59,6 +59,7 @@ executed on **any type of management node** (master, storage, or worker).
 
 **This section is specific to utility storage nodes**. An advanced wipe includes stopping Ceph,
 deleting the Ceph volumes, and then wiping the disks and RAIDs.
+Then the [Basic wipe](#basic-wipe) is performed.
 
 1. Stop Ceph.
 
