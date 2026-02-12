@@ -1,18 +1,19 @@
-# IUF does not run the next stage for an activity
+# IUF Unable To Run Next Stage
 
-## Issue Description
+## Issue description
 
-During the CSM upgrade, IUF reports that multiple sessions are in progress for an activity. The next stage for the activity does not run due to above error.
-This issue is seen after pre-install-check stage or management-nodes-rollout stage of iuf run.
+During the CSM upgrade, IUF warns that multiple sessions are in progress for an activity.
+The next stage for the activity does not run because of this warning.
+This issue is seen after `pre-install-check` stage or `management-nodes-rollout` stage of the IUF run.
 
-This issue causes the session associated with the activity to continue to be in "in progress" even after workflow associated with the stage has successfully completed.
+This issue causes the session associated with the activity to continue to be in "in progress" even
+after the workflow associated with the stage has successfully completed.
 
-## Error Identification
+## Issue identification
 
-When the issue occurs the following errors are emitted by iuf cli:
+When the issue occurs the following messages are emitted by `iuf-cli`:
 
-```sh
-iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
+```text
 INFO All logs will be stored in /etc/cray/upgrade/csm/iuf/update-csm-1.6.0/log/20241021025621
 INFO [ACTIVITY: update-csm-1.6.0                               ] BEG Install started at 2024-10-21 02:56:21.778284
 INFO Neither --recipe-vars nor --bootprep-config-dir were specified, so
@@ -25,34 +26,38 @@ INFO [IUF SESSION:                                             ] END Completed a
 INFO [ACTIVITY: update-csm-1.6.0                               ] END Completed in 0:00:08
 ```
 
-## Error Conditions
+## Issue conditions
 
 There is a race condition in `cray-nls` that is hit when multiple `cray-nls` pods are starting at the same time.
 This happens during a `cray-nls` chart upgrade and sometimes when a node with multiple `cray-nls` pods is drained, which causes these pods to start simultaneously on another node.
 
-## Workaround Description
+## Workaround description
 
-Step 1: Identify the session for the previous stage which ran successfully for the activity being run.
+1. Identify the session for the previous stage which ran successfully for the activity being run.
 
-```bash
-2024-10-21T01:40:09.731277Z INFO [IUF SESSION: update-csm-1-6-0-h0y63                 ] BEG Started at 2024-10-21 01:40:09.731167
-2024-10-21T01:40:13.585718Z DBG  Next workflow update-csm-1-6-0-h0y63-management-nodes-rollout-wnbpb
-```
+    ```text
+    2024-10-21T01:40:09.731277Z INFO [IUF SESSION: update-csm-1-6-0-h0y63                 ] BEG Started at 2024-10-21 01:40:09.731167
+    2024-10-21T01:40:13.585718Z DBG  Next workflow update-csm-1-6-0-h0y63-management-nodes-rollout-wnbpb
+    ```
 
-Step 2: Find the configmap associated with the session from previous step in argo namespace.
+1. (`ncn-mw#`) Find the ConfigMap associated with the session from previous step in the `argo` namespace.
 
-```bash
-kubectl get cm -n argo --selector type=iuf_session |grep <session_name>
-```
+    ```bash
+    kubectl get cm -n argo --selector type=iuf_session |grep <session_name>
+    ```
 
-Step 3: Make a backup of the configmap since it will be edited in the next step.
+1. (`ncn-mw#`) Make a backup of the ConfigMap because it will be edited in the next step.
 
-```bash
-kubectl get cm -n argo <session_name> -o yaml > <session_name>_cm_backup.yaml
-```
+    ```bash
+    kubectl get cm -n argo <session_name> -o yaml > <session_name>_cm_backup.yaml
+    ```
 
-Step 4: Edit the configmap to modify "current_state" to "completed" if "current_state" is "in_progress".
+1. (`ncn-mw#`) Edit the ConfigMap to modify `"current_state"` to `"completed"` if `"current_state"` is `"in_progress"`.
 
-```bash
-kubectl edit configmap -n argo <session_name> -o json
-```
+    ```bash
+    kubectl edit configmap -n argo <session_name> -o json
+    ```
+
+1. Re-run workflow using the same IUF command.
+
+    With the previous session set to `"completed"`, the multiple sessions warning should not be seen and the workflow should run as expected.
