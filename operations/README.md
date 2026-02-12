@@ -251,7 +251,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
     - [Accessing `sat bootprep` Files](configuration_management/Accessing_Sat_Bootprep_Files.md)
     - [Management Node Personalization](configuration_management/Management_Node_Personalization.md)
     - [Management Node Image Customization](configuration_management/Management_Node_Image_Customization.md)
-    - [Secure Tenant Specific Sensitive Information with SOPS](configuration_management/Secure_Sensitive_Information_in_VCS.md)
+    - [Managing Sensitive Tenant Information in VCS with SOPS](configuration_management/Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md)
 - [Troubleshoot CFS Issues](configuration_management/Troubleshoot_CFS_Issues.md)
     - [Troubleshoot CFS Session Failed](configuration_management/Troubleshoot_CFS_Session_Failed.md)
     - [Troubleshoot CFS Session Failing to Complete](configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
@@ -387,6 +387,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [Retrieve an Authentication Token](security_and_authentication/Retrieve_an_Authentication_Token.md)
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 - [SOPS Introduction](security_and_authentication/SOPS.md)
+- [Managing Sensitive Tenant Information in VCS with SOPS](configuration_management/Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md)
 - [Audit Logs](security_and_authentication/Audit_Logs.md)
 - [Cray STS Token Generator API](../api/sts.md)
 - [Configure root user on HPE iLO BMCs](security_and_authentication/Configure_root_user_on_HPE_iLO_BMCs.md)
@@ -869,6 +870,8 @@ these backups.
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
 - [Global Tenant Hooks](multi-tenancy/GlobalTenantHooks.md)
 - [Example Workflow](multi-tenancy/ExampleWorkflow.md)
+- [Multi-tenancy with BOS](boot_orchestration/Multi_tenancy_with_BOS.md)
+- [Managing Sensitive Tenant Information in VCS with SOPS](configuration_management/Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md)
 
 ## iSCSI SBPS (Scalable Boot Content Projection Service)
 

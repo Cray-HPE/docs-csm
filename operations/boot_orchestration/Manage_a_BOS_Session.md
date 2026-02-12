@@ -1,15 +1,19 @@
 # Manage a BOS Session
 
-Once a Boot Orchestration Service \(BOS\) session template is created, users can perform operations on nodes, such as `boot`, `reboot`, and `shutdown`.
+Once a BOS [session template](Session_Templates.md) is created, users can perform operations on nodes,
+such as `boot`, `reboot`, and `shutdown`.
 
-To find the API versions of any commands listed, add `-vvv` to the end of the CLI command, and the CLI will print the underlying call to the API in the output.
+To find the corresponding API calls for any Cray CLI command, append `-vvv` to the end of the CLI command.
+This makes the CLI print the underlying API call in the output.
 
-* [Create a new session](#create-a-new-session)
+* [Create a session](#create-a-session)
+    * [Optional session creation arguments](#optional-session-creation-arguments)
 * [List all sessions](#list-all-sessions)
-* [Show details for a session](#show-details-for-a-session)
+* [Show session details](#show-session-details)
+* [View session status](#view-session-status)
 * [Delete a session](#delete-a-session)
 
-## Create a new session
+## Create a session
 
 Creating a new BOS session requires the following command-line options:
 
@@ -27,6 +31,7 @@ Example output:
 ```json
 {
   "components": "",
+  "include_disabled": false,
   "limit": "",
   "name": "9fea7f3f-0a77-40b9-892d-37712de51d65",
   "operation": "boot",
@@ -42,12 +47,20 @@ Example output:
 }
 ```
 
+### Optional session creation arguments
+
 Sessions also support several other optional arguments:
 
 * `--name`: The session name can be specified. If not set, a random UUID will be generated for the name.
-* `--limit`: Limits the nodes that BOS will run against. For more information see [Limit the Scope of a BOS Session](Limit_the_Scope_of_a_BOS_Session.md)
-    * If the `session_limit_required` [BOS Option](Options.md) is enabled, then the `limit` argument is not optional.
-* `--stage`: Sets `staged_state` for components rather than `desired_state`. This has no immediate effect, but can be applied at a later time. For more information see [Stage Changes with BOS](Stage_Changes_with_BOS.md)
+* `--limit`: Limits the nodes that BOS will run against.
+    * For more information see [Limit the Scope of a BOS Session](Limit_the_Scope_of_a_BOS_Session.md).
+    * If the [`session_limit_required` BOS option](Options.md#session_limit_required) is enabled, then the `limit` argument is not optional.
+* `--stage`: Sets `staged_state` for components rather than `desired_state`.
+    * The new session has no immediate effect, but can be applied at a later time.
+    * For more information see [Stage Changes with BOS](Stage_Changes_with_BOS.md).
+* `--include-disabled`: BOS sessions automatically exclude nodes that have been disabled in the
+  [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm),
+  unless this argument is set to true when the session is created.
 
 ## List all sessions
 
@@ -63,6 +76,7 @@ Example output:
 [
   {
     "components": "",
+    "include_disabled": false,
     "limit": "",
     "name": "9fea7f3f-0a77-40b9-892d-37712de51d65",
     "operation": "boot",
@@ -79,12 +93,12 @@ Example output:
 ]
 ```
 
-## Show details for a session
+## Show session details
 
-(`ncn-mw#`) Get details for a BOS session using the session ID.
+(`ncn-mw#`) Get details for a BOS session using the session name.
 
  ```bash
-cray bos v2 sessions describe <BOS_SESSION_ID> --format json
+cray bos v2 sessions describe <BOS_SESSION_NAME> --format json
 ```
 
 Example output:
@@ -92,6 +106,7 @@ Example output:
 ```json
 {
   "components": "",
+  "include_disabled": false,
   "limit": "",
   "name": "9fea7f3f-0a77-40b9-892d-37712de51d65",
   "operation": "boot",
@@ -107,10 +122,20 @@ Example output:
 }
 ```
 
+## View session status
+
+(`ncn-mw#`) View the status of a BOS session using the session name.
+
+ ```bash
+cray bos v2 sessions status list <BOS_SESSION_NAME> --format json
+```
+
+See [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md).
+
 ## Delete a session
 
 (`ncn-mw#`) Delete a specific BOS session:
 
 ```bash
-cray bos v2 sessions delete <BOS_SESSION_ID>
+cray bos v2 sessions delete <BOS_SESSION_NAME>
 ```

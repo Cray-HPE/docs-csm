@@ -108,9 +108,14 @@ This boot artifact information from the files stored in S3 is then written to th
 ### Specifying nodes
 
 Each boot set also specifies a set of nodes that are the targets of the boot set.
-There are three different fields used to specify the nodes: `node_list`, `node_groups`, or `node_roles_groups`.
+There are three different fields used to specify the nodes: `node_list`, `node_groups`, and `node_roles_groups`.
+The total set of nodes targeted by the boot set is the union of the nodes specified by these fields.
 
-> Also see the [Architecture](#architecture) section for information on how that field relates to specifying nodes.
+> Related:
+>
+> * See the [Architecture](#architecture) section for information on how that field relates to specifying nodes.
+> * See [Session templates with tenancy](Multi_tenancy_with_BOS.md#session-templates-with-tenancy) for details on
+>   on how specifying nodes behaves in a multi-tenancy environment.
 
 #### Node list
 
@@ -123,7 +128,10 @@ For example:
 ```
 
 NIDs are not supported.
-The [`reject_nids` option](Options.md#reject-nids) can be enabled in order to prevent accidental creation of session templates that reference NIDs.
+The [`reject_nids` option](Options.md#reject_nids) can be enabled in order to prevent accidental creation of session templates that reference NIDs.
+
+If the session template belongs to a tenant, any nodes listed in this field should belong to that tenant in TAPMS.
+For more information, see [Session templates with tenancy](Multi_tenancy_with_BOS.md#session-templates-with-tenancy).
 
 #### Node groups
 
@@ -171,7 +179,7 @@ and of the boot artifacts. Supported values are `X86` and `ARM`.
 When a boot set is validated, it will contact IMS to make sure that the boot image being used has an architecture matching
 what is specified in the boot set. Boot set validation happens when creating a session template, validating a session template, or
 creating a session. In cases where BOS is unable to perform this validation, the behavior of BOS is controlled by
-the [`ims_errors_fatal` option](Options.md#ims-errors-fatal) and [`ims_images_must_exist` option](Options.md#ims-images-must-exist).
+the [`ims_errors_fatal` option](Options.md#ims_errors_fatal) and [`ims_images_must_exist` option](Options.md#ims_images_must_exist).
 
 Unlike the fields discussed in the [Specifying nodes](#specifying-nodes) section, the `arch` field is not used to specify additional
 nodes. Instead, it acts as a filter, removing any specified nodes that do not have a matching architecture.
