@@ -181,10 +181,57 @@ will mean that the associated staged session will never be marked complete by th
 ### `session-setup`
 
 This operator monitors for pending v2 sessions and moves them into the running state.
-It uses the [session template](Session_Templates.md) and the session limit (if any) to determine the target components
-for the session. It uses the session template to determine the appropriate boot artifacts and
-(optionally) CFS configuration. It then [enables](Components.md#enabled) target components in BOS
-and updates them with the desired target state, boot artifacts, and configuration.
+For each pending session found, the following procedure is performed by the operator:
+
+1. Contact HSM to get the following:
+
+    * A list of the node membership for all [groups](../hardware_state_manager/Component_Groups_and_Partitions.md),
+      [roles, and subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md).
+    * Information on every node, such as whether it is enabled or disabled in HSM.
+
+1. For each [boot set](Session_Templates.md#boot-sets) in the [session template](Session_Templates.md), the operator
+   does the following steps:
+
+    1. The target node list for the boot set starts empty.
+
+    1. If the boot set [`node_list`](Session_Templates.md#node-list) field is set, add those components to the target list.
+
+    1. For any HSM groups specified in the [`node_groups`](Session_Templates.md#node-groups) field of the boot set,
+       add the associated components to the target list.
+
+    1. For any HSM roles or subroles specified in the [`node_roles_groups`](Session_Templates.md#node-roles-groups) field,
+       add the associated components to the target list.
+
+    1. If a [session limit](Limit_the_Scope_of_a_BOS_Session.md) was specified, apply it to the target list,
+       removing any components which do not match the limit.
+
+    1. If the session `include_disabled` field is false, then remove any components that are disabled in HSM.
+
+       See [Optional session creation arguments](Manage_a_BOS_Session.md#optional-session-creation-arguments).
+
+    1. For each target component, determine what target state it should have in BOS. This is based on the session operation, the
+       CFS settings in the session template, and the boot artifacts in the boot set.
+
+        * If this is a non-staged session (`staged` field is false), then this will be used to determine the desired state.
+
+        * If this is a [staged session](Stage_Changes_with_BOS.md), then this will be used to determine the staged state.
+
+1. For each component that was identified in the previous step, the BOS component record will be patched with the following changes:
+
+    * Set the target state (as described in the final substep of the previous step).
+    * Clear the error field.
+
+    If this is not a staged session, then the patch will also include the following:
+
+    * If this is a reboot operation, clear the actual state.
+    * Set the session field to the name of the session.
+    * Set [enabled](Components.md#enabled) to true.
+    * Set the last action field to `session_setup`.
+
+1. Patch the BOS session record to make the following changes:
+
+    * Set `status`.`status` field to `running`.
+    * Set `components` field to a comma-separated list of the target components.
 
 Related: [BOS v2 sessions and HSM locks](Sessions.md#bos-sessions-and-hsm-locks).
 
