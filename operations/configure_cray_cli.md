@@ -1,5 +1,16 @@
 # Configure the Cray Command Line Interface (`cray` CLI)
 
+- [Overview](#overview)
+- [Single user already configured in Keycloak](#single-user-already-configured-in-keycloak)
+    - [Procedure for existing Keycloak user](#procedure-for-existing-keycloak-user)
+- [Configure all NCNs with temporary Keycloak user](#configure-all-ncns-with-temporary-keycloak-user)
+    - [Procedure for temporary Keycloak user](#procedure-for-temporary-keycloak-user)
+    - [Troubleshooting results of the automated script](#troubleshooting-results-of-the-automated-script)
+        - [Debugging an individual node](#debugging-an-individual-node)
+        - [Debugging problems with initialization or authorization](#debugging-problems-with-initialization-or-authorization)
+
+## Overview
+
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands.
 
 Later procedures in the installation workflow use the `cray` CLI to interact with multiple services.
@@ -201,7 +212,7 @@ As the script leverages Keycloak administrative APIs, the `--keycloakHost` comma
     At this point the `cray` CLI will be operational on all successful nodes and authenticated with
     the input Keycloak account.
 
-## Troubleshooting results of the automated script
+### Troubleshooting results of the automated script
 
 Each node will have `Success` reported if everything worked, the node was initialized,
 and the `cray` CLI is operational for that node. For nodes with problems, there will be a
@@ -230,7 +241,7 @@ Results with problems on some nodes may look like the following:
 At this point, the script may be re-run with the `--debug` flag added, in order for
 debug level log messages to be displayed. Alternatively, each failing node may be looked at individually.
 
-### Debugging an individual node
+#### Debugging an individual node
 
 1. (`ncn-mws#`) Log into the node that failed.
 
@@ -318,7 +329,7 @@ debug level log messages to be displayed. Alternatively, each failing node may b
    with a valid existing Keycloak user following the process
    [Single User Already Configured in Keycloak](#single-user-already-configured-in-keycloak).
 
-### Debugging problems with initialization or authorization
+#### Debugging problems with initialization or authorization
 
 **NOTE:**  While resolving the following issues is beyond the scope of this section, more information about what is failing can be found by adding `-vvvvv` to the `cray init` commands.
 

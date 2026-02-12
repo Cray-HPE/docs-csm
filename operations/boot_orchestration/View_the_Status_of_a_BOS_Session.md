@@ -1,10 +1,16 @@
 # View the Status of a BOS Session
 
-The Boot Orchestration Service \(BOS\) supports a status endpoint that reports detailed status information for individual BOS sessions.
+BOS supports status endpoints that report detailed status information for individual BOS sessions.
 
 * [BOS v2 session status](#bos-v2-session-status)
     * [View the status of a v2 session](#view-the-status-of-a-v2-session)
     * [Session status details](#session-status-details)
+        * [`error_summary`](#error_summary)
+        * [`managed_components_count`](#managed_components_count)
+        * [`status`](#status)
+        * [`start_time`](#start_time)
+        * [`end_time`](#end_time)
+        * [`duration`](#duration)
 * [BOS v1 session status](#bos-v1-session-status)
     * [Metadata](#metadata)
     * [View the status of a v1 session](#view-the-status-of-a-v1-session)
@@ -14,8 +20,10 @@ The Boot Orchestration Service \(BOS\) supports a status endpoint that reports d
 
 ## BOS v2 session status
 
-BOS v2 session status offers an overall status, as well as information about the percentage of components in each state, and any errors being experienced.
-Status will be current as long as the session is running, and will cache itself when the session ends for future reference.
+BOS v2 session status offers an overall status, as well as information about the percentage of
+[components](Components.md) in each state, and any errors being experienced.
+The status will be current as long as the [session](Sessions.md) is running; the status
+will cache itself when the session ends for future reference.
 
 ### View the status of a v2 session
 
@@ -55,23 +63,29 @@ Example output:
 
 #### `error_summary`
 
-Contains any error messages currently reported by nodes whether those are transient failures that will be retried or nodes that have reached a retry limit.
-Nodes are grouped by error message, and each message includes a total count of nodes reporting that error as well as a comma separated list of nodes.
+Contains any error messages currently reported by nodes, whether those are transient failures
+that will be retried or nodes that have reached a retry limit.
+
+Nodes are grouped by error message, and each message includes a total count of nodes reporting
+that error as well as a comma separated list of nodes.
 For errors on many nodes, the list of nodes will be truncated to the first few for readability.
+In this case, the specific [components](Components.md) can be examined to determine which ones
+are impacted by the error.
 
 #### `managed_components_count`
 
 The number of components this session is responsible for.
-While the session is running, this is the current count and may decrease if other newer sessions take over responsibility for components.
-For completed sessions this is the number of components that were tracked by the session until the session was complete.
+
+While the session is running, this is the current count. It may decrease if other sessions are
+started that take over responsibility for some of the components.
+
+For completed sessions, this is the count at the time when the session completed.
 
 #### `status`
 
-Status can be either `pending`, `running`, or `complete`. Sessions are considered `pending` until the desired state of all associated components has been set.
-
-#### `percent_*`
-
-The percent of the `managed_components` that are in the specified state.
+Status can be either `pending`, `running`, or `complete`. Sessions are considered `pending` until the
+[`session-setup` operator](Operators.md#session-setup) has processed it and set the target states
+of all associated components.
 
 #### `start_time`
 
@@ -83,44 +97,47 @@ This timestamp will initially be `null` and will be set when the session ends.
 
 #### `duration`
 
-This lists the duration of the session in `h:mm:ss`. While the session is running, this will be the current duration, and the value is locked-in when the session completes.
+This lists the duration of the session in `h:mm:ss`.
+While the session is running, this will be the current duration;
+the value is locked-in when the session completes.
 
 ## BOS v1 session status
 
 In BOS v1, the status can be retrieved for each boot set within the session, as well as the individual items within a boot set.
 
 BOS sessions contain one or more boot sets. Each boot set contains one or more phases, depending upon the operation for that session.
-For example, a `reboot` operation would have a `shutdown`, `boot`, and possibly `configuration` phase, but a `shutdown` operation would only have a `shutdown` phase.
+For example, a `reboot` operation would have a `shutdown`, `boot`, and possibly `configuration` phase,
+but a `shutdown` operation would only have a `shutdown` phase.
 Each phase contains the following categories: `not_started`, `in_progress`, `succeeded`, `failed`, and `excluded`.
 
 ### Metadata
 
 Each session, boot set, and phase contains similar metadata. The following is a table of useful attributes to look for in the metadata:
 
-| Attribute     | Meaning |
-|---------------|---------|
-| `start_time`  | The time when a session, boot set, or phase started work. |
+| Attribute     | Meaning                                                                                         |
+|---------------|-------------------------------------------------------------------------------------------------|
+| `start_time`  | The time when a session, boot set, or phase started work.                                       |
 | `in_progress` | If true, it means that the session, boot set, or phase has started and still has work going on. |
-| `complete`    | If true, it means the session, boot set, or phase has finished. |
-| `error_count` | The number of errors encountered in the boot sets or phases. |
-| `stop_time`   | The time when a session, boot set, or phase ended work. |
+| `complete`    | If true, it means the session, boot set, or phase has finished.                                 |
+| `error_count` | The number of errors encountered in the boot sets or phases.                                    |
+| `stop_time`   | The time when a session, boot set, or phase ended work.                                         |
 
 The following table summarizes how to interpret the various combinations of values for the `in_progress` and `complete` flags:
 
-| `in_progress` | `complete` | Meaning |
-|---------------|------------|---------|
-| false         | false      | Item has not started. |
-| true          | false      | Item is in progress. |
-| false         | true       | Item has completed. |
-| true          | true       | Invalid state \(should not occur\). |
+| `in_progress` | `complete` | Meaning                             |
+|---------------|------------|-------------------------------------|
+| false         | false      | Item has not started.               |
+| true          | false      | Item is in progress.                |
+| false         | true       | Item has completed.                 |
+| true          | true       | Invalid state (should not occur).   |
 
 The `in_progress`, `complete`, and `error_count` fields are cumulative, meaning that they summarize the state of the sub-items.
 
-| Item     | `in_progress` meaning                                                       | `complete` meaning |
-|----------|-----------------------------------------------------------------------------|--------------------|
+| Item     | `in_progress` meaning                                                       | `complete` meaning                                                                          |
+|----------|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | Phase    | If true, it means there is at least one node in the `in_progress` category. | If true, it means that there are no nodes in the `in_progress` or `not_started` categories. |
-| Boot set | If true, it means there is at least one phase that is `in_progress`.        | If true, it means that all phases in the boot set are `complete`. |
-| Session  | If true, it means that at least one boot set is `in_progress`.              | If true, it means that all boot sets are `complete`. |
+| Boot set | If true, it means there is at least one phase that is `in_progress`.        | If true, it means that all phases in the boot set are `complete`.                           |
+| Session  | If true, it means that at least one boot set is `in_progress`.              | If true, it means that all boot sets are `complete`.                                        |
 
 ### View the status of a v1 session
 
@@ -211,7 +228,9 @@ Example output:
 ### View the status of a boot set
 
 Run the following command to view the status for a specific boot set in a session.
-For more information about retrieving the session ID and boot set name, refer to the "View the Status of a Session" section above. Descriptions of the different status sections are described below.
+For more information about retrieving the session ID and boot set name,
+see [View the status of a v1 session](#view-the-status-of-a-v1-session).
+Descriptions of the different status sections are described below.
 
 * Boot set
     * The `id` parameter identifies which session this status belongs to.
@@ -221,7 +240,8 @@ For more information about retrieving the session ID and boot set name, refer to
 * Phases
     * The `name` parameter is the name of the phase.
     * There is a `metadata` section for each phase.
-    * Each phase contains the following categories: `not_started`, `in_progress`, `succeeded`, `failed`, and `excluded`. The nodes are listed in the category they are currently occupying.
+    * Each phase contains the following categories: `not_started`, `in_progress`, `succeeded`, `failed`, and `excluded`.
+      The nodes are listed in the category they are currently occupying.
 
 (`ncn-mw#`)
 
@@ -375,7 +395,7 @@ Example output:
 
 ### View the status for an individual phase
 
-Direct calls to the API are needed to retrieve the status for an individual phase. Support for the Cray CLI is not currently available.
+Direct calls to the API are needed to retrieve the status for an individual phase. Support for the Cray CLI is not available.
 
 (`ncn-mw#`) The following command is used to view the status of a phase:
 
@@ -383,7 +403,8 @@ Direct calls to the API are needed to retrieve the status for an individual phas
 curl -H "Authorization: Bearer BEARER_TOKEN" -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/SESSION_ID/status/BOOT_SET_NAME/PHASE
 ```
 
-(`ncn-mw#`) In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is `computes`, and the individual phase is `shutdown`.
+(`ncn-mw#`) In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is `computes`,
+and the individual phase is `shutdown`.
 
 ```bash
 curl -H "Authorization: Bearer BEARER_TOKEN" -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1e5ba0c0ec/status/computes/shutdown
@@ -444,7 +465,7 @@ Example output:
 
 ### View the status for an individual category
 
-Direct calls to the API are needed to retrieve the status for an individual category. Support for the Cray CLI is not currently available.
+Direct calls to the API are needed to retrieve the status for an individual category. Support for the Cray CLI is not available.
 
 (`ncn-mw#`) The following command is used to view the status of a phase:
 
@@ -452,7 +473,8 @@ Direct calls to the API are needed to retrieve the status for an individual cate
 curl -H "Authorization: Bearer BEARER_TOKEN" -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/SESSION_ID/status/BOOT_SET_NAME/PHASE/CATEGORY
 ```
 
-(`ncn-mw#`) In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is `computes`, the phase is `shutdown`, and the category is `in_progress`.
+(`ncn-mw#`) In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is `computes`,
+the phase is `shutdown`, and the category is `in_progress`.
 
 ```bash
 curl -H "Authorization: Bearer BEARER_TOKEN" -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1e5ba0c0ec/status/computes/shutdown/in_progress
