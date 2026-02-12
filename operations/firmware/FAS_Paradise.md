@@ -10,11 +10,22 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
+* [Prerequisites](#prerequisites)
+* [Update Paradise `bmc_active` procedure](#update-paradise-bmc_active-procedure)
+* [Update Paradise `bios_active` procedure](#update-paradise-bios_active-procedure)
+* [Update Paradise `erot_active` procedure](#update-paradise-erot_active-procedure)
+* [Update Paradise `fpga_active` procedure](#update-paradise-fpga_active-procedure)
+* [Update Paradise `pld_active` procedure](#update-paradise-pld_active-procedure)
+* [Update Paradise firmware using JSON file and Cray CLI](#update-paradise-firmware-using-json-file-and-cray-cli)
+* [Upload Paradise images to TFTP server](#upload-paradise-images-to-tftp-server)
+* [Reset BMC factory defaults](#reset-bmc-factory-defaults)
+* [Reset BIOS factory defaults](#reset-bios-factory-defaults)
+
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+* The [Cray command line interface (CLI)](../../glossary.md#cray-cli-cray) tool is initialized and configured on the system.
 See [Configure the Cray CLI](../configure_cray_cli.md).
-* The firmware images are loaded into S3 and to the TFTP server.
+* The firmware images are loaded into [S3](../../glossary.md#simple-storage-service-s3) and to the TFTP server.
 See [Upload Paradise images to TFTP server](#upload-paradise-images-to-tftp-server)
 
 The following targets can be updated with FAS on Paradise Nodes:
@@ -28,10 +39,10 @@ The following targets can be updated with FAS on Paradise Nodes:
 ## Update Paradise `bmc_active` procedure
 
 NOTE: Some BMC firmware updates will require that factory defaults, or a
-factory reset, be applied.  You can check for this requirement when you
-download a new HFP firmware release.  It is very important to check for
+factory reset, be applied. Check for this requirement when
+downloading a new HFP firmware release. It is very important to check for
 and perform this action if it is required. If a factory reset of the BMC
-is required, follow
+is required, then follow
 [the BMC factory reset procedure](#reset-bmc-factory-defaults) at the
 bottom of this page before updating the BMC firmware.
 
@@ -103,10 +114,10 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 ```
 
 Some BIOS versions will require that BIOS factory defaults are applied to
-clear all prior settings **AFTER** the BIOS is updated.  You can check for
-this requirement when you download a new HFP firmware release. It is very
+clear all prior settings **AFTER** the BIOS is updated. Check for
+this requirement when downloading a new HFP firmware release. It is very
 important to check for and perform this action if it is required. If
-resetting BIOS factory defaults is required, follow the
+resetting BIOS factory defaults is required, then follow the
 [BIOS factory defaults procedure](#reset-bios-factory-defaults) at the
 bottom of this page.
 
@@ -119,7 +130,7 @@ If resetting BIOS factory defaults is not required, simply power the node on.
 ## Update Paradise `erot_active` procedure
 
 **NOTE:** After update of `erot_active` an AC power cycle is required for update to take affect.
-To do an AC power cycle, run the following command (`ncn#`).
+To do an AC power cycle, run the following command (`ncn-mw#`).
 
 ```bash
 ssh admin@$(xname) "ipmitool raw 0x38 0x02"
@@ -154,7 +165,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 ## Update Paradise `fpga_active` procedure
 
 **NOTE:** After update of `fpga_active` an AC power cycle is required for update to take affect.
-To do an AC power cycle, run the following command (`ncn#`).
+To do an AC power cycle, run the following command (`ncn-mw#`).
 
 ```bash
 ssh admin@$(xname) "ipmitool raw 0x38 0x02"
@@ -227,7 +238,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 
 1. Initiate a dry-run to verify the firmware that will be updated and the version it will update to.
 
-    1. (`ncn#`) Create the dry-run session.
+    1. (`ncn-mw#`) Create the dry-run session.
 
         The `overrideDryrun = false` value indicates that the command will do a dry run.
 
@@ -242,7 +253,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
         actionID = "fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"
         ```
 
-    1. (`ncn#`) Describe the `actionID` for firmware update dry-run job.
+    1. (`ncn-mw#`) Describe the `actionID` for firmware update dry-run job.
 
         Replace the `actionID` value with the string returned in the previous step. In this example, `"fddd0025-f5ff-4f59-9e73-1ca2ef2a432d"` is used.
 
@@ -306,7 +317,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
         "description":"Update Foxconn Node BMCs"
         ```
 
-    1. (`ncn#`) Run the firmware update.
+    1. (`ncn-mw#`) Run the firmware update.
 
         The output `overrideDryrun = true` indicates that an actual firmware update job was created. A new `actionID` will also be displayed.
 
@@ -343,7 +354,7 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
     operationID = "e910c6ad-db98-44fc-bdc5-90477b23386f"
     ```
 
-1. (`ncn#`) View more details for an operation using the `operationID` from the previous step.
+1. (`ncn-mw#`) View more details for an operation using the `operationID` from the previous step.
 
     Check the list of nodes for the `failed` or `completed` state.
 
@@ -384,29 +395,32 @@ To update using a JSON file and the Cray CLI, use this example JSON file and fol
 
     Once the firmware and BIOS are updated, the compute nodes can be powered back on.
 
-    If the nodes have never been powered on in the system before (they are being added during a hardware add procedure), then use the Boot Orchestration Service (BOS) to power them on.
-    Using BOS will prepare the initial boot artifacts required to boot them. If this is not the first time they have been powered on in this system, then you can use the Power Control Service \(PCS\) to power them on.
+    If the nodes have never been powered on in the system before (they are being added during a hardware add procedure),
+    then use the [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) to power them on.
+    Using BOS will prepare the initial boot artifacts required to boot them.
+    If this is not the first time they have been powered on in this system, then the
+    [Power Control Service (PCS)](../../glossary.md#power-control-service-pcs) can be used to power them on.
 
 ## Upload Paradise images to TFTP server
 
-(`ncn#`) To check if a firmware is uploaded to the TFTP server:
+(`ncn-mw#`) To check if a firmware is uploaded to the TFTP server:
 
 ```bash
 kubectl -n services exec -it `kubectl get pods -n services -l app.kubernetes.io/instance=cms-ipxe -o custom-columns=NS:.metadata.name --no-headers | head -1` -- ls /shared_tftp
 ```
 
-If the firmware file you need is not listed, run the following command to copy the file from S3 to the TFTP server (`ncn#`)
+(`ncn-mw#`) If the required firmware file is not listed, then run the following command to copy the file from S3 to the TFTP server.
 
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/upload_foxconn_images_tftp.py
 ```
 
-## Reset BMC Factory Defaults
+## Reset BMC factory defaults
 
-**IMPORTANT: Only perform this action if required!  Check the HFP release notes!**
+**IMPORTANT: Only perform this action if required! Check the HFP release notes!**
 
-Run the following command prior to using FAS to update the BMC firmware.  This
-will reset the BMC to factory defaults (`ncn#`):
+(`ncn-mw#`) Run the following command prior to using FAS to update the BMC firmware. This
+will reset the BMC to factory defaults:
 
 ```bash
 ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
@@ -415,50 +429,46 @@ ssh admin@$(xname) 'fw_setenv openbmconce "factory-reset"'
 Continue to update the BMC firmware using one of the methods above.
 
 **NOTE:** The credentials for the `admin` account may have been
-reset along with the factory defaults.  Should this occur, FAS will no longer
+reset along with the factory defaults. Should this occur, FAS will no longer
 be able to verify the update after the BMC reboots and will fail after the
-time limit.  The BMC firmware update should still have succeeded despite
-this.  After the update is complete, return here to reset the `admin`
+time limit. The BMC firmware update should still have succeeded despite
+this. After the update is complete, return here to reset the `admin`
 password if necessary.
 
 If the `admin` password changed to something other than the what is stored in
-vault, you may see something like the following when attempting to log in to
+Vault, something like the following may be seen when attempting to log in to
 the BMC:
 
 ```text
-> ssh admin@x3000c0s33b3
-admin@x3000c0s33b3's password:
-
 The account is locked due to 10 failed logins.
 
 (5 minutes left to unlock)
 Permission denied, please try again.
 ```
 
-You will need to wait until the lockout period expires and time your next
+Wait until the lockout period expires and time the next
 login attempt to occur prior to other system services attempting to log in
-with the wrong password, locking you out again.  The factory default
-password that you will need to log in with to reset the password will not
-be mentioned here. Please request it from your HPE service representative.
+with the wrong password, causing another lockout. The factory default
+password required to log in with to reset the password will not
+be mentioned here. Request it from an HPE service representative.
 
-Time the following command to execute after the lockout period expires.
-Rather than specifying `password` for the new admin password, as shown
-in the example, specify the correct password found in vault for your
-system (`ncn#`):
+(`ncn-mw#`) Time the following command to execute after the lockout period expires.
+Rather than specifying `password` for the new `admin` password, as shown
+in the example, specify the actual password that is found in Vault on the system.
 
 ```bash
 ssh admin@$(xname) 'ipmitool user set password 1 "password"'
 ```
 
-## Reset BIOS Factory Defaults
+## Reset BIOS factory defaults
 
-**IMPORTANT: Only perform this action if required!  Check the HFP release notes!**
+**IMPORTANT: Only perform this action if required! Check the HFP release notes!**
 
-Before proceeding, you must have first used FAS to update the BIOS on the
+It is required to have first used FAS to update the BIOS on the
 target node **before** resetting the BIOS factory defaults. The node should
 remain powered **OFF** after the update.
 
-1. (`ncn#`) Reset BIOS factory defaults using `ipmitool`:
+1. (`ncn-mw#`) Reset BIOS factory defaults using `ipmitool`:
 
     ```bash
     ssh admin@$(bmc_xname) 'ipmitool raw 0x0 0x8 0x05 0x80 0x80 0x00 0x00 0x00 ; ipmitool raw 0x0 0x9 0x05 0x00 0x00'
@@ -470,14 +480,14 @@ remain powered **OFF** after the update.
     01 05 80 80 00 00 00
     ```
 
-    If the results do not look like this, please consult with your HPE service
+    If the results do not look like this, then consult with an HPE service
     representative before proceeding.
 1. Next, power the node on.
 
     **IMPORTANT:** After the node has powered on, it must
     **REMAIN ON FOR AT LEAST 6 MINUTES** before proceeding to the next step.
 
-1. (`ncn#`) Clear CMOS using `ipmitool`:
+1. (`ncn-mw#`) Clear CMOS using `ipmitool`:
 
     ```bash
     ssh admin@$(bmc_xname) 'ipmitool chassis bootdev none clear-cmos=yes'
