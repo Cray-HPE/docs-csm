@@ -1,17 +1,25 @@
 # View the Status of a BOS Session
 
-The Boot Orchestration Service \(BOS\) supports a status endpoint that reports detailed status information for individual BOS sessions.
+BOS supports a status endpoint that reports detailed status information for individual BOS sessions.
 
 * [BOS session status](#bos-session-status)
-  * [View the status of a session](#view-the-status-of-a-session)
-  * [Session status details](#session-status-details)
+* [View the status of a session](#view-the-status-of-a-session)
+* [Session status details](#session-status-details)
+    * [`error_summary`](#error_summary)
+    * [`managed_components_count`](#managed_components_count)
+    * [`status`](#status)
+    * [`start_time`](#start_time)
+    * [`end_time`](#end_time)
+    * [`duration`](#duration)
 
 ## BOS session status
 
-BOS session status offers an overall status, as well as information about the percentage of components in each state, and any errors being experienced.
-Status will be current as long as the session is running, and will cache itself when the session ends for future reference.
+BOS session status offers an overall status, as well as information about the percentage of
+[components](Components.md) in each state, and any errors being experienced.
+The status will be current as long as the [session](Sessions.md) is running; the status
+will cache itself when the session ends for future reference.
 
-### View the status of a session
+## View the status of a session
 
 (`ncn-mw#`) To view detailed session status, run:
 
@@ -45,36 +53,44 @@ Example output:
 }
 ```
 
-### Session status details
+## Session status details
 
-#### `error_summary`
+### `error_summary`
 
-Contains any error messages currently reported by nodes whether those are transient failures that will be retried or nodes that have reached a retry limit.
-Nodes are grouped by error message, and each message includes a total count of nodes reporting that error as well as a comma separated list of nodes.
+Contains any error messages currently reported by nodes, whether those are transient failures
+that will be retried or nodes that have reached a retry limit.
+
+Nodes are grouped by error message, and each message includes a total count of nodes reporting
+that error as well as a comma separated list of nodes.
 For errors on many nodes, the list of nodes will be truncated to the first few for readability.
+In this case, the specific [components](Components.md) can be examined to determine which ones
+are impacted by the error.
 
-#### `managed_components_count`
+### `managed_components_count`
 
 The number of components this session is responsible for.
-While the session is running, this is the current count and may decrease if other newer sessions take over responsibility for components.
-For completed sessions this is the number of components that were tracked by the session until the session was complete.
 
-#### `status`
+While the session is running, this is the current count. It may decrease if other sessions are
+started that take over responsibility for some of the components.
 
-Status can be either `pending`, `running`, or `complete`. Sessions are considered `pending` until the desired state of all associated components has been set.
+For completed sessions, this is the count at the time when the session completed.
 
-#### `percent_*`
+### `status`
 
-The percent of the `managed_components` that are in the specified state.
+Status can be either `pending`, `running`, or `complete`. Sessions are considered `pending` until the
+[`session-setup` operator](Operators.md#session-setup) has processed it and set the target states
+of all associated components.
 
-#### `start_time`
+### `start_time`
 
 This timestamp is set when the session is created.
 
-#### `end_time`
+### `end_time`
 
 This timestamp will initially be `null` and will be set when the session ends.
 
-#### `duration`
+### `duration`
 
-This lists the duration of the session in `h:mm:ss`. While the session is running, this will be the current duration, and the value is locked-in when the session completes.
+This lists the duration of the session in `h:mm:ss`.
+While the session is running, this will be the current duration;
+the value is locked-in when the session completes.
