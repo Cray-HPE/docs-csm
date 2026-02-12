@@ -1,7 +1,15 @@
 # Target Ansible Tasks for Image Customization
 
-The Configuration Framework Service \(CFS\) enables Ansible playbooks to run against both running nodes \(node personalization\) and images prior to boot\(image customization\).
-See [Configuration Management Use Cases](Configuration_Management.md#use-cases) for more information about image customization and when it should be used.
+- [Overview](#overview)
+- [Using `cray_cfs_image`](#using-cray_cfs_image)
+- [Image customization limitations](#image-customization-limitations)
+
+## Overview
+
+The Configuration Framework Service (CFS) enables Ansible playbooks to run against both running
+nodes (node personalization) and images prior to boot (image customization).
+See [Configuration Management Use Cases](Configuration_Management.md#use-cases) for more information
+about image customization and when it should be used.
 
 Ideally image customization playbooks should be separate from node personalization playbooks. This reduces the likelihood that Ansible content will run in both modes, and reduces the need for conditional checks in the playbooks.
 
@@ -23,9 +31,12 @@ It is also best practice to include a default in Ansible roles for playbook and 
 when: "{{ cray_cfs_image | default(false) }}"
 ```
 
-If a default is not provided, any playbooks or roles will not be runnable outside of the CFS Ansible Execution Environment \(AEE\) without the user specifying `cray_cfs_image` in the `vars` files or with the Ansible `extra-vars` options.
+If a default is not provided, any playbooks or roles will not be runnable outside of the CFS Ansible
+Execution Environment (AEE) without the user specifying `cray_cfs_image` in the `vars` files or with
+the Ansible `extra-vars` options.
 
-CFS automatically sets this variable in the `hosts/01-cfs-generated.yaml` file for all sessions. When the session target is image customization, it sets `cray_cfs_image` to `true`; otherwise, it is `false`.
+CFS automatically sets this variable in the `hosts/01-cfs-generated.yaml` file for all sessions. When
+the session target is image customization, it sets `cray_cfs_image` to `true`; otherwise, it is `false`.
 
 ## Image customization limitations
 
