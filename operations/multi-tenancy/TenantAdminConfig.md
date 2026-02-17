@@ -150,7 +150,7 @@ Decoding this token will illustrate the `groups` and `name` claims added by Keyc
 
 ![OIDCToken](images/oidctoken.png)
 
-This token can now be used by a the tenant administrator to interact with Kubernetes.
+This token can now be used by the tenant administrator to interact with Kubernetes.
 
 - (`ncn-mw#`) The following is an example of listing pods in the `vcluster-blue` namespace (which was specified in the `ClusterRole` above as allowed):
 
