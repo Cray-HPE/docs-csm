@@ -49,7 +49,7 @@ For example, a customer could use the 192.168.30.0/24 network to connect via the
 The customer also needs to provide an IP address on this network, such as 192.168.30.253.
 This IP address will be assigned to the uplink port on the HPE Cray EX TOR Spine Switch.
 
-For a dual-spine configuration, the administrator would need to extended the customer network
+For a dual-spine configuration, the administrator would need to extend the customer network
 to both switches using one IP address for each switch. After extending the network,
 two equal routes need to be configured.
 The spine switches are configured to support multi-chassis link aggregation group (MLAG)
