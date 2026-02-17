@@ -17,15 +17,15 @@ See the
 [Tenant Custom Resource Definition](https://github.com/Cray-HPE/cray-tapms-operator/blob/main/config/crd/bases/tapms.hpe.com_tenants.yaml)
 for the full schema. Below is a description of the required fields for a tenant:
 
-| Field                                         | Description                                                                                                                                                 |
-|-----------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `tenantname`                                  | Name of the tenant. See [Tenant naming requirements](CrayHncManager.md#tenant-naming-requirements) for restrictions on tenant naming.                       |
+| Field                                         | Description                                                                                                                                                      |
+|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `tenantname`                                  | Name of the tenant. See [Tenant naming requirements](CrayHncManager.md#tenant-naming-requirements) for restrictions on tenant naming.                            |
 | `childnamespaces`                             | List of namespaces that should be created for the tenant. These namespaces will be created with the name specified here, prepended with the required HNC prefix. |
-| `tenantresources`.`type`                      | Only `compute` is supported in the initial release of TAPMS.                                                                                                |
-| `tenantresources`.`hsmgrouplabel`             | The name of the HSM group label for the xnames specified below (mutually exclusive from `hsmpartitionname`).                                                |
-| `tenantresources`.`hsmpartitionname`          | The name of the HSM partition to create and assignments for the xnames specified below  (mutually exclusive from `hsmgrouplabel`).                          |
-| `tenantresources`.`enforceexclusivehsmgroups` | If `true`, tenants that share this setting will not be allowed to specify the same xname (only appropriate if `hsmgrouplabel` is also specified).           |
-| `tenantresources`.`xnames`                    | List of compute component names (xnames) that this tenant is allowed to use for running jobs.                                                               |
+| `tenantresources`.`type`                      | Only `compute` is supported in the initial release of TAPMS.                                                                                                     |
+| `tenantresources`.`hsmgrouplabel`             | The name of the HSM group label for the xnames specified below (mutually exclusive from `hsmpartitionname`).                                                     |
+| `tenantresources`.`hsmpartitionname`          | The name of the HSM partition to create and assignments for the xnames specified below  (mutually exclusive from `hsmgrouplabel`).                               |
+| `tenantresources`.`enforceexclusivehsmgroups` | If `true`, tenants that share this setting will not be allowed to specify the same xname (only appropriate if `hsmgrouplabel` is also specified).                |
+| `tenantresources`.`xnames`                    | List of compute component names (xnames) that this tenant is allowed to use for running jobs.                                                                    |
 
 ## Reconcile operations
 
