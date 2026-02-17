@@ -1,56 +1,60 @@
 # View the Status of a BOS Session
 
-The Boot Orchestration Service \(BOS\) supports a status endpoint that reports the status for individual BOS sessions. The status can be retrieved for each boot set within the session, as well as the individual items within a boot set.
+BOS supports a status endpoint that reports detailed status information for individual BOS sessions.
 
+* [BOS session status](#bos-session-status)
 * [Metadata](#metadata)
-* [View the status of a v1 session](#view-the-status-of-a-v1-session)
+* [View the status of a session](#view-the-status-of-a-session)
 * [View the status of a boot set](#view-the-status-of-a-boot-set)
 * [View the status for an individual phase](#view-the-status-for-an-individual-phase)
 * [View the status for an individual category](#view-the-status-for-an-individual-category)
 
-In BOS v1, the status can be retrieved for each boot set within the session, as well as the individual items within a boot set.
+## BOS session status
+
+The status can be retrieved for each boot set within the session, as well as the individual items within a boot set.
 
 BOS sessions contain one or more boot sets. Each boot set contains one or more phases, depending upon the operation for that session.
-For example, a `reboot` operation would have a `shutdown`, `boot`, and possibly `configuration` phase, but a `shutdown` operation would only have a `shutdown` phase.
+For example, a `reboot` operation would have a `shutdown`, `boot`, and possibly `configuration` phase,
+but a `shutdown` operation would only have a `shutdown` phase.
 Each phase contains the following categories: `not_started`, `in_progress`, `succeeded`, `failed`, and `excluded`.
 
 ## Metadata
 
 Each session, boot set, and phase contains similar metadata. The following is a table of useful attributes to look for in the metadata:
 
-| Attribute     | Meaning |
-|---------------|---------|
-| `start_time`  | The time when a session, boot set, or phase started work. |
+| Attribute     | Meaning                                                                                         |
+|---------------|-------------------------------------------------------------------------------------------------|
+| `start_time`  | The time when a session, boot set, or phase started work.                                       |
 | `in_progress` | If true, it means that the session, boot set, or phase has started and still has work going on. |
-| `complete`    | If true, it means the session, boot set, or phase has finished. |
-| `error_count` | The number of errors encountered in the boot sets or phases. |
-| `stop_time`   | The time when a session, boot set, or phase ended work. |
+| `complete`    | If true, it means the session, boot set, or phase has finished.                                 |
+| `error_count` | The number of errors encountered in the boot sets or phases.                                    |
+| `stop_time`   | The time when a session, boot set, or phase ended work.                                         |
 
 The following table summarizes how to interpret the various combinations of values for the `in_progress` and `complete` flags:
 
-| `in_progress` | `complete` | Meaning |
-|---------------|------------|---------|
-| false         | false      | Item has not started. |
-| true          | false      | Item is in progress. |
-| false         | true       | Item has completed. |
-| true          | true       | Invalid state \(should not occur\). |
+| `in_progress` | `complete` | Meaning                             |
+|---------------|------------|-------------------------------------|
+| false         | false      | Item has not started.               |
+| true          | false      | Item is in progress.                |
+| false         | true       | Item has completed.                 |
+| true          | true       | Invalid state (should not occur).   |
 
 The `in_progress`, `complete`, and `error_count` fields are cumulative, meaning that they summarize the state of the sub-items.
 
-| Item     | `in_progress` meaning                                                       | `complete` meaning |
-|----------|-----------------------------------------------------------------------------|--------------------|
+| Item     | `in_progress` meaning                                                       | `complete` meaning                                                                          |
+|----------|-----------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
 | Phase    | If true, it means there is at least one node in the `in_progress` category. | If true, it means that there are no nodes in the `in_progress` or `not_started` categories. |
-| Boot set | If true, it means there is at least one phase that is `in_progress`.        | If true, it means that all phases in the boot set are `complete`. |
-| Session  | If true, it means that at least one boot set is `in_progress`.              | If true, it means that all boot sets are `complete`. |
+| Boot set | If true, it means there is at least one phase that is `in_progress`.        | If true, it means that all phases in the boot set are `complete`.                           |
+| Session  | If true, it means that at least one boot set is `in_progress`.              | If true, it means that all boot sets are `complete`.                                        |
 
-## View the status of a v1 session
+## View the status of a session
 
 The BOS session ID is required to view the status of a session. To list the available sessions, use the following command:
 
 > Note: If this command fails, there may be too many BOS sessions. For more information, see
 > [Hang Listing BOS Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md).
 
-```bash
+```console
 ncn-mw# cray bos session list --format json
 ```
 
@@ -76,7 +80,7 @@ Example output:
 
 It is recommended to describe the session using the session ID above to verify the desired selection was selected:
 
-```bash
+```console
 ncn-mw# cray bos session describe SESSION_ID --format toml
 ```
 
@@ -97,7 +101,7 @@ The status for the session will show the session ID, the boot sets in the sessio
 
 To display the status for the session:
 
-```bash
+```console
 ncn-mw# cray bos session status list SESSION_ID -–format json
 ```
 
@@ -130,8 +134,10 @@ Example output:
 
 ## View the status of a boot set
 
-Run the following command to view the status for a specific boot set in a session. For more information about retrieving the session ID and boot set name,
-see the [View the status of a v1 session](#view-the-status-of-a-v1-session) section above. Descriptions of the different status sections are described below.
+Run the following command to view the status for a specific boot set in a session.
+For more information about retrieving the session ID and boot set name,
+see [View the status of a session](#view-the-status-of-a-session).
+Descriptions of the different status sections are described below.
 
 * Boot set
   * The `id` parameter identifies which session this status belongs to.
@@ -141,9 +147,10 @@ see the [View the status of a v1 session](#view-the-status-of-a-v1-session) sect
 * Phases
   * The `name` parameter is the name of the phase.
   * There is a `metadata` section for each phase.
-  * Each phase contains the following categories: `not_started`, `in_progress`, `succeeded`, `failed`, and `excluded`. The nodes are listed in the category they are currently occupying.
+  * Each phase contains the following categories: `not_started`, `in_progress`, `succeeded`, `failed`, and `excluded`.
+    The nodes are listed in the category they are currently occupying.
 
-```bash
+```console
 ncn-mw# cray bos session status describe BOOT_SET_NAME SESSION_ID --format json
 ```
 
@@ -293,17 +300,18 @@ Example output:
 
 ### View the status for an individual phase
 
-Direct calls to the API are needed to retrieve the status for an individual phase. Support for the Cray CLI is not currently available.
+Direct calls to the API are needed to retrieve the status for an individual phase. Support for the Cray CLI is not available.
 
 The following command is used to view the status of a phase:
 
-```bash
+```console
 ncn-mw# curl -H "Authorization: Bearer BEARER_TOKEN" -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/SESSION_ID/status/BOOT_SET_NAME/PHASE
 ```
 
-In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is `computes`, and the individual phase is `shutdown`.
+In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is `computes`,
+and the individual phase is `shutdown`.
 
-```bash
+```console
 ncn-mw# curl -H "Authorization: Bearer BEARER_TOKEN" -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1e5ba0c0ec/status/computes/shutdown
 ```
 
@@ -362,17 +370,18 @@ Example output:
 
 ## View the status for an individual category
 
-Direct calls to the API are needed to retrieve the status for an individual category. Support for the Cray CLI is not currently available.
+Direct calls to the API are needed to retrieve the status for an individual category. Support for the Cray CLI is not available.
 
 The following command is used to view the status of a phase:
 
-```bash
+```console
 ncn-mw# curl -H "Authorization: Bearer BEARER_TOKEN" -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/SESSION_ID/status/BOOT_SET_NAME/PHASE/CATEGORY
 ```
 
-In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is `computes`, the phase is `shutdown`, and the category is `in_progress`.
+In the following example, the session ID is `f89eb554-c733-4197-b2f2-4e1e5ba0c0ec`, the boot set name is `computes`,
+the phase is `shutdown`, and the category is `in_progress`.
 
-```bash
+```console
 ncn-mw# curl -H "Authorization: Bearer BEARER_TOKEN" -X GET https://api-gw-service-nmn.local/apis/bos/v1/session/f89eb554-c733-4197-b2f2-4e1e5ba0c0ec/status/computes/shutdown/in_progress
 ```
 

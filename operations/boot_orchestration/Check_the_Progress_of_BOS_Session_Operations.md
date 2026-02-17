@@ -11,12 +11,18 @@ ncn-mw# cray bos session create --template-uuid SESSIONTEMPLATE_NAME --operation
 Example output:
 
 ```toml
+limit = ""
 operation = "boot"
 templateName = "SESSIONTEMPLATE_NAME"
 [[links]]
-href = "foo-c7faa704-3f98-4c91-bdfb-e377a184ab4f"
+href = "/v1/session/a939bd32-9d27-433f-afc2-735e77ec8e58"
 jobId = "boa-a939bd32-9d27-433f-afc2-735e77ec8e58"
 rel = "session"
+type = "GET"
+
+[[links]]
+href = "/v1/session/a939bd32-9d27-433f-afc2-735e77ec8e58/status"
+rel = "status"
 type = "GET"
 ```
 
