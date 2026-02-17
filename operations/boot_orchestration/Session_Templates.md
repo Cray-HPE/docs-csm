@@ -15,6 +15,7 @@ Session templates can be created via the API by providing JSON data or via the C
     * [`rootfs` providers](#rootfs-providers)
         * [`root` kernel parameter example](#root-kernel-parameter-example)
     * [Overriding configuration](#overriding-configuration)
+    * [Boot set validation](#boot-set-validation)
 
 ## Session template structure
 
@@ -59,7 +60,7 @@ The following is an example BOS session template:
 ```
 
 * The `description` field is an optional text description of the template.
-* The `node_list` field (under `boot_sets`) is a list of individual node component names (xnames).
+* The `node_list` field (under `boot_sets`) is a list of individual node component names ([xnames](../../glossary.md#xname)).
 * The `etag` field is used to identify the version of the `manifest.json` file in S3.
 * The `path` field is the path to the `manifest.json` file in S3.
 * The `type` field is the type of storage where the boot image resides.
@@ -109,6 +110,7 @@ This boot artifact information from the files stored in S3 is then written to th
 
 Each boot set also specifies a set of nodes that are the targets of the boot set.
 There are three different fields used to specify the nodes: `node_list`, `node_groups`, and `node_roles_groups`.
+These are called the hardware-specifier fields of the boot set.
 The total set of nodes targeted by the boot set is the union of the nodes specified by these fields.
 
 > Related:
@@ -119,7 +121,7 @@ The total set of nodes targeted by the boot set is the union of the nodes specif
 
 #### Node list
 
-`node_list` maps to a list of nodes identified by component names (xnames).
+`node_list` maps to a list of nodes identified by component names ([xnames](../../glossary.md#xname)).
 
 For example:
 
@@ -127,7 +129,7 @@ For example:
 "node_list": ["x3000c0s19b1n0", "x3000c0s19b1n1", "x3000c0s19b2n0"]
 ```
 
-NIDs are not supported.
+[NIDs](../../glossary.md#node-id-nid) are not supported.
 The [`reject_nids` option](Options.md#reject_nids) can be enabled in order to prevent accidental creation of session templates that reference NIDs.
 
 If the session template belongs to a tenant, any nodes listed in this field should belong to that tenant in TAPMS.
@@ -231,3 +233,40 @@ The following table explains the different pieces in the preceding example.
 It is also possible to specify CFS configuration in the boot set. This is done by setting the `cfs` field inside the boot set.
 It follows the same format as the `cfs` field at the top level of the session template.
 If specified, this will override (for that boot set entry) whatever value is set in the base session template.
+
+### Boot set validation
+
+Boot set validation is performed by the [BOS API server](API.md) in the following operations:
+
+* A [session template](Session_Templates.md) is being created
+* A session template is being validated.
+* A [session](Sessions.md) is being created.
+    * In the case that the session operation is a shutdown, then
+      not all of the boot set validation occurs. See below for details.
+
+If a boot set fails validation, then the associated operation also fails. The following
+things are checked when a boot set is validated:
+
+* Verify that at least one non-empty hardware-specifier field is set.
+    * See [Specifying nodes](#specifying-nodes) for details on hardware-specifier fields.
+* Verify that the [`rootfs_provider`](#rootfs-providers) field is either unset or is set to a supported value.
+* Verify that the [boot artifacts](#boot-artifacts) exist in [S3](../../glossary.md#simple-storage-service-s3).
+    * This check is not performed in the case that the boot set validation is being
+      done when creating a shutdown session.
+* If the [`ims_images_must_exist` option](Options.md#ims_images_must_exist) is enabled,
+  verify that the boot image exists in IMS.
+    * If the [`ims_errors_fatal` option](Options.md#ims_errors_fatal) is also enabled,
+      then the boot set validation will fail if BOS is unable to contact IMS to perform
+      this check.
+    * This check is not performed in the case that the boot set validation is being
+      done when creating a shutdown session.
+* Verify that the architecture of the image in IMS matches the architecture specified
+  in the boot set.
+    * If the [`ims_errors_fatal` option](Options.md#ims_errors_fatal) is enabled,
+      then the boot set validation will fail if BOS is unable to contact IMS to perform
+      this check.
+    * This check is not performed in the case that the boot set validation is being
+      done when creating a shutdown session.
+* If the [`reject_nids` option](Options.md#reject_nids) is enabled,
+  verify that the [`node_list`](#node-list) field is either unset or does
+  not contain any [NIDs](../../glossary.md#node-id-nid).
