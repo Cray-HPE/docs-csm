@@ -102,9 +102,14 @@ This boot artifact information from the files stored in S3 is then written to th
 ### Specifying nodes
 
 Each boot set also specifies a set of nodes that are the targets of the boot set.
-There are three different fields used to specify the nodes: `node_list`, `node_groups`, or `node_roles_groups`.
+There are three different fields used to specify the nodes: `node_list`, `node_groups`, and `node_roles_groups`.
+The total set of nodes targeted by the boot set is the union of the nodes specified by these fields.
 
-> Also see the [Architecture](#architecture) section for information on how that field relates to specifying nodes.
+> Related:
+>
+> * See the [Architecture](#architecture) section for information on how that field relates to specifying nodes.
+> * See [Session templates with tenancy](Multi_tenancy_with_BOS.md#session-templates-with-tenancy) for details on
+>   on how specifying nodes behaves in a multi-tenancy environment.
 
 #### Node list
 
@@ -115,6 +120,9 @@ For example:
 ```text
 "node_list": ["x3000c0s19b1n0", "x3000c0s19b1n1", "x3000c0s19b2n0"]
 ```
+
+If the session template belongs to a tenant, any nodes listed in this field should belong to that tenant in TAPMS.
+For more information, see [Session templates with tenancy](Multi_tenancy_with_BOS.md#session-templates-with-tenancy).
 
 #### Node groups
 

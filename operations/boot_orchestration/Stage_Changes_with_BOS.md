@@ -18,7 +18,7 @@ This is a BOS v2 feature only. For suggestions on working around this in v1, see
 ## Create a staged session
 
 Creating a staged session is no different than creating a normal session, with one exception: the `staged` value should be set to `True`.
-For more on creating sessions, see [Create a new v2 session](Manage_a_BOS_Session.md#create-a-new-v2-session).
+For more on creating sessions, see [Create a v2 session](Manage_a_BOS_Session.md#create-a-v2-session).
 
 > When using [Multi-tenancy with BOS](Multi_tenancy_with_BOS.md), the session must be created using the appropriate tenant ID,
 > and the session template being used must belong to that same tenant. For more information, see
