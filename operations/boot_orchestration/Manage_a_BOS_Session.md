@@ -1,14 +1,20 @@
 # Manage a BOS Session
 
-Once there is a Boot Orchestration Service \(BOS\) session template created, users can perform operations on nodes, such as `boot`, `reboot`, `configure`, and `shutdown`.
-Managing sessions through the Cray CLI can be accomplished using the `cray bos session` commands.
+Once a BOS [session template](Session_Templates.md) is created, users can perform operations on nodes,
+such as `boot`, `reboot`, `configure`, and `shutdown`.
 
-* [Create a new session](#create-a-new-session)
+To find the corresponding API calls for any Cray CLI command, append `-vvv` to the end of the CLI command.
+This makes the CLI print the underlying API call in the output.
+
+* [Create a session](#create-a-session)
+  * [Optional session creation arguments](#optional-session-creation-arguments)
+  * [Completed session cleanup](#completed-session-cleanup)
 * [List all sessions](#list-all-sessions)
-* [Show details for a session](#show-details-for-a-session)
+* [Show session details](#show-session-details)
+* [View session status](#view-session-status)
 * [Delete a session](#delete-a-session)
 
-## Create a new session
+## Create a session
 
 Creating a new BOS session requires the following command-line options:
 
@@ -17,24 +23,42 @@ Creating a new BOS session requires the following command-line options:
 
 The following is an example of a boot operation:
 
-```bash
+```console
 ncn-mw# cray bos session create --template-uuid TEMPLATE_UUID --operation boot --format toml
 ```
 
 Example output:
 
 ```toml
+limit = ""
 operation = "boot"
 templateUuid = "TEMPLATE_UUID"
 [[links]]
-href = "foo-c7faa704-3f98-4c91-bdfb-e377a184ab4f"
-jobId = "boa-a939bd32-9d27-433f-afc2-735e77ec8e58"
+href = "/v1/session/9173f29f-29a4-424f-b974-7fe85036dc3f"
+jobId = "boa-9173f29f-29a4-424f-b974-7fe85036dc3f"
 rel = "session"
+type = "GET"
+
+[[links]]
+href = "/v1/session/9173f29f-29a4-424f-b974-7fe85036dc3f/status"
+rel = "status"
 type = "GET"
 ```
 
-It is important to periodically delete completed BOS v1 sessions. If too many BOS v1 sessions
-exist, it can lead to hangs when trying to list them. This limitation does not exist in BOS v2.
+The BOS session ID is a UUID embedded in the `jobId` and `href` fields.
+In the above example, it is `9173f29f-29a4-424f-b974-7fe85036dc3f`.
+
+### Optional session creation arguments
+
+BOS sessions also support the following optional argument:
+
+* `--limit`: Limits the nodes that BOS will run against.
+  * For more information see [Limit the Scope of a BOS Session](Limit_the_Scope_of_a_BOS_Session.md).
+
+### Completed session cleanup
+
+It is important to periodically delete completed BOS sessions. If too many BOS sessions
+exist, it can lead to hangs when trying to list them.
 For more information, see:
 
 * [Hang Listing BOS Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md)
@@ -44,7 +68,7 @@ For more information, see:
 
 List all BOS sessions with the following command:
 
-```bash
+```console
 ncn-mw# cray bos session list --format toml
 ```
 
@@ -58,11 +82,11 @@ results = [ "fc469e41-6419-4367-a571-d5fd92893398", "st3-d6730dd5-f0f8-4229-b224
 many sessions exist. For more information, see
 [Hang Listing BOS Sessions](../../troubleshooting/known_issues/Hang_Listing_BOS_Sessions.md).
 
-## Show details for a session
+## Show session details
 
-Get details for a BOS session using the session ID returned in the `cray bos session list` command output.
+Get details for a BOS session using the session ID.
 
-```bash
+```console
 ncn-mw# cray bos session describe BOS_SESSION_ID --format toml
 ```
 
@@ -81,6 +105,10 @@ stage = "Done"
 **Troubleshooting:** There is a known issue in BOS v1 where some sessions cannot be described using the `cray bos session describe` command.
 The issue with the describe action results in a 404 error, despite the session existing in the output of `cray bos session list` command.
 
+## View session status
+
+See [View the status of a session](View_the_Status_of_a_BOS_Session.md#view-the-status-of-a-session).
+
 ## Delete a session
 
 It is important to periodically delete completed BOS sessions. If too many BOS sessions
@@ -89,6 +117,6 @@ exist, it can lead to hangs when trying to list them. For more information, see
 
 Delete a specific BOS session:
 
-```bash
+```console
 ncn-mw# cray bos session delete BOS_SESSION_ID
 ```

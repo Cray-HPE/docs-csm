@@ -90,7 +90,8 @@ This boot artifact information from the files stored in S3 is then written to th
 ### Specifying nodes
 
 Each boot set also specifies a set of nodes that are the targets of the boot set.
-There are three different fields used to specify the nodes: `node_list`, `node_groups`, or `node_roles_groups`.
+There are three different fields used to specify the nodes: `node_list`, `node_groups`, and `node_roles_groups`.
+The total set of nodes targeted by the boot set is the union of the nodes specified by these fields.
 
 #### Node list
 
@@ -116,7 +117,7 @@ For example:
 
 To retrieve the current list of HSM groups, run following command:
 
-```bash
+```console
 ncn-mw# cray hsm groups list --format json | jq .[].label
 ```
 
