@@ -27,7 +27,7 @@ that are owned by that tenant. No other tenant-specific interactions are support
 For details on how to make CFS API or CLI calls on behalf of a tenant, see
 [Interacting with services as a tenant](../multi-tenancy/TenantAdminConfig.md#interacting-with-services-as-a-tenant).
 
-Making CFS requests on behalf of a tenant is only support by CFS v3, not CFS v2.
+Making CFS requests on behalf of a tenant is only supported by CFS v3, not CFS v2.
 For full details on which CFS API calls support being called on behalf of a tenant,
 see [CFS API](../../api/cfs.md).
 

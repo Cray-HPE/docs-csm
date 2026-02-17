@@ -20,7 +20,7 @@ Some services in CSM allow tenants to make requests to their APIs. For example, 
 [Boot Orchestration Service (BOS)](../boot_orchestration/README.md) and the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs).
 The APIs for these services identify the tenant based on information passed in the request.
-A tenant must always pass information identifying itself -- their tenant ID -- when making a request.
+A tenant must always pass information identifying itself -- its tenant ID -- when making a request.
 This is done by including the `Cray-Tenant-Name` field in the request header, set to the name of the tenant.
 When this is done, the service will contextually operate on behalf of that tenant.
 
