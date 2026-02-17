@@ -20,7 +20,7 @@ for the full schema. Below is a description of the required fields for a tenant:
 | Field                                             | Description                                                                                                                                                                         |
 |---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `tenantname`                                      | Name of the tenant. See [Tenant naming requirements](CrayHncManager.md#tenant-naming-requirements) for restrictions on tenant naming.                                               |
-| `childnamespaces`                                 | List of namespaces that should be created for the tenant. These namespaces be created with the name specified here, prepended with the required HNC prefix.                         |
+| `childnamespaces`                                 | List of namespaces that should be created for the tenant. These namespaces will be created with the name specified here, prepended with the required HNC prefix.                         |
 | `tenantresources`.`type`                          | Only `compute` and `application` are supported in the current release of TAPMS.                                                                                                     |
 | `tenantresources`.`hsmgrouplabel`                 | The name of the HSM group label for the xnames specified below (mutually exclusive from `hsmpartitionname`).                                                                        |
 | `tenantresources`.`hsmpartitionname`              | The name of the HSM partition to create and assignments for the xnames specified below  (mutually exclusive from `hsmgrouplabel`).                                                  |
@@ -41,7 +41,7 @@ When a tenant CR is applied, TAPMS will:
    the `cray-hnc-manager` Helm chart.
 1. Create namespaces specified in the `childnamespaces` with the tenant-specific prefix.
 1. Add the specified xnames to an [HSM group or partition](../hardware_state_manager/Component_Groups_and_Partitions.md).
-1. Apply the valued specified in `hsmgrouplabel`
+1. Apply the value specified in `hsmgrouplabel`
 1. If the `enforceexclusivehsmgroups` flag is `true`, TAPMS will ensure xnames cannot be specified in multiple
    tenants (that also have the flag set to `true` for their `hsmgrouplabel`).
 1. Create a Keycloak group with the name `<tenant-name>-tenant-admin` which can be assigned to users intended to be

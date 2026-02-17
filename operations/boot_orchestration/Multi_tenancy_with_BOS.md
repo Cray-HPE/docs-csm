@@ -38,11 +38,11 @@ resources specific to that tenant.
 
 ### Tenant administrators
 
-A tenant administrator is a role that is only able to manage resources belong to a specific tenant.
+A tenant administrator is a role that is only able to manage resources belonging to a specific tenant.
 
 [Tenant administrators](../multi-tenancy/TenantAdminConfig.md) should be able to view their
 [components](Components.md), [session templates](Session_Templates.md), and [sessions](Sessions.md) normally.
-Tenant administrators are not be able to view the resources of another tenant.
+Tenant administrators are not able to view the resources of another tenant.
 Tenant administrators have restricted or no access to some BOS endpoints, such as the components endpoint
 (which can be viewed but not patched), and the options endpoint (which is blocked entirely).
 
