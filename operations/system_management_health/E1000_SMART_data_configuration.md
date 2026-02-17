@@ -171,7 +171,7 @@ the Redfish Exporter must be configured with the domain name from ClusterStor pr
 
 1. Select the FQDN of the primary management node to use as your RFSF API connection destination.
 
-   The FQDN of the primary EAN IP address discovered above on the primary management node is the FQDN that should be used to connected to the RFSF API.
+   The FQDN of the primary EAN IP address discovered above on the primary management node is the FQDN that should be used to connect to the RFSF API.
 
    The primary EAN IP address discovered above on the secondary node should be used in the case of a failover on the management nodes that causes the secondary node to become the primary.
 
