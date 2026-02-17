@@ -318,113 +318,113 @@ ncn-s# ceph orch host ok-to-stop <hostname>
 Remove a host
 
 ```bash
-ncn-s# cephorch host rm <hostname>
+ncn-s# ceph orch host rm <hostname>
 ```
 
 Update a host address
 
 ```bash
-ncn-s# cephorch host set-addr <hostname> <addr>
+ncn-s# ceph orch host set-addr <hostname> <addr>
 ```
 
 List services known to orchestrator
 
 ```bash
-ncn-s# cephorch ls [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]
+ncn-s# ceph orch ls [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]
 ```
 
 Remove OSD services
 
 ```bash
-ncn-s# cephorch osd rm <svc_id>... [--replace] [--force]
+ncn-s# ceph orch osd rm <svc_id>... [--replace] [--force]
 ```
 
 Status of OSD removal operation
 
 ```bash
-ncn-s# cephorch osd rm status [plain|json|json-pretty|yaml]
+ncn-s# ceph orch osd rm status [plain|json|json-pretty|yaml]
 ```
 
 Remove OSD services
 
 ```bash
-ncn-s# cephorch osd rm stop <svc_id>...
+ncn-s# ceph orch osd rm stop <svc_id>...
 ```
 
 Pause orchestrator background work
 
 ```bash
-ncn-s# cephorch pause
+ncn-s# ceph orch pause
 ```
 
 List daemons known to orchestrator
 
 ```bash
-ncn-s# cephorch ps [<hostname>] [<service_name>] [<daemon_type>] [<daemon_id>] [plain|json|json-pretty|yaml] [--refresh]
+ncn-s# ceph orch ps [<hostname>] [<service_name>] [<daemon_type>] [<daemon_id>] [plain|json|json-pretty|yaml] [--refresh]
 ```
 
 Resume orchestrator background work (if paused)
 
 ```bash
-ncn-s# cephorch resume
+ncn-s# ceph orch resume
 ```
 
 Remove a service
 
 ```bash
-ncn-s# cephorch rm <service_name> [--force]
+ncn-s# ceph orch rm <service_name> [--force]
 ```
 
 Select orchestrator module backend
 
 ```bash
-ncn-s# cephorch set backend <module_name>
+ncn-s# ceph orch set backend <module_name>
 ```
 
 Start, stop, restart, redeploy, or reconfigure an entire service (i.e. all daemons):
 
 ```bash
-ncn-s# cephorch start|stop|restart|redeploy|reconfig <service_name>
+ncn-s# ceph orch start|stop|restart|redeploy|reconfig <service_name>
 ```
 
 Report configured backend and its status
 
 ```bash
-ncn-s# cephorch status [plain|json|json-pretty|yaml]
+ncn-s# ceph orch status [plain|json|json-pretty|yaml]
 ```
 
 Check service versions vs available and target containers
 
 ```bash
-ncn-s# cephorch upgrade check [<image>] [<ceph_version>]
+ncn-s# ceph orch upgrade check [<image>] [<ceph_version>]
 ```
 
 Pause an in-progress upgrade
 
 ```bash
-ncn-s# cephorch upgrade pause
+ncn-s# ceph orch upgrade pause
 ```
 
 Resume paused upgrade
 
 ```bash
-ncn-s# cephorch upgrade resume
+ncn-s# ceph orch upgrade resume
 ```
 
 Initiate upgrade
 
 ```bash
-ncn-s# cephorch upgrade start [<image>] [<ceph_version>]
+ncn-s# ceph orch upgrade start [<image>] [<ceph_version>]
 ```
 
 Check service versions vs available and target containers
 
 ```bash
-ncn-s# cephorch upgrade status
+ncn-s# ceph orch upgrade status
 ```
 
 Stop an in-progress upgrade
 
 ```bash
-ncn-s# cephorch upgrade stop
+ncn-s# ceph orch upgrade stop
 ```
