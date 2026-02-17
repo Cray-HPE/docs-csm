@@ -22,7 +22,7 @@ id = "x3000c0s1b0n0"
 session = ""
 ```
 
-This command coupled with the Linux `watch` command are an often used way to get continuous updates on the most recent
+This command coupled with the Linux `watch` command is an often used way to get continuous updates on the most recent
 actions applied to the node.
 
 ## Examine the node console
