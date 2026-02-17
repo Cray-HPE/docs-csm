@@ -171,7 +171,7 @@ ncn-s003  /dev/vdc  hdd   4797e919-667e-4376-b   107G  Unknown  N/A    N/A    No
 ncn-s003  /dev/vdd  hdd   3b2c090d-37a0-403b-a   107G  Unknown  N/A    N/A    No
 ```
 
-**`IMPORTANT:`** If `--wide` is used, it will give the reasons a drive is not `Available.`. This **DOES NOT** mean something is wrong. If Ceph already has the drive provisioned, then one may see similar reasons
+**`IMPORTANT:`** If `--wide` is used, it will give the reasons a drive is not `Available.`. This **DOES NOT** mean something is wrong. If Ceph already has the drive provisioned, then one may see similar reasons.
 
 ## General use
 
