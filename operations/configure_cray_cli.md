@@ -1,5 +1,13 @@
 # Configure the Cray Command Line Interface (`cray` CLI)
 
+- [Overview](#overview)
+- [Procedure](#procedure)
+- [Troubleshooting](#troubleshooting)
+  - [Initialization fails](#initialization-fails)
+  - [Internal error](#internal-error)
+
+## Overview
+
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands.
 
 Procedures in the CSM installation workflow use the `cray` CLI to interact with multiple services.
@@ -18,7 +26,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
    this service account and assigning it to the `CRAY_CREDENTIALS` environment variable to permit simple CLI operations.
    It must be unset in order to validate that the CLI is working with user authentication.
 
-   ```bash
+   ```console
    ncn# unset CRAY_CREDENTIALS
    ```
 
@@ -34,7 +42,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
    - If LDAP configuration was not enabled, or is not working, then a Keycloak local account may be created.
      See [Configure Keycloak Account](CSM_product_management/Configure_Keycloak_Account.md) to create this local account in Keycloak.
 
-   ```bash
+   ```console
    ncn# cray init --hostname api-gw-service-nmn.local
    ```
 
@@ -50,7 +58,7 @@ The `cray` CLI only needs to be initialized once per user on a node.
 
 1. Verify that the `cray` CLI is operational.
 
-    ```bash
+    ```console
     ncn# cray artifacts buckets list -vvv
     ```
 
@@ -96,7 +104,7 @@ By default these nodes are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
 
     > The expected output will be similar to the following, but it will vary based on the nodes running `radosgw`.
 
-    ```bash
+    ```console
     ncn-s# ceph orch restart rgw.site1.zone1
     ```
 
@@ -110,7 +118,7 @@ By default these nodes are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
 
 1. Check to see that the processes restarted.
 
-    ```bash
+    ```console
     ncn-s# ceph orch ps --daemon_type rgw
     ```
 
@@ -129,7 +137,7 @@ By default these nodes are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
 
     1. Determine the active `ceph-mgr`.
 
-        ```bash
+        ```console
         ncn-s#ceph mgr dump | jq -r .active_name
         ```
 
@@ -141,13 +149,13 @@ By default these nodes are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
 
     1. Fail the active `ceph-mgr`.
 
-        ```bash
+        ```console
         ncn-s# ceph mgr fail $(ceph mgr dump | jq -r .active_name)
         ```
 
     1. Confirm that `ceph-mgr` has moved to a different `ceph-mgr` container.
 
-        ```bash
+        ```console
         ncn-s# ceph mgr dump | jq -r .active_name
         ```
 
