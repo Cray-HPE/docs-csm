@@ -1,5 +1,13 @@
 # Configure the Cray Command Line Interface (`cray` CLI)
 
+- [Overview](#overview)
+- [Procedure](#procedure)
+- [Troubleshooting](#troubleshooting)
+  - [Initialization fails](#initialization-fails)
+  - [Internal error](#internal-error)
+
+## Overview
+
 The `cray` command line interface (CLI) is a framework created to integrate all of the system management REST APIs into easily usable commands.
 
 Procedures in the CSM installation workflow use the `cray` CLI to interact with multiple services.
