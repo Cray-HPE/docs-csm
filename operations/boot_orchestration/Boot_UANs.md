@@ -20,6 +20,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
     ```json
     {
       "components": "",
+      "include_disabled": false,
       "limit": "",
       "name": "9fea7f3f-0a77-40b9-892d-37712de51d65",
       "operation": "boot",
