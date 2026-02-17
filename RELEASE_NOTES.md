@@ -537,7 +537,7 @@ CASMCMS-9253 DOCS: IMS artifacts remained orphaned with CSM 1.5.2 systems
 CASMCMS-9260 DOCS: Slow IMS image jobs: Document reason and workarounds
 CASMCMS-9299 DOCS: Improve VCS password change documentation
 CASMCMS-9300 DOCS: Linting
-CASMCMS-9306 Document SOPS use with Tenant Specific host_vars and global_vars with ansible
+CASMCMS-9306 Document SOPS use with tenant-specific host_vars and global_vars with Ansible
 CASMCMS-9318 Console MT - Update documentation for new apis
 CASMCMS-9329 DOCS: Document "update many CFS components" CLI option
 CASMCMS-9332 DOCS: Document "update many CFS components" CLI option in release notes

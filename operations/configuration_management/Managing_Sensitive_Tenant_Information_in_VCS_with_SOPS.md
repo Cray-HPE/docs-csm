@@ -1,28 +1,48 @@
-# Managing Sensitive Tenant Information in \(VCS\) with SOPS
+# Managing Sensitive Tenant Information in VCS with SOPS
+
+* [Overview](#overview)
+* [CFS API access with tenancy](#cfs-api-access-with-tenancy)
+* [SOPS encryption](#sops-encryption)
+* [SOPS decryption](#sops-decryption)
+* [Security considerations](#security-considerations)
+
+## Overview
 
 For added security, CFS enables native [SOPS](../security_and_authentication/SOPS.md) integration for `host_vars` and `group_vars`
 encryption as part of its security policy. Members of a tenancy, as defined by [TAPMS](../multi-tenancy/Tapms.md),
 may choose to encrypt any configuration information deemed sensitive. When a new tenant is created, TAPMS enables and
 exposes a new endpoint and transit engine through [HashiCorp Vault](../multi-tenancy/Vault.md). Tenant administrators may select
 and convert standard Ansible `host_vars` and `group_vars` files in an encrypted format
-and check them into [Version Control Service](Version_Control_Service_VCS.md) \(VCS\).
+and check them into the [Version Control Service (VCS)](Version_Control_Service_VCS.md).
 
-## Overview
+## CFS API access with tenancy
 
-Global administrators are able to manage CFS configurations for all tenants, including creation of new configurations
-to be specifically owned by a tenant, and removal of any configuration that belonged to a tenant that no longer exists.
+Infrastructure administrators are able to manage CFS configurations for all tenants.
+This includes the creation and removal of configurations to be specifically owned by a tenant.
 
 Tenant administrators are able to create CFS configurations that are specific to their tenancy, and they are only able
 to modify and delete a CFS configuration that they own. List operations related to tenancy only show CFS configurations
-that are owned by that tenant. No other tenant specific interactions are intended with the CFS API at this time.
+that are owned by that tenant. No other tenant-specific interactions are supported with the CFS API.
 
-### SOPS Encryption
+For details on how to make CFS API or CLI calls on behalf of a tenant, see
+[Interacting with services as a tenant](../multi-tenancy/TenantAdminConfig.md#interacting-with-services-as-a-tenant).
+
+Making CFS requests on behalf of a tenant is only supported by CFS v3, not CFS v2.
+For full details on which CFS API calls support being called on behalf of a tenant,
+see [CFS API](../../api/cfs.md).
+
+> Unlike the [tenant name-spacing](../boot_orchestration/Multi_tenancy_with_BOS.md#tenant-name-spacing) used in the
+> [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos), all CFS configurations use
+> a single namespace. Therefore it is not possible for two CFS configurations to have the same name, even if they belong
+> to different tenants.
+
+## SOPS encryption
 
 Tenants may use the standard set of version control tools in concert with best practices outlined in instructions for
 encrypting variables using the SOPS binary to perform encryption.
 
-While using version control system to author and encrypt variables, the standard Ansible inventory and directory layout
-applies for issuing `host_vars` and `group_vars` in the top level directory of your checkout. By convention, Ansible's
+While using VCS to author and encrypt variables, the standard Ansible inventory and directory layout
+applies for issuing `host_vars` and `group_vars` in the top level directory. By convention, Ansible's
 SOPS module denotes files that contain a `.sops.` suffix in concert with their file format suffixes (e.g. `.yaml`,
 `.ini`, `.json`) in order to denote that the contents of the files are encrypted and require decryption before use as
 Ansible runs.
@@ -41,7 +61,7 @@ find . | grep sops
 ./host_vars/x3001c0s31b0n0/extra_secret_information_for_a_specific_node.sops.yaml
 ```
 
-### SOPS Decryption
+## SOPS decryption
 
 When CFS sessions are created, they are always associated with exactly one CFS configuration. If that CFS configuration
 is owned by a tenant, then CFS will coordinate efforts with TAPMS and Vault to look up the associated `VAULT_TOKEN` for
@@ -50,7 +70,7 @@ that tenant and expose this as an environment variable to be used by Ansible wit
 By default, Ansible is shipped with the SOPS module turned on, so any `host_vars` and `group_vars` that are within the
 associated VCS checkouts when run will automatically decrypt any encrypted values in memory.
 
-## Security Considerations
+## Security considerations
 
 When Ansible runs, encrypted variables are automatically decrypted for use. Standard good practices and safety
 using Ansible tasks with `no_log: True` should be used in conjunction with any tasks that handle sensitive
