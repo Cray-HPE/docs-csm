@@ -81,6 +81,7 @@ to the exiting problem seen into the existing search. (The example searches for 
     * Systems upgrading from CSM 1.6 to CSM 1.7 **may ignore** this issue until the next
       CSM 1.7+ reinstall.
 * [Cilium Migration Failure Due to Missing BSS Global Metadata Parameter](known_issues/cilium_migration_k8s_primary_cni_not_set.md)
+* [Kubelet Memory Pressure False Positive](known_issues/kubelet_memory_pressure_false_positive.md)
 
 ## Booting
 
@@ -184,6 +185,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [`etcd` Pods in CLBO State](known_issues/etcd_pods_in_CLBO_state.md)
 * [Cilium Network Troubleshooting Runbook](Cilium_Network_Troubleshooting_Runbook.md)
 * [Node Unable to Join Kubernetes Cluster During NCN Rebuild](known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md)
+* [Kubelet Memory Pressure False Positive](known_issues/kubelet_memory_pressure_false_positive.md)
 
 ## MetalLB
 
