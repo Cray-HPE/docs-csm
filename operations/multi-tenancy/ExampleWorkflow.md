@@ -45,7 +45,7 @@ This guide is intended to provide a comprehensive set of instructions for a syst
 
 In this document we provide examples for a hypothetical system called `Development`, which has two tenants, and each tenant has a `SlurmCluster`.
 
-Note that this document reflects the current state of the Multi-Tenancy feature.  For example, VNI blocks must be manually configured today, but they will be automatically configured in a future release.
+Note that this document reflects the current state of the Multi-Tenancy feature. For example, VNI blocks must be manually configured today, but they will be automatically configured in a future release.
 
 Here are the steps required:
 
@@ -111,8 +111,8 @@ For the purposes of this guide, the tenant configuration settings are made in ea
 
 These configuration settings are made:
 
-* In each `SlurmCluster's` configuration file, e.g. `devcls01a.yaml`
-* In each `SlurmCluster's` `/etc/slurm/slurm.conf` file (in each `slurmctld` pod)
+* In each `SlurmCluster` configuration file, e.g. `devcls01a.yaml`
+* In each `SlurmCluster` `/etc/slurm/slurm.conf` file (in each `slurmctld` pod)
 
 #### `SlurmCluster` names
 

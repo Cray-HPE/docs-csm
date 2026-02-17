@@ -1,4 +1,4 @@
-# Managing Sensitive Information in \(VCS\)
+# Managing Sensitive Tenant Information in VCS with SOPS
 
 For added security, the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
 enables native [SOPS](../security_and_authentication/SOPS.md) integration for `hostvars` and `groupvars`
