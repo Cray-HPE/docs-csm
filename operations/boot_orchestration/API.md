@@ -21,10 +21,23 @@ All of the core BOS work is done by [BOA](index.md#boot-orchestration-agent-boa)
 
 ## Kubernetes deployment
 
-(`ncn-mw#`) The BOS API server runs in multiple Kubernetes pods in the `services` namespace.
+The BOS API server is a Kubernetes deployment in the `services` namespace:
 
-```bash
-kubectl get pods -n services -l app.kubernetes.io/name=cray-bos
+```console
+ncn-mw# kubectl get deployments -n services -l app.kubernetes.io/name=cray-bos
+```
+
+Example output:
+
+```text
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+cray-bos   2/2     2            2           11d
+```
+
+The BOS API server runs in multiple Kubernetes pods in the `services` namespace.
+
+```console
+ncn-mw# kubectl get pods -n services -l app.kubernetes.io/name=cray-bos
 ```
 
 Example output:

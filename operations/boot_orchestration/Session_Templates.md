@@ -54,7 +54,7 @@ The following is an example BOS session template:
 ```
 
 * The `description` field is an optional text description of the template.
-* The `node_list` field (under `boot_sets`) is a list of individual node component names (xnames).
+* The `node_list` field (under `boot_sets`) is a list of individual node component names ([xnames](../../glossary.md#xname)).
 * The `etag` field is used to identify the version of the `manifest.json` file in S3.
 * The `path` field is the path to the `manifest.json` file in S3.
 * The `type` field is the type of storage where the boot image resides.
@@ -91,11 +91,13 @@ This boot artifact information from the files stored in S3 is then written to th
 
 Each boot set also specifies a set of nodes that are the targets of the boot set.
 There are three different fields used to specify the nodes: `node_list`, `node_groups`, and `node_roles_groups`.
+These are called the hardware-specifier fields of the boot set.
 The total set of nodes targeted by the boot set is the union of the nodes specified by these fields.
 
 #### Node list
 
-`node_list` maps to a list of nodes identified by component names (xnames). NIDs are not supported.
+`node_list` maps to a list of nodes identified by component names ([xnames](../../glossary.md#xname)).
+[NIDs](../../glossary.md#node-id-nid) are not supported.
 
 For example:
 
