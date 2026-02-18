@@ -155,7 +155,7 @@ CASMTRIAGE-8604 DOCS: Mitigate disk-pressure during IUF worker rolling upgrades 
 CASMTRIAGE-8584 DOCS: Enhanced the CSM upgrade documentation to better describe the actions performed during upgrade by IUF hooks.
 CASMTRIAGE-8863 DOCS: Added Kubernetes upgrade time estimates after IUF deploy-product.
 MTL-2572 DOCS: Moved the kernel-parameter update into the NCN rebuild workflow step where kernel/initramfs/rootfs are updated immediately before reboot.
-CAST-38971 DOCS: Restored IUF troubleshooting documentation for “iuf_unable_to_run_next_stage.md”.
+CAST-38971 DOCS: Restored IUF troubleshooting documentation for "iuf_unable_to_run_next_stage.md".
 ```
 
 ### iSCSI SBPS
