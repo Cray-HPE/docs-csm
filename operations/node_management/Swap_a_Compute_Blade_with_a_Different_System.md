@@ -108,21 +108,21 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ### Source: Clear the node controller settings
 
-1. Remove the system specific settings from each node controller on the blade.
+Remove the system-specific settings from each node controller on the blade.
 
-   > The two commands look similar, but note that the component names (xnames)
-   > in the URLs differ slightly, targeting each node controller on the blade.
+> The two commands look similar, but note that the component names (xnames)
+> in the URLs differ slightly, targeting each node controller on the blade.
 
-   ```bash
-   ncn# curl -k -u root:PASSWORD -X POST -H \
-            'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
-            https://x9000c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
-   ncn# curl -k -u root:PASSWORD -X POST -H \
-            'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
-            https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
-   ```
+```bash
+ncn# curl -k -u root:PASSWORD -X POST -H \
+         'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
+         https://x9000c3s0b0/redfish/v1/Managers/BMC/Actions/Manager.Reset
+ncn# curl -k -u root:PASSWORD -X POST -H \
+         'Content-Type: application/json' -d '{"ResetType":"StatefulReset"}' \
+         https://x9000c3s0b1/redfish/v1/Managers/BMC/Actions/Manager.Reset
+```
 
-   Use `Ctrl`-`C` to return to the prompt if command does not return.
+Use `Ctrl`-`C` to return to the prompt if command does not return.
 
 ### Source: Power off the chassis slot
 
