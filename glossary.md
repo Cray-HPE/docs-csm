@@ -53,6 +53,7 @@ Glossary of terms used in CSM documentation.
 * [NCN Lifecycle Service (NLS)](#ncn-lifecycle-service-nls)
 * [NIC Mezzanine Card (NMC)](#nic-mezzanine-card-nmc)
 * [Node Controller (nC)](#node-controller-nc)
+* [Node ID (NID)](#node-id-nid)
 * [Node Management Network (NMN)](#node-management-network-nmn)
 * [Node Memory Dump (NMD)](#node-memory-dump-nmd)
 * [Non-Compute Node (NCN)](#non-compute-node-ncn)
@@ -510,6 +511,19 @@ node card.
 Each compute blade node card includes an embedded node controller (nC) and REST
 endpoint to manage the node environmental conditions, power, HMS nFPGA interface, and
 firmware.
+
+## Node ID (NID)
+
+A numerical identifier for a node. Nodes can be uniquely identified using NIDs or [xnames](#xname),
+although not all CSM services support the use of NIDs for node identification. The NID for a node
+can be found using the [Boot Script Service (BSS)](#boot-script-service-bss), the
+[Hardware State Manager (HSM)](#hardware-state-manager-hsm), or the
+[System Admin Toolkit (SAT)](#system-admin-toolkit-sat).
+
+See also:
+
+* [Defragment NID Numbering](operations/node_management/Defragment_NID_Numbering.md)
+* [Power control and query by NID](operations/power_management/Cray_Advanced_Platform_Monitoring_and_Control_CAPMC.md#power-control-and-query-by-nid)
 
 ## Node Management Network (NMN)
 
