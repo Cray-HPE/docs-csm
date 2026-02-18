@@ -48,8 +48,8 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * Many SLES security vulnerabilities remediated
 * Addressed Kyverno deployment and policy enforcement issues, including version alignment in platform
   manifests, webhook timeout handling, and baseline policy violations in IUF automation tests.
-* Remediated KEVs and CVEs across platform components (cray-sts, IMS kiwi-ng builder, CFS operator,
-  argoexec, kubectl, product-deletion-utility), updated Kata for security fixes, and addressed kernel CVE-2025-38083.
+* Remediated KEVs and CVEs across platform components (`cray-sts`, IMS kiwi-ng builder, CFS operator,
+  `argoexec`, `kubectl`, product-deletion-utility), updated Kata for security fixes, and addressed kernel `CVE-2025-38083`.
 
 ### Tests
 
@@ -81,7 +81,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 * Fixed `cmsdev` to correctly report pods as Running that are in CLBO status
 * Updated tests to log a warning instead of failure if a pod is in `Succeeded` state
 * Added Goss tests for Rack Resiliency
-* Added CI Unit testcases for [Resiliency Monitoring Service](operations/rack_resiliency/Resiliency_Monitoring_Service.md)
+* Added CI Unit test cases for [Resiliency Monitoring Service](operations/rack_resiliency/Resiliency_Monitoring_Service.md)
 
 ## Customer-requested
 
@@ -114,11 +114,11 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   product catalog usage.
 * Fixed CFS session handling when IMS job containers are killed and improved remote node teardown
   space usage.
-* Resolved monitoring and diagnostics issues such as Victoria Metrics agent scraping of istio-proxy
+* Resolved monitoring and diagnostics issues such as Victoria Metrics agent scraping of `istio-proxy`
   sidecars and unintended `cray-console-node` SSH attempts to NCNs on vShasta.
 * Corrected Rack Resiliency automation playbooks that were disruptive, restarted wrong deployments,
-  overwrote Kyverno policy, or assumed kubectl on storage nodes.
-* Fixed Rack Resiliency Ceph HAProxy script to properly handle config generation, backups, and conditional restarts, improving idempotency and debuggability.
+  overwrote Kyverno policy, or assumed `kubectl` on storage nodes.
+* Fixed Rack Resiliency Ceph HAProxy script to properly handle config generation, backups, and conditional restarts, improving idempotency and ease of debugging.
 * Victoria metrics can now be collected for BOS and CFS database pods.
 
 ## Known issues
@@ -132,7 +132,6 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   issues when running nodes are moved into tenant-specific VLANs.
   
 For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
-
 
 ## All resolved issues
 
