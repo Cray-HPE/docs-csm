@@ -39,6 +39,7 @@ node is listed in this description.
     ```json
     {
       "components": "x3000c0s17b0n0",
+      "include_disabled": false,
       "limit": "x3000c0s17b0n0",
       "name": "94e712ab-df76-40ee-8cfb-7ac487fd8a13",
       "operation": "reboot",
@@ -49,7 +50,8 @@ node is listed in this description.
         "start_time": "2023-06-27T00:33:17",
         "status": "complete"
       },
-      "template_name": "gdr-tmpl"
+      "template_name": "gdr-tmpl",
+      "tenant": null
     }
     ```
 

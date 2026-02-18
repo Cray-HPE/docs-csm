@@ -4,6 +4,12 @@ The Boot Orchestration Service (BOS) creates a session when it is asked to perfo
 Sessions provide a way to track the status of many nodes at once as they perform the same operation with the same session template information.
 When creating a session, both the operation and session template are required parameters.
 
+* [Operations](#operations)
+* [Sessions and status](#sessions-and-status)
+* [BOS sessions and HSM locks](#bos-sessions-and-hsm-locks)
+
+## Operations
+
 BOS v2 supports these operations:
 
 * Reboot - Reboot a designated collection of nodes into the desired state. This will always force a reboot.
@@ -24,7 +30,7 @@ See [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md) for 
 
 ## BOS sessions and HSM locks
 
-As part of a `pending` BOS session being started, the BOS [`session-setup` operator](BOS_Services.md#session-setup)
+As part of a `pending` BOS session being started, the BOS [`session-setup` operator](Operators.md#session-setup)
 determines which nodes are targeted for the session. For example, it removes nodes whose architectures are not compatible with
 the boot sets in the session template, and this is also when it applies the
 [session limit](Limit_the_Scope_of_a_BOS_Session.md) (if one was specified).

@@ -20,6 +20,7 @@ UAN boot images and a BOS session template have been created. See [Image Prepara
     ```json
     {
       "components": "",
+      "include_disabled": false,
       "limit": "",
       "name": "9fea7f3f-0a77-40b9-892d-37712de51d65",
       "operation": "boot",
@@ -30,7 +31,8 @@ UAN boot images and a BOS session template have been created. See [Image Prepara
         "start_time": "2022-08-22T14:44:27",
         "status": "pending"
       },
-      "template_name": "cle-1.1.0"
+      "template_name": "cle-1.1.0",
+      "tenant": null
     }
     ```
 

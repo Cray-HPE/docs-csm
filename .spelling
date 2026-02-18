@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -268,6 +268,7 @@ Keycloak
 Keycloak's
 Kiali
 Kibana
+kubelet
 Kubernetes
 Kyverno
 LAN
@@ -488,6 +489,7 @@ bootscript
 bootsys
 buses
 c0
+cadvisor
 catalog
 cataloged
 cdu
@@ -502,6 +504,7 @@ ceph-radosgw
 cephadm
 cephfs
 cfgsh
+cgroup
 channeled
 checkmark
 chrooted
@@ -696,7 +699,6 @@ re-architecting
 reauthentication
 rec
 reconfig
-redis
 reestablished
 remediate
 remediated
@@ -1119,6 +1121,9 @@ Admin
 - operations/security_and_authentication/Manage_Sealed_Secrets.md
 # To allow Site Init
 Init
+
+- operations/security_and_authentication/Manage_System_Passwords.md
+rec
 
 - operations/security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md
 SNMP-backed

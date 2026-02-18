@@ -115,7 +115,7 @@ step. The critical services are restarted only when Rack Resiliency is enabled a
 
 ### Modifying critical services
 
-Administrators are able to modify the Rack Resiliency critical services.  If an administrator does nothing but remove critical
+Administrators are able to modify the Rack Resiliency critical services. If an administrator does nothing but remove critical
 services, then no service restarts are necessary. However, if any critical service is added or modified, then a
 service restart is performed as part of that procedure.
 

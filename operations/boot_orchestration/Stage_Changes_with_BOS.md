@@ -1,18 +1,28 @@
 # Staging Changes with BOS
 
-In v2 of the Boot Orchestration Service (BOS), it is possible to stage changes when creating a session.
-These changes will not immediately take effect, and will instead be applied when the `applystaged` endpoint is called.
-
-* [Creating a staged session](#creating-a-staged-session)
-* [Applying a staged state](#applying-a-staged-state)
+* [Overview](#overview)
+* [Create a staged session](#create-a-staged-session)
+* [Apply a staged state](#apply-a-staged-state)
 * [Stage changes without BOS](#stage-changes-without-bos)
     * [Stage boot artifacts](#stage-boot-artifacts)
     * [Stage a configuration](#stage-a-configuration)
 
-## Creating a staged session
+## Overview
 
-(`ncn-mw#`) Creating a staged session is no different than creating a normal session, with one exception: the `staged` value should be set to `True`.
-For more on creating sessions, see [Create a new session](Manage_a_BOS_Session.md#create-a-new-session).
+In v2 of the Boot Orchestration Service (BOS), it is possible to stage changes when creating a session.
+These changes will not immediately take effect, and will instead be applied when
+[the `applystaged` endpoint](../../api/bos.md#post_v2_apply_staged) is called.
+
+## Create a staged session
+
+Creating a staged session is no different than creating a normal session, with one exception: the `staged` value should be set to `True`.
+For more on creating sessions, see [Create a session](Manage_a_BOS_Session.md#create-a-session).
+
+> When using [Multi-tenancy with BOS](Multi_tenancy_with_BOS.md), the session must be created using the appropriate tenant ID,
+> and the session template being used must belong to that same tenant. For more information, see
+> [Sessions and session templates](Multi_tenancy_with_BOS.md#sessions-and-session-templates).
+
+(`ncn-nw#`) The session can be created using the [Cray CLI](../../glossary.md#cray-cli-cray).
 
 ```bash
 cray bos v2 sessions create --template-name TEMPLATE_NAME --operation boot --stage True --format json
@@ -22,9 +32,13 @@ This creates a new BOS session that can be managed and monitored as normal, but 
 information will be stored in a `staged_state` field. The session will continue to run so long as any components have staged state that has not been
 applied so that status can be used to monitor actions such as rolling upgrades.
 
-## Applying a staged state
+## Apply a staged state
 
 Applying staged state is done on a per component basis. Multiple components can be specified in a single call.
+
+> When using [Multi-tenancy with BOS](Multi_tenancy_with_BOS.md), the request to apply the staged state must
+> be done using the appropriate tenant ID. For more information, see
+> [Staged sessions with tenancy](Multi_tenancy_with_BOS.md#staged-sessions-with-tenancy).
 
 (`ncn-mw#`) In the CLI this can be done with a comma-separated list of component names (xnames), or by specifying a range of values.
 
@@ -35,17 +49,22 @@ cray bos v2 applystaged create --xnames x3000c0s19b[1-4]n0
 (`ncn-mw#`) When using the API, components should be provided as a list of xnames.
 
 ```bash
-curl -X POST -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json"  --data '{"xnames":["x3000c0s19b1n0","x3000c0s19b2n0"]}' https://api-gw-service-nmn.local/apis/bos/v2/applystaged
+curl -X POST -H "Authorization: Bearer ${TOKEN}" -H "Content-Type: application/json"  \
+    --data '{"xnames":["x3000c0s19b1n0","x3000c0s19b2n0"]}' \
+    https://api-gw-service-nmn.local/apis/bos/v2/applystaged
 ```
 
-When called, any staged data for the given components will be moved to the desired state.
-In addition BOS will check for the associated session in order to determine what kind of operation to apply. This allows users to stage any operation, including shutdowns.
+When called, any staged data for the given components is moved to the desired state.
+In addition, BOS checks for the associated session in order to determine what kind of operation to apply.
+This allows users to stage any operation, including shutdowns.
 
-If for some reason a session that was used to stage data is deleted before `applystaged` is called for the associated components, it will no longer be possible to apply the staged state
-since BOS will not be able to determine which operation should be taken.
+If a session that was used to stage data is deleted before `applystaged` is called for the associated components,
+it will no longer be possible to apply the staged state because BOS will not be able to determine which operation
+should be taken.
 
-By default staged data will not be cleared when `applystaged` is called, allowing users to call the endpoint multiple times.
-This behavior can be changed using the [Options](Options.md) endpoint so that the staged data is cleared when `applystaged` is called.
+By default, staged data is not cleared when `applystaged` is called, allowing users to call the endpoint multiple times.
+This behavior can be changed using the [`clear_stage`](Options.md#clear_stage) option so that the staged data is cleared
+when `applystaged` is called. For more information on BOS options, see [BOS Options](Options.md).
 
 ## Stage changes without BOS
 

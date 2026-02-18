@@ -41,6 +41,9 @@ Once this step has completed:
 > - This job must be monitored manually and must complete successfully before proceeding to the next stage.
 > - The job will restart when upgrading the master nodes to 1.32 and `kubelet` restarts. When the job restarts, a new output log will be created.
 >
+> **For CSM 1.7 to `1.7.x` upgrades:**  
+> The `upgrade-k8s-job` will still run but will only deploy the latest manifests without performing a Kubernetes version upgrade. Monitor the job to ensure it completes successfully before proceeding to the next stage.
+>
 > (`ncn-mw#`) To tail the log file and see the progress, run:
 >
 > ```bash

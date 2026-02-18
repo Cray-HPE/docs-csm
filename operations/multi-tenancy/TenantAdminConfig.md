@@ -1,7 +1,8 @@
 # Tenant Administrator Configuration
 
 - [Overview](#overview)
-- [Cray CLI integration](#cray-cli-integration)
+- [Interacting with services as a tenant](#interacting-with-services-as-a-tenant)
+    - [Cray CLI integration](#cray-cli-integration)
 - [Kubernetes OIDC API integration](#kubernetes-oidc-api-integration)
 - [Tenant-specific Keycloak groups](#tenant-specific-keycloak-groups)
 - [`Roles` and `Rolebindings`](#roles-and-rolebindings)
@@ -10,13 +11,48 @@
 
 ## Overview
 
-This page describes how to configure a user as a `Tenant Administrator`, allowing that person to perform administrative functions on one or more tenants,
-without giving them the same permissions an `Infrastructure Administrator` would have.
+This page describes how to configure a user as a Tenant Administrator, allowing that person to perform administrative functions on one or more tenants,
+without giving them the same permissions an Infrastructure Administrator would have.
 
-## Cray CLI integration
+## Interacting with services as a tenant
 
-When using the `cray` CLI for various operations specific to tenant-owned resources (Compute/Application Nodes), the CLI should be scoped to the appropriate tenant when `cray init` is executed.
-The CLI supports the optional `--tenant <tenant-name>` argument, which subsequently passes the `cray-tenant-name` value in the header for API requests to the respective service.
+Some services in CSM allow tenants to make requests to their APIs. For example, the
+[Boot Orchestration Service (BOS)](../boot_orchestration/README.md) and the
+[Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs).
+The APIs for these services identify the tenant based on information passed in the request.
+A tenant must always pass information identifying itself -- its tenant ID -- when making a request.
+This is done by including the `Cray-Tenant-Name` field in the request header, set to the name of the tenant.
+When this is done, the service will contextually operate on behalf of that tenant.
+
+(`linux#`) For example:
+
+```bash
+curl -H "Cray-Tenant-Name: vcluster-red" \
+    -H "Authorization: Bearer ${TOKEN}" \
+    -H 'Content-Type: application/json' \
+    https://api-gw-service-nmn.local/apis/bos/v2/components/
+```
+
+Note: HPE-authored OPA rules prevent unauthorized tenant requests from accessing service APIs, so the value
+chosen for `Cray-Tenant-Name` must match the user-provided access token within a request. If the user access
+token is not part of the tenant name being used, then the command will fail. Because it is possible for one user to
+be a part of multiple tenant groups, this allows users to select the specific tenant that they are operating under.
+Even if a user is part of multiple individual tenant groups, only the tenant specified in the request header will
+be considered for that request.
+
+See also:
+
+- [Multi-tenancy with BOS](../boot_orchestration/Multi_tenancy_with_BOS.md)
+- [Managing Sensitive Tenant Information in VCS with SOPS](../configuration_management/Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md)
+
+### Cray CLI integration
+
+Instead of using the API directly, the [Cray CLI](../../glossary.md#cray-cli-cray)
+can also be used to perform various operations specific to tenant-owned resources
+([compute nodes](../../glossary.md#compute-node-cn) or [application nodes](../../glossary.md#application-node-an)).
+In order to do this, the CLI must be scoped to the appropriate tenant by executing `cray init` with the optional
+`--tenant <tenant-name>` argument. This causes the CLI to include the tenant identification in the header of the
+API calls it makes.
 
 ## Kubernetes OIDC API integration
 
@@ -37,14 +73,15 @@ The Kubernetes API server is then configured to reference this client for token 
 
 ## Tenant-specific Keycloak groups
 
-When a tenant is created, `tapms` will create a Keycloak group specific for that tenant. In the below example, `vcluster-blue` is the name of the tenant, and `tapms` has created a group with the name `vcluster-blue-tenant-admin`:
+When a tenant is created, TAPMS will create a Keycloak group specifically for that tenant.
+In the below example, `vcluster-blue` is the name of the tenant, and TAPMS has created a group with the name `vcluster-blue-tenant-admin`.
 
-**`NOTE`** Logging into the Keycloak UI may not automatically display the realm in which the tenant groups are created.
-Ensure that you have the correct realm selected if the expected groups are not present.
+> **NOTE** Logging into the Keycloak UI may not automatically display the realm in which the tenant groups are created.
+> Ensure that the correct realm is selected if the expected groups are not present.
 
 ![UserGroups](images/usergroups.png)
 
-For the initial release of multi-tenancy, assigning this group to a user is a manual process. Select the desired user and add them as a member of the new group as follows:
+Assigning this group to a user is a manual process. Select the desired user and add them as a member of the new group as follows:
 
 ![GroupMembership](images/groupmembership.png)
 
@@ -52,9 +89,10 @@ Users can be added to more than one tenant using the same procedure.
 
 ## `Roles` and `Rolebindings`
 
-Ultimately, the operations the tenant administrator is authorized to perform are controlled by [Kubernetes RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
+Ultimately, the operations the tenant administrator is authorized to perform are controlled by
+[Kubernetes RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 By default when a tenant is created and a Keycloak user is added to a tenant's Keycloak group, that user will have no permissions configured.
-The `Infrastructure Administrator` needs to create the desired/appropriate `Roles` and `RoleBindings` for the tenant administrator.
+The Infrastructure Administrator needs to create the desired/appropriate `Roles` and `RoleBindings` for the tenant administrator.
 Below is an example of a YAML file which will give a user some basic permissions for both the `tenants` and `vcluster-blue` namespaces:
 
 ```yaml
@@ -99,7 +137,8 @@ subjects:
   apiGroup: rbac.authorization.k8s.io
 ```
 
-Note the reference to the Keycloak group `vcluster-blue-tenant-admin` in each of the `RoleBinding` sections. Administrators can create the appropriate `rules` in the `ClusterRole` which control the actions the tenant administrator is allowed to perform.
+Note the reference to the Keycloak group `vcluster-blue-tenant-admin` in each of the `RoleBinding` sections.
+Administrators can create the appropriate rules in the `ClusterRole` in order to control the actions the tenant administrator is allowed to perform.
 
 ## Retrieve an OIDC token
 
@@ -115,7 +154,7 @@ Decoding this token will illustrate the `groups` and `name` claims added by Keyc
 
 ![OIDCToken](images/oidctoken.png)
 
-This token can now be used by a the tenant administrator to interact with Kubernetes.
+This token can now be used by the tenant administrator to interact with Kubernetes.
 
 - (`ncn-mw#`) The following is an example of listing pods in the `vcluster-blue` namespace (which was specified in the `ClusterRole` above as allowed):
 

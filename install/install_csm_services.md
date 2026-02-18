@@ -28,6 +28,14 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 1. (`pit#`) Install YAPL.
 
+    If installing CSM 1.7.1 or later version:
+
+   ```bash
+   rpm -Uvh "${CSM_PATH}"/rpm/cray/csm/noos/x86_64/yapl-*.x86_64.rpm
+   ```
+
+    If installing CSM 1.7.0:
+
    ```bash
    rpm -Uvh "${CSM_PATH}"/rpm/cray/csm/sle-15sp2/x86_64/yapl-*.x86_64.rpm
    ```

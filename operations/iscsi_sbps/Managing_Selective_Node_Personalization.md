@@ -270,7 +270,7 @@ Otherwise (if the new worker NCN should be configured as an iSCSI target), perfo
 
 This means that all worker NCNs are configured as iSCSI targets.
 In this scenario, the remove NCN procedure can be performed as usual. After it is done, the
-administrator must refresh the iSCSI configuration.  See
+administrator must refresh the iSCSI configuration. See
 [Refresh iSCSI configuration](#refresh-iscsi-configuration).
 
 #### Removing worker NCN when `iscsi_sbps` group exists

@@ -7034,7 +7034,7 @@ Options for the Boot Orchestration Service.
 |cfs_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to CFS|
 |cleanup_completed_session_ttl|string|false|none|Delete complete Sessions that are older than cleanup_completed_session_ttl (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior.|
 |clear_stage|boolean|false|none|Allows a Component's staged information to be cleared when the requested staging action has been started. Defaults to false.|
-|component_actual_state_ttl|string|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>0 disables cleanup behavior for newly booted nodes and instructs bos-state-reporter to report once instead of periodically.|
+|component_actual_state_ttl|string|false|none|The maximum amount of time a Component's actual state is considered valid (in minutes, hours, days, or weeks).<br>WARNING: This option should NOT be set to a 0 value. Doing this will cause serious disruptions to BOS operations.<br>To avoid problems, never set this option to a value less than 1 hour.|
 |default_retry_policy|integer|false|none|The default maximum number attempts per node for failed actions.|
 |discovery_frequency|integer|false|none|How frequently the BOS discovery agent syncs new Components from HSM (in seconds)|
 |hsm_read_timeout|integer|false|none|The amount of time (in seconds) to wait for a response before timing out a request to HSM|
