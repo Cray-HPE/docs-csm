@@ -191,7 +191,9 @@ Each component is described in more detail in the following sections.
 
 ### Management node access controls
 
-Managed nodes are limited to access only CSM services on the management nodes. The ACLs of this sub-feature are named `MANAGED_NODE_ISOLATION` and replace the existing `nmn-hmn` ACL on the NMN.  The list of allowed services is as follows:
+Managed nodes are limited to access only CSM services on the management nodes.
+The ACLs of this sub-feature are named `MANAGED_NODE_ISOLATION` and replace the existing `nmn-hmn` ACL on the NMN.
+The list of allowed services is as follows:
 
 ```text
     10 comment Permit Unrestricted NCN to NCN Communication
