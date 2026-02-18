@@ -6,7 +6,7 @@ When running IUF commands, the `iuf-cli` waits for 10 minutes before starting ex
 
 ## Error Identification
 
-While executing IUF commands the following warning is displayed by `iuf-cli` for 10 minutes .
+While executing IUF commands the following warning is displayed by `iuf-cli` for 10 minutes.
 
 ```sh
 ncn-m001:~ # iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r management-nodes-rollout --limit-management-rollout ncn-w003
@@ -30,7 +30,7 @@ INFO [STAGE: management-nodes-rollout                          ] BEG Argo workfl
 
 If an IUF session is abruptly terminated (e.g., using Ctrl+C), the running workflow is also terminated.  Although IUF stores workflow data in a state file `(activity_dict.yaml)`, the termination causes the workflow status to become "Unknown."
 
-When IUF attempts to retrieve the workflow status, it fails because the workflow no longer exists. This results in a discrepancy between the activity data stored by IUF and the `argo` workflow server.
+When IUF attempts to retrieve the workflow status, it fails because the workflow no longer exists. This results in a discrepancy between the activity data stored by IUF and the `Argo` workflow server.
 
 ## Workaround Description
 
@@ -42,7 +42,7 @@ To resolve this issue, follow these steps:
     cd /etc/cray/upgrade/csm/iuf/${ACTIVITY_NAME}/state
     ```
 
-2. Identify the workflow with the **"Unknown"** status. For example, for the workflow  `install-products-2kh2l-management-nodes-rollout-gnqzj` with "Unknown" status, the entry would look  like this:
+2. Identify the workflow with the **"Unknown"** status. For example, for the workflow `install-products-2kh2l-management-nodes-rollout-gnqzj` with "Unknown" status, the entry would look like this:
 
     ```sh
     '2025-03-06t10:44:08':
@@ -91,6 +91,6 @@ To resolve this issue, follow these steps:
           workflow_id: install-products-2kh2l-management-nodes-rollout-gnqzj 
     ```
 
-3. Remove the workflow entry with the "Unknown" status from the file which is the entire block shown above.
+3. Remove the workflow entry with the "Unknown" status from the file, which is the entire block shown above.
 
 4. Re-run the IUF command.
