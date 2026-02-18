@@ -20,7 +20,7 @@ limiting and what licenses, if any, are needed.
 
 ## Redfish API
 
-The Redfish API for rack-mounted nodes is the node's Power resource which is
+The Redfish API for rack-mounted nodes is the node's power resource which is
 presented by the BMC. OEM properties may be used to augment the Power schema to
 provide additional power management capabilities.
 
@@ -37,7 +37,7 @@ The Control resources will only manifest in the nC's Redfish endpoint after
 a node has been powered on and background processes have discovered the node's
 power management capabilities.
 
-## Power Limiting
+## Power limiting
 
 PCS power limit controls for compute nodes can query component capabilities
 and manipulate the node power constraints. This functionality enables external
@@ -59,9 +59,9 @@ Power limit control will only be valid on a compute node when power limiting is
 enabled, the node is booted, and the node is in the Ready state as seen via the
 Hardware State Manager.
 
-## Cray CLI Examples for Liquid Cooled Compute Node Power Management
+## Cray CLI examples for liquid cooled compute node power management
 
-### Get Node Power Control and Limit Settings
+### Get node power control and limit settings
 
 ```console
 cray power cap snapshot --xnames XNAME_LIST --format json
@@ -134,7 +134,7 @@ Example output:
 }
 ```
 
-### Set Node Power Limit
+### Set node power limit
 
 ```console
 cray power cap set --xnames XNAME_LIST --control CONTROL_NAME VALUE --format json
@@ -292,7 +292,7 @@ Example output:
 }
 ```
 
-### Remove Node Power Limit (Set to Default)
+### Remove node power limit (set to default)
 
 ```console
 cray power cap set --xnames XNAME_LIST --control CONTROL_NAME 0 --format json
@@ -376,15 +376,15 @@ Example output:
 }
 ```
 
-## Enable and Disable Power Limiting
+## Enable and disable power limiting
 
 _NOTE:
 Power limiting on `HPE Cray EX4252` (Antero) and `HPE Cray EX255a`
-(Parry Peak) hardware cannot be disabled.  To effectively accomplish
+(Parry Peak) hardware cannot be disabled. To effectively accomplish
 the same thing, set the power limit value to the max value returned
 from power cap snapshot._
 
-### Enable Power Limiting
+### Enable power limiting
 
 Determine the valid power limit range for the target control by using the
 `power cap snapshot` Cray CLI option.
@@ -488,7 +488,7 @@ curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
         -d '{"ControlMode":"Automatic","SetPoint":'${limit}'}'
 ```
 
-### Disable Power Limiting
+### Disable power limiting
 
 Each control at the Redfish endpoint needs to be disabled.
 
@@ -517,18 +517,18 @@ curl -k -u $login:$pass -H "Content-Type: application/json" -X PATCH \
 
 ### Gigabyte
 
-* **Enable Power Limiting**
+#### Gigabyte: Enable power limiting
 
-    ```bash
-    curl -k -u $login:$pass -H "Content-Type: application/json" \
+```bash
+curl -k -u $login:$pass -H "Content-Type: application/json" \
     -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
     --data '{"PowerLimitTrigger": "Activate"}'
-    ```
+```
 
-* **Deactivate Node Power Limit**
+#### Gigabyte: Deactivate node power limit
 
-    ```bash
-    curl -k -u $login:$pass -H "Content-Type: application/json" \
+```bash
+curl -k -u $login:$pass -H "Content-Type: application/json" \
     -X POST https://${BMC}/redfish/v1/Chassis/Self/Power/Actions/LimitTrigger \
     --data '{"PowerLimitTrigger": "Deactivate"}'
-    ```
+```
