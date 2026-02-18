@@ -532,18 +532,14 @@ MTL-2605 metal-ipmitool: resolve CVE-2020-5208 by bumping version/release
 MTL-2604 Locate/install/test mft and kernel-mft-mlnx-kmp-default RPMs
 MTL-2603 Package update sweep / mitigate CVEs
 MTL-2602 Upgrade ansible version in NCNs
-MTL-2601 VTN Reports Known Exploited Vulnerabilities (KEVs) detected in compute-7.1.38-x86_64.squashfs image
 MTL-2600 VTN Reports Known Exploited Vulnerabilities (KEVs) detected in storage-ceph-7.1.38-x86_64.squashfs image
 MTL-2598 iptables rules for tftp fail to get applied
 MTL-2596 VTN STROSS scan reported deny module is used in storage-ceph-7.1.38-x86_64.squashfs
-MTL-2595 ceph kernel module not provded by kernel-default RPM in SP7
+MTL-2595 ceph kernel module not provided by kernel-default RPM in SP7
 MTL-2594 Update PAM / fix blank password issue
-MTL-2578 node-images: Evaluate if insserv-compat is still needed
-MTL-2559 rbd kernel module not provded by kernel-default RPM in SP7 Beta
+MTL-2559 rbd kernel module not provided by kernel-default RPM in SP7 Beta
 MTL-2549 EFI BootTrim fails on Broadcom
 MTL-2543 Update csm-docker-sle-go Build Environment
 MTL-2539 Move node-image builds to 15-SP7 (GM)
 MTL-2538 Move node-image builds to 15-SP7 (BETA)
-MTL-2456 Error in cloud-init ntp module
-MTL-2381 Fix incorrect fru parsing causing problems on HPE/Marvell/Broadcom Servers
 ```
