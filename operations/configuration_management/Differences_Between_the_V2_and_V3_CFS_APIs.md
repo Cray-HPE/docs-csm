@@ -44,3 +44,5 @@ For convenience all changes are listed here.
   This can be accessed by specifying `debug_fail`, `debug_facts` or `debug_noop` as the
   configuration for a session if a configuration has not already been created with that name.
   See [Troubleshoot CFS Issues](Troubleshoot_CFS_Issues.md) for more information.
+* CFS v3 supports [Multi-tenancy](../README.md#multi-tenancy). For more information, see
+  [Managing Sensitive Tenant Information in VCS with SOPS](Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md).

@@ -46,14 +46,16 @@ When resuming a procedure after a break, always be sure that a typescript is run
 ### 2. Ensure latest documentation is installed
 
 Before following the steps to prepare for the upgrade, make sure that the latest CSM documentation RPMs are
-installed on any NCNs where preparation procedures are being performed. These should be for the **`CURRENT`**
+installed on any NCNs where preparation procedures are being performed. These should be for the **CURRENT**
 CSM version on the system -- not the target version of the upgrade.
 
 See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation) for instructions.
 
 ### 3. Prune Nexus data
 
-Over time, it's possible for the persistent volume that stores Nexus data to fill up with old and unnecessary files, which can cause the upgrade to fail if not enough disk space is available. Please see [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md) for specific steps.
+Over time, it is possible for the persistent volume that stores Nexus data to fill up with old and unnecessary files,
+which can cause the upgrade to fail if not enough disk space is available.
+See [Nexus Space Cleanup](../operations/package_repository_management/Nexus_Space_Cleanup.md) for specific steps.
 
 ### 4. Export Nexus data
 

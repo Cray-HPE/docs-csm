@@ -1,5 +1,19 @@
 # SOPS Introduction
 
+* [Overview](#overview)
+* [Trust TLS certificates](#trust-tls-certificates)
+* [Using SOPS with tenant-specific TAPMS exposed Vault endpoint](#using-sops-with-tenant-specific-tapms-exposed-vault-endpoint)
+    * [Setup procedure](#setup-procedure)
+    * [Example procedure](#example-procedure)
+    * [SOPS use case requirements](#sops-use-case-requirements)
+    * [SOPS use cases](#sops-use-cases)
+        * [Encrypt sensitive tenant-specific values with SOPS](#encrypt-sensitive-tenant-specific-values-with-sops)
+        * [Encrypt existing files with SOPS](#encrypt-existing-files-with-sops)
+        * [Decrypt encrypted files with SOPS](#decrypt-encrypted-files-with-sops)
+        * [Use SOPS with VCS, CFS, and Ansible](#use-sops-with-vcs-cfs-and-ansible)
+
+## Overview
+
 Secrets OPerationS (SOPS) is an editor that utilizes a number of different encryption strategies
 in order to secure sensitive information in a secure way. SOPS supports multiple
 types of encryption service back-ends. CSM uses HashiCorp Vault to encrypt and
@@ -23,7 +37,7 @@ by a man in the middle security exception.
 Follow the instructions for trusting this certificate in the local environment before proceeding. See
 [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md).
 
-## Using SOPS with tenant specific TAPMS exposed Vault endpoint
+## Using SOPS with tenant-specific TAPMS exposed Vault endpoint
 
 [Tenant and Partition Management System (TAPMS)](../multi-tenancy/Tapms.md)
 creates a unique Vault encryption endpoint for each tenant that is created on the system when requested.
@@ -159,7 +173,7 @@ The `VAULT_TOKEN` will be valid until its duration has expired. These values
 may be used on any system with SOPS installed that match these criteria:
 
 * The environment is configured to trust TLS/SSL certificates from CSM.
-* The environment has a network connection that can resolve `$VAULT_ADDR` over the customer managed network.
+* The environment has a network connection that can resolve `$VAULT_ADDR` over the Customer Managed Network.
 * A version of SOPS that supports HashiCorp Vault is installed.
     * For the latest version and how to install it, see [the SOPS release page](https://github.com/getsops/sops/releases).
     * Mac environments using brew: `brew install sops`
@@ -169,12 +183,13 @@ may be used on any system with SOPS installed that match these criteria:
 ### SOPS use cases
 
 These are example use cases for how SOPS can be used to secure sensitive information.
-The information provided here is a subset of what SOPS can do. The [SOPS `README`](https://github.com/getsops/sops/blob/main/README.rst)
+The information provided here is a subset of what SOPS can do. The
+[SOPS `README`](https://github.com/getsops/sops/blob/main/README.rst)
 provides more comprehensive examples of how it can be used.
 
-#### Use SOPS to interactively encrypt sensitive values that are unique to a tenant
+#### Encrypt sensitive tenant-specific values with SOPS
 
-From a SOPS equipped environment
+From a SOPS equipped environment:
 
 ```bash
 sops --hc-vault-transit $VAULT_ADDR new_secret_contents.yml
@@ -183,37 +198,36 @@ sops --hc-vault-transit $VAULT_ADDR new_secret_contents.yml
 SOPS opens up an interactive text editor allowing creation and modification of a
 new file containing secret information.
 
-#### Use SOPS to encrypt an existing file
+#### Encrypt existing files with SOPS
 
-From a SOPS equipped environment
+From a SOPS equipped environment:
 
 ```bash
 sops encrypt --hc-vault-transit $VAULT_ADDR csm_repos.yml > csm_repos.sops.yml
 ```
 
-#### Use SOPS to decrypt an already encrypted file
+#### Decrypt encrypted files with SOPS
 
-From a SOPS equipped environment
+From a SOPS equipped environment:
 
 ```bash
 sops decrypt csm_repos.sops.yml > csm_repos.decrypted.yml
 ```
 
-#### Using SOPS with VCS and CFS with Ansible
+#### Use SOPS with VCS, CFS, and Ansible
 
 The version of Ansible used by the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
-is SOPS enabled, meaning it is not necessary to store
-sensitive information in variables within the
+is SOPS enabled, meaning it is not necessary to store sensitive information in variables within the
 [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs).
-This is important, as only members of a tenancy should have access to the secure information, and no one else.
+This is important, because no one other than the members of a tenancy should have access to the secure information.
 
 By convention, Ansible is configured to decrypt any and all `hostvars` and `groupvars`
 that are stored within VCS. This allows users to check out the contents of their
 Ansible and git repositories, encrypt those files and variables that are considered
 sensitive, and then check in the SOPS encrypted version of these files.
 
-Ansible relies on filename hints within`hostvars` and `groupvars` in order to determine
+Ansible relies on filename hints within `hostvars` and `groupvars` in order to determine
 which files, if any, require decryption before Ansible is run. Ansible will decrypt
 any `hostvars` or `groupvars` files that include a `*.sops.*` pattern.
 
@@ -223,7 +237,7 @@ any `hostvars` or `groupvars` files that include a `*.sops.*` pattern.
 
 1. Replace sensitive information with encrypted versions.
 
-    Example from a SOPS equipped environment with a checked out CFS configuration
+    Example from a SOPS equipped environment with a checked out VCS branch from a CFS configuration:
 
     ```bash
     cd csm-config
@@ -242,3 +256,5 @@ any `hostvars` or `groupvars` files that include a `*.sops.*` pattern.
 1. Create a CFS session (either automatically as part of boot or through CFS API).
 
     See [CFS Sessions](../configuration_management/CFS_Sessions.md).
+
+See also: [Managing Sensitive Tenant Information in VCS with SOPS](../configuration_management/Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md).

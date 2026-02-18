@@ -392,7 +392,7 @@ This error occurs when sessions with the configured name prefix already exist in
 
 * Run the test with `--delete-previous-sessions` to automatically clean them up.
 * Manually delete the sessions using the CFS CLI or API.
-* Use a different `--name` prefix that doesn't conflict with existing sessions.
+* Use a different `--name` prefix that does not conflict with existing sessions.
 
 ### Test fails with page size errors (CFS v2)
 
