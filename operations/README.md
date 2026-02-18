@@ -383,6 +383,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
 - [Retrieve an Authentication Token](security_and_authentication/Retrieve_an_Authentication_Token.md)
 - [Manage Sealed Secrets](security_and_authentication/Manage_Sealed_Secrets.md)
 - [SOPS Introduction](security_and_authentication/SOPS.md)
+- [Managing Sensitive Tenant Information in VCS with SOPS](configuration_management/Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md)
 - [Audit Logs](security_and_authentication/Audit_Logs.md)
 - [Cray STS Token Generator API](../api/sts.md)
 - [Configure root user on HPE iLO BMCs](security_and_authentication/Configure_root_user_on_HPE_iLO_BMCs.md)
@@ -892,6 +893,8 @@ these backups.
 - [TAPMS Tenant Status API](../api/tapms-operator.md)
 - [Global Tenant Hooks](multi-tenancy/GlobalTenantHooks.md)
 - [Example Workflow](multi-tenancy/ExampleWorkflow.md)
+- [Multi-tenancy with BOS](boot_orchestration/Multi_tenancy_with_BOS.md)
+- [Managing Sensitive Tenant Information in VCS with SOPS](configuration_management/Managing_Sensitive_Tenant_Information_in_VCS_with_SOPS.md)
 
 ## iSCSI SBPS (Scalable Boot Content Projection Service)
 

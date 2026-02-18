@@ -39,6 +39,7 @@ node is listed in this description.
     ```json
     {
       "components": "x3000c0s17b0n0",
+      "include_disabled": false,
       "limit": "x3000c0s17b0n0",
       "name": "94e712ab-df76-40ee-8cfb-7ac487fd8a13",
       "operation": "reboot",

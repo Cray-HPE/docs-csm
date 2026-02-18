@@ -212,9 +212,9 @@ arguments that may be necessary.
 ### Gathering profiles from inside the service mesh
 
 A few more steps are required to gather profiles from inside the service
-mesh for those services unavailable outside of the service mesh.  There
+mesh for those services unavailable outside of the service mesh. There
 are nuances for each service, so each is documented individually or as
-pairs.  The first example, `hmcollector-ingress` will be given in a bit
+pairs. The first example, `hmcollector-ingress` will be given in a bit
 more detail, while the remaining will be abbreviated.
 
 #### `hmcollector-ingress`
