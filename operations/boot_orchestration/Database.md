@@ -2,6 +2,7 @@
 
 * [Overview](#overview)
 * [BOS v2 databases](#bos-v2-databases)
+  * [Kubernetes deployment](#kubernetes-deployment)
   * [Data organization](#data-organization)
 * [BOS v1 database](#bos-v1-database)
 * [Access](#access)
@@ -15,7 +16,24 @@ they are stored in the [BOS v2 databases](#bos-v2-databases).
 
 ## BOS v2 databases
 
-(`ncn-mw#`) All BOS v2 data is stored in Redis databases running in a pod in the `services` namespace.
+All v2 BOS data is stored in Redis databases.
+
+### Kubernetes deployment
+
+(`ncn-mw#`) The BOS v2 databases are a Kubernetes deployment in the `services` namespace.
+
+```bash
+kubectl get deployments -n services -l app.kubernetes.io/name=cray-bos-db
+```
+
+Example output:
+
+```text
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+cray-bos-db   1/1     1            1           11d
+```
+
+(`ncn-mw#`) The Redis database pod runs in the `services` namespace.
 
 ```bash
 kubectl get pods -n services -l app.kubernetes.io/name=cray-bos-db
@@ -34,7 +52,7 @@ Within the Redis pod, the BOS v2 data is divided into 6 databases:
 
 | *Database*                                                                 | *Key*                                                               |
 | -------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| [Components](Components.md)                                                | Node xname                                                          |
+| [Components](Components.md)                                                | Component name ([xname](../../glossary.md#xname))                   |
 | Boot artifacts (`initrd`, kernel, and kernel parameters)                   | [BSS](../../glossary.md#boot-script-service-bss) token              |
 | [Options](Options.md)                                                      | `options`                                                           |
 | [Session templates](Session_Templates.md)                                  | Template name                                                       |
@@ -62,8 +80,11 @@ cray-bos-etcd-2   2/2     Running   0          4d
 
 ## Access
 
-All access to the BOS databases is done by the [BOS API server](API.md), with a single exception;
-The [`power-on` operator](Operators.md#power-on) directly writes to the BOS v2 boot artifacts database.
+All access to the BOS databases is done by the [BOS API server](API.md), with two exceptions:
+
+* The [`power-on` operator](Operators.md#power-on) directly writes to the BOS v2 boot artifacts database.
+* The [migration job](API.md#migration-job) directly reads from and writes to most of the BOS v1 and v2 databases.
+  * The migration job only runs when the `cray-bos` deployment is upgraded.
 
 ## Source
 
