@@ -1,6 +1,7 @@
 # Retrieve SMART data from ClusterStor E1000 nodes via Redfish Exporter
 
-This is a Prometheus Exporter for extracting metrics from a server using the Redfish API. The hostname of the server has to be passed as target parameter in the http call.
+This is a Prometheus Exporter for extracting metrics from a server using the Redfish API.
+The hostname of the server has to be passed as target parameter in the HTTP call.
 
 All these steps need to be followed post install/upgrade CSM services.
 
@@ -8,120 +9,127 @@ All these steps need to be followed post install/upgrade CSM services.
 
 NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
 
-In order to provide SMART data to the `prometheus` time series database, the Redfish Exporter must be configured with domain name from ClusterStor primary management node.
+In order to provide SMART data to the Prometheus time series database,
+the Redfish Exporter must be configured with the domain name from ClusterStor primary management node.
 
-1. Find the `ip address` of both mgmt nodes on the external access network (EAN) of ClusterStor.
+1. Find the IP address of both management nodes on the external access network (EAN) of ClusterStor.
 
-    1. If static EAN IP addresses are configured on the mgmt nodes in the, following command will show what they are:
+    1. If static EAN IP addresses are configured on the management nodes,
+       then the following command will show what they are:
 
-        ```bash
-        [root@kjcf01n00 ~]# cscli ean ipaddr show
-        ```
+       ```bash
+       cscli ean ipaddr show
+       ```
 
-       Example Output:
+       Example output:
 
-        ```text
-        ---------------------------------------------------
-        Node       Network       Interface  IP ADDRESS
-        ---------------------------------------------------
-        kjcf01n00  EAN           pub0       172.30.53.54
-        kjcf01n01  EAN           pub0       172.30.53.55
-        ---------------------------------------------------
-        ```
+       ```text
+       ---------------------------------------------------
+       Node       Network       Interface  IP ADDRESS
+       ---------------------------------------------------
+       kjcf01n00  EAN           pub0       172.30.53.54
+       kjcf01n01  EAN           pub0       172.30.53.55
+       ---------------------------------------------------
+       ```
 
-    1. If static IP addresses have not been configured on the mgmt nodes in the cluster, and the `cscli ean ipaddr show` command returns empty, as seen below:
+    1. If static IP addresses have not been configured on the management nodes in the cluster,
+       then the `cscli ean ipaddr show` command returns empty, as seen below:
 
-        ```bash
-        [root@kjlmo1200 ~]# cscli ean ipaddr show
-        ```
+       ```bash
+       cscli ean ipaddr show
+       ```
 
-       Example Output:
+       Example output:
 
-        ```text
-        empty
-        ```
+       ```text
+       empty
+       ```
+
+       In this case, perform the following steps:
 
        1. Check what the primary EAN interface name is with the following command:
 
-           ```bash
-           [root@kjlmo1200 ~]# cscli ean primary show
-           ```
+          ```bash
+          cscli ean primary show
+          ```
 
-          Example Output:
+          Example output:
 
-           ```text
-           Interface: pub0
-             Prefix:
-             Gateway:
-           Added EAN primary interfaces:
-           pub0
-           Free interfaces:
-           pub0
-           pub1
-           pub2
-           pub3
-           ```
+          ```text
+          Interface: pub0
+            Prefix:
+            Gateway:
+          Added EAN primary interfaces:
+          pub0
+          Free interfaces:
+          pub0
+          pub1
+          pub2
+          pub3
+          ```
 
-           This output indicates that the primary EAN interface is pub0, this is the default primary EAN interface on ClusterStor mgmt nodes. If no static IP address is set on this interface, it will default to DHCP.
+          This output indicates that the primary EAN interface is `pub0`, which is the default primary EAN interface on ClusterStor management nodes.
+          If no static IP address is set on this interface, it will default to DHCP.
 
-           Check the IP address of this interface on both mgmt nodes with the following command:
+       1. Check the IP address of this interface on both management nodes with the following command:
 
-            ```bash
-            [root@kjlmo1200 ~]# pdsh -g mgmt ip a l pub0 | dshbak -c
-            ```
+          ```bash
+          pdsh -g mgmt ip a l pub0 | dshbak -c
+          ```
 
-           Example Output:
+          Example output:
 
-            ```text
-            ----------------
-            kjlmo1200
-            ----------------
-            2: pub0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-                link/ether b4:96:91:02:73:0c brd ff:ff:ff:ff:ff:ff
-                altname enp8s0f0
-                inet 10.214.135.37/21 brd 10.214.135.255 scope global dynamic pub0
-                   valid_lft 80500sec preferred_lft 80500sec
-            ----------------
-            kjlmo1201
-            ----------------
-            2: pub0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-                link/ether b4:96:91:03:10:74 brd ff:ff:ff:ff:ff:ff
-                altname enp22s0f0
-                inet 10.214.135.45/21 brd 10.214.135.255 scope global dynamic pub0
-                   valid_lft 77093sec preferred_lft 77093sec
-            ```
+          ```text
+          ----------------
+          kjlmo1200
+          ----------------
+          2: pub0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+              link/ether b4:96:91:02:73:0c brd ff:ff:ff:ff:ff:ff
+              altname enp8s0f0
+              inet 10.214.135.37/21 brd 10.214.135.255 scope global dynamic pub0
+                 valid_lft 80500sec preferred_lft 80500sec
+          ----------------
+          kjlmo1201
+          ----------------
+          2: pub0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+              link/ether b4:96:91:03:10:74 brd ff:ff:ff:ff:ff:ff
+              altname enp22s0f0
+              inet 10.214.135.45/21 brd 10.214.135.255 scope global dynamic pub0
+                 valid_lft 77093sec preferred_lft 77093sec
+          ```
 
-1. Get the FQDN of each mgmt node from the primary EAN `ip addresses` found on each using `nslookup`.
+1. Get the FQDN of each management node from the primary EAN IP addresses found on each using `nslookup`.
 
     ```bash
-    [root@kjlmo1200 ~]# nslookup 10.214.135.37
+    nslookup 10.214.135.37
     ```
 
-   Example Output:
+   Example output:
 
     ```text
     37.135.214.10.in-addr.arpa  name = kjlmo1200.hpc.amslabs.hpecorp.net.
     ```
 
     ```bash
-    [root@kjlmo1200 ~]# nslookup 10.214.135.45
+    nslookup 10.214.135.45
     ```
 
-   Example Output:
+   Example output:
 
     ```text
     45.135.214.10.in-addr.arpa   name = kjlmo1201.hpc.amslabs.hpecorp.net.
     ```
 
-1. Determine which mgmt nodes is currently the primary mgmt node.
+1. Determine which management node is currently the primary management node.
 
-   The RFSF API services run on the primary mgmt node in the ClusterStor SMU. To determine which node is currently the primary mgmt node, look at `cscli show_nodes` output:
+   The RFSF API services run on the primary management node in the ClusterStor SMU.
+   To determine which node is currently the primary management node, look at `cscli show_nodes` output:
 
    ```bash
-   [root@kjlmo1200 ~]# cscli show_nodes
+   cscli show_nodes
    ```
 
-   Example Output:
+   Example output:
 
    ```text
    ----------------------------------------------------------------------------------------
@@ -136,14 +144,15 @@ In order to provide SMART data to the `prometheus` time series database, the Red
    ----------------------------------------------------------------------------------------
    ```
 
-   NOTE: The MGMT node where Role is NOT surrounded by parentheses is the current primary MGMT node `(kjlmo1200 above)`.
-   This is also the node that can run `cscli`, so that is another indication of which node is primary vs. secondary. If a node is failed over, the output changes as follows:
+   NOTE: The `MGMT` node where Role is NOT surrounded by parentheses is the current primary `MGMT` node (`kjlmo1200` above).
+   This is also the node that can run `cscli`, so that is another indication of which node is primary vs. secondary.
+   If a node is failed over, the output changes as follows:
 
    ```bash
-   [root@kjlmo1200 ~]# cscli show_nodes
+   cscli show_nodes
    ```
 
-   Example Output:
+   Example output:
 
    ```text
    ---------------------------------------------------------------------------------------- 
@@ -158,25 +167,25 @@ In order to provide SMART data to the `prometheus` time series database, the Red
    ----------------------------------------------------------------------------------------
    ```
 
-1. Select the FQDN of the primary mgmt node to use as your RFSF API connection destination.
+1. Select the FQDN of the primary management node to use as your RFSF API connection destination.
 
-   The FQDN of the primary EAN `ip address` discovered above on the primary mgmt node is the FQDN that should be used to connected to the RFSF API.
+   The FQDN of the primary EAN IP address discovered above on the primary management node is the FQDN that should be used to connect to the RFSF API.
 
-    The primary EAN `ip address` discovered above on the secondary node should be used in the case of a failover on the mgmt nodes that causes the secondary node to become the primary.
+   The primary EAN IP address discovered above on the secondary node should be used in the case of a failover on the management nodes that causes the secondary node to become the primary.
 
-## Create admin user `(LDAP instance)` on ClusterStor E1000 primary mgmt node
+## Create `admin` user on ClusterStor E1000 primary management node
 
 NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
 
-1. Add an admin user on primary management node discovered in the above section.
+1. Add an `admin` user on the primary management node discovered in the previous section.
 
    ```bash
    cscli admins add --username abcxyz --role full --password Abcxyz@123
    ```
 
-   NOTE: Password should have minimum length of 8 characters with minimum 1 lowercase alphabet, 1 uppercase alphabet, 1 alpha numeric and 1 special character.
+   NOTE: Password should have minimum length of eight characters with minimum one lowercase alphabet, one uppercase alphabet, one number and one special character.
 
-1. View the created admins user.
+1. View the created user.
 
    ```bash
    cscli admins list
@@ -192,30 +201,33 @@ NOTE: The below steps needs to be performed on the ClusterStor E1000 node.
    ---------------------------------------------------------------
    ```
 
-## Create `Configmap` with FQDN of the primary mgmt node
+## Create ConfigMap with FQDN of the primary management node
 
 NOTE: The below steps needs to be performed on the CSM cluster either on master or worker node.
 
-1. (`ncn-mw#`) Check if `configmap` `cray-sysmgmt-health-redfish` already exists.
+1. (`ncn-mw#`) Check if the `cray-sysmgmt-health-redfish` ConfigMap already exists in the `sysmgmt-health` namespace.
 
     ```bash
     kubectl get cm -n sysmgmt-health cray-sysmgmt-health-redfish
     ```
 
-   Example Output:
+   Example output:
 
     ```text
     NAME                          DATA   AGE
     cray-sysmgmt-health-redfish   1      15d
     ```
 
-1. (`ncn-mw#`) Delete the existing `configmap`.
+1. (`ncn-mw#`) Delete the existing ConfigMap in the `sysmgmt-health` namespace.
 
     ```bash
     kubectl delete cm -n sysmgmt-health cray-sysmgmt-health-redfish --force
     ```
 
-1. (`ncn-mw#`) Create a `configmap` file `/tmp/configmap.yml` with the below content and replace TARGET with site specific FQDN of the primary mgmt node from the above section in the second last line.
+1. (`ncn-mw#`) Create a ConfigMap file `/tmp/configmap.yml`.
+
+   Use the following content, replacing `TARGET` with the site-specific FQDN of the primary management node
+   identified at the end of [Configure domain name for ClusterStor management node](#configure-domain-name-for-clusterstor-management-node).
    For example, `TARGET=abc100.xyz.com`.
 
     ```yaml
@@ -241,7 +253,8 @@ NOTE: The below steps needs to be performed on the CSM cluster either on master 
         curl -o /tmp/redfish-smart-1.prom cray-sysmgmt-health-redfish-exporter.sysmgmt-health.svc:9220/health?target=${TARGET}
     ```
   
-    NOTE: In case `ClusterStor` has more than one or multiple primary management node then multiple targets and curl commands can be used. The above script file `fetch_health.sh` under data section will look similar to:
+    NOTE: If the ClusterStor has more than one or multiple primary management node, then multiple targets and `curl` commands can be used.
+    The above script file `fetch_health.sh` under data section will look similar to:
   
     ```yaml
     data:
@@ -259,27 +272,28 @@ NOTE: The below steps needs to be performed on the CSM cluster either on master 
         curl -o /tmp/redfish-smart-1.prom cray-sysmgmt-health-redfish-exporter.sysmgmt-health.svc:9220/health?target=${TARGETN}
     ```
 
-1. (`ncn-mw#`) Apply the above file to create a `configmap` in `sysmgmt-health` namespace.
+1. (`ncn-mw#`) Apply the above file to create a ConfigMap in the `sysmgmt-health` namespace.
 
     ```bash
     kubectl apply -f /tmp/configmap.yml -n sysmgmt-health
     ```
 
-1. (`ncn-mw#`) Verify if the `configmap` is created or not.
+1. (`ncn-mw#`) Verify that the ConfigMap exists in the `sysmgmt-health` namespace.
 
     ```bash
     kubectl get configmap -n sysmgmt-health | grep redfish
     ```
 
-   Example Output:
+   Example output:
 
     ```text
     cray-sysmgmt-health-redfish                                    1      1m
     ```
 
-## Configure Username and Password for Redfish Exporter
+## Configure username and password for Redfish Exporter
 
-LDAP instance - Username and Password created on ClusterStor primary management node in the above step will be used here to configure Redfish Exporter.
+This procedure configures the Redfish Exporter using the username and password created in
+[Create admin user on ClusterStor E1000 primary management node](#create-admin-user-on-clusterstor-e1000-primary-management-node).
 
 This procedure can be performed on any master or worker NCN.
 
@@ -377,9 +391,7 @@ This procedure can be performed on any master or worker NCN.
         kubectl get pod -n sysmgmt-health | grep redfish
         ```
 
-Metrics Information:
-
-The SMART data in `prometheus` format would look like:
+The SMART data in Prometheus format would look like:
 
 ```text
 smartmon_temperature_celsius_raw_value{disk="/dev/sdk",host="kjlmo900.hpc.amslabs.hpecorp.net",endpoint="metrics", instance="10.252.1.6:9100", job="node-exporter", namespace="sysmgmt-health", pod="cray-sysmgmt-health-prometheus-node-exporter-74fd8",redfish_instance="10.214.132.198:9220",type="sas"} 33.0
@@ -389,5 +401,7 @@ smartmon_smartctl_run{disk="/dev/sdk",host="kjlmo900.hpc.amslabs.hpecorp.net"end
 smartmon_device_active{disk="/dev/sdm",host="kjlmo900.hpc.amslabs.hpecorp.net",endpoint="metrics", instance="10.252.1.6:9100", job="node-exporter", namespace="sysmgmt-health", pod="cray-sysmgmt-health-prometheus-node-exporter-74fd8",edfish_instance="10.214.132.198:9220",type="sas"} 1.0
 ```
 
-NOTE: In the above metrics example `redfish_instance` is the `E1000` node primary management name IP address and instance is the master/worker node IP address where redfish-exporter pod is scheduled.
-In case of open source `grafana` dashboards, instance in the `grafana` dashboards variable needs to be replaced with `redfish_instance` to get the `E1000` SMART data.
+NOTE: In the above metrics example, `redfish_instance` is the E1000 node primary management IP address;
+`instance` is the master/worker node IP address where the Redfish Exporter pod is scheduled.
+For open source Grafana dashboards, instance in the Grafana dashboards variable needs to be replaced with
+`redfish_instance` in order to get the E1000 SMART data.

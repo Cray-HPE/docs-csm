@@ -52,7 +52,7 @@ When resuming a procedure after a break, always be sure that a typescript is run
 ### 2. Ensure latest documentation is installed
 
 Before following the steps to prepare for the upgrade, make sure that the latest CSM documentation RPMs are
-installed on any NCNs where preparation procedures are being performed. These should be for the **`CURRENT`**
+installed on any NCNs where preparation procedures are being performed. These should be for the **CURRENT**
 CSM version on the system -- not the target version of the upgrade.
 
 See [Check for latest documentation](../update_product_stream/README.md#check-for-latest-documentation) for instructions.

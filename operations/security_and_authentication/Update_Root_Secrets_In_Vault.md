@@ -52,7 +52,7 @@ to safely update the data in Vault.
 
 (`ncn-mw#`) The `/usr/share/doc/csm/scripts/operations/configuration/write_root_secrets_to_vault.py` script can be used to
 set the password, SSH keys, and/or SSH configuration for the root user. It can also be used to delete any of
-these values from Vault.  Run the script with the `--help` argument to see the different options.
+these values from Vault. Run the script with the `--help` argument to see the different options.
 
 ### `write_ssh_config_to_vault.py`
 
