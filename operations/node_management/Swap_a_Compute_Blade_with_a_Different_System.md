@@ -137,7 +137,7 @@ ncn-mw# cray hsm inventory redfishEndpoints update --enabled false x9000c3s0b1
 
 ### Source: Clear the node controller settings
 
-Remove the system specific settings from each node controller on the blade.
+Remove the system-specific settings from each node controller on the blade.
 
 > The two commands look similar, but note that the component names (xnames)
 > in the URLs differ slightly, targeting each node controller on the blade.
