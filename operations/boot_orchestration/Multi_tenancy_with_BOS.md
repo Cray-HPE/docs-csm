@@ -6,6 +6,7 @@
     * [Tenant administrators](#tenant-administrators)
 * [Components](#components)
 * [Sessions and session templates](#sessions-and-session-templates)
+    * [Tenant name-spacing](#tenant-name-spacing)
     * [Session templates with tenancy](#session-templates-with-tenancy)
         * [Tenant-owned session templates](#tenant-owned-session-templates)
         * [Session templates not owned by tenants](#session-templates-not-owned-by-tenants)
