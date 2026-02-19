@@ -83,7 +83,7 @@ Set variables identifying the boot artifacts and parameters.
 
 1. (`ncn-mw#`) Set `PARAMS` to the boot kernel parameters.
 
-    -*IMPORTANT:** The `PARAMS` line must always include the substring `crashkernel=512M`.
+    **IMPORTANT:** The `PARAMS` line must always include the substring `crashkernel=512M`.
     This enables node dumps, which are needed to troubleshoot node crashes.
 
     > For readability, this example shows the variable being set over multiple lines.
@@ -140,7 +140,7 @@ There are three options for updating BSS:
 
 #### Update BSS by NID
 
-1. (`ncn-mw#`) Set `NIDS` to a comma-separated list of the [node IDs](../../glossary.md#nid) whose BSS entries should be updated.
+1. (`ncn-mw#`) Set `NIDS` to a comma-separated list of the [node IDs](../../glossary.md#node-id-nid) whose BSS entries should be updated.
 
     ```bash
     NIDS=1001,1032
