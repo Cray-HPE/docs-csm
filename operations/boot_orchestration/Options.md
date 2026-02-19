@@ -226,7 +226,7 @@ This can be helpful in avoiding accidental reboots of more components than inten
 
 If this option is enabled, it is still possible to effectively create a session with no limit
 by specifying `*` as the limit parameter (if this is done on the command line, it must be
-quoted it in order to prevent it from being interpreted by the shell).
+quoted in order to prevent it from being interpreted by the shell).
 
 This option does NOT have an effect on:
 

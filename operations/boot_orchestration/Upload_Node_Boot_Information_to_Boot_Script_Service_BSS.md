@@ -161,7 +161,7 @@ There are three options for updating BSS:
 #### Update BSS default boot setup
 
 BSS supports a mechanism that allows for a default boot setup, rather than needing to specify boot details for each specific node.
-This feature is particular useful with larger systems. To do this, follow the [Update BSS by host name](#update-bss-by-host-name)
+This feature is particularly useful with larger systems. To do this, follow the [Update BSS by host name](#update-bss-by-host-name)
 procedure, setting the `HOSTS` variable to `Default`.
 
 ### 3. Next step

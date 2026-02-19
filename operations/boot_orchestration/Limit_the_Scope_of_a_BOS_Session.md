@@ -32,7 +32,7 @@ This option has no effect on BOS v1 sessions.
 However, even if this option is enabled, it is still possible to use
 [Advanced session limit syntax](#advanced-session-limit-syntax) to effectively create a
 session with no limit; a session can be limited to all nodes on the system by specifying
-`*` as the limit parameter (if this is done on the command line, it must be quoted it in
+`*` as the limit parameter (if this is done on the command line, it must be quoted in
 order to prevent it from being interpreted by the shell).
 
 ## Limiting tenant sessions in v2
