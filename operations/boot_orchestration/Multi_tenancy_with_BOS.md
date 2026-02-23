@@ -6,6 +6,7 @@
     * [Tenant administrators](#tenant-administrators)
 * [Components](#components)
 * [Sessions and session templates](#sessions-and-session-templates)
+    * [Tenant name-spacing](#tenant-name-spacing)
     * [Session templates with tenancy](#session-templates-with-tenancy)
         * [Tenant-owned session templates](#tenant-owned-session-templates)
         * [Session templates not owned by tenants](#session-templates-not-owned-by-tenants)
@@ -37,11 +38,12 @@ resources specific to that tenant.
 
 A tenant administrator is a role that is only able to manage resources belonging to a specific tenant.
 
-[Tenant administrators](../multi-tenancy/TenantAdminConfig.md) should be able to view their
+[Tenant administrators](../multi-tenancy/TenantAdminConfig.md) are able to view their
 [components](Components.md), [session templates](Session_Templates.md), and [sessions](Sessions.md) normally.
+Tenant administrators are also able to create sessions using their session templates.
 Tenant administrators are not able to view the resources of another tenant.
 Tenant administrators have restricted or no access to some BOS endpoints, such as the components endpoint
-(which can be viewed but not patched), and the options endpoint (which is blocked entirely).
+(which can be viewed but not patched), and the [options](Options.md) endpoint (which is blocked entirely).
 
 ## Components
 
