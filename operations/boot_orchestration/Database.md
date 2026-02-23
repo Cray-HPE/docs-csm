@@ -1,13 +1,31 @@
 # BOS database
 
 * [Overview](#overview)
+* [Kubernetes deployment](#kubernetes-deployment)
 * [Data organization](#data-organization)
 * [Access](#access)
 * [Source](#source)
 
 ## Overview
 
-(`ncn-mw#`) All BOS data is stored in Redis databases running in a pod in the `services` namespace.
+All BOS data is stored in Redis databases.
+
+## Kubernetes deployment
+
+(`ncn-mw#`) The BOS databases are a Kubernetes deployment in the `services` namespace.
+
+```bash
+kubectl get deployments -n services -l app.kubernetes.io/name=cray-bos-db
+```
+
+Example output:
+
+```text
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+cray-bos-db   1/1     1            1           11d
+```
+
+(`ncn-mw#`) The database pod runs in the `services` namespace.
 
 ```bash
 kubectl get pods -n services -l app.kubernetes.io/name=cray-bos-db
@@ -26,7 +44,7 @@ Within the Redis pod, the BOS data is divided into 6 databases:
 
 | *Database*                                                                 | *Key*                                                               |
 | -------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| [Components](Components.md)                                                | Node xname                                                          |
+| [Components](Components.md)                                                | Component name ([xname](../../glossary.md#xname))                   |
 | Boot artifacts (`initrd`, kernel, and kernel parameters)                   | [BSS](../../glossary.md#boot-script-service-bss) token              |
 | [Options](Options.md)                                                      | `options`                                                           |
 | [Session templates](Session_Templates.md)                                  | Hash based on [tenant](Multi_tenancy_with_BOS.md) and template name |
@@ -39,8 +57,11 @@ Within the Redis pod, the BOS data is divided into 6 databases:
 
 ## Access
 
-All access to the BOS databases is done by the [BOS API server](API.md), with a single exception;
-The [`power-on` operator](Operators.md#power-on) directly writes to the boot artifacts database.
+All access to the BOS databases is done by the [BOS API server](API.md), with two exceptions:
+
+* The [`power-on` operator](Operators.md#power-on) directly writes to the boot artifacts database.
+* The [migration job](API.md#migration-job) directly reads from and writes to most of the databases.
+    * The migration job only runs when the `cray-bos` deployment is upgraded.
 
 ## Source
 

@@ -188,7 +188,8 @@ After this time, the request will time out. The default is 20 seconds.
 
 ### `ims_errors_fatal`
 
-This option modifies how BOS behaves when validating the architecture of a boot image in a [boot set](Session_Templates.md#boot-sets).
+This option modifies how BOS behaves when validating the architecture of a boot image
+during [boot set validation](Session_Templates.md#boot-set-validation).
 Specifically, this option comes into play when BOS needs data from the
 [Image Management Service (IMS)](../../glossary.md#image-management-service-ims)
 in order to do this validation, but IMS is unreachable.
@@ -197,12 +198,10 @@ In the above situation, if this option is true, then the validation will fail.
 Otherwise, if the option is false, then a warning will be logged, but the validation will not
 be failed because of this.
 
-This boot set validation happens when creating a session template, validating a session
-template, or creating a session.
-
 ### `ims_images_must_exist`
 
-This option modifies how BOS behaves when validating a boot set whose boot image appears to be from IMS.
+This option modifies how BOS behaves when performing [boot set validation](Session_Templates.md#boot-set-validation)
+on a [boot set](Session_Templates.md#boot-sets) whose boot image appears to be from IMS.
 Specifically, this option comes into play when the image does not actually exist in IMS.
 
 In the above situation, if this option is true, then the validation will fail.
@@ -211,9 +210,6 @@ be failed because of this.
 
 Note: If `ims_images_must_exist` is true but `ims_errors_fatal` is false, then
 a failure to determine whether or not an image is in IMS will NOT result in a fatal error.
-
-This boot set validation happens when creating a [session template](Session_Templates.md),
-validating a session template, or creating a session.
 
 ### `ims_read_timeout`
 
@@ -258,21 +254,29 @@ How frequently the BOS operators check component state for needed actions (in se
 
 ### `reject_nids`
 
-BOS does not support the use of NIDs to identify nodes -- only xnames.
-If the `reject_nids` option is enabled, BOS will prevent creation of sessions and session templates that appear to reference NIDs.
+Regardless of the value of this option,
+BOS does not support the use of [NIDs](../../glossary.md#node-id-nid) to identify nodes -- only
+component names ([xnames](../../glossary.md#xname)).
+If the `reject_nids` option is enabled, then BOS will prevent creation of [sessions](Sessions.md) and
+[session templates](Session_Templates.md) that appear to reference NIDs.
 Specifically, if this option is enabled, then:
 
-* When creating a session template, if it has any boot sets with a `node_list` that appears to contain a NID, then the creation will fail.
-* When validating a session template, if it has any boot sets with a `node_list` that appears to contain a NID, then the validation will fail.
-* When creating a session, if the specified session template has any boot sets with a `node_list` that appears to contain a NID, then the session creation will fail.
-* When creating a session, if the session limit appears to contain NID values, then the creation will fail.
+* During [boot set validation](Session_Templates.md#boot-set-validation), if a
+  [boot set](Session_Templates.md#boot-sets) has
+  a [`node_list`](Session_Templates.md#node-list) that appears to contain a NID, then the validation will fail.
+* When creating a session, if the [session limit](Limit_the_Scope_of_a_BOS_Session.md) appears to contain NID
+  values, then the creation will fail.
 
 This option does NOT have an effect on sessions that were created prior to it being enabled (even if they have not yet started).
 
 ### `session_limit_required`
 
-If enabled, BOS sessions cannot be created without specifying the `limit` parameter.
+If enabled, then BOS sessions cannot be created without specifying a
+[session limit](Limit_the_Scope_of_a_BOS_Session.md).
 This can be helpful in avoiding accidental reboots of more components than intended.
+
 If this option is enabled, it is still possible to effectively create a session with no limit
 by specifying `*` as the limit parameter (if this is done on the command line, it must be
-quoted it in order to prevent it from being interpreted by the shell).
+quoted in order to prevent it from being interpreted by the shell).
+
+This option does NOT have an effect on sessions that were created prior to it being enabled (even if they have not yet started).
