@@ -219,8 +219,16 @@ How frequently the BOS operators check component state for needed actions (in se
 
 > This option is only available as a 'hotfix' in CSM 1.4.
 
-If enabled, BOS sessions cannot be created without specifying the `limit` parameter.
+If enabled, then BOS v2 sessions cannot be created without specifying a
+[session limit](Limit_the_Scope_of_a_BOS_Session.md).
+
 This can be helpful in avoiding accidental reboots of more components than intended.
+
 If this option is enabled, it is still possible to effectively create a session with no limit
 by specifying `*` as the limit parameter (if this is done on the command line, it must be
-quoted it in order to prevent it from being interpreted by the shell).
+quoted in order to prevent it from being interpreted by the shell).
+
+This option does NOT have an effect on:
+
+* BOS v2 sessions that were created prior to the option being enabled (even if they have not yet started)
+* BOS v1 sessions

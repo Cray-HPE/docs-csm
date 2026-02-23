@@ -19,13 +19,20 @@ For more details on creating a session, see [Create a session](Manage_a_BOS_Sess
 
 ## NIDs in session limits
 
-When specifying nodes, component names (xnames) must be used. The use of NIDs is not supported.
+When specifying nodes, component names ([xnames](../../glossary.md#xname)) must be used. The use of
+[NIDs](../../glossary.md#node-id-nid) is not supported.
 
 ## Requiring v2 session limits
 
 If the [`session_limit_required` option](Options.md#session_limit_required) is enabled,
 then the `limit` parameter is not optional when creating a BOS v2 session.
 This option has no effect on BOS v1 sessions.
+
+However, even if this option is enabled, it is still possible to use
+[Advanced session limit syntax](#advanced-session-limit-syntax) to effectively create a
+session with no limit; a session can be limited to all nodes on the system by specifying
+`*` as the limit parameter (if this is done on the command line, it must be quoted in
+order to prevent it from being interpreted by the shell).
 
 ## Advanced session limit syntax
 
