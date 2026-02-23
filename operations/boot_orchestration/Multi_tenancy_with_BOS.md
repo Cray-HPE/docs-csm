@@ -6,6 +6,7 @@
     * [Tenant administrators](#tenant-administrators)
 * [Components](#components)
 * [Sessions and session templates](#sessions-and-session-templates)
+    * [Tenant name-spacing](#tenant-name-spacing)
     * [Session templates with tenancy](#session-templates-with-tenancy)
         * [Tenant-owned session templates](#tenant-owned-session-templates)
         * [Session templates not owned by tenants](#session-templates-not-owned-by-tenants)
@@ -40,11 +41,12 @@ resources specific to that tenant.
 
 A tenant administrator is a role that is only able to manage resources belonging to a specific tenant.
 
-[Tenant administrators](../multi-tenancy/TenantAdminConfig.md) should be able to view their
+[Tenant administrators](../multi-tenancy/TenantAdminConfig.md) are able to view their
 [components](Components.md), [session templates](Session_Templates.md), and [sessions](Sessions.md) normally.
+Tenant administrators are also able to create sessions using their session templates.
 Tenant administrators are not able to view the resources of another tenant.
 Tenant administrators have restricted or no access to some BOS endpoints, such as the components endpoint
-(which can be viewed but not patched), and the options endpoint (which is blocked entirely).
+(which can be viewed but not patched), and the [options](Options.md) endpoint (which is blocked entirely).
 
 ## Components
 
@@ -147,8 +149,8 @@ For example, consider the following session template:
           "Compute"
         ],
         "path": "s3://boot-images/6afda9c4-297f-4d35-b104-f20ed12c4d08/manifest.json",
-        "rootfs_provider": "sbps",
-        "rootfs_provider_passthrough": "sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.fanta.hpc.amslabs.hpecorp.net:300",
+        "rootfs_provider": "cpss3",
+        "rootfs_provider_passthrough": "dvs:api-gw-service-nmn.local:300:hsn0,nmn0:0",
         "type": "s3"
       }
   },
