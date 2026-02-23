@@ -14,6 +14,7 @@ Session templates can be created via the API by providing JSON data or via the C
   * [`rootfs` providers](#rootfs-providers)
     * [`root` kernel parameter example](#root-kernel-parameter-example)
   * [Overriding configuration (BOS v2 only)](#overriding-configuration-bos-v2-only)
+  * [Boot set validation](#boot-set-validation)
 
 ## Session template structure
 
@@ -55,7 +56,7 @@ The following is an example BOS session template:
 ```
 
 * The `description` field is an optional text description of the template.
-* The `node_list` field (under `boot_sets`) is a list of individual node component names (xnames).
+* The `node_list` field (under `boot_sets`) is a list of individual node component names ([xnames](../../glossary.md#xname)).
 * The `etag` field is used to identify the version of the `manifest.json` file in S3.
 * The `path` field is the path to the `manifest.json` file in S3.
 * The `type` field is the type of storage where the boot image resides.
@@ -93,11 +94,13 @@ This boot artifact information from the files stored in S3 is then written to th
 
 Each boot set also specifies a set of nodes that are the targets of the boot set.
 There are three different fields used to specify the nodes: `node_list`, `node_groups`, and `node_roles_groups`.
+These are called the hardware-specifier fields of the boot set.
 The total set of nodes targeted by the boot set is the union of the nodes specified by these fields.
 
 #### Node list
 
-`node_list` maps to a list of nodes identified by component names (xnames). NIDs are not supported.
+`node_list` maps to a list of nodes identified by component names ([xnames](../../glossary.md#xname)).
+[NIDs](../../glossary.md#node-id-nid) are not supported.
 
 For example:
 
@@ -207,3 +210,22 @@ It follows the same format as the `cfs` field at the top level of the session te
 If specified, this will override (for that boot set entry) whatever value is set in the base session template.
 
 This feature is not supported for BOS v1.
+
+### Boot set validation
+
+Boot set validation is performed by the [BOS API server](API.md) in the following operations:
+
+* A [session template](Session_Templates.md) is being validated.
+* A v2 [session](Sessions.md) is being created.
+  * This does not happen when a BOS v1 session is created.
+  * In the case that the session operation is a shutdown, then
+    not all of the boot set validation occurs. See below for details.
+
+If a boot set fails validation, then the associated operation also fails. The following
+things are checked when a boot set is validated:
+
+* Verify that at least one non-empty hardware-specifier field is set.
+  * See [Specifying nodes](#specifying-nodes) for details on hardware-specifier fields.
+* Verify that the [boot artifacts](#boot-artifacts) exist in [S3](../../glossary.md#simple-storage-service-s3).
+  * This check is not performed in the case that the boot set validation is being
+    done when creating a shutdown session.

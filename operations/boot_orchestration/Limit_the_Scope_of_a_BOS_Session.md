@@ -18,7 +18,8 @@ For more details on creating a session, see [Create a session](Manage_a_BOS_Sess
 
 ## NIDs in session limits
 
-When specifying nodes, component names (xnames) must be used. The use of NIDs is not supported.
+When specifying nodes, component names ([xnames](../../glossary.md#xname)) must be used. The use of
+[NIDs](../../glossary.md#node-id-nid) is not supported.
 
 ## Advanced session limit syntax
 

@@ -3,7 +3,7 @@
 * [Overview](#overview)
 * [Execution loop](#execution-loop)
 * [Options](#options)
-* [Kubernetes pods](#kubernetes-pods)
+* [Kubernetes deployment](#kubernetes-deployment)
 * [Operator list](#operator-list)
   * [`actual-state-cleanup`](#actual-state-cleanup)
   * [`configuration`](#configuration)
@@ -49,7 +49,9 @@ the relevant operator descriptions in the [Operator list](#operator-list).
 The following BOS options apply to operators generally:
 
 * [`logging_level`](Options.md#logging_level)
-  * This option determines the verbosity of the [BOS operator Kubernetes pod](#kubernetes-pods) logs.
+  * This option determines the verbosity of BOS logging, including the BOS operator logs.
+  * The operator logs can be viewed by looking at the logs of the pods in the operator
+    [Kubernetes deployment](#kubernetes-deployment).
 * [`polling_frequency`](Options.md#polling_frequency)
   * This option determines how long the sleep interval is in the [execution loop](#execution-loop).
   * The only operator which is an exception to this is the [`discovery`](#discovery) operator, which
@@ -57,9 +59,30 @@ The following BOS options apply to operators generally:
 
 See [Options](Options.md) for more information.
 
-## Kubernetes pods
+## Kubernetes deployment
 
-(`ncn-mw#`) The BOS operators run in Kubernetes pods in the `services` namespace.
+(`ncn-mw#`) Each BOS operator has its own Kubernetes deployment in the `services` namespace.
+
+```bash
+kubectl get deployments -n services -l app.kubernetes.io/instance=cray-bos | grep '^cray-bos-operator-'
+```
+
+Example output:
+
+```text
+cray-bos-operator-actual-state-cleanup   1/1     1            1           11d
+cray-bos-operator-configuration          1/1     1            1           11d
+cray-bos-operator-discovery              1/1     1            1           11d
+cray-bos-operator-power-off-forceful     1/1     1            1           11d
+cray-bos-operator-power-off-graceful     1/1     1            1           11d
+cray-bos-operator-power-on               1/1     1            1           11d
+cray-bos-operator-session-cleanup        1/1     1            1           11d
+cray-bos-operator-session-completion     1/1     1            1           11d
+cray-bos-operator-session-setup          1/1     1            1           11d
+cray-bos-operator-status                 1/1     1            1           11d
+```
+
+(`ncn-mw#`) The BOS operator pods run in the `services` namespace.
 
 ```bash
 kubectl get pods -n services | grep '^cray-bos-operator-'
@@ -146,7 +169,7 @@ For each enabled BOS component that has a `power-on-pending` status, this operat
 
 1. Calls CAPMC to power on the node.
 
-> Unlike all parts of BOS other than the [API server](API.md), this operator directly accesses a
+> Unlike almost all parts of BOS other than the [API server](API.md), this operator directly accesses a
 > [BOS database](Database.md). Specifically, after the BSS step in the above procedure,
 > the operator writes an entry in the boot artifacts database. The key for the entry is the BSS
 > token. The value of the entry is a dictionary containing the kernel, kernel, parameters, and `initrd`.
