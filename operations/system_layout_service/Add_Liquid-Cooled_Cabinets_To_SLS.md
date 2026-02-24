@@ -216,12 +216,12 @@ This procedure adds one or more liquid-cooled cabinets and associated [CDU][cdu]
     Configuration
     ========================
     SLS State File: sls_dump.json
-    [CDU][cdu] Switch:     d1w1
+    CDU Switch:     d1w1
     Brand:          Dell
     Alias:          sw-cdu-003
 
     ================================
-    [CDU][cdu] Switch Network Configuration
+    CDU Switch Network Configuration
     ================================
     Selecting IP Reservation for d1w1 CDU Switch in HMN's network_hardware subnet
       Found existing IP reservation sw-spine-001 with IP 10.254.0.2
