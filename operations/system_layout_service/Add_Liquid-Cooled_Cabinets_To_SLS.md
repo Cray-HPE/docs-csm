@@ -235,14 +235,14 @@ This procedure adds one or more liquid-cooled cabinets and associated [CDU][cdu]
     Configuration
     ========================
     SLS State File: sls_dump.json
-    [CDU][cdu] Switch:     d1w1
+    CDU Switch:     d1w1
     Brand:          Dell
     Alias:          sw-cdu-003
 
     ================================
-    [CDU][cdu] Switch Network Configuration
+    CDU Switch Network Configuration
     ================================
-    Selecting IP Reservation for d1w1 [CDU][cdu] Switch in HMN's network_hardware subnet
+    Selecting IP Reservation for d1w1 CDU Switch in HMN's network_hardware subnet
       Found existing IP reservation sw-spine-001 with IP 10.254.0.2
       Found existing IP reservation sw-spine-002 with IP 10.254.0.3
       Found existing IP reservation sw-leaf-bmc-001 with IP 10.254.0.4
@@ -250,7 +250,7 @@ This procedure adds one or more liquid-cooled cabinets and associated [CDU][cdu]
       Found existing IP reservation sw-cdu-001 with IP 10.254.0.6
       Found existing IP reservation sw-cdu-002 with IP 10.254.0.7
       10.254.0.8 Available for use.
-    Selecting IP Reservation for d1w1 [CDU][cdu] Switch in NMN's network_hardware subnet
+    Selecting IP Reservation for d1w1 CDU Switch in NMN's network_hardware subnet
       Found existing IP reservation sw-spine-001 with IP 10.252.0.2
       Found existing IP reservation sw-spine-002 with IP 10.252.0.3
       Found existing IP reservation sw-leaf-bmc-001 with IP 10.252.0.4
@@ -258,7 +258,7 @@ This procedure adds one or more liquid-cooled cabinets and associated [CDU][cdu]
       Found existing IP reservation sw-cdu-001 with IP 10.252.0.6
       Found existing IP reservation sw-cdu-002 with IP 10.252.0.7
       10.252.0.8 Available for use.
-    Selecting IP Reservation for d1w1 [CDU][cdu] Switch in MTL's network_hardware subnet
+    Selecting IP Reservation for d1w1 CDU Switch in MTL's network_hardware subnet
       Found existing IP reservation sw-spine-001 with IP 10.1.0.2
       Found existing IP reservation sw-spine-002 with IP 10.1.0.3
       Found existing IP reservation sw-leaf-bmc-001 with IP 10.1.0.4
