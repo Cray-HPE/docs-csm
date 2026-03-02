@@ -3,7 +3,7 @@
 ## Symptom  
 
 During CSM upgrade from `1.6.x` to `1.7.x`, where 'x' is the minor version,
-the NCN checks may fail with iSCSI SBPS as below: 
+the NCN checks may fail with iSCSI SBPS as below:
 
 ```text
 {
@@ -96,7 +96,7 @@ Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Failed with result 'e
 
 ## Resolution
 
-Follow the squence of steps on the affected node as below:
+Follow the sequence of steps on the affected node as below:
 
 1. Enable the `sbps-marshal` `systemd` service:
 
