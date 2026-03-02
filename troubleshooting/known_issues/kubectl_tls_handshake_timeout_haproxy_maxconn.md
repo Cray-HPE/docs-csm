@@ -15,7 +15,7 @@ HAProxy cannot accept any new connections and all new `kubectl` requests time ou
 Unable to connect to the server: net/http: TLS handshake timeout
 ```
 
-Directly querying the HAProxy endpoint also fails:
+(`ncn-m#`) Directly querying the HAProxy endpoint also fails:
 
 ```bash
 curl -k https://<ncn-m001-nmn-ip>:6442/healthz
@@ -34,7 +34,7 @@ Error from server (BadRequest): the server rejected our request for an unknown r
 or:
 
 ```text
-error sending request: Post "https://<ncn-m001-hmn-ip>:6442/...": EOF
+error sending request: Post "https://<ncn-m001-nmn-ip>:6442/...": EOF
 ```
 
 Restarting HAProxy (`systemctl restart haproxy`) may restore brief functionality, but the issue quickly recurs until
@@ -44,7 +44,7 @@ the underlying stuck processes are cleared.
 
 ### 1. Check HAProxy connection counts
 
-On any master NCN, inspect the HAProxy stats socket to determine whether the session limit has been reached:
+(`ncn-m#`) On any master NCN, inspect the HAProxy stats socket to determine whether the session limit has been reached:
 
 ```bash
 echo "show stat" | socat stdio /var/lib/haproxy/stats | grep "^k8s-api" | \
@@ -63,7 +63,7 @@ k8s-api-3       qcur:0    qmax:0    scur:250  smax:250  slim:250  stot:1207   st
 
 ### 2. Count stuck `kubectl` processes
 
-Check the number of `kubectl` processes running on all master and worker nodes. A healthy node should have only a
+(`ncn-m#`) Check the number of `kubectl` processes running on all master and worker nodes. A healthy node should have only a
 handful of `kubectl` processes. Counts in the range of 90–130 per node indicate accumulation of stuck processes:
 
 ```bash
@@ -80,7 +80,7 @@ ncn-w007: 94
 ...
 ```
 
-To see which processes are stuck, run the following on an affected node:
+(`ncn-mw#`) To see which processes are stuck, run the following on an affected node:
 
 ```bash
 ps aux | grep kubectl | grep -v grep
@@ -106,7 +106,7 @@ backend k8s-api
     default-server verify none check-ssl inter 10s downinter 5s rise 2 fall 2 slowstart 60s maxconn 2500 maxqueue 256 weight 100
 ```
 
-Then reload HAProxy:
+(`ncn-m#`) Then reload HAProxy:
 
 ```bash
 systemctl reload haproxy
@@ -116,14 +116,14 @@ This restores `kubectl` functionality while the stuck processes are cleaned up.
 
 ### Step 2: Kill stuck `kubectl` processes on all master and worker nodes
 
-Run the following on each affected node to terminate the stuck processes. Replace `ncn-w0[01-XX]` with the appropriate
+(`ncn-m#`) Run the following to terminate the stuck processes. Replace `ncn-w0[01-XX]` with the appropriate
 worker node range for the system:
 
 ```bash
 pdsh -w ncn-m00[1-3],ncn-w0[01-XX] 'pkill -f "kubectl rollout status"'
 ```
 
-Alternatively, to kill all `kubectl` processes (use with care):
+(`ncn-m#`) Alternatively, to kill all `kubectl` processes (use with care):
 
 ```bash
 pdsh -w ncn-m00[1-3],ncn-w0[01-XX] 'pkill kubectl'
@@ -131,7 +131,7 @@ pdsh -w ncn-m00[1-3],ncn-w0[01-XX] 'pkill kubectl'
 
 ### Step 3: Verify HAProxy connection counts return to normal
 
-After clearing the stuck processes, confirm that session counts have dropped significantly:
+(`ncn-m#`) After clearing the stuck processes, confirm that session counts have dropped significantly:
 
 ```bash
 while true; do
@@ -156,7 +156,7 @@ k8s-api-3       qcur:0    qmax:0    scur:25   smax:249  slim:2500 stot:485    st
 While investigating, it is possible to communicate directly with a `kube-apiserver` process on a specific master node
 by editing a copy of `admin.conf` to point at the node's IP and port `6443` instead of the HAProxy address.
 
-Find the location of the current Kubernetes configuration file:
+(`ncn-m#`) Find the location of the current Kubernetes configuration file:
 
 ```bash
 echo $KUBECONFIG
@@ -168,7 +168,7 @@ Example output:
 /etc/kubernetes/admin.conf
 ```
 
-Copy the file and edit the `server` field to point directly at one of the master node IPs on port `6443`:
+(`ncn-m#`) Copy the file and edit the `server` field to point directly at one of the master node IPs on port `6443`:
 
 ```bash
 cp /etc/kubernetes/admin.conf /root/admin-direct.conf
