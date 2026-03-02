@@ -1,8 +1,9 @@
-# iSCSI SBPS Marshal agent may fail during upgrade 
+# iSCSI SBPS Marshal agent may fail during upgrade
 
 ## Symptom  
 
-During CSM upgrade from 1.6.x to 1.7.x, the NCN checks may fail with iSCSI SBPS as below: 
+During CSM upgrade from `1.6.x` to `1.7.x`, where 'x' is the minor version,
+the NCN checks may fail with iSCSI SBPS as below: 
 
 ```text
 {
@@ -72,13 +73,13 @@ iSCSI SBPS marshal system service may not be in active state as below:
         CPU: 2ms
 ```
 
-Journalctl log for this service may have below errors:
+`journalctl` log for this service may have below errors:
 
 ```bash
 # Journalctl -u sbps-marshal.service
 ```
 
-Snippet of journalctl log:
+Snippet of `journalctl` log:
 
 ```text
 Feb 26 09:11:00 ncn-w003 systemd[1]: Started System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary images similar to PE..
@@ -97,7 +98,7 @@ Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Failed with result 'e
 
 Follow the squence of steps on the affected node as below:
 
-1. Enable the sbps-marshal systemd service: 
+1. Enable the `sbps-marshal` `systemd` service:
 
 ```bash
 # systemctl enable sbps-marshal.service
@@ -110,13 +111,13 @@ ncn-w003:~ # systemctl enable sbps-marshal.service
 Created symlink /etc/systemd/system/multi-user.target.wants/sbps-marshal.service → /usr/lib/systemd/system/sbps-marshal.service.
 ```
 
-1. Restart sbps-marshal systemd service
+1. Restart `sbps-marshal` `systemd` service
 
 ```bash
 # systemctl restart sbps-marshal.service
 ```
 
-1. Check the status of sbps-marshal.service, it should be running fine as below:
+1. Check the status of `sbps-marshal` service, it should be running fine as below:
 
 Example command:
 
