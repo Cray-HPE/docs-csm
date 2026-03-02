@@ -1,11 +1,11 @@
-# iSCSI SBPS Marshal agent may fail during upgrade
+# iSCSI SBPS systemd service (sbps-marshal) may fail during upgrade
 
 ## Symptom  
 
-During CSM upgrade from `1.6.x` to `1.7.x`, where 'x' is the minor version,
+During CSM upgrade from `1.6.x` to `1.7.x`, where 'x' is the patch version,
 the NCN checks may fail with iSCSI SBPS as below:
 
-```text
+```json
 {
     "duration": 54160,
     "err": null,
@@ -25,14 +25,14 @@ the NCN checks may fail with iSCSI SBPS as below:
     "resource-type": "Command",
     "result": 1,
     "skipped": false,
-    "successful": false, --------
+    "successful": false,
     "summary-line": "Command: iSCSI-readiness-test: exit-status:\nExpected\n    <int>: 1\nto equal\n    <int>: 0",
     "test-type": 0,
     "title": "iSCSI-readinesss-test"
 }
 ```
 
-```text
+```json
 {
     "duration": 35375,
     "err": null,
@@ -52,7 +52,7 @@ the NCN checks may fail with iSCSI SBPS as below:
     "resource-type": "Command",
     "result": 1,
     "skipped": false,
-    "successful": false, --------
+    "successful": false,
     "summary-line": "Command: iscsi_cps_sanity: exit-status:\nExpected\n    <int>: 1\nto equal\n    <int>: 0",
     "test-type": 0,
     "title": "iSCSI boot content projection"
@@ -61,10 +61,10 @@ the NCN checks may fail with iSCSI SBPS as below:
 
 ## Root cause
 
-iSCSI SBPS marshal system service may not be in active state as below:
+iSCSI SBPS marshal systemd service may not be active:
 
 ```bash
-# systemctl status sbps-marshal
+systemctl status sbps-marshal
 ● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary images simi>
      Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
      Active: activating (auto-restart) (Result: exit-code) since Thu 2026-02-26 09:11:36 UTC; 13s ago
@@ -73,10 +73,10 @@ iSCSI SBPS marshal system service may not be in active state as below:
         CPU: 2ms
 ```
 
-`journalctl` log for this service may have below errors:
+The systemd journal may show the following errors:
 
 ```bash
-# Journalctl -u sbps-marshal.service
+Journalctl -u sbps-marshal.service
 ```
 
 Snippet of `journalctl` log:
@@ -94,30 +94,35 @@ Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Main process exited, 
 Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Failed with result 'exit-code'.
 ```
 
+The `/usr/lib/sbps-marshal/bin/sbps-marshal` is failed to locate is because, the symbolic link between
+`/etc/systemd/system/multi-user.target.wants/sbps-marshal.service` and `/usr/lib/systemd/system/sbps-marshal.service`
+was not established. This will get established when the sbps-marshal.service is enabled. There looks to be enable of
+sbps-marshal service failed during worker node personalization and hence issue.
+
 ## Resolution
 
 Follow the sequence of steps on the affected node as below:
 
-1. Enable the `sbps-marshal` `systemd` service:
+1. (`ncn-w#`) Enable the `sbps-marshal` `systemd` service:
 
 ```bash
-# systemctl enable sbps-marshal.service
+systemctl enable sbps-marshal.service
 ```
 
 Example output:
 
 ```bash
-ncn-w003:~ # systemctl enable sbps-marshal.service
+systemctl enable sbps-marshal.service
 Created symlink /etc/systemd/system/multi-user.target.wants/sbps-marshal.service → /usr/lib/systemd/system/sbps-marshal.service.
 ```
 
-1. Restart `sbps-marshal` `systemd` service
+1. (`ncn-w#`) Restart the `sbps-marshal` `systemd` service
 
 ```bash
-# systemctl restart sbps-marshal.service
+systemctl restart sbps-marshal.service
 ```
 
-1. Check the status of `sbps-marshal` service, it should be running fine as below:
+1. (`ncn-w#`) Check the status of the `sbps-marshal` service, it should be running fine as below:
 
 Example command:
 
@@ -128,8 +133,7 @@ Example command:
 Example command output:
 
 ```bash
-
-ncn-w003:~ # systemctl status sbps-marshal.service
+ systemctl status sbps-marshal.service
 ● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary>
      Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
      Active: active (running) since Thu 2026-02-26 18:07:51 UTC; 22min ago
