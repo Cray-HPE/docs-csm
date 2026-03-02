@@ -18,11 +18,11 @@ Unable to connect to the server: net/http: TLS handshake timeout
 Directly querying the HAProxy endpoint also fails:
 
 ```bash
-curl -k https://<ncn-m001-hmn-ip>:6442/healthz
+curl -k https://<ncn-m001-nmn-ip>:6442/healthz
 ```
 
 ```text
-curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to <ncn-m001-hmn-ip>:6442
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to <ncn-m001-nmn-ip>:6442
 ```
 
 Other Kubernetes-dependent services may also report errors such as:
