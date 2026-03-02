@@ -52,6 +52,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Cray CLI 403 Forbidden Errors](known_issues/craycli_403_forbidden_errors.md)
 * [Flags Set For Nodes In HSM](known_issues/flags_set_for_nodes_in_hsm.md)
 * [Helm Chart Deploy Timeouts](known_issues/helm_chart_deploy_timeouts.md)
+* [`kubectl` TLS Handshake Timeout Caused by HAProxy Connection Exhaustion](known_issues/kubectl_tls_handshake_timeout_haproxy_maxconn.md)
 * [HPE iLO dropping event subscriptions and not properly transitioning power state in CSM software](known_issues/hpe_systems_not_transitioning_power_state.md)
 * [NCN health checks known issues](known_issues/issues_with_ncn_health_checks.md)
 * [NCN resource checks known issues](known_issues/ncn_resource_checks.md)
