@@ -48,7 +48,7 @@ wait_for_ceph_orch() {
 
   while true; do
     # Check for any non-running ceph daemons
-    if ceph orch ps | grep -E 'starting|stopped|error|unknown' >/dev/null; then
+    if ceph orch ps | grep -E 'starting|stopped|error|unknown' > /dev/null; then
       echo "Daemons still transitioning..."
 
     # Ensure all MONs are in quorum
@@ -86,34 +86,34 @@ update_ceph_csi_configmaps() {
   NEW_MONITORS=$(ceph mon dump -f json | jq -c '[.mons[].public_addr | split("/")[0]]')
   # Namespaces ceph-rbd, ceph-cephfs, default, services contains ceph-csi-config configmap
   for ns in ceph-rbd ceph-cephfs default services; do
-    if kubectl -n "$ns" get cm ceph-csi-config >/dev/null 2>&1; then
+    if kubectl -n "$ns" get cm ceph-csi-config > /dev/null 2>&1; then
       echo "Updating ceph-csi-config in namespace $ns"
-      kubectl -n "$ns" get cm ceph-csi-config -o json |
-        jq --argjson mons "$NEW_MONITORS" '
+      kubectl -n "$ns" get cm ceph-csi-config -o json \
+        | jq --argjson mons "$NEW_MONITORS" '
                 .data["config.json"] |= (
                     fromjson
                     | map(.monitors = $mons)
                     | tojson
                 )
-            ' |
-        kubectl apply -f -
+            ' \
+        | kubectl apply -f -
     else
       echo "Skipping $ns (ceph-csi-config not found)"
     fi
   done
 
   # Handle ceph-etc configmap in backups namespace separately
-  if kubectl -n backups get cm ceph-etc >/dev/null 2>&1; then
+  if kubectl -n backups get cm ceph-etc > /dev/null 2>&1; then
     echo "Updating ceph-etc in namespace backups"
-    kubectl -n backups get cm ceph-etc -o json |
-      jq --argjson mons "$NEW_MONITORS" '
+    kubectl -n backups get cm ceph-etc -o json \
+      | jq --argjson mons "$NEW_MONITORS" '
             .data["config.json"] |= (
                 fromjson
                 | map(.monitors = $mons)
                 | tojson
             )
-        ' |
-      kubectl apply -f -
+        ' \
+      | kubectl apply -f -
   else
     echo "Skipping backups (ceph-etc not found)"
   fi
@@ -134,8 +134,8 @@ update_customizations() {
   echo "Extracting customizations.yaml from secret..."
 
   kubectl get secret -n loftsman site-init \
-    -o jsonpath='{.data.customizations\.yaml}' |
-    base64 -d >"${tmpdir}/customizations.yaml"
+    -o jsonpath='{.data.customizations\.yaml}' \
+    | base64 -d >"${tmpdir}/customizations.yaml"
 
   echo "Updating monitor list..."
 
@@ -151,7 +151,6 @@ update_customizations() {
     --from-file="${tmpdir}/customizations.yaml"
 
   rm -rf "$tmpdir"
-  trap - EXIT
   echo "customizations secret updated successfully"
 
   echo "Updating cephExporter endpoints in loftsman-cray-sysmgmt-health..."
@@ -161,8 +160,8 @@ update_customizations() {
     -o jsonpath='{.data.manifest\.yaml}')
 
   local updated_manifest
-  updated_manifest=$(echo "$manifest_yaml" |
-    NEW_MONS="$new_mons" yq e \
+  updated_manifest=$(echo "$manifest_yaml" \
+    | NEW_MONS="$new_mons" yq e \
       '.spec.charts[].values.cephExporter.endpoints = (strenv(NEW_MONS) | split("\n") | map(select(length > 0)))' -)
 
   kubectl patch cm -n loftsman loftsman-cray-sysmgmt-health \
