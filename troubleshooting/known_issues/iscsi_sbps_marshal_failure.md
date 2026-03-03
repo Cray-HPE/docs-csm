@@ -2,8 +2,9 @@
 
 ## Symptom  
 
-During CSM upgrade from `1.6.x` to `1.7.x`, where 'x' is the patch version,
-the NCN checks may fail with iSCSI SBPS as below:
+During the CSM upgrade from `1.6.x` to `1.7.x` or from `1.7.x` to `1.7.y`
+where 'x' and 'y' are the patch version(s), the NCN health checks may fail with
+iSCSI SBPS as below:
 
 ```json
 {
@@ -76,7 +77,7 @@ systemctl status sbps-marshal
 The systemd journal may show the following errors:
 
 ```bash
-Journalctl -u sbps-marshal.service
+journalctl -u sbps-marshal.service
 ```
 
 Snippet of `journalctl` log:
@@ -94,10 +95,10 @@ Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Main process exited, 
 Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Failed with result 'exit-code'.
 ```
 
-The `/usr/lib/sbps-marshal/bin/sbps-marshal` is failed to locate is because, the symbolic link between
-`/etc/systemd/system/multi-user.target.wants/sbps-marshal.service` and `/usr/lib/systemd/system/sbps-marshal.service`
-was not established. This will get established when the sbps-marshal.service is enabled. There looks to be enable of
-sbps-marshal service failed during worker node personalization and hence issue.
+The failure to locate `/usr/lib/sbps-marshal/bin/sbps-marshal` is due to the absence of symbolic link between
+`/etc/systemd/system/multi-user.target.wants/sbps-marshal.service` and `/usr/lib/systemd/system/sbps-marshal.service`.
+This symbolic link is established when the `sbps-marshal` service is enabled. It looks that enabling `sbps-marshal` 
+service is failed during the worker node personalization which likely led to this issue.
 
 ## Resolution
 
@@ -122,18 +123,17 @@ Created symlink /etc/systemd/system/multi-user.target.wants/sbps-marshal.service
 systemctl restart sbps-marshal.service
 ```
 
-1. (`ncn-w#`) Check the status of the `sbps-marshal` service, it should be running fine as below:
+1. (`ncn-w#`) Check the status of the `sbps-marshal` service, it should be running:
 
 Example command:
 
 ```bash
-# systemctl status sbps-marshal.service
+systemctl status sbps-marshal.service
 ```
 
 Example command output:
 
-```bash
- systemctl status sbps-marshal.service
+```text
 ● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary>
      Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
      Active: active (running) since Thu 2026-02-26 18:07:51 UTC; 22min ago
