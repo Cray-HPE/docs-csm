@@ -1,6 +1,6 @@
-# iSCSI SBPS systemd service (sbps-marshal) may fail during upgrade
+# iSCSI SBPS `systemd` service (`sbps-marshal`) may fail during upgrade
 
-## Symptom  
+## Symptom
 
 During the CSM upgrade from `1.6.x` to `1.7.x` or from `1.7.x` to `1.7.y`
 where 'x' and 'y' are the patch version(s), the NCN health checks may fail with
@@ -62,7 +62,7 @@ iSCSI SBPS as below:
 
 ## Root cause
 
-iSCSI SBPS marshal systemd service may not be active:
+iSCSI SBPS marshal `systemd` service may not be active:
 
 ```bash
 systemctl status sbps-marshal
@@ -74,7 +74,7 @@ systemctl status sbps-marshal
         CPU: 2ms
 ```
 
-The systemd journal may show the following errors:
+The `systemd` journal may show the following errors:
 
 ```bash
 journalctl -u sbps-marshal.service
@@ -97,7 +97,7 @@ Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Failed with result 'e
 
 The failure to locate `/usr/lib/sbps-marshal/bin/sbps-marshal` is due to the absence of symbolic link between
 `/etc/systemd/system/multi-user.target.wants/sbps-marshal.service` and `/usr/lib/systemd/system/sbps-marshal.service`.
-This symbolic link is established when the `sbps-marshal` service is enabled. It looks that enabling `sbps-marshal` 
+This symbolic link is established when the `sbps-marshal` service is enabled. It looks that enabling `sbps-marshal`
 service is failed during the worker node personalization which likely led to this issue.
 
 ## Resolution
