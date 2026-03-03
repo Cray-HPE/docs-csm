@@ -186,6 +186,16 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
     **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
     If monitoring progress with the Argo UI, remember to include these workflows.
 
+    **`NOTE`** If `Rack Resiliency` is enabled, add the `_admin` label to all Ceph nodes before proceeding.
+
+    (`ncn-m001#`) Add the `_admin` label to all Ceph nodes.
+
+    ```bash
+    for host in $(ceph orch host ls --format json | jq -r '.[].hostname'); do
+        ceph orch host label add $host _admin
+    done
+    ```
+
     1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN storage node.
 
         ```bash
@@ -204,7 +214,60 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         cray cfs components describe "${XNAME}"
         ```
 
-        The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
+        The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to be `configured`.
+
+        **`NOTE`** If `Rack Resiliency` is enabled, there is a known corner case where the node would not transition to `configured` state for a long time. If this occurs, perform the following steps:
+
+        1. From the output of `cray cfs components describe "${XNAME}"` that was run above, fetch the `CFS_SESSION_NAME` for the `rack_resiliency_for_mgmt_nodes.yml` playbook:
+
+            ```toml
+            [[state]]
+            cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+            commit = "a3e8d330adb99215e2d4cd084fc38ff590718705"
+            lastUpdated = "2026-03-03T11:41:04Z"
+            playbook = "rack_resiliency_for_mgmt_nodes.yml"
+            sessionName = "batcher-75d4e8ee-b688-4ae8-9ecd-065d8a3c9705"
+            ```
+
+            The value of `sessionName` is the `CFS_SESSION_NAME`.
+
+        1. (`ncn-m#`) Identify the associated CFS pod with the session:
+
+            ```bash
+            CFS_POD_NAME=$(kubectl get pods --no-headers -o custom-columns=":metadata.name" -n services -l cfsession=<CFS_SESSION_NAME>)
+            echo "${CFS_POD_NAME}"
+            ```
+
+        1. (`ncn-m#`) Inspect the Ansible logs for the CFS pod:
+
+            ```bash
+            kubectl logs -n services "${CFS_POD_NAME}" ansible
+            ```
+
+        1. (`ncn-m#`) If the session is stuck at the following task for long time:
+
+            ```text
+            TASK [csm.rr.ceph_zoning : Apply CEPH zoning] **********************************
+            changed: [x3000c0s29b0n0 -> x3000c0s29b0n0]
+
+            TASK [csm.rr.ceph_haproxy : Copy ceph_haproxy.sh script to the target machine] ***
+            changed: [x3000c0s29b0n0]
+            ```
+            Then delete the CFS pod:
+
+            ```bash
+            kubectl delete pod -n services "${CFS_POD_NAME}"
+            ```
+            A replacement CFS pod will be created automatically, and the session should proceed to completion successfully.
+
+
+    **`NOTE`** If `Rack Resiliency` is enabled, run the following script from `ncn-s001`, which has access to the Kubernetes cluster. The script waits for the Ceph cluster to be stabilized, and then updates the latest monitor configuration in the Ceph CSI, customizations, and `loftsman-cray-sysmgmt-health` ConfigMaps.
+
+    (`ncn-s001#`) Execute `RR_ceph_upgrade.sh` script
+
+    ```bash
+    /usr/share/doc/csm/upgrade/scripts/RR_ceph_upgrade.sh
+    ```
 
     1. (`ncn-m001#`) Upgrade the remaining NCN storage nodes once the first has upgraded successfully. This upgrades NCN storage nodes serially.
     Get the number of storage nodes based on the cluster and verify that it is correct. The storage canary node should not be in the list since it has already been upgraded.
@@ -226,6 +289,18 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
            --format json | jq -r .Components[].ID | grep b0n | sort); do cray cfs components describe \
            $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'; done
         ```
+
+    **`NOTE`** If `Rack Resiliency` is enabled, remove the `_admin` label from all Ceph nodes except `ncn-s001`. The storage canary node (`ncn-s001`) retains the `_admin` label as it functions as the primary Ceph administration node.
+
+    (`ncn-m001#`) Remove the `_admin` label from all Ceph nodes except `ncn-s001`.
+
+    ```bash
+    for host in $(ceph orch host ls --format json | jq -r '.[].hostname'); do
+        if [ "$host" != "ncn-s001" ]; then
+        ceph orch host label rm $host _admin
+        fi
+    done
+    ```
 
 1. Perform the NCN master node upgrade of `ncn-m002` and `ncn-m003`.
 
