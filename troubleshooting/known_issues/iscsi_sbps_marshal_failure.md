@@ -98,7 +98,7 @@ Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Failed with result 'e
 The failure to locate `/usr/lib/sbps-marshal/bin/sbps-marshal` is due to the absence of symbolic link between
 `/etc/systemd/system/multi-user.target.wants/sbps-marshal.service` and `/usr/lib/systemd/system/sbps-marshal.service`.
 This symbolic link is established when the `sbps-marshal` service is enabled. It looks that enabling `sbps-marshal`
-service is failed during the worker node personalization which likely led to this issue.
+service failed during the worker node personalization which likely led to this issue.
 
 ## Resolution
 
@@ -112,8 +112,7 @@ systemctl enable sbps-marshal.service
 
 Example output:
 
-```bash
-systemctl enable sbps-marshal.service
+```text
 Created symlink /etc/systemd/system/multi-user.target.wants/sbps-marshal.service → /usr/lib/systemd/system/sbps-marshal.service.
 ```
 

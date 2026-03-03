@@ -82,7 +82,7 @@ to the exiting problem seen into the existing search. (The example searches for 
       CSM 1.7+ reinstall.
 * [Cilium Migration Failure Due to Missing BSS Global Metadata Parameter](known_issues/cilium_migration_k8s_primary_cni_not_set.md)
 * [Kubelet Memory Pressure False Positive](known_issues/kubelet_memory_pressure_false_positive.md)
-* [
+* [iSCSI SBPS Marshal agent failure](known_issues/iscsi_sbps_marshal_failure.md)
 
 ## Booting
 
@@ -109,7 +109,6 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
-* [iSCSI SBPS Marshal agent failure](known_issues/iscsi_sbps_marshal_failure.md)
 
 ## ConMan
 
