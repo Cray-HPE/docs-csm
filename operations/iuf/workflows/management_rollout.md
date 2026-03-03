@@ -253,15 +253,17 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
             TASK [csm.rr.ceph_haproxy : Copy ceph_haproxy.sh script to the target machine] ***
             changed: [x3000c0s29b0n0]
             ```
+
             Then delete the CFS pod:
 
             ```bash
             kubectl delete pod -n services "${CFS_POD_NAME}"
             ```
+
             A replacement CFS pod will be created automatically, and the session should proceed to completion successfully.
 
-
-    **`NOTE`** If `Rack Resiliency` is enabled, run the following script from `ncn-s001`, which has access to the Kubernetes cluster. The script waits for the Ceph cluster to be stabilized, and then updates the latest monitor configuration in the Ceph CSI, customizations, and `loftsman-cray-sysmgmt-health` ConfigMaps.
+    **`NOTE`** If `Rack Resiliency` is enabled, run the following script from `ncn-s001`, which has access to the Kubernetes cluster.
+    The script waits for completion of Ceph Orchestrator operations, and updates the latest monitor configuration in several ConfigMaps.
 
     (`ncn-s001#`) Execute `RR_ceph_upgrade.sh` script
 
