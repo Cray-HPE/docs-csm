@@ -135,7 +135,7 @@ update_customizations() {
 
   kubectl get secret -n loftsman site-init \
     -o jsonpath='{.data.customizations\.yaml}' \
-    | base64 -d >"${tmpdir}/customizations.yaml"
+    | base64 -d > "${tmpdir}/customizations.yaml"
 
   echo "Updating monitor list..."
 
