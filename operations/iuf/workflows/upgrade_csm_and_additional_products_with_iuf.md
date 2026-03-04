@@ -28,7 +28,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
 ![Upgrade CSM and additional products with IUF](../../../img/operations/diagram_csm_stack_upgrade_111723.png)
 
-1. [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.4/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md)
+1. [Prepare for Upgrade to Next CSM Major Version](https://cray-hpe.github.io/docs-csm/en-14/upgrade/prepare_for_upgrade_to_next_csm_major_version/)
    in the CSM 1.4 documentation.
 
 1. CSM preparation, prepare assets, and prerequisites.
