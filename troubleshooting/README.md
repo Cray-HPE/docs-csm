@@ -83,6 +83,7 @@ to the exiting problem seen into the existing search. (The example searches for 
       CSM 1.7+ reinstall.
 * [Cilium Migration Failure Due to Missing BSS Global Metadata Parameter](known_issues/cilium_migration_k8s_primary_cni_not_set.md)
 * [Kubelet Memory Pressure False Positive](known_issues/kubelet_memory_pressure_false_positive.md)
+* [iSCSI SBPS Marshal agent failure](known_issues/iscsi_sbps_marshal_failure.md)
 
 ## Booting
 
