@@ -71,6 +71,8 @@ The CSM upgrade steps are run automatically, either directly through IUF stages 
    1. [Validate Deployment](validate_deployment.md)
    1. [Perform Slingshot Switch and Management Network Switch Firmware Updates](slingshot_management_network_switch_updates.md)
 
+   **`NOTE`** After completing this stage, [Validate CSM Health](../../validate_csm_health.md) checks and any product-specific health checks for installed or upgraded during this activity.
+
 1. Managed rollout
 
    Follow the IUF [Managed Rollout](managed_rollout.md) instructions.
