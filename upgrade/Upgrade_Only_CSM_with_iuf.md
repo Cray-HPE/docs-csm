@@ -15,7 +15,7 @@ The upgrade from CSM 1.6 to CSM 1.7 uses the IUF framework. The CSM upgrade step
    [CSM 1.6.0 or later to 1.7 Upgrade Process](Upgrade_Management_Nodes_and_CSM_Services.md)
    documentation.
 
-1. [Prepare for Upgrade to Next CSM Major Version](https://github.com/Cray-HPE/docs-csm/tree/release/1.6/upgrade/Prepare_for_Upgrade_to_Next_CSM_Major_Version.md)
+1. [Prepare for Upgrade to Next CSM Major Version](https://cray-hpe.github.io/docs-csm/en-16/upgrade/prepare_for_upgrade_to_next_csm_major_version/)
    in the CSM 1.6 documentation.
 
 1. Prepare for the upgrade procedure and download product media.
