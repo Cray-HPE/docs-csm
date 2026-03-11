@@ -22,7 +22,7 @@ This issue has been resolved in CSM `1.7.1`, and the fix now needs to be backpor
 
 ## Resolution
 
-The resolution is to apply the following fixes to remove the TPG disablement, followed by restarting the `target` service on the Kubernetes worker nodes nodes.
+The resolution is to apply the following fixes to remove the TPG disablement, followed by restarting the `target` service on the Kubernetes worker nodes.
 
 After the update-vcs-config stage of the CSM upgrade through IUF, follow the procedure below:
 
@@ -40,7 +40,7 @@ Example output:
 1.7.0
 ```
 
-#### Step 2:(`ncn-mw#`) Find the CFS configuration branch associated with the CSM version found in Step 1
+#### Step 2: (`ncn-mw#`) Find the CFS configuration branch associated with the CSM version found in Step 1
 
 ```bash
 kubectl get cm -n services cray-product-catalog -o yaml | yq r - 'data.csm' | grep ^1.7.0: -A 10 | grep import_branch
@@ -69,9 +69,9 @@ Clone `csm-config-management.git`(Use above VCS credentials) repo:
 git clone https://$GITUSER:$GITPASS@api-gw-service-nmn.local/vcs/cray/csm-config-management.git
 ```
 
-Check out the `import_branch` identified in the `Step 1.2`:
+Check out the `import_branch` identified in the `Step 2`:
 
-In the following command, substitute the actual branch name found in the `Step 1.2`:
+In the following command, substitute the actual branch name found in the `Step 2`:
 
 ```bash
 cd csm-config-management
