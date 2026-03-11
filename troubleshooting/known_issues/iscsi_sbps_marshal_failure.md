@@ -195,7 +195,7 @@ Use the following procedure on the affected node.
     rpm -qa | grep sbps-marshal
    ```
 
-   Example output on sucessful installation:
+   Example output on successful installation:
 
    ```text
    sbps-marshal-1.0.3-1.noarch
