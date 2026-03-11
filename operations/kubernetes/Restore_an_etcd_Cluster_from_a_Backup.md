@@ -88,7 +88,7 @@ cray-bss etcd cluster health verified from cray-bss-bitnami-etcd-1
 
 ## Restore from a specific backup
 
-The automated `etcd_restore_rebuild.sh` script always restores from the most recent backup within the last 7 days.
+The automated `etcd_restore_rebuild.sh` script always restores from the most recent backup within the last seven days.
 In situations where the most recent backup contains corrupted data, it may be necessary to restore from an older backup manually.
 
 Use the `etcd-util.sh` script to list available backups and restore from a specific one.
@@ -141,4 +141,6 @@ Use the `etcd-util.sh` script to list available backups and restore from a speci
     statefulset rolling update complete 3 pods at revision cray-bss-bitnami-etcd-5d4978bfb...
     Setting cluster state for cray-bss to back to 'existing'
     statefulset.apps/cray-bss-bitnami-etcd env updated
+    Checking endpoint health.
+    cray-bss etcd cluster health verified from cray-bss-bitnami-etcd-1
     ```
