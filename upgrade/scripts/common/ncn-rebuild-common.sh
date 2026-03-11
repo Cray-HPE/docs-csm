@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2021-2024 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2021-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -380,14 +380,27 @@ if [[ $state_recorded == "0" ]]; then
   # wait for cloud-init
   # ssh commands are expected to fail for a while, so we temporarily disable set -e
   set +e
-  printf "%s" "waiting for cloud-init: $target_ncn ..."
-  while true; do
+  ssh_keys_done=0
+  while [ $ssh_keys_done -eq 0 ]; do
+    # ssh_keygen_keyscan is tried until it succeeds once
     if ssh_keygen_keyscan "${target_ncn}" &> /dev/null; then
       ssh_keys_done=1
-      ssh "${target_ncn}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null 'cat /var/log/cloud-init-output.log | grep "The system is finally up"' &> /dev/null && break
+      echo "ssh_keygen_keyscan succeeded for ${target_ncn}"
+    else
+      echo "Waiting for ssh_keygen_keyscan on ${target_ncn}"
+      sleep 20
     fi
-    printf "%c" "."
-    sleep 20
+  done
+
+  printf "%s" "waiting for cloud-init: $target_ncn ..."
+  while true; do
+    if ssh "${target_ncn}" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      'cat /var/log/cloud-init-output.log | grep "The system is finally up"' &> /dev/null; then
+      break
+    else
+      printf "%c" "."
+      sleep 20
+    fi
   done
   # Restore set -e
   set -e
