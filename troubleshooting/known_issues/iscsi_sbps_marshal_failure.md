@@ -62,7 +62,7 @@ iSCSI SBPS as below:
 
 ## Root cause
 
-Status of iSCSI SBPS `systemd` service may not be active:
+(`ncn-w#`) Status of iSCSI SBPS `systemd` service may not be active:
 
 ```bash
 systemctl status sbps-marshal
@@ -187,6 +187,18 @@ Use the following procedure on the affected node.
 
    ```bash
    zypper install sbps-marshal-1.0.3-1.noarch.rpm
+   ```
+
+1. (`ncn-w#`) Verify whether the RPM is installed:
+
+   ```bash
+    rpm -qa | grep sbps-marshal
+   ```
+
+   Example output on sucessful installation:
+
+   ```text
+   sbps-marshal-1.0.3-1.noarch
    ```
 
 1. (`ncn-w#`) Enable the `sbps-marshal` `systemd` service:
