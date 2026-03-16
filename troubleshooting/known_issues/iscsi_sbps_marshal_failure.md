@@ -229,25 +229,25 @@ Use the following procedure on the affected node.
 
    Example command output:
 
-```text
+   ```text
    
-● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary>
-     Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
-     Active: active (running) since Thu 2026-02-26 18:07:51 UTC; 22min ago
-   Main PID: 1297260 (sbps-marshal)
-      Tasks: 1
-        CPU: 3min 14.810s
-     CGroup: /system.slice/sbps-marshal.service
-             └─1297260 /usr/lib/sbps-marshal/bin/python /usr/lib/sbps-marshal/bin/sbps-marshal
+   ● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary>
+       Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
+       Active: active (running) since Thu 2026-02-26 18:07:51 UTC; 22min ago
+       Main PID: 1297260 (sbps-marshal)
+          Tasks: 1
+          CPU: 3min 14.810s
+       CGroup: /system.slice/sbps-marshal.service
+                └─1297260 /usr/lib/sbps-marshal/bin/python /usr/lib/sbps-marshal/bin/sbps-marshal
 
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:405 INFO 2026-02-26T18:29:49+0000 END SCAN
-```
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:405 INFO 2026-02-26T18:29:49+0000 END SCAN
+   ```
