@@ -159,7 +159,7 @@ Use the following procedure on the affected node.
       export K8S_IMS_IMAGE_ID=a72b1bb7-30ad-499f-b5b4-e192853445a1
       ```
 
-   1. Switch to the directory mentioned in `CSM_ARTI_DIR` variable above
+   1. Switch to the directory mentioned in the `CSM_ARTI_DIR` variable from the previous step.
 
       ```bash
       cd /etc/cray/upgrade/csm/media/upg171rc6/csm-1.7.1-rc.6
