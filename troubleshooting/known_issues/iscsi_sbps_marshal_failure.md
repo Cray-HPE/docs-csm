@@ -192,7 +192,7 @@ Use the following procedure on the affected node.
 1. (`ncn-w#`) Verify whether the RPM is installed:
 
    ```bash
-    rpm -qa | grep sbps-marshal
+   rpm -qa | grep sbps-marshal
    ```
 
    Example output on successful installation:
