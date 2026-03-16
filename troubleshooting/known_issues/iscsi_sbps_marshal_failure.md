@@ -165,7 +165,7 @@ Use the following procedure on the affected node.
       cd /etc/cray/upgrade/csm/media/upg171rc6/csm-1.7.1-rc.6
       ```
 
-      Switch to `rpm/cray/csm/noos/noarch` under above mentioned directory
+    1.  Switch to `rpm/cray/csm/noos/noarch` under above mentioned directory.
 
       ```bash
       cd rpm/cray/csm/noos/noarch
