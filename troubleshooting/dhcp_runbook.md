@@ -16,7 +16,7 @@
       - [State Manager Daemon](#state-manager-daemon)
    1. [Duplicate IP address](#23-duplicate-ip-address)
    1. [Numerous DHCP decline messages during node boot](#24-numerous-dhcp-decline-messages-during-node-boot)
-   1. [Deleted SMD `ethernetInterfaces` record restored by DHCP helper](#25-deleted-smd-ethernetinterface-record-restored-by-dhcp-helper)
+   1. [Deleted SMD `ethernetInterfaces` record restored by DHCP helper](#25-deleted-smd-ethernetinterfaces-record-restored-by-dhcp-helper)
 - [3 Network troubleshooting](#3-network-troubleshooting)
    1. [Check BGP/MetalLB](#31-check-bgpmetallb)
       - [Mellanox spine switches](#mellanox-spine-switches)
