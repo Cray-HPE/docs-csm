@@ -171,7 +171,7 @@ Use the following procedure on the affected node.
       cd rpm/cray/csm/noos/noarch
       ```
 
-      List the `sbps-marshal` RPM
+    1.  List the `sbps-marshal` RPM.
 
       ```bash
       ls -l | grep sbps-marshal
