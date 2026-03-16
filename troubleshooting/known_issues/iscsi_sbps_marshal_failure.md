@@ -117,7 +117,7 @@ resulting in the absence of symbolic link `/etc/systemd/system/multi-user.target
 
 Use the following procedure on the affected node.
 
-1. (`ncn-w#`) Check if the `sbps-marshal` RPM installed.
+1. (`ncn-w#`) Check if the `sbps-marshal` RPM is installed.
 
    ```bash
    rpm -qa | grep sbps
