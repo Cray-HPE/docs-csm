@@ -141,7 +141,7 @@ Use the following procedure on the affected node.
    Removed "/etc/systemd/system/multi-user.target.wants/sbps-marshal.service".
    ```
 
-1. (`ncn-m#`) Locate the `sbps-marshal` RPM on the master node on which upgrade is triggered
+1. (`ncn-m#`) Locate the `sbps-marshal` RPM on the master node on which upgrade is triggered.
 
    1. cat upgrade `myenv` file :
 
