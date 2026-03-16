@@ -545,7 +545,7 @@ message.
 
 **Cause:** `dhcp-helper.py` runs on a 3 minute CronJob and reconciles active Kea DHCP leases
 against SMD. If it finds an active lease for a MAC address with no corresponding SMD record, it
-re-creates the record. There is no locking mechanism to honour admin deletions, so any deletion is
+re-creates the record. There is no locking mechanism to honor admin deletions, so any deletion is
 silently reversed on the next run as long as the Kea lease remains active.
 
 **Workaround:** Delete the Kea lease **before** deleting the SMD record.
@@ -585,7 +585,7 @@ silently reversed on the next run as long as the Kea lease remains active.
 
 > **Important:** Do **not** delete the SMD record first. If the Kea lease is still active when the
 > next `dhcp-helper` CronJob runs (within 3 minutes), the SMD record will be restored
-> automatically. Minimise the time between steps 2 and 3 to reduce the chance of a cron run
+> automatically. Minimize the time between steps 2 and 3 to reduce the chance of a cron run
 > occurring in between.
 
 ## 3 Network troubleshooting
