@@ -188,7 +188,7 @@ Use the following procedure on the affected node.
    ```bash
    zypper install sbps-marshal-1.0.3-1.noarch.rpm
    ```
-   
+
 1. (`ncn-w#`) Verify whether the RPM is installed:
 
    ```bash
