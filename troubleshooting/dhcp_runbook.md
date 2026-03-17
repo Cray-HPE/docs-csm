@@ -16,6 +16,7 @@
       - [State Manager Daemon](#state-manager-daemon)
    1. [Duplicate IP address](#23-duplicate-ip-address)
    1. [Numerous DHCP decline messages during node boot](#24-numerous-dhcp-decline-messages-during-node-boot)
+   1. [Deleted SMD `ethernetInterfaces` record restored by DHCP helper](#25-deleted-smd-ethernetinterfaces-record-restored-by-dhcp-helper)
 - [3 Network troubleshooting](#3-network-troubleshooting)
    1. [Check BGP/MetalLB](#31-check-bgpmetallb)
       - [Mellanox spine switches](#mellanox-spine-switches)
@@ -535,6 +536,57 @@ troubleshoot and remediate the problem.
 
    The standard discovery/DHCP/DNS process should complete in about 5 minutes.
    This will get the node to boot up.
+
+### 2.5 Deleted SMD `ethernetInterfaces` record restored by DHCP helper
+
+**Symptom:** An SMD `EthernetInterface` record deleted via the API or `cray hsm` CLI reappears
+within 3 minutes, and the `cray-dhcp-kea-helper` job logs show an `Added {'MACAddress': ...}`
+message.
+
+**Cause:** `dhcp-helper.py` runs on a 3 minute CronJob and reconciles active Kea DHCP leases
+against SMD. If it finds an active lease for a MAC address with no corresponding SMD record, it
+re-creates the record. There is no locking mechanism to honor admin deletions, so any deletion is
+silently reversed on the next run as long as the Kea lease remains active.
+
+**Workaround:** Delete the Kea lease **before** deleting the SMD record.
+
+1. (`ncn-mw#`) Find the IP address currently associated with the MAC address to be removed.
+
+   ```bash
+   cray hsm inventory ethernetInterfaces describe <MAC-no-colons> --format json | jq '.IPAddresses[].IPAddress'
+   ```
+
+1. (`ncn-mw#`) Delete the Kea lease for that IP address.
+
+   ```bash
+   curl -s -k -H "Authorization: Bearer ${TOKEN}" \
+       -X POST \
+       -H "Content-Type: application/json" \
+       -d '{"command": "lease4-del", "service": ["dhcp4"], "arguments": {"ip-address": "<IP>"}}' \
+       https://api-gw-service-nmn.local/apis/dhcp-kea | jq
+   ```
+
+   A successful deletion returns a result of `0`:
+
+   ```text
+   [
+     {
+       "result": 0,
+       "text": "IPv4 lease deleted."
+     }
+   ]
+   ```
+
+1. (`ncn-mw#`) Delete the SMD `EthernetInterface` record.
+
+   ```bash
+   cray hsm inventory ethernetInterfaces delete <MAC-no-colons>
+   ```
+
+> **Important:** Do **not** delete the SMD record first. If the Kea lease is still active when the
+> next `dhcp-helper` CronJob runs (within 3 minutes), the SMD record will be restored
+> automatically. Minimize the time between steps 2 and 3 to reduce the chance of a cron run
+> occurring in between.
 
 ## 3 Network troubleshooting
 

@@ -84,6 +84,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Cilium Migration Failure Due to Missing BSS Global Metadata Parameter](known_issues/cilium_migration_k8s_primary_cni_not_set.md)
 * [Kubelet Memory Pressure False Positive](known_issues/kubelet_memory_pressure_false_positive.md)
 * [iSCSI SBPS Marshal agent failure](known_issues/iscsi_sbps_marshal_failure.md)
+* [Worker nodes unresponsive and `dmesg` flooded with iSCSI errors](known_issues/worker_nodes_unresponsive_and_dmesg_flooded_with_iSCSI_errors.md)
 
 ## Booting
 
