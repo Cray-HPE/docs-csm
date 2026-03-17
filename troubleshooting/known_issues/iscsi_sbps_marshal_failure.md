@@ -62,10 +62,16 @@ iSCSI SBPS as below:
 
 ## Root cause
 
-iSCSI SBPS marshal `systemd` service may not be active:
+(`ncn-w#`) Status of iSCSI SBPS `systemd` service may not be active:
 
 ```bash
 systemctl status sbps-marshal
+```
+
+Example command output:
+
+```text
+
 ● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary images simi>
      Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
      Active: activating (auto-restart) (Result: exit-code) since Thu 2026-02-26 09:11:36 UTC; 13s ago
@@ -74,7 +80,7 @@ systemctl status sbps-marshal
         CPU: 2ms
 ```
 
-The `systemd` journal may show the following errors:
+The `systemd` service journal may show the following errors:
 
 ```bash
 journalctl -u sbps-marshal.service
@@ -95,61 +101,152 @@ Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Main process exited, 
 Feb 26 09:11:36 ncn-w003 systemd[1]: sbps-marshal.service: Failed with result 'exit-code'.
 ```
 
-The failure to locate `/usr/lib/sbps-marshal/bin/sbps-marshal` is due to the absence of symbolic link between
-`/etc/systemd/system/multi-user.target.wants/sbps-marshal.service` and `/usr/lib/systemd/system/sbps-marshal.service`.
-This symbolic link is established when the `sbps-marshal` service is enabled. It looks that enabling `sbps-marshal`
-service failed during the worker node personalization which likely led to this issue.
+The failure to locate `/usr/lib/sbps-marshal/bin/sbps-marshal` can occur due to issues during the RPM installation
+or `sbps-marshal` service enablement process. The `sbps-marshal` binary is installed as part of the RPM installation,
+while the symbolic link between `/usr/lib/systemd/system/sbps-marshal.service` and
+`/etc/systemd/system/multi-user.target.wants/sbps-marshal.service` is created when the `sbps-marshal` service is enabled.
+
+Two scenarios can lead to this issue:
+
+1. Incomplete RPM installation, resulting in the absence of `/usr/lib/sbps-marshal/bin/sbps-marshal`.
+
+1. Successful RPM installation but the failure during service enablement (for example during worker node personalization),
+resulting in the absence of symbolic link `/etc/systemd/system/multi-user.target.wants/sbps-marshal.service`
 
 ## Resolution
 
-Follow the sequence of steps on the affected node as below:
+Use the following procedure on the affected node.
+
+1. (`ncn-w#`) Check if the `sbps-marshal` RPM is installed.
+
+   ```bash
+   rpm -qa | grep sbps
+   ```
+
+   Example output:
+
+   ```text
+   sbps-marshal-1.0.3-1.noarch
+   ```
+
+1. (`ncn-w#`) Uninstall the `sbps-marshal` RPM.
+
+   ```bash
+   rpm -e sbps-marshal-1.0.3-1.noarch
+   ```
+
+   Example output:
+
+   ```text
+   Removed "/etc/systemd/system/multi-user.target.wants/sbps-marshal.service".
+   ```
+
+1. (`ncn-m#`) Locate the `sbps-marshal` RPM on the master node on which upgrade is triggered.
+
+   1. cat upgrade `myenv` file :
+
+      ```bash
+      cat /etc/cray/upgrade/csm/myenv
+      ```
+
+      Example output:
+
+      ```text
+      export CSM_ARTI_DIR=/etc/cray/upgrade/csm/media/upg171rc6/csm-1.7.1-rc.6
+      export CSM_RELEASE=1.7.1-rc.6
+      export CSM_REL_NAME=csm-1.7.1-rc.6
+      export STORAGE_IMS_IMAGE_ID=d3b0b216-028f-427d-9569-192f2750d1fc
+      export K8S_IMS_IMAGE_ID=a72b1bb7-30ad-499f-b5b4-e192853445a1
+      ```
+
+   1. Switch to the directory mentioned in the `CSM_ARTI_DIR` variable from the previous step.
+
+      ```bash
+      cd /etc/cray/upgrade/csm/media/upg171rc6/csm-1.7.1-rc.6
+      ```
+
+   1. Switch to `rpm/cray/csm/noos/noarch` under above mentioned directory.
+
+      ```bash
+      cd rpm/cray/csm/noos/noarch
+      ```
+
+   1. List the `sbps-marshal` RPM.
+
+      ```bash
+      ls -l | grep sbps-marshal
+      ```
+
+      Example command output:
+
+      ```text
+      -rw-r--r-- 1 root root 11615684 Jan 22 18:34 sbps-marshal-1.0.3-1.noarch.rpm
+      ```
+
+1. (`ncn-w#`) Install the `sbps-marshal` RPM listed above:
+
+   ```bash
+   zypper install sbps-marshal-1.0.3-1.noarch.rpm
+   ```
+
+1. (`ncn-w#`) Verify whether the RPM is installed:
+
+   ```bash
+   rpm -qa | grep sbps-marshal
+   ```
+
+   Example output on successful installation:
+
+   ```text
+   sbps-marshal-1.0.3-1.noarch
+   ```
 
 1. (`ncn-w#`) Enable the `sbps-marshal` `systemd` service:
 
-```bash
-systemctl enable sbps-marshal.service
-```
+   ```bash
+   systemctl enable sbps-marshal.service
+   ```
 
-Example output:
+   Example output:
 
-```text
-Created symlink /etc/systemd/system/multi-user.target.wants/sbps-marshal.service → /usr/lib/systemd/system/sbps-marshal.service.
-```
+   ```text
+   Created symlink /etc/systemd/system/multi-user.target.wants/sbps-marshal.service → /usr/lib/systemd/system/sbps-marshal.service.
+   ```
 
 1. (`ncn-w#`) Restart the `sbps-marshal` `systemd` service
 
-```bash
-systemctl restart sbps-marshal.service
-```
+   ```bash
+   systemctl restart sbps-marshal.service
+   ```
 
 1. (`ncn-w#`) Check the status of the `sbps-marshal` service, it should be running:
 
-Example command:
+   Example command:
 
-```bash
-systemctl status sbps-marshal.service
-```
+   ```bash
+   systemctl status sbps-marshal.service
+   ```
 
-Example command output:
+   Example command output:
 
-```text
-● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary>
-     Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
-     Active: active (running) since Thu 2026-02-26 18:07:51 UTC; 22min ago
-   Main PID: 1297260 (sbps-marshal)
-      Tasks: 1
-        CPU: 3min 14.810s
-     CGroup: /system.slice/sbps-marshal.service
-             └─1297260 /usr/lib/sbps-marshal/bin/python /usr/lib/sbps-marshal/bin/sbps-marshal
+   ```text
+   ● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary>
+       Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
+       Active: active (running) since Thu 2026-02-26 18:07:51 UTC; 22min ago
+       Main PID: 1297260 (sbps-marshal)
+          Tasks: 1
+          CPU: 3min 14.810s
+       CGroup: /system.slice/sbps-marshal.service
+                └─1297260 /usr/lib/sbps-marshal/bin/python /usr/lib/sbps-marshal/bin/sbps-marshal
 
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
-Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:405 INFO 2026-02-26T18:29:49+0000 END SCAN
-```
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:314 INFO 2026-02-26T18:29:49+0000 No sbps-project key value>
+   Feb 26 18:29:49 ncn-w003 sbps-marshal[1297260]: agent.py:main:405 INFO 2026-02-26T18:29:49+0000 END SCAN
+   ```
