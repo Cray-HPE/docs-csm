@@ -63,7 +63,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
    Follow the IUF [Validate Deployment](validate_deployment.md) instructions.
 
-   **`NOTE`** After completing this stage, [Validate CSM Health](../../validate_csm_health.md) checks and any product-specific health checks for installed or upgraded during this activity.
+   **`NOTE`** After completing this step, run the [Validate CSM Health](../../validate_csm_health.md) checks, as well as any product-specific health checks for items installed or upgraded during this activity.
 
 1. Perform managed node rollout.
 
