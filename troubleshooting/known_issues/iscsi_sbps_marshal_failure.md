@@ -165,13 +165,13 @@ Use the following procedure on the affected node.
       cd /etc/cray/upgrade/csm/media/upg171rc6/csm-1.7.1-rc.6
       ```
 
-    1.  Switch to `rpm/cray/csm/noos/noarch` under above mentioned directory.
+   1. Switch to `rpm/cray/csm/noos/noarch` under above mentioned directory.
 
       ```bash
       cd rpm/cray/csm/noos/noarch
       ```
 
-    1.  List the `sbps-marshal` RPM.
+   1. List the `sbps-marshal` RPM.
 
       ```bash
       ls -l | grep sbps-marshal
@@ -188,7 +188,7 @@ Use the following procedure on the affected node.
    ```bash
    zypper install sbps-marshal-1.0.3-1.noarch.rpm
    ```
-
+   
 1. (`ncn-w#`) Verify whether the RPM is installed:
 
    ```bash
@@ -230,7 +230,6 @@ Use the following procedure on the affected node.
    Example command output:
 
    ```text
-   
    ● sbps-marshal.service - System service that manages Squashfs images projected via iSCSI for IMS, PE, and other ancillary>
        Loaded: loaded (/usr/lib/systemd/system/sbps-marshal.service; enabled; preset: disabled)
        Active: active (running) since Thu 2026-02-26 18:07:51 UTC; 22min ago
