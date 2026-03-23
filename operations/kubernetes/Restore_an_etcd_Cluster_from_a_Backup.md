@@ -6,6 +6,7 @@ The commands in this procedure can be run on any Kubernetes master or worker nod
 
 * [Prerequisites](#prerequisites)
 * [Restore procedure](#restore-procedure)
+* [Restore from a specific backup](#restore-from-a-specific-backup)
 
 ## Prerequisites
 
@@ -84,3 +85,63 @@ statefulset.apps/cray-bss-bitnami-etcd env updated
 Checking endpoint health.
 cray-bss etcd cluster health verified from cray-bss-bitnami-etcd-1
 ```
+
+## Restore from a specific backup
+
+The automated `etcd_restore_rebuild.sh` script always restores from the most recent backup within the last seven days.
+In situations where the most recent backup contains corrupted data, it may be necessary to restore from an older backup manually.
+
+Use the `etcd-util.sh` script to list available backups and restore from a specific one.
+
+### List available backups
+
+1. (`ncn-mw#`) List all available backups for a cluster.
+
+    Replace `cray-bss` with the name of the etcd cluster to list backups for.
+
+    ```bash
+    /opt/cray/platform-utils/etcd/etcd-util.sh list_backups cray-bss
+    ```
+
+    Example output:
+
+    ```text
+    cray-bss/db-2026-02-24_23-00
+    cray-bss/db-2026-02-25_23-00
+    cray-bss/db-2026-02-26_23-00
+    cray-bss/db-2026-03-03_22-00
+    cray-bss/db-2026-03-04_22-00
+    ```
+
+### Restore from a selected backup
+
+1. (`ncn-mw#`) Restore the cluster from a specific backup.
+
+    Replace `cray-bss` with the name of the etcd cluster and `db-2026-03-03_22-00` with the backup name (without the cluster prefix) from the list of available backups.
+
+    ```bash
+    /opt/cray/platform-utils/etcd/etcd-util.sh restore_from_backup cray-bss db-2026-03-03_22-00
+    ```
+
+    Example output:
+
+    ```text
+    Scaling etcd statefulset down to zero...
+    statefulset.apps/cray-bss-bitnami-etcd scaled
+    statefulset rolling update complete 0 pods at revision cray-bss-bitnami-etcd-977d76d6b...
+    Setting cluster state for cray-bss to 'new' and to start from snapshot
+    statefulset.apps/cray-bss-bitnami-etcd env updated
+    Deleting existing PVC's...
+    persistentvolumeclaim "data-cray-bss-bitnami-etcd-0" deleted
+    persistentvolumeclaim "data-cray-bss-bitnami-etcd-1" deleted
+    persistentvolumeclaim "data-cray-bss-bitnami-etcd-2" deleted
+    Scaling etcd statefulset back up to three members...
+    statefulset.apps/cray-bss-bitnami-etcd scaled
+    ...
+    statefulset rolling update complete 3 pods at revision cray-bss-bitnami-etcd-5d4978bfb...
+    Setting cluster state for cray-bss to back to 'existing'
+    statefulset.apps/cray-bss-bitnami-etcd env updated
+    
+    Checking endpoint health.
+    cray-bss etcd cluster health verified from cray-bss-bitnami-etcd-1
+    ```
