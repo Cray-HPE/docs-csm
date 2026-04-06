@@ -3,8 +3,8 @@
 This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new
 global default credential.
 
-**`NOTE`** This procedure does not provision Slingshot switch BMCs (`RouterBMCs`). Slingshot switch BMC default credentials must be changed using the procedures in the Slingshot
-product documentation. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the `Slingshot Operations Guide (> 1.6.0)`.
+**`NOTE`** This procedure does not provision HPE Slingshot switch BMCs (`RouterBMCs`). HPE Slingshot switch BMC default credentials must be changed using the procedures in the HPE Slingshot
+product documentation. To update HPE Slingshot switch BMCs, refer to "Change HPE Slingshot switch login and Redfish API credentials" in the *HPE Slingshot Installation Guide for CSM (S-9004)*.
 
 This procedure provisions only the default Redfish `root` account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
 

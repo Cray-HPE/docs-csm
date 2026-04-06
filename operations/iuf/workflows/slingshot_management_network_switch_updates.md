@@ -1,21 +1,21 @@
-# Perform Slingshot Switch and Management Network Switch Firmware Updates
+# Perform HPE Slingshot Switch and Management Network Switch Firmware Updates
 
-This section updates the Slingshot switch and management network switch firmware updates.
+This section updates the HPE Slingshot switch and management network switch firmware updates.
 
-- [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
+- [1. Perform HPE Slingshot switch firmware updates](#1-perform-hpe-slingshot-switch-firmware-updates)
 - [2. Perform management network switch firmware updates](#2-perform-management-network-switch-firmware-updates)
 
 > **NOTE:** Switch firmware updates may cause temporary interrupts in network traffic during the upgrade procedure.
 
-## 1. Perform Slingshot switch firmware updates
+## 1. Perform HPE Slingshot switch firmware updates
 
-**`NOTE`** This subsection is only required if a new version of the slingshot product is being installed by IUF
+**`NOTE`** This subsection is only required if a new version of the HPE Slingshot product is being installed by IUF.
 
-Instructions to perform Slingshot switch firmware updates are provided in the "Upgrade HPE Slingshot switch firmware in a CSM environment" section of the _HPE Slingshot Installation Guide for CSM_.
+Instructions to perform HPE Slingshot switch firmware updates are provided in the "Update switch firmware for CSM" section of the _HPE Slingshot Administration (S-9007)_.
 
 Once this step has completed:
 
-- Slingshot switch firmware has been updated
+- HPE Slingshot switch firmware has been updated
 
 ## 2. Perform management network switch firmware updates
 
@@ -26,7 +26,7 @@ Management network switch firmware is shipped in the HPC Firmware Pack (HFP) pro
 Refer to [Update Management Network Firmware](../../network/management_network/firmware/update_management_network_firmware.md) for instructions on performing the switch firmware update.
 
 **`NOTE`** The firmware on spine, leaf, and CDU switches can be updated without disruption. Air-cooled compute nodes, their BMCs, and other air-cooled devices
-such as Slingshot switches will experience a loss of connectivity while the leaf-bmc switch the device is connected to restarts.
+such as HPE Slingshot switches will experience a loss of connectivity while the leaf-bmc switch the device is connected to restarts.
 
 Once this step has been completed:
 

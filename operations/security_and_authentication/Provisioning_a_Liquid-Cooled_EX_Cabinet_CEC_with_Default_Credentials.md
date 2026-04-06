@@ -4,7 +4,7 @@ This procedure provisions a `Glibc` compatible SHA-512 administrative password h
 This password becomes the Redfish default global credential to access the CMM controllers and node controllers (BMCs).
 
 This procedure does not provision Slingshot switch BMCs. Slingshot switch BMC default credentials must be changed using the procedures
-in the Slingshot product documentation. Refer to  "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
+in the HPE Slingshot product documentation. Refer to "Change HPE Slingshot switch login and Redfish API credentials" in the *HPE Slingshot Installation Guide for CSM (S-9004)*.
 
 ## Prerequisites
 

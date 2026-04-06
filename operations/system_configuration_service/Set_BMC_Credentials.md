@@ -16,7 +16,7 @@ conveniently automates the steps of the SCSD procedure.
 - To change liquid-cooled BMC credentials, refer to [Change Cray EX Liquid-Cooled Cabinet Global Default Password](../security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md).
 - To change air-cooled Node BMC credentials, refer to [Change Air-Cooled Node BMC Credentials](../security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md).
 - To change ServerTech PDU credentials, refer to [Change Credentials on ServerTech PDUs](../security_and_authentication/Change_Credentials_on_ServerTech_PDUs.md).
-- To change Slingshot switch BMC credentials, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
+- To change HPE Slingshot switch BMC credentials, refer to "Change HPE Slingshot switch login and Redfish API credentials" in the *HPE Slingshot Installation Guide for CSM (S-9004)*.
 
 - [Prerequisites](#prerequisites)
 - [Procedures](#procedures)

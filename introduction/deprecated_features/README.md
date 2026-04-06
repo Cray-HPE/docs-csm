@@ -81,7 +81,7 @@ features are listed first).
 
 ### Deprecated in CSM 1.6
 
-- The `sat swap cable` and `sat swap switch` commands are deprecated. Use [Slingshot](../../glossary.md#slingshot) Orchestrated Maintenance to remove and add Slingshot switches and cables. For more information, see the *HPE Slingshot Operations Guide (S-9000)*.
+- The `sat swap cable` and `sat swap switch` commands are deprecated. Use [Slingshot](../../glossary.md#slingshot) Orchestrated Maintenance to remove and add Slingshot switches and cables. For more information, see the *HPE Slingshot Administration Guide (S-9007)*.
 - Support for projecting root filesystems and PE images using the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and the
   [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs)
     - This projection should instead be done using the [Scalable Boot Projection Service](../../glossary.md#scalable-boot-projection-service-sbps)
