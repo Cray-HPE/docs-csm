@@ -11,7 +11,7 @@ This section updates the HPE Slingshot switch and management network switch firm
 
 **`NOTE`** This subsection is only required if a new version of the HPE Slingshot product is being installed by IUF.
 
-Instructions to perform HPE Slingshot switch firmware updates are provided in the "Update switch firmware for CSM" section of the _HPE Slingshot Administration (S-9007)_.
+Instructions to perform HPE Slingshot switch firmware updates are provided in the "Update switch firmware for CSM" section of the _HPE Slingshot Administration Guide (S-9007)_.
 
 Once this step has completed:
 

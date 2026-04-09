@@ -8,13 +8,13 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
 
     Verify all 3 SLS replicas are up and running:
 
-    ```
+    ```console
     kubectl -n services get pods -l cluster-name=cray-sls-postgres
     ```
 
     Expected output should look similar to the following:
 
-    ```
+    ```text
     NAME                  READY   STATUS    RESTARTS   AGE
     cray-sls-postgres-0   3/3     Running   0          18d
     cray-sls-postgres-1   3/3     Running   0          18d

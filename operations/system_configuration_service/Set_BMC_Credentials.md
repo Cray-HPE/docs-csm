@@ -20,9 +20,9 @@ conveniently automates the steps of the SCSD procedure.
 
 - [Prerequisites](#prerequisites)
 - [Procedures](#procedures)
-  - [Generate a unique random password for each BMC in the system](#generate-a-unique-random-password-for-each-bmc-in-the-system)
-  - [Generate a single random password for all BMCs in the system](#generate-a-single-random-password-for-all-bmcs-in-the-system)
-  - [Provide a user-defined password for all BMCs in the system](#provide-a-user-defined-password-for-all-bmcs-in-the-system)
+    - [Generate a unique random password for each BMC in the system](#generate-a-unique-random-password-for-each-bmc-in-the-system)
+    - [Generate a single random password for all BMCs in the system](#generate-a-single-random-password-for-all-bmcs-in-the-system)
+    - [Provide a user-defined password for all BMCs in the system](#provide-a-user-defined-password-for-all-bmcs-in-the-system)
 
 ## Prerequisites
 
