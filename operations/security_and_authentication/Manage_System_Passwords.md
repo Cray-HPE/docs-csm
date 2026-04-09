@@ -241,7 +241,7 @@ curl -u root:xxx -X PATCH -H 'Content-Type: application/json' -d '{"Name": "Test
 >
 > - To change liquid-cooled BMC credentials, refer to [Change Cray EX Liquid-Cooled Cabinet Global Default Password](../security_and_authentication/Change_EX_Liquid-Cooled_Cabinet_Global_Default_Password.md).
 > - To change air-cooled node BMC credentials, refer to [Change Air-Cooled Node BMC Credentials](../security_and_authentication/Change_Air-Cooled_Node_BMC_Credentials.md).
-> - To change Slingshot switch BMC credentials, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
+> - To change HPE Slingshot switch BMC credentials, refer to "Change HPE Slingshot switch login and Redfish API credentials" in the *HPE Slingshot Installation Guide for CSM (S-9004)*.
 
 For example:
 

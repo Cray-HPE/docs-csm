@@ -8,13 +8,13 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
 
     Verify all 3 SLS replicas are up and running:
 
-    ```
+    ```console
     kubectl -n services get pods -l cluster-name=cray-sls-postgres
     ```
 
     Expected output should look similar to the following:
 
-    ```
+    ```text
     NAME                  READY   STATUS    RESTARTS   AGE
     cray-sls-postgres-0   3/3     Running   0          18d
     cray-sls-postgres-1   3/3     Running   0          18d
@@ -48,7 +48,7 @@ This procedure is intended to repopulate SLS in the event when no Postgres backu
     ```
 
 3. Any previously made customizations made to SLS will need to be applied again. This includes any SLS API operations that modified the state of SLS.
-    - The HSN network in SLS will be missing HSN subnet data, this data will need to be repopulated again using the "Setup IP/MAC configuration" procedure in the *HPE Slingshot Installation Guide for CSM*.
+    - The HSN network in SLS will be missing HSN subnet data, this data will need to be repopulated again using the "Setup IP/MAC configuration" procedure in the *HPE Slingshot Installation Guide for CSM (S-9004)*.
 
     - Any hardware that was added or moved in the system using one of the following procedures will need to be performed again.
         - [Add a Standard Rack Node](../node_management/Add_a_Standard_Rack_Node.md)

@@ -12,7 +12,7 @@ This section updates the software running on managed [compute][cn] and [applicat
             - [Reboot compute nodes with Slurm](#reboot-compute-nodes-with-slurm)
         1. [Compute reboot complete](#223-compute-reboot-complete)
     1. [Application nodes](#23-application-nodes)
-1. [Update managed host Slingshot NIC firmware](#3-update-managed-host-slingshot-nic-firmware)
+1. [Update managed HPE Slingshot Host Software NIC firmware](#3-update-managed-hpe-slingshot-host-software-nic-firmware)
 1. [Execute the IUF `post-install-check` stage](#4-execute-the-iuf-post-install-check-stage)
 1. [Next steps](#5-next-steps)
 
@@ -200,18 +200,18 @@ Once this step has completed:
 - Per-stage product hooks have executed for the `managed-nodes-rollout` stage if [IUF][iuf] `managed-nodes-rollout`
   procedures were used to perform the reboots.
 
-## 3. Update managed host Slingshot NIC firmware
+## 3. Update managed HPE Slingshot Host Software NIC firmware
 
-If new [Slingshot][slingshot] NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of
-the _HPE Slingshot Installation Guide for Bare Metal_ for details on how to update NIC firmware on managed nodes.
+If new HPE [Slingshot][slingshot] NIC firmware was provided, refer to the "Firmware management" section of
+the _HPE Slingshot Host Software Administration Guide (S-9012)_ for details on how to update NIC firmware on managed nodes.
 
-Reboot the managed nodes for which Slingshot NIC firmware has been updated.
+Reboot the managed nodes for which HPE Slingshot NIC firmware has been updated.
 Administrators should determine the best approach for rebooting
 managed nodes that aligns with site preferences.
 
 Once this step has completed:
 
-- Slingshot NIC firmware has been updated on managed nodes.
+- HPE Slingshot NIC firmware has been updated on managed nodes.
 
 ## 4. Execute the IUF `post-install-check` stage
 

@@ -21,8 +21,8 @@ merely an automation of the manual steps outlined in the "How to create a bonded
 
 The _How to create a bonded IP host interface with HPE Slingshot_ document is available from the HPE Support Portal. The other documentation is bundled with the HPE Slingshot software download.
 
-* _HPE Slingshot Installation Guide for CSM_
-* _HPE Slingshot Administration Guide_
+* _HPE Slingshot Installation Guide for CSM (S-9004)_
+* _HPE Slingshot Administration Guide (S-9007)_
 * [How to create a bonded IP host interface with HPE Slingshot](https://support.hpe.com/hpesc/public/docDisplay?docId=dp00004881en_us&docLocale=en_US)
 
 ## Limitations

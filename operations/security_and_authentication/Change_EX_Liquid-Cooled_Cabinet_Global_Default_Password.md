@@ -46,4 +46,4 @@ procedures.
 
 1. Perform the procedures in [Updating the Liquid-Cooled EX Cabinet Default Credentials after a CEC Password Change](Updating_the_Liquid-Cooled_EX_Cabinet_Default_Credentials_after_a_CEC_Password_Change.md).
 
-1. To update Slingshot switch BMCs, refer to "Change Rosetta Login and Redfish API Credentials" in the *Slingshot Operations Guide (> 1.6.0)*.
+1. To update HPE Slingshot switch BMCs, refer to "Change HPE Slingshot switch login and Redfish API credentials" in the *HPE Slingshot Installation Guide for CSM (S-9004)*.
