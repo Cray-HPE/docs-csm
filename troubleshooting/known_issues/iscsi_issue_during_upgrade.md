@@ -136,7 +136,7 @@ Below steps need to be followed in order to avoid the issue:
 
 1. Edit `/etc/iscsi/iscsid.conf` set `iscsid.safe_logout` back to 'yes'
 
-   iscsid.safe_logout = Yes
+   `iscsid.safe_logout` = Yes
 
 1. Restart `iscsid` service
 
