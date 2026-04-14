@@ -28,12 +28,17 @@ During a CSM upgrade, cloud init keeps looping with an error while fetching the 
     [ 2793.848637] cloud-init[12289]: If your cluster was setup to utilize IPVS, run ipvsadm --clear (or similar)
    ```
 
-2. Check whether `udpIdleTimeout` exists in `kube-proxy`.
+1. Check whether `udpIdleTimeout` exists in `kube-proxy`.
 
    ```bash
-   ncn-m001:/usr/share/doc/csm/upgrade/scripts/upgrade # kubectl get cm -n kube-system kube-proxy -o yaml | grep udpIdle
-    udpIdleTimeout: 0s
+   ncn-m#:/usr/share/doc/csm/upgrade/scripts/upgrade # kubectl get cm -n kube-system kube-proxy -o yaml | grep udpIdle
    ```
+
+   Example output:
+
+   ```text
+    udpIdleTimeout: 0s
+    ```
 
 ## Issue conditions
 
@@ -41,7 +46,7 @@ This issue occurs when `PREPARE_KUBEADM` successfully patches `kube-proxy`, but 
 
 ## Workaround description
 
-1. Create the `PREPARE_KUBEADM.sh` script using the below command
+1. (`ncn-m#`)Create the `PREPARE_KUBEADM.sh` script using the below command
 
    ```bash
    cat > PREPARE_KUBEADM.sh <<'EOF'
@@ -72,15 +77,15 @@ This issue occurs when `PREPARE_KUBEADM` successfully patches `kube-proxy`, but 
    EOF
    ```
 
-2. Execute the script using these command:
+1. (`ncn-m#`)Execute the script using these command:
 
    ```bash
    chmod +x PREPARE_KUBEADM.sh
    ./PREPARE_KUBEADM.sh
    ```
 
-3. Verify that the `udpIdleTimeout` was removed post the script execution:
+1. (`ncn-m#`)Verify that the `udpIdleTimeout` was removed post the script execution:
 
    ```bash
-   ncn-m001:/usr/share/doc/csm/upgrade/scripts/upgrade # kubectl get cm -n kube-system kube-proxy -o yaml | grep udpIdle
+   kubectl get cm -n kube-system kube-proxy -o yaml | grep udpIdle
    ```
