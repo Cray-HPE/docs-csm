@@ -28,10 +28,10 @@ During a CSM upgrade, cloud init keeps looping with an error while fetching the 
     [ 2793.848637] cloud-init[12289]: If your cluster was setup to utilize IPVS, run ipvsadm --clear (or similar)
    ```
 
-1. Check whether `udpIdleTimeout` exists in `kube-proxy`.
+1. (`ncn-m#`)Check whether `udpIdleTimeout` exists in `kube-proxy`.
 
    ```bash
-   ncn-m#:/usr/share/doc/csm/upgrade/scripts/upgrade # kubectl get cm -n kube-system kube-proxy -o yaml | grep udpIdle
+   kubectl get cm -n kube-system kube-proxy -o yaml | grep udpIdle
    ```
 
    Example output:
