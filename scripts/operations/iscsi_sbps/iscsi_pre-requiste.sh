@@ -52,7 +52,7 @@ systemctl restart iscsid.service
 PORTAL=$(iscsiadm -m session | grep $NCN_WORKER | awk '{print $3}' | sed 's/3260.*/3260/')
 IQN=$(iscsiadm -m session | grep $NCN_WORKER | awk '{print $4}')
 
-# Logout the iSCSI session 
+# Logout the iSCSI session
 
 iscsiadm -m node -T $IQN -p $PORTAL -u
 
@@ -70,7 +70,7 @@ iscsiadm -m discovery -t sendtargets -p $PORTAL
 
 # Login to iSCSI session
 
-iscsiadm -m node -T $IQN -p $PORTAL -l 
+iscsiadm -m node -T $IQN -p $PORTAL -l
 
 # Set back iscsid.safe_logout from 'No' to 'Yes'
 

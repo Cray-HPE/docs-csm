@@ -54,7 +54,7 @@ as those `LUNs` may not exist with the same LUN number or mapped to different im
 ## Resolution
 
 The solution is to logout the iSCSI session after the worker node is down for rebuild and then discover
-the LUNs using `iscsiadm` command and login to the iSCSI session. All these steps are automated in the
+the `LUNs` using `iscsiadm` command and login to the iSCSI session. All these steps are automated in the
 following script and hence it is required to run the script:
 [`iscsi_pre-requiste.sh`](../../scripts/operations/iscsi_sbps/iscsi_pre-requiste.sh)
 on all compute and UAN nodes (using `pdsh` command).
