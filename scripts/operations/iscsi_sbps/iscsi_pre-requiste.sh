@@ -24,7 +24,7 @@
 
 # This script need to be run on iSCSI client nodes when the NCN worker node
 # (iSCSI target node) is down during rebuild. Attempting to run when the
-#  iSCSI target is up and running, this script will fail. 
+# iSCSI target is up and running, this script will fail.
 
 # Provide worker name as command line argument
 
