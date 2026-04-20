@@ -29,8 +29,8 @@
 # Provide worker name as command line argument
 
 if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <argument: NCN worker name>"
-    exit 1
+  echo "Usage: $0 <argument: NCN worker name>"
+  exit 1
 fi
 
 NCN_WORKER=$1
@@ -59,9 +59,9 @@ iscsiadm -m node -T $IQN -p $PORTAL -u
 exit_status=$?
 
 if [ $exit_status -ne 0 ]; then
-    echo "Logging out of iSCSI session with $NCN_WORKER failed, so exiting by resetting iscsid.safe_logout to 'Yes' "
-    sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "$CONFIG_FILE"
-    exit 1
+  echo "Logging out of iSCSI session with $NCN_WORKER failed, so exiting by resetting iscsid.safe_logout to 'Yes' "
+  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "$CONFIG_FILE"
+  exit 1
 fi
 
 # Perform iscsiadm discovery
