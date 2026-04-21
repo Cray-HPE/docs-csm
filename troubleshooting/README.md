@@ -85,6 +85,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Kubelet Memory Pressure False Positive](known_issues/kubelet_memory_pressure_false_positive.md)
 * [iSCSI SBPS Marshal agent failure](known_issues/iscsi_sbps_marshal_failure.md)
 * [Worker nodes unresponsive and `dmesg` flooded with iSCSI errors](known_issues/worker_nodes_unresponsive_and_dmesg_flooded_with_iSCSI_errors.md)
+* [Cloud init loops for master node: unknown field `udpIdleTimeout`](known_issues/management_nodes_rollout_stuck_at_cloud_init.md)
 
 ## Booting
 
