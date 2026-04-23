@@ -609,6 +609,11 @@ If these respective messages are encountered on the canary worker and any comput
     node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
     with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
+    **`Note`**
+        - We need to make sure at least two worker nodes (iSCSI SBPS targets) are healthy for high availability after completion of all the workers rollouts.
+            - After successful canary rollout, proceed with next set of worker nodes rollout in a batche, followed by the remaining worker nodes rollout, to prevent impact on compute nodes.
+            - After next set of worker nodes rollout completion, execute Step 6 (LUN assignment verification) at [management rollout of ncn worker nodes](# management_rollout.md#23-ncn-worker-nodes].
+        
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
     - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
