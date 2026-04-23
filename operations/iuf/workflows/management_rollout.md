@@ -574,6 +574,9 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
+1. (`ncn-w001#`) Verify the health of the iSCSI SBPS on canary worker node
+
+1. (`ncn-n00*#`) Verify the health of the iSCSI SBPS on compute nodes
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
