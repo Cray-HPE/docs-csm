@@ -282,8 +282,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
         See [Configure the Cray Command Line Interface](../../configure_cray_cli.md) for details on how to do this.
 
-    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the    new CFS configuration and image built in
-    previous steps of the workflow.
+    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the new CFS  configuration and image built in previous steps of the workflow.
 
         (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
@@ -578,33 +577,33 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     1. (`ncn-w001#`) Verify whether the following messages are observed on the canary worker node.       
 
-    ```bash
-    dmesg | grep "Detected NON_EXISTENT_LUN Access"
-    ```
+        ```bash
+        dmesg | grep "Detected NON_EXISTENT_LUN Access"
+        ```
 
-    Example output:
+        Example output:
 
-    ```text
-    sd 2:0:0:10: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
-    sd 2:0:0:12: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
-    sd 2:0:0:7: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
-    sd 2:0:0:9: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
-    ```
+        ```text
+        sd 2:0:0:10: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+        sd 2:0:0:12: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+        sd 2:0:0:7: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+        sd 2:0:0:9: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+        ```
 
-    1. (`ncn-n00*#`) Verify whether the following messages are observed on any compute or UAN node.
+    1. (`ncn-nid#`) Verify whether the following messages are observed on any compute or UAN node.
    
-    ```bash
-    dmesg | grep "LUN assignments"
-    ```
+        ```bash
+        dmesg | grep "LUN assignments"
+        ```
 
-    Example output:
+        Example output:
 
-    ```text
-    TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
-    TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
-    TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
-    TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
-    ```
+        ```text
+        TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+        TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+        TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+        TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+        ```
 
 If above respective messages are encountered on the canary worker and any compute/UAN nodes, ensure the following procedure is followed before continuing.
 [Steps to follow after the worker node is down during Rebuild](../..//iscsi_sbps/iscsi_pre-requisite_steps_during_rebuild.md).
@@ -616,8 +615,8 @@ If above respective messages are encountered on the canary worker and any comput
     with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
     **`Note`** We need to make sure at least two worker nodes (iSCSI SBPS targets) are healthy for high availability after completion of all the workers rollout.
-       - proceed with next set of worker nodes rollout in a batch, followed by the remaining worker nodes rollout, to prevent impact on compute nodes.
-           - execute Step 6 (LUN assignment verification) at [management rollout of ncn worker nodes](# management_rollout.md#23-ncn-worker-nodes].
+   - proceed with next set of worker nodes rollout in a batch, followed by the remaining worker nodes rollout, to prevent impact on compute nodes.
+       - execute Step 6 (LUN assignment verification) at [management rollout of ncn worker nodes](#management_rollout.md#23-ncn-worker-nodes] after each batch of worker nodes rollout.
         
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
