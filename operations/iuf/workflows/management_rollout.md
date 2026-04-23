@@ -574,9 +574,34 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
-1. (`ncn-w001#`) Verify the health of the iSCSI SBPS on canary worker node
+1. Verify whether there have been any changes to LUN assignments on the iSCSI SBPS target (canary worker node).
 
-1. (`ncn-n00*#`) Verify the health of the iSCSI SBPS on compute nodes
+    1. (`ncn-w001#`) Check if below messages is seen on the canary worker node.
+
+    ```bash
+    dmesg | grep "Detected NON_EXISTENT_LUN Access"
+    ```
+
+    Example output:
+
+    ```text
+    Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+    ```
+
+    1. (`ncn-n00*#`) Check if below messages is seen on any of the compute/ UAN node.
+
+    ```bash
+    dmesg | grep "LUN assignments"
+    ```
+
+    Example output:
+
+    ```text
+    sd 2:0:0:12: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+    ```
+
+If these respective messages are encountered on the canary worker and any compute/UAN nodes, ensure the following procedure is completed before continuing.
+[Steps to follow after the worker node is down during Rebuild](../..//iscsi_sbps/iscsi_pre-requisite_steps_during_rebuild.md).
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
