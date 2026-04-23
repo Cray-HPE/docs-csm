@@ -51,7 +51,7 @@ systemctl restart iscsid.service
 PORTAL=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $3}' | sed 's/3260.*/3260/')
 IQN=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $4}')
 
-if [[ -z "${PORTAL}" ]] || [[ -z "${IQN}" ]]; then
+if [[ -z ${PORTAL} ]] || [[ -z ${IQN} ]]; then
   echo "Error: No iSCSI session found for worker ${NCN_WORKER}"
   sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
   exit 1
