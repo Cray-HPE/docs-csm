@@ -574,9 +574,9 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
-1. Verify whether there have been any changes to LUN assignments on the iSCSI SBPS target (canary worker node).
+1. Verify whether there have been any changes to LUN assignments on the `iSCSI SBPS` target (canary worker node).
 
-    1. (`ncn-w001#`) Check if below messages is seen on the canary worker node.
+    1. (`ncn-w001#`) Verify whether the following messages are observed on the canary worker node.       
 
     ```bash
     dmesg | grep "Detected NON_EXISTENT_LUN Access"
@@ -585,11 +585,14 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     Example output:
 
     ```text
-    Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+    sd 2:0:0:10: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+    sd 2:0:0:12: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+    sd 2:0:0:7: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+    sd 2:0:0:9: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
     ```
 
-    1. (`ncn-n00*#`) Check if below messages is seen on any of the compute/ UAN node.
-
+    1. (`ncn-n00*#`) Verify whether the following messages are observed on any compute or UAN node.
+   
     ```bash
     dmesg | grep "LUN assignments"
     ```
@@ -597,10 +600,13 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     Example output:
 
     ```text
-    sd 2:0:0:12: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
+    TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+    TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+    TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
+    TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
     ```
 
-If these respective messages are encountered on the canary worker and any compute/UAN nodes, ensure the following procedure is completed before continuing.
+If above respective messages are encountered on the canary worker and any compute/UAN nodes, ensure the following procedure is followed before continuing.
 [Steps to follow after the worker node is down during Rebuild](../..//iscsi_sbps/iscsi_pre-requisite_steps_during_rebuild.md).
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
@@ -609,10 +615,9 @@ If these respective messages are encountered on the canary worker and any comput
     node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
     with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
-    **`Note`**
-        - We need to make sure at least two worker nodes (iSCSI SBPS targets) are healthy for high availability after completion of all the workers rollouts.
-            - After successful canary rollout, proceed with next set of worker nodes rollout in a batche, followed by the remaining worker nodes rollout, to prevent impact on compute nodes.
-            - After next set of worker nodes rollout completion, execute Step 6 (LUN assignment verification) at [management rollout of ncn worker nodes](# management_rollout.md#23-ncn-worker-nodes].
+    **`Note`** We need to make sure at least two worker nodes (iSCSI SBPS targets) are healthy for high availability after completion of all the workers rollout.
+       - proceed with next set of worker nodes rollout in a batch, followed by the remaining worker nodes rollout, to prevent impact on compute nodes.
+           - execute Step 6 (LUN assignment verification) at [management rollout of ncn worker nodes](# management_rollout.md#23-ncn-worker-nodes].
         
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
