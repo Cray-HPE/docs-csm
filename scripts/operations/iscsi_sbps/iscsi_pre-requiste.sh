@@ -37,44 +37,61 @@ NCN_WORKER=$1
 echo "NCN_WORKER = $1"
 
 CONFIG_FILE="/etc/iscsi/iscsid.conf"
-#CONFIG_FILE="/root/Asha/iscsid.conf"
 
 # Backup the original file
 cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
 
 # Set iscsid.safe_logout value 'No'
-sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)[Yy][Ee][Ss]/\1No/' "$CONFIG_FILE"
+sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)[Yy][Ee][Ss]/\1No/' "${CONFIG_FILE}"
 
 echo "Updated iscsid.safe_logout to No"
 
 systemctl restart iscsid.service
 
-PORTAL=$(iscsiadm -m session | grep $NCN_WORKER | awk '{print $3}' | sed 's/3260.*/3260/')
-IQN=$(iscsiadm -m session | grep $NCN_WORKER | awk '{print $4}')
+PORTAL=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $3}' | sed 's/3260.*/3260/')
+IQN=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $4}')
+
+if [[ -z "${PORTAL}" ]] || [[ -z "${IQN}" ]]; then
+  echo "Error: No iSCSI session found for worker ${NCN_WORKER}"
+  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
+  exit 1
+fi
 
 # Logout the iSCSI session
 
-iscsiadm -m node -T $IQN -p $PORTAL -u
+iscsiadm -m node -T ${IQN} -p ${PORTAL} -u
 
 exit_status=$?
 
 if [ $exit_status -ne 0 ]; then
-  echo "Logging out of iSCSI session with $NCN_WORKER failed, so exiting by resetting iscsid.safe_logout to 'Yes' "
-  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "$CONFIG_FILE"
+  echo "Logging out of iSCSI session with ${NCN_WORKER} failed, so exiting by resetting iscsid.safe_logout to 'Yes'"
+  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
   exit 1
 fi
 
 # Perform iscsiadm discovery
 
-iscsiadm -m discovery -t sendtargets -p $PORTAL
+iscsiadm -m discovery -t sendtargets -p ${PORTAL}
+
+if [ $? -ne 0 ]; then
+  echo "Error: Discovery failed for portal ${PORTAL}"
+  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
+  exit 1
+fi
 
 # Login to iSCSI session
 
 iscsiadm -m node -T $IQN -p $PORTAL -l
 
+if [ $? -ne 0 ]; then
+  echo "Error: Login failed for ${IQN} at ${PORTAL}"
+  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
+  exit 1
+fi
+
 # Set back iscsid.safe_logout from 'No' to 'Yes'
 
-sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "$CONFIG_FILE"
+sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
 
 echo "Updated iscsid.safe_logout to Yes"
 
