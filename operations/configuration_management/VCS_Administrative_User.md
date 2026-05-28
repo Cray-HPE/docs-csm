@@ -156,10 +156,10 @@ This can be done either using the VCS web interface, or using the command line.
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    > This procedure gets a copy of the `shasta-cfg/utils` directory from latest IUF activity. If this procedure is being followed when
+    > This procedure gets a copy of the `shasta-cfg/utils` from the last upgraded CSM artifacts directory. If this procedure is being followed when
     > the PIT node or expanded CSM release tarball is still available, then this directory can be copied from there instead.
 
-    1. Source the environment file to get the `CSM_ARTI_DIR` value, which contains the path to the latest IUF activity media directory used during the most recent upgrade.
+    1. Source the environment file to get the `CSM_ARTI_DIR` value, which contains the path to the latest CSM artifacts directory used during the most recent upgrade.
 
         ```bash
         source /etc/cray/upgrade/csm/myenv
@@ -173,7 +173,7 @@ This can be done either using the VCS web interface, or using the command line.
 
         > **NOTE:** If the media directory is not present or does not contain the latest content, the `utils` directory can be obtained
         > from the CSM repository as a fallback. Clone the repository on a local
-        > system that has internet access, then copy only the `utils` directory to the cluster node.
+        > system that has internet aq2  access, then copy only the `utils` directory to the cluster node.
         >
         > On the local system:
         >

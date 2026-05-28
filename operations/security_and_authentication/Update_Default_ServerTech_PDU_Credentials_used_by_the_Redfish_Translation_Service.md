@@ -35,7 +35,7 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    1. Source the environment file to get the `CSM_ARTI_DIR` value, which contains the path to the latest IUF activity media directory used during the most recent upgrade.
+    1. Source the environment file to get the `CSM_ARTI_DIR` value, which contains the path to the latest CSM artifacts directory used during the most recent upgrade.
 
         ```bash
         source /etc/cray/upgrade/csm/myenv
