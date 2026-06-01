@@ -1,6 +1,6 @@
-# Steps to follow after the worker node is down during Rebuild
+# Steps to follow after the worker node rollout during upgrade 
 
-This document presents the pre-requisite steps to avoid issues with iSCSI SBPS
+This document presents the steps to perform to avoid issues with iSCSI SBPS
 during the CSM upgrade of worker nodes which are iSCSI target nodes.
 
 ## Symptom
@@ -53,8 +53,31 @@ as those `LUNs` may not exist with the same LUN number or mapped to different im
 
 ## Resolution
 
-The solution is to logout the iSCSI session after the worker node is down for rebuild and then discover
-the `LUNs` using `iscsiadm` command and login to the iSCSI session. All these steps are automated in the
-following script and hence it is required to run the script:
-[`iscsi_pre-requiste.sh`](../../scripts/operations/iscsi_sbps/iscsi_pre-requiste.sh)
-on all compute and UAN nodes (using `pdsh` command).
+The solution is, post worker node rebuild, logout the iSCSI session, discover the `LUNs` and login to
+the iSCSI session using `iscsiadm` command. The steps are automated in the script
+[`iscsi_post_rollout.sh`](../../scripts/operations/iscsi_sbps/iscsi_post_rollout.sh) and it is required
+to copy the script onto iSCSI initiator (Compute/UAN) nodes and run using `pdsh` command from the master
+node:
+
+```text
+sh iscsi_post_rollout.sh <NCN worker node>"
+```
+
+Example Command to be run if ncn-w002 was rolled out:
+
+```bash
+sh iscsi_post_rollout.sh ncn-w002
+``` 
+
+**Note:**
+
+In certain state of the system(s), if the iSCSI session is not allowed to logout like if the device or resouce in
+use, then it is required to turn of the `iscsid.safe_logout` attribute in `/etc/iscsi/iscsid.conf` file
+and then restart the `iscsid` service and then logout the iSCSI session. By default `iscsid.safe_logout`
+will be set to 'Yes', so this needs to be set to 'No'. After logging in to the iSCSI session, this needs
+to be set back to 'Yes' and then restart the `iscsid` service.
+
+Also, in some state of the system(s), iSCSI session will not be allowed to logout untill the worker node
+to be rebuild is down. In such cases, iSCSI session needs to be logged out after the worker node is
+down (cordon) during rebuild and may require to set the `iscsid.safe_logout` attribute in `/etc/iscsi/iscsid.conf`
+to 'No' and restart `iscsid` service as mentioned above.

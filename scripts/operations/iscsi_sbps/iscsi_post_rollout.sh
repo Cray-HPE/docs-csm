@@ -29,31 +29,18 @@
 # Provide worker name as command line argument
 
 if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 <argument: NCN worker name>"
+  echo "Usage: $0 <argument: NCN worker name> e.g ncn-w001"
   exit 1
 fi
 
 NCN_WORKER=$1
 echo "NCN_WORKER = $1"
 
-CONFIG_FILE="/etc/iscsi/iscsid.conf"
-
-# Backup the original file
-cp "$CONFIG_FILE" "${CONFIG_FILE}.bak"
-
-# Set iscsid.safe_logout value 'No'
-sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)[Yy][Ee][Ss]/\1No/' "${CONFIG_FILE}"
-
-echo "Updated iscsid.safe_logout to No"
-
-systemctl restart iscsid.service
-
 PORTAL=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $3}' | sed 's/3260.*/3260/')
 IQN=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $4}')
 
 if [[ -z ${PORTAL} ]] || [[ -z ${IQN} ]]; then
-  echo "Error: No iSCSI session found for worker ${NCN_WORKER}"
-  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
+  echo "Error: No iSCSI session found for worker ${NCN_WORKER}, exiting"
   exit 1
 fi
 
@@ -64,9 +51,10 @@ iscsiadm -m node -T ${IQN} -p ${PORTAL} -u
 exit_status=$?
 
 if [ $exit_status -ne 0 ]; then
-  echo "Logging out of iSCSI session with ${NCN_WORKER} failed, so exiting by resetting iscsid.safe_logout to 'Yes'"
-  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
+  echo "Logging out of iSCSI session with ${NCN_WORKER} failed, exiting"
   exit 1
+else
+  echo "Logging out of iSCSI session with ${NCN_WORKER} suceeded"
 fi
 
 # Perform iscsiadm discovery
@@ -74,9 +62,10 @@ fi
 iscsiadm -m discovery -t sendtargets -p ${PORTAL}
 
 if [ $? -ne 0 ]; then
-  echo "Error: Discovery failed for portal ${PORTAL}"
-  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
+  echo "Error: iSCSI Discovery failed for portal ${PORTAL}"
   exit 1
+else 
+  echo "iSCSI Discovery suceeded for portal ${PORTAL}"
 fi
 
 # Login to iSCSI session
@@ -84,15 +73,8 @@ fi
 iscsiadm -m node -T $IQN -p $PORTAL -l
 
 if [ $? -ne 0 ]; then
-  echo "Error: Login failed for ${IQN} at ${PORTAL}"
-  sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
+  echo "Error: iSCSI session Login failed for ${IQN} at ${PORTAL}"
   exit 1
+else
+  echo "iSCSI session Login suceeded for ${IQN} at ${PORTAL}"
 fi
-
-# Set back iscsid.safe_logout from 'No' to 'Yes'
-
-sed -i 's/^\(\s*iscsid\.safe_logout\s*=\s*\)No/\1Yes/' "${CONFIG_FILE}"
-
-echo "Updated iscsid.safe_logout to Yes"
-
-systemctl restart iscsid.service
