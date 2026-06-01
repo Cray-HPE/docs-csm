@@ -67,12 +67,12 @@ Example Command to be run if `ncn-w002` was rolled out:
 
 ```bash
 sh iscsi_post_rollout.sh ncn-w002
-``` 
+```
 
 **Note:**
 
 In certain state of the system(s), if the iSCSI session is not allowed to logout, like if the device or resource
 in use, then it is required to turn off the `iscsid.safe_logout` attribute (set to 'No') in `/etc/iscsi/iscsid.conf`
 file and then restart `iscsid` service and then run the script `iscsi_post_rollout.sh`. By default `iscsid.safe_logout`  
-will be set to 'Yes', so this needs to be set to 'No'. After running `iscsi_post_rollout.sh` suceessfully, 
+will be set to 'Yes', so this needs to be set to 'No'. After running `iscsi_post_rollout.sh` successfully,
 `iscsid.safe_logout` needs to be set back to 'Yes' and then restart the `iscsid` service.
