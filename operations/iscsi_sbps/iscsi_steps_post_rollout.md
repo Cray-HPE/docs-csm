@@ -1,4 +1,4 @@
-# Steps to follow after the worker node rollout during upgrade 
+# Steps to follow after the worker node rollout during upgrade
 
 This document presents the steps to perform to avoid issues with iSCSI SBPS
 during the CSM upgrade of worker nodes which are iSCSI target nodes.
@@ -63,7 +63,7 @@ node:
 sh iscsi_post_rollout.sh <NCN worker node>"
 ```
 
-Example Command to be run if ncn-w002 was rolled out:
+Example Command to be run if `ncn-w002` was rolled out:
 
 ```bash
 sh iscsi_post_rollout.sh ncn-w002
@@ -71,13 +71,8 @@ sh iscsi_post_rollout.sh ncn-w002
 
 **Note:**
 
-In certain state of the system(s), if the iSCSI session is not allowed to logout like if the device or resouce in
-use, then it is required to turn of the `iscsid.safe_logout` attribute in `/etc/iscsi/iscsid.conf` file
-and then restart the `iscsid` service and then logout the iSCSI session. By default `iscsid.safe_logout`
-will be set to 'Yes', so this needs to be set to 'No'. After logging in to the iSCSI session, this needs
-to be set back to 'Yes' and then restart the `iscsid` service.
-
-Also, in some state of the system(s), iSCSI session will not be allowed to logout untill the worker node
-to be rebuild is down. In such cases, iSCSI session needs to be logged out after the worker node is
-down (cordon) during rebuild and may require to set the `iscsid.safe_logout` attribute in `/etc/iscsi/iscsid.conf`
-to 'No' and restart `iscsid` service as mentioned above.
+In certain state of the system(s), if the iSCSI session is not allowed to logout, like if the device or resource
+in use, then it is required to turn off the `iscsid.safe_logout` attribute (set to 'No') in `/etc/iscsi/iscsid.conf`
+file and then restart `iscsid` service and then run the script `iscsi_post_rollout.sh`. By default `iscsid.safe_logout`  
+will be set to 'Yes', so this needs to be set to 'No'. After running `iscsi_post_rollout.sh` suceessfully, 
+`iscsid.safe_logout` needs to be set back to 'Yes' and then restart the `iscsid` service.

@@ -64,7 +64,7 @@ iscsiadm -m discovery -t sendtargets -p ${PORTAL}
 if [ $? -ne 0 ]; then
   echo "Error: iSCSI Discovery failed for portal ${PORTAL}"
   exit 1
-else 
+else
   echo "iSCSI Discovery suceeded for portal ${PORTAL}"
 fi
 
