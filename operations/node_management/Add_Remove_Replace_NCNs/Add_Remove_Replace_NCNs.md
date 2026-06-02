@@ -39,7 +39,7 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
    ```
 
    Note: For adding FMNs (Fabric Manager Nodes) to CSM there is a new prompt added to confirm if the node getting added is an FMN or not:
-    
+
   ```text
    Please answer with yes or no.
    Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
@@ -161,7 +161,7 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
 
     Restarting cray-dhcp-kea
    ```
-    
+
 ## Add worker, storage, master or FMN(Fabric Manager Node) NCNs
 
 Use this procedure to add a worker, storage, master or FMN NCN.
