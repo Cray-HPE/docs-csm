@@ -361,7 +361,7 @@ The NCN MAC addresses need to be collected using the [Collect NCN MAC Addresses]
       generated in the [FMN base image creation stage](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/fm_on_baremetal/Configure_FM_On_Baremetal.md#fmn-base-image-creation).
 
         For Example: Base image id of FMN is `06135c73-bcd9-4d38-928f-ada20bdf6a6`
-      
+
         ```bash
             cd /usr/share/doc/csm/scripts/operations/node_management/Add_Remove_Replace_NCNs/
             ./add_management_ncn.py ncn-data \
@@ -373,7 +373,7 @@ The NCN MAC addresses need to be collected using the [Collect NCN MAC Addresses]
                 --mac-lan0 b8:59:9f:d9:9d:e8 \
                 --mac-lan1 b8:59:9f:d9:9d:e9
            ```
-        
+
 1. (`ncn-mw#`) Run the `add_management_ncn.py` script again, adding the `--perform-changes` argument to the command run in the previous step:
 
    > ***NOTE*** Depending on the networking configuration of the system the CMN or CAN networks
