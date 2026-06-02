@@ -4,7 +4,7 @@
 - [Terminology and Components](#terminology-and-components)
 - [Architecture](#architecture)
 - [Configure FM on baremetal](#configure-fm-on-baremetal)
-- [Slngshot Switch Firmware Update](#slngshot-switch-firmware-update)
+- [Slingshot Switch Firmware Update](#slngshot-switch-firmware-update)
 - [Troubleshooting](#troubleshooting)
 
 ## Introduction
