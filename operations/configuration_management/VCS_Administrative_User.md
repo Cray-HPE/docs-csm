@@ -173,7 +173,7 @@ This can be done either using the VCS web interface, or using the command line.
 
         > **NOTE:** If the media directory is not present or does not contain the latest content, the `utils` directory can be obtained
         > from the CSM repository as a fallback. Clone the repository on a local
-        > system that has internet aq2  access, then copy only the `utils` directory to the cluster node.
+        > system that has internet access, then copy only the `utils` directory to the cluster node.
         >
         > On the local system:
         >
