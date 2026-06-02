@@ -27,7 +27,6 @@ Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable F
 * Step 4: [FMN Post Boot](#fmn-post-boot)
     * [Validation](#validation)
     * [Install Fabric Manager on FM baremetal nodes](#install-fabric-manager-on-fm-baremetal-nodes)
-* Step 5: [Uninstall FMN Helm Chart](#uninstall-fmn-helm-chart)
 
 ## FMN Prerequisites
 
