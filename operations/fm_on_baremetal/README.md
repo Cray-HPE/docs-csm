@@ -26,10 +26,10 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 [Slingshot Host Software](../../glossary.md#slingshot-host-software-shs)
 
 ### FM
-[Fabric Manager](...)
+[Fabric Manager](../../glossary.md#fabric-manager)
 
 ### FMN
-[Fabric Manager Node](...)
+[Fabric Manager Node](../../glossary.md#fabric-manager-node)
 
 ### SLS 
 
