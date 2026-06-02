@@ -445,4 +445,4 @@ ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
 
 ### Install Fabric Manager on FM baremetal nodes
 
-For install/ upgrade Fabric Manager on the FMNs please refer _HPE Slingshot Installation Guide for CSM_.
+For install/ upgrade Fabric Manager on the FMNs please refer section "3 Install HPE Slingshot Fabric Manager software on bare metal servers" in _HPE Slingshot Installation Guide for CSM_ PDF.
