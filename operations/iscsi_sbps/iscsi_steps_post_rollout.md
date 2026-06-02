@@ -53,26 +53,23 @@ as those `LUNs` may not exist with the same LUN number or mapped to different im
 
 ## Resolution
 
-The solution is, post worker node rebuild, logout the iSCSI session, discover the `LUNs` and login to
-the iSCSI session using `iscsiadm` command. The steps are automated in the script
-[`iscsi_post_rollout.sh`](../../scripts/operations/iscsi_sbps/iscsi_post_rollout.sh) and it is required
-to copy the script onto iSCSI initiator (Compute/UAN) nodes and run using `pdsh` command from the master
-node:
+The solution is to re-establish the iSCSI session after a worker node rebuild by logging out the existing
+stale iSCSI session with rebuilt worker node, rediscover the `LUNs` and logging in back using the `iscsiadm`
+command. The steps are automated the script [`iscsi_post_rollout.sh`](../../scripts/operations/iscsi_sbps/iscsi_post_rollout.sh) and must be copied to the iSCSI initiator nodes (Compute/UAN) and executed from the master node using 
+`pdsh` command.
 
-```text
-sh iscsi_post_rollout.sh <NCN worker node>"
-```
-
-Example Command to be run if `ncn-w002` was rolled out:
+Example Command to be run if `ncn-w002` was rolled out and on compute node x3000c0s19b3n0:
 
 ```bash
-sh iscsi_post_rollout.sh ncn-w002
+pdsh -w x3000c0s19b3n0 "sh iscsi_post_rollout.sh ncn-w002"
 ```
 
 **Note:**
 
-In certain state of the system(s), if the iSCSI session is not allowed to logout, like if the device or resource
-in use, then it is required to turn off the `iscsid.safe_logout` attribute (set to 'No') in `/etc/iscsi/iscsid.conf`
-file and then restart `iscsid` service and then run the script `iscsi_post_rollout.sh`. By default `iscsid.safe_logout`  
-will be set to 'Yes', so this needs to be set to 'No'. After running `iscsi_post_rollout.sh` successfully,
-`iscsid.safe_logout` needs to be set back to 'Yes' and then restart the `iscsid` service.
+In certain state of the system(s), the iSCSI session may not be allowed to logout, for example when a device or resource
+in use, then it is required to disable the `iscsid.safe_logout` parameter in `/etc/iscsi/iscsid.conf` temporarily by
+setting it to 'No', followed by restart of the `iscsid` service. Once this change has been made, run the `iscsi_post_rollout.sh` script.
+
+By default, `iscsid.safe_logout` is set to 'Yes', so it must be changed to 'No' before executing the script.
+After `iscsi_post_rollout.sh` completes successfully, restore `iscsid.safe_logout` to 'Yes' and restart the
+`iscsid` service again to re-enable safe logout behavior.

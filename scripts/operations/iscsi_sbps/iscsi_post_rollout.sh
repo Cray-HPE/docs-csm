@@ -26,10 +26,11 @@
 # (iSCSI target node) is down during rebuild. Attempting to run when the
 # iSCSI target is up and running, this script will fail.
 
-# Provide worker name as command line argument
+# Provide worker node name as command line argument
 
 if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 <argument: NCN worker name> e.g ncn-w001"
+  echo "Usage: $0 <argument: NCN worker name>"
+  echo "e.g: $0 ncn-w001"
   exit 1
 fi
 
@@ -40,7 +41,7 @@ PORTAL=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $3}' | sed 's/32
 IQN=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $4}')
 
 if [[ -z ${PORTAL} ]] || [[ -z ${IQN} ]]; then
-  echo "Error: No iSCSI session found for worker ${NCN_WORKER}, exiting"
+  echo "Error: No iSCSI session found for worker node ${NCN_WORKER}, exiting"
   exit 1
 fi
 
