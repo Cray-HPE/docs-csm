@@ -871,6 +871,10 @@ xnames
 zeroization
 zeroize
 zypper
+Baremetal
+baremetal
+FabricManager
+FMNs
 
 # Network Terms - Starting to organize a little bit here but it's not done
 0.5m
