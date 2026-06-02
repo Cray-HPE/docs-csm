@@ -5,7 +5,6 @@
 - [Architecture](#architecture)
 - [Configure FM on baremetal](#configure-fm-on-baremetal)
 - [Slingshot Switch Firmware Update](#slingshot-switch-firmware-update)
-- [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
@@ -70,7 +69,3 @@ To configure FM on baremetal please follow the [procedure](Configure_FM_On_Barem
 
 * For clusters using the FM pod: CSM will continue to handle switch firmware uploads and updates as [before](../../operations/iuf/workflows/slingshot_management_network_switch_updates.md#perform-slingshot-switch-and-management-network-switch-firmware-updates).
 * For clusters with bare-metal FM: FMN will host the switch firmware, and FM will be responsible for managing switch updates. Refer section "3.2.6 (Optional) Update HPE Slingshot switch firmware" in _HPE Slingshot Installation Guide for CSM_ PDF.
-
-## Troubleshooting
-
-For information on how to troubleshoot FM on baremetal, see [Troubleshooting](Troubleshooting.md).
