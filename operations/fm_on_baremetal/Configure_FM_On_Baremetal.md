@@ -22,7 +22,7 @@ Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable F
 * step 2: [FMN Pre Boot](#fmn-pre-boot)
     * [FMN Base Image Creation](#fmn-base-image-creation)
     * [Add FMN Nodes to CSM](#add-fmn-nodes-to-csm)
-    * [Update Switch Configuration With CANU](#update-switch-configuration-with-canu)
+    * [Generate Switch Configuration With CANU](#generate-switch-configuration-with-canu)
 * Step 3: [FMN Booting](#fmn-booting)
 * Step 4: [FMN Post Boot](#fmn-post-boot)
     * [Validation](#validation)
@@ -120,7 +120,7 @@ After creating the FMN base image, add FMN nodes to CSM by following the Follow 
 
 After completion of the NCN add procedure, SLS, HSM, and BSS will contain the corresponding FMN data. 
 
-#### Generate the switch configuration
+### Generate Switch Configuration With CANU
 
 For Example: 
 
