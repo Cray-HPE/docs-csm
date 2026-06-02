@@ -42,7 +42,8 @@ Verify that the BMC of each FMN is configured with the correct root user credent
 
 ### FMN Base Image Creation
 
-The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to `ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts.
+The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to
+`ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts.
 This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host.
 
 The following steps details the process for generating the FMN image.
@@ -171,7 +172,7 @@ Last login: Thu Dec  4 05:03:46 2025 from 10.252.1.10
 ...
 ```
 
-2. Check if both FMN nodes are shown under `sat status`:
+1. Check if both FMN nodes are shown under `sat status`:
 
 ```bash
 ncn-m001:~ # sat status | grep fmn
@@ -183,7 +184,7 @@ INFO: All values for 'Most Recent Session Template' are 'MISSING', omitting key.
 | x3000c0s29b0n0 | fmn002    | Node | 100012   | On        | OK   | True    | X86  | River | Management  | FabricManager | Sling    | True    | fmn-bm-default-configuration | configured           | 0           | stable      | MISSING                              | MISSING                              |
 ```
 
-3. Optionally check more details on the FMN nodes
+1. Optionally check more details on the FMN nodes
 
 For Example:
 
