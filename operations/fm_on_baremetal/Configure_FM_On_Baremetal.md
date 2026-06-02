@@ -47,7 +47,7 @@ The FabricManager subrole has been introduced to facilitate FMN node discovery a
 
 #### Create FMN base image (only base OS; no Fabric Manager)
 
-Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements. [See] (../../operations/configuration_management/Management_Node_Image_Customization.md)
+Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements. [See] (../configuration_management/Management_Node_Image_Customization.md)
 
 ##### FMN Boot Preparation
 
@@ -446,4 +446,4 @@ ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
 
 ### Install Fabric Manager on FM baremetal nodes
 
-For install/ upgrade Fabric Manager on the FMNs please refer [FabricManager Install/ Upgrade](...)
+For install/ upgrade Fabric Manager on the FMNs please refer _HPE Slingshot Installation Guide for CSM_.
