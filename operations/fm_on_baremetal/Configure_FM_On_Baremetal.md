@@ -1,17 +1,17 @@
-# Configure FM (Fabric Manager) On Baremetal
+# Configure FM (Fabric Manager) On `Baremetal`
 
-This document describes the procedure for customizing and deploying the base FMN OS image along with provisioning storage LUNs, 
-and configuring the necessary networking to support Fabric Manager on  baremetal following the CSM upgrade.
+This document describes the procedure for customizing and deploying the base FMN OS image along with provisioning storage `LUNs`, 
+and configuring the necessary networking to support Fabric Manager on `baremetal` following the CSM upgrade.
   
 ## Requirements
 
 * Hardware requirements - 2 bare-metal nodes with dedicated boot and data disks
-* Software requirements - OS (SLES SP7), CSM services like CANU, HSM, SLS, BSS, CSI, CFS, ansible playbooks for FMN
+* Software requirements - OS (SLES SP7), CSM services like CANU, HSM, SLS, BSS, CSI, CFS, Ansible playbooks for FMN
 
 ## Note:
 
 * Fabric Manager Nodes (`FMNs`) can be added only after the CSM upgrade has been completed.
-* By default, Fabric Manager would be running on kubernetes as a Kuberetes pod
+* By default, Fabric Manager would be running on Kubernetes as a Kubernetes pod
 * After Fabric Manager is migrated from a Kubernetes pod to bare-metal infrastructure, it cannot be reverted.
   
 ## Post upgrade of CSM from 1.7.0 to 1.7.1
