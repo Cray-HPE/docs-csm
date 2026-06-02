@@ -147,8 +147,7 @@ Take extreme care when manipulating ACLs, if CANU suggests moving a "permit any 
 
 ## FMN Booting
 
-Once the FMNs have been added to the CSM, proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image. [See]
-(../../operations/node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn)
+Once the FMNs have been added to the CSM, proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image. [See](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn)
 
 ## FMN Post Boot
 
