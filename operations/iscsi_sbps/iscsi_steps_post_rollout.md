@@ -55,10 +55,10 @@ as those `LUNs` may not exist with the same LUN number or mapped to different im
 
 The solution is to re-establish the iSCSI session after a worker node rebuild by logging out the existing
 stale iSCSI session with rebuilt worker node, rediscover the `LUNs` and logging in back using the `iscsiadm`
-command. The steps are automated the script [`iscsi_post_rollout.sh`](../../scripts/operations/iscsi_sbps/iscsi_post_rollout.sh) and must be copied to the iSCSI initiator nodes (Compute/UAN) and executed from the master node using 
+command. The steps are automated the script [`iscsi_post_rollout.sh`](../../scripts/operations/iscsi_sbps/iscsi_post_rollout.sh) and must be copied to the iSCSI initiator nodes (Compute/UAN) and executed from the master node using
 `pdsh` command.
 
-Example Command to be run if `ncn-w002` was rolled out and on compute node x3000c0s19b3n0:
+Example Command to be run if `ncn-w002` was rolled out and on compute node `x3000c0s19b3n0`:
 
 ```bash
 pdsh -w x3000c0s19b3n0 "sh iscsi_post_rollout.sh ncn-w002"
