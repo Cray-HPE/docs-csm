@@ -1,19 +1,19 @@
 # Configure FM (Fabric Manager) On `Baremetal`
 
-This document describes the procedure for customizing and deploying the base FMN OS image along with provisioning storage `LUNs`, 
+This document describes the procedure for customizing and deploying the base FMN OS image along with provisioning storage `LUNs`,
 and configuring the necessary networking to support Fabric Manager on `baremetal` following the CSM upgrade.
-  
+
 ## Requirements
 
 * Hardware requirements - 2 bare-metal nodes with dedicated boot and data disks
 * Software requirements - OS (SLES SP7), CSM services like CANU, HSM, SLS, BSS, CSI, CFS, Ansible playbooks for FMN
 
-## Note:
+## Notes
 
 * Fabric Manager Nodes (`FMNs`) can be added only after the CSM upgrade has been completed.
 * By default, Fabric Manager would be running on Kubernetes as a Kubernetes pod
 * After Fabric Manager is migrated from a Kubernetes pod to bare-metal infrastructure, it cannot be reverted.
-  
+
 ## Post upgrade of CSM from 1.7.0 to 1.7.1
 
 Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow below procedure.
@@ -42,7 +42,10 @@ Verify that the BMC of each FMN is configured with the correct root user credent
 
 ### FMN Base Image Creation
 
-The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to `ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts. This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host. The following steps details the process for generating the FMN image.
+The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to `ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts.
+This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host.
+
+The following steps details the process for generating the FMN image.
 
 #### Create FMN base image (only base OS; no Fabric Manager)
 
@@ -89,12 +92,12 @@ images:
   - Management_Fabric
 ```
 
-##### New FMN base image creation and uploade to S3 
+##### New FMN base image creation and upload to S3
 
 Execute the commands below on any master node to generate the new FMN image and upload it to the S3 storage.
 
 First set `bootprep` file path:
- 
+
 ```bash
 # BOOTPREP_FILE_PATH=./fmn_bootprep.yaml
 ```
@@ -117,11 +120,11 @@ sat bootprep run \
 
 After creating the FMN base image, add FMN nodes to CSM by following the Follow step 1 to step in  [NCN add procedure](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-worker-storage-master-or-fmnfabric-manager-node-ncns)
 
-After completion of the NCN add procedure, SLS, HSM, and BSS will contain the corresponding FMN data. 
+After completion of the NCN add procedure, SLS, HSM, and BSS will contain the corresponding FMN data.
 
 ### Generate Switch Configuration With CANU
 
-For Example: 
+For Example:
 
 ```bash
 canu generate network config -a TDS --csm 1.7 --custom-config custom_switch_config.yaml --edge Arista --sls-file sls_input_file.json --ccj surtur-ccj.json --folder output (--enable-nmn-isolation --nmn-pvlan <pvid>)
@@ -132,7 +135,7 @@ canu generate network config -a TDS --csm 1.7 --custom-config custom_switch_conf
 * TDS style systems have the management nodes plugged directly into the spine switches, most will only have a single leaf-bmc switch.
 * Systems that use the "Full" architecture will have the management nodes plugged into the leaf switches.
 
-The configuration generated here will contain updates for the leaf-bmc switch(es) for the Fabric Manager node BMCs and updates to either the spine switches or the leaf switches for the bonded connection.
+The configuration generated here will contain updates for the leaf-bmc switch(`es`) for the Fabric Manager node BMCs and updates to either the spine switches or the leaf switches for the bonded connection.
 
 For Example:
 
@@ -140,7 +143,7 @@ For Example:
 canu validate switch config --ip 10.254.0.4 --generated output/sw-leaf-bmc-001.cfg
 ```
 
-**Note:** CANU will likely suggest the removal of the snmpv3 user, this is because the SNMP configuration is not held in the `custom_config.yaml` file because it's not permitted to store secrets in GitHub. Do NOT remove this configuration from the switch.
+**Note:** CANU will likely suggest the removal of the `snmpv3` user, this is because the SNMP configuration is not held in the `custom_config.yaml` file because it's not permitted to store secrets in GitHub. Do NOT remove this configuration from the switch.
 
 Take extreme care when manipulating ACLs, if CANU suggests moving a "permit any ..." rule be sure to create the new rule before removing the old one. It is possible to lose access to the switch if the ACLs are not applied in the correct order.
 
@@ -276,7 +279,6 @@ Aliases = [ "fmn001-chn", "time-chn", "time-chn.local",]
 Comment = "x3000c0s28b0n0"
 IPAddress = "10.102.193.206"
 Name = "fmn001"
-
 ```
 
 #### SLS hardware should list the new nodes
@@ -297,7 +299,7 @@ For Example:
 cray sls search networks list --name NMN --format json
 ```
 
-#### HSM ethernet interfaces should be updated with the same allocated IPs
+#### HSM `ethernet` interfaces should be updated with the same allocated IPs
 
 For Example:
 
@@ -321,7 +323,7 @@ cray bss bootparameters list --hosts Global --format json
 
 #### Validate FMN required storage configuration (LVM partitions)
 
-Check if both LVM partiions `/dev/mapper/metalvg0-SCFIRMWARE` and `/dev/mapper/metalvg0-SLINGSHOT` created and mounted under `/opt/cray/FW/sc-firmware` and `/opt/slingshot` rescpectively on both FMN nodes (`fmn001` and `fmn002`).
+Check if both LVM partitions `/dev/mapper/metalvg0-SCFIRMWARE` and `/dev/mapper/metalvg0-SLINGSHOT` created and mounted under `/opt/cray/FW/sc-firmware` and `/opt/slingshot` respectively on both FMN nodes (`fmn001` and `fmn002`).
 
 ```bash
 fmn001:~ # lsblk
@@ -411,8 +413,7 @@ fmn002:~ # mount | grep /opt/slingshot
 
 #### Validate addition of FM required repositories
 
-Check if all the required repos are added on both FMN nodes (`fmn001` and `fmn002`) in order to install prerequisite OS RPMs 
-required during Slingshot Sftware installation.
+Check if all the required repos are added on both FMN nodes (`fmn001` and `fmn002`) in order to install prerequisite OS RPMs required during Slingshot Software installation.
 
 For Example:
 
