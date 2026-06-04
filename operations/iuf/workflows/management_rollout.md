@@ -573,40 +573,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
-1. Verify whether there have been any changes to LUN assignments on the `iSCSI SBPS` target (canary worker node).
-
-    1. (`ncn-w001#`) Verify whether the following messages are observed on the canary worker node.       
-
-        ```bash
-        dmesg | grep "Detected NON_EXISTENT_LUN Access"
-        ```
-
-        Example output:
-
-        ```text
-        sd 2:0:0:10: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
-        sd 2:0:0:12: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
-        sd 2:0:0:7: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
-        sd 2:0:0:9: LUN assignments on this target have changed. The Linux SCSI layer does not automatically remap LUN assignments.
-        ```
-
-    1. (`ncn-nid#`) Verify whether the following messages are observed on any compute or UAN node.
-   
-        ```bash
-        dmesg | grep "LUN assignments"
-        ```
-
-        Example output:
-
-        ```text
-        TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
-        TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
-        TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
-        TARGET_CORE[iSCSI]: Detected NON_EXISTENT_LUN Access for 0x00000001 from iqn.2023-06.csm.iscsi:x 1000c1s1b1n0
-        ```
-
-If above respective messages are encountered on the canary worker and any compute/UAN nodes, ensure the following procedure is followed before continuing.
-[Steps to follow after the worker node is down during Rebuild](../..//iscsi_sbps/iscsi_pre-requisite_steps_during_rebuild.md).
+1. Ensure to [follow these steps after canary worker node rollout is complete](../..//iscsi_sbps/iscsi_pre-requisite_steps_during_rebuild.md).
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
@@ -614,9 +581,9 @@ If above respective messages are encountered on the canary worker and any comput
     node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
     with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
-    **`Note`** We need to make sure at least two worker nodes (iSCSI SBPS targets) are healthy for high availability after completion of all the workers rollout.
-   - proceed with next set of worker nodes rollout in a batch, followed by the remaining worker nodes rollout, to prevent impact on compute nodes.
-       - execute Step 6 (LUN assignment verification) at [management rollout of ncn worker nodes](#management_rollout.md#23-ncn-worker-nodes] after each batch of worker nodes rollout.
+    **`Note`** Ensure at least two worker nodes (iSCSI SBPS targets) remain healthy to maintain high availability after the worker nodes rollout is complete.
+   - proceed with next set of worker nodes rollout in a batch after canary wroker node rollout, followed by the remaining worker nodes rollout.
+   - execute Step 6 at [management rollout of ncn worker nodes](#management_rollout.md#23-ncn-worker-nodes] after each batch of worker nodes rollout.
         
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
@@ -650,6 +617,8 @@ If above respective messages are encountered on the canary worker and any comput
         cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
     done
     ```
+    
+1. Ensure to [follow these steps after worker nodes rollout is complete](../..//iscsi_sbps/iscsi_pre-requisite_steps_during_rebuild.md).
 
 Once this step has completed:
 
