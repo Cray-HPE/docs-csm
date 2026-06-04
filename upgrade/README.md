@@ -9,7 +9,7 @@ software. Choose the appropriate procedure from the sections below.
     * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
     * [Option 3: Upgrade only CSM](#option-3-upgrade-only-csm)
 * [CSM patch version upgrade](#csm-patch-version-upgrade)
-* [FM On Baremetal](#fm_on_baremetal)
+* [FM On Baremetal](#fm-on-baremetal)
 
 ## Release Notes
 
