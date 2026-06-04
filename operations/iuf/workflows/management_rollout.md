@@ -573,7 +573,8 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```bash
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
-1. Ensure to [follow these steps after canary worker node rollout is complete](../..//iscsi_sbps/iscsi_pre-requisite_steps_during_rebuild.md).
+    
+1. Ensure to [follow these steps after canary worker node rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
@@ -582,9 +583,9 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
     **`Note`** Ensure at least two worker nodes (iSCSI SBPS targets) remain healthy to maintain high availability after the worker nodes rollout is complete.
-   - proceed with next set of worker nodes rollout in a batch after canary wroker node rollout, followed by the remaining worker nodes rollout.
-   - execute Step 6 at [management rollout of ncn worker nodes](#management_rollout.md#23-ncn-worker-nodes] after each batch of worker nodes rollout.
-        
+   - proceed with next set of worker nodes rollout in a batch after canary worker node rollout, followed by the remaining worker nodes rollout.
+   - ensure to execute step 6 at [2.3 NCN worker nodes](23-ncn-worker-nodes) after each batch of worker nodes rollout.
+
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
     - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
@@ -617,8 +618,8 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
         cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
     done
     ```
-    
-1. Ensure to [follow these steps after worker nodes rollout is complete](../..//iscsi_sbps/iscsi_pre-requisite_steps_during_rebuild.md).
+
+1. Ensure to [follow these steps after worker nodes rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
 
 Once this step has completed:
 
