@@ -1,7 +1,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022-2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -113,7 +113,7 @@ spec:
                     echo "INFO This stage will start a new Argo workflow with a name containing 'ncn-lifecycle-rebuild'."
                     echo '{{inputs.parameters.global_params}}' > global.params.data
 
-                    cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration')}}"
+                    cfs_config="{{=jsonpath(inputs.parameters.global_params,'$.input_params.cfs_configuration_management')}}"
                     ims_image="{{=jsonpath(inputs.parameters.global_params,'$.input_params.boot_image_management')}}"
                     if [[ -n $cfs_config && -n $ims_image ]]; then
                       echo "INFO Rebuilding $rebuild_set using passed parameters $ims_image and $cfs_config"
