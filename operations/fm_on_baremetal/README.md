@@ -8,7 +8,7 @@
 
 ## Introduction
 
-The Fabric Manager (FM) bare-metal enablement within the Cray System Management (CSM) framework introduces dedicated Fabric Manager Nodes (FMNs) 
+The Fabric Manager (FM) bare-metal enablement within the Cray System Management (CSM) framework introduces dedicated Fabric Manager Nodes (FMNs)
 that manage and monitor Slingshot fabric operations outside of a Kubernetes environment.
 
 CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment.
@@ -62,16 +62,16 @@ CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS i
 
 In CSM versions < 1.7.0, the deployment of the Fabric Manager within CSM uses native Kubernetes capabilities—both during upgrades and in failure/HA scenarios.
 Kubernetes itself provides health checks and a scheduler that can rebalance workloads across nodes based on load, administrative policies, and other criteria.
-The Fabric Manager is deployed as a single pod in Kubernetes. A traditional HA model for Fabric Manager doesn’t map cleanly into Kubernetes, so instead, Kubernetes’ 
+The Fabric Manager is deployed as a single pod in Kubernetes. A traditional HA model for Fabric Manager doesn’t map cleanly into Kubernetes, so instead, Kubernetes’
 built-in mechanisms detect failures and spin up a replacement pod, minimizing downtime.
 
-In theory, this model should satisfy HA requirements: if the pod fails (or needs to be moved during an upgrade), Kubernetes can detect the fault and 
+In theory, this model should satisfy HA requirements: if the pod fails (or needs to be moved during an upgrade), Kubernetes can detect the fault and
 recreate the Fabric Manager on another node, providing continuity.
 
-In practice, however, this approach does not meet the contractual HA obligations. Because of Kubernetes "best‑effort" scheduling and the resource demands 
+In practice, however, this approach does not meet the contractual HA obligations. Because of Kubernetes "best‑effort" scheduling and the resource demands
 of the Fabric Manager, real service outages can exceed 5 minutes.
 
-To address these issues, CSM 1.7.1 includes FM on baremetal support, which provides the necessary base OS image, networking, and storage configurations 
+To address these issues, CSM 1.7.1 includes FM on baremetal support, which provides the necessary base OS image, networking, and storage configurations
 for running the Slingshot Fabric Manager natively within the CSM environment to achieve HA.
 
 ![FM On Baremetal](FM-HA-1.png)
@@ -82,5 +82,5 @@ To configure FM on baremetal please follow the [procedure](Configure_FM_On_Barem
 
 ## Slingshot Switch Firmware Update
 
-* For clusters using the FM pod: CSM will continue to handle switch firmware uploads and updates as [before](../../operations/iuf/workflows/slingshot_management_network_switch_updates.md#perform-slingshot-switch-and-management-network-switch-firmware-updates).
-* For clusters with bare-metal FM: FMN will host the switch firmware, and FM will be responsible for managing switch updates. Refer section "3.2.6 (Optional) Update HPE Slingshot switch firmware" in _HPE Slingshot Installation Guide for CSM_ PDF.
+- For clusters using the FM pod: CSM will continue to handle switch firmware uploads and updates as [before](../../operations/iuf/workflows/slingshot_management_network_switch_updates.md#perform-slingshot-switch-and-management-network-switch-firmware-updates).
+- For clusters with bare-metal FM: FMN will host the switch firmware, and FM will be responsible for managing switch updates. Refer section "3.2.6 (Optional) Update HPE Slingshot switch firmware" in _HPE Slingshot Installation Guide for CSM_ PDF.
