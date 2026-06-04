@@ -267,4 +267,4 @@ In general, scaling master nodes is not recommended because it can cause Etcd la
 The following is a high-level overview of the replace NCN workflow:
 
 1. [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-or-master-ncns)
-1. [Add Worker, Storage, or Master NCNs](#add-worker-storage-or-master-ncns)
+1. [Add worker, storage, master or FMN NCNs](#add-worker-storage-master-or-fmn-ncns)
