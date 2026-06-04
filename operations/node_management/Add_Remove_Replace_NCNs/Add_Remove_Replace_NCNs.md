@@ -11,7 +11,7 @@ Add, remove, replace, or move non-compute nodes (NCNs). This applies to worker, 
 The following workflows are available:
 
 * [Prerequisites](#prerequisites)
-* [Add worker, storage, or master NCNs](#add-worker-storage-or-master-ncns)
+* [Add worker, storage, master or FMN NCNs](#add-worker-storage-master-or-fmn-ncns)
     * [Add NCN prerequisites](#add-ncn-prerequisites)
     * [Add NCN procedure](#add-ncn-procedure)
 * [Remove worker, storage, or master NCNs](#remove-worker-storage-or-master-ncns)
@@ -162,9 +162,9 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
     Restarting cray-dhcp-kea
    ```
 
-## Add worker, storage, master or FMN(Fabric Manager Node) NCNs
+## Add worker, storage, master or FMN NCNs
 
-Use this procedure to add a worker, storage, master or FMN NCN.
+Use this procedure to add a worker, storage, master or FMN (Fabric Manager Node) NCNs.
 
 ### Add NCN prerequisites
 
