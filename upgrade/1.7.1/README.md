@@ -1,4 +1,4 @@
-# CSM 1.7.1-Patch1 Installation Instructions
+# CSM 1.7.1-patch.1 Installation Instructions
 
 * [Introduction](#introduction)
 * [Bug fixes and improvements](#bug-fixes-and-improvements)
@@ -6,8 +6,8 @@
 
 ## Introduction
 
-This document guides an administrator through the patch update to Cray Systems Management `v1.7.1-patch1`
-from CSM `v1.7.1` onwards only.
+This document guides an administrator through the patch update to Cray Systems Management `1.7.1-patch.1`
+from CSM `1.7.1` onwards only.
 
 ## Bug fixes and improvements
 
@@ -44,7 +44,7 @@ from CSM `v1.7.1` onwards only.
    export PS1='\u@\H \D{%Y-%m-%d} \t \w # '
    ```
 
-1. Download and extract the CSM `v1.7.1-patch1` release to `ncn-m001`.
+1. Download and extract the CSM `v1.7.1-patch.1` release to `ncn-m001`.
 
    See [Download and Extract CSM Product Release](../../update_product_stream/README.md#download-and-extract-csm-product-release).
 
@@ -53,7 +53,7 @@ from CSM `v1.7.1` onwards only.
    **IMPORTANT**: Modify the command as necessary to match the actual location of the extracted files.
 
    ```bash
-   export CSM_DISTDIR="$(pwd)/csm-1.7.1-patch1"
+   export CSM_DISTDIR="$(pwd)/csm-1.7.1-patch.1"
    echo "${CSM_DISTDIR}"
    ```
 
@@ -111,9 +111,9 @@ Save the file and proceed to next step.
 It should have the content similar to example below:
 
    ```bash
-   export CSM_ARTI_DIR=/etc/cray/upgrade/csm/patch-install/csm-1.7.1-patch1
-   export CSM_RELEASE=1.7.1-patch1
-   export CSM_REL_NAME=csm-1.7.1-patch1
+   export CSM_ARTI_DIR=/etc/cray/upgrade/csm/patch-install/csm-1.7.1-patch.11
+   export CSM_RELEASE=1.7.1-patch.1
+   export CSM_REL_NAME=csm-1.7.1-patch.1
    export SECURE_STORAGE_IMAGE_ID=10bb9f73-0ca0-46dc-bb0f-d5e15dbeef36
    export SECURE_K8S_IMAGE_ID=04e06407-4b12-4401-8168-cd7683e1fa4d
    export MASTER_CONFIG=management-25.9.0-rc.4-prodinst
@@ -219,7 +219,7 @@ SUCCESS
    kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r -j - | jq -r 'to_entries[] | .key' | sort -V
    ```
 
-   Example output that includes the new CSM version (`1.7.1-patch1`):
+   Example output that includes the new CSM version (`1.7.1-patch.1`):
 
    ```text
    0.9.2
@@ -245,7 +245,7 @@ SUCCESS
    1.5.3
    1.7.0
    1.7.1
-   1.7.1-patch1
+   1.7.1-patch.1
    ```
 
 1. Confirm that the product catalog has an accurate timestamp for the CSM upgrade.
@@ -253,7 +253,7 @@ SUCCESS
    (`ncn-m001#`) Confirm that the `import_date` reflects the timestamp of the upgrade.
 
    ```bash
-   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.7.1-patch1".configuration.import_date'
+   kubectl get cm cray-product-catalog -n services -o jsonpath='{.data.csm}' | yq r  - '"1.7.1-patch.1".configuration.import_date'
    ```
 
 ### Complete upgrade
