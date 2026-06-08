@@ -60,10 +60,10 @@ command. The steps are automated the script [`iscsi_post_rollout.sh`](../../scri
 
 Run the script [`scp_iscsi_scr.sh`](../../scripts/operations/iscsi_sbps/scp_iscsi_scr.sh) to copy `iscsi_post_rollout.sh` onto compute nodes. Then to run `iscsi_post_rollout.sh` on compute nodes:
 
-For example if `ncn-w002` was rolled out and to run `iscsi_post_rollout.sh` on compute node x3000c0s19b3n0:
+For example if `ncn-w002` was rolled out and to run `iscsi_post_rollout.sh` on compute node `x3000c0s19b3n0`:
 
 ```bash
-pdsh -w x3000c0s19b3n0 "sh iscsi_post_rollout.sh ncn-w002"
+pdsh -w x3000c0s19b3n0 "sh /root/iscsi_post_rollout.sh ncn-w002"
 ```
 
 **Note:**

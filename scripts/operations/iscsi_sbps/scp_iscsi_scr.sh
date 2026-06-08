@@ -22,12 +22,15 @@
 #  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 #  OTHER DEALINGS IN THE SOFTWARE.
 
-# This is the script to copy iscsi_post_rollout.sh to all compute nodes. 
+# This is the script to copy iscsi_post_rollout.sh to all compute nodes.
 
 #!/bin/bash
 
-aliases=($(sat status --filter role=compute | \
-    awk -F'|' '
+# shellcheck disable=SC2207
+
+aliases=($(
+  sat status --filter role=compute \
+    | awk -F'|' '
         /^\|/ {
             gsub(/^[ \t]+|[ \t]+$/, "", $3)
             if ($3 ~ /^nid/) print $3
@@ -35,6 +38,6 @@ aliases=($(sat status --filter role=compute | \
 ))
 
 for alias in "${aliases[@]}"; do
-    echo "$alias-nmn"
-    scp iscsi_post_rollout.sh root@$alias-nmn:/root/
+  echo "$alias-nmn"
+  scp iscsi_post_rollout.sh root@$alias-nmn:/root/
 done
