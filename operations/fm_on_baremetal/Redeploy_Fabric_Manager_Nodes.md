@@ -2,7 +2,7 @@
 
 > **OPTIONAL:** This procedure is only applicable if Fabric Manager nodes were deployed during the CSM installation.
 
-Although Fabric Manager Nodes (FMNs) were deployed during the CSM installation, the initial deployment did not include the final image
+Although Fabric Manager Nodes (FMNs) were deployed during the CSM installation, the initial deployment would not include the final image
 with all necessary components. Once the other HPE Cray EX software products have been installed via the Install and Upgrade Framework (IUF),
 the FMNs need to be redeployed with the new customized image.
 
