@@ -1,4 +1,4 @@
-# Steps to follow after the worker node rollout during upgrade
+# Steps to follow after the worker node rollout during CSM upgrade
 
 This document presents the steps to perform to avoid issues with iSCSI SBPS
 during the CSM upgrade of worker nodes which are iSCSI target nodes.
@@ -58,7 +58,9 @@ stale iSCSI session with rebuilt worker node, rediscover the `LUNs` and logging 
 command. The steps are automated the script [`iscsi_post_rollout.sh`](../../scripts/operations/iscsi_sbps/iscsi_post_rollout.sh) and must be copied to the iSCSI initiator nodes (Compute/UAN) and executed from the master node using
 `pdsh` command.
 
-Example Command to be run if `ncn-w002` was rolled out and on compute node `x3000c0s19b3n0`:
+Run the script [`scp_iscsi_scr.sh`](../../scripts/operations/iscsi_sbps/scp_iscsi_scr.sh) to copy `iscsi_post_rollout.sh` onto compute nodes. Then to run `iscsi_post_rollout.sh` on compute nodes:
+
+For example if `ncn-w002` was rolled out and to run `iscsi_post_rollout.sh` on compute node x3000c0s19b3n0:
 
 ```bash
 pdsh -w x3000c0s19b3n0 "sh iscsi_post_rollout.sh ncn-w002"
