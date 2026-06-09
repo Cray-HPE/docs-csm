@@ -78,16 +78,23 @@ Once the new FMN image has been built and uploaded to S3, update the boot parame
 
     For each FMN, set `metal.no-wipe=0`:
 
-    ```bash
-    TARGET_XNAME=<fmn-xname>
-    csi handoff bss-update-param --set metal.no-wipe=0 --limit ${TARGET_XNAME}
-    ```
-
-    For example:
+    For Example:
 
     ```bash
     TARGET_XNAME=x3000c0s28b0n0
     csi handoff bss-update-param --set metal.no-wipe=0 --limit ${TARGET_XNAME}
+    ```
+
+    Expected output:
+
+    ```bash
+    2026/06/05 11:33:35 TOKEN was not set. Attempting to read API token from Kubernetes directly ...
+    2026/06/05 11:33:35 Getting management NCNs from SLS...
+    12
+    2026/06/05 11:33:35 Done getting management NCNs from SLS.
+    2026/06/05 11:33:35 Updating NCN kernel parameters...
+    2026/06/05 11:33:35 Successfully PUT BSS entry for x3000c0s28b0n0
+    2026/06/05 11:33:35 Done updating NCN kernel parameters.
     ```
 
     Repeat for each FMN.
