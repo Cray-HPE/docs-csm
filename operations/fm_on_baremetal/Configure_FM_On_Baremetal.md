@@ -42,15 +42,13 @@ Verify that the BMC of each FMN is configured with the correct root user credent
 
 ### FMN Base Image Creation
 
-The FabricManager subrole has been introduced to facilitate FMN node discovery and configuration. Corresponding updates have been made to
-`ncn_nodes.yaml` and `ncn_initrd.yaml` to support customization of the FMN base image— a non-Kubernetes image containing only essential artifacts.
-This customization is performed using the `csm.fm.baremetal` Ansible role, executed under the `Management_FabricManager` host.
+The FMN base image creation process supports node discovery, configuration, and base image customization. The base image contains only the essential artifacts required for deployment.
 
 The following steps details the process for generating the FMN image.
 
 #### Create FMN base image (only base OS; no Fabric Manager)
 
-Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements. [See](../configuration_management/Management_Node_Image_Customization.md)
+Adapt and customize the current NCN Kubernetes image for compatibility with FMN node requirements.
 
 ##### FMN Boot Preparation
 
