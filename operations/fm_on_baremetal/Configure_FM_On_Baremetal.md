@@ -119,7 +119,7 @@ sat bootprep run \
 
 After creating the FMN base image, add FMN nodes to CSM by following the Follow step 1 to step in  [NCN add procedure](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-worker-storage-master-or-fmnfabric-manager-node-ncns)
 
-After completion of the NCN add procedure, SLS, HSM, and BSS will contain the corresponding FMN data.
+Upon completion of the NCN add procedure, the corresponding FMN entries will be populated in SLS, HSM, and BSS. The required network, storage and other cloud-init configurations are added to BSS and would be applied when the FMN node boots.
 
 ### Generate Switch Configuration With CANU
 
@@ -298,7 +298,7 @@ For Example:
 cray sls search networks list --name NMN --format json
 ```
 
-#### HSM `ethernet` interfaces should be updated with the same allocated IPs
+#### HSM ethernetInterfaces should be updated with the same allocated IPs
 
 For Example:
 
