@@ -54,7 +54,7 @@ Adapt and customize the current NCN Kubernetes image for compatibility with FMN 
 
 Create `sat bootprep` configuration file (`fmn_bootprep.yaml`) for FMN as below.
 
-**Note:** Ensure that the `fmn_bootprep.yaml` configuration file is updated with the official released versions before proceeding.
+**Note:** Ensure that the `fmn_bootprep.yaml` configuration file is updated with the official CSM released versions and the appropriate commits on playbooks before proceeding.
 
 For Example:
 
@@ -95,13 +95,13 @@ images:
 
 Execute the commands below on any master node to generate the new FMN image and upload it to the S3 storage.
 
-First set `bootprep` file path:
+(ncn-m#) First set `bootprep` file path:
 
 ```bash
 # BOOTPREP_FILE_PATH=./fmn_bootprep.yaml
 ```
 
-Now execute the `sat bootprep run` command below to generate the new base image and upload it to S3.
+(ncn-m#) Now execute the `sat bootprep run` command below to generate the new base image and upload it to S3.
 
 ```bash
 sat bootprep run \
