@@ -13,6 +13,8 @@ that manage and monitor Slingshot fabric operations outside of the Kubernetes en
 
 CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment.
 
+Please note that this feature is only available from CSM 1.7.1 and onwards.
+
 **NOTE**:
 
 - `FMNs` are considered Management nodes.
