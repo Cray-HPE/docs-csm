@@ -208,28 +208,6 @@ Arch = "X86"
 Class = "River"
 ```
 
-```bash
-ncn-m001:~ # XNAME=x3000c0s29b0n0
-```
-
-```bash
-ncn-m001:~ # cray hsm state components describe "${XNAME}" --format toml
-```
-
-```text
-ID = "x3000c0s29b0n0"
-Type = "Node"
-State = "On"
-Flag = "OK"
-Enabled = true
-Role = "Management"
-SubRole = "FabricManager"
-NID = 100012
-NetType = "Sling"
-Arch = "X86"
-Class = "River"
-```
-
 #### Validate FMN required networking configuration
 
 Check NMN, CMN, HMN, CHN, metal and virtual IP configuration for both FMN nodes (`fmn001` and `fmn002`).
@@ -255,16 +233,22 @@ Name = "fmn001"
 ...
 
 [[results.ExtraProperties.Subnets.IPReservations]]
+Aliases = [ "fmn001-nmn", "time-nmn", "time-nmn.local", "x3000c0s28b0n0", "fmn001.local",]
+Comment = "x3000c0s28b0n0"
+IPAddress = "10.252.1.12"
+Name = "fmn001"
+
+[[results.ExtraProperties.Subnets.IPReservations]]
 Aliases = [ "fmn-vip.local",]
 Comment = "fmn-virtual-ip"
 IPAddress = "10.252.1.13"
 Name = "fmn-vip"
 
 [[results.ExtraProperties.Subnets.IPReservations]]
-Aliases = [ "fmn001-nmn", "time-nmn", "time-nmn.local", "x3000c0s28b0n0", "fmn001.local",]
-Comment = "x3000c0s28b0n0"
-IPAddress = "10.252.1.12"
-Name = "fmn001"
+Aliases = [ "fmn001-mgmt",]
+Comment = "x3000c0s28b0"
+IPAddress = "10.254.1.21"
+Name = "x3000c0s28b0"
 
 [[results.ExtraProperties.Subnets.IPReservations]]
 Aliases = [ "fmn001-hmn", "time-hmn", "time-hmn.local",]
@@ -287,8 +271,6 @@ For Example:
 ```bash
 cray sls hardware describe x3000c0s28b0n0
 ```
-
-#### IPs should be allocated and made available for FMNs in all of SLS networks
 
 **Note:** NMN and HMN should be having additional FMN VIPs also allocated.
 
@@ -367,47 +349,12 @@ fmn001:~ # mount | grep /opt/slingshot
 /dev/mapper/metalvg0-SLINGSHOT on /opt/slingshot type ext4 (rw,relatime,stripe=256)
 ```
 
-```bash
-fmn002:~ # lsblk
-```
+#### Join Fabric Manager nodes to Spire
 
-```text
-NAME                      MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
-loop0                       7:0    0   2.2G  1 loop  /run/rootfsbase
-sda                         8:0    0   3.5T  0 disk
-├─sda1                      8:1    0   476M  0 part
-│ └─md127                   9:127  0 475.9M  0 raid1 /metal/recovery
-├─sda2                      8:2    0  22.8G  0 part
-│ └─md126                   9:126  0  22.8G  0 raid1 /run/initramfs/live
-├─sda3                      8:3    0 139.7G  0 part
-│ └─md125                   9:125  0 139.6G  0 raid1 /run/initramfs/overlayfs
-└─sda4                      8:4    0 139.7G  0 part
-  └─md124                   9:124  0 279.1G  0 raid0
-    ├─metalvg0-SCFIRMWARE 254:0    0    80G  0 lvm   /opt/cray/FW/sc-firmware
-    └─metalvg0-SLINGSHOT  254:1    0   120G  0 lvm   /opt/slingshot
-sdb                         8:16   0   3.5T  0 disk
-├─sdb1                      8:17   0   476M  0 part
-│ └─md127                   9:127  0 475.9M  0 raid1 /metal/recovery
-├─sdb2                      8:18   0  22.8G  0 part
-│ └─md126                   9:126  0  22.8G  0 raid1 /run/initramfs/live
-├─sdb3                      8:19   0 139.7G  0 part
-│ └─md125                   9:125  0 139.6G  0 raid1 /run/initramfs/overlayfs
-└─sdb4                      8:20   0 139.7G  0 part
-  └─md124                   9:124  0 279.1G  0 raid0
-    ├─metalvg0-SCFIRMWARE 254:0    0    80G  0 lvm   /opt/cray/FW/sc-firmware
-    └─metalvg0-SLINGSHOT  254:1    0   120G  0 lvm   /opt/slingshot
-sdc                         8:32   0   3.5T  0 disk
-sdd                         8:48   0   3.5T  0 disk
-```
+After the Fabric Manager nodes have been deployed and are running, join them to Spire to avoid issues with Spire tokens.
 
 ```bash
-fmn002:~ # mount | grep /opt/cray/FW/sc-firmware
-/dev/mapper/metalvg0-SCFIRMWARE on /opt/cray/FW/sc-firmware type ext4 (rw,relatime,stripe=256)
-```
-
-```bash
-fmn002:~ # mount | grep /opt/slingshot
-/dev/mapper/metalvg0-SLINGSHOT on /opt/slingshot type ext4 (rw,relatime,stripe=256)
+ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
 ```
 
 #### Validate addition of FM required repositories
@@ -432,14 +379,6 @@ Repository priorities are without effect. All enabled repositories share the sam
  5 | SUSE-SLE-Module-Containers-15-SP7-x86_64-Updates                      | SUSE-SLE-Module-Containers-15-SP7-x86_64-Updates | Yes     | (  ) No   | Yes
  6 | csm-embedded                                                          | csm-embedded                                     | Yes     | (  ) No   | Yes
  ...
-```
-
-#### Join Fabric Manager nodes to Spire
-
-After the Fabric Manager nodes have been deployed and are running, join them to Spire to avoid issues with Spire tokens.
-
-```bash
-ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
 ```
 
 ### Install Fabric Manager on FM baremetal nodes
