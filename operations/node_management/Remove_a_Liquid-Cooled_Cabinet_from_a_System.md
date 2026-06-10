@@ -172,33 +172,16 @@ Remove all remaining hardware inventory entries associated with the cabinet.
     done
     ```
 
-1. (`ncn-mw#`) Remove all Ethernet interfaces associated with the cabinet from HSM.
-
-    ```bash
-    for mac in $(cray hsm inventory ethernetInterfaces list --format json | \
-                   jq -r --arg CABINET "${CABINET}" \
-                     '.[] | select(.ComponentID | startswith($CABINET)) | .ID')
-    do
-        echo "Removing $mac from HSM Inventory EthernetInterfaces"
-        cray hsm inventory ethernetInterfaces delete "$mac"
-    done
-    ```
-
 1. (`ncn-mw#`) Remove the hardware inventory entries for the cabinet.
 
     ```bash
     cray hsm inventory hardware delete "/Inventory/Hardware/${CABINET}"
     ```
 
-1. (`ncn-mw#`) Restart Kea to pick up the DHCP changes.
-
-    ```bash
-    kubectl rollout restart deployment -n services cray-dhcp-kea
-    ```
-
 ### 6. Cleanup SLS data
 
 Remove the cabinet and all associated components from the System Layout Service (SLS).
+****Should cani be used here instead****??? - cani alpha remove cabinet x{cab} and cani alpha session apply?????
 
 1. (`ncn-mw#`) Set the cabinet xname.
 
@@ -233,7 +216,54 @@ Remove the cabinet and all associated components from the System Layout Service 
 
     The command should return no results.
 
-### 7. Re-enable the `hms-discovery` cron job
+1. Delete the cabinet's network definitions/subnets from the relevant SLS Networks entries (HMN/NMN/CAN/CMN/CHN cabinet subnets) — these are not auto-removed when you delete the cabinet hardware.
+
+**TODO**
+
+1. (`ncn-mw#`) Remove all NodeBMC, ChassisBMC, RouterBMC ethernetInterfaces associated with the cabinet from HSM.
+
+    ```bash
+    for mac in $(cray hsm inventory ethernetInterfaces list --format json | \
+                   jq -r --arg CABINET "${CABINET}" \
+                     '.[] | select(.ComponentID | startswith($CABINET)) | .ID')
+    do
+        echo "Removing $mac from HSM Inventory EthernetInterfaces"
+        cray hsm inventory ethernetInterfaces delete "$mac"
+    done
+
+or (better above option as it would delete any additional components if present like CabinetPDU/CabinetPDUController)
+
+    ```bash
+    for t in NodeBMC ChassisBMC RouterBMC; do
+    for id in $(cray hsm inventory ethernetInterfaces list --type "$t" --format json \
+                    | jq -r --arg c "$CAB" '.[] | select(.ComponentID | startswith($c)) | .ID'); do
+        cray hsm inventory ethernetInterfaces delete "$id"
+    done
+    done
+    ```
+
+### 7. Vault cleanup
+
+Delete secret/hms-creds/<bmc_xname> for every BMC in the cabinet (and any CEC/PDU creds rooted on that cabinet).
+
+****Add a procedure for this****
+
+Network/global cleanup that the blade procedure never touches:
+
+Remove the cabinet's HMN/NMN VLAN subnets and any IP reservations from SLS Networks.
+Rerun csi config init/network reconcile (or follow Updating_Cabinet_Routes_on_Management_NCNs.md) to drop static routes to the cabinet's HMN/NMN subnets from the management NCNs.
+Restart cray-dhcp-kea, cray-dns-unbound, BSS, and SLS-dependent services so they reload the new topology.
+kubectl -n services rollout restart deployment cray-dhcp-kea
+kubectl -n services rollout restart deployment cray-dns-unbound-manager
+
+
+### 8. Restart Kea and re-enable the `hms-discovery` cron job
+
+1. (`ncn-mw#`) Restart Kea to pick up the DHCP changes.
+
+    ```bash
+    kubectl rollout restart deployment -n services cray-dhcp-kea
+    ```
 
 1. (`ncn-mw#`) Un-suspend the `hms-discovery` cron job.
 
@@ -254,7 +284,33 @@ Remove the cabinet and all associated components from the System Layout Service 
     hms-discovery   */3 * * * *   False     1        46s             15d
     ```
 
-### 8. Remove the physical cabinet
+### 9. Remove CMM and CEC port configuration from CDU switches
+
+Remove the CMM and CEC port configuration from the CDU switches that served the cabinet.
+
+1. Update the SHCD to reflect the removal of the cabinet.
+
+1. Use CANU to generate a new CCJ file from the updated SHCD.
+
+    ```bash
+    canu generate network config --csm 1.7 --ccj updated-ccj.json --shcd updated-shcd.xlsx
+    ```
+
+1. Use CANU to generate new network configuration using the new CCJ and SLS files.
+
+    ```bash
+    canu generate network config --csm 1.7 --ccj updated-ccj.json --sls-file sls_input_file.json --folder switch-configs
+    ```
+
+1. Apply the updated configuration to the target CDU switches.
+
+    ```bash
+    canu apply network config --config switch-configs/<switch-hostname>.cfg --host <switch-hostname> --password <password>
+    ```
+
+    Repeat for each CDU switch that had connections to the removed cabinet.
+
+### 10. Remove the physical cabinet
 
 1. Remove the blades from the cabinet (if not already done during step 3).
 
