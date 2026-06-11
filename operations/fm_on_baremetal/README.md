@@ -24,41 +24,17 @@ Please note that this feature is only available from CSM 1.7.1 and onwards.
 
 ## Terminology and Components
 
-### SHS
-
-[Slingshot Host Software](../../glossary.md#slingshot-host-software-shs)
-
-### FM
-
-[Fabric Manager](../../glossary.md#fabric-manager)
-
-### FMN
-
-[Fabric Manager Node](../../glossary.md#fabric-manager-node)
-
-### SLS
-
-[System Layout Service](../../glossary.md#system-layout-service-sls)
-
-### HSM
-
-[Hardware State Manager](../../glossary.md#hardware-state-manager-hsm)
-
-### BSS
-
-[Boot Script Service](../../glossary.md#boot-script-service-bss)
-
-### CANU
-
-[CSM Automatic Network Utility](../../glossary.md#csm-automatic-network-utility-canu)
-
-### SAT
-
-[System Admin Toolkit](../../glossary.md#system-admin-toolkit-sat)
-
-### SMA
-
-[System Monitoring Application](../../glossary.md#system-monitoring-application-sma)
+| *Component*                                   | *Reference*                                                                           |
+| --------------------------------------------- | ------------------------------------------------------------------------------------- |
+| SHS                                           | [Slingshot Host Software](../../glossary.md#slingshot-host-software-shs)              |
+| FM                                            | [Fabric Manager](../../glossary.md#fabric-manager)                                    |
+| FMN                                           | [Fabric Manager Node](../../glossary.md#fabric-manager-node)                          |
+| SLS                                           | [System Layout Service](../../glossary.md#system-layout-service-sls)                  |
+| HSM                                           | [Hardware State Manager](../../glossary.md#hardware-state-manager-hsm)                |
+| BSS                                           | [Boot Script Service](../../glossary.md#boot-script-service-bss)                      |
+| CANU                                          | [CSM Automatic Network Utility](../../glossary.md#csm-automatic-network-utility-canu) |
+| SAT                                           | [System Admin Toolkit](../../glossary.md#system-admin-toolkit-sat)                    |
+| SMA                                           | [System Monitoring Application](../../glossary.md#system-monitoring-application-sma)  |
 
 ## Architecture
 
@@ -76,8 +52,6 @@ of the Fabric Manager, real service outages can exceed 5 minutes.
 To address these issues, CSM 1.7.1 includes FM on baremetal support, which provides the necessary base OS image, networking, and storage configurations
 for running the Slingshot Fabric Manager natively within the CSM environment to achieve HA.
 
-![FM On Baremetal](FM-HA-1.png)
-
 ## Configure FM on baremetal
 
 To configure FM on baremetal please follow the [procedure](Configure_FM_On_Baremetal.md).
@@ -85,4 +59,4 @@ To configure FM on baremetal please follow the [procedure](Configure_FM_On_Barem
 ## Slingshot Switch Firmware Update
 
 - For clusters using the FM pod: CSM will continue to handle switch firmware uploads and updates as [before](../../operations/iuf/workflows/slingshot_management_network_switch_updates.md#perform-slingshot-switch-and-management-network-switch-firmware-updates).
-- For clusters with bare-metal FM: FMN will host the switch firmware, and FM will be responsible for managing switch updates. Refer section "3.2.6 (Optional) Update HPE Slingshot switch firmware" in _HPE Slingshot Installation Guide for CSM_ PDF.
+- For clusters with bare-metal FM: FMN will host the switch firmware, and FM will be responsible for managing switch updates. Refer section "3.2.6 (Optional) Update HPE Slingshot switch firmware" in HPE Slingshot Installation Guide for CSM PDF.

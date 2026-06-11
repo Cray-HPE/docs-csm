@@ -21,8 +21,7 @@ Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable F
 * Step 1: [FMN Prerequisites](#fmn-prerequisites)
 * step 2: [FMN Pre Boot](#fmn-pre-boot)
     * [FMN Base Image Creation](#fmn-base-image-creation)
-    * [Add FMN Nodes to CSM](#add-fmn-nodes-to-csm)
-    * [Generate Switch Configuration With CANU](#generate-switch-configuration-with-canu)
+    * [Add NCN Procedure](#add-ncn-procedure)
 * Step 3: [FMN Booting](#fmn-booting)
 * Step 4: [FMN Post Boot](#fmn-post-boot)
     * [Validation](#validation)
@@ -115,15 +114,19 @@ sat bootprep run \
 
 **Note:** Using the `--overwrite-images` option in the command above will overwrite any previously uploaded images in S3.
 
-### Add FMN Nodes to CSM
+**Note:** After creating the FMN base image above, follow below steps to add FMN nodes to CSM:
 
-After creating the FMN base image, add FMN nodes to CSM by following the below steps:
+### Add NCN procedure
 
-#### Step 1: Allocate NCN IP Addresses
+#### Allocate NCN IP Addresses
 
-Follow the procedure defined at [Allocate NCN IP Addresses](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/node_management/Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md#allocate-ncn-ip-addresses)
+Follow [`Step-1`](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure)
 
-#### Step 2: Generate Switch Configuration With CANU
+#### Add NCN data
+
+Follow [`Step-3`](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure)
+
+#### Generate Switch Configuration With CANU
 
 For Example:
 
@@ -131,7 +134,7 @@ For Example:
 canu generate network config -a TDS --csm 1.7 --custom-config custom_switch_config.yaml --edge Arista --sls-file sls_input_file.json --ccj surtur-ccj.json --folder output (--enable-nmn-isolation --nmn-pvlan <pvid>)
 ```
 
-#### Step 3: Validate the generated switch configuration against the network switches
+#### Validate the generated switch configuration against the network switches
 
 * TDS style systems have the management nodes plugged directly into the spine switches, most will only have a single leaf-bmc switch.
 * Systems that use the "Full" architecture will have the management nodes plugged into the leaf switches.
@@ -148,11 +151,11 @@ canu validate switch config --ip 10.254.0.4 --generated output/sw-leaf-bmc-001.c
 
 Take extreme care when manipulating ACLs, if CANU suggests moving a "permit any ..." rule be sure to create the new rule before removing the old one. It is possible to lose access to the switch if the ACLs are not applied in the correct order.
 
-#### Step 4: FMN Booting
+## FMN Booting
 
 Upon completion of the FMNs add procedure, the corresponding FMN entries will be populated in SLS, HSM, and BSS. The required network, storage and other cloud-init configurations are added to BSS and would be applied when the FMN node boots.
 
-Proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image.[Boot NCN](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn).
+Proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image [Boot NCN](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn).
 
 ## FMN Post Boot
 
@@ -306,6 +309,14 @@ cray bss bootparameters list --format json --name x3000c0s28b0n0
 cray bss bootparameters list --hosts Global --format json
 ```
 
+#### Join Fabric Manager nodes to Spire
+
+After the Fabric Manager nodes have been deployed and are running, join them to Spire to avoid issues with Spire tokens.
+
+```bash
+ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
+```
+
 #### Validate FMN required storage configuration (LVM partitions)
 
 Check if both LVM partitions `/dev/mapper/metalvg0-SCFIRMWARE` and `/dev/mapper/metalvg0-SLINGSHOT` created and mounted under `/opt/cray/FW/sc-firmware` and `/opt/slingshot` respectively on both FMN nodes (`fmn001` and `fmn002`).
@@ -351,14 +362,6 @@ fmn001:~ # mount | grep /opt/cray/FW/sc-firmware
 ```bash
 fmn001:~ # mount | grep /opt/slingshot
 /dev/mapper/metalvg0-SLINGSHOT on /opt/slingshot type ext4 (rw,relatime,stripe=256)
-```
-
-#### Join Fabric Manager nodes to Spire
-
-After the Fabric Manager nodes have been deployed and are running, join them to Spire to avoid issues with Spire tokens.
-
-```bash
-ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
 ```
 
 #### Validate addition of FM required repositories
