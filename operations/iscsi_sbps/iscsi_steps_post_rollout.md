@@ -13,7 +13,7 @@ iSCSI client nodes became `un-responsive` where most of the commands failed with
 Example command:
 
 ```bash
-multipath -ll
+nid000001:~ # multipath -ll
 ```
 
 Example command output reporting Bus error:
@@ -53,18 +53,26 @@ as those `LUNs` may not exist with the same LUN number or mapped to different im
 
 ## Resolution
 
-The solution is to re-establish the iSCSI session after a worker node rebuild by logging out the existing
-stale iSCSI session with rebuilt worker node, rediscover the `LUNs` and logging in back using the `iscsiadm`
-command. The steps are automated the script [`iscsi_post_rollout.sh`](../../scripts/operations/iscsi_sbps/iscsi_post_rollout.sh) and must be copied to the iSCSI initiator nodes (Compute/UAN) and executed from the master node using
-`pdsh` command.
+The solution is to logout the iSCSI session with rebuilt worker node which is stale and re-establish
+the iSCSI session with rebuilt worker node, rediscover the `LUNs` and login to iSCSI session using `iscsiadm`
+command. The steps are automated in the script [`iscsi_post_rollout.sh`](../../scripts/operations/iscsi_sbps/iscsi_post_rollout.sh) and need to copy this script onto the iSCSI initiator nodes (Compute/UAN) and run it.
 
-Run the script [`scp_iscsi_scr.sh`](../../scripts/operations/iscsi_sbps/scp_iscsi_scr.sh) to copy `iscsi_post_rollout.sh` onto compute nodes. Then to run `iscsi_post_rollout.sh` on compute nodes:
+1. (`ncn-m#`) Run the script [`scp_iscsi_scr.sh`](../../scripts/operations/iscsi_sbps/scp_iscsi_scr.sh)
+   to copy `iscsi_post_rollout.sh` onto compute nodes.
 
-For example if `ncn-w002` was rolled out and to run `iscsi_post_rollout.sh` on compute node `x3000c0s19b3n0`:
+   ```bash
+   sh scp_iscsi_scr.sh
+   ```
 
-```bash
-pdsh -w x3000c0s19b3n0 "sh /root/iscsi_post_rollout.sh ncn-w002"
-```
+   Copy `iscsi_post_rollout.sh` manually to UAN nodes onto /tmp directory.
+
+1. (`ncn-m#`) Example command to run `iscsi_post_rollout.sh` on compute node:
+   
+   For example if `ncn-w002` was rebuilt and to run on compute node `x3000c0s19b3n0`:
+
+   ```bash
+   pdsh -w x3000c0s19b3n0 "sh /tmp/iscsi_post_rollout.sh ncn-w002"
+   ```
 
 **Note:**
 

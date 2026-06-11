@@ -24,8 +24,6 @@
 
 # This is the script to copy iscsi_post_rollout.sh to all compute nodes.
 
-#!/bin/bash
-
 # shellcheck disable=SC2207
 
 aliases=($(
@@ -38,6 +36,5 @@ aliases=($(
 ))
 
 for alias in "${aliases[@]}"; do
-  echo "$alias-nmn"
-  scp iscsi_post_rollout.sh root@$alias-nmn:/root/
+  scp iscsi_post_rollout.sh root@$alias-nmn:/tmp/
 done

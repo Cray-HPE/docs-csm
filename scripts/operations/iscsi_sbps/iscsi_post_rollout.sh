@@ -35,7 +35,6 @@ if [ "$#" -ne 1 ]; then
 fi
 
 NCN_WORKER=$1
-echo "NCN_WORKER = $1"
 
 PORTAL=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $3}' | sed 's/3260.*/3260/')
 IQN=$(iscsiadm -m session | grep ${NCN_WORKER} | awk '{print $4}')
