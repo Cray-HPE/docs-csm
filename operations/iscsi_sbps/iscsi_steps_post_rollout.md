@@ -64,10 +64,10 @@ command. The steps are automated in the script [`iscsi_post_rollout.sh`](../../s
    sh scp_iscsi_scr.sh
    ```
 
-   Copy `iscsi_post_rollout.sh` manually to UAN nodes onto /tmp directory.
+   Copy `iscsi_post_rollout.sh` manually to UAN nodes onto `/tmp` directory.
 
 1. (`ncn-m#`) Example command to run `iscsi_post_rollout.sh` on compute node:
-   
+
    For example if `ncn-w002` was rebuilt and to run on compute node `x3000c0s19b3n0`:
 
    ```bash
