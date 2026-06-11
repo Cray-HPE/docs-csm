@@ -32,13 +32,33 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    1. Run `git clone https://github.com/Cray-HPE/csm.git`.
-
-    1. Copy the directory `./csm/vendor/github.com/Cray-HPE/shasta-cfg/utils` from the cloned repository into the desired working directory.
+    1. Source the environment file to get the `CSM_ARTI_DIR` value, which contains the path to the latest CSM artifacts directory used during the most recent upgrade.
 
         ```bash
-        cp -vr ./csm/vendor/github.com/Cray-HPE/shasta-cfg/utils .
+        source /etc/cray/upgrade/csm/myenv
         ```
+
+    1. Copy the `utils` directory from `shasta-cfg` into the desired working directory.
+
+        ```bash
+        cp -vr "${CSM_ARTI_DIR}/shasta-cfg/utils" .
+        ```
+
+        > **NOTE:** If the media directory is not present or does not contain the latest content, the `utils` directory can be obtained
+        > from the CSM repository as a fallback. Clone the repository on a local
+        > system that has access to the internet, then copy only the `utils` directory to the cluster node.
+        >
+        > On the local system:
+        >
+        > ```bash
+        > git clone https://github.com/Cray-HPE/csm.git
+        > ```
+        >
+        > Then copy the `utils` directory from the cloned repository to the cluster node:
+        >
+        > ```bash
+        > scp -r ./csm/vendor/github.com/Cray-HPE/shasta-cfg/utils <ncn-mw>:/path/to/working/directory/
+        > ```
 
     1. Acquire sealed secret keys.
 

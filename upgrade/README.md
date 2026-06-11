@@ -50,13 +50,9 @@ uncommon upgrade scenario.
 
 ## CSM patch version upgrade
 
-Follow one of these procedures when upgrading from CSM 1.7 to a newer patch version of CSM 1.7.
-(The one exception is in the unusual situation of upgrading from a pre-release version of CSM 1.7.0;
-in that case, follow the [CSM major/minor version upgrade](#csm-majorminor-version-upgrade)
-procedures).
+Follow one of these procedures when upgrading from CSM 1.7.1 to a newer patch version of CSM 1.7.1
 
 If there are multiple patch versions available, note that there is no need to perform intermediate
-CSM 1.7 patch upgrades. Instead, consider upgrading to the latest CSM 1.7 patch release.
+CSM 1.7.1 patch upgrades. Instead, consider upgrading to the latest CSM 1.7.1 patch release.
 
-There are no CSM 1.7 patch versions currently available. When any become available, they will
-be listed here.
+* [CSM 1.7.1 Patch Installation Instructions](1.7.1/README.md)
