@@ -156,16 +156,36 @@ This can be done either using the VCS web interface, or using the command line.
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    > This procedure gets a copy of the `shasta-cfg/stable/utils` directory from `github`. If this procedure is being followed when
-    > the PIT node or expanded CSM release tarball is still available, then this directory can copied from those instead.
+    > This procedure gets a copy of the `shasta-cfg/utils` from the last upgraded CSM artifacts directory. If this procedure is being followed when
+    > the PIT node or expanded CSM release tarball is still available, then this directory can be copied from there instead.
 
-    1. Run `git clone https://github.com/Cray-HPE/csm.git -b release/1.7`.
-
-    1. Copy the directory `vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils` from the cloned repository into the desired working directory.
+    1. Source the environment file to get the `CSM_ARTI_DIR` value, which contains the path to the latest CSM artifacts directory used during the most recent upgrade.
 
         ```bash
-        cp -vr ./csm/vendor/stash.us.cray.com/scm/shasta-cfg/stable/utils .
+        source /etc/cray/upgrade/csm/myenv
         ```
+
+    1. Copy the `utils` directory from `shasta-cfg` into the desired working directory.
+
+        ```bash
+        cp -vr "${CSM_ARTI_DIR}/shasta-cfg/utils" .
+        ```
+
+        > **NOTE:** If the media directory is not present or does not contain the latest content, the `utils` directory can be obtained
+        > from the CSM repository as a fallback. Clone the repository on a local
+        > system that has internet access, then copy only the `utils` directory to the cluster node.
+        >
+        > On the local system:
+        >
+        > ```bash
+        > git clone https://github.com/Cray-HPE/csm.git
+        > ```
+        >
+        > Then copy the `utils` directory from the cloned repository to the cluster node:
+        >
+        > ```bash
+        > scp -r ./csm/vendor/github.com/Cray-HPE/shasta-cfg/utils <ncn-mw>:/path/to/working/directory/
+        > ```
 
     1. Change the password in the `customizations.yaml` file.
 

@@ -672,6 +672,7 @@ osds*
 oversubscription
 passthrough
 passwordless
+patch.1
 permissioned
 pickup
 playbook
@@ -1207,3 +1208,9 @@ cos-prechecks-for-worker-reboots
 
 - operations/iuf/workflows/management_rollout.md
 cos-prechecks-for-worker-reboots
+
+- upgrade/1.7.1/index.md
+README.md
+
+- upgrade/1.7.1/README.md
+Patch1
