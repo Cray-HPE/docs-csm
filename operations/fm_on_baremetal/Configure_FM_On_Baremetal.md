@@ -117,11 +117,13 @@ sat bootprep run \
 
 ### Add FMN Nodes to CSM
 
-After creating the FMN base image, add FMN nodes to CSM by following the Follow step 1 to step in  [NCN add procedure](../../operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-worker-storage-master-or-fmnfabric-manager-node-ncns)
+After creating the FMN base image, add FMN nodes to CSM by following the below steps:
 
-Upon completion of the NCN add procedure, the corresponding FMN entries will be populated in SLS, HSM, and BSS. The required network, storage and other cloud-init configurations are added to BSS and would be applied when the FMN node boots.
+#### Step 1: Allocate NCN IP Addresses
 
-### Generate Switch Configuration With CANU
+Follow the procedure defined at [Allocate NCN IP Addresses](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/node_management/Add_Remove_Replace_NCNs/Allocate_NCN_IP_Addresses.md#allocate-ncn-ip-addresses)
+
+#### Step 2: Generate Switch Configuration With CANU
 
 For Example:
 
@@ -129,7 +131,7 @@ For Example:
 canu generate network config -a TDS --csm 1.7 --custom-config custom_switch_config.yaml --edge Arista --sls-file sls_input_file.json --ccj surtur-ccj.json --folder output (--enable-nmn-isolation --nmn-pvlan <pvid>)
 ```
 
-#### Validate the generated switch configuration against the network switches
+#### Step 3: Validate the generated switch configuration against the network switches
 
 * TDS style systems have the management nodes plugged directly into the spine switches, most will only have a single leaf-bmc switch.
 * Systems that use the "Full" architecture will have the management nodes plugged into the leaf switches.
@@ -146,9 +148,11 @@ canu validate switch config --ip 10.254.0.4 --generated output/sw-leaf-bmc-001.c
 
 Take extreme care when manipulating ACLs, if CANU suggests moving a "permit any ..." rule be sure to create the new rule before removing the old one. It is possible to lose access to the switch if the ACLs are not applied in the correct order.
 
-## FMN Booting
+#### Step 4: FMN Booting
 
-Once the FMNs have been added to the CSM, proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image. [See](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn)
+Upon completion of the FMNs add procedure, the corresponding FMN entries will be populated in SLS, HSM, and BSS. The required network, storage and other cloud-init configurations are added to BSS and would be applied when the FMN node boots.
+
+Proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal base image.[Boot NCN](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn).
 
 ## FMN Post Boot
 
