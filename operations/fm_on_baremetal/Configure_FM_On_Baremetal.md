@@ -284,7 +284,7 @@ For Example:
 cray sls search networks list --name NMN --format json
 ```
 
-#### HSM ethernetInterfaces should be updated with the same allocated IPs
+#### HSM `ethernetInterfaces` should be updated with the same allocated IPs
 
 For Example:
 
