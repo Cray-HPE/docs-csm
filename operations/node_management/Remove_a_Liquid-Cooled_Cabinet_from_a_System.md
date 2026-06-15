@@ -16,10 +16,6 @@ This procedure will remove an entire liquid-cooled cabinet from an HPE Cray EX s
 
 - Check the status of the HSN and record link status before the procedure.
 
-- The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
-    - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
-    - Review the *HPE Cray EX Hand Pump User Guide H-6200*
-
 ## Procedure
 
 ### 1. Identify all blades in the cabinet
