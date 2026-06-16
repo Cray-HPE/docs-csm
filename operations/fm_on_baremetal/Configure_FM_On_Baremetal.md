@@ -1,6 +1,6 @@
 # Configure FM (Fabric Manager) On `Baremetal`
 
-This document describes the procedure for customizing and deploying the base FMN OS image along with provisioning storage `LUNs`,
+This document describes the procedure for customizing and deploying the base FMN OS image along with provisioning storage volumes,
 and configuring the necessary networking to support Fabric Manager on `baremetal` following the CSM upgrade.
 
 ## Requirements
@@ -114,17 +114,18 @@ sat bootprep run \
 
 **Note:** Using the `--overwrite-images` option in the command above will overwrite any previously uploaded images in S3.
 
-**Note:** After creating the FMN base image above, follow below steps to add FMN nodes to CSM:
+### Add FMN nodes to CSM
 
-### Add NCN procedure
+Follow the steps below to register FMNs in CSM (SLS/HSM/BSS) and configure the required network, storage, and cloud-init settings in BSS.
+These configurations will be provisioned automatically during node boot.
 
 #### Allocate NCN IP Addresses
 
-Follow [`Step-1`](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure)
+Follow [`Step-1`](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure) for allocating NCN IP addresses.
 
 #### Add NCN data
 
-Follow [`Step-3`](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure)
+Follow [`Step-3`](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure) for adding NCN data.
 
 #### Generate Switch Configuration With CANU
 
@@ -215,6 +216,8 @@ Arch = "X86"
 Class = "River"
 ```
 
+**Note:** NMN and HMN should be having additional FMN VIPs also allocated.
+
 #### Validate FMN required networking configuration
 
 Check NMN, CMN, HMN, CHN, metal and virtual IP configuration for both FMN nodes (`fmn001` and `fmn002`).
@@ -252,6 +255,11 @@ IPAddress = "10.252.1.13"
 Name = "fmn-vip"
 
 [[results.ExtraProperties.Subnets.IPReservations]]
+Comment = "fmn-virtual-ip"
+IPAddress = "10.254.1.2"
+Name = "fmn-vip"
+
+[[results.ExtraProperties.Subnets.IPReservations]]
 Aliases = [ "fmn001-mgmt",]
 Comment = "x3000c0s28b0"
 IPAddress = "10.254.1.21"
@@ -279,12 +287,22 @@ For Example:
 cray sls hardware describe x3000c0s28b0n0
 ```
 
-**Note:** NMN and HMN should be having additional FMN VIPs also allocated.
+Example Output:
 
-For Example:
+```text
+Parent = "x3000c0s28b0"
+Xname = "x3000c0s28b0n0"
+Type = "comptype_node"
+Class = "River"
+TypeString = "Node"
+LastUpdated = 1770352943
+LastUpdatedTime = "2026-02-06 04:42:23.048807 +0000 +0000"
 
-```bash
-cray sls search networks list --name NMN --format json
+[ExtraProperties]
+Aliases = [ "fmn001",]
+NID = 100011
+Role = "Management"
+SubRole = "FabricManager"
 ```
 
 #### HSM `ethernetInterfaces` should be updated with the same allocated IPs
@@ -293,6 +311,83 @@ For Example:
 
 ```bash
 cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --format json
+```
+
+Example Output:
+
+```json
+[
+  {
+    "ID": "1423f200029a",
+    "Description": "",
+    "MACAddress": "14:23:f2:00:02:9a",
+    "LastUpdate": "2026-02-06T12:57:53.593753Z",
+    "ComponentID": "x3000c0s28b0n0",
+    "Type": "Node",
+    "IPAddresses": []
+  },
+  {
+    "ID": "1423f2028e93",
+    "Description": "",
+    "MACAddress": "14:23:f2:02:8e:93",
+    "LastUpdate": "2026-02-06T12:57:53.47447Z",
+    "ComponentID": "x3000c0s28b0n0",
+    "Type": "Node",
+    "IPAddresses": []
+  },
+  {
+    "ID": "1423f200029b",
+    "Description": "",
+    "MACAddress": "14:23:f2:00:02:9b",
+    "LastUpdate": "2026-02-06T12:57:53.515843Z",
+    "ComponentID": "x3000c0s28b0n0",
+    "Type": "Node",
+    "IPAddresses": []
+  },
+  {
+    "ID": "00e0ed3210ed",
+    "Description": "CSI Handoff MAC",
+    "MACAddress": "00:e0:ed:32:10:ed",
+    "LastUpdate": "2026-02-06T12:57:53.362998Z",
+    "ComponentID": "x3000c0s28b0n0",
+    "Type": "Node",
+    "IPAddresses": []
+  },
+  {
+    "ID": "1423f2028e92",
+    "Description": "Bond0 - bond0.nmn0- kea",
+    "MACAddress": "14:23:f2:02:8e:92",
+    "LastUpdate": "2026-02-06T13:00:14.114892Z",
+    "ComponentID": "x3000c0s28b0n0",
+    "Type": "Node",
+    "IPAddresses": [
+      {
+        "IPAddress": "10.252.1.13"
+      },
+      {
+        "IPAddress": "10.102.193.42"
+      },
+      {
+        "IPAddress": "10.1.1.10"
+      },
+      {
+        "IPAddress": "10.102.193.205"
+      },
+      {
+        "IPAddress": "10.254.1.22"
+      }
+    ]
+  },
+  {
+    "ID": "00e0ed3210ec",
+    "Description": "CSI Handoff MAC",
+    "MACAddress": "00:e0:ed:32:10:ec",
+    "LastUpdate": "2026-02-06T12:57:53.327619Z",
+    "ComponentID": "x3000c0s28b0n0",
+    "Type": "Node",
+    "IPAddresses": []
+  }
+]
 ```
 
 #### BSS should be updated with new hosts entries for FMN with proper configurations
