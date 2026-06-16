@@ -24,7 +24,7 @@ Post CSM Upgrade to CSM 1.7.1, if an administrator wishes to enable Fabric Manag
     * [Add FMN nodes to CSM](#add-fmn-nodes-to-csm)
 * Step 3: [FMN Booting](#fmn-booting)
 * Step 4: [FMN Post Boot](#fmn-post-boot)
-    * [Join Fabric Manager nodes to Spire](#join-fabric-manager-nodes-to-spire) 
+    * [Join Fabric Manager nodes to Spire](#join-fabric-manager-nodes-to-spire)
     * [Validation](#validation)
     * [Install Fabric Manager on FM baremetal nodes](#install-fabric-manager-on-fm-baremetal-nodes)
 
@@ -161,7 +161,7 @@ Proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal
 
 ## FMN Post Boot
 
-#### Join Fabric Manager nodes to Spire
+### Join Fabric Manager nodes to Spire
 
 After the Fabric Manager nodes have been deployed and are running, join them to Spire to avoid issues with Spire tokens.
 
@@ -169,9 +169,9 @@ After the Fabric Manager nodes have been deployed and are running, join them to 
 ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
 ```
 
-#### Validation
+### Validation
 
-##### Validate the successful bring-up of the base FMNs
+#### Validate the successful bring-up of the base FMNs
 
 1. Check if we are able to access both FMN nodes (`fmn001` and `fmn002`):
 
@@ -227,7 +227,7 @@ Class = "River"
 
 **Note:** NMN and HMN should be having additional FMN VIPs also allocated.
 
-##### Validate FMN required networking configuration
+#### Validate FMN required networking configuration
 
 Check NMN, CMN, HMN, CHN, metal and virtual IP configuration for both FMN nodes (`fmn001` and `fmn002`).
 
@@ -288,7 +288,7 @@ IPAddress = "10.102.193.206"
 Name = "fmn001"
 ```
 
-##### SLS hardware should list the new nodes
+#### SLS hardware should list the new nodes
 
 For Example:
 
@@ -314,7 +314,7 @@ Role = "Management"
 SubRole = "FabricManager"
 ```
 
-##### HSM `ethernetInterfaces` should be updated with the same allocated IPs
+#### HSM `ethernetInterfaces` should be updated with the same allocated IPs
 
 For Example:
 
@@ -399,7 +399,7 @@ Example Output:
 ]
 ```
 
-##### BSS should be updated with new hosts entries for FMN with proper configurations
+#### BSS should be updated with new hosts entries for FMN with proper configurations
 
 **Note:** BSS global parameters also should have been populated with FMN IPs and FMN VIP
 
@@ -413,7 +413,7 @@ cray bss bootparameters list --format json --name x3000c0s28b0n0
 cray bss bootparameters list --hosts Global --format json
 ```
 
-##### Validate FMN required storage configuration (LVM partitions)
+#### Validate FMN required storage configuration (LVM partitions)
 
 Check if both LVM partitions `/dev/mapper/metalvg0-SCFIRMWARE` and `/dev/mapper/metalvg0-SLINGSHOT` created and mounted under `/opt/cray/FW/sc-firmware` and `/opt/slingshot` respectively on both FMN nodes (`fmn001` and `fmn002`).
 
@@ -460,7 +460,7 @@ fmn001:~ # mount | grep /opt/slingshot
 /dev/mapper/metalvg0-SLINGSHOT on /opt/slingshot type ext4 (rw,relatime,stripe=256)
 ```
 
-##### Validate addition of FM required repositories
+#### Validate addition of FM required repositories
 
 Check if all the required repos are added on both FMN nodes (`fmn001` and `fmn002`) in order to install prerequisite OS RPMs required during Slingshot Software installation.
 
