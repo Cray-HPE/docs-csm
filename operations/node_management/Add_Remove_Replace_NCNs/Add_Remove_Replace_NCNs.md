@@ -46,7 +46,7 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
    y
    ```
 
-   Overall, the script `ncn_add_pre-req.py` will ask the following question:
+   Overall, the `ncn_add_pre-req.py` script prompts the user with the following questions:
 
    ```text
    How many NCNs would you like to add? Do not include NCNs to be removed or moved.

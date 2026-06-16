@@ -16,7 +16,7 @@ and configuring the necessary networking to support Fabric Manager on `baremetal
 
 ## Post upgrade of CSM to 1.7.1
 
-Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow below procedure.
+Post CSM Upgrade to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow below procedure.
 
 * Step 1: [FMN Prerequisites](#fmn-prerequisites)
 * step 2: [FMN Pre Boot](#fmn-pre-boot)
@@ -41,9 +41,9 @@ Verify that the BMC of each FMN is configured with the correct root user credent
 
 ### FMN Base Image Creation
 
-The FMN base image creation process supports node discovery, configuration, and base image customization. The base image contains only the essential artifacts required for deployment.
+The FMN base image creation process includes node discovery, configuration, and base image customization. The base image contains only the essential artifacts required for deployment.
 
-The following steps details the process for generating the FMN image.
+The following steps detail the process for generating the FMN image.
 
 #### Create FMN base image (only base OS; no Fabric Manager)
 
@@ -161,7 +161,7 @@ Proceed to boot the FMN nodes (using iPXE boot commands) with the FMN bare-metal
 
 ### Validation
 
-#### Validate base FMN nodes bring up successful completion
+#### Validate the successful bring-up of the base FMNs
 
 1. Check if we are able to access both FMN nodes (`fmn001` and `fmn002`):
 
@@ -297,7 +297,7 @@ cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --forma
 
 #### BSS should be updated with new hosts entries for FMN with proper configurations
 
-**Note:** BSS global parameters also needs to be updated with FMN IPs(VIP not included).
+**Note:** BSS global parameters also should have been populated with FMN IPs and FMN VIP
 
 For Example:
 

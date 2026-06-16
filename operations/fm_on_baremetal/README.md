@@ -13,7 +13,7 @@ that manage and monitor Slingshot fabric operations outside of the Kubernetes en
 
 CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment.
 
-Please note that this feature is only available from CSM 1.7.1 and onwards.
+Please note that this feature is only available from CSM 1.7.1 onwards.
 
 **NOTE**:
 
@@ -38,7 +38,7 @@ Please note that this feature is only available from CSM 1.7.1 and onwards.
 
 ## Architecture
 
-In CSM versions < 1.7.0, the deployment of the Fabric Manager within CSM uses native Kubernetes capabilities—both during upgrades and in failure/HA scenarios.
+In CSM versions <= 1.7.0, the deployment of the Fabric Manager within CSM uses native Kubernetes capabilities—both during upgrades and in failure/HA scenarios.
 Kubernetes itself provides health checks and a scheduler that can rebalance workloads across nodes based on load, administrative policies, and other criteria.
 The Fabric Manager is deployed as a single pod in Kubernetes. A traditional HA model for Fabric Manager doesn’t map cleanly into Kubernetes, so instead, Kubernetes’
 built-in mechanisms detect failures and spin up a replacement pod, minimizing downtime.
