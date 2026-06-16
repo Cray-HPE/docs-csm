@@ -225,11 +225,10 @@ Arch = "X86"
 Class = "River"
 ```
 
-**Note:** NMN and HMN should be having additional FMN VIPs also allocated.
-
 #### Validate FMN required networking configuration
 
 Check NMN, CMN, HMN, CHN, metal and virtual IP configuration for both FMN nodes (`fmn001` and `fmn002`).
+**Note:** NMN and HMN should be having additional FMN VIPs also allocated.
 
 ```bash
 ncn-m001:~ # cray sls networks list
@@ -254,19 +253,15 @@ Name = "fmn001"
 [[results.ExtraProperties.Subnets.IPReservations]]
 Aliases = [ "fmn001-nmn", "time-nmn", "time-nmn.local", "x3000c0s28b0n0", "fmn001.local",]
 Comment = "x3000c0s28b0n0"
-IPAddress = "10.252.1.12"
+IPAddress = "10.252.1.13"
 Name = "fmn001"
 
 [[results.ExtraProperties.Subnets.IPReservations]]
 Aliases = [ "fmn-vip.local",]
 Comment = "fmn-virtual-ip"
-IPAddress = "10.252.1.13"
+IPAddress = "10.252.1.4"
 Name = "fmn-vip"
-
-[[results.ExtraProperties.Subnets.IPReservations]]
-Comment = "fmn-virtual-ip"
-IPAddress = "10.254.1.2"
-Name = "fmn-vip"
+...
 
 [[results.ExtraProperties.Subnets.IPReservations]]
 Aliases = [ "fmn001-mgmt",]
@@ -277,8 +272,13 @@ Name = "x3000c0s28b0"
 [[results.ExtraProperties.Subnets.IPReservations]]
 Aliases = [ "fmn001-hmn", "time-hmn", "time-hmn.local",]
 Comment = "x3000c0s28b0n0"
-IPAddress = "10.254.1.21"
+IPAddress = "10.254.1.22"
 Name = "fmn001"
+
+[[results.ExtraProperties.Subnets.IPReservations]]
+Comment = "fmn-virtual-ip"
+IPAddress = "10.254.1.2"
+Name = "fmn-vip"
 ...
 
 [[results.ExtraProperties.Subnets.IPReservations]]
