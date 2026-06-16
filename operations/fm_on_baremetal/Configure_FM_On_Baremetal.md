@@ -14,7 +14,7 @@ and configuring the necessary networking to support Fabric Manager on `baremetal
 * By default, Fabric Manager would be running on Kubernetes as a Kubernetes pod
 * After Fabric Manager is migrated from a Kubernetes pod to bare-metal infrastructure, it cannot be reverted.
 
-## Post upgrade of CSM from 1.7.0 to 1.7.1
+## Post upgrade of CSM to 1.7.1
 
 Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow below procedure.
 
