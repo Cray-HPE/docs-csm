@@ -122,11 +122,11 @@ These configurations will be provisioned automatically during node boot.
 
 #### Allocate NCN IP Addresses
 
-Follow [Step-1 of NCN Add Procedure](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure) for allocating NCN IP addresses.
+Follow [`Step-1 of NCN Add Procedure`](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure) for allocating NCN IP addresses.
 
 #### Add NCN data
 
-Follow [Step-3 of NCN Add Procedure](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure) for adding NCN data.
+Follow [`Step-3 of NCN Add Procedure`](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure) for adding NCN data.
 
 #### Generate Switch Configuration With CANU
 
