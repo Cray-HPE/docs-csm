@@ -358,7 +358,7 @@ The NCN MAC addresses need to be collected using the [Collect NCN MAC Addresses]
         ```
 
     * For FMNs (Fabric Manager Nodes), where alias is fmn00*, we need to pass on additional `--fmn-image-id` parameter with FMN base image ID
-      generated in the [FMN base image creation stage](https://github.com/Cray-HPE/docs-csm/blob/CASM-5740-fm-ha/operations/fm_on_baremetal/Configure_FM_On_Baremetal.md#fmn-base-image-creation).
+      generated in the [FMN base image creation stage](../../fm_on_baremetal/Configure_FM_On_Baremetal.md#fmn-base-image-creation).
 
         For Example: Base image id of FMN is `06135c73-bcd9-4d38-928f-ada20bdf6a6`
 
