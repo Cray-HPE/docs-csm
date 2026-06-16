@@ -9,6 +9,7 @@ software. Choose the appropriate procedure from the sections below.
     * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
     * [Option 3: Upgrade only CSM](#option-3-upgrade-only-csm)
 * [CSM patch version upgrade](#csm-patch-version-upgrade)
+* [FM On Baremetal](#fm-on-baremetal)
 
 ## Release Notes
 
@@ -56,3 +57,7 @@ If there are multiple patch versions available, note that there is no need to pe
 CSM 1.7.1 patch upgrades. Instead, consider upgrading to the latest CSM 1.7.1 patch release.
 
 * [CSM 1.7.1 Patch Installation Instructions](1.7.1/README.md)
+
+## FM On Baremetal
+
+Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow the [procedure](../operations/fm_on_baremetal/README.md#fm-fabric-manager-on-baremetal).
