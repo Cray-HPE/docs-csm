@@ -120,11 +120,11 @@ sat bootprep run \
 Follow the steps below to register FMNs in CSM (SLS/HSM/BSS) and configure the required network, storage, and cloud-init settings in BSS.
 These configurations will be provisioned automatically during node boot.
 
-1) Follow [prerequisites](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#prerequisites) section of Add_Remove_Replace_NCNs.
+1) Follow [prerequisites](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#prerequisites) section of `Add_Remove_Replace_NCNs`.
 
 2) Follow [NCN Add prerequisites](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-prerequisites) section which contains the prerequisites specific to the node addition procedure.
 
-3) Allocate NCN IP Addresses 
+3) Allocate NCN IP Addresses
 
    Follow [`Step-1 of NCN Add Procedure`](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md#add-ncn-procedure) for allocating NCN IP addresses.
 
@@ -179,55 +179,55 @@ ncn-m001:~ # /opt/cray/platform-utils/spire/fix-spire-on-fmn.sh
 
 1. Check if we are able to access both FMN nodes (`fmn001` and `fmn002`):
 
-```bash
-ncn-m001:~ # ssh fmn001
-Last login: Thu Dec  4 11:25:30 2025 from 10.252.1.10
-...
-```
+    ```bash
+    ncn-m001:~ # ssh fmn001
+    Last login: Thu Dec  4 11:25:30 2025 from 10.252.1.10
+    ...
+    ```
 
-```bash
-ncn-m001:~ # ssh fmn002
-Last login: Thu Dec  4 05:03:46 2025 from 10.252.1.10
-...
-```
+    ```bash
+    ncn-m001:~ # ssh fmn002
+    Last login: Thu Dec  4 05:03:46 2025 from 10.252.1.10
+    ...
+    ```
 
-2. Check if both FMN nodes are shown under `sat status`:
+1. Check if both FMN nodes are shown under `sat status`:
 
-```bash
-ncn-m001:~ # sat status | grep fmn
-```
+    ```bash
+    ncn-m001:~ # sat status | grep fmn
+    ```
 
-```text
-INFO: All values for 'Most Recent Session Template' are 'MISSING', omitting key.
-| x3000c0s28b0n0 | fmn001    | Node | 100011   | On        | OK   | True    | X86  | River | Management  | FabricManager | Sling    | True    | fmn-bm-default-configuration | configured           | 0           | stable      | MISSING                              | MISSING                              |
-| x3000c0s29b0n0 | fmn002    | Node | 100012   | On        | OK   | True    | X86  | River | Management  | FabricManager | Sling    | True    | fmn-bm-default-configuration | configured           | 0           | stable      | MISSING                              | MISSING                              |
-```
+    ```text
+    INFO: All values for 'Most Recent Session Template' are 'MISSING', omitting key.
+    | x3000c0s28b0n0 | fmn001    | Node | 100011   | On        | OK   | True    | X86  | River | Management  | FabricManager | Sling    | True    | fmn-bm-default-configuration | configured           | 0           | stable      | MISSING                              | MISSING                              |
+    | x3000c0s29b0n0 | fmn002    | Node | 100012   | On        | OK   | True    | X86  | River | Management  | FabricManager | Sling    | True    | fmn-bm-default-configuration | configured           | 0           | stable      | MISSING                              | MISSING                              |
+    ```
 
-3. Optionally check more details on the FMN nodes
+1. Optionally check more details on the FMN nodes
 
-For Example:
+    For Example:
 
-```bash
-ncn-m001:~ # XNAME=x3000c0s28b0n0
-```
+    ```bash
+    ncn-m001:~ # XNAME=x3000c0s28b0n0
+    ```
 
-```bash
-ncn-m001:~ # cray hsm state components describe "${XNAME}" --format toml
-```
+    ```bash
+    ncn-m001:~ # cray hsm state components describe "${XNAME}" --format toml
+    ```
 
-```text
-ID = "x3000c0s28b0n0"
-Type = "Node"
-State = "On"
-Flag = "OK"
-Enabled = true
-Role = "Management"
-SubRole = "FabricManager"
-NID = 100011
-NetType = "Sling"
-Arch = "X86"
-Class = "River"
-```
+    ```text
+    ID = "x3000c0s28b0n0"
+    Type = "Node"
+    State = "On"
+    Flag = "OK"
+    Enabled = true
+    Role = "Management"
+    SubRole = "FabricManager"
+    NID = 100011
+    NetType = "Sling"
+    Arch = "X86"
+    Class = "River"
+    ```
 
 #### Validate FMN required networking configuration
 
