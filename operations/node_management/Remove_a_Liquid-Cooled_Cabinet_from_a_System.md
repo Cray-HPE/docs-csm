@@ -10,7 +10,7 @@ This procedure will remove an entire liquid-cooled cabinet from an HPE Cray EX s
 
 - Knowledge of whether the Scalable Boot Projection Service (SBPS) is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
-- The Slingshot fabric must be configured with the desired topology for the desired state of the blades in the system.
+- The Slingshot fabric must be reconfigured to remove the HSN switches in the target cabinet from the topology. Refer to the *HPE Slingshot Administration Guide (S-9007)* for fabric reconfiguration procedures.
 
 - The System Layout Service (SLS) must have the desired HSN configuration.
 
@@ -134,9 +134,9 @@ After all blades have been removed from the cabinet, clean up the Chassis BMC en
     done
     ```
 
-### 5. Cleanup HMS hardware inventory
+### 5. Cleanup HMS hardware inventory and ethernet interfaces
 
-Remove all remaining hardware inventory entries associated with the cabinet.
+Remove all remaining hardware inventory entries and ethernet interfaces associated with the cabinet.
 
 1. (`ncn-mw#`) Set the cabinet xname.
 
@@ -174,10 +174,21 @@ Remove all remaining hardware inventory entries associated with the cabinet.
     cray hsm inventory hardware delete "/Inventory/Hardware/${CABINET}"
     ```
 
+1. (`ncn-mw#`) Remove all NodeBMC, ChassisBMC, RouterBMC ethernetInterfaces associated with the cabinet from HSM.
+
+    ```bash
+    for mac in $(cray hsm inventory ethernetInterfaces list --format json | \
+                   jq -r --arg CABINET "${CABINET}" \
+                     '.[] | select(.ComponentID | startswith($CABINET)) | .ID')
+    do
+        echo "Removing $mac from HSM Inventory EthernetInterfaces"
+        cray hsm inventory ethernetInterfaces delete "$mac"
+    done
+    ```
+
 ### 6. Cleanup SLS data
 
 Remove the cabinet and all associated components from the System Layout Service (SLS).
-****Should cani be used here instead****??? - cani alpha remove cabinet x{cab} and cani alpha session apply?????
 
 1. (`ncn-mw#`) Set the cabinet xname.
 
@@ -212,48 +223,136 @@ Remove the cabinet and all associated components from the System Layout Service 
 
     The command should return no results.
 
-1. Delete the cabinet's network definitions/subnets from the relevant SLS Networks entries (HMN/NMN/CAN/CMN/CHN cabinet subnets) — these are not auto-removed when you delete the cabinet hardware.
+### 7. Network and global cleanup
 
-**TODO**
+The following cleanup addresses network-level resources that the individual blade removal procedure does not touch.
 
-1. (`ncn-mw#`) Remove all NodeBMC, ChassisBMC, RouterBMC ethernetInterfaces associated with the cabinet from HSM.
+#### Remove the cabinet's VLAN subnets from SLS Networks
 
-    ```bash
-    for mac in $(cray hsm inventory ethernetInterfaces list --format json | \
-                   jq -r --arg CABINET "${CABINET}" \
-                     '.[] | select(.ComponentID | startswith($CABINET)) | .ID')
-    do
-        echo "Removing $mac from HSM Inventory EthernetInterfaces"
-        cray hsm inventory ethernetInterfaces delete "$mac"
-    done
+Each liquid-cooled cabinet has dedicated subnets in the HMN_MTN and NMN_MTN SLS networks. These subnets are **not** automatically removed when the cabinet hardware entries are deleted from SLS. They must be removed manually.
 
-or (better above option as it would delete any additional components if present like CabinetPDU/CabinetPDUController)
+1. (`ncn-mw#`) Set the cabinet xname and derive the subnet name.
 
     ```bash
-    for t in NodeBMC ChassisBMC RouterBMC; do
-    for id in $(cray hsm inventory ethernetInterfaces list --type "$t" --format json \
-                    | jq -r --arg c "$CAB" '.[] | select(.ComponentID | startswith($c)) | .ID'); do
-        cray hsm inventory ethernetInterfaces delete "$id"
-    done
+    CABINET="x9000"
+    SUBNET_NAME="cabinet_${CABINET#x}"
+    echo "Subnet name: $SUBNET_NAME"
+    ```
+
+1. (`ncn-mw#`) Get an API token.
+
+    ```bash
+    export TOKEN=$(curl -s -S -d grant_type=client_credentials \
+            -d client_id=admin-client \
+            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+            https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+    ```
+
+1. (`ncn-mw#`) For each relevant network (HMN_MTN, NMN_MTN), retrieve the network definition, remove the cabinet subnet, and update SLS.
+
+    ```bash
+    for NETWORK in HMN_MTN NMN_MTN; do
+        echo "Removing subnet $SUBNET_NAME from $NETWORK"
+
+        # Retrieve the current network definition
+        NETWORK_JSON=$(cray sls networks describe "$NETWORK" --format json)
+
+        # Remove the cabinet subnet from the Subnets array
+        UPDATED_JSON=$(echo "$NETWORK_JSON" | jq --arg SUBNET "$SUBNET_NAME" \
+            '.ExtraProperties.Subnets |= map(select(.Name != $SUBNET))')
+
+        # Update the network in SLS
+        echo "$UPDATED_JSON" | curl -s -k -X PUT \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            "https://api-gw-service-nmn.local/apis/sls/v1/networks/${NETWORK}" \
+            -d @-
     done
     ```
 
-### 7. Vault cleanup
+1. (`ncn-mw#`) Verify the subnets have been removed.
 
-Delete secret/hms-creds/<bmc_xname> for every BMC in the cabinet (and any CEC/PDU creds rooted on that cabinet).
+    ```bash
+    for NETWORK in HMN_MTN NMN_MTN; do
+        echo "Checking $NETWORK for $SUBNET_NAME:"
+        cray sls networks describe "$NETWORK" --format json | \
+            jq --arg SUBNET "$SUBNET_NAME" '.ExtraProperties.Subnets[] | select(.Name == $SUBNET)'
+    done
+    ```
 
-****Add a procedure for this****
+    The commands should return no results.
 
-Network/global cleanup that the blade procedure never touches:
+#### Update static routes on management NCNs
 
-Remove the cabinet's HMN/NMN VLAN subnets and any IP reservations from SLS Networks.
-Rerun csi config init/network reconcile (or follow Updating_Cabinet_Routes_on_Management_NCNs.md) to drop static routes to the cabinet's HMN/NMN subnets from the management NCNs.
-Restart cray-dhcp-kea, cray-dns-unbound, BSS, and SLS-dependent services so they reload the new topology.
-kubectl -n services rollout restart deployment cray-dhcp-kea
-kubectl -n services rollout restart deployment cray-dns-unbound-manager
+Management NCNs have static routes to each cabinet's HMN_MTN and NMN_MTN subnets. After removing the cabinet subnets from SLS, regenerate the route files to drop those routes.
+
+Follow the procedure in [Updating Cabinet Routes on Management NCNs](Updating_Cabinet_Routes_on_Management_NCNs.md) to regenerate and apply the updated routes.
+
+#### Restart services to reload the new network topology
+
+1. (`ncn-mw#`) Restart DHCP (Kea) to remove leases and pools for the deleted subnets.
+
+    ```bash
+    kubectl -n services rollout restart deployment cray-dhcp-kea
+    ```
+
+1. (`ncn-mw#`) Restart DNS (Unbound) to drop any cached records for the cabinet.
+
+    ```bash
+    kubectl -n services rollout restart deployment cray-dns-unbound-manager
+    ```
+
+1. (`ncn-mw#`) Verify the services are running after restart.
+
+    ```bash
+    kubectl -n services rollout status deployment cray-dhcp-kea
+    kubectl -n services rollout status deployment cray-dns-unbound-manager
+    ```
 
 
-### 8. Restart Kea and re-enable the `hms-discovery` cron job
+### 8. Vault cleanup
+
+Remove stored BMC credentials from Vault for all controllers in the cabinet.
+
+1. (`ncn-mw#`) Set the cabinet xname.
+
+    ```bash
+    CABINET="x9000"
+    ```
+
+1. (`ncn-mw#`) Set up the Vault alias.
+
+    ```bash
+    VAULT_PASSWD=$(kubectl -n vault get secrets cray-vault-unseal-keys -o json | jq -r '.data["vault-root"]' | base64 -d)
+    alias vault='kubectl -n vault exec -i cray-vault-0 -c vault -- env VAULT_TOKEN=$VAULT_PASSWD VAULT_ADDR=http://127.0.0.1:8200 VAULT_FORMAT=json vault'
+    ```
+
+1. (`ncn-mw#`) List all `hms-creds` entries for the cabinet.
+
+    ```bash
+    vault kv list secret/hms-creds | jq -r '.[]' | grep "^${CABINET}"
+    ```
+
+1. (`ncn-mw#`) Delete all `hms-creds` entries for the cabinet.
+
+    ```bash
+    for xname in $(vault kv list secret/hms-creds | jq -r '.[]' | grep "^${CABINET}"); do
+        echo "Deleting Vault secret for $xname"
+        vault kv delete "secret/hms-creds/${xname}"
+    done
+    ```
+
+1. (`ncn-mw#`) Verify that no credentials remain for the cabinet.
+
+    ```bash
+    vault kv list secret/hms-creds | jq -r '.[]' | grep "^${CABINET}"
+    ```
+
+    The command should return no results.
+
+### 9. Re-enable the `hms-discovery` cron job
+
+**NOTE**: If the Kea restart was already performed as part of the [network and global cleanup](#7-network-and-global-cleanup) in a previous step, skip the Kea restart below and proceed directly to re-enabling the `hms-discovery` cron job.
 
 1. (`ncn-mw#`) Restart Kea to pick up the DHCP changes.
 
@@ -280,7 +379,7 @@ kubectl -n services rollout restart deployment cray-dns-unbound-manager
     hms-discovery   */3 * * * *   False     1        46s             15d
     ```
 
-### 9. Remove CMM and CEC port configuration from CDU switches
+### 10. Remove CMM and CEC port configuration from CDU switches
 
 Remove the CMM and CEC port configuration from the CDU switches that served the cabinet.
 
@@ -306,7 +405,7 @@ Remove the CMM and CEC port configuration from the CDU switches that served the 
 
     Repeat for each CDU switch that had connections to the removed cabinet.
 
-### 10. Remove the physical cabinet
+### 11. Remove the physical cabinet
 
 1. Remove the blades from the cabinet (if not already done during step 3).
 
