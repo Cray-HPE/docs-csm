@@ -63,7 +63,9 @@ For each blade (slot) in the cabinet, follow one of the following procedures:
 - [Removing a Liquid-cooled blade from a System](Removing_a_Liquid-cooled_blade_from_a_System.md)
 - [Removing a Liquid-cooled blade from a System Using SAT](Removing_a_Liquid-cooled_blade_from_a_System_Using_SAT.md)
 
-**NOTE**: Since the `hms-discovery` cron job has already been suspended in step 2, skip the steps in those procedures that suspend and un-suspend the `hms-discovery` cron job. Also skip the step that rediscovers the Chassis BMC, as that will not be needed when removing the entire cabinet.
+**NOTE**: Since the `hms-discovery` cron job has already been suspended in step 2, skip the steps in those procedures that suspend
+and un-suspend the `hms-discovery` cron job. Also skip the step that rediscovers the Chassis BMC, as that will not be needed when
+removing the entire cabinet.
 
 Repeat the chosen procedure for every blade in the cabinet. For example, if the cabinet has chassis 0 through 7, each with slots 0 through 7:
 
@@ -308,7 +310,6 @@ Follow the procedure in [Updating Cabinet Routes on Management NCNs](Updating_Ca
     kubectl -n services rollout status deployment cray-dhcp-kea
     kubectl -n services rollout status deployment cray-dns-unbound-manager
     ```
-
 
 ### 8. Vault cleanup
 

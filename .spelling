@@ -1203,3 +1203,10 @@ cos-prechecks-for-worker-reboots
 
 - operations/iuf/workflows/management_rollout.md
 cos-prechecks-for-worker-reboots
+
+- operations/node_management/Remove_a_Liquid-Cooled_Cabinet_from_a_System.md
+ethernet
+ethernetInterfaces
+NodeBMC
+ChassisBMC
+RouterBMC
