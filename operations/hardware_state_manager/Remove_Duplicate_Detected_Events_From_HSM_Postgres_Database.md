@@ -3,7 +3,6 @@
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
 - [Procedure](#procedure)
-- [Alternative procedure for large databases](#alternative-procedure-for-large-databases)
     - [Environment variables](#environment-variables)
 
 ## Overview
@@ -83,6 +82,19 @@ other component types were affected by this bug.
     export HWINV_SCRIPT_DIR="/usr/share/doc/csm/upgrade/scripts/upgrade/smd/"
     ```
 
+1. Set an environment variable pointing to the location where the backup file 
+   should be generated:
+
+    ```bash
+    export BACKUP_FILE_DIR="/customer/can/pick/any/directory"
+    ```
+
+1. Change directory to ${BACKUP_FILE_DIR}
+
+    ```bash
+    cd ${BACKUP_FILE_DIR}
+    ```
+
 1. Run the `fru_history_backup.sh` script to take a backup of the hardware
    inventory history table. Runtime will depend on the size of the table.
   
@@ -102,7 +114,7 @@ other component types were affected by this bug.
     Dump complete. Dump file is: smd_hwinv_hist_table_backup-07302025-161001.sql
     ```
   
-    The backup file will be located in the current working directory.
+    The backup file will be located in ${BACKUP_FILE_DIR} directory.
 
 1. __[OPTIONAL]__ This step should not be required unless some sort of
    corruption occurs to the hardware inventory history table in subsequent
@@ -114,7 +126,7 @@ other component types were affected by this bug.
    not interrupt the operation.
 
     ```bash
-    export BACKUP_FILE="/full/path/to/backup/file.sql"
+    export BACKUP_FILE="${BACKUP_FILE_DIR}/file.sql"
     ${HWINV_SCRIPT_DIR}/fru_history_restore.sh
     ```
 
@@ -160,7 +172,7 @@ other component types were affected by this bug.
     Removing /tmp/smd_hwinv_hist_table_backup-07302025-152732.sql in the postgres leader pod
     Restore complete.
     ```
-  
+
 1. Run the `fru_history_remove_duplicate_detected_events.sh` pruning script
    to remove the duplicate "Detected" events from the database.
   
@@ -170,8 +182,7 @@ other component types were affected by this bug.
 
    On systems larger than 1500 nodes, this step may take many hours,
    possibly over 24 hours. On such systems, it is recommended to
-   instead perform the
-   [Alternative procedure for large databases](#alternative-procedure-for-large-databases).
+   instead proceed with the next step 
    Breaking the operation up into chunks facilitates
    visibility into progress and prevents lost progress in the event the
    pruning operation prematurely exits.
@@ -222,60 +233,57 @@ other component types were affected by this bug.
 
     The `fru_history_remove_duplicate_detected_events.sh`
     script can fail if there are too many duplicate "Detected" events
-    present in the database. If this occurs, then see
-    [Alternative procedure for large databases](#alternative-procedure-for-large-databases)
+    present in the database. If this occurs, proceed to the next step
 
-## Alternative procedure for large databases
+1. __[OPTIONAL]__ Skip this step if the previuos step was completed successfully.
 
-Skip this procedure if the [procedure above](#procedure) was completed successfully.
+   Follow the below procedure if the previous step failed, or 
+   if the system has more than 1500 nodes.
 
-Follow this procedure if the final step in the procedure above failed,
-or if the system has more than 1500 nodes.
+   This step uses environment variables to control the batch size and number
+   of iterations. Full descriptions of each variable are provided at the end of
+   this section.
 
-This procedure uses environment variables to control the batch size and number
-of iterations. Full descriptions of each variable are provided at the end of
-this section.
+   The first step is to determine an appropriate batch size through incremental testing.
+    Begin with conservative settings: `VACUUM_TYPE` set to `ANALYZE`,
+   `MAX_BATCHES` set to 1, and `BATCH_SIZE` set to 100,000:
 
-The first step is to determine an appropriate batch size through incremental
-testing. Begin with conservative settings: `VACUUM_TYPE` set to `ANALYZE`,
-`MAX_BATCHES` set to 1, and `BATCH_SIZE` set to 100,000:
+    ```bash
+    BATCH_SIZE=100000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
+    ```
 
-```bash
-BATCH_SIZE=100000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
-```
+    If successful, increase the batch size to 1,000,000:
 
-If successful, increase the batch size to 1,000,000:
+    ```bash
+    BATCH_SIZE=1000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
+    ```
 
-```bash
-BATCH_SIZE=1000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
-```
+    If successful, increase the batch size to 10,000,000:
 
-If successful, increase the batch size to 10,000,000:
+    ```bash
+    BATCH_SIZE=10000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
+    ```
 
-```bash
-BATCH_SIZE=10000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
-```
+    If successful, attempt 100,000,000:
 
-If successful, attempt 100,000,000:
+    ```bash
+    BATCH_SIZE=100000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
+    ```
 
-```bash
-BATCH_SIZE=100000000 MAX_BATCHES=1 VACUUM_TYPE=ANALYZE ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
-```
+    The maximum viable batch size is typically either 10,000,000 or 100,000,000.
 
-The maximum viable batch size is typically either 10,000,000 or 100,000,000.
+    Once the maximum batch size has been determined, increase the number of batches
+    processed per run by adjusting the `MAX_BATCHES` variable. Continue running the
+    script until all duplicate events are pruned.
 
-Once the maximum batch size has been determined, increase the number of batches
-processed per run by adjusting the `MAX_BATCHES` variable. Continue running the
-script until all duplicate events are pruned.
+    After all duplicates have been removed, run the script one final time with a
+    `FULL` vacuum to reclaim disk space:
 
-After all duplicates have been removed, run the script one final time with a
-`FULL` vacuum to reclaim disk space:
+    ```bash
+    VACUUM_TYPE=FULL ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
+    ```
 
-```bash
-VACUUM_TYPE=FULL ${HWINV_SCRIPT_DIR}/fru_history_remove_duplicate_detected_events.sh
-```
-
-_Note:_ A `FULL` vacuum is required to return disk space to the operating system.
+    _Note:_ A `FULL` vacuum is required to return disk space to the operating system.
 
 ### Environment variables
 
