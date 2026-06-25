@@ -86,10 +86,10 @@ other component types were affected by this bug.
    should be generated:
 
     ```bash
-    export BACKUP_FILE_DIR="/customer/can/pick/any/directory"
+    export BACKUP_FILE_DIR="/customer/selected/directory"
     ```
 
-1. Change directory to ${BACKUP_FILE_DIR}
+1. Change directory to customer selected location.
 
     ```bash
     cd ${BACKUP_FILE_DIR}
@@ -235,7 +235,7 @@ other component types were affected by this bug.
     script can fail if there are too many duplicate "Detected" events
     present in the database. If this occurs, proceed to the next step
 
-1. __[OPTIONAL]__ Skip this step if the previuos step was completed successfully.
+1. __[OPTIONAL]__ Skip this step if the previous step was completed successfully.
 
    Follow the below procedure if the previous step failed, or
    if the system has more than 1500 nodes.
