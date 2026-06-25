@@ -82,7 +82,7 @@ other component types were affected by this bug.
     export HWINV_SCRIPT_DIR="/usr/share/doc/csm/upgrade/scripts/upgrade/smd/"
     ```
 
-1. Set an environment variable pointing to the location where the backup file 
+1. Set an environment variable pointing to the location where the backup file
    should be generated:
 
     ```bash
@@ -182,7 +182,7 @@ other component types were affected by this bug.
 
    On systems larger than 1500 nodes, this step may take many hours,
    possibly over 24 hours. On such systems, it is recommended to
-   instead proceed with the next step 
+   instead proceed with the next step
    Breaking the operation up into chunks facilitates
    visibility into progress and prevents lost progress in the event the
    pruning operation prematurely exits.
@@ -237,10 +237,10 @@ other component types were affected by this bug.
 
 1. __[OPTIONAL]__ Skip this step if the previuos step was completed successfully.
 
-   Follow the below procedure if the previous step failed, or 
+   Follow the below procedure if the previous step failed, or
    if the system has more than 1500 nodes.
 
-   This step uses environment variables to control the batch size and number
+   This procedure uses environment variables to control the batch size and number
    of iterations. Full descriptions of each variable are provided at the end of
    this section.
 
