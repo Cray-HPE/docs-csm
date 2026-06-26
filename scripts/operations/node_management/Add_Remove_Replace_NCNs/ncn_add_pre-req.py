@@ -2,7 +2,7 @@
 #
 # MIT License
 #
-# (C) Copyright 2022, 2025 Hewlett Packard Enterprise Development LP
+# (C) Copyright 2022-2026 Hewlett Packard Enterprise Development LP
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -441,23 +441,24 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         last_reserved_ip = sorted_ip_set[last_ip]
         start_dhcp_pool = ip_dhcp_pool_start[network]
         ip_white_space = int(ipaddress.IPv4Address(str(start_dhcp_pool))) - int(
-            ipaddress.IPv4Address(str(last_reserved_ip)))
+              ipaddress.IPv4Address(str(last_reserved_ip))) - 1
 
         print()
         print(f'Checking {network}.')
         print(f'last_reserved_ip: {last_reserved_ip}    start_dhcp_pool:{start_dhcp_pool}')
-        if adding_fmns:
+
+        # Only check for FMN VIP on networks that support it (NMN, HMN)
+        network_adding_fmns = adding_fmns
+        has_fmn_vip = False
+        if adding_fmns and network in ["NMN", "HMN"]:
             has_fmn_vip = network_has_fmn_vip.get(network, False)
             if has_fmn_vip:
-                print(f"{network} already has an existing fmn-vip reservation. Not adding additional VIP")
-                adding_fmns = False
-            else:
-                print(f"{network} does not have an existing fmn-vip reservation. Will add VIP along with FMN NCN(s)")
+                network_adding_fmns = False
+
         if ip_white_space < 0:
             print(f'FATAL last_reserved_ip {last_reserved_ip} exceeds start_dhcp_pool {start_dhcp_pool}')
             print(f'Verify DHCPStart and DHCPEnd are correct for the {network} network in SLS.')
             sys.exit(1)
-        print(f'The space between last_reserved_ip and start_dhcp_pool is {ip_white_space} IP.\n')
         log.info(f'Unsorted static ips:'
                   f' {ip_set}')
         log.info(f'Sorted static ips:'
@@ -468,13 +469,25 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         ips_to_delete_from_smd[network] = set()
         new_ip_dhcp_pool_start[network] = ''
         ip_shift = 0
-        if add_ncn_count >= ip_white_space-1:
+
+        # Calculate IPs needed based on network-specific FMN VIP setting
+        ips_needed = required_ip_counts(add_ncn_count, network_adding_fmns, network)
+
+        print(f'The space between last_reserved_ip and start_dhcp_pool is {ip_white_space} IP. '
+              f'IPs needed: {ips_needed}. '
+              f'{"No DHCP pool adjustment needed." if ips_needed <= ip_white_space else "DHCP pool adjustment required."}\n')
+
+        if ips_needed > ip_white_space:
+            if adding_fmns and network in ["NMN", "HMN"]:
+                if has_fmn_vip:
+                    print(f"{network} already has an existing fmn-vip reservation. Not adding additional VIP")
+                else:
+                    print(f"{network} does not have an existing fmn-vip reservation. Will add VIP along with FMN NCN(s)")
             print('There is not enough static IP space to add an NCN. Adjusting DHCP pool start.')
-            ips_needed = required_ip_counts(add_ncn_count, adding_fmns, network)
             for offset in range(1, ips_needed + 1):
                 ip = ipaddress.IPv4Address(last_reserved_ip) + offset
                 ips_to_delete_from_smd[network].add(str(ip))
-            ip_shift = ips_needed
+            ip_shift = ips_needed - ip_white_space
 
             temp = ipaddress.IPv4Address(start_dhcp_pool) + ip_shift
             new_ip_dhcp_pool_start[network] = str(temp)
@@ -487,9 +500,11 @@ def add_ncn_network_update(add_ncn_count, network_list, api_header, sls_networks
         else:
             new_ip_dhcp_pool_start[network] = str(temp)
 
-            print("IPs to be removed from SMD EthernetInterfaces and Kea active leases:")
-            print(ips_to_delete_from_smd)
-            print()
+            ips_with_removals = {net: ips for net, ips in ips_to_delete_from_smd.items() if ips}
+            if ips_with_removals:
+                print("IPs to be removed from SMD EthernetInterfaces and Kea active leases:")
+                print(ips_with_removals)
+                print()
             print(f'add_ncn_count: {add_ncn_count}\n'
                   f'ip_dhcp_pool_start:\n{ip_dhcp_pool_start}\n'
                   f'new_ip_dhcp_pool_start: \n{new_ip_dhcp_pool_start}\n')
