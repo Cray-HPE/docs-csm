@@ -86,10 +86,10 @@ other component types were affected by this bug.
    should be generated:
 
     ```bash
-    export BACKUP_FILE_DIR="/customer/selected/directory"
+    export BACKUP_FILE_DIR=<user-selected-directory>
     ```
 
-1. Change directory to customer selected location.
+1. Change directory to user selected location.
 
     ```bash
     cd ${BACKUP_FILE_DIR}
@@ -182,7 +182,7 @@ other component types were affected by this bug.
 
    On systems larger than 1500 nodes, this step may take many hours,
    possibly over 24 hours. On such systems, it is recommended to
-   instead proceed with the next step
+   instead proceed with the next step.
    Breaking the operation up into chunks facilitates
    visibility into progress and prevents lost progress in the event the
    pruning operation prematurely exits.
@@ -229,11 +229,11 @@ other component types were affected by this bug.
     ```
 
     Should any issues arise requiring restoration of the hardware inventory
-    history table, please refer back to step 3.
+    history table, please refer back to step 5.
 
     The `fru_history_remove_duplicate_detected_events.sh`
     script can fail if there are too many duplicate "Detected" events
-    present in the database. If this occurs, proceed to the next step
+    present in the database. If this occurs, proceed to the next step.
 
 1. __[OPTIONAL]__ Skip this step if the previous step was completed successfully.
 
@@ -285,13 +285,13 @@ other component types were affected by this bug.
 
     _Note:_ A `FULL` vacuum is required to return disk space to the operating system.
 
-### Environment variables
+    ### Environment variables
 
-The following environment variables control the behavior of the pruning script:
+    The following environment variables control the behavior of the pruning script:
 
-| Variable                  | Default          | Description                                                                                                                                                                                                                      |
-|---------------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `BATCH_SIZE`              | `ALL` (no limit) | Maximum number of duplicate events to prune per iteration. Start with a low value and increase incrementally until a failure occurs, then use the last successful value.                                                         |
-| `MAX_BATCHES`             | `0` (no limit)   | Maximum number of batches (iterations) to perform. When determining the `BATCH_SIZE`, set this to `1` to test one batch at a time. Once `BATCH_SIZE` is determined, increase this value to process multiple batches per run.     |
-| `REPLICATION_SLEEP_DELAY` | `1`              | Specifies the sleep delay in seconds between batches to allow database replication to catch up. Adjusting this value is typically not necessary.                                                                                 |
-| `VACUUM_TYPE`             | `FULL`           | The type of vacuum to perform after pruning. Options are `FULL` or `ANALYZE`. Use `ANALYZE` during incremental pruning operations to save time. After all duplicates are removed, perform a `FULL` vacuum to reclaim disk space. |
+    | Variable                  | Default          | Description                                                                                                                                                                                                                      |
+    |---------------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | `BATCH_SIZE`              | `ALL` (no limit) | Maximum number of duplicate events to prune per iteration. Start with a low value and increase incrementally until a failure occurs, then use the last successful value.                                                         |
+    | `MAX_BATCHES`             | `0` (no limit)   | Maximum number of batches (iterations) to perform. When determining the `BATCH_SIZE`, set this to `1` to test one batch at a time. Once `BATCH_SIZE` is determined, increase this value to process multiple batches per run.     |
+    | `REPLICATION_SLEEP_DELAY` | `1`              | Specifies the sleep delay in seconds between batches to allow database replication to catch up. Adjusting this value is typically not necessary.                                                                                 |
+    | `VACUUM_TYPE`             | `FULL`           | The type of vacuum to perform after pruning. Options are `FULL` or `ANALYZE`. Use `ANALYZE` during incremental pruning operations to save time. After all duplicates are removed, perform a `FULL` vacuum to reclaim disk space. |
