@@ -10,7 +10,7 @@ are seen in the `dmesg` of iSCSI client nodes (Compute and UAN nodes) due to whi
 iSCSI client nodes became `un-responsive` where most of the commands failed with
 `Bus error`.
 
-Example command:
+(`nid#`) Example command:
 
 ```bash
 nid000001:~ # multipath -ll
