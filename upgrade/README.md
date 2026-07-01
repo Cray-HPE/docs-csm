@@ -17,13 +17,11 @@ Before upgrading, review the [Release Notes](../RELEASE_NOTES.md)
 
 ## CSM major/minor version upgrade
 
-Follow one of these procedures when upgrading from CSM 1.6 to CSM 1.7 (regardless of patch version).
-(Additionally, in the unusual situation of upgrading from a pre-release version of CSM 1.7.0, then one of these
-procedure should be followed.)
+Follow one of these procedures when upgrading from CSM 1.6 to CSM 1.7.0 or CSM 1.7.1 .
 
 There is no need to upgrade from CSM 1.6 to CSM 1.7.0, and then separately upgrade from CSM 1.7.0 to the
-latest patch release. The procedures in this section can be used to upgrade from CSM 1.6 directly to the
-latest patch release of CSM 1.7.
+CSM 1.7.1 release. The procedures in this section can be used to upgrade from CSM 1.6 directly to the
+ CSM 1.7.1
 
 ### Option 1: Upgrade CSM with additional HPE Cray EX software products
 
@@ -51,12 +49,15 @@ uncommon upgrade scenario.
 
 ## CSM patch version upgrade
 
-Follow one of these procedures when upgrading from CSM 1.7.1 to a newer patch version of CSM 1.7.1
+If the starting version of the upgrade is CSM 1.7.0, then follow the [CSM major/minor version upgrade](#csm-majorminor-version-upgrade) instructions for Upgrading to CSM 1.7.1 .
+CSM upgrades starting from 1.7.1 are expected to be done along with the upgrade of other products and should be done through IUF.
 
-If there are multiple patch versions available, note that there is no need to perform intermediate
+**`NOTE`**  From CSM 1.7.1 onwards the patches follow new naming convention: `CSM 1.7.1-patch.<patch-number>`
+
+If there are multiple patch versions available after CSM 1.7.1, note that there is no need to perform intermediate
 CSM 1.7.1 patch upgrades. Instead, consider upgrading to the latest CSM 1.7.1 patch release.
 
-* [CSM 1.7.1 Patch Installation Instructions](1.7.1/README.md)
+* [CSM 1.7.1-patch.1 Installation Instructions](1.7.1/README.md)
 
 ## FM On Baremetal
 
