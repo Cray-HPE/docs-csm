@@ -284,13 +284,13 @@ other component types were affected by this bug.
 
     _Note:_ A `FULL` vacuum is required to return disk space to the operating system.
 
-    _Environment variables_
+    - **Environment variables**
 
-    The following environment variables control the behavior of the pruning script:
+        The following environment variables control the behavior of the pruning script:
 
-    | Variable                  | Default          | Description                                                                                                                                                                                                                      |
-    |---------------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | `BATCH_SIZE`              | `ALL` (no limit) | Maximum number of duplicate events to prune per iteration. Start with a low value and increase incrementally until a failure occurs, then use the last successful value.                                                         |
-    | `MAX_BATCHES`             | `0` (no limit)   | Maximum number of batches (iterations) to perform. When determining the `BATCH_SIZE`, set this to `1` to test one batch at a time. Once `BATCH_SIZE` is determined, increase this value to process multiple batches per run.     |
-    | `REPLICATION_SLEEP_DELAY` | `1`              | Specifies the sleep delay in seconds between batches to allow database replication to catch up. Adjusting this value is typically not necessary.                                                                                 |
-    | `VACUUM_TYPE`             | `FULL`           | The type of vacuum to perform after pruning. Options are `FULL` or `ANALYZE`. Use `ANALYZE` during incremental pruning operations to save time. After all duplicates are removed, perform a `FULL` vacuum to reclaim disk space. |
+        | Variable                  | Default          | Description                                                                                                                                                                                                                      |
+        |---------------------------|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+        | `BATCH_SIZE`              | `ALL` (no limit) | Maximum number of duplicate events to prune per iteration. Start with a low value and increase incrementally until a failure occurs, then use the last successful value.                                                         |
+        | `MAX_BATCHES`             | `0` (no limit)   | Maximum number of batches (iterations) to perform. When determining the `BATCH_SIZE`, set this to `1` to test one batch at a time. Once `BATCH_SIZE` is determined, increase this value to process multiple batches per run.     |
+        | `REPLICATION_SLEEP_DELAY` | `1`              | Specifies the sleep delay in seconds between batches to allow database replication to catch up. Adjusting this value is typically not necessary.                                                                                 |
+        | `VACUUM_TYPE`             | `FULL`           | The type of vacuum to perform after pruning. Options are `FULL` or `ANALYZE`. Use `ANALYZE` during incremental pruning operations to save time. After all duplicates are removed, perform a `FULL` vacuum to reclaim disk space. |
