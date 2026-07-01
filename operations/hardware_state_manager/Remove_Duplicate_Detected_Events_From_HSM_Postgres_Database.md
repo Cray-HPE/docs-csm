@@ -284,7 +284,7 @@ other component types were affected by this bug.
 
     _Note:_ A `FULL` vacuum is required to return disk space to the operating system.
 
-    _*Environment variables*_
+    _Environment variables_
 
     The following environment variables control the behavior of the pruning script:
 
