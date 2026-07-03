@@ -34,6 +34,8 @@ Glossary of terms used in CSM documentation.
 * [EX Compute Cabinet](#ex-compute-cabinet)
 * [EX TDS Cabinet](#ex-tds-cabinet)
 * [Fabric](#fabric)
+* [Fabric Manager](#fabric-manager)
+* [Fabric Manager Node](#fabric-manager-node)
 * [Firmware Action Service (FAS)](#firmware-action-service-fas)
 * [Floor Standing CDU](#floor-standing-cdu)
 * [Hardware Management Network (HMN)](#hardware-management-network-hmn)
@@ -375,6 +377,17 @@ compute blades and 16 [High Speed Network (HSN)](#high-speed-network-hsn) switch
 
 The [Slingshot](#slingshot) fabric consists of the switches, cables, ports, topology policy, and
 configuration settings for the Slingshot [High-Speed Network](#high-speed-network-hsn).
+
+## Fabric Manager
+
+The [Slingshot](#slingshot) Fabric Manager software includes a suite of software which configures, manages, and monitors the network. It runs on an
+external server and communicates with the switches over the out-of-band management network.
+
+## Fabric Manager Node
+
+The [Slingshot](#slingshot) Fabric Manager runs on at least one dedicated server referred to as the HPE Slingshot Fabric Manager Node (FMN). It also runs on the
+HPE Slingshot switches. HPE Slingshot Fabric Manager software is installed on a bare metal server (FMN) instead of using Kubernetes pods in order to support
+systems with HPE Slingshot version 3.0.0 and above and High Availability (HA) requirements.
 
 ## Firmware Action Service (FAS)
 
