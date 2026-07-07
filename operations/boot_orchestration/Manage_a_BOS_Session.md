@@ -3,6 +3,8 @@
 Once a BOS [session template](Session_Templates.md) is created, users can perform operations on nodes,
 such as `boot`, `reboot`, and `shutdown`.
 
+> For a basic high-level summary of what happens during a simple BOS session, see [Simple BOS Session Flow](Simple_BOS_Session_Flow.md).
+
 To find the corresponding API calls for any Cray CLI command, append `-vvv` to the end of the CLI command.
 This makes the CLI print the underlying API call in the output.
 

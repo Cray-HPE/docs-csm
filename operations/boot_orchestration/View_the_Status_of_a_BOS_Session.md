@@ -2,6 +2,8 @@
 
 BOS supports a status endpoint that reports detailed status information for individual BOS sessions.
 
+> For a basic high-level summary of what happens during a simple BOS session, see [Simple BOS Session Flow](Simple_BOS_Session_Flow.md).
+
 * [BOS session status](#bos-session-status)
 * [View the status of a session](#view-the-status-of-a-session)
 * [Session status details](#session-status-details)
