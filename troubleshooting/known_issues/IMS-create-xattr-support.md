@@ -30,12 +30,7 @@ annotations:
 However, the `cray-configmap-ims-v2-image-create-kiwi-ng` `configmap` is missing this annotation,
 meaning the initial image creation step (where kiwi-ng installs base RPMs) has no `xattr` support.
 
-This inconsistency was never caught in testing because HPE's internal systems had the MUNGE fix
-applied from a separate repository that did not use `xattr-dependent` RPMs.
-
-## Resolution
-
-**Immediate workaround (manual):**
+## Workaround Solution
 
 1. Edit the `cray-configmap-ims-v2-image-create-kiwi-ng` `configmap` to add the `xattr` annotation:
 
