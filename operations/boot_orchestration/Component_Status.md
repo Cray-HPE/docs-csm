@@ -141,4 +141,5 @@ However, typically `on_hold` will be the result of a `stable` of `failed` compon
 
 ![Status Transitions](../../img/operations/boot_orchestration/bos_v2_status_transitions.png)
 
-For more information on the BOS operators that act on components to move them from state to state, see [BOS operators](Operators.md)
+For more information on the BOS operators that act on components to move them from state to state, see [BOS operators](Operators.md).
+For a basic high-level summary of what happens during a simple BOS session, see [Simple BOS Session Flow](Simple_BOS_Session_Flow.md).
