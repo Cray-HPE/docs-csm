@@ -88,7 +88,7 @@ images:
         prefix: secure-kubernetes
   configuration: fmn-bm-default-configuration
   configuration_group_names:
-  - Management_Fabric
+  - Management_FabricManager
 ```
 
 ##### New FMN base image creation and upload to S3
