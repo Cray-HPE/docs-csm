@@ -45,7 +45,7 @@ Replace an HPE Cray EX liquid-cooled compute blade.
    This example shows cabinet 1000, chassis 3, slot 0 (`x1000c3s0`).
 
    ```bash
-   cray hsm state components enabled update --enabled false x1000c3s0 --id x1000c3s0
+   cray hsm state components enabled update --enabled false x1000c3s0
    ```
 
    Disabling the slot prevents `hms-discovery` from attempting to automatically power on slots. If the slot
