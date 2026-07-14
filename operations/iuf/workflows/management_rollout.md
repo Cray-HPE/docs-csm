@@ -574,7 +574,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
 
-1. Ensure to [follow these steps after canary worker node rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
+1. Ensure to [follow these steps after worker node rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
