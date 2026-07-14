@@ -584,8 +584,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     **`Note`** Ensure at least two worker nodes (iSCSI SBPS targets) remain healthy to maintain high availability after the worker nodes rollout is complete.
    - proceed with next set of worker nodes rollout in a batch after canary worker node rollout, followed by the remaining worker nodes rollout.
-   - ensure to execute step 6 at [2.3 NCN worker nodes](23-ncn-worker-nodes) after each batch of worker nodes rollout.
-
+   
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
     - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
