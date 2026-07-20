@@ -344,7 +344,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
         **Important:** SDU may take about 45 minutes to run on a small system \(longer for large systems\).
 
         ```bash
-        sdu --scenario triage --start_time '-4 hours' \
+        sdu scenario triage --start_time '-4 hours' \
                  --reason "saving state before powerdown"
         ```
 
@@ -407,7 +407,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 
         ```bash
         kubectl exec -it -n services \
-            "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager
+            "$(kubectl get pod -l app.kubernetes.io/name=slingshot-fabric-manager \
             -n services --no-headers | head -1 | awk '{print $1}')" \
              -c slingshot-fabric-manager -- fmn-show-status --details \
            | tee -a fmn-show-status-details.txt

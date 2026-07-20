@@ -74,6 +74,7 @@ shown here with numbered topics.
     1. [Kubernetes encryption](#1-kubernetes-encryption)
     1. [Export Nexus data](#2-export-nexus-data)
 - [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
+- [Fabric Manager Node redeployment](#fabric-manager-node-redeployment)
 
 > **`NOTE`** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#12-troubleshooting-installation-problems) and
@@ -336,3 +337,11 @@ See the [Install or upgrade additional products with IUF](../operations/iuf/work
 procedure to continue with the installation of additional HPE Cray EX software products.
 
 For additional information on the IUF, see [Install and Upgrade Framework](../operations/iuf/IUF.md).
+
+## Fabric Manager Node redeployment
+
+> **OPTIONAL:** This section is only applicable if Fabric Manager nodes were deployed during the CSM installation.
+
+After additional HPE Cray EX software products have been installed, Fabric Manager nodes need to be redeployed with a new customized image.
+
+See [Redeploy Fabric Manager Nodes](../operations/fm_on_baremetal/Redeploy_Fabric_Manager_Nodes.md).

@@ -3,6 +3,8 @@
 In order to investigate node boot-related issues, it is important to understand the flow of a healthy boot process and the associated components.
 This section outlines the normal flow of components that play a role in booting compute nodes, including DHCP, BSS, and TPTP.
 
+For a basic high-level summary of what happens during a simple BOS session, see [Simple BOS Session Flow](Simple_BOS_Session_Flow.md).
+
 ## DHCP
 
 A healthy DHCP exchange between server and client looks like the following:

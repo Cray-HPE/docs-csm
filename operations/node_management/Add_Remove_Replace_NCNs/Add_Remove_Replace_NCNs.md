@@ -11,7 +11,7 @@ Add, remove, replace, or move non-compute nodes (NCNs). This applies to worker, 
 The following workflows are available:
 
 * [Prerequisites](#prerequisites)
-* [Add worker, storage, or master NCNs](#add-worker-storage-or-master-ncns)
+* [Add worker, storage, master or FMN NCNs](#add-worker-storage-master-or-fmn-ncns)
     * [Add NCN prerequisites](#add-ncn-prerequisites)
     * [Add NCN procedure](#add-ncn-procedure)
 * [Remove worker, storage, or master NCNs](#remove-worker-storage-or-master-ncns)
@@ -38,7 +38,15 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
    ./ncn_add_pre-req.py 
    ```
 
-   The script will ask the following question:
+   Note: For adding FMNs (Fabric Manager Nodes) to CSM there is a new prompt added to confirm if the node getting added is an FMN or not:
+
+  ```text
+   Please answer with yes or no.
+   Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
+   y
+   ```
+
+   Overall, the `ncn_add_pre-req.py` script prompts the user with the following questions:
 
    ```text
    How many NCNs would you like to add? Do not include NCNs to be removed or moved.
@@ -52,6 +60,10 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
     Please enter answer as an integer.
     How many NCNs would you like to add? Do not include NCNs to be removed or moved.
     10
+
+    Please answer with yes or no.
+    Are the NCNs to be added are Fabric Manager Nodes (FMNs)? [y/N]
+    N
 
     You are about to make DESTRUCTIVE changes to the system.
 
@@ -150,9 +162,9 @@ The latest CSM documentation has been installed on the master nodes. See [Check 
     Restarting cray-dhcp-kea
    ```
 
-## Add worker, storage, or master NCNs
+## Add worker, storage, master or FMN NCNs
 
-Use this procedure to add a worker, storage, or master NCN.
+Use this procedure to add a worker, storage, master or FMN (Fabric Manager Node) NCNs.
 
 ### Add NCN prerequisites
 
@@ -255,4 +267,4 @@ In general, scaling master nodes is not recommended because it can cause Etcd la
 The following is a high-level overview of the replace NCN workflow:
 
 1. [Remove Worker, Storage, or Master NCNs](#remove-worker-storage-or-master-ncns)
-1. [Add Worker, Storage, or Master NCNs](#add-worker-storage-or-master-ncns)
+1. [Add worker, storage, master or FMN NCNs](#add-worker-storage-master-or-fmn-ncns)

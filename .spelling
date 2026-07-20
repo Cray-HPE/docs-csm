@@ -672,6 +672,7 @@ osds*
 oversubscription
 passthrough
 passwordless
+patch.1
 permissioned
 pickup
 playbook
@@ -871,6 +872,10 @@ xnames
 zeroization
 zeroize
 zypper
+Baremetal
+baremetal
+FabricManager
+FMNs
 
 # Network Terms - Starting to organize a little bit here but it's not done
 0.5m
@@ -1203,3 +1208,9 @@ cos-prechecks-for-worker-reboots
 
 - operations/iuf/workflows/management_rollout.md
 cos-prechecks-for-worker-reboots
+
+- upgrade/1.7.1/index.md
+README.md
+
+- upgrade/1.7.1/README.md
+Patch1

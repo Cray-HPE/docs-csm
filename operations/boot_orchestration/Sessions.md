@@ -28,6 +28,8 @@ A session will continue to track a component until the component reaches its des
 Additional status information is also available for sessions to track information such as how many components are at each step in the process.
 See [View the Status of a BOS Session](View_the_Status_of_a_BOS_Session.md) for more information.
 
+For a basic high-level summary of what happens during a simple BOS session, see [Simple BOS Session Flow](Simple_BOS_Session_Flow.md).
+
 ## BOS sessions and HSM locks
 
 As part of a `pending` BOS session being started, the BOS [`session-setup` operator](Operators.md#session-setup)
