@@ -580,9 +580,10 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
     node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
-    with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded. Here ensure at least two worker nodes (iSCSI SBPS targets) remain healthy to maintain high availability for iSCSI SBPS after the worker nodes rollout is complete.
- Proceed with next set of worker nodes rollout in a batch after canary worker node rollout, followed by the remaining worker nodes rollout.
-   
+    with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
+    Here ensure at least two worker nodes (iSCSI SBPS targets) remain healthy to maintain high availability for iSCSI SBPS after the worker nodes rollout is complete.
+    Proceed with next set of worker nodes rollout in a batch after canary worker node rollout, followed by the remaining worker nodes rollout.
+
     **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
     - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
