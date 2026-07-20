@@ -583,10 +583,10 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
    all remaining worker nodes is complete.
 
    **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
-    node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
-    with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
-    
-    **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
+   node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
+   with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
+
+   **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
     - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
 
