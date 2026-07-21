@@ -588,7 +588,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
    with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
    **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
-   
+
     - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
 
         ```bash
@@ -597,7 +597,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
     - (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes.
       The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
-   
+
         ```bash
         WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -v $WORKER_CANARY |  awk '{print $1}' | xargs)
         echo $WORKER_NODES
