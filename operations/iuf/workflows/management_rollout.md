@@ -579,7 +579,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
    **`NOTE`** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high
-   availability for iSCSI SBPS. We can rollout one more worker other than canary node to be labeled with `iuf-prevent-rollout=true` followed by rest of
+   availability for iSCSI SBPS. We can rollout one more worker node other than canary node to be labeled with `iuf-prevent-rollout=true` followed by rest of
    the worker nodes rollout. Verify the health of these nodes before proceeding to the next batch of worker node rollouts. Continue this process until the rollout of
    all remaining worker nodes is complete.
 
