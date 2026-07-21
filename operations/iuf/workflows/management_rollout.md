@@ -575,7 +575,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```
 
 1. Ensure to [follow these steps after worker node rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
-
+  
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
    **`NOTE`** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high
@@ -597,6 +597,10 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     - (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes.
       The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
 
+       **`NOTE`** Since we need to ensure at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high
+       availability for iSCSI SBPS, we can rollout one more worker other than canary node to be labeled with `iuf-prevent-rollout=true` followed by rest of
+      the worker nodes rollout.  
+      
         ```bash
         WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -v $WORKER_CANARY |  awk '{print $1}' | xargs)
         echo $WORKER_NODES
