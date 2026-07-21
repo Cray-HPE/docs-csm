@@ -282,8 +282,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
         See [Configure the Cray Command Line Interface](../../configure_cray_cli.md) for details on how to do this.
 
-    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the    new CFS configuration and image built in
-    previous steps of the workflow.
+    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the new CFS  configuration and image built in previous steps of the workflow.
 
         (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
@@ -575,13 +574,20 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     kubectl get nodes --show-labels | grep iuf-prevent-rollout
     ```
 
+1. Ensure to [follow these steps after worker node rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
+  
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
-    **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
-    node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
-    with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
+   **`NOTE`** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high
+   availability for iSCSI SBPS. We can rollout one more worker node other than canary node to be labeled with `iuf-prevent-rollout=true` followed by rest of
+   the worker nodes rollout. Verify the health of these nodes before proceeding to the next batch of worker node rollouts. Continue this process until the rollout of
+   all remaining worker nodes is complete.
 
-    **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
+   **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
+   node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
+   with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
+
+   **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
 
     - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
 
@@ -613,6 +619,8 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
         cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
     done
     ```
+
+1. Ensure to [follow these steps after worker nodes rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
 
 Once this step has completed:
 
