@@ -1,19 +1,19 @@
 # DNS Troubleshooting
 
 - [Check the status of the `cray-dns-unbound` pods/services](#check-the-status-of-the-cray-dns-unbound-podsservices)
-  - [Check `cray-dns-unbound` pods](#check-cray-dns-unbound-pods)
-  - [Check `cray-dnspunbound-coredns` job](#check-cray-dnspunbound-coredns-job)
-  - [Check `cray-dns-unbound-manager` cronjob](#check-cray-dns-unbound-manager-cronjob)
-  - [Verify DNS records are being generated](#verify-dns-records-are-being-generated)
+    - [Check `cray-dns-unbound` pods](#check-cray-dns-unbound-pods)
+    - [Check `cray-dns-unbound-coredns` job](#check-cray-dns-unbound-coredns-job)
+    - [Check `cray-dns-unbound-manager` cronjob](#check-cray-dns-unbound-manager-cronjob)
+    - [Verify DNS records are being generated](#verify-dns-records-are-being-generated)
 - [Check host resolver configuration](#check-host-resolver-configuration)
-  - [Check `/etc/resolv.conf`](#check-etcresolvconf)
-  - [Check `cray-dns-unbound` forwarding information is correct and accessible](#check-cray-dns-unbound-forwarding-information-is-correct-and-accessible)
+    - [Check `/etc/resolv.conf`](#check-etcresolvconf)
+    - [Check `cray-dns-unbound` forwarding information is correct and accessible](#check-cray-dns-unbound-forwarding-information-is-correct-and-accessible)
 - [Checking hostname in DNS](#checking-hostname-in-dns)
-  - [Lookup hostname by querying DNS](#lookup-hostname-by-querying-dns)
-  - [Lookup hostname in Unbound ConfigMap](#lookup-hostname-in-unbound-configmap)
-  - [Reset `cray-dns-unbound` ConfigMap](#reset-cray-dns-unbound-configmap)
-  - [Check `cray-dns-unbound` logs](#check-cray-dns-unbound-logs)
-  - [Check `cray-dns-unbound-manager` logs](#check-cray-dns-unbound-manager-logs)
+    - [Lookup hostname by querying DNS](#lookup-hostname-by-querying-dns)
+    - [Lookup hostname in Unbound ConfigMap](#lookup-hostname-in-unbound-configmap)
+    - [Reset `cray-dns-unbound` ConfigMap](#reset-cray-dns-unbound-configmap)
+    - [Check `cray-dns-unbound` logs](#check-cray-dns-unbound-logs)
+    - [Check `cray-dns-unbound-manager` logs](#check-cray-dns-unbound-manager-logs)
 - [Further troubleshooting](#further-troubleshooting)
 
 ## Check the status of the `cray-dns-unbound` pods/services
@@ -37,7 +37,7 @@ cray-dns-unbound-6d7cdf6cdb-xsxrr   2/2     Running   0          2d13h
 
 All of the pods should have `Running` status.
 
-### Check `cray-dnspunbound-coredns` job
+### Check `cray-dns-unbound-coredns` job
 
 (`ncn-mw#`) On any Kubernetes NCN, run:
 
@@ -53,6 +53,9 @@ cray-dns-unbound-coredns   1/1           65s        64d
 ```
 
 Verify that `COMPLETIONS` is `1/1`.
+
+**`NOTE`** The `cray-dns-unbound-coredns` job may not be found if it gets automatically
+removed by Kyverno once the TTL expires (3 days).
 
 ### Check `cray-dns-unbound-manager` cronjob
 
@@ -137,8 +140,8 @@ nameserver 10.92.100.225
     Address: 2607:f8b0:4009:81a::200e
     ```
 
-  - If the DNS query fails on the configured `dns-forwarder`, then this will cause DNS issues for the entire system and must be resolved.
-  - A workaround is to remove `dns-forwarding` configurations in the `cray-dns-unbound` ConfigMap.
+    - If the DNS query fails on the configured `dns-forwarder`, then this will cause DNS issues for the entire system and must be resolved.
+    - A workaround is to remove `dns-forwarding` configurations in the `cray-dns-unbound` ConfigMap.
 
       For example, change from the following:
 
