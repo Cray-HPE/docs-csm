@@ -54,6 +54,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [IMS image creation failure](known_issues/ims_image_creation_failure.md)
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
+* [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 
 ## Booting
 
@@ -87,6 +88,7 @@ CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. See [Depre
 * [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
+* [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 
 ## ConMan
 
