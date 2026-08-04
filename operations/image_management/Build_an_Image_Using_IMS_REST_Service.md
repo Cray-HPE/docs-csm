@@ -571,7 +571,7 @@ use. Typically, customers access the system from outside the Kubernetes cluster 
 1. Touch the `complete` file once investigations are complete.
 
     ```bash
-    [root@POD image]# touch /mount/image/complete
+    [root@POD image]# touch /mnt/image/complete
     ```
 
 #### Verify Creation
