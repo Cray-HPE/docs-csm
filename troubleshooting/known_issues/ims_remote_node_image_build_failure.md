@@ -75,14 +75,14 @@ do the following:
           id: 93b33c0f-4e5d-4289-903a-68284c67e8fc
     ```
 
-    Set a variable for the `configuration.import_branch` value from the most recent installed version,
-    in this example `cray/csm/1.27.2`.
+1. (`ncn-mw#`) Set a variable for the `configuration.import_branch` value from the most recent installed version,
+   in this example `cray/csm/1.27.2`.
 
     ```bash
     CSM_IMPORT_BRANCH="cray/csm/1.27.2"
     ```
 
-1. (`ncn-mw#`) Create the patch file
+1. (`ncn-mw#`) Create the patch file.
 
     Create a file named `fix.patch` and paste the below text into the file:
 
@@ -166,7 +166,7 @@ do the following:
     +  - cni-plugins=1.1.1-150500.3.2.1
     ```
 
-1. (`ncn-mw#`) Check out the `csm-config` Ansible plays
+1. (`ncn-mw#`) Check out the `csm-config` Ansible plays.
 
     The Ansible plays for configuring images are stored in a git repository on the system. To check out
     the repository:
@@ -189,7 +189,7 @@ do the following:
     Resolving deltas: 100% (90/90), done.
     ```
 
-    Now set up a temporary branch based on the branch for the installed version of CSM:
+1. (`ncn-mw#`) Set up a temporary branch based on the branch for the installed version of CSM.
 
     ```bash
     cd csm-config-management
@@ -207,7 +207,7 @@ do the following:
     Switched to a new branch 'patch_branch'
     ```
 
-1. (`ncn-mw#`) Apply a fix via a git patch operation
+1. (`ncn-mw#`) Apply a fix via a git patch operation.
 
     ```bash
     git apply ../fix.patch
@@ -219,8 +219,8 @@ do the following:
 
     ```text
     # git apply ../fix.patch
-    # git commit -a -m "Apply WAR patch."
-    [patch_branch adc9dca] Apply WAR patch.
+    # git commit -a -m "Fixed bare bones CFS error with missing package."
+    [patch_branch adc9dca] Fixed bare bones CFS error with missing package.
     3 files changed, 29 insertions(+), 7 deletions(-)
     # git push -u origin patch_branch
     Enumerating objects: 11, done.
@@ -240,10 +240,10 @@ do the following:
     branch 'patch_branch' set up to track 'origin/patch_branch'.
     ```
 
-1. (`ncn-mw#`) Record the new commit id for the patch changes
+1. (`ncn-mw#`) Record the new commit ID for the patch changes.
 
-    There is now a new commit id for the patched version that needs to be used for customizing
-    the remote build image. To get this new commit id:
+    There is now a new commit ID for the patched version that needs to be used for customizing
+    the remote build image. To get this new commit ID:
 
     ```bash
     git rev-parse HEAD
@@ -255,7 +255,7 @@ do the following:
     adc9dca4255fea61402013c4b7a2089f61e95421
     ```
 
-1. Continue with the directions
+1. Continue with the directions.
 
     Now follow the directions in [Create a barebones IMS builder image](../../operations/image_management/Configure_a_Remote_Build_Node.md#create-a-barebones-ims-builder-image)
     but use the `COMMIT_ID` from the previous step in Step 3.
