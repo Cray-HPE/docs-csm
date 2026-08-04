@@ -93,6 +93,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [IMS Created Image Stores Incorrect Metadata](known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
 * [PostgreSQL System ID Mismatch](known_issues/postgres_system_id_mismatch.md)
 * [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
+* [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 
 ## Booting
 
@@ -123,6 +124,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
+* [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 
 ## ConMan
 
