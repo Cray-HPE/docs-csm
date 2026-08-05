@@ -94,12 +94,14 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [PostgreSQL System ID Mismatch](known_issues/postgres_system_id_mismatch.md)
 * [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
+* [BOS Log Level Change Issues](known_issues/BOS_Log_Level_Change_Issues.md)
 
 ## Booting
 
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 * [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 * `boot_sets` field always required when [Modifying a session template](../operations/boot_orchestration/Manage_a_Session_Template.md#modify-a-session-template)
+* [BOS Log Level Change Issues](known_issues/BOS_Log_Level_Change_Issues.md)
 
 ### UAN boot issues
 

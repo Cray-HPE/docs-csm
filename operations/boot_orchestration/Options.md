@@ -223,6 +223,8 @@ After this time, the request will time out. The default is 20 seconds.
 The logging level for the [BOS API](API.md) server and the [BOS Operators](Operators.md).
 Valid values for this option are `DEBUG`, `INFO`, and `WARN`.
 
+> See also: [BOS Log Level Change Issues](../../troubleshooting/known_issues/BOS_Log_Level_Change_Issues.md)
+
 ### `max_boot_wait_time`
 
 How long BOS will wait for a node to boot into a usable state before rebooting it again (in seconds).
