@@ -89,6 +89,8 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 ## Booting
 
+* [Common issues with staging sessions](../operations/boot_orchestration/Stage_Changes_with_BOS.md#common-issues-with-staging)
+
 ### UAN boot issues
 
 * [UAN Boot Issues](../operations/boot_orchestration/Troubleshoot_UAN_Boot_Issues.md)

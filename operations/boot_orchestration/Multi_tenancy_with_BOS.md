@@ -184,6 +184,8 @@ It is possible to [Stage Changes with BOS](Stage_Changes_with_BOS.md) with tenan
 described in [Sessions with tenancy](#sessions-with-tenancy). In addition, the request to
 [apply the staged state](Stage_Changes_with_BOS.md#apply-a-staged-state) must include the tenant identification.
 
+> See also: [Common issues with staging](Stage_Changes_with_BOS.md#common-issues-with-staging)
+
 ## BOS API access with tenancy
 
 For details on how to make BOS API or CLI calls on behalf of a tenant, see
