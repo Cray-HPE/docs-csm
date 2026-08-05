@@ -61,6 +61,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 * [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
+* [Common issues with staging sessions](../operations/boot_orchestration/Stage_Changes_with_BOS.md#common-issues-with-staging)
 
 ### UAN boot issues
 
