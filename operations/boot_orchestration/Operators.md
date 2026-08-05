@@ -31,6 +31,8 @@ These operators are always running, even when no session is actively underway.
 This is a big difference from BOS version 1, where each session created a new dedicated Kubernetes job
 that handled everything associated with that session.
 
+See also: [Race Conditions in BOS and CFS](../../troubleshooting/known_issues/Race_Conditions_in_BOS_and_CFS.md).
+
 ## Execution loop
 
 Each operator follows the same basic execution loop:
