@@ -55,10 +55,12 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [IMS image creation failure](known_issues/ims_image_creation_failure.md)
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
+* [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
 
 ## Booting
 
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
+* [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
 
 ### UAN boot issues
 

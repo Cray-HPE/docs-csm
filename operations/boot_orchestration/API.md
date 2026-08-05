@@ -65,6 +65,8 @@ The server logs can be viewed by looking at the logs of the pods in the server
 
 See [Options](Options.md) for more information.
 
+> See also: [BOS Log Level Change Not Dynamic](../../troubleshooting/known_issues/BOS_Log_Level_Change_Not_Dynamic.md).
+
 ## Migration job
 
 When the `cray-bos` [Kubernetes deployment](#kubernetes-deployment) is upgraded, the `cray-bos-migration`
