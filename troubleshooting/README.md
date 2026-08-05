@@ -88,11 +88,13 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Soft Deleted IMS Recipe Always Has `arch=x86_64`](known_issues/ims_soft_deleted_recipe_always_assigned_arch_x86_64.md)
 * [Soft Deleted IMS Image Always Has `arch=x86_64`](known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
+* [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
 
 ## Booting
 
 * [BOS Sessions Stuck Pending](known_issues/BOS_Sessions_Stuck_Pending.md)
 * [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
+* [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
 
 ### UAN boot issues
 
