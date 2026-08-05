@@ -64,6 +64,7 @@ the following options do:
     * This option also impacts the logging level for the BOS v1 portions of the API server.
     * The server logs can be viewed by looking at the logs of the pods in the server
       [Kubernetes deployment](#kubernetes-deployment).
+    * See also: [BOS Log Level Change Not Dynamic](../../troubleshooting/known_issues/BOS_Log_Level_Change_Not_Dynamic.md).
 * [`session_limit_required`](Options.md#session_limit_required)
     * This option determines whether or not a [session limit](Limit_the_Scope_of_a_BOS_Session.md)
       is required when creating a new [session](Sessions.md).
