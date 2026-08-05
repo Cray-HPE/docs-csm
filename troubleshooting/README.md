@@ -102,6 +102,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 * `boot_sets` field always required when [Modifying a session template](../operations/boot_orchestration/Manage_a_Session_Template.md#modify-a-session-template)
 * [BOS Log Level Change Issues](known_issues/BOS_Log_Level_Change_Issues.md)
+* [Common issues with staging sessions](../operations/boot_orchestration/Stage_Changes_with_BOS.md#common-issues-with-staging)
 
 ### UAN boot issues
 
