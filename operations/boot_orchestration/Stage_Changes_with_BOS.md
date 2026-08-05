@@ -3,13 +3,15 @@
 * [Overview](#overview)
 * [Create a staged session](#create-a-staged-session)
 * [Apply a staged state](#apply-a-staged-state)
+* [Common issues with staging](#common-issues-with-staging)
 * [Stage changes without BOS](#stage-changes-without-bos)
     * [Stage boot artifacts](#stage-boot-artifacts)
     * [Stage a configuration](#stage-a-configuration)
 
 ## Overview
 
-In v2 of the Boot Orchestration Service (BOS), it is possible to stage changes when creating a session.
+In v2 of the Boot Orchestration Service (BOS), it is possible to stage changes when creating a
+[session](Sessions.md).
 These changes will not immediately take effect, and will instead be applied when
 [the `applystaged` endpoint](../../api/bos.md#post_v2_apply_staged) is called.
 
@@ -60,6 +62,11 @@ When called, any staged data for the given components is moved to the desired st
 In addition, BOS checks for the associated session in order to determine what kind of operation to apply.
 This allows users to stage any operation, including shutdowns.
 
+**Important**: The response to the `applystaged` request should be fully checked;
+it is not sufficient to just check the status code. The response categorizes all
+of the specified components as succeeded, failed, or ignored. The response can have
+a successful status code even if no components succeeded.
+
 If a session that was used to stage data is deleted before `applystaged` is called for the associated components,
 it will no longer be possible to apply the staged state because BOS will not be able to determine which operation
 should be taken.
@@ -67,6 +74,25 @@ should be taken.
 By default, staged data is not cleared when `applystaged` is called, allowing users to call the endpoint multiple times.
 This behavior can be changed using the [`clear_stage`](Options.md#clear_stage) option so that the staged data is cleared
 when `applystaged` is called. For more information on BOS options, see [BOS Options](Options.md).
+
+## Common issues with staging
+
+* If [applying a staged state](#apply-a-staged-state) succeeds but appears to have no effect,
+  then be sure to check the response body to the apply staged state request. It is possible
+  that the staged state was not actually applied, even though the request had a successful
+  status code.
+* There are three scenarios that can cause a component to be ignored when
+  [applying a staged state](#apply-a-staged-state):
+    * The ignored component does not exist in the [BOS database](Database.md).
+    * A tenant was specified with the apply staged state request, and the ignored component is not associated with that tenant.
+    * The staged state of the ignored component does not have a BOS session specified in it.
+* When staging sessions in a multi-tenancy environment, it is important to carefully read
+  and understand the following multi-tenancy document:
+  [Sessions and session templates](Multi_tenancy_with_BOS.md#sessions-and-session-templates).
+    * If the staged session belongs to a tenant but the apply staged request is not made on behalf of a
+      tenant, then the components will be marked as failed.
+    * If the staged session does not belong to a tenant but the apply staged request is made on behalf of
+      a tenant, then the components will be marked as failed.
 
 ## Stage changes without BOS
 
