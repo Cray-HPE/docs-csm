@@ -52,6 +52,7 @@ The following BOS options apply to operators generally:
     * This option determines the verbosity of BOS logging, including the BOS operator logs.
     * The operator logs can be viewed by looking at the logs of the pods in the operator
       [Kubernetes deployment](#kubernetes-deployment).
+    * See also: [BOS Log Level Change Issues](../../troubleshooting/known_issues/BOS_Log_Level_Change_Issues.md).
 * [`polling_frequency`](Options.md#polling_frequency)
     * This option determines how long the sleep interval is in the [execution loop](#execution-loop).
     * The only operator which is an exception to this is the [`discovery`](#discovery) operator, which

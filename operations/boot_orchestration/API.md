@@ -61,6 +61,7 @@ the following options do:
     * This option determines the verbosity of BOS logging, including the BOS API server.
     * The server logs can be viewed by looking at the logs of the pods in the server
       [Kubernetes deployment](#kubernetes-deployment).
+    * See also: [BOS Log Level Change Issues](../../troubleshooting/known_issues/BOS_Log_Level_Change_Issues.md).
 * [`ims_read_timeout`](Options.md#ims_read_timeout)
     * This option determines how long the BOS API server will wait for a response to API requests to IMS.
     * BOS has other service-specific timeout options; these options would also apply to the BOS API server,
