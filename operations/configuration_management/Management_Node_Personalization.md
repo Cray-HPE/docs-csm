@@ -33,9 +33,9 @@ This procedure has a scripted option and a manual option. Use the scripted optio
 ### Prerequisites to re-run node personalization on management nodes
 
 - The Cray CLI must be configured and authenticated.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 - The latest CSM documentation RPM must be installed.
-  - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+    - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ### Scripted procedure to re-run node personalization on management nodes
 
@@ -121,7 +121,7 @@ for more information on the CFS Batcher.
 ### Prerequisites to re-run node personalization on a specific management node
 
 - The Cray CLI must be configured and authenticated.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ### Manual procedure to re-run node personalization on a specific management node
 
