@@ -68,7 +68,7 @@ In the following procedure, unless otherwise directed, run commands on any manag
 
 ### Apply the permanent fix
 
-5. (`ncn-mw#`) Update the `cray-k8s-encryption` `ClusterRole` with required RBAC rules.
+1. (`ncn-mw#`) Update the `cray-k8s-encryption` `ClusterRole` with required RBAC rules.
 
    ```bash
    kubectl apply -f - <<'EOF'
@@ -89,7 +89,7 @@ In the following procedure, unless otherwise directed, run commands on any manag
    EOF
    ```
 
-6. (`ncn-mw#`) Restart the daemonset and wait for rollout.
+2. (`ncn-mw#`) Restart the DaemonSet and wait for rollout.
 
    ```bash
    kubectl rollout restart daemonset/cray-k8s-encryption -n kube-system
@@ -100,36 +100,36 @@ In the following procedure, unless otherwise directed, run commands on any manag
 
 Use this workaround only if all control-plane nodes, `goal`, and `etcd` are already `identity`.
 
-7. (`ncn-mw#`) Set the `current` annotation manually.
+1. (`ncn-mw#`) Set the `current` annotation manually.
 
    ```bash
    kubectl annotate secret --overwrite -n kube-system cray-k8s-encryption current=identity
    ```
 
-8. (`ncn-mw#`) Re-run status.
+2. (`ncn-mw#`) Re-run status.
 
    ```bash
    /usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --status
    ```
 
-> This workaround may unblock the runbook but does not replace the RBAC fix.
+> This workaround may unblock the process but does not replace the RBAC fix.
 
 ### Validate the fix
 
-9. (`ncn-mw#`) Confirm authorization checks now pass.
+1. (`ncn-mw#`) Confirm authorization checks now pass.
 
    ```bash
    kubectl auth can-i --as=system:serviceaccount:kube-system:cray-k8s-encryption list customresourcedefinitions.apiextensions.k8s.io
    kubectl auth can-i --as=system:serviceaccount:kube-system:cray-k8s-encryption get customresourcedefinitions.apiextensions.k8s.io
    ```
 
-10. (`ncn-mw#`) Confirm logs do not show CRD permission failures.
+2. (`ncn-mw#`) Confirm logs do not show CRD permission failures.
 
     ```bash
     kubectl logs -n kube-system -l app=cray-k8s-encryption --tail=200
     ```
 
-11. (`ncn-mw#`) Confirm final status convergence.
+3. (`ncn-mw#`) Confirm final status convergence.
 
     ```text
     current: identity
