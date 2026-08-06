@@ -45,8 +45,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Gigabyte BMC Missing Redfish Data](known_issues/Gigabyte_BMC_Missing_Redfish_Data.md)
 * [Hang Listing BOS Sessions](known_issues/Hang_Listing_BOS_Sessions.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## Booting
+
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ### UAN boot issues
 
@@ -75,6 +78,7 @@ CRUS is deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0. It will be 
 * [Ansible Play Failures in CFS Sessions](../operations/configuration_management/Troubleshoot_Ansible_Play_Failures_in_CFS_Sessions.md)
 * [CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## ConMan
 
