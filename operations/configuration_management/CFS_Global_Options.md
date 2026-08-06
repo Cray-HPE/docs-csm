@@ -62,7 +62,8 @@ See [Manage Multiple Inventories in a Single Location](Manage_Multiple_Inventori
 
 ## Batch size
 
-This option determines the maximum number of components that will be included in each session created by CFS Batcher.
+This option determines the maximum number of components that will be included in each session created by the
+[CFS Batcher](CFS_Batcher.md).
 
 * Name: `batchSize`
 * Default: `25` components per session
@@ -178,13 +179,15 @@ For more information on configuration layers, see [Configuration Layers](Configu
 
 ## Hardware synchronization interval
 
-The number of seconds between checks to the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm)
-for new hardware additions to the system.
+The number of seconds that the [CFS Hardware Synchronization Agent](CFS_Hardware_Synchronization_Agent.md)
+waits between checks to the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm)
+for hardware additions to the system.
 
 * Name: `hardwareSyncInterval`
 * Default: `10` seconds
 
-When new hardware is registered with HSM, CFS will add it as a component.
+When new hardware is registered with HSM, the CFS Hardware Synchronization Agent will make an API call
+to create corresponding CFS components.
 
 See [Configuration Management of System Components](Configuration_Management_of_System_Components.md) for more information.
 

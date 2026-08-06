@@ -25,7 +25,7 @@ command when the playbooks are executed.
 ## How Ansible verbosity level is determined
 
 The Ansible verbosity is determined at the time that the CFS session starts.
-The verbosity is applied to all configuration layers in the session.
+The verbosity is applied to all [configuration](Configuration_Layers.md) layers in the session.
 The verbosity is set to the first one of the following things that successfully
 specifies a verbosity level.
 
@@ -81,8 +81,7 @@ Not all CFS sessions are created directly by an administrator. For example:
 
 * A session may be created indirectly (as part of a [SAT][sat] or [IUF][iuf] operation,
   for example).
-* A session may be created by the CFS batcher. For more information,
-  see [Configuration Management with the CFS Batcher](Configuration_Management_with_the_CFS_Batcher.md).
+* A session may be created by the [CFS Batcher](CFS_Batcher.md).
 
 In these cases, an administrator is not able to directly specify these parameters using the
 method described in the previous section. However, these sessions will run using the
