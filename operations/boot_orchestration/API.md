@@ -25,6 +25,8 @@ For BOS v1, the work is done by [BOA](README.md#boot-orchestration-agent-boa).
 > Other than the API server, there are only two parts of BOS that ever directly access the BOS databases.
 > See [BOS database access](Database.md#access) for details.
 
+See also: [Race Conditions in BOS and CFS](../../troubleshooting/known_issues/Race_Conditions_in_BOS_and_CFS.md).
+
 ## Kubernetes deployment
 
 (`ncn-mw#`) The BOS API server is a Kubernetes deployment in the `services` namespace:

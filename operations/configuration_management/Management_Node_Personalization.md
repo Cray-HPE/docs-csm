@@ -6,8 +6,9 @@
 
 ## Introduction
 
-Management node personalization refers to the process of CFS applying a configuration to a
-management node after it is booted.
+Management node personalization refers to the process of CFS applying a
+[configuration](CFS_Configurations.md) to a
+[management node](../../glossary.md#management-nodes) after it is booted.
 
 The same CFS configuration is used for post-boot personalization of master, storage, and worker
 management nodes. However, some individual parts of that configuration will only be applied to
@@ -24,19 +25,17 @@ no changes have been made to the configuration layers (such as a new layer, diff
 or new commit made).
 
 This procedures causes CFS to re-run personalization on management nodes by clearing the
-configuration state and error count on the management node components. This causes the CFS Batcher
-to reconfigure these components.
-See [Automatic Configuration Management](Automatic_Configuration_Management.md)
-for more information on the CFS Batcher.
+configuration state and error count on the management node components. This causes the
+[CFS Batcher](CFS_Batcher.md) to reconfigure these components.
 
 This procedure has a scripted option and a manual option. Use the scripted option if possible.
 
 ### Prerequisites to re-run node personalization on management nodes
 
 - The Cray CLI must be configured and authenticated.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 - The latest CSM documentation RPM must be installed.
-  - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
+    - See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ### Scripted procedure to re-run node personalization on management nodes
 
@@ -119,14 +118,13 @@ commit made).
 
 This procedures causes CFS to re-run personalization on a management node by clearing the
 configuration state and error count on the management node component. This causes the CFS Batcher
-to reconfigure these components.
-See [Automatic Configuration Management](Automatic_Configuration_Management.md)
+to reconfigure these components. See [CFS Batcher](CFS_Batcher.md)
 for more information on the CFS Batcher.
 
 ### Prerequisites to re-run node personalization on a specific management node
 
 - The Cray CLI must be configured and authenticated.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ### Manual procedure to re-run node personalization on a specific management node
 

@@ -89,6 +89,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Soft Deleted IMS Image Always Has `arch=x86_64`](known_issues/ims_soft_deleted_image_always_assigned_arch_x86_64.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 * [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## Booting
 
@@ -96,6 +97,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [BOS Operator Pods `OOMKilled`](known_issues/BOS_Operator_Pods_OOMKilled.md)
 * [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
 * [Common issues with staging sessions](../operations/boot_orchestration/Stage_Changes_with_BOS.md#common-issues-with-staging)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ### UAN boot issues
 
@@ -121,6 +123,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## ConMan
 
