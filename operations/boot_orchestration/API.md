@@ -19,6 +19,8 @@ coordinate the progress of sessions, and so on. Its essential purpose is to act 
 
 All of the core BOS work is done by [BOA](index.md#boot-orchestration-agent-boa).
 
+See also: [Race Conditions in BOS and CFS](../../troubleshooting/known_issues/Race_Conditions_in_BOS_and_CFS.md).
+
 ## Kubernetes deployment
 
 The BOS API server is a Kubernetes deployment in the `services` namespace:

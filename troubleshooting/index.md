@@ -50,8 +50,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## Booting
+
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ### UAN boot issues
 
@@ -83,6 +86,7 @@ See [Deprecated features](../introduction/differences.md#deprecated_features) fo
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## ConMan
 
