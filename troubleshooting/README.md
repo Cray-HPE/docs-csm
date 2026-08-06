@@ -86,10 +86,12 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [iSCSI SBPS Marshal agent failure](known_issues/iscsi_sbps_marshal_failure.md)
 * [Worker nodes unresponsive and `dmesg` flooded with iSCSI errors](known_issues/worker_nodes_unresponsive_and_dmesg_flooded_with_iSCSI_errors.md)
 * [Cloud init loops for master node: unknown field `udpIdleTimeout`](known_issues/management_nodes_rollout_stuck_at_cloud_init.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## Booting
 
 * [Common issues with staging sessions](../operations/boot_orchestration/Stage_Changes_with_BOS.md#common-issues-with-staging)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ### UAN boot issues
 
@@ -114,6 +116,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## ConMan
 
