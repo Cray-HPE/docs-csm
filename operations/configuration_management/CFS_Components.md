@@ -1,9 +1,14 @@
 # CFS Components
 
-The Configuration Framework Service \(CFS\) contains a database of the configuration state of available hardware known to the Hardware State Manager \(HSM\).
-When new nodes are added to the HSM database, the `CFS-Hardware-Sync-Agent` enters the component into the CFS database with an empty state of configuration.
+The Configuration Framework Service \(CFS\) contains a database of the configuration state of
+available hardware known to the [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm).
+When new nodes are added to the HSM database, the
+[CFS Hardware Synchronization Agent](CFS_Hardware_Synchronization_Agent.md)
+enters the component into the CFS database with an empty state of configuration.
 
-Administrators are able to set a desired CFS configuration for each component, and the `CFS-Batcher` ensures the desired configuration state and the current configuration state match.
+Administrators are able to set a desired CFS configuration for each component, and the
+[CFS Batcher](CFS_Batcher.md) ensures the desired configuration state and the current
+configuration state match.
 See [Automatic Configuration Management](Automatic_Configuration_Management.md) for more information.
 
 - [Component data](#component-data)

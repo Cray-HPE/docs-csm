@@ -95,6 +95,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Kyverno policy management known issues](../operations/kubernetes/Kyverno.md#known-issues)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 * [BOS Log Level Change Issues](known_issues/BOS_Log_Level_Change_Issues.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## Booting
 
@@ -103,6 +104,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * `boot_sets` field always required when [Modifying a session template](../operations/boot_orchestration/Manage_a_Session_Template.md#modify-a-session-template)
 * [BOS Log Level Change Issues](known_issues/BOS_Log_Level_Change_Issues.md)
 * [Common issues with staging sessions](../operations/boot_orchestration/Stage_Changes_with_BOS.md#common-issues-with-staging)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ### UAN boot issues
 
@@ -128,6 +130,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
+* [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
 
 ## ConMan
 
