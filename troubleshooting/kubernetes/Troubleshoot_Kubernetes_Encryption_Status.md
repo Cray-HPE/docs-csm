@@ -4,7 +4,7 @@ Use this procedure to diagnose and resolve a Kubernetes encryption status mismat
 
 ## Symptoms
 
-One or more of the following issues are possible symptoms:
+One or more of the following symptoms are possible:
 
 - `/usr/share/doc/csm/scripts/operations/kubernetes/encryption.sh --status` reports:
 
