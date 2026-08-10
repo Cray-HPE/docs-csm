@@ -90,6 +90,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 * [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
 * [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
+* [CFS Batcher Can Be Slow To See Updated CFS Options](known_issues/CFS_Batcher_Can_Be_Slow_To_See_Updated_CFS_Options.md)
+* [CFS Batcher Creating Multiple Sessions For Same Batch](known_issues/CFS_Batcher_Creating_Multiple_Sessions_For_Same_Batch.md)
+* [CFS Operator Creating Multiple Jobs For Same Session](known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
+* [CFS Component State Updates Allow Invalid Values](known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
+* [CFS Component State Update Does Not Preserve Layer Timestamps](known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
 
 ## Booting
 
@@ -124,6 +129,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 * [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
+* [CFS Batcher Can Be Slow To See Updated CFS Options](known_issues/CFS_Batcher_Can_Be_Slow_To_See_Updated_CFS_Options.md)
+* [CFS Batcher Creating Multiple Sessions For Same Batch](known_issues/CFS_Batcher_Creating_Multiple_Sessions_For_Same_Batch.md)
+* [CFS Operator Creating Multiple Jobs For Same Session](known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
+* [CFS Component State Updates Allow Invalid Values](known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
+* [CFS Component State Update Does Not Preserve Layer Timestamps](known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
 
 ## ConMan
 
