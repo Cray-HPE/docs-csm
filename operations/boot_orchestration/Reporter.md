@@ -71,8 +71,8 @@ on a node without network access to the [BOS API](API.md).
 
 ## CFS state reporter
 
-The BOS reporter is somewhat analogous to the [CFS](../../glossary.md#configuration-framework-service-cfs) state reporter,
-but there are import differences:
+The BOS reporter is somewhat analogous to the [State Reporter](../configuration_management/CFS_State_Reporter.md)
+for [CFS](../../glossary.md#configuration-framework-service-cfs), but there are import differences:
 
 * Unlike the CFS state reporter, which runs once when a node first boots, the BOS reporter is expected to always be running.
 * The CFS state reporter does not collect or report any state information about the node on which it is running; it is

@@ -246,7 +246,8 @@ resiliency by offering protection to the management plane against rack-level fai
 * Fixed an issue where incorrect metadata was stored for newly created IMS images.
 * Fixed an issue where IMS image tags were removed by a soft delete.
 * Fixed an issue where updating a CFS session could fail and cause the session to be stuck in pending state.
-* Fixed an issue where `cfs-debugger` crashed when `cfs-state-reporter` service status did not include a `since` timestamp.
+* Fixed an issue where `cfs-debugger` crashed when [`cfs-state-reporter`](operations/configuration_management/CFS_State_Reporter.md)
+  service status did not include a `since` timestamp.
 * Fixed an issue where the post-upgrade job of `cms-ipxe` would fail if a previously failed `cms-ipxe` upgrade job entry existed.
 * Fixed an issue where, when building an IMS image from a recipe, the job status would not update to `error` when the `zypper` repositories were not available.
 * Fixed an issue where the hardware inventory history table in the HSM/SMD database grew too large due to duplicate "Detected" events.
