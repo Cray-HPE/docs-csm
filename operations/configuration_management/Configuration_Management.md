@@ -32,7 +32,7 @@ CFS is comprised of a group of services and components interacting within the Cr
 * The [CFS Operator](CFS_Operator.md).
 * The [CFS Batcher](CFS_Batcher.md).
 * CFS Trust, which manages the keys and certificates CFS uses to access other system components (nodes).
-* CFS State Reporter, which runs on each of the system components (nodes) to alert the CFS API when a component is rebooted and requires configuration.
+* [CFS State Reporter](CFS_State_Reporter.md), which runs on each of the system components (nodes) to alert the CFS API when a component is rebooted and requires configuration.
 * CFS ARA, which collects the Ansible logs from the AEE pods.
 
 Although it is not a formal part of the service, CFS integrates with a Gitea instance (VCS) running in the CSM service mesh for management of the configuration content life-cycle.

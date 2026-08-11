@@ -1,12 +1,14 @@
 # Configure CSM packages with CFS
 
-CSM includes a playbook that should be applied to Compute and Application node images.
+CSM includes a playbook that should be applied to [Compute node](../../glossary.md#compute-node-cn) and
+[Application node](../../glossary.md#application-node-an) images.
 Among other things, the `csm_packages.yml` playbook installs the packages for both the
-CFS state reporter and the [BOS reporter](../boot_orchestration/Reporter.md).
+[CFS state reporter](../configuration_management/CFS_State_Reporter.md) and the
+[BOS reporter](../boot_orchestration/Reporter.md).
 These packages are necessary for [CFS](../../glossary.md#configuration-framework-service-cfs) and
-[BOS](../../glossary.md#boot-orchestration-service-bos) to operate on a node, so a configuration layer containing the
-playbook must be included in the image customization for any nodes that are expected to be
-managed with CFS and BOS.
+[BOS](../../glossary.md#boot-orchestration-service-bos) to operate on a node, so a configuration
+layer containing the playbook must be included in the image customization for any nodes that are
+expected to be managed with CFS and BOS.
 
 ## Setting up the CSM configuration layer
 

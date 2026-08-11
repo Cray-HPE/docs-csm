@@ -18,7 +18,7 @@ and the expiration time for scheduling less than full sessions are configurable.
 
 There are several situations that will cause automatic configuration:
 
-* When rebooted, components that have the `cfs-state-reporter` package installed will clear the component's recorded state, resulting in a full configuration.
+* When rebooted, components that have the [CFS State Reporter](CFS_State_Reporter.md) package installed will clear the component's recorded state, resulting in a full configuration.
 * When a configuration is updated, all components with that desired configuration will automatically get updates for the layers of the configuration that have changed.
 * If a configuration is only partially applied because of a previous failed configuration session and the component has not exceeded its maximum retries, it will be configured with any layers of the configurations that have not yet been successfully applied.
 * When a user manually resets the configuration state of a component, it will force reconfiguration without rebooting a node.
