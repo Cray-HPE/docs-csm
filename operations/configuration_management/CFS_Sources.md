@@ -72,6 +72,9 @@ Example output:
 }
 ```
 
+> If running CSM 1.5.2 or earlier, see
+> [Omitting Authentication Method In API Call Causes CFS Source Creation To Fail](../../troubleshooting/known_issues/Omitting_Authentication_Method_In_API_Call_Causes_CFS_Source_Creation_To_Fail.md).
+
 ## Update a CFS source
 
 (`ncn-mw#`) Update an existing CFS source.

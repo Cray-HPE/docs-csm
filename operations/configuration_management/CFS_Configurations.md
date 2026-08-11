@@ -8,6 +8,8 @@ Configurations with a single layer are useful when testing out a new configurati
 To fully configure a node or boot image component with all of the software products required, multiple layers can be used to apply all configurations in a single CFS session.
 When applying layers in a session, CFS runs through the configuration layers serially in the order specified.
 
+> If running CSM 1.5.0, see [Cannot Create CFS V3 Configuration Layers With Special Parameters](../../troubleshooting/known_issues/Cannot_Create_CFS_V3_Configuration_Layers_With_Special_Parameters.md).
+
 ## Example configuration (single layer)
 
 The following is an example configuration with a single layer. This can be used

@@ -31,6 +31,10 @@ list of patch versions.
 * Update [System Admin Toolkit (SAT)](../../glossary.md#system-admin-toolkit-sat) version to `3.25.16`
 * Improvements and fixes to CSM health checks
 * Resolved CVEs in multiple services
+* Resolved known issues from CSM 1.5.2
+    * [CFS Allows Some In-Use Sources To Be Deleted](../../troubleshooting/known_issues/CFS_Allows_Some_In-Use_Sources_To_Be_Deleted.md)
+    * [CFS Batcher Crashes And Does Not Restart](../../troubleshooting/known_issues/CFS_Batcher_Crashes_And_Does_Not_Restart.md)
+    * [Omitting Authentication Method In API Call Causes CFS Source Creation To Fail](../../troubleshooting/known_issues/Omitting_Authentication_Method_In_API_Call_Causes_CFS_Source_Creation_To_Fail.md)
 
 ## Steps
 

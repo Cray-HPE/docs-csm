@@ -70,6 +70,8 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Product Catalog Upgrade Error](known_issues/product_catalog_upgrade_error.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [PCS and CAPMC Transaction Size Limitation](known_issues/pcs_and_capmc_transaction_size_limitation.md)
+* [Ansible Permission Denied Errors](../operations/configuration_management/CFS_Key_Management.md)
+* [CFS Sessions Stuck Pending](known_issues/CFS_Sessions_Stuck_Pending.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [`sat bootprep` image customization error](known_issues/sat_bootprep_image_customization_error.md)
 * [`cray-console-node` pods in `CrashLoopBackOff`](known_issues/cray-console-node_pods_in_CrashLoopBackOff.md)
@@ -90,6 +92,17 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 * [BOS Log Level Change Not Dynamic](known_issues/BOS_Log_Level_Change_Not_Dynamic.md)
 * [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
+* [CFS Batcher Can Be Slow To See Updated CFS Options](known_issues/CFS_Batcher_Can_Be_Slow_To_See_Updated_CFS_Options.md)
+* [CFS Batcher Creating Multiple Sessions For Same Batch](known_issues/CFS_Batcher_Creating_Multiple_Sessions_For_Same_Batch.md)
+* [CFS Operator Creating Multiple Jobs For Same Session](known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
+* [CFS Component State Updates Allow Invalid Values](known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
+* [CFS Component State Update Does Not Preserve Layer Timestamps](known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
+* [Omitting Authentication Method In API Call Causes CFS Source Creation To Fail](known_issues/Omitting_Authentication_Method_In_API_Call_Causes_CFS_Source_Creation_To_Fail.md)
+* [CFS Allows Some In-Use Sources To Be Deleted](known_issues/CFS_Allows_Some_In-Use_Sources_To_Be_Deleted.md)
+* [CFS Batcher Crashes And Does Not Restart](known_issues/CFS_Batcher_Crashes_And_Does_Not_Restart.md)
+* [CFS V2 Bulk Component Patch By ID Broken](known_issues/CFS_V2_Bulk_Component_Patch_By_ID_Broken.md)
+* [CFS Sessions Have Incorrect ARA Link](known_issues/CFS_Sessions_Have_Incorrect_ARA_Link.md)
+* [Cannot Create CFS V3 Configuration Layers With Special Parameters](known_issues/Cannot_Create_CFS_V3_Configuration_Layers_With_Special_Parameters.md)
 
 ## Booting
 
@@ -117,13 +130,28 @@ to the exiting problem seen into the existing search. (The example searches for 
 ## Configuration management
 
 * [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
+* [Troubleshoot CFS Session Failed](../operations/configuration_management/Troubleshoot_CFS_Session_Failed.md)
+* [Troubleshoot CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+* [Troubleshoot CFS Sessions Failing to Start](../operations/configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
 * [Incrementally Configuring Images](incrementally_configuring_images.md)
 * [CFS V2 Failures On Large Systems](known_issues/CFS_V2_Failures_On_Large_Systems.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
-* [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
+* [CFS Sessions Stuck Pending](known_issues/CFS_Sessions_Stuck_Pending.md)
+* [CFS Key Management and Ansible Permission Denied Errors](../operations/configuration_management/CFS_Key_Management.md)
 * [Skipped Ansible if no CSM `root` secret in Vault](known_issues/Skipped_Ansible_if_no_CSM_root_secret_in_Vault.md)
 * [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
+* [CFS Batcher Can Be Slow To See Updated CFS Options](known_issues/CFS_Batcher_Can_Be_Slow_To_See_Updated_CFS_Options.md)
+* [CFS Batcher Creating Multiple Sessions For Same Batch](known_issues/CFS_Batcher_Creating_Multiple_Sessions_For_Same_Batch.md)
+* [CFS Operator Creating Multiple Jobs For Same Session](known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
+* [CFS Component State Updates Allow Invalid Values](known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
+* [CFS Component State Update Does Not Preserve Layer Timestamps](known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
+* [Omitting Authentication Method In API Call Causes CFS Source Creation To Fail](known_issues/Omitting_Authentication_Method_In_API_Call_Causes_CFS_Source_Creation_To_Fail.md)
+* [CFS Allows Some In-Use Sources To Be Deleted](known_issues/CFS_Allows_Some_In-Use_Sources_To_Be_Deleted.md)
+* [CFS Batcher Crashes And Does Not Restart](known_issues/CFS_Batcher_Crashes_And_Does_Not_Restart.md)
+* [CFS V2 Bulk Component Patch By ID Broken](known_issues/CFS_V2_Bulk_Component_Patch_By_ID_Broken.md)
+* [CFS Sessions Have Incorrect ARA Link](known_issues/CFS_Sessions_Have_Incorrect_ARA_Link.md)
+* [Cannot Create CFS V3 Configuration Layers With Special Parameters](known_issues/Cannot_Create_CFS_V3_Configuration_Layers_With_Special_Parameters.md)
 
 ## ConMan
 

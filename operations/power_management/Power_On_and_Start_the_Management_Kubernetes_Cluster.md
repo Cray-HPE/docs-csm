@@ -4,14 +4,15 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 ## Prerequisites
 
-* All management rack PDUs are connected to facility power and facility power is on.
+* All management rack [PDUs](../../glossary.md#power-distribution-unit-pdu) are connected to facility power and facility power is on.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT)
-  product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
-* To avoid slow `sat` commands, ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes. See [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md).
+  product stream documentation (`S-8031`) for instructions on how to acquire a [SAT](../../glossary.md#system-admin-toolkit-sat) authentication token.
+* To avoid slow `sat` commands, ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker
+  [NCNs](../../glossary.md#non-compute-node-ncn). See [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md).
 
 ## Procedure
 
-1. If necessary, power on the management cabinet CDU and chilled doors.
+1. If necessary, power on the management cabinet [CDU](../../glossary.md#coolant-distribution-unit-cdu) and chilled doors.
 
 1. Set all management cabinet PDU circuit breakers to `ON` \(all cabinets that contain Kubernetes master nodes, worker nodes, or storage nodes\).
 
@@ -30,7 +31,8 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     read -r -s -p "ncn-m001 BMC ${USERNAME} password: " IPMI_PASSWORD
     ```
 
-    > In the example commands below, replace `NCN_M001_BMC_HOSTNAME` with the hostname of the BMC of `ncn-m001`.
+    > In the example commands below, replace `NCN_M001_BMC_HOSTNAME` with the hostname of the
+    > [BMC](../../glossary.md#baseboard-management-controller-bmc) of `ncn-m001`.
 
     ```bash
     export IPMI_PASSWORD
@@ -55,7 +57,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
     Wait for the login prompt.
 
-    If `ncn-m001` boots into the PIT node, then perform the following procedure:
+    If `ncn-m001` boots into the [PIT](../../glossary.md#pre-install-toolkit-pit) node, then perform the following procedure:
 
     1. Set boot order to boot from disk.
 
@@ -95,7 +97,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 ### Power on all other management NCNs
 
-1. (`ncn-m001#`) Power on and boot other management NCNs.
+1. (`ncn-m001#`) Power on and boot other [management NCNs](../../glossary.md#management-nodes).
 
     This command requires input for the IPMI username and password for the management nodes.
 
@@ -476,7 +478,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
         cray-console-node-1      3/3     Running            0          2m
         ```
 
-1. (`ncn-m001#`) Check if `sma-timescaledb-single` is in `CrashLoopBackOff` state.
+1. (`ncn-m001#`) Check if the `sma-timescaledb-single` is in `CrashLoopBackOff` state.
 
     When the system powers up, some pods such as `sma-timescaledb-single-1` or `sma-timescaledb-single-2` might enter a `CrashLoopBackOff` state.
 
@@ -496,7 +498,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
     This command will fix `sma-timescaledb-single-1` pod and then it fixes pod 2 automatically.
 
-1. Check if SMA Alerta and Monasca fail to start.
+1. Check if [SMA](../../glossary.md#system-monitoring-application-sma) Alerta and Monasca fail to start.
 
     SMA Alerta and Monasca may fail to start when the system is powered up.
     The job `sma-pgdb-init-job-1` is missing which prevents `sma-alerta-*` from starting.
@@ -535,7 +537,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
     To resolve this issue, use the following workaround steps:
 
-    1. (`ncn#`) Check how many helm versions exist.
+    1. (`ncn-mw#`) Check how many helm versions exist.
 
         ```bash
         helm history -n sma sma-pgdb-init
@@ -548,7 +550,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
             1    Sep 23 2024   deployed sma-pgdb-init-1.7.1 1.7.1  Install complete
         ```
 
-    1. (`ncn#`) This command works when there is one or more versions that have single digit version numbers.
+    1. (`ncn-mw#`) This command works when there is one or more versions that have single digit version numbers.
         It will fail if there is a version 1,10,2,3,4,5,6,7,9 because of the non-numerical sort.
         If there are any two digit versions, then the helm rollback command should be used with a specific older version.
 
@@ -558,7 +560,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
     1. Once the `sma-pgdb-init` job is complete, confirm that the `sma-alerta` and `sma-monasca-notification-0` pods have started normally.
 
-    1. (`ncn#`) Confirm how long the `ttlSecondsAfterFinished` value is set in the new job.
+    1. (`ncn-mw#`) Confirm how long the `ttlSecondsAfterFinished` value is set in the new job.
 
         ```bash
         kubectl -n sma get job sma-pgdb-init-job1 -o yaml > sma-pgdb-init-job1.yaml
@@ -570,30 +572,28 @@ Some systems are configured with lazy mounts that do not have this requirement f
         This is the number of seconds that a system can be powered off before the job will be deleted. 259200 seconds is only 72 hours so the job will be deleted by Kubernetes after 72 hours.
         If the system is powered off for more than 72 hours, this job will be purged and hence preventing these SMA pods from starting correctly. So increase the value.
 
-    1. (`ncn#`) Use the already collected YAML file for `sma-pgdb-init-job1` to delete the current job.
+    1. (`ncn-mw#`) Use the already collected YAML file for `sma-pgdb-init-job1` to delete the current job.
 
         ```bash
         kubectl -n sma delete -f sma-pgdb-init-job1.yaml
         ```
 
-    1. (`ncn#`) Modify the YAML file and make these changes:
+    1. Modify the `sma-pgdb-init-job1.yaml` YAML file and make these changes:
 
-       * remove status section
-       * remove all UID(s)
-       * change `ttlSecondsAfterFinished` value to `maxint`
-       * `ttlSecondsAfterFinished: 2147483647`
+       * Remove status section
+       * Remove all UIDs
+       * Change `ttlSecondsAfterFinished` value to `maxint`
+       * Set `ttlSecondsAfterFinished: 2147483647`
 
-       ```bash
-       vi sma-pgdb-init-job1.yaml
-       ```
-
-    1. (`ncn#`) Apply new settings.
+    1. (`ncn-mw#`) Apply new settings.
 
         ```bash
         kubectl -n sma apply -f sma-pgdb-init-job1.yaml
         ```
 
-1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
+1. (`ncn-m001#`) Determine whether the [CFS State Reporter](../configuration_management/CFS_State_Reporter.md)
+   service is failing to start on each manager/master and worker NCN while trying to contact
+   [CFS](../../glossary.md#configuration-framework-service-cfs).
 
     **Note:** The `systemctl` command run on each node may have `exit code 3` reported. This does not indicate a problem with `cfs-state-reporter` on that node.
 

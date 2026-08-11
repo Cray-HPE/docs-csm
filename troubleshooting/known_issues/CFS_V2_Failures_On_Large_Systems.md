@@ -1,7 +1,7 @@
 # CFS V2 Failures On Large Systems
 
-This page describes a known issue in CSM 1.5. Most of it will be fixed in CSM 1.5.1,
-and all of it will be fixed in CSM 1.6.0.
+This page describes a known issue in CSM 1.5. Most of it is fixed in CSM 1.5.1,
+and all of it is fixed in CSM 1.6.0.
 
 > Some commands on this page require the Cray CLI to be configured.
 > See [Configure the Cray CLI](../../operations/configure_cray_cli.md).
@@ -179,5 +179,5 @@ For information on how to do that, see [Increase Pod Resource Limits](../../oper
 
 ## Fix
 
-This problem will be fixed in BOS and `cmsdev` in CSM 1.5.1.
-This problem will be fixed in SAT in CSM 1.6.0.
+This problem is fixed in BOS and `cmsdev` in CSM 1.5.1.
+This problem is fixed in SAT in CSM 1.6.0.
