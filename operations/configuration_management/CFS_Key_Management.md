@@ -1,23 +1,20 @@
-# CFS Key Management and Permission Denied Errors
+# CFS Key Management and Ansible Permission Denied Errors
 
 The Configuration Framework Service \(CFS\) manages its own keys separate from keys for
 communication between CFS and the components or images that it is configuring.
 These are separate from the keys used by users and should not need to be managed.
 
-* [`cfs-state-reporter` service](#cfs-state-reporter-service)
+If Ansible is unable to connect with its target and fails with an
+`Unreachable - Permission denied` error, the first place to check is the
+[CFS State Reporter](CFS_State_Reporter.md) service on the target node.
+
+Every booted node should be running a copy of `cfs-state-reporter`.
+One of the things this service is responsible for is pulling down the public key.
+
 * [Check `cfs-state-reporter` health](#check-cfs-state-reporter-health)
 * [`cfs-state-reporter` problem scenarios](#cfs-state-reporter-problem-scenarios)
     * [`cfs-state-reporter` failed](#cfs-state-reporter-failed)
     * [`cfs-state-reporter` still running](#cfs-state-reporter-still-running)
-
-## `cfs-state-reporter` service
-
-If Ansible is unable to connect with its target and fails with an
-`Unreachable - Permission denied` error, the first place to check is the
-`cfs-state-reporter` service on the target node.
-
-Every booted node should be running a copy of `cfs-state-reporter`.
-One of the things this service is responsible for is pulling down the public key.
 
 ## Check `cfs-state-reporter` health
 

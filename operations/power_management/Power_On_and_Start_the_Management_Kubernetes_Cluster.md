@@ -4,14 +4,15 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 ## Prerequisites
 
-* All management rack PDUs are connected to facility power and facility power is on.
+* All management rack [PDUs](../../glossary.md#power-distribution-unit-pdu) are connected to facility power and facility power is on.
 * An authentication token is required to access the API gateway and to use the `sat` command. See the "SAT Authentication" section of the HPE Cray EX System Admin Toolkit (SAT)
-  product stream documentation (`S-8031`) for instructions on how to acquire a SAT authentication token.
-* To avoid slow `sat` commands, ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker nodes. See [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md).
+  product stream documentation (`S-8031`) for instructions on how to acquire a [SAT](../../glossary.md#system-admin-toolkit-sat) authentication token.
+* To avoid slow `sat` commands, ensure `/root/.bashrc` has proper handling of `kubectl` commands on all master and worker
+  [NCNs](../../glossary.md#non-compute-node-ncn). See [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md).
 
 ## Procedure
 
-1. If necessary, power on the management cabinet CDU and chilled doors.
+1. If necessary, power on the management cabinet [CDU](../../glossary.md#coolant-distribution-unit-cdu) and chilled doors.
 
 1. Set all management cabinet PDU circuit breakers to `ON` \(all cabinets that contain Kubernetes master nodes, worker nodes, or storage nodes\).
 
@@ -30,7 +31,8 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     read -r -s -p "ncn-m001 BMC ${USERNAME} password: " IPMI_PASSWORD
     ```
 
-    > In the example commands below, replace `NCN_M001_BMC_HOSTNAME` with the hostname of the BMC of `ncn-m001`.
+    > In the example commands below, replace `NCN_M001_BMC_HOSTNAME` with the hostname of the
+    > [BMC](../../glossary.md#baseboard-management-controller-bmc) of `ncn-m001`.
 
     ```bash
     export IPMI_PASSWORD
@@ -55,7 +57,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
     Wait for the login prompt.
 
-    If `ncn-m001` boots into the PIT node, then perform the following procedure:
+    If `ncn-m001` boots into the [PIT](../../glossary.md#pre-install-toolkit-pit) node, then perform the following procedure:
 
     1. Set boot order to boot from disk.
 
@@ -89,7 +91,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 ### Power on all other management NCNs
 
-1. (`ncn-m001#`) Power on and boot other management NCNs.
+1. (`ncn-m001#`) Power on and boot other [management NCNs](../../glossary.md#management-nodes).
 
     This command requires input for the IPMI username and password for the management nodes.
 
@@ -459,7 +461,9 @@ Some systems are configured with lazy mounts that do not have this requirement f
         cray-console-node-1      3/3     Running            0          2m
         ```
 
-1. (`ncn-m001#`) Determine whether the `cfs-state-reporter` service is failing to start on each manager/master and worker NCN while trying to contact CFS.
+1. (`ncn-m001#`) Determine whether the [CFS State Reporter](../configuration_management/CFS_State_Reporter.md)
+   service is failing to start on each manager/master and worker NCN while trying to contact
+   [CFS](../../glossary.md#configuration-framework-service-cfs).
 
     **Note:** The `systemctl` command run on each node may have `exit code 3` reported. This does not indicate a problem with `cfs-state-reporter` on that node.
 
