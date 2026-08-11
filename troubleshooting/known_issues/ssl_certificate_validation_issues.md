@@ -1,11 +1,25 @@
 # SSL Certificate Validation Issues
 
+1. [SSL validation fails during the installation process](#1-ssl-validation-fails-during-the-installation-process)
+    1. [Error messages](#11-error-messages)
+    1. [Solution](#12-solution)
+1. [SSL validation only fails in Python applications](#2-ssl-validation-only-fails-in-python-applications)
+    1. [Error messages](#21-error-messages)
+    1. [Solution](#22-solution)
+1. [SSL validation only fails with `podman` and/or pulling down Kubernetes containers](#3-ssl-validation-only-fails-with-podman-andor-pulling-down-kubernetes-containers)
+    1. [Error messages](#31-error-messages)
+    1. [Solution](#32-solution)
+1. [`update-ca-certificates` fails to add `platform-ca` to `ca-bundle`](#4-update-ca-certificates-fails-to-add-platform-ca-to-ca-bundle)
+    1. [Error messages](#41-error-messages)
+    1. [Solution](#42-solution)
+
 ## 1 SSL validation fails during the installation process
 
 If the intermediate CA that is used to sign service certificates changes after
-the NCNs are brought up, then this causes the `platform-ca` on the NCNs to no
-longer be valid. This is due to the `platform-ca` only being pulled via `cloud-init`
-on first boot. Run the following Goss test to validate this is the case.
+the [NCNs](../../glossary.md#non-compute-node-ncn) are brought up, then this causes
+the `platform-ca` on the NCNs to no longer be valid. This is because the `platform-ca`
+is only pulled by `cloud-init` on first boot. Run the following Goss test to validate
+this is the case.
 
 ### 1.1 Error messages
 
@@ -66,15 +80,21 @@ Max retries exceeded with url: /keycloak/realms/shasta/protocol/openid-connect/t
 
 ### 2.2 Solution
 
-`python3` applications, such as CFS, will fail to validate the API Gateway's SSL
-certificate if a non-SuSE-provided `certifi` Python package is used. This is due
-to the official `certifi` package using its own CA certificate bundle instead
-of the system's bundle. This normally happens if `pip install` is used to
-install an application with a `certifi` dependency. To see the version of `certifi`
-on the system, run `pip show certifi`.
+`python3` applications, such as the
+CFS State Reporter,
+will fail to validate the API Gateway's SSL certificate if a non-SuSE-provided
+`certifi` Python package is used. This is due to the official `certifi` package
+using its own CA certificate bundle instead of the system's bundle. This normally
+happens if `pip install` is used to install an application with a `certifi`
+dependency. To see the version of `certifi` on the system, run `pip show certifi`.
 
-```console
+```bash
 pip show certifi
+```
+
+Example output:
+
+```text
 Name: certifi
 Version: 2021.10.8
 Summary: Python package for providing Mozilla's CA Bundle.
@@ -92,8 +112,13 @@ then uninstall this `certifi` package in order to trust the
 platform CA. The following command shows the expected output on a CSM v1.3
 system.
 
-```console
+```bash
 pip show certifi
+```
+
+Example output:
+
+```text
 Name: certifi
 Version: 2018.1.18
 Summary: Python package for providing Mozilla's CA Bundle.
@@ -124,7 +149,7 @@ If the platform CA was not available in the system's CA certificate bundle when
 to `https://registry.local`. This is due to `containerd` caching the CA bundle on
 startup.
 
-### 3.1 Error message
+### 3.1 Error messages
 
 ```text
 Get https://registry.local/v2/: x509: certificate signed by unknown authority
@@ -132,11 +157,11 @@ Error: unable to pull registry.local/IMAGE:TAG: Error initializing source docker
 registry.local: Get https://registry.local/v2/: x509: certificate signed by unknown authority
 ```
 
-### 3.2 Resolution of failure pulling containers
+### 3.2 Solution
 
 Restart the `containerd` service.
 
-```console
+```bash
 systemctl restart containerd
 ```
 
@@ -171,7 +196,8 @@ rm -v /var/lib/ca-certificates/ca-bundle.pem
 update-ca-certificates
 ```
 
-If these issues are suspected to have caused problems with `cfs-state-reporter`, then restart the `cfs-state-reporter` service:
+If these issues are suspected to have caused problems with `cfs-state-reporter`, then restart the
+CFS State Reporter service:
 
 ```bash
 systemctl restart cfs-state-reporter

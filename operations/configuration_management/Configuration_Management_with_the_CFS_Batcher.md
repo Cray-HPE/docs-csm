@@ -1,12 +1,13 @@
 # Configuration Management with the CFS Batcher
 
-Creating configuration sessions with the Configuration Framework Service \(CFS\) enables remote execution for configuring live nodes
-and boot images prior to booting. CFS also provides its Batcher component for configuration management of registered system
-components. The CFS Batcher periodically examines the aggregated configuration state of registered components and schedules CFS
-sessions against those that have not been configured to their desired state. The frequency of scheduling, the maximum number of
+Creating [configuration sessions](Configuration_Sessions.md) with the Configuration Framework Service (CFS) enables remote
+execution for configuring live nodes and boot images prior to booting. CFS also provides its Batcher
+component for configuration management of registered system [components](Configuration_Management_of_System_Components.md).
+The CFS Batcher periodically examines the aggregated configuration state of registered components and schedules CFS sessions
+against those that have not been configured to their desired state. The frequency of scheduling, the maximum number of
 components to schedule in the same CFS session, and the expiration time for scheduling less than full sessions are configurable.
 
-The CFS-Batcher schedules CFS sessions according to the following rules:
+The CFS Batcher schedules CFS sessions according to the following rules:
 
 * Components are assigned to a batch if they need configuration, are not disabled, and are currently not assigned to a batch.
   * Components are grouped according to their desired state information.
@@ -117,8 +118,9 @@ Use the `cray cfs sessions list --help` command output for all filtering options
 ## Map CFS Batcher sessions to BOS sessions
 
 (`ncn-mw#`) To find all of the sessions created by the CFS Batcher because of configuration requests made by a specific
-Boot Orchestration Service \(BOS\) session, filter the sessions by the name of the BOS session, which is added as a tag on the
-CFS sessions. The BOS session ID is required to run the following command.
+[Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) session, filter the CFS sessions by the name
+of the [BOS session](../boot_orchestration/Sessions.md), which is added as a tag on the CFS sessions.
+The BOS session ID is required to run the following command.
 
 ```bash
 cray cfs sessions list --tags bos_session=BOS_SESSION_ID
