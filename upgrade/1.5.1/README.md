@@ -47,6 +47,11 @@ list of patch versions.
 * `CAST-34869`: Fixed an issue where `cray-hms-rts-snmp` would enter encounter a segmentation fault
 * `CAST-34141`: Fixed an issue where the `QLogic` driver would crash the system
 * Fixed an issue where an old version of the spire-agent was loaded into Nexus resulting in failed ARM compute builds
+* Resolved known issues from CSM 1.5.0
+    * [Cannot Create CFS V3 Configuration Layers With Special Parameters](../../troubleshooting/known_issues/Cannot_Create_CFS_V3_Configuration_Layers_With_Special_Parameters.md)
+    * [CFS Sessions Have Incorrect ARA Link](../../troubleshooting/known_issues/CFS_Sessions_Have_Incorrect_ARA_Link.md)
+    * [CFS V2 Bulk Component Patch By ID Broken](../../troubleshooting/known_issues/CFS_V2_Bulk_Component_Patch_By_ID_Broken.md)
+    * [CFS V2 Failures On Large Systems](../../troubleshooting/known_issues/CFS_V2_Failures_On_Large_Systems.md) (partial)
 
 ## Steps
 

@@ -38,6 +38,8 @@ The links in records can be disabled by setting
 [Include ARA links](CFS_Global_Options.md#include-ara-links) to `false` in the
 [CFS Global Options](CFS_Global_Options.md).
 
+> If running CSM 1.5.0, see [CFS Sessions Have Incorrect ARA Link](../../troubleshooting/known_issues/CFS_Sessions_Have_Incorrect_ARA_Link.md).
+
 ## Disabling ARA
 
 ARA is a plugin for Ansible that can easily be disabled if needed.

@@ -3,6 +3,8 @@
 Modify a Configuration Framework Service \(CFS\) configuration by specifying the JSON of the configuration and its layers. Use the
 `cray cfs v3 configurations update` command, similar to creating a configuration.
 
+> If running CSM 1.5.0, see [Cannot Create CFS V3 Configuration Layers With Special Parameters](../../troubleshooting/known_issues/Cannot_Create_CFS_V3_Configuration_Layers_With_Special_Parameters.md)
+
 ## Prerequisites
 
 * A CFS configuration has been created.

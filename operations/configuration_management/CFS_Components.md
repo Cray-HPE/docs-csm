@@ -17,7 +17,7 @@ See [Automatic Configuration Management](Automatic_Configuration_Management.md) 
 - [Disable component configuration](#disable-component-configuration)
 - [Force component reconfiguration](#force-component-reconfiguration)
 - [Update components in bulk](#update-components-in-bulk)
-- [Component with zero-length ID](#component-with-zero-length-id)
+- [Known issues](#known-issues)
 
 ## Component data
 
@@ -133,7 +133,9 @@ cray cfs v3 components update <xname> --desired-config <config_name>
 
 (`ncn-mw#`) To disable CFS configuration of a component, use the `--enabled` option:
 
-> **WARNING:** When a node reboots and the state-reporter reports in to CFS, it will automatically enable configuration. The following command only disables configuration until a node reboots.
+> **WARNING:** When a node reboots and the [CFS State Reporter](CFS_State_Reporter.md) runs,
+> it will automatically enable configuration. The following command only disables configuration
+> until a node reboots.
 
 ```bash
 cray cfs v3 components update <xname> --enabled false
@@ -170,8 +172,8 @@ Updating multiple components at once is not currently available in the CLI due t
 However for those programmatically interacting with the CFS API, it is possible to update multiple components at once by calling `/v3/components` with a `PATCH` operation.
 It is possible to either provide patches for multiple components in a list, or to provide a single patch and filters for which components to apply the patch to. See the [CFS API specification](../../api/cfs.md) for more information.
 
-## Component with zero-length ID
+## Known issues
 
-It is possible for CFS to end up with an invalid component whose ID field is a zero-length string. See
-[CFS Component With Zero-Length ID](../../troubleshooting/known_issues/CFS_Component_With_Zero_Length_ID.md)
-for more details.
+- [CFS Component With Zero-Length ID](../../troubleshooting/known_issues/CFS_Component_With_Zero_Length_ID.md)
+- [CFS Component State Updates Allow Invalid Values](../../troubleshooting/known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
+- [CFS V2 Bulk Component Patch By ID Broken](../../troubleshooting/known_issues/CFS_V2_Bulk_Component_Patch_By_ID_Broken.md)
