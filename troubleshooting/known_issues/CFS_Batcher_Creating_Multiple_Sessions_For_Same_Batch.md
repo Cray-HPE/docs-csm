@@ -16,7 +16,7 @@ CFS Operator.
 
 ## Fix
 
-None -- this issue exists in all versions of CSM.
+This issue is fixed in CSM 1.7.1-patch.2; the issue exists in all earlier versions of CSM.
 
 ## Workaround
 
