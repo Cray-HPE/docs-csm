@@ -61,6 +61,7 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md)
 * [Missing Binaries in aarch64 Images](known_issues/missing_binaries_in_aarch64_images.md)
 * [Spire pods stuck in `PodInitializing`](known_issues/spire_pod_initializing.md)
+* [Ansible Permission Denied Errors](../operations/configuration_management/CFS_Key_Management.md)
 * [CFS Component With Zero-Length ID](known_issues/CFS_Component_With_Zero_Length_ID.md)
 * [IMS Images Orphaned in S3](known_issues/ims_images_orphaned_in_s3.md)
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
@@ -87,6 +88,11 @@ to the exiting problem seen into the existing search. (The example searches for 
 * [Worker nodes unresponsive and `dmesg` flooded with iSCSI errors](known_issues/worker_nodes_unresponsive_and_dmesg_flooded_with_iSCSI_errors.md)
 * [Cloud init loops for master node: unknown field `udpIdleTimeout`](known_issues/management_nodes_rollout_stuck_at_cloud_init.md)
 * [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
+* [CFS Batcher Can Be Slow To See Updated CFS Options](known_issues/CFS_Batcher_Can_Be_Slow_To_See_Updated_CFS_Options.md)
+* [CFS Batcher Creating Multiple Sessions For Same Batch](known_issues/CFS_Batcher_Creating_Multiple_Sessions_For_Same_Batch.md)
+* [CFS Operator Creating Multiple Jobs For Same Session](known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
+* [CFS Component State Updates Allow Invalid Values](known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
+* [CFS Component State Update Does Not Preserve Layer Timestamps](known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
 
 ## Booting
 
@@ -110,13 +116,21 @@ to the exiting problem seen into the existing search. (The example searches for 
 ## Configuration management
 
 * [Troubleshoot CFS Issues](../operations/configuration_management/Troubleshoot_CFS_Issues.md)
+* [Troubleshoot CFS Session Failed](../operations/configuration_management/Troubleshoot_CFS_Session_Failed.md)
+* [Troubleshoot CFS Session Failing to Complete](../operations/configuration_management/Troubleshoot_CFS_Session_Failing_to_Complete.md)
+* [Troubleshoot CFS Sessions Failing to Start](../operations/configuration_management/Troubleshoot_CFS_Sessions_Failing_to_Start.md)
 * [CFS Sessions Race Condition Test](cfs_sessions_race_condition_test.md)
 * [Incrementally Configuring Images](incrementally_configuring_images.md)
 * [CFS-API pods in CLBO state](known_issues/cfs-api_pods_in_CLBO_state.md)
 * [VCS Password With Illegal Characters](known_issues/VCS_Password_With_Illegal_Characters.md)
 * [CFS Session for Image Customization Status Stuck at `running`](known_issues/cfs_session_status_for_image_customization_on_remote_node_stuck_at_running.md)
-* [CFS Key Management](../operations/configuration_management/CFS_Key_Management.md)
+* [CFS Key Management and Ansible Permission Denied Errors](../operations/configuration_management/CFS_Key_Management.md)
 * [Race Conditions in BOS and CFS](known_issues/Race_Conditions_in_BOS_and_CFS.md)
+* [CFS Batcher Can Be Slow To See Updated CFS Options](known_issues/CFS_Batcher_Can_Be_Slow_To_See_Updated_CFS_Options.md)
+* [CFS Batcher Creating Multiple Sessions For Same Batch](known_issues/CFS_Batcher_Creating_Multiple_Sessions_For_Same_Batch.md)
+* [CFS Operator Creating Multiple Jobs For Same Session](known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
+* [CFS Component State Updates Allow Invalid Values](known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
+* [CFS Component State Update Does Not Preserve Layer Timestamps](known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
 
 ## ConMan
 
