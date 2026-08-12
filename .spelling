@@ -400,6 +400,8 @@ PaaS
 PAM-4
 passthrough
 passwordless
+patch.1
+patch.2
 Patroni
 PCH-style
 PCI-SIG
