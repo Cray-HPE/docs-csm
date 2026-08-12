@@ -1,9 +1,10 @@
 # Known Issue: IMS remote node build failure
 
-In CSM 1.6.0, there is a failure in building the IMS barebones builder image while following
-these steps: [Create a barebones IMS builder image](../../operations/image_management/Configure_a_Remote_Build_Node.md#create-a-barebones-ims-builder-image)
+In CSM 1.6.0, there is a failure in building the [IMS](../../glossary.md#image-management-service-ims)
+barebones builder image while following these steps:
+[Create a barebones IMS builder image](../../operations/image_management/Configure_a_Remote_Build_Node.md#create-a-barebones-ims-builder-image)
 
-When this happens, the CFS pod customizing the image may contain this error:
+When this happens, the [CFS](../../glossary.md#configuration-framework-service-cfs) pod customizing the image may contain this error:
 
 ```text
 TASK [csm.packages : Install RPMs (SLES-based)] ********************************

@@ -100,3 +100,5 @@ Example configuration:
   }
 }
 ```
+
+> If running CSM 1.6.0, also see: [CFS Allows Some In-Use Sources To Be Deleted](../../troubleshooting/known_issues/CFS_Allows_Some_In-Use_Sources_To_Be_Deleted.md).

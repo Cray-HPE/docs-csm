@@ -28,8 +28,8 @@ This section covers the components and actions taken when a user or service sets
 1. A user sets the desired configuration for some number of [components](CFS_Components.md).
    This may immediately trigger configuration if the component is enabled in CFS and the desired
    configuration has not yet been applied. If that is the case, then skip to step 4.
-1. When a node reboots, the CFS State Reporter runs on the node, and contacts the CFS API to enable and clear the state for the current node. This will always trigger
-   the next steps for configuration as long as a desired configuration is set for the node.
+1. When a node reboots, the [CFS State Reporter](CFS_State_Reporter.md) runs on the node, and contacts the CFS API to enable and clear the state for the
+   current node. This will always trigger the next steps for configuration as long as a desired configuration is set for the node.
 1. The [CFS Batcher](CFS_Batcher.md) monitors the CFS API, periodically querying for enabled components with a `pending` configuration status.
    (The status is determined by the API at query time based on the desired and current state of the component). Any components found are placed into batches.
 1. The CFS Batcher calls the CFS API to create sessions for each batch, using the `ansible-limit` parameter to limit each session to the components in a batch.

@@ -54,6 +54,11 @@ see [CSM 1.6 release notes](RELEASE_NOTES.md).
 
 * Fix CANU generated switch configuration security concern
 
+## Known issues resolved from CSM 1.6.0
+
+* [CFS Allows Some In-Use Sources To Be Deleted](troubleshooting/known_issues/CFS_Allows_Some_In-Use_Sources_To_Be_Deleted.md)
+* [Omitting Authentication Method In API Call Causes CFS Source Creation To Fail](troubleshooting/known_issues/Omitting_Authentication_Method_In_API_Call_Causes_CFS_Source_Creation_To_Fail.md)
+
 ## Bug fixes
 
 ```text
