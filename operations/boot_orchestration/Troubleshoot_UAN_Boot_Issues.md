@@ -79,7 +79,8 @@ If DVS and CPS are both healthy, then both of these commands will return all the
 ## Image boot issues
 
 Once dracut exits, the UAN will boot the `rootfs` image. Failures seen in this phase tend to be failures of `spire-agent`, `cfs-state-reporter`, or both, to start.
-The `cfs-state-reporter` tells CFS that the node is ready and allows CFS to start node personalization. If `cfs-state-reporter` does not start, check if the `spire-agent` has started.
+The [CFS State Reporter](../configuration_management/CFS_State_Reporter.md) tells CFS that the node is ready and allows CFS to start node personalization.
+If `cfs-state-reporter` does not start, then check if the `spire-agent` has started.
 The `cfs-state-reporter` depends on the `spire-agent`. Running `systemctl status spire-agent` will show that that service is enabled and running if there are no issues with that service.
 Similarly, running `systemctl status cfs-state-reporter` will show a status of `SUCCESS`.
 

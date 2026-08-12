@@ -1,22 +1,23 @@
 # Configuration Management with the CFS Batcher
 
-Creating configuration sessions with the Configuration Framework Service \(CFS\) enables remote execution for configuring live nodes
-and boot images prior to booting. CFS also provides its Batcher component for configuration management of registered system
-components. The CFS Batcher periodically examines the aggregated configuration state of registered components and schedules CFS
-sessions against those that have not been configured to their desired state. The frequency of scheduling, the maximum number of
+Creating [configuration sessions](Configuration_Sessions.md) with the Configuration Framework Service (CFS) enables remote
+execution for configuring live nodes and boot images prior to booting. CFS also provides its [Batcher](CFS_Batcher.md)
+component for configuration management of registered system [components](Configuration_Management_of_System_Components.md).
+The CFS Batcher periodically examines the aggregated configuration state of registered components and schedules CFS sessions
+against those that have not been configured to their desired state. The frequency of scheduling, the maximum number of
 components to schedule in the same CFS session, and the expiration time for scheduling less than full sessions are configurable.
 
-The CFS-Batcher schedules CFS sessions according to the following rules:
+The CFS Batcher schedules CFS sessions according to the following rules:
 
 * Components are assigned to a batch if they need configuration, are not disabled, and are currently not assigned to a batch.
-  * Components are grouped according to their desired state information.
-  * A new batch is created if no partial batches match the desired state, and all similar batches are full.
+    * Components are grouped according to their desired state information.
+    * A new batch is created if no partial batches match the desired state, and all similar batches are full.
 * Batches are scheduled as CFS sessions when the batch is full or the batch window time has been exceeded.
-  * The timer for the batch window is started when the first component is added, and is never reset. Nodes should never wait more
-    than the window period between being ready for configuration and being scheduled in a CFS session.
+    * The timer for the batch window is started when the first component is added, and is never reset. Nodes should never wait more
+      than the window period between being ready for configuration and being scheduled in a CFS session.
 * CFS cannot guarantee that jobs for similar batches will start at the same time, even if all CFS sessions are created at the same
   time. This variability is due to the nature of Kubernetes scheduling.
-  * Checking the start time for the CFS session is more accurate than checking the pod start time when determining when a batch was scheduled.
+    * Checking the start time for the CFS session is more accurate than checking the pod start time when determining when a batch was scheduled.
 
 There are two safety mechanisms built into the Batcher scheduling that can delay batches more than the usual amount of time.
 Both mechanisms are indicated in the logs:
@@ -24,16 +25,16 @@ Both mechanisms are indicated in the logs:
 * CFS Batcher will not schedule multiple sessions to configure the same component. Batcher monitors on-going sessions that it started
   so that if one session is started and the desired configuration changes, Batcher can wait until the initial session is completed
   before scheduling the component with the new configuration to a new session.
-  * If Batcher is restarted, it will attempt to rebuild its state based on sessions with the "batcher-" naming scheme that are still
-    in progress. This ensures that scheduling conflicts will not occur even if Batcher is restarted.
-  * On restart, some information on the in-flight sessions is lost, so this wait ensures that the Batcher does not schedule multiple
-    configuration sessions for the same component at the same time.
+    * If Batcher is restarted, it will attempt to rebuild its state based on sessions with the "batcher-" naming scheme that are still
+      in progress. This ensures that scheduling conflicts will not occur even if Batcher is restarted.
+    * On restart, some information on the in-flight sessions is lost, so this wait ensures that the Batcher does not schedule multiple
+      configuration sessions for the same component at the same time.
 * If several CFS sessions that are created by the Batcher Agent fail in a row \(the most recent 20 sessions\), Batcher will start
   throttling the creation of new sessions.
-  * The throttling is automatically reset if a single session succeeds. Users can also manually reset this by restarting Batcher.
-  * The back-off is increased if new sessions continue to fail.
-  * This helps protect against cases where high numbers of retries are allowed so that Batcher cannot flood Kubernetes with new jobs
-    in a short period of time.
+    * The throttling is automatically reset if a single session succeeds. Users can also manually reset this by restarting Batcher.
+    * The back-off is increased if new sessions continue to fail.
+    * This helps protect against cases where high numbers of retries are allowed so that Batcher cannot flood Kubernetes with new jobs
+      in a short period of time.
 
 ## Configure Batcher
 
@@ -117,8 +118,9 @@ Use the `cray cfs sessions list --help` command output for all filtering options
 ## Map CFS Batcher sessions to BOS sessions
 
 (`ncn-mw#`) To find all of the sessions created by the CFS Batcher because of configuration requests made by a specific
-Boot Orchestration Service \(BOS\) session, filter the sessions by the name of the BOS session, which is added as a tag on the
-CFS sessions. The BOS session ID is required to run the following command.
+[Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-service-bos) session, filter the CFS sessions by the name
+of the [BOS session](../boot_orchestration/Sessions.md), which is added as a tag on the CFS sessions.
+The BOS session ID is required to run the following command.
 
 ```bash
 cray cfs sessions list --tags bos_session=BOS_SESSION_ID
