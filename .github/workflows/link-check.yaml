@@ -65,7 +65,7 @@ jobs:
 
     - name: Report errors
       if: ${{ steps.changed-files.outputs.deleted_files != '' || steps.changed-files.outputs.renamed_files != '' || inputs.force_full_scan }}
-      uses: actions/github-script@v8
+      uses: actions/github-script@v9
       with:
         script: |
             const fs = require('fs');
