@@ -612,6 +612,8 @@ osds*
 oversubscription
 passthrough
 passwordless
+patch.1
+patch.2
 permissioned
 pickup
 playbook
