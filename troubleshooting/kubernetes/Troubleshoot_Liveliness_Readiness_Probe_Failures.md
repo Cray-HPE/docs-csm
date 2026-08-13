@@ -3,14 +3,14 @@
 Identify and troubleshoot Readiness or Liveliness probes that report services as unhealthy intermittently.
 
 This is a known issue and can be classified into two categories, connection refused and client timeout.
-The commands in this procedure assume the user is logged into either a master or worker non-compute node \(NCN\).
+The commands in this procedure assume the user is logged into either a master or worker non-compute node (NCN).
 
 - [Troubleshoot a refused connection](#troubleshoot-a-refused-connection)
-  - [Refused connection - symptom](#refused-connection---symptom)
-  - [Refused connection - procedure](#refused-connection---procedure)
+    - [Refused connection - symptom](#refused-connection---symptom)
+    - [Refused connection - procedure](#refused-connection---procedure)
 - [Troubleshoot a client timeout](#troubleshoot-a-client-timeout)
-  - [Client timeout - symptom](#client-timeout---symptom)
-  - [Client timeout - procedure](#client-timeout---procedure)
+    - [Client timeout - symptom](#client-timeout---symptom)
+    - [Client timeout - procedure](#client-timeout---procedure)
 - [Next steps](#next-steps)
 
 ## Troubleshoot a refused connection

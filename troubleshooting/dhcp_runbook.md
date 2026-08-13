@@ -135,7 +135,7 @@ Verify that the configuration being used is not the base configuration.
 1. (`ncn-mw#`) View the current configuration.
 
    ```bash
-   curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-get",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq 
+   curl -s -k -H "Authorization: Bearer ${TOKEN}" -X POST -H "Content-Type: application/json" -d '{ "command": "config-get",  "service": [ "dhcp4" ] }' https://api-gw-service-nmn.local/apis/dhcp-kea | jq
    ```
 
 1. Determine whether the base configuration is in use.
@@ -429,7 +429,7 @@ A sign of a duplicate IP address is seeing a `DECLINE` message from the client t
        Client-ID Option 61, length 19: hardware-type 255, 99:be:1a:d3:00:01:00:01:26:c8:55:c3:b4:2e:99:be:1a:d3
        Server-ID Option 54, length 4: 10.42.0.58
        Requested-IP Option 50, length 4: 10.252.0.26
-       Agent-Information Option 82, length 22: 
+       Agent-Information Option 82, length 22:
          Circuit-ID SubOption 1, length 20: vlan2-ethernet1/1/12
 ```
 
@@ -604,11 +604,11 @@ run on the spine switches themselves.
      p: partial programming in H/W
    VRF Name default:
      ------------------------------------------------------------------------------------------------------
-     Destination       Mask              Flag     Gateway           Interface        Source     AD/M  
+     Destination       Mask              Flag     Gateway           Interface        Source     AD/M
      ------------------------------------------------------------------------------------------------------
-     default           0.0.0.0           c        10.102.255.9      eth1/16          static     1/1   
-     10.92.100.222     255.255.255.255   c        10.252.0.4        vlan2            bgp        200/0   
-                                         c        10.252.0.5        vlan2            bgp        200/0   
+     default           0.0.0.0           c        10.102.255.9      eth1/16          static     1/1
+     10.92.100.222     255.255.255.255   c        10.252.0.4        vlan2            bgp        200/0
+                                         c        10.252.0.5        vlan2            bgp        200/0
                                          c        10.252.0.6        vlan2            bgp        200/0
    ```
 
@@ -630,7 +630,7 @@ BGP Summary
  Peers                  : 4            Log Neighbor Changes   : No
  Cfg. Hold Time         : 180          Cfg. Keep Alive        : 60
  Confederation Id       : 0
- 
+
  Neighbor        Remote-AS MsgRcvd MsgSent   Up/Down Time State        AdminStatus
  10.252.0.2      65533       45052   45044   02m:02w:02d  Established   Up
  10.252.1.7      65533       78389   90090   02m:02w:02d  Established   Up

@@ -9,7 +9,7 @@ One or more of the following issues are possible symptoms of this issue.
 * The `kubectl` command can become unresponsive because of a high load.
 * `ps aux` cannot return or complete because of aspects of the `/proc` file system being locked.
 
-If `kubectl` is non-responsive on any particular node, then commands can be run from any other master or worker non-compute node \(NCN\).
+If `kubectl` is non-responsive on any particular node, then commands can be run from any other master or worker non-compute node (NCN).
 
 ## Procedure
 
@@ -20,7 +20,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
 
 1. (`ncn-mw#`) Check to see if `kubectl` is not responding because of a `kworker` issue.
 
-    1. List the process identification \(`PID`\) numbers of the `kworker`s in the `D` state.
+    1. List the process identification (`PID`) numbers of the `kworker`s in the `D` state.
 
         Processes in the `D` state are blocked on I/O and are not an issue unless they remain blocked indefinitely. Use the command below to see which `PID`s remain stuck in
         this state.
@@ -112,7 +112,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
     <nil>"
     2020-07-19T07:19:44.440413+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:19:44.440243465Z" level=info msg="Exec process \"7a3cf826f008c37bd0fe89382561af42afe37ac4d52f37ce9312cc950248f4da\" exits with exit code 0 and error
     <nil>"
-    2020-07-19T07:20:02.442421+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:02.442266943Z" level=error msg="StopPodSandbox for \"d449618d075b918fd6397572c79bd758087b31788dd8bf40f4dc10bb1a013a68\" failed" 
+    2020-07-19T07:20:02.442421+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:02.442266943Z" level=error msg="StopPodSandbox for \"d449618d075b918fd6397572c79bd758087b31788dd8bf40f4dc10bb1a013a68\" failed"
         error="failed to destroy network for sandbox \"d449618d075b918fd6397572c79bd758087b31788dd8bf40f4dc10bb1a013a68\": Multus: Err in getting k8s network from pod: getPodNetworkAnnotation: failed to query the pod sma-monasca-agent-xkxnj in out of cluster comm: pods \"sma-monasca-agent-xkxnj\" not found"
     2020-07-19T07:20:04.440834+00:00 ncn-w001 containerd[43098]: time="2020-07-19T07:20:04.440742542Z" level=info msg="Exec process \"2a751ca1453d7888be88ab4010becbb0e75b7419d82e45ca63e55e4155110208\" exits with exit code 0 and error
     <nil>"
@@ -153,7 +153,7 @@ In the following procedures, unless otherwise directed, run the commands on the 
     NCN_NAME=ncn-w999
     USERNAME=root
     read -r -s -p "${NCN_NAME} BMC ${USERNAME} password: " IPMI_PASSWORD
-    export IPMI_PASSWORD    
+    export IPMI_PASSWORD
     ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power off; sleep 5;
     ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power show; echo
     ipmitool -U "${USERNAME}" -E -I lanplus -H "${NCN_NAME}-mgmt" power on; sleep 5;

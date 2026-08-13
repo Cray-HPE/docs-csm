@@ -22,7 +22,7 @@ customization job. Use the following procedure to detect the issue.
    ```
 
   Example output:
-  
+
   ```json
   {
   "arch": "x86_64",
@@ -88,7 +88,7 @@ customization job. Use the following procedure to detect the issue.
    ```bash
    ssh -p <IMS_SSH_PORT> root@<IMS_SSH_HOST>
    ```
-  
+
 1. Confirm that the SSH attempt resulted in a connection failure.
    If that is not the case, then the procedure documented here is not applicable.
 

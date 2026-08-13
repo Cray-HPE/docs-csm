@@ -46,7 +46,7 @@ The following sections provide examples of [SAT][sat] commands that can help det
 ```bash
 ANTERO=$(sat hwinv --list-node-enclosures --fields=xname \
              --filter='Model=ANTERO' --format json  | \
-         jq '.node_enclosure_list[] | "xname=\(.xname)*"' -r | sed 's/e0//' | \
+         jq '.node_enclosure_list[] | "xname=(.xname)*"' -r | sed 's/e0//' | \
          paste -sd " " | sed 's/ / or /g')
 sat status --type Node --fields 'xname,role,nid' --filter "${ANTERO}"
 ```
@@ -136,7 +136,7 @@ Optionally, during a system maintenance window, the Antero [NID][nid] numbering 
 
 <!-- markdownlint-disable MD053 -->
 <!---
-    For references that are likely to appear on a lot of pages (glossary references, for example), 
+    For references that are likely to appear on a lot of pages (glossary references, for example),
     we allow definitions for entries that are not used on the page, as a convenience.
 -->
 
