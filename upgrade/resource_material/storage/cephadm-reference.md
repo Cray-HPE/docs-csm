@@ -18,7 +18,7 @@ Alternatively, execute the command as follows:
 cephadm shell -- ceph -s
 ```
 
-## Ceph Device Operations
+## Ceph device operations
 
 There are multiple ways to do Ceph device operations now.
 

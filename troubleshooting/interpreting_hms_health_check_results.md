@@ -1,28 +1,27 @@
 # Interpreting HMS Health Check Results
 
-- [Interpreting HMS Health Check Results](#interpreting-hms-health-check-results)
-  - [Introduction](#introduction)
-  - [Prerequisites](#prerequisites)
-  - [Overview](#overview)
-  - [Execution](#execution)
-  - [Failure analysis](#failure-analysis)
+- [Introduction](#introduction)
+- [Prerequisites](#prerequisites)
+- [Overview](#overview)
+- [Execution](#execution)
+- [Failure analysis](#failure-analysis)
     - [Smoke test failure](#smoke-test-failure)
     - [Functional test failure](#functional-test-failure)
-  - [Tavern output](#tavern-output)
-  - [Additional troubleshooting](#additional-troubleshooting)
+- [Tavern output](#tavern-output)
+- [Additional troubleshooting](#additional-troubleshooting)
     - [`run_hms_ct_tests.sh`](#run_hms_ct_testssh)
-      - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
-        - [`test_components.tavern.yaml` and `test_hardware.tavern.yaml`](#test_componentstavernyaml-and-test_hardwaretavernyaml)
-        - [`test_components.tavern.yaml`](#test_componentstavernyaml)
-      - [`cray-hms-firmware-action-test-functional`](#cray-hms-firmware-action-test-functional)
-        - [`test_actions.tavern.yaml`](#test_actionstavernyaml)
-      - [`cray-power-control-test-functional`](#cray-power-control-test-functional)
-        - [`test_power-status.tavern.yaml`](#test_power-statustavernyaml)
+        - [`cray-hms-smd-test-functional`](#cray-hms-smd-test-functional)
+            - [`test_components.tavern.yaml` and `test_hardware.tavern.yaml`](#test_componentstavernyaml-and-test_hardwaretavernyaml)
+            - [`test_components.tavern.yaml`](#test_componentstavernyaml)
+        - [`cray-hms-firmware-action-test-functional`](#cray-hms-firmware-action-test-functional)
+            - [`test_actions.tavern.yaml`](#test_actionstavernyaml)
+        - [`cray-power-control-test-functional`](#cray-power-control-test-functional)
+            - [`test_power-status.tavern.yaml`](#test_power-statustavernyaml)
     - [`hsm_discovery_status_test.sh`](#hsm_discovery_status_testsh)
-      - [`HTTPsGetFailed`](#httpsgetfailed)
-      - [`ChildVerificationFailed`](#childverificationfailed)
-      - [`DiscoveryStarted`](#discoverystarted)
-  - [Install blocking vs. Non-blocking failures](#install-blocking-vs-non-blocking-failures)
+        - [`HTTPsGetFailed`](#httpsgetfailed)
+        - [`ChildVerificationFailed`](#childverificationfailed)
+        - [`DiscoveryStarted`](#discoverystarted)
+- [Install blocking vs. Non-blocking failures](#install-blocking-vs-non-blocking-failures)
 
 ## Introduction
 
@@ -130,15 +129,15 @@ In this case, the HSM smoke test job failed. Find the name of the pod and inspec
 
     ```text
     Running smoke tests...
-    
+
     ...
-    
+
     2022-07-01 21:13:05,853 Testing {"path": "hsm/v2/service/ready", "expected_status_code": 200, "method": "GET", "body": null, "headers": {}, "url": "http://cray-smd/hsm/v2/service/ready"}
     2022-07-01 21:13:05,863 Starting new HTTP connection (1): cray-smd:80
     2022-07-01 21:13:05,873 FAIL: HTTPConnectionPool(host='cray-smd', port=80): Max retries exceeded with url: /hsm/v2/service/ready (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7faf6fdf6460>: Failed to establish a new connection: [Errno 111] Connection refused'))
-    
+
     ...
-    
+
     2022-07-01 21:13:09,282 FAIL: hsm-smoke-tests
     2022-07-01 21:13:09,282 failed!
     2022-07-01 21:13:09,282 FAIL: hsm-smoke-tests ran with failures
@@ -195,18 +194,18 @@ In this case, the HSM functional test job failed. Find the name of the pod and i
     rootdir: /src/app, configfile: pytest.ini
     plugins: tap-3.3, tavern-1.23.1
     collecting ... collected 38 items
-    
+
     ...
-    
+
     test_components.tavern.yaml::Ensure that we can conduct a query for all Nodes in the Component collection FAILED [ 21%]
-    
+
     ...
-    
+
     =================================== FAILURES ===================================
     _ /src/app/test_components.tavern.yaml::Ensure that we can conduct a query for all Nodes in the Component collection _
-    
+
     ...
-    
+
     Errors:
     E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all Nodes' failed:
         - Error calling validate function '<function validate_pykwalify at 0x7f34e3ebf6d0>':
@@ -379,7 +378,7 @@ cray hsm state components list --type Node --role compute --format json
 
 Example output:
 
-```text
+```json
 {
   "Components": []
 }

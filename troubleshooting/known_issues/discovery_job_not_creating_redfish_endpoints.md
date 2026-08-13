@@ -1,15 +1,15 @@
-# HMS Discovery Job Not Creating RedfishEndpoints In Hardware State Manager
+# HMS Discovery Job Not Creating `RedfishEndpoint`s In Hardware State Manager
 
 It is a known issue with the HMS Discovery cronjob that when a BMC does not respond by its IP address,
 the discovery job will not create a `RedfishEndpoint` for the BMC in Hardware State Manager (HSM). However,
 it does update the BMC MAC address in HSM with its component name (xname). The discovery job only creates a
 new `RedfishEndpoints` when it encounters an unknown MAC address without a component name (xname) associated with it.
 
-This troubleshooting procedure is only applicable for air-cooled NodeBMCs and RouterBMCs.
+This troubleshooting procedure is only applicable for air-cooled `NodeBMC`s and `RouterBMC`s.
 
 ## Prerequisites
 
-- Only applicable to an air-cooled NodeBMC or RouterBMC.
+- Only applicable to an air-cooled `NodeBMC` or `RouterBMC`.
 
 ## Symptoms
 
@@ -17,25 +17,25 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
 - The BMC is pingable.
 - There is no `RedfishEndpoint` for the BMC in HSM.
 
-## Check For Symptoms
+## Check for symptoms
 
 1. Setup an environment variable with to store the xname of the BMC.
 
-    > This should be either the component name (xname) for a NodeBMC (`xXcCsSbB`) or RouterBMC (`xXcCrRbB`).
+    > This should be either the component name (xname) for a `NodeBMC` (`xXcCsSbB`) or `RouterBMC` (`xXcCrRbB`).
 
     ```console
     export BMC=x3000c0s18b0
     ```
 
-1. Check to see in HSM if the component ID for a BMC has a MAC address and IP associated with it.
+1. Check to see in HSM if the component ID for a BMC has a MAC address and IP address associated with it.
 
     ```console
-    cray hsm inventory ethernetInterfaces list --component-id $BMC
+    cray hsm inventory ethernetInterfaces list --component-id $BMC --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     [[results]]
     ID = "54802852b706"
     Description = ""
@@ -84,7 +84,7 @@ This troubleshooting procedure is only applicable for air-cooled NodeBMCs and Ro
     rtt min/avg/max/mdev = 0.152/0.247/0.342/0.075 ms
     ```
 
-1. Verify that no Redfish endpoint for the NodeBMC or RouterBMC is present in HSM.
+1. Verify that no Redfish endpoint for the `NodeBMC` or `RouterBMC` is present in HSM.
 
     ```console
     cray hsm inventory redfishEndpoints describe $BMC
@@ -112,7 +112,7 @@ Correcting this River Redfish endpoint discovery issue can be done by running th
 The return value of the script is 0 if the correction was successful or if no correction was needed. A non-zero return value means
 that manual intervention may be needed to correct the issue. Continue to the next section if there were failures.
 
-### Script Debugging Steps
+### Script debugging steps
 
 1. Check that the `hms-discovery` cronjob has run to completion since running the script.
 
@@ -141,12 +141,12 @@ that manual intervention may be needed to correct the issue. Continue to the nex
 1. Verify that the MAC address has a component ID associated with it.
 
     ```console
-    cray hsm inventory ethernetInterfaces describe $BMC_MAC
+    cray hsm inventory ethernetInterfaces describe $BMC_MAC --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     ID = "54802852b706"
     Description = ""
     MACAddress = "54:80:28:52:b7:06"
@@ -166,12 +166,12 @@ that manual intervention may be needed to correct the issue. Continue to the nex
     > that are not in the `DiscoveryOk` or `DiscoveryStarted` states, such as `HTTPsGetFailed`.
 
     ```console
-    cray hsm inventory redfishEndpoints describe $BMC
+    cray hsm inventory redfishEndpoints describe $BMC --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     ID = "x3000c0s18b0"
     Type = "NodeBMC"
     Hostname = "x3000c0s18b0"
