@@ -26,7 +26,7 @@ After a couple minutes, run `ceph -s` again and see if there are more OSDs. If O
    HEALTH_WARN 1 pool(s) do not have an application enabled
    [WRN] POOL_APP_NOT_ENABLED: 1 pool(s) do not have an application enabled
       application not enabled on pool '.mgr'
-      use 'ceph osd pool application enable <pool-name> <app-name>', where <app-name> is 'cephfs', 'rbd', 'rgw', or freeform for custom applications. 
+      use 'ceph osd pool application enable <pool-name> <app-name>', where <app-name> is 'cephfs', 'rbd', 'rgw', or freeform for custom applications.
    ```
 
    (`ncn-s001`) Then enable the `.mgr` pool with the following command.

@@ -6,18 +6,18 @@ This outlines conventions and standards that are used in this documentation.
 - [File formats](#file-formats)
 - [Typographic conventions](#typographic-conventions)
 - [Command prompt conventions](#command-prompt-conventions)
-  - [Host and user name in command prompts](#host-and-user-name-in-command-prompts)
-  - [Node abbreviations](#node-abbreviations)
-  - [Command prompt reference](#command-prompt-reference)
-  - [Command prompt location](#command-prompt-location)
-  - [Command prompts inside new shells](#command-prompts-inside-new-shells)
-    - [`chroot` example](#chroot-example)
-    - [`kubectl exec` example](#kubectl-exec-example)
-    - [Combined `ssh` and `chroot` example](#combined-ssh-and-chroot-example)
-  - [Directory path in command prompt](#directory-path-in-command-prompt)
+    - [Host and user name in command prompts](#host-and-user-name-in-command-prompts)
+    - [Node abbreviations](#node-abbreviations)
+    - [Command prompt reference](#command-prompt-reference)
+    - [Command prompt location](#command-prompt-location)
+    - [Command prompts inside new shells](#command-prompts-inside-new-shells)
+        - [`chroot` example](#chroot-example)
+        - [`kubectl exec` example](#kubectl-exec-example)
+        - [Combined `ssh` and `chroot` example](#combined-ssh-and-chroot-example)
+    - [Directory path in command prompt](#directory-path-in-command-prompt)
 - [Ability to pause and resume procedures](#ability-to-pause-and-resume-procedures)
-  - [Bad example](#bad-example)
-  - [Good example](#good-example)
+    - [Bad example](#bad-example)
+    - [Good example](#good-example)
 - [Templates](#templates)
 
 ## Markdown format
@@ -60,10 +60,10 @@ The following list contains abbreviations for nodes used below
 
 - CN - Compute Node
 - NCN - Non-Compute Node
-  - `ncn-m` - Master NCN
-  - `ncn-s` - Storage NCN
-  - `ncn-w` - Worker NCN
-  - These can also be used in combination. For example, `ncn-mw` in a command prompt indicates that the command may be run on a master or worker NCN.
+    - `ncn-m` - Master NCN
+    - `ncn-s` - Storage NCN
+    - `ncn-w` - Worker NCN
+    - These can also be used in combination. For example, `ncn-mw` in a command prompt indicates that the command may be run on a master or worker NCN.
 - AN - Application Node (special type of NCN)
 - UAN - User Access Node (special type of AN)
 - PIT - Pre-Install Toolkit (initial node used as the inception node during software installation, booted from the LiveCD)
@@ -135,7 +135,7 @@ the prompt changes to indicate that subsequent commands are to be run inside the
 1. (`chroot-hostname#`) Lorem ipsum.
 
     ```bash
-    exit 
+    exit
     ```
 
 1. (`hostname#`) Lorem ipsum!

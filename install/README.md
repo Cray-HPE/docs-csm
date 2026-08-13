@@ -59,7 +59,7 @@ shown here with numbered topics.
     1. [Validate CSM health before final NCN deployment](#3-validate-csm-health-before-final-ncn-deployment)
     1. [Deploy final NCN](#4-deploy-final-ncn)
     1. [Configure administrative access](#5-configure-administrative-access)
-    1. [ARP Cache Tuning](#6-arp-cache-tuning)
+    1. [ARP cache tuning](#6-arp-cache-tuning)
     1. [Configure E1000 node and Redfish Exporter for SMART data](#7-configure-e1000-node-and-redfish-exporter-for-smart-data)
     1. [Validate CSM health](#8-validate-csm-health)
     1. [Configure Prometheus alert notifications](#9-configure-prometheus-alert-notifications)
@@ -67,7 +67,7 @@ shown here with numbered topics.
     1. [Update firmware with FAS](#11-update-firmware-with-fas)
     1. [Prepare compute nodes](#12-prepare-compute-nodes)
     1. [Troubleshooting installation problems](#13-troubleshooting-installation-problems)
-- [Post-Installation](#post-installation)
+- [Post-installation](#post-installation)
     1. [Kubernetes encryption](#1-kubernetes-encryption)
     1. [Export Nexus data](#2-export-nexus-data)
 - [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
@@ -240,12 +240,12 @@ This may include:
 
 See [Configure Administrative Access](configure_administrative_access.md).
 
-### 6. ARP Cache Tuning
+### 6. ARP cache tuning
 
 Now that all of the NCNs have been deployed and administrative access has been configured, ARP cache settings need to be adjusted before proceeding.
 Depending on the number of nodes in the system, failure to perform this step may cause significant management plane problems.
 
-See [ARP Cache Tuning](../operations/configuration_management/ARP_cache_tuning.md)
+See [ARP Cache Tuning Guide](../operations/network/ARP_Cache_Tuning_Guide.md).
 
 ### 7. Configure E1000 node and Redfish Exporter for SMART data
 
@@ -311,7 +311,7 @@ The procedures in this section should be referenced during the CSM install for a
 
 See [Troubleshooting Installation Problems](troubleshooting_installation.md).
 
-## Post-Installation
+## Post-installation
 
 ### 1. Kubernetes encryption
 

@@ -225,7 +225,7 @@ Unable to ioctl(KDSETLED) -- are you not on the console? (Inappropriate ioctl fo
     1. Reset the node.
 
         ```bash
-        ipmitool -I lanplus -U $USERNAME -E -H ${NODE}-mgmt power reset 
+        ipmitool -I lanplus -U $USERNAME -E -H ${NODE}-mgmt power reset
         ```
 
 ### Resetting `kdump`

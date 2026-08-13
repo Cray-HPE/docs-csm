@@ -66,7 +66,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
       ```text
       MAC age-time            : 300 seconds
       Number of MAC addresses : 21
-      
+
       MAC Address          VLAN     Type                      Port
       --------------------------------------------------------------
       b4:2e:99:df:f3:61    4        dynamic                   1/1/36
