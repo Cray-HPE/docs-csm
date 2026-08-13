@@ -21,7 +21,7 @@ procedure entails deactivating the LiveCD, meaning the LiveCD and all of its res
 ## 1. Required services
 
 These services must be healthy before the reboot of the LiveCD can take place. If the health checks performed earlier in the install
-completed successfully \([Validate CSM Health](../operations/validate_csm_health.md)\), then the following platform services will be healthy
+completed successfully ([Validate CSM Health](../operations/validate_csm_health.md)), then the following platform services will be healthy
 and ready for reboot of the LiveCD:
 
 * Utility Storage (Ceph)

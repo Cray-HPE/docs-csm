@@ -36,7 +36,7 @@ ip link
 
 ## Device naming
 
-The underlying naming relies on [`biosdevname`](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname).
+The underlying naming relies on [`biosdevname`](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname).
 This helps conform device naming into a smaller set of possible names. It also helps reveal when driver issues occur; if an
 administrator observes an interface with name that does not conform to this naming scheme, then this is an indication of a problem.
 

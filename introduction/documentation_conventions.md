@@ -138,7 +138,7 @@ commands are to be run inside the new shell.
 1. (`chroot-hostname#`) Lorem ipsum.
 
     ```bash
-    exit 
+    exit
     ```
 
 1. (`hostname#`) Lorem ipsum!

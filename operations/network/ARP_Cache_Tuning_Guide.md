@@ -1,0 +1,333 @@
+# ARP Cache Tuning Guide
+
+In order to ensure smooth network communication, Address Resolution Protocol (ARP) cache settings must
+be adjusted to handle a larger number of nodes. This guide will help administrators to calculate and set
+appropriate values.
+
+- [Prerequisites](#prerequisites)
+- [Key ARP cache settings](#key-arp-cache-settings)
+- [Formula for tuning ARP cache settings](#formula-for-tuning-arp-cache-settings)
+    - [Calculate `gc_thresh1`](#calculate-gc_thresh1)
+    - [Calculate remaining values](#calculate-remaining-values)
+    - [Example calculation and settings](#example-calculation-and-settings)
+- [Host configuration](#host-configuration)
+    - [Procedure to configure hosts using CFS](#procedure-to-configure-hosts-using-cfs)
+        1. [Prepare VCS branch](#1-prepare-vcs-branch)
+        1. [Configure the `csm.ncn.sysctl` Ansible role](#2-configure-the-csmncnsysctl-ansible-role)
+        1. [Configure CFS to run the `csm.ncn.sysctl` role](#3-configure-cfs-to-run-the-csmncnsysctl-role)
+        1. [Verification](#4-verification)
+    - [Troubleshooting](#troubleshooting)
+    - [Additional steps](#additional-steps)
+
+## Prerequisites
+
+The following information is required and will need to be gathered before performing the steps outlined in this guide.
+
+- Total number of communicating nodes ([master, worker, storage](../../glossary.md#management-nodes),
+  [compute](../../glossary.md#compute-nodes-cn), and [application nodes](../../glossary.md#application-nodes-an)).
+- Total number of network interface cards (NICs) in each node.
+
+## Key ARP cache settings
+
+- `gc_thresh1`: Minimum number of entries the cache attempts to maintain.
+- `gc_thresh2`: Threshold where older entries start getting cleared before the cache overfills.
+- `gc_thresh3`: Maximum number of cache entries allowed. If exceeded, new entries may be dropped.
+- `gc_stale_time`: Time (in seconds) before an ARP entry is marked stale.
+- `base_reachable_time_ms`: Time (in milliseconds) an entry remains valid before being re-verified.
+
+## Formula for tuning ARP cache settings
+
+Storage nodes do not have [HSN](../../glossary.md#high-speed-network-hsn) connections. In order to
+keep ARP settings management simple, the values calculated for the worker nodes should also be
+applied to the storage nodes.
+
+### Calculate `gc_thresh1`
+
+`gc_thresh1` = (number of nodes) \* ((NICs per node)²)
+
+Where:
+
+- Number of nodes is the total number of communicating nodes (master, worker, storage, compute, and application nodes).
+- NICs per node is the number of NICs in each node (HSN NICs + [NMN](../../glossary.md#node-management-network-nmn) NICs).
+  Nodes will have two, three, or five total NICs.
+    - HSN NICs is the number of NICs on the HSN per node. If some compute nodes have one, some have two, and some have
+      four HSN NICs, then use the largest value (four) for the formula.
+    - NMN NICs is the  number of NICs on the NMN per node. Most nodes have a single NIC on the NMN, but workers will
+      have two. For the formula, assume each node has one NIC on the NMN.
+
+### Calculate remaining values
+
+- `gc_thresh2` = 1.5 \* `gc_thresh1`
+- `gc_thresh3` = 2 \* `gc_thresh2`
+
+### Example calculation and settings
+
+This calculation assumes the following scenario:
+
+- Total nodes = 1000 (master, worker, storage, compute, and application nodes).
+- Each node has:
+    - 4 HSN NICs.
+    - 1 NMN NIC.
+    - NICs per node = 4 + 1 = 5
+
+`gc_thresh1` = 1000 \* (5²) = 25000
+
+`gc_thresh2` = 1.5 x `gc_thresh1` = 1.5 \* 25000 = 37500
+
+`gc_thresh3` = 2 x `gc_thresh2` = 2 \* 37500 = 75000
+
+Given the above calculations, the following are appropriate ARP settings:
+
+```ini
+net.ipv4.neigh.default.gc_thresh1 = 25000
+net.ipv4.neigh.default.gc_thresh2 = 37500
+net.ipv4.neigh.default.gc_thresh3 = 75000
+net.ipv4.neigh.default.gc_stale_time = 240
+net.ipv4.neigh.default.base_reachable_time_ms = 1500000
+```
+
+## Host configuration
+
+### Procedure to configure hosts using CFS
+
+The following steps describe how to use the
+[Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
+to configure ARP cache settings for [NCNs](../../glossary.md#non-compute-nodes-ncns).
+
+#### 1. Prepare VCS branch
+
+1. Clone the `csm-config-management` repository from [VCS](../../glossary.md#version-control-service-vcs).
+
+    See [Cloning a VCS repository](../configuration_management/Version_Control_Service_VCS.md#cloning-a-vcs-repository).
+
+1. (`ncn-mw#`) List the available CSM versions (`CSM_RELEASE`).
+
+   ```bash
+   kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}'
+   ```
+
+1. (`ncn-mw#`) Determine the import branch to use.
+
+   > **NOTE:** Update `CSM_RELEASE` for the version being used.
+
+   ```bash
+   export CSM_RELEASE=1.6.0
+   export IMPORT_BRANCH=$(kubectl -n services get cm cray-product-catalog -o jsonpath='{.data.csm}' | yq4 ".[\"${CSM_RELEASE}\"].configuration.import_branch") && echo "${IMPORT_BRANCH}"
+   ```
+
+1. (`ncn-mw#`) Create an integration branch from the import branch for the required configuration.
+
+   ```bash
+   cd csm-config-management
+   git checkout -b integration-${IMPORT_BRANCH##*/} origin/${IMPORT_BRANCH}
+   ```
+
+   Example output:
+
+   ```text
+   branch 'integration-1.26.0' set up to track 'origin/cray/csm/1.26.0'.
+   Switched to a new branch 'integration-1.26.0'
+   ```
+
+   > **NOTE:** In this example, `integration-1.26.0` is the name of the new branch.
+
+   See [VCS Branching Strategy](../configuration_management/VCS_Branching_Strategy.md) for more information about Git branches in VCS.
+
+#### 2. Configure the `csm.ncn.sysctl` Ansible role
+
+1. (`ncn-mw#`) Update the appropriate variables in `roles/csm.ncn.sysctl/vars/main.yml` using the values calculated
+   in the [Formula for tuning ARP cache settings](#formula-for-tuning-arp-cache-settings).
+
+   > **NOTE:** The following values are only examples and MUST be updated using the calculated values.
+
+   ```yaml
+   sysctl_config:
+     - name: net.ipv4.neigh.default.gc_thresh1
+       value: 25000
+     - name: net.ipv4.neigh.default.gc_thresh2
+       value: 37500
+     - name: net.ipv4.neigh.default.gc_thresh3
+       value: 75000
+     - name: net.ipv4.neigh.default.gc_stale_time
+       value: 240
+     - name: net.ipv4.neigh.default.base_reachable_time_ms
+       value: 1500000
+   ```
+
+1. (`ncn-mw#`) Commit the change and push it back up to the VCS.
+
+   ```bash
+   git add roles/csm.ncn.sysctl/vars/main.yml
+   git commit -m 'Set ARP cache values for all NCNs'
+   git push --set-upstream origin integration-1.26.0
+   ```
+
+#### 3. Configure CFS to run the `csm.ncn.sysctl` role
+
+1. (`ncn-mw#`) Create a [CFS configuration](../configuration_management/CFS_Configurations.md) using the committed changes.
+
+   1. Obtain the commit hash and create a configuration template file.
+
+      ```bash
+      COMMIT=$(git rev-parse --verify HEAD)
+      cat << EOF > arp-settings.json
+      {
+        "layers": [
+          {
+             "cloneUrl": "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git",
+             "commit": "${COMMIT}",
+             "name": "arp-cache-settings",
+             "playbook": "ncn_sysctl.yml"
+          }
+        ]
+      }
+      EOF
+      ```
+
+   1. Create a CFS configuration from the template file.
+
+      ```bash
+      cray cfs configurations update arp-cache-settings --file ./arp-settings.json
+      ```
+
+      Example output:
+
+      ```toml
+      lastUpdated = "2025-01-06T22:39:46Z"
+      name = "arp-cache-settings"
+      [[layers]]
+      cloneUrl = "https://api-gw-service-nmn.local/vcs/cray/csm-config-management.git"
+      commit = "36811473a8b98e88ef8afee1df021d55eac50114"
+      name = "arp-cache-settings"
+      playbook = "ncn_sysctl.yml"
+      ```
+
+1. (`ncn-mw#`) Create a [CFS session](../configuration_management/CFS_Sessions.md) to apply the configuration to the nodes.
+
+   ```bash
+   SESSION=arp-cache-settings-$(date +%Y%m%d%H%M%S)
+   cray cfs sessions create --name "${SESSION}" --configuration-name arp-cache-settings
+   ```
+
+   Example output:
+
+   ```toml
+   name = "arp-cache-settings-20250106224045"
+
+   [ansible]
+   config = "cfs-default-ansible-cfg"
+   verbosity = 0
+
+   [configuration]
+   limit = ""
+   name = "arp-cache-settings"
+
+   [status]
+   artifacts = []
+
+   [tags]
+
+   [target]
+   definition = "dynamic"
+   groups = []
+   image_map = []
+
+   [status.session]
+   startTime = "2025-01-06T22:41:04"
+   status = "pending"
+   succeeded = "none"
+   ```
+
+#### 4. Verification
+
+1. (`ncn-mw#`) Check whether or not the CFS session completed successfully.
+
+   ```bash
+   cray cfs sessions describe ${SESSION}
+   ```
+
+   Example output:
+
+   ```ini
+   name = "arp-cache-settings-20250106224045"
+
+   [ansible]
+   config = "cfs-default-ansible-cfg"
+   verbosity = 0
+
+   [configuration]
+   limit = ""
+   name = "arp-cache-settings"
+
+   [status]
+   artifacts = []
+
+   [tags]
+
+   [target]
+   definition = "dynamic"
+   groups = []
+   image_map = []
+
+   [status.session]
+   completionTime = "2025-01-06T22:41:14"
+   job = "cfs-e7962be9-1cfa-4604-bb07-d5ae99be5456"
+   startTime = "2025-01-06T22:41:04"
+   status = "complete"
+   succeeded = "true"
+   ```
+
+   `session.status` should be `complete` and `status.succeeded` should be `true`.
+   See the [troubleshooting](#troubleshooting) section if that is not the case.
+
+1. (`ncn-m001`) Verify the ARP settings.
+
+      ```bash
+      NCNS=$(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u | tr '\r\n\t' ',')
+
+      pdsh -w ${NCNS} "sysctl -a | grep -E 'net.ipv4.neigh.default.gc_thresh[1-3]|net.ipv4.neigh.default.gc_stale_time|net.ipv4.neigh.default.base_reachable_time_ms'" | dshbak -c
+      ```
+
+      Example output:
+
+      ```ini
+      ncn-s001: net.ipv4.neigh.default.base_reachable_time_ms = 30000
+      ncn-s001: net.ipv4.neigh.default.gc_stale_time = 240
+      ncn-s001: net.ipv4.neigh.default.gc_thresh1 = 2048
+      ncn-s001: net.ipv4.neigh.default.gc_thresh2 = 4096
+      ncn-s001: net.ipv4.neigh.default.gc_thresh3 = 8192
+      ncn-w001: net.ipv4.neigh.default.base_reachable_time_ms = 30000
+      ncn-w001: net.ipv4.neigh.default.gc_stale_time = 240
+      ncn-w001: net.ipv4.neigh.default.gc_thresh1 = 2048
+      ncn-w001: net.ipv4.neigh.default.gc_thresh2 = 4096
+      ncn-w001: net.ipv4.neigh.default.gc_thresh3 = 8192
+      ncn-m001: net.ipv4.neigh.default.base_reachable_time_ms = 30000
+      ncn-m001: net.ipv4.neigh.default.gc_stale_time = 240
+      ncn-m001: net.ipv4.neigh.default.gc_thresh1 = 2048
+      ncn-m001: net.ipv4.neigh.default.gc_thresh2 = 4096
+      ncn-m001: net.ipv4.neigh.default.gc_thresh3 = 8192
+      ```
+
+### Troubleshooting
+
+If the CFS sessions failed to complete successfully, then see:
+
+- [View Configuration Session Logs](../configuration_management/View_Configuration_Session_Logs.md)
+- [Troubleshoot Failed CFS Sessions](../configuration_management/Troubleshoot_CFS_Session_Failed.md)
+- [CSM Troubleshooting Information](../../troubleshooting/README.md)
+
+### Additional steps
+
+This procedure performs a one time configuration of the target nodes. The ARP cache settings will persist through a reboot of the
+node but a rebuild of the node will wipe it.
+
+In order to persist this configuration through a rebuild of the node, the CFS layer should be added to the CFS configuration used
+for the NCNs. It may also be desirable to add this layer to the `site_vars.yaml` as well as any
+[SAT](../../glossary.md#system-admin-toolkit-sat) bootprep file used for `sat bootprep`, in order to ensure that the
+`update-cfs-configuration` stage of [IUF](../../glossary.md#install-and-upgrade-framework-iuf) does not remove this layer.
+
+For more information, see:
+
+- [CFS Configurations](../configuration_management/CFS_Configurations.md)
+- [IUF: Overview](../iuf/IUF.md)
+- [IUF: Configuration](../iuf/workflows/configuration.md)

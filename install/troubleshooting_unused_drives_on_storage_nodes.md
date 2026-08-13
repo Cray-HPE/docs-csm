@@ -12,9 +12,9 @@ describes how to validate that the storage NCNs have the expected number of OSDs
 - [Expected number of OSDs](#expected-number-of-osds)
 - [Automatic check](#automatic-check)
 - [Manual checks and remediation](#manual-checks-and-remediation)
-  - [Option 1](#option-1)
-  - [Option 2](#option-2)
-  - [Wipe and add drives](#wipe-and-add-drives)
+    - [Option 1](#option-1)
+    - [Option 2](#option-2)
+    - [Wipe and add drives](#wipe-and-add-drives)
 - [Additional information](#additional-information)
 
 ## Expected number of OSDs
@@ -81,7 +81,7 @@ table and multiplying it by the number of storage NCNs in the system. That is:
         "osd_in_since": 1659470908,
         "num_remapped_pgs": 0
     }
-    
+
     2022-09-20 16:00:44.671 DEBUG    Decoding command output from JSON into object
     2022-09-20 16:00:44.671 DEBUG    Extracting number of OSDs from object
     2022-09-20 16:00:44.671 INFO     num_osds = 40

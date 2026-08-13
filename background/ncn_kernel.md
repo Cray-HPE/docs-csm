@@ -733,7 +733,7 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 | CSM 1.5                   | `5.14.21-150500.55.39.1.27360.1.PTF.1215587`   | SLES-15-SP5 bond bug (SUSE case #00703657) and QLogic fix (SUSE case #00707151) |
 | CSM 1.6                   | `6.4.0-150600.23.17.1`                         | SLES-15-SP6                                                                     |
 
-[1]:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
+[1]:https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
 
 [2]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#usage
 
