@@ -88,7 +88,7 @@ Build and customize image recipes with the Image Management Service (IMS).
 
 ## Boot orchestration
 
-Use the Boot Orchestration Service \(BOS\) to boot, configure, and shut down collections of nodes.
+Use the Boot Orchestration Service (BOS) to boot, configure, reboot, and shut down collections of nodes.
 
 - [Boot Orchestration Service (BOS)](boot_orchestration/README.md)
     - [BOS Cheat Sheet](boot_orchestration/Cheatsheet.md)
@@ -200,7 +200,7 @@ HPE Cray System Management (CSM) software manages and controls power out-of-band
 
 ## Artifact management
 
-Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifacts on the system.
+Use the Ceph Object Gateway Simple Storage Service (S3) API to manage artifacts on the system.
 
 - [Artifact Management](artifact_management/Artifact_Management.md)
 - [Manage Artifacts with the Cray CLI](artifact_management/Manage_Artifacts_with_the_Cray_CLI.md)
@@ -209,7 +209,7 @@ Use the Ceph Object Gateway Simple Storage Service \(S3\) API to manage artifact
 
 ## Compute rolling upgrades
 
-Upgrade sets of compute nodes with the Compute Rolling Upgrade Service \(CRUS\) without requiring an entire set of nodes to be out of service at once. CRUS enables
+Upgrade sets of compute nodes with the Compute Rolling Upgrade Service (CRUS) without requiring an entire set of nodes to be out of service at once. CRUS enables
 administrators to limit the impact on production caused from upgrading compute nodes by working through one step of the upgrade process at a time.
 
 > **NOTES**
@@ -229,7 +229,7 @@ administrators to limit the impact on production caused from upgrading compute n
 
 ## Configuration management
 
-The Configuration Framework Service \(CFS\) is available on systems for remote execution and configuration management of nodes and boot images.
+The Configuration Framework Service (CFS) is available on systems for remote execution and configuration management of nodes and boot images.
 
 - [Configuration Management](configuration_management/Configuration_Management.md)
 - [Configuration Layers](configuration_management/Configuration_Layers.md)
@@ -266,7 +266,7 @@ The Configuration Framework Service \(CFS\) is available on systems for remote e
 - [CFS Operator](configuration_management/CFS_Operator.md)
 - [CFS State Reporter](configuration_management/CFS_State_Reporter.md)
 - [Exporting and Importing CFS Data](configuration_management/Exporting_and_Importing_CFS_Data.md)
-- [Version Control Service \(VCS\)](configuration_management/Version_Control_Service_VCS.md)
+- [Version Control Service (VCS)](configuration_management/Version_Control_Service_VCS.md)
     - [VCS Administrative User](configuration_management/VCS_Administrative_User.md)
     - [Git Operations](configuration_management/Git_Operations.md)
     - [VCS Branching Strategy](configuration_management/VCS_Branching_Strategy.md)
@@ -392,10 +392,10 @@ Mechanisms used by the system to ensure the security and authentication of inter
     - [Keycloak User Management with `kcadm.sh`](security_and_authentication/Keycloak_User_Management_with_Kcadm.md)
     - [Keycloak User Localization](security_and_authentication/Keycloak_User_Localization.md)
     - [Create a Backup of the Keycloak Postgres Database](security_and_authentication/Create_a_Backup_of_the_Keycloak_Postgres_Database.md)
-- [Public Key Infrastructure \(PKI\)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
-    - [PKI Certificate Authority \(CA\)](security_and_authentication/PKI_Certificate_Authority_CA.md)
+- [Public Key Infrastructure (PKI)](security_and_authentication/Public_Key_Infrastructure_PKI.md)
+    - [PKI Certificate Authority (CA)](security_and_authentication/PKI_Certificate_Authority_CA.md)
     - [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](security_and_authentication/Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
-    - [Transport Layer Security \(TLS\) for Ingress Services](security_and_authentication/Transport_Layer_Security_for_Ingress_Services.md)
+    - [Transport Layer Security (TLS) for Ingress Services](security_and_authentication/Transport_Layer_Security_for_Ingress_Services.md)
     - [PKI Services](security_and_authentication/PKI_Services.md)
     - [HashiCorp Vault](security_and_authentication/HashiCorp_Vault.md)
     - [Backup and Restore Vault Clusters](security_and_authentication/Backup_and_Restore_Vault_Clusters.md)
@@ -410,7 +410,7 @@ Mechanisms used by the system to ensure the security and authentication of inter
 
 ## Resiliency
 
-HPE Cray EX systems are designed so that system management services \(SMS\) are fully resilient and that there is no single point of failure.
+HPE Cray EX systems are designed so that system management services (SMS) are fully resilient and that there is no single point of failure.
 
 - [Resiliency](resiliency/Resiliency.md)
 - [Resilience of System Management Services](resiliency/Resilience_of_System_Management_Services.md)
@@ -501,7 +501,7 @@ confident that a lack of issues indicates the system is operating normally.
 
 ## System Layout Service (SLS)
 
-The System Layout Service \(SLS\) holds information about the system design, such as the physical locations of network hardware, compute nodes, and cabinets. It also
+The System Layout Service (SLS) holds information about the system design, such as the physical locations of network hardware, compute nodes, and cabinets. It also
 stores information about the network, such as which port on which switch should be connected to each compute node.
 
 - [System Layout Service (SLS)](system_layout_service/System_Layout_Service_SLS.md)
@@ -518,7 +518,7 @@ stores information about the network, such as which port on which switch should 
 
 ## System configuration service
 
-The System Configuration Service \(SCSD\) allows administrators to set various BMC and controller parameters. These parameters are typically set during discovery, but
+The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters. These parameters are typically set during discovery, but
 this tool enables parameters to be set before or after discovery. The operations to change these parameters are available in the Cray CLI under the `scsd` command.
 
 - [System Configuration Service](system_configuration_service/System_Configuration_Service.md)
@@ -529,7 +529,7 @@ this tool enables parameters to be set before or after discovery. The operations
 
 ## Hardware State Manager (HSM)
 
-Use the Hardware State Manager \(HSM\) to monitor and interrogate hardware components in the HPE Cray EX system, tracking hardware state and inventory information, and
+Use the Hardware State Manager (HSM) to monitor and interrogate hardware components in the HPE Cray EX system, tracking hardware state and inventory information, and
 making it available via REST queries and message bus events when changes occur.
 
 - [Hardware State Manager (HSM)](hardware_state_manager/Hardware_State_Manager.md)
@@ -669,7 +669,7 @@ while older systems have Dell and Mellanox switches. Switch IP addresses are gen
 
 ### Customer accessible networks (CMN/CAN/CHN)
 
-The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the customer network to services, NCNs, and User Access Nodes \(UANs\) in the system.
+The customer accessible networks (CMN/CAN/CHN) provide access from outside the customer network to services, NCNs, and User Access Nodes (UANs) in the system.
 
 - [Customer Accessible Networks](network/customer_accessible_networks/Customer_Accessible_Networks.md)
 - [Externally Exposed Services](network/customer_accessible_networks/Externally_Exposed_Services.md)
@@ -682,7 +682,7 @@ The customer accessible networks \(CMN/CAN/CHN\) provide access from outside the
 
 ### Dynamic Host Configuration Protocol (DHCP)
 
-The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
+The DHCP service on the HPE Cray EX system uses the Internet Systems Consortium (ISC) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
 - [DHCP](network/dhcp/DHCP.md)
 - [Troubleshoot DHCP Issues](network/dhcp/Troubleshoot_DHCP_Issues.md)
@@ -702,8 +702,8 @@ The central DNS infrastructure provides the structural networking hierarchy and 
 
 ### External DNS
 
-External DNS, along with the Customer Management Network \(CMN\), Border Gateway Protocol \(BGP\), and MetalLB, makes it simpler to access the HPE Cray EX API and system
-management services. Services are accessible directly from a laptop without needing to tunnel into a non-compute node \(NCN\) or override /etc/hosts settings.
+External DNS, along with the Customer Management Network (CMN), Border Gateway Protocol (BGP), and MetalLB, makes it simpler to access the HPE Cray EX API and system
+management services. Services are accessible directly from a laptop without needing to tunnel into a non-compute node (NCN) or override /etc/hosts settings.
 
 - [External DNS](network/external_dns/External_DNS.md)
 - [External DNS `csi config init` Input Values](network/external_dns/External_DNS_csi_config_init_Input_Values.md)
@@ -716,10 +716,10 @@ management services. Services are accessible directly from a laptop without need
 ### MetalLB in BGP-mode
 
 MetalLB is a component in Kubernetes that manages access to `LoadBalancer` services from outside the Kubernetes cluster. There are `LoadBalancer` services on the Node
-Management Network \(NMN\), Hardware Management Network \(HMN\), and Customer Access Network \(CAN\).
+Management Network (NMN), Hardware Management Network (HMN), and Customer Access Network (CAN).
 
 MetalLB can run in either `Layer2-mode` or `BGP-mode` for each address pool it manages. `BGP-mode` is used for the NMN, HMN, and CAN. This enables true load balancing
-\(`Layer2-mode` does failover, not load balancing\) and allows for a more robust layer 3 configuration for these networks.
+(`Layer2-mode` does failover, not load balancing) and allows for a more robust layer 3 configuration for these networks.
 
 - [MetalLB in BGP-Mode](network/metallb_bgp/MetalLB_in_BGP-Mode.md)
 - [MetalLB Configuration](network/metallb_bgp/MetalLB_Configuration.md)
@@ -763,8 +763,8 @@ stream to update firmware on other components.
 
 ## User Access Service (UAS)
 
-The User Access Service \(UAS\) is a containerized service managed by Kubernetes that enables application developers to create and run user applications. Users launch
-a User Access Instance \(UAI\) using the `cray` command. Users can also transfer data between the Cray system and external systems using the UAI.
+The User Access Service (UAS) is a containerized service managed by Kubernetes that enables application developers to create and run user applications. Users launch
+a User Access Instance (UAI) using the `cray` command. Users can also transfer data between the Cray system and external systems using the UAI.
 
 - [User Access Service (UAS)](UAS_user_and_admin_topics/README.md)
 - [List UAS Version Information](UAS_user_and_admin_topics/List_UAS_Information.md)

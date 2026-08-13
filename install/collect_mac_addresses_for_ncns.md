@@ -34,7 +34,7 @@ This assumes that the HMN is not setup on the PIT node; these steps cater to bar
    - Set up the `bond`:
 
       ```bash
-      # NOTE: REplace p801p1 and p802p2 with the interfaces from system_config.yaml#install-ncn-bond-members, e.g. the interfaces the PIT is using as the bond. 
+      # NOTE: REplace p801p1 and p802p2 with the interfaces from system_config.yaml#install-ncn-bond-members, e.g. the interfaces the PIT is using as the bond.
       /root/bin/csi-setup-bond0.sh 10.1.1.1/16 p801p1 p801p2
       ```
 

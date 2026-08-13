@@ -705,7 +705,7 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 | CSM 1.3.1                 | 5.3.18-150300.59.87.1                          |                                                        |
 | CSM 1.4.0                 | 5.**14.21-150400.24.38.1.25440.1.PTF.1204911** | SLES-15-SP4 upgrade and SUSE patch (case #00502283)    |
 
-[1]:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
+[1]:https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
 [2]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#usage
 [3]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#metalno-wipe
 [4]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#metalwipe-delay
