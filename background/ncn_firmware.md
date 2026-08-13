@@ -47,7 +47,7 @@ This section covers drivers and firmware versions for management network hardwar
 > The following examples use QLogic Corp FastLinQ QL41000 series PCIe cards. Actual output will vary when using other
 > vendor's hardware.
 
-From Use `ethtool` to fetch the driver and firmware version from any NCN \(replace `mgmt0` with any interface name\):
+From Use `ethtool` to fetch the driver and firmware version from any NCN (replace `mgmt0` with any interface name):
 
 ```bash
 ethtool -i mgmt0
@@ -68,7 +68,7 @@ supports-register-dump: yes
 supports-priv-flags: yes
 ```
 
-Alternatively, target every NCN with \(replace `mgmt0` or append more commands to check additional interfaces\):
+Alternatively, target every NCN with (replace `mgmt0` or append more commands to check additional interfaces):
 
 ```bash
 PDSH_SSH_ARGS_APPEND="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" pdsh -b -w $(grep -oP 'ncn-w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '

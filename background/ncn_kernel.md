@@ -735,7 +735,7 @@ This value sets the `xname` for the node, detailing the geolocation of the node.
 | CSM 1.7.0                 | `6.4.0-150600.23.53.1`                         | SLES-15-SP6                                                                         |
 | CSM 1.7.1                 | `6.4.0-150700.53.25.1`                         | SLES-15-SP7                                                                         |
 
-[1]:https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
+[1]:https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/networking_guide/sec-consistent_network_device_naming_using_biosdevname
 
 [2]:https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/main/README.adoc#usage
 

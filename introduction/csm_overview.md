@@ -141,7 +141,7 @@ There are several network values and other pieces of system information that are
 * CMN gateway IP address: The IP address assigned to a specific port on the spine switch, which will act as the
   gateway between the CMN and the rest of the customer's internal networks. This address would be the last hop
   route to the CMN network.
-* The User Network subnet which will be either the Customer Access Network \(CAN\) or Customer High-speed Network \(CHN\). The address pool mentioned below needs to be part of this subnet.
+* The User Network subnet which will be either the Customer Access Network (CAN) or Customer High-speed Network (CHN). The address pool mentioned below needs to be part of this subnet.
 
   For more information on the CAN and CHN, see [Customer Accessible Networks](../operations/network/customer_accessible_networks/Customer_Accessible_Networks.md).
 

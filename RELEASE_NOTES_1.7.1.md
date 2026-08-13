@@ -138,7 +138,7 @@ changes it includes.
 
   Compute nodes must be configured to use iSCSI over the Node Management Network (NMN) to successfully boot and to prevent iSCSI access
   issues when running nodes are moved into tenant-specific VLANs.
-  
+
 For a full list of known issues, see [Known issues](troubleshooting/README.md#known-issues).
 
 ## All resolved issues

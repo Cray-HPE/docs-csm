@@ -150,7 +150,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) Boot the **storage NCNs**.
 
     ```bash
-    grep -oP "${stoken}" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on 
+    grep -oP "${stoken}" /etc/dnsmasq.d/statics.conf | sort -u | xargs -t -i ipmitool -I lanplus -U "${USERNAME}" -E -H {} power on
     ```
 
 1. (`pit#`) Observe the installation through the console of `ncn-s001-mgmt`.
@@ -172,7 +172,7 @@ for all nodes, the Ceph storage will have been initialized and the Kubernetes cl
 1. (`pit#`) Wait for storage nodes to output the following before booting Kubernetes master nodes and worker nodes.
 
     ```text
-    ...sleeping 5 seconds until /etc/kubernetes/admin.conf 
+    ...sleeping 5 seconds until /etc/kubernetes/admin.conf
     ```
 
 ### 2.2 Deploy Kubernetes NCNs
