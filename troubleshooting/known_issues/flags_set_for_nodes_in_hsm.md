@@ -1,20 +1,18 @@
 # Flags Set For Nodes In HSM
 
-## Table of contents
-
 - [Introduction](#introduction)
 - [Warning Flags](#warning-flags)
 - [Alert Flags](#alert-flags)
 
 ## Introduction
 
-This document describes how to identify and troubleshoot issues with nodes in HSM that have flags other than "OK" set.
+This document describes how to identify and troubleshoot issues with nodes in HSM that have flags other than `OK` set.
 
-## Warning Flags
+## Warning flags
 
 Warning flags are set for nodes in HSM when BMCs report an unhealthy status in Redfish for some component associated with the node.
 
-1. (`ncn-mw#`) Check for nodes with "Warning" flags set in HSM.
+1. (`ncn-mw#`) Check for nodes with `Warning` flags set in HSM.
 
     ```bash
     cray hsm state components list --type Node --flag Warning --format json | jq '.Components[] | { ID: .ID, Flag: .Flag }' -c | sort -V | jq -c
@@ -29,7 +27,7 @@ Warning flags are set for nodes in HSM when BMCs report an unhealthy status in R
     {"ID":"x3000c0s19b4n0","Flag":"Warning"}
     ```
 
-1. (`ncn-mw#`) Check the BMCs of the "Warning" flag nodes for endpoints with unhealthy statuses in Redfish.
+1. (`ncn-mw#`) Check the BMCs of the `Warning` flag nodes for endpoints with unhealthy statuses in Redfish.
 
     Example command:
 
@@ -58,7 +56,7 @@ Warning flags are set for nodes in HSM when BMCs report an unhealthy status in R
             "State": "Enabled"
         },
         ...
-    } 
+    }
     ```
 
     Example command:
@@ -67,7 +65,7 @@ Warning flags are set for nodes in HSM when BMCs report an unhealthy status in R
     curl -s -k -u root:<password> https://<bmc_xname>/redfish/v1/Chassis/Enclosure | jq
     ```
 
-    Example output for unhealthy Chassis Enclosure:
+    Example output for unhealthy chassis enclosure:
 
     ```text
     {
@@ -92,7 +90,7 @@ The Redfish event logs may also help determine the cause of unhealthy statuses.
     curl -s -k -u root:<password> https://<bmc_xname>/redfish/v1/Chassis/Self/LogServices/Logs/Entries/<num> | jq
     ```
 
-    Example of log entry for unhealthy Power Supply:
+    Example of log entry for unhealthy power supply:
 
     ```text
     {
@@ -116,11 +114,11 @@ The Redfish event logs may also help determine the cause of unhealthy statuses.
     }
     ```
 
-## Alert Flags
+## Alert flags
 
-Nodes with "Alert" flags set that are also in "Standby" state in HSM indicate that heartbeats have been lost for the node.
+Nodes with `Alert` flags set that are also in `Standby` state in HSM indicate that heartbeats have been lost for the node.
 
-1. (`ncn-mw#`) Check for nodes with "Alert" flags set and "Standby" state in HSM.
+1. (`ncn-mw#`) Check for nodes with `Alert` flags set and `Standby` state in HSM.
 
     ```bash
     cray hsm state components list --type Node --flag Alert --state Standby --format json | jq '.Components[] | { ID: .ID, Flag: .Flag, State: .State }' -c | sort -V | jq -c

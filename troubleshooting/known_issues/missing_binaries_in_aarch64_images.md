@@ -77,7 +77,7 @@ what was seen to help identify if it happens again.
     Generating "/run/initramfs/rdsosreport.txt"
 
     Press Enter for maintenance
-    (or press Control-D to continue): 
+    (or press Control-D to continue):
     ```
 
     This case directly reported the missing `liblnetconfig.so.4` file, so any of the below workaround steps

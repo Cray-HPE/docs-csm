@@ -166,7 +166,7 @@ For additional reference material on the upgrade processes and scripts mentioned
 
   When executing command `/usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}`, if `rsync` error is displayed in console after stage `REPAIR_AND_VERIFY_CHRONY_CONFIG` or in
   `output.log` as shown in example below, then ensure latest version of `libcsm` and `docs-csm` RPMs are successfully installed and then re-execute the same command.
-  
+
   ```bash
   /usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
   ...
@@ -178,9 +178,9 @@ For additional reference material on the upgrade processes and scripts mentioned
 
    ```text
    ====> REPAIR_AND_VERIFY_CHRONY_CONFIG ...
-   rsync: [sender] link_stat "/etc/cray/upgrade/csm/csm-<version>/tarball/csm-<version>/chrony" failed: 
+   rsync: [sender] link_stat "/etc/cray/upgrade/csm/csm-<version>/tarball/csm-<version>/chrony" failed:
    No such file or directory (2)
-   rsync error: some files/attrs were not transferred (see previous errors) (code <number>) at main.c(<line number>) 
+   rsync error: some files/attrs were not transferred (see previous errors) (code <number>) at main.c(<line number>)
    [sender=<version>]
    <line number> /usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh
    rsync -aq "${CSM_ARTI_DIR}"/chrony "${target_ncn}":/srv/cray/scripts/common/

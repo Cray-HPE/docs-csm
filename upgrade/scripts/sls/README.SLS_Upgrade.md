@@ -168,7 +168,7 @@ In CMN and NMN:
     "MTU": 9000,
     "MyASN": 65536,
     "PeerASN": 65533,
-    "Subnets": 
+    "Subnets":
 ```
 
 ### Remove `kubeapi-vip` reservations for all networks except NMN

@@ -18,7 +18,7 @@ The `kubectl get pod` command returns pods that seem to be stuck in the `Init` o
 
     In the above example, `ncn-w002` is the node that may need attention.
 
-## Recovery Steps
+## Recovery steps
 
 Execute the following steps on the node that was determined in the previous step.
 
