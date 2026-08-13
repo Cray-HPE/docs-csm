@@ -3,17 +3,18 @@
 There are several alternative procedures to perform an upgrade of Cray Systems Management (CSM)
 software. Choose the appropriate procedure from the sections below.
 
-* [Release Notes](#release-notes)
-* [CSM major/minor version upgrade](#csm-majorminor-version-upgrade)
+> **NOTE** After CSM 1.7.1, the patch release versions follow a new naming convention
+> (`1.7.1-patch.<patch-number>`), starting with 1.7.1-patch.1
+
+* [Release notes](#release-notes)
+* [Fabric Manager on baremetal](#fabric-manager-on-baremetal)
+* [Valid upgrade paths](#valid-upgrade-paths)
+* [CSM upgrade procedures](#csm-upgrade-procedures)
     * [Option 1: Upgrade CSM with additional HPE Cray EX software products](#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
     * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
     * [Option 3: Upgrade only CSM](#option-3-upgrade-only-csm)
-* [CSM patch version upgrade](#csm-171-patch-version-upgrade)
-* [FM On Baremetal](#fm-on-baremetal)
 
-## Release Notes
-
-Before upgrading, review corresponding release notes:
+## Release notes
 
 * [CSM 1.7.0 Release Notes](../RELEASE_NOTES.md)
 
@@ -21,13 +22,28 @@ Before upgrading, review corresponding release notes:
 
 * [CSM 1.7.1-patch.1 Release Notes](../RELEASE_NOTES_1.7.1-patch.1.md)
 
-## CSM major/minor version upgrade
+## Fabric Manager on baremetal
 
-Follow one of these procedures when upgrading from CSM 1.6 to CSM 1.7.0 or CSM 1.7.1 .
+After CSM is upgraded from 1.7.0 to CSM 1.7.1, if desiring to enable Fabric Manager on baremetal,
+then see [Slingshot Fabric Manager on baremetal](../operations/fm_on_baremetal/README.md).
 
-There is no need to upgrade from CSM 1.6 to CSM 1.7.0, and then separately upgrade from CSM 1.7.0 to the
-CSM 1.7.1 release. The procedures in this section can be used to upgrade from CSM 1.6 directly to the
- CSM 1.7.1. However, Upgrade to CSM `1.7.1-patch.1` can be done only from CSM `1.7.1` .
+## Valid upgrade paths
+
+These [CSM upgrade procedures](#csm-upgrade-procedures) can be used to perform the following upgrades:
+
+| *Starting CSM version* | *Target CSM version*        |
+| ---------------------- | --------------------------- |
+| 1.6.x                  | 1.7.0                       |
+| 1.6.x                  | 1.7.1                       |
+| 1.7.0                  | 1.7.1                       |
+| 1.7.1                  | `1.7.1-patch.x`             |
+| `1.7.1-patch.x`        | `1.7.1-patch.y` (`y` > `x`) |
+
+> **NOTE** Upgrading to CSM `1.7.1-patch.x` can only be done only from CSM 1.7.1 or higher.
+
+## CSM upgrade procedures
+
+Before upgrading, review the corresponding [release notes](#release-notes).
 
 ### Option 1: Upgrade CSM with additional HPE Cray EX software products
 
@@ -52,15 +68,3 @@ To upgrade only CSM, see the [Upgrade Only CSM with IUF](Upgrade_Only_CSM_with_i
 This option applies to CSM-only systems and systems which have additional HPE Cray EX software
 products installed, as long as those additional products are not also being upgraded. This is an
 uncommon upgrade scenario.
-
-## CSM 1.7.1 patch version upgrade
-
-* If the starting version of the upgrade is CSM 1.7.0, then follow the [CSM major/minor version upgrade](#csm-majorminor-version-upgrade) instructions for Upgrading to CSM 1.7.1 .
-
- **`NOTE`**  From CSM 1.7.1-patch.1 onwards the patches follow new naming convention: `CSM 1.7.1-patch.<patch-number>`
-
-* If Upgrading to Cray Systems Management `1.7.1-patch.1` Follow the procedures described in [CSM major/minor version upgrade](#csm-majorminor-version-upgrade) from CSM `1.7.1` onwards only.
-
-## FM On Baremetal
-
-Post CSM Upgrade from 1.7.0 to CSM 1.7.1, if an administrator wishes to enable Fabric Manager on baremetal, they must follow the [procedure](../operations/fm_on_baremetal/README.md#fm-fabric-manager-on-baremetal).

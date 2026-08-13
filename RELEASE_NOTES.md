@@ -43,6 +43,9 @@
 
 ## Patch releases
 
+> **NOTE** After CSM 1.7.1, the patch release versions follow a new naming convention
+> (`1.7.1-patch.<patch-number>`), starting with 1.7.1-patch.1
+
 This is the release notes page for CSM 1.7.0. Each patch for CSM 1.7 has its own release notes, detailing what
 changes it includes.
 

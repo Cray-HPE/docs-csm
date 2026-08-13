@@ -1,15 +1,24 @@
 # Cray System Management (CSM) 1.7.1-patch.1 Release Notes
 
-* [Introduction](#introduction)
-* [Bug fixes and improvements](#bug-fixes-and-improvements)
-* [Upgrade Steps](#upgrade-steps)
+This document guides an administrator through the patch update to Cray Systems Management 1.7.1-patch.1
+from CSM 1.7.1 onwards only -- do not apply this patch directly to CSM 1.7.0.
 
-## Introduction
+This page documents the changes introduced by this patch, compared to the previous patch
+version of CSM.
 
-This document guides an administrator through the patch update to Cray Systems Management `1.7.1-patch.1`
-from CSM `1.7.1` onwards only.
+For the main CSM 1.7 release notes page, including links to other patch release notes,
+see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
-## Bug fixes and improvements
+* [Patch releases](#patch-releases)
+* [Bug fixes, additions, and improvements](#bug-fixes-additions-and-improvements)
+* [Upgrade steps](#upgrade-steps)
+
+## Patch releases
+
+This is the release notes page for CSM 1.7.1-patch.1. Each patch for CSM 1.7.1 has its own release notes, detailing what
+changes it includes.
+
+## Bug fixes, additions, and improvements
 
 * Fixed a `USS 1.5.1-1's` `blancapeak` boot failure on Grace-Hopper based compute nodes where the root file system mounted read-only after a USS update.  
   The `csm-sbps-dracut` package has been updated so these bind mounts are no longer mounted read-only, resolving the issue.
@@ -17,6 +26,6 @@ from CSM `1.7.1` onwards only.
 * `CVE-2026-46333` - Fixed CVE Linux kernel `ptrace` vulnerability.  
   New NCN node images have been built with the patched kernel, and vulnerability scan results confirm the issue is resolved.
 
-## Upgrade Steps
+## Upgrade steps
 
-Follow the procedures described in [CSM major/minor version upgrade](upgrade/README.md#csm-majorminor-version-upgrade#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
+See [Upgrade CSM](upgrade/README.md).
