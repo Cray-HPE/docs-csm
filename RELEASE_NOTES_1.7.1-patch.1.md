@@ -15,8 +15,10 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 ## Patch releases
 
-This is the release notes page for CSM 1.7.1-patch.1. Each patch for CSM 1.7.1 has its own release notes, detailing what
-changes it includes.
+This is the release notes page for CSM 1.7.1-patch.1;
+each patch for CSM 1.7.1 has its own release notes, detailing what changes it includes.
+For a full list of CSM 1.7.1 patch releases, see
+[CSM 1.7.1 patch releases](RELEASE_NOTES_1.7.1.md#patch-releases).
 
 ## Bug fixes, additions, and improvements
 

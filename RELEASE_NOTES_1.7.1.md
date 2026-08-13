@@ -6,7 +6,7 @@ version of CSM.
 For the main CSM 1.7 release notes page, including links to other patch release notes,
 see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
-* [Patch releases](#patch-releases)
+* [CSM 1.7.1 patch releases](#csm-171-patch-releases)
 * [Additions and improvements](#additions-and-improvements)
 * [Customer-requested](#customer-requested)
 * [Bug fixes](#bug-fixes)
@@ -30,7 +30,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
     * [CRAYSAT](#craysat)
     * [MTL](#mtl)
 
-## Patch releases
+## CSM 1.7.1 patch releases
 
 This is the release notes page for CSM 1.7.1. Each patch for CSM 1.7.1 has its own release notes, detailing what
 changes it includes.
