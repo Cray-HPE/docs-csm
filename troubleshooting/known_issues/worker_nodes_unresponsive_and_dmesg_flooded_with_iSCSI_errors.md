@@ -203,7 +203,7 @@ Example output:
 
 Example case for node `ncn-w001`:
 
-* Get the xname of node:  
+* Get the xname of node:
 
 ```bash
 XNAME=$(ssh ncn-w001 cat /etc/cray/xname)

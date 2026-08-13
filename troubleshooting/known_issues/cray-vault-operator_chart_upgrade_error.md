@@ -23,7 +23,7 @@ Releasing cray-vault-operator v1.5.2
 
 2025-12-01T23:38:17Z INF Running helm install/upgrade with arguments: upgrade --install cray-vault-operator helm/cray-vault-operator-1.5.2.tgz --namespace vault --create-namespace --set global.chart.name=cray-vault-operator --set global.chart.version=1.5.2 chart=cray-vault-operator command=ship namespace=vault version=1.5.2
 2025-12-01T23:43:21Z ERR Error releasing chart cray-vault-operator v1.5.2: Shell error: Error: UPGRADE FAILED: pre-upgrade hooks failed: 1 error occurred:
-        * timed out waiting for the condition chart=cray-vault-operator command=ship namespace=vault version=1.5.2 
+        * timed out waiting for the condition chart=cray-vault-operator command=ship namespace=vault version=1.5.2
 ```
 
 The `cray-vault-operator-pre-upgrade-crd-upgrade-crd-hook` pods in `vault` namespace will be in Error status:
@@ -34,7 +34,7 @@ The `cray-vault-operator-pre-upgrade-crd-upgrade-crd-hook` pods in `vault` names
 kubectl get pods -n vault
 ```
 
-Example Output:
+Example output:
 
 ```console
 NAME                                             READY   STATUS      RESTARTS   AGE
@@ -60,7 +60,7 @@ The logs of the `cray-vault-operator-pre-upgrade-crd-hook` pods will contain thi
 kubectl logs -n vault cray-vault-operator-pre-upgrade-crd-hook-6trs8
 ```
 
-Example Output:
+Example output:
 
 ```console
 The CustomResourceDefinition "vaults.vault.banzaicloud.com" is invalid: spec.preserveUnknownFields: Invalid value: true: must be false in order to use defaults in the schema
@@ -78,7 +78,7 @@ the IUF Management Nodes Rollout.
    kubectl delete crd vaults.vault.banzaicloud.com
    ```
 
-   Example Output:
+   Example output:
 
    ```console
    ncn-m001:~ # kubectl delete crd vaults.vault.banzaicloud.com

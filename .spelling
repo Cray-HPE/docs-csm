@@ -320,11 +320,12 @@ NetworkManager
 Nexus
 OAuth
 OAuth2
-OSDs
-OpROM
-OpROMs
 OpenAPI
 OpenID
+OpenSearch
+OpROM
+OpROMs
+OSDs
 OverlayFS
 PAM-4
 PCH-style

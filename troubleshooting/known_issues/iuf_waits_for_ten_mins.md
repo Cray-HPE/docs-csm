@@ -1,15 +1,21 @@
 # IUF waits for 10 minutes to get workflow status before executing
 
-## Issue Description
+## Issue description
 
-When running IUF commands, the `iuf-cli` waits for 10 minutes before starting execution. During this time, it repeatedly displays a warning message: "Unable to get workflow status."
+When running IUF commands, the `iuf-cli` waits for 10 minutes before starting execution.
+During this time, it repeatedly displays a warning message: "Unable to get workflow status."
 
-## Error Identification
+## Error identification
 
 While executing IUF commands the following warning is displayed by `iuf-cli` for 10 minutes.
 
-```sh
-ncn-m001:~ # iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r management-nodes-rollout --limit-management-rollout ncn-w003
+```bash
+iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r management-nodes-rollout --limit-management-rollout ncn-w003
+```
+
+Example output:
+
+```text
 INFO All logs will be stored in /etc/cray/upgrade/csm/iuf/install-products/log/20250306145455
 WARN Unable to get workflow status. Retrying after 10 seconds...
 WARN Unable to get workflow status. Retrying after 10 seconds...
@@ -23,28 +29,33 @@ WARN Unable to get workflow status. Retrying after 10 seconds...
 WARN Unable to get workflow status. Retrying after 10 seconds...
 INFO [ACTIVITY: install-products                               ] BEG Install started at 2025-03-06 14:54:55.095146
 INFO [IUF SESSION: install-products-h16zj                      ] BEG Started at 2025-03-06 15:04:15.305532
-INFO [STAGE: management-nodes-rollout                          ] BEG Argo workflow: install-products-h16zj-management-nodes-rollout-vg48w 
+INFO [STAGE: management-nodes-rollout                          ] BEG Argo workflow: install-products-h16zj-management-nodes-rollout-vg48w
 ```
 
-## Error Conditions
+## Error conditions
 
-If an IUF session is abruptly terminated (e.g., using Ctrl+C), the running workflow is also terminated.  Although IUF stores workflow data in a state file `(activity_dict.yaml)`, the termination causes the workflow status to become "Unknown."
+If an IUF session is abruptly terminated (e.g., using Ctrl+C), the running workflow is also terminated.
+Although IUF stores workflow data in a state file `(activity_dict.yaml)`, the termination causes the workflow status to become "Unknown."
 
-When IUF attempts to retrieve the workflow status, it fails because the workflow no longer exists. This results in a discrepancy between the activity data stored by IUF and the `Argo` workflow server.
+When IUF attempts to retrieve the workflow status, it fails because the workflow no longer exists.
+This results in a discrepancy between the activity data stored by IUF and the Argo workflow server.
 
-## Workaround Description
+## Workaround description
 
 To resolve this issue, follow these steps:
 
 1. Locate the `activity_dict.yaml` file in the state directory of the activity.
 
-    ```sh
+    ```bash
     cd /etc/cray/upgrade/csm/iuf/${ACTIVITY_NAME}/state
     ```
 
-2. Identify the workflow with the **"Unknown"** status. For example, for the workflow `install-products-2kh2l-management-nodes-rollout-gnqzj` with "Unknown" status, the entry would look like this:
+1. Identify the workflow with the `Unknown` status.
 
-    ```sh
+    For example, for the workflow `install-products-2kh2l-management-nodes-rollout-gnqzj` with `Unknown` status,
+    the entry would look like this:
+
+    ```yaml
     '2025-03-06t10:44:08':
           args:
             activity: install-products
@@ -88,9 +99,9 @@ To resolve this issue, follow these steps:
           session: install-products-2kh2l
           state: in_progress
           status: Unknown
-          workflow_id: install-products-2kh2l-management-nodes-rollout-gnqzj 
+          workflow_id: install-products-2kh2l-management-nodes-rollout-gnqzj
     ```
 
-3. Remove the workflow entry with the "Unknown" status from the file, which is the entire block shown above.
+1. Remove the workflow entry with the `Unknown` status from the file, which is the entire block shown above.
 
-4. Re-run the IUF command.
+1. Re-run the IUF command.

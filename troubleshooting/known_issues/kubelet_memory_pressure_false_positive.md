@@ -25,9 +25,9 @@ Worker nodes may show memory pressure taints and extremely high memory usage per
     Warning  Evicted  31s  kubelet  The node was low on resource: memory. Threshold quantity: 100Mi, available: -9315068Ki.
     ```
 
-- However, checking the node with `kubectl describe node` shows memory requests/limits are reasonable and within capacity.
+- Checking the node with `kubectl describe node` shows memory requests/limits are reasonable and within capacity.
 
-## Root Cause
+## Root cause
 
 This is a bug in kubelet's cadvisor component that incorrectly processes cgroup v2 memory statistics on certain nodes. The calculated
 available memory can show astronomically incorrect values (e.g., 16 Exabytes) or negative values, causing kubelet to believe the node is
@@ -39,20 +39,20 @@ This bug was introduced in Kubernetes 1.28 and remains unresolved as of Kubernet
 
 ## Diagnosis
 
-### Quick Check
+### Quick check
 
 Use the following script to check node memory statistics from kubelet's perspective. This will reveal if kubelet is reporting incorrect memory values:
 
-1. (`ncn-m#`) Check a specific node (replace `ncn-w002` with the node name):
+1. (`ncn-mw#`) Check a specific node (replace `ncn-w002` with the node name):
 
     ```bash
     NODE="ncn-w002"
     kubectl get --raw /api/v1/nodes/$NODE/proxy/stats/summary | \
       jq -r '.node.memory |
-        "Available Bytes:    \(.availableBytes) (\((.availableBytes/1073741824)|tostring) GiB)\n" +
-        "Usage Bytes:        \(.usageBytes) (\((.usageBytes/1073741824)|tostring) GiB)\n" +
-        "Working Set Bytes:  \(.workingSetBytes) (\((.workingSetBytes/1073741824)|tostring) GiB)\n" +
-        "RSS Bytes:          \(.rssBytes) (\((.rssBytes/1073741824)|tostring) GiB)"'
+        "Available Bytes:    (.availableBytes) (((.availableBytes/1073741824)|tostring) GiB)\n" +
+        "Usage Bytes:        (.usageBytes) (((.usageBytes/1073741824)|tostring) GiB)\n" +
+        "Working Set Bytes:  (.workingSetBytes) (((.workingSetBytes/1073741824)|tostring) GiB)\n" +
+        "RSS Bytes:          (.rssBytes) (((.rssBytes/1073741824)|tostring) GiB)"'
     ```
 
     Expected output for a healthy node:
@@ -75,24 +75,24 @@ Use the following script to check node memory statistics from kubelet's perspect
 
     The available bytes showing values like 18 quintillion (approximately 16 Exabytes) or negative values indicates the bug is present.
 
-2. (`ncn-m#`) Check all nodes:
+1. (`ncn-mw#`) Check all nodes:
 
     ```bash
     for NODE in $(kubectl get nodes -o jsonpath='{.items[*].metadata.name}'); do
         echo "=== $NODE ==="
         kubectl get --raw /api/v1/nodes/$NODE/proxy/stats/summary | \
           jq -r '.node.memory |
-            "Available Bytes:    \(.availableBytes) (\((.availableBytes/1073741824)|tostring) GiB)",
-            "Usage Bytes:        \(.usageBytes) (\((.usageBytes/1073741824)|tostring) GiB)",
-            "Working Set Bytes:  \(.workingSetBytes) (\((.workingSetBytes/1073741824)|tostring) GiB)",
-            "RSS Bytes:          \(.rssBytes) (\((.rssBytes/1073741824)|tostring) GiB)"'
+            "Available Bytes:    (.availableBytes) (((.availableBytes/1073741824)|tostring) GiB)",
+            "Usage Bytes:        (.usageBytes) (((.usageBytes/1073741824)|tostring) GiB)",
+            "Working Set Bytes:  (.workingSetBytes) (((.workingSetBytes/1073741824)|tostring) GiB)",
+            "RSS Bytes:          (.rssBytes) (((.rssBytes/1073741824)|tostring) GiB)"'
         echo ""
     done
     ```
 
 ### Additional Checks
 
-1. (`ncn-m#`) Check for memory pressure taints on nodes:
+1. (`ncn-mw#`) Check for memory pressure taints on nodes:
 
     ```bash
     kubectl get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints
@@ -100,7 +100,7 @@ Use the following script to check node memory statistics from kubelet's perspect
 
     Look for `node.kubernetes.io/memory-pressure` taints.
 
-2. (`ncn-m#`) View node conditions:
+1. (`ncn-mw#`) View node conditions:
 
     ```bash
     kubectl describe node <node-name> | grep -A 10 "^Conditions:"
@@ -108,7 +108,7 @@ Use the following script to check node memory statistics from kubelet's perspect
 
     The `MemoryPressure` condition may show `False` (correct) even though kubelet is still incorrectly calculating memory statistics.
 
-3. (`ncn-m#`) Compare with actual node memory usage:
+1. (`ncn-mw#`) Compare with actual node memory usage:
 
     ```bash
     ssh <node-name> free -h
@@ -116,33 +116,33 @@ Use the following script to check node memory statistics from kubelet's perspect
 
 ## Resolution
 
-The workaround is to reboot the affected worker node(s). This resets kubelet's memory statistics and resolves the issue.
+The workaround is to reboot the affected worker nodes. This resets kubelet's memory statistics and resolves the issue.
 
-1. (`ncn-m#`) Identify affected nodes using the quick check script above.
+1. (`ncn-mw#`) Identify affected nodes using the quick check script above.
 
-2. (`ncn-m#`) Follow the standard NCN worker node reboot procedure for each affected node.
+1. (`ncn-mw#`) Follow the standard NCN worker node reboot procedure for each affected node.
 
     See [Reboot NCNs](../../operations/node_management/Reboot_NCNs.md) for detailed instructions.
 
-3. (`ncn-m#`) After the node comes back online, verify the memory statistics are correct:
+1. (`ncn-mw#`) After the node comes back online, verify the memory statistics are correct:
 
     ```bash
     NODE="ncn-w002"
     kubectl get --raw /api/v1/nodes/$NODE/proxy/stats/summary | \
       jq -r '.node.memory |
-        "Available Bytes:    \(.availableBytes) (\((.availableBytes/1073741824)|tostring) GiB)\n" +
-        "Usage Bytes:        \(.usageBytes) (\((.usageBytes/1073741824)|tostring) GiB)\n" +
-        "Working Set Bytes:  \(.workingSetBytes) (\((.workingSetBytes/1073741824)|tostring) GiB)\n" +
-        "RSS Bytes:          \(.rssBytes) (\((.rssBytes/1073741824)|tostring) GiB)"'
+        "Available Bytes:    (.availableBytes) (((.availableBytes/1073741824)|tostring) GiB)\n" +
+        "Usage Bytes:        (.usageBytes) (((.usageBytes/1073741824)|tostring) GiB)\n" +
+        "Working Set Bytes:  (.workingSetBytes) (((.workingSetBytes/1073741824)|tostring) GiB)\n" +
+        "RSS Bytes:          (.rssBytes) (((.rssBytes/1073741824)|tostring) GiB)"'
     ```
 
-4. (`ncn-m#`) Verify the node no longer has memory pressure taint:
+1. (`ncn-mw#`) Verify the node no longer has memory pressure taint:
 
     ```bash
     kubectl describe node <node-name> | grep -i taint
     ```
 
-5. (`ncn-m#`) Verify pending pods can now schedule:
+1. (`ncn-mw#`) Verify pending pods can now schedule:
 
     ```bash
     kubectl get pods --all-namespaces --field-selector status.phase=Pending

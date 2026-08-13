@@ -160,15 +160,15 @@ In this case, the HSM smoke test job failed. Find the name of the pod and inspec
 
     ```text
     Running smoke tests...
-    
+
     ...
-    
+
     2022-07-01 21:13:05,853 Testing {"path": "hsm/v2/service/ready", "expected_status_code": 200, "method": "GET", "body": null, "headers": {}, "url": "http://cray-smd/hsm/v2/service/ready"}
     2022-07-01 21:13:05,863 Starting new HTTP connection (1): cray-smd:80
     2022-07-01 21:13:05,873 FAIL: HTTPConnectionPool(host='cray-smd', port=80): Max retries exceeded with url: /hsm/v2/service/ready (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7faf6fdf6460>: Failed to establish a new connection: [Errno 111] Connection refused'))
-    
+
     ...
-    
+
     2022-07-01 21:13:09,282 FAIL: hsm-smoke-tests
     2022-07-01 21:13:09,282 failed!
     2022-07-01 21:13:09,282 FAIL: hsm-smoke-tests ran with failures
@@ -225,18 +225,18 @@ In this case, the HSM functional test job failed. Find the name of the pod and i
     rootdir: /src/app, configfile: pytest.ini
     plugins: tap-3.3, tavern-1.23.1
     collecting ... collected 38 items
-    
+
     ...
-    
+
     test_components.tavern.yaml::Ensure that we can conduct a query for all Nodes in the Component collection FAILED [ 21%]
-    
+
     ...
-    
+
     =================================== FAILURES ===================================
     _ /src/app/test_components.tavern.yaml::Ensure that we can conduct a query for all Nodes in the Component collection _
-    
+
     ...
-    
+
     Errors:
     E   tavern.util.exceptions.TestFailError: Test 'Verify the expected response fields for all Nodes' failed:
         - Error calling validate function '<function validate_pykwalify at 0x7f34e3ebf6d0>':
@@ -401,7 +401,7 @@ FAILED test_components.tavern.yaml::Ensure that we can conduct a variety of quer
 FAILED test_hardware.tavern.yaml::Query the Hardware collection for Node information
 ```
 
-If these failures occur, see the [Test Failures Due To No Discovered Compute Nodes In HSM](./known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
+If these failures occur, see the [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
 
 ##### `test_components.tavern.yaml`
 
@@ -585,7 +585,7 @@ FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status f
 FAILED api/1-non-disruptive/test_power-status.tavern.yaml::Verify power-status for a Node using a managementStateFilter
 ```
 
-If these failures occur, see the [Test Failures Due To No Discovered Compute Nodes In HSM](./known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
+If these failures occur, see the [Test Failures Due To No Discovered Compute Nodes In HSM](known_issues/test_failures_no_discovered_computes_in_hsm.md) documentation for further troubleshooting.
 
 The following is an example of a failed test execution due to PCS not having
 any data in its ETCD storage:

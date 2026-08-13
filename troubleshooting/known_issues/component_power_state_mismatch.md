@@ -5,7 +5,7 @@ become out of sync with the actual hardware state reported by PCS or Redfish. In
 when trying to power on or off nodes with BOS, and will present as SAT or HSM reporting nodes are `On` while PCS
 reports them as `Off` (or vice versa).
 
-## Possible Causes
+## Possible causes
 
 Possible reasons the power state got out of sync include but are not limited to:
 
@@ -32,7 +32,7 @@ cray hsm inventory discover create --xnames x3000c0s0b0,x3000c0s1b0
 The power state will be re-synced after all of the BMCs listed have a `LastDiscoveryStatus` of `DiscoverOK`.
 
 ```bash
-cray hsm inventory redfishEndpoints describe x3000c0s0b0
+cray hsm inventory redfishEndpoints describe x3000c0s0b0 --format json
 ```
 
 Example output:

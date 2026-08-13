@@ -16,7 +16,7 @@ This document provides guidance on how to troubleshoot Cilium-related issues in 
 > Look for any errors or warnings in the output.
 
 ```bash
-cilium status 
+cilium status
 ```
 
 Expected output resembles the following:

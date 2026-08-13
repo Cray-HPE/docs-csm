@@ -75,7 +75,7 @@ There is a known issue where if Unbound is configured to forward to an invalid o
      www.google.com has IPv6 address 2607:f8b0:4001:c17::67
      ```
 
-   If the above checks fail, then verify that the Customer Management Network \(CMN\) is working correctly. See [Troubleshoot CMN issues](../../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md) for more information.
+   If the above checks fail, then verify that the Customer Management Network (CMN) is working correctly. See [Troubleshoot CMN issues](../../operations/network/customer_accessible_networks/Troubleshoot_CMN_Issues.md) for more information.
 
 If it is not possible to restore access to the `forward-addr`, then reconfigure Unbound to point to a working DNS server, or temporarily remove the forwarder configuration.
 See "Change the Site DNS Server" in [Manage the DNS Unbound Resolver](../../operations/network/dns/Manage_the_DNS_Unbound_Resolver.md) for more information.

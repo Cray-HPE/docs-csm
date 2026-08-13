@@ -432,17 +432,17 @@ If the test is interrupted or fails unexpectedly, the CFS operator may remain sc
   ```bash
   kubectl scale deployment -n services cray-cfs-operator --replicas=1
   ```
-  
+
 * If the global page-size was modified (CFS v2 only), it may need to be manually restored through the `cray cli`.
-  
+
   (`ncn-mw#`) Example of restoring the default page size to 1000:
-  
+
   ```bash
   cray cfs v3 options update --default-page-size 1000
   ```
-  
+
   Example output:
-  
+
   ```text
   additional_inventory_source = ""
   additional_inventory_url = ""

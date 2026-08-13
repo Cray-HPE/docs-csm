@@ -65,14 +65,14 @@ This issue occurs when `PREPARE_KUBEADM` successfully patches `kube-proxy`, but 
        > "${tmpdir}/kubeadm-config.yaml"
    patch=$(jq -c -n --rawfile text "${tmpdir}/kubeadm-config.yaml" '.data["ClusterConfiguration"]=$text')
    kubectl -n kube-system patch configmap kubeadm-config --type merge --patch "${patch}"
-   
+
    echo "Patching kube-proxy configmap to remove udpIdleTimeout ..."
    kubectl -n kube-system get configmap kube-proxy -o go-template --template '{{ index .data "config.conf" }}' \
      | yq4 e 'del(.udpIdleTimeout)' \
        > "${tmpdir}/kube-proxy.yaml"
    patch=$(jq -c -n --rawfile text "${tmpdir}/kube-proxy.yaml" '.data["config.conf"]=$text')
    kubectl -n kube-system patch configmap kube-proxy --type merge --patch "${patch}"
-   
+
    rm -rf "${tmpdir}"
    EOF
    ```

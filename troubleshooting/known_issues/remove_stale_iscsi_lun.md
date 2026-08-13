@@ -1,6 +1,6 @@
 # Worker nodes may hang or unresponsive post `rootfs/PE` image deletion
 
-## Symptom  
+## Symptom
 
 On CSM 1.7 cluster, where compute/UAN nodes are booted with iSCSI SBPS,
 if any `rootfs/PE` images are deleted say if some of these images are unused,

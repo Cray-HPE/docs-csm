@@ -34,7 +34,7 @@ The upgrade to CSM 1.7 is done through IUF. Follow one of the following two proc
 
 1. [Upgrade CSM and additional products with IUF](../operations/iuf/workflows/upgrade_csm_and_additional_products_with_iuf.md)
 
-1. [Upgrade only CSM](./Upgrade_Only_CSM_with_iuf.md)
+1. [Upgrade only CSM](Upgrade_Only_CSM_with_iuf.md)
 
 **Important:** Take note of the below content for troubleshooting purposes, in the event that issues are encountered during the upgrade process.
 
@@ -167,7 +167,7 @@ The upgrade to CSM 1.7 is done through IUF. Follow one of the following two proc
 
   When executing command `/usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}`, if `rsync` error is displayed in console after stage `REPAIR_AND_VERIFY_CHRONY_CONFIG` or in
   `output.log` as shown in example below, then ensure latest version of `libcsm` and `docs-csm` RPMs are successfully installed and then re-execute the same command.
-  
+
   ```bash
   /usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh --csm-version ${CSM_RELEASE}
   ...
@@ -179,9 +179,9 @@ The upgrade to CSM 1.7 is done through IUF. Follow one of the following two proc
 
    ```text
    ====> REPAIR_AND_VERIFY_CHRONY_CONFIG ...
-   rsync: [sender] link_stat "/etc/cray/upgrade/csm/csm-<version>/tarball/csm-<version>/chrony" failed: 
+   rsync: [sender] link_stat "/etc/cray/upgrade/csm/csm-<version>/tarball/csm-<version>/chrony" failed:
    No such file or directory (2)
-   rsync error: some files/attrs were not transferred (see previous errors) (code <number>) at main.c(<line number>) 
+   rsync error: some files/attrs were not transferred (see previous errors) (code <number>) at main.c(<line number>)
    [sender=<version>]
    <line number> /usr/share/doc/csm/upgrade/scripts/upgrade/prerequisites.sh
    rsync -aq "${CSM_ARTI_DIR}"/chrony "${target_ncn}":/srv/cray/scripts/common/

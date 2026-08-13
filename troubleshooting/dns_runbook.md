@@ -23,7 +23,7 @@
 (`ncn-mw#`) On any Kubernetes NCN, run:
 
 ```bash
-kubectl get -n services pods | grep unbound |grep -v unbound-manager 
+kubectl get -n services pods | grep unbound |grep -v unbound-manager
 ```
 
 Expected output resembles the following:
@@ -132,7 +132,7 @@ nameserver 10.92.100.225
     ```text
     Server: 172.30.84.40
     Address: 172.30.84.40#53
- 
+
     Non-authoritative answer:
     Name: google.com
     Address: 172.217.1.238
@@ -240,13 +240,13 @@ Reset DNS record data for `cray-dns-unbound` to force a complete DNS record gene
     Use the appropriate command based on the information obtained in the previous step.
 
     - Compressed data version
-  
+
         ```bash
         kubectl -n services patch configmaps cray-dns-unbound --type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
         ```
-  
+
     - Non-compressed data version
-  
+
         ```bash
         kubectl -n services patch configmaps cray-dns-unbound --type merge -p '{"data":{"records.json":"[]"}}'
         ```
