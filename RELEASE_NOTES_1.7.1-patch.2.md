@@ -1,15 +1,26 @@
 # Cray System Management (CSM) 1.7.1-patch.2 Release Notes
 
-* [Introduction](#introduction)
-* [Bug fixes and improvements](#bug-fixes-and-improvements)
-* [Upgrade Steps](#upgrade-steps)
+This document guides an administrator through the patch update to Cray Systems Management 1.7.1-patch.2
+from CSM 1.7.1 onwards only -- do not apply this patch directly to CSM 1.7.0.
 
-## Introduction
+This page documents the changes introduced by this patch, compared to the previous patch
+version of CSM.
 
-This document guides an administrator through the patch update to CSM 1.7.1-patch.2
-from CSM `1.7.1` onwards only.
+For the main CSM 1.7 release notes page, including links to other patch release notes,
+see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
-## Bug fixes and improvements
+* [Patch releases](#patch-releases)
+* [Bug fixes, additions, and improvements](#bug-fixes-additions-and-improvements)
+* [Upgrade steps](#upgrade-steps)
+
+## Patch releases
+
+This is the release notes page for CSM 1.7.1-patch.2;
+each patch for CSM 1.7.1 has its own release notes, detailing what changes it includes.
+For a full list of CSM 1.7.1 patch releases, see
+[CSM 1.7.1 patch releases](RELEASE_NOTES_1.7.1.md#patch-releases).
+
+## Bug fixes, additions, and improvements
 
 ### Configuration Framework Service (CFS)
 
@@ -34,4 +45,4 @@ This patch includes many fixes and improvements for CFS.
 
 ## Upgrade steps
 
-Follow the procedures described in [CSM major/minor version upgrade](upgrade/README.md#csm-majorminor-version-upgrade#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
+See [Upgrade CSM](upgrade/README.md).
