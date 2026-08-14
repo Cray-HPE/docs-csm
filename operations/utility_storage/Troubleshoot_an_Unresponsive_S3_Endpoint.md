@@ -2,7 +2,7 @@
 
 The following section includes various issues causing an unresponsive `radosgw` S3 endpoint and how to resolve them.
 
-## Issue 1: Rados-Gateway/`s3` endpoint is Not Accessible
+## Issue 1: Rados gateway/S3 endpoint is not accessible
 
 Check the response code from `rgw-vip`.
 
@@ -10,9 +10,9 @@ Check the response code from `rgw-vip`.
 curl --write-out '%{http_code}' --silent --output /dev/null http://rgw-vip
 ```
 
-Expected Responses: `2xx`, `3xx`
+Expected responses: `2xx`, `3xx`
 
-### Procedure
+### Issue 1: Procedure
 
 1. Check the individual endpoints.
 
@@ -22,29 +22,36 @@ Expected Responses: `2xx`, `3xx`
 
    Expected output if individual endpoints are healthy:
 
-   ```bash
+   ```text
    Curl Response Code for ncn-s001: 200
    Curl Response Code for ncn-s002: 200
    Curl Response Code for ncn-s003: 200
    ```
 
-   **Troubleshooting:** If an error occurs with the above script, then `echo $num_storage_nodes`.
-   If it is not an integer that matches the known configuration of the number of Utility Storage nodes, then run `cloud-init init` to refresh the `cloud-init` cache.
-   Alternatively, manually set that number if the number of Utility Storage nodes is known.
+### Issue 1: Troubleshooting
 
-1. Verify `HAProxy` and `KeepAlived` status.
+If an error occurs with the above script, then `echo $num_storage_nodes`.
+If it is not an integer that matches the known configuration of the number of storage NCNs,
+then run `cloud-init init` to refresh the `cloud-init` cache.
+Alternatively, manually set that number if the number of storage NCNs is known.
 
-   `KeepAlived:`
+#### Verify `HAProxy` and `keepalived` status
 
-   1. Check `KeepAlived` on each node running `ceph-radosgw`. By default, this will be all Utility Storage nodes, but may differ based on your configuration.
+##### Verify `keepalived` status
 
-   ```bash
-   systemctl is-active keepalived.service
-   ```
+1. Check `keepalived` on each node running `ceph-radosgw`.
 
-   `active` should be returned in the output.
+    By default, this will be all storage NCNs, but may differ based on specific system configuration.
 
-   1. Check for the `KeepAlived` instance hosting the VIP (Virtual IP). This command will have to be run on each node until you find the expected output.
+    ```bash
+    systemctl is-active keepalived.service
+    ```
+
+    `active` should be returned in the output.
+
+1. Check for the `keepalived` instance hosting the VIP (Virtual IP).
+
+    Run this command on each node until the expected output is found.
 
     ```bash
     journalctl -u keepalived.service --no-pager |grep -i gratuitous
@@ -52,75 +59,75 @@ Expected Responses: `2xx`, `3xx`
 
     Example output:
 
-    ```bash
+    ```text
     Aug 25 19:33:12 ncn-s001 Keepalived_vrrp[12439]: Registering gratuitous ARP shared channel
     Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: Sending gratuitous ARP on bond0.nmn0 for 10.252.1.3
     Aug 25 19:43:08 ncn-s001 Keepalived_vrrp[12439]: (VI_0) Sending/queueing gratuitous ARPs on bond0.nmn0 for 10.252.1.3
     ```
 
-   `HAProxy:`
+##### Verify `HAProxy` status
 
-   ```bash
-   systemctl is-active haproxy.service
-   ```
+1. Check status.
 
-   `active` should be returned in the output.
+    ```bash
+    systemctl is-active haproxy.service
+    ```
 
-1. Check `haproxy.cfg` has correct values for RGW backend. Do this for each storage node.
+    `active` should be returned in the output.
 
-   ```bash
-   cat /etc/haproxy/haproxy.cfg | grep -v 'default' | grep -A 15 'backend rgw-backend'
-   ```
+1. Verify that `haproxy.cfg` has correct values for RGW backend.
 
-   Expected output:
+    Do this for each storage node.
 
-   ```bash
-   backend rgw-backend
-   option forwardfor
-   balance static-rr
-   option httpchk GET /
-       server server-ncn-s001-rgw0 10.252.1.4:8080 check weight 100
-       server server-ncn-s002-rgw0 10.252.1.5:8080 check weight 100
-       server server-ncn-s003-rgw0 10.252.1.6:8080 check weight 100
-   ...
-   ```
+    ```bash
+    grep -v 'default' /etc/haproxy/haproxy.cfg | grep -A 15 'backend rgw-backend'
+    ```
 
-   If the output is not as expected and does not contain all nodes running RGW, then follow steps below.
+    Expected output:
 
-   1. `(ncn-s00[1/2/3]#)` Redeploy RGW and specify hostnames for the placement.
+    ```text
+    backend rgw-backend
+    option forwardfor
+    balance static-rr
+    option httpchk GET /
+        server server-ncn-s001-rgw0 10.252.1.4:8080 check weight 100
+        server server-ncn-s002-rgw0 10.252.1.5:8080 check weight 100
+        server server-ncn-s003-rgw0 10.252.1.6:8080 check weight 100
+    ...
+    ```
 
-      ```bash
-        ceph orch apply rgw site1 zone1 --placement="<num-daemons> ncn-s001 ncn-s002 ncn-s003 ... ncn-s00X" --port=8080
-      ```
+    If the output is as expected and contains all nodes running RGW, then skip the remaining steps.
+    If the output is not as expected and does not contain all nodes running RGW, then follow the remaining steps.
 
-   1. Regenerate `haproxy.cfg` on all storage nodes and restart Haproxy.
+1. (`ncn-s00[1/2/3]#`) Redeploy RGW and specify hostnames for the placement.
 
-      ```bash
-      pdsh -w $(grep -oP 'ncn-s\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg; systemctl enable haproxy.service; systemctl restart haproxy.service'
-      ```
+    ```bash
+    ceph orch apply rgw site1 zone1 --placement="<num-daemons> ncn-s001 ncn-s002 ncn-s003 ... ncn-s00X" --port=8080
+    ```
 
-   After these steps, verify the correct values are in `/etc/haproxy/haproxy.cfg` for the `rgw backend`.
+1. (`ncn-s#`) Regenerate `haproxy.cfg` on all storage nodes and restart `HAProxy`.
 
-## Issue 2: Ceph Reports `HEALTH_OK` but S3 Operations Not Functioning
+    ```bash
+    pdsh -w $(grep -oP 'ncn-s\w\d+' /etc/hosts | sort -u |  tr -t '\n' ',') '/srv/cray/scripts/metal/generate_haproxy_cfg.sh > /etc/haproxy/haproxy.cfg; systemctl enable haproxy.service; systemctl restart haproxy.service'
+    ```
+
+1. Verify the correct values are in `/etc/haproxy/haproxy.cfg` for the `rgw backend`.
+
+## Issue 2: Ceph reports `HEALTH_OK` but S3 operations not functioning
 
 Restart Ceph OSDs to help make the `rgw.local:8080` endpoint responsive.
 
-**Ceph has an issue where it appears healthy but the `rgw.local:8080` endpoint is unresponsive.**
-
+Ceph has an issue where it appears healthy but the `rgw.local:8080` endpoint is unresponsive.
 This issue occurs when `ceph -s` is run and produces a very high reads per second output:
 
-```bash
+```text
 io:
     client:   103 TiB/s rd, 725 KiB/s wr, 2 op/s rd, 44 op/s wr
 ```
 
-The `rgw.local` endpoint needs to be responsive in order to interact directly with the Simple Storage Service \(S3\) RESTful API.
+The `rgw.local` endpoint needs to be responsive in order to interact directly with the Simple Storage Service (S3) RESTful API.
 
-### Prerequisites
-
-This procedure requires admin privileges.
-
-### Procedure for restarting Ceph OSDs
+### Issue 2: Procedure for restarting Ceph OSDs
 
 1. View the OSD status.
 
@@ -130,7 +137,7 @@ This procedure requires admin privileges.
 
     Example output:
 
-    ```bash
+    ```text
     ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
     -1       20.95312 root default
     -7        6.98438     host ncn-s001
@@ -142,7 +149,6 @@ This procedure requires admin privileges.
     -5        6.98438     host ncn-s003
      1   ssd  3.49219         osd.1         up  1.00000 1.00000
      4   ssd  3.49219         osd.4         up  1.00000 1.00000
-
     ```
 
 1. Log in to each node and restart the OSDs.

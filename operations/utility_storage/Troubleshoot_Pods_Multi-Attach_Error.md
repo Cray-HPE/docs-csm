@@ -1,9 +1,12 @@
 # Troubleshoot Pods Multi-Attach Error
 
-Troubleshoot an issue where pods cannot restart on another worker node because of the "Volume is already exclusively attached to one node and can't be attached to another" error.
-Kubernetes does not currently support `readwritemany` access mode for Rados Block Device \(RBD\) devices, which causes an issue where devices fail to unmap correctly.
+Troubleshoot an issue where pods cannot restart on another worker node because of the
+"Volume is already exclusively attached to one node and can't be attached to another" error.
+Kubernetes does not currently support `readwritemany` access mode for
+Rados Block Device (RBD) devices, which causes an issue where devices fail to unmap correctly.
 
-The issue occurs when unmounting the mounts tied to the RBD devices, which causes the `rbd-task` \(watcher\) to not stop for the RBD device.
+The issue occurs when unmounting the mounts tied to the RBD devices, which causes the `rbd-task`
+(watcher) to not stop for the RBD device.
 
 **WARNING:** If this process is followed and there are mount points that cannot be unmounted without using the force option, then a process may still be writing to them.
 If mount points are forcefully unmounted, there is a high probability of data loss or corruption.
@@ -26,7 +29,7 @@ This procedure requires administrative privileges.
 
 1. (`ncn-mw#`) Describe the pod experiencing issues.
 
-    The returned Persistent Volume Claim \(PVC\) information will be needed in future steps.
+    The returned Persistent Volume Claim (PVC) information will be needed in future steps.
 
     ```bash
     kubectl -n services describe pod POD_ID

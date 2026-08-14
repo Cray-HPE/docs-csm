@@ -1,6 +1,6 @@
 # Move Unmanaged Ceph OSDs
 
-**`IMPORTANT:`** This document addresses how to move OSDs that are unmanaged, but should actually
+**IMPORTANT:** This document addresses how to move OSDs that are unmanaged, but should actually
 be managed by the Ceph orchestrator. For OSDs that are intentionally unmanaged, DO NOT use
 this document to move them.
 
@@ -19,7 +19,7 @@ ceph orch ls | awk 'NR==1 || /osd/'
 Example output (the following example shows eight unmanaged OSDs with `osd` service name):
 
 ```text
-NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT 
+NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT
 osd                                           8  5m ago     -    <unmanaged>
 osd.all-available-devices                    16  5m ago     6d   *
 ```
@@ -102,7 +102,7 @@ Perform the following steps on only one storage node.
     Example output (`osd` service no longer shows `<unmanaged>` placement):
 
     ```text
-    NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT 
+    NAME                       PORTS        RUNNING  REFRESHED  AGE  PLACEMENT
     osd                                           8  10m ago    -    * <--- no longer <unmanaged>
     osd.all-available-devices                    16  10m ago    7d   *
     ```

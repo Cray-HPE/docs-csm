@@ -5,7 +5,7 @@ intervals of low I/O activity on the cluster. By default, these deep scrubs occu
 interval. Scheduling of deep scrubs is staggered across the PGs in the Ceph cluster, so that all PGs
 are not deep-scrubbed at the same time.
 
-## Ceph Deep Scrub Behavior During Outages
+## Ceph deep scrub behavior during outages
 
 When one or more OSDs are down, the deep scrubbing of the PGs on those OSDs cannot be performed. If a
 deep scrub of a PG is scheduled to occur while the OSD is down, the deep scrubbing will be delayed
@@ -33,7 +33,7 @@ scrubs missed after the system was brought up after power down:
 Note the message accompanying the `HEALTH_WARN` state indicating `7 pgs not deep-scrubbed in time`.
 This alert will clear when deep scrubbing completes.
 
-## Viewing Ceph Deep Scrub Schedule
+## Viewing ceph deep scrub schedule
 
 The `ceph pg dump` command shows information about the PGs in the Ceph cluster. This command can be
 used to see the last time PGs were scrubbed and thus infer the next time they will be scrubbed. For

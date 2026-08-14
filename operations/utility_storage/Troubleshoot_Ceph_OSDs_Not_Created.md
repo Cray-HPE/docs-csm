@@ -13,7 +13,7 @@ This procedure will help start an OSD on an available disk or a disk marked as u
 
     Example output:
 
-    ```bash
+    ```text
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         34.93088  root default
     -3         17.46544      host ncn-s001
@@ -87,11 +87,13 @@ To determine which path to follow, run the following command to see if Ceph find
     ceph orch device ls
     ```
 
-    1. Possible output 1. This output shows that Ceph is not able to discover the disks that are not being used.
-    Ceph does not see `/dev/sda`, `/dev/sdb`, `/dev/sdc`, `/dev/sdd`.
-    If the output looks like what is below, follow [Manually add OSDs to disks not discovered by Ceph](#manually-add-osds-to-disks-not-discovered-by-ceph).
+    - Possible output 1.
 
-        ```bash
+        This output shows that Ceph is not able to discover the disks that are not being used.
+        Ceph does not see `/dev/sda`, `/dev/sdb`, `/dev/sdc`, `/dev/sdd`.
+        If the output looks like what is below, then follow [Manually add OSDs to disks not discovered by Ceph](#manually-add-osds-to-disks-not-discovered-by-ceph).
+
+        ```text
         HOST      PATH        TYPE  DEVICE ID                                   SIZE  AVAILABLE  REFRESHED  REJECT REASONS
         ncn-s001  /dev/md127  ssd                        299G  No         2m ago     locked
         ncn-s001  /dev/sdg    ssd   SAMSUNG_MZ7LH30215  3840G  No         2m ago     Insufficient space (<10 extents) on vgs, LVM detected, locked
@@ -104,10 +106,12 @@ To determine which path to follow, run the following command to see if Ceph find
         ncn-s003  /dev/sdh    ssd   SAMSUNG_MZ7LH30412  3840G  No         2m ago     Insufficient space (<10 extents) on vgs, LVM detected, locked
         ```
 
-    1. Possible output 2. The output below shows that Ceph discovers the devices as available.
-    If the output looks like what is below, follow [Add OSDs to disks discovered by Ceph](#add-osds-to-disks-discovered-by-ceph).
+    - Possible output 2.
 
-        ```bash
+        The output below shows that Ceph discovers the devices as available.
+        If the output looks like what is below, then follow [Add OSDs to disks discovered by Ceph](#add-osds-to-disks-discovered-by-ceph).
+
+        ```text
         HOST      PATH        TYPE  DEVICE ID            SIZE  AVAILABLE  REFRESHED  REJECT REASONS
         ncn-s001  /dev/md127  ssd                        299G  No         2m ago     locked
         ncn-s001  /dev/sda    ssd                        299G  Yes        2m ago
@@ -127,7 +131,7 @@ To determine which path to follow, run the following command to see if Ceph find
         ...
         ```
 
-### Manually add OSDs to disks not discovered by Ceph
+## Manually add OSDs to disks not discovered by Ceph
 
 If the disks are not discovered by Ceph, it is likely due to the fact they are marked as removable. This can be checked by running `lsblk` and observing if a value of 1 is seen in the removable column.
 In order to add these disks to Ceph, run the `bootstrap_osd_on_removable_disk.sh` script.
@@ -158,7 +162,7 @@ If the OSD is created but does not start after three minutes, run `ceph orch dae
 This means that they are not managed by the Ceph orchestrator. This does not impact the operation of the Ceph cluster.
 Also note, this script may need to be rerun after the storage node is upgraded or rebuilt to recreate the OSDs.
 
-### Add OSDs to disks discovered by Ceph
+## Add OSDs to disks discovered by Ceph
 
 1. (`ncn-s001/2/3#`) Add OSDs on all available devices. First, run the `dry-run` to see which disks OSDs will be created on.
 
