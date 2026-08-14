@@ -2,9 +2,10 @@
 
 Use this procedure to diagnose and fix clients not logging into Ceph FS.
 
-**`NOTE`** This section does not diagnose nor fix network issues. Please ensure that all networking is functional before proceeding.
+## Important notes
 
-***IMPORTANT:*** The following commands can be run from ncn-m001/2/3 or ncn-s001/2/3.
+- This guide does not diagnose nor fix network issues. Ensure that all networking is functional before proceeding.
+- The commands in this procedure can be run from a master NCN or one of the first three storage NCNs.
 
 ## Procedure
 
@@ -17,7 +18,7 @@ Use this procedure to diagnose and fix clients not logging into Ceph FS.
    Example output:
 
    ```text
-   cephfs - 0 clients    <---- This indicates we have no clients connected
+   cephfs - 0 clients    <---- This indicates there are no clients connected
    ======
    RANK      STATE                MDS               ACTIVITY     DNS    INOS
    0        active      cephfs.ncn-s001.abiiiw  Reqs:    0 /s     0      0
@@ -35,9 +36,9 @@ Use this procedure to diagnose and fix clients not logging into Ceph FS.
    ceph mds fail 0
    ```
 
-   **`NOTE`** "0" refers to the active rank in our above output.
+   **NOTE** "0" refers to the active rank in the above output.
 
-1. Verify clients have reconnected.
+1. Verify that clients have reconnected.
 
    ```bash
    ceph fs status
@@ -46,7 +47,7 @@ Use this procedure to diagnose and fix clients not logging into Ceph FS.
    Example output:
 
    ```text
-   cephfs - 24 clients   <---- Shows our clients have reconnected
+   cephfs - 24 clients   <---- Shows clients have reconnected
    ======
    RANK      STATE                MDS               ACTIVITY     DNS    INOS
     0        active      cephfs.ncn-s002.kyayma  Reqs:    1 /s  52.8k  20.3k

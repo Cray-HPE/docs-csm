@@ -1,10 +1,12 @@
 # Ceph Storage Types
 
-As a reference, the following `ceph` and `rbd` commands are run from a master node or ncn-s001/2/3. Certain commands will work on different systems. For example, the `rbd` command can be used on the worker nodes if specifying the proper key.
+As a reference, the following `ceph` and `rbd` commands are run from a master node or one of the first three storage nodes
+(`ncn-s001`, `ncn-s002`, or `ncn-s003`). Certain commands will work on different nodes. For example, the `rbd` command can
+be used on the worker nodes if specifying the proper key.
 
-## Ceph Block \(rbd\)
+## Ceph block (`rbd`)
 
-**List block devices in a specific pool:**
+### List block devices in a specific pool
 
 ```bash
 rbd -p POOL_NAME ls -l
@@ -12,24 +14,24 @@ rbd -p POOL_NAME ls -l
 
 Example output:
 
-```
+```text
 NAME     SIZE  PARENT FMT PROT LOCK
 kube_vol 4 GiB          2
 ```
 
-**Create a block device:**
+### Create a block device
 
 ```bash
 rbd create -p POOL_NAME VOLUME_NAME -size SIZE
 ```
 
-**Remove a block device:**
+### Remove a block device
 
 ```bash
 rbd -p POOL_NAME remove VOLUME_NAME
 ```
 
-**Show mapped devices:**
+### Show mapped devices
 
 ```bash
 rbd showmapped
@@ -37,16 +39,16 @@ rbd showmapped
 
 Example output:
 
-```
+```text
 id pool namespace image    snap device
 0  test           test_vol -    /dev/rbd0
 1  kube           kube_vol -    /dev/rbd1
 2  smf            smf_vol  -    /dev/rbd2
 ```
 
-## Ceph MDS \(File\)
+## Ceph MDS (file)
 
-**Display CephFS shares with their pool information:**
+### Display CephFS shares with their pool information
 
 ```bash
 ceph fs ls
@@ -54,11 +56,11 @@ ceph fs ls
 
 Example output:
 
-```
+```text
 name: cephfs, metadata pool: cephfs_metadata, data pools: [cephfs_data ]
 ```
 
-**Show the status of all CephFS components:**
+### Show the status of all CephFS components
 
 ```bash
 ceph fs status
@@ -66,7 +68,7 @@ ceph fs status
 
 Example output:
 
-```
+```text
 cephfs - 0 clients <<-- Containers or hosts attached to cephfs are represented here
 ======
 +------+--------+-----------+---------------+-------+-------+
@@ -90,11 +92,11 @@ MDS version: ceph version 14.2.0-300-gacd2f2b9e1 (acd2f2b9e196222b0350b3b59af998
 
 ```
 
-## Ceph RadosGW \(object/s3\)
+## Ceph Rados gateway (`object/s3`)
 
-**List the services to learn more about the radosgw service:**
+### List the services to learn more about the `radosgw` service
 
-The following command lists more than just the radosgw service, so ensure the correct sections are used.
+The following command lists more than just the `radosgw` service, so ensure the correct sections are used.
 
 ```bash
 ceph service dump
@@ -102,7 +104,7 @@ ceph service dump
 
 Example output:
 
-```
+```text
 {
     "epoch": 2,
     "modified": "2019-08-11 04:37:31.464120",
@@ -142,7 +144,7 @@ Example output:
                 },
 ```
 
-**Edit and view user information:**
+### Edit and view user information
 
 The following command is an example of how to get information about a specific user.
 
@@ -152,7 +154,7 @@ radosgw-admin user info --uid TEST_USER
 
 Example output:
 
-```
+```json
 {
     "user_id": "test_user",
     "display_name": "test_user",
@@ -195,13 +197,13 @@ Example output:
 
 The `radosgw-admin bucket` command is used to remove or view buckets.
 
-**To list the buckets:**
+### List the buckets
 
 ```bash
 radosgw-admin bucket list
 ```
 
-**To remove a specific bucket:**
+### Remove a specific bucket
 
 ```bash
 radosgw-admin bucket rm --bucket-name BUCKET_NAME

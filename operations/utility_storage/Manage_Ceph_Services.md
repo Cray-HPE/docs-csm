@@ -1,16 +1,17 @@
 # Manage Ceph Services
 
-The following commands are required to start, stop, or restart Ceph services. Restarting Ceph services is helpful for troubleshoot issues with the utility storage platform.
+The following commands are required to start, stop, or restart Ceph services.
+Restarting Ceph services is helpful for troubleshooting issues with the utility storage platform.
 
-## List Ceph Services
+## List Ceph services
 
 ```bash
-ncn-s00(1/2/3)# ceph orch ps
+ceph orch ps
 ```
 
 Example output:
 
-```bash
+```text
 NAME                             HOST      STATUS        REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
 mds.cephfs.ncn-s001.zwptsg       ncn-s001  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  bb08bcb2f034
 mds.cephfs.ncn-s002.qyvoyv       ncn-s002  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  32c3ff10be42
@@ -38,111 +39,112 @@ rgw.site1.ncn-s002.divvfs        ncn-s002  running (3d)  7m ago     3d   15.2.8 
 rgw.site1.ncn-s003.spojqa        ncn-s003  running (3d)  7m ago     3d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  f95116a16e41
 ```
 
-## Ceph Monitor Service (ceph-mon)
+## Ceph monitor service (`ceph-mon`)
 
-**IMPORTANT:** All of the below ceph orch commands should be run from `ncn-s001/2/3` or `ncn-m001/2/3`.
+**IMPORTANT:** All of the below `ceph orch` commands should be run from `ncn-s001/2/3` or `ncn-m001/2/3`.
 
-Start the ceph-mon service:
+### Start the `ceph-mon` service
 
-> **`NOTE`** The mon process can have a container ID appended to the end of the host name. Please use the output from above to ensure the correct name is used.
-
-```bash
-ncn-s00(1/2/3)# ceph orch daemon start mon.<hostname>
-```
-
-Stop the ceph-mon service:
+> **NOTE** The `mon` process can have a container ID appended to the end of the host name.
+> Use the output from above to ensure the correct name is used.
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon stop mon.<hostname>
+ceph orch daemon start mon.<hostname>
 ```
 
-Restart the ceph-mon service:
+### Stop the `ceph-mon` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon restart mon.<hostname>
+ceph orch daemon stop mon.<hostname>
 ```
 
-## Ceph OSD Service (ceph-osd)
-
-Start the ceph-osd service:
+### Restart the `ceph-mon` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon start osd.<number>
+ceph orch daemon restart mon.<hostname>
 ```
 
-Stop the ceph-osd service:
+## Ceph OSD service (`ceph-osd`)
+
+### Start the `ceph-osd` service
 
 ```bash
-nncn-s00(1/2/3)# ceph orch daemon stop osd.<number>
+ceph orch daemon start osd.<number>
 ```
 
-Restart the ceph-osd service:
+### Stop the `ceph-osd` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon restart osd.<number>
+ceph orch daemon stop osd.<number>
 ```
 
-## Ceph Manager Service (ceph-mgr)
-
-Start the ceph-mgr service:
+### Restart the `ceph-osd` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon start mgr.<hostname>
+ceph orch daemon restart osd.<number>
 ```
 
-Stop the ceph-mgr service:
+## Ceph manager service (`ceph-mgr`)
+
+### Start the `ceph-mgr` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon stop mgr.<hostname>
+ceph orch daemon start mgr.<hostname>
 ```
 
-Restart the ceph-mgr service:
+### Stop the `ceph-mgr` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon restart mgr.<hostname>
+ceph orch daemon stop mgr.<hostname>
 ```
 
-## Ceph MDS Service (cephfs)
-
-Start the ceph-mgr service:
+### Restart the `ceph-mgr` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon start mds.cephfs.<container id from ceph orch ps output>
+ceph orch daemon restart mgr.<hostname>
 ```
 
-Stop the ceph-mgr service:
+## Ceph MDS service (`cephfs`)
+
+### Start the `cephfs` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon stop mds.cephfs.<container id from ceph orch ps output>
+ceph orch daemon start mds.cephfs.<container id from ceph orch ps output>
 ```
 
-Restart the ceph-mgr service:
+### Stop the `cephfs` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon restart mds.cephfs.<container id from ceph orch ps output>
+ceph orch daemon stop mds.cephfs.<container id from ceph orch ps output>
 ```
 
-## Ceph Rados-Gateway Service (ceph-radosgw)
-
-Start the rados-gateway:
+### Restart the `cephfs` service
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon start rgw.site1.<container id from ceph orch ls>
+ceph orch daemon restart mds.cephfs.<container id from ceph orch ps output>
 ```
 
-Stop the rados-gateway:
+## Ceph Rados-gateway service (`ceph-radosgw`)
+
+### Start the Rados gateway
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon stop rgw.site1.<container id from ceph orch ls>
+ceph orch daemon start rgw.site1.<container id from ceph orch ls>
 ```
 
-Restart the rados-gateway:
+### Stop the Rados gateway
 
 ```bash
-ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.<container id from ceph orch ls>
+ceph orch daemon stop rgw.site1.<container id from ceph orch ls>
 ```
 
-## Ceph Service Restart using CEPHADM
+### Restart the Rados gateway
+
+```bash
+ceph orch daemon restart rgw.site1.<container id from ceph orch ls>
+```
+
+## Ceph service restart using `cephadm`
 
 > **IMPORTANT:** The following commands need to run from the host where services are being started or stopped.
 
@@ -179,31 +181,34 @@ ncn-s00(1/2/3)# ceph orch daemon restart rgw.site1.<container id from ceph orch 
    systemctl restart ceph-01a0d9d2-ea7f-43dc-af25-acdfa5242a48@mgr.ncn-s001
    ```
 
-## Ceph Manager Modules
+## Ceph manager modules
 
-**Location:** Ceph manager modules can be enabled or disabled from any ceph-mon nodes.
+**Location:** Ceph manager modules can be enabled or disabled from any `ceph-mon` nodes.
 
-Enable Ceph manager modules:
+### Enable Ceph manager modules
 
 ```bash
 ceph mgr MODULE_NAME enable MODULE
 ```
 
-Disable Ceph manager modules:
+### Disable Ceph manager modules
 
 ```bash
 ceph mgr MODULE_NAME disable MODULE
 ```
 
-## Scale Ceph Services
+## Scale Ceph services
 
-Ceph has the ability to deploy/scale/reconfigure/redeploy Ceph processes down and back up to restart the services.
+Ceph has the ability to deploy, scale, reconfigure, or redeploy Ceph processes down and back up to restart the services.
 
-> **IMPORTANT:** When scaling the Ceph manager daemon (mgr.hostname.\<containerid>), keep in mind that there must be a running manager daemon as it is what is controlling the orchestration processes.
-> **IMPORTANT:** osd.all-available-devices cannot be scaled; this is the process to auto-discover available OSDs.
-> **IMPORTANT:** The crash service cannot be scaled; this is the equivalent of a Kubernetes daemon set and runs on all nodes to collect crash data.
+> **IMPORTANT:**
+>
+> - When scaling the Ceph manager daemon (`mgr.hostname.\<containerid>`), keep in mind that there must be a
+>   running manager daemon because it is what is controlling the orchestration processes.
+> - `osd.all-available-devices` cannot be scaled; this is the process to auto-discover available OSDs.
+> - The crash service cannot be scaled; this is the equivalent of a Kubernetes daemon set and runs on all nodes to collect crash data.
 
-The following example shows scaling the mgr service down and back up.
+The following example shows scaling the `ceph-mgr` service down and back up.
 
 ### Prerequisites
 
@@ -211,138 +216,155 @@ Two SSH sessions are required. One to do the work from and another that is runni
 
 ### Procedure
 
-  1. List the services.
+1. List the services.
 
-     ```bash
-     ceph orch ls
-     ```
+    ```bash
+    ceph orch ls
+    ```
 
-     Example output:
+    Example output:
 
-     ```bash
-     NAME                       RUNNING  REFRESHED  AGE  PLACEMENT                                                      IMAGE NAME                        IMAGE ID
-     crash                          6/6  9s ago     4d   *                                                              registry.local/ceph/ceph:v15.2.8  5553b0cb212c
-     mds.cephfs                     3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
-     mgr                            3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
-     mon                            3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
-     osd.all-available-devices      6/6  9s ago     4d    *                                                              registry.local/ceph/ceph:v15.2.8   5553b0cb212c
-     rgw.site1                3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;ncn-s004;ncn-s005;ncn-s006;count:3  registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+    ```text
+    NAME                       RUNNING  REFRESHED  AGE  PLACEMENT                                                      IMAGE NAME                        IMAGE ID
+    crash                          6/6  9s ago     4d   *                                                              registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+    mds.cephfs                     3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+    mgr                            3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+    mon                            3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;count:3                             registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+    osd.all-available-devices      6/6  9s ago     4d    *                                                              registry.local/ceph/ceph:v15.2.8   5553b0cb212c
+    rgw.site1                3/3  9s ago     4d   ncn-s001;ncn-s002;ncn-s003;ncn-s004;ncn-s005;ncn-s006;count:3  registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+    ```
 
-     ```
+    (Optional) Limit the results.
 
-     (Optional) Limit the results.
+    Syntax: `ceph orch [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]`
 
-      Syntax: `ceph orch [<service_type>] [<service_name>] [--export] [plain|json|json-pretty|yaml] [--refresh]`
+    ```bash
+    ceph orch ls mgr
+    ```
 
-      ```bash
-      ceph orch ls mgr
-      ```
+    Example output:
 
-      Example output:
+    ```text
+    NAME  RUNNING  REFRESHED  AGE  PLACEMENT                           IMAGE NAME                        IMAGE ID
+    mgr       3/3  17s ago    4d   ncn-s001;ncn-s002;ncn-s003;count:3  registry.local/ceph/ceph:v15.2.8  5553b0cb212c
+    ```
 
-      ```bash
-      NAME  RUNNING  REFRESHED  AGE  PLACEMENT                           IMAGE NAME                        IMAGE ID
-      mgr       3/3  17s ago    4d   ncn-s001;ncn-s002;ncn-s003;count:3  registry.local/ceph/ceph:v15.2.8  5553b0cb212c
-      ```
+    The placement of the services is retrieved with this command.
 
-      The placement of the services is retrieved with this command.
+1. Choose the service to scale.
 
-  2. Choose the service to scale. ***(reminder the example will use the MGR service)***
+    > Reminder: the example will use the `ceph-mgr` service.
 
-     1. If scaling mds or mgr daemons, make sure to fail over the active mgr/mds daemon so there is always one running.
+    1. If scaling `mds` or `mgr` daemons, make sure to fail over the active `mgr`/`mds` daemon so there is always one running.
 
-         ```bash
-         # To get the active MDS
+        - Get the active `mds`
 
-         ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
+            > This will change when it fails over, so keep this command handy.
 
-         cephfs.ncn-s001.juehkw <-- current active MDS. note this will change when you fail it over so keep this command handy
+            ```bash
+            ceph fs status -f json-pretty|jq -r '.mdsmap[]|select(.state=="active")|.name'
+            ```
 
-         # To get the active MGR
+            Example output:
 
-         ceph mgr dump | jq -r .active_name
+            ```text
+            cephfs.ncn-s001.juehkw
+            ```
 
-         ncn-s002.fumzfm  <-- current active MGR. note this will change when you fail it over so keep this command handy
-         ```
+        - Get the active `mgr`
 
-      Now, the service, current placement policy, and if applicable, the active MGR/MDS daemon are all known.
+            > This will change when it fails over, so keep this command handy.
 
-  3. Scale the service.
+            ```bash
+            ceph mgr dump | jq -r .active_name
+            ```
 
-     ```bash
-     ceph orch apply --placement="1 <host where the active mgr is running>"
-     ```
+            Example output:
 
-     For example:
+            ```text
+            ncn-s002.fumzfm
+            ```
 
-     ```bash
-     ceph orch apply mgr --placement="1 ncn-s002"
-     Scheduled mgr update...
-     ```
+1. Scale the service.
 
-  4. Watch the SSH session that is showing the Ceph status (`ceph -s`).
+    ```bash
+    ceph orch apply --placement="1 <host where the active mgr is running>"
+    ```
 
-     ```bash
-     ceph -s
-     ```
+    For example:
 
-     Example output:
+    ```bash
+    ceph orch apply mgr --placement="1 ncn-s002"
+    ```
 
-     ```bash
-     cluster:
-      id:     11d5d552-cfac-11eb-ab69-fa163ec012bf
-      health: HEALTH_OK
+    Example output:
 
-     services:
-      mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 70s)
-      mgr: ncn-s002.fumzfm(active, since 14s)
-      mds: cephfs:1 {0=cephfs.ncn-s001.juehkw=up:active} 1 up:standby-replay 1 up:standby
-      osd: 6 osds: 6 up (since 4d), 6 in (since 4d)
-      rgw: 2 daemons active (site1.zone1.ncn-s005.hzfbkd, site1.zone1.ncn-s006.vjuwkf)
+    ```text
+    Scheduled mgr update...
+    ```
 
-     task status:
+1. Watch the SSH session that is showing the Ceph status (`ceph -s`).
 
-     data:
-      pools:   7 pools, 193 pgs
-      objects: 256 objects, 7.5 MiB
-      usage:   9.1 GiB used, 261 GiB / 270 GiB avail
-      pgs:     193 active+clean
+    ```bash
+    ceph -s
+    ```
 
-     io:
-      client:   663 B/s rd, 1 op/s rd, 0 op/s wr
+    Example output:
 
-     ```
+    ```text
+    cluster:
+     id:     11d5d552-cfac-11eb-ab69-fa163ec012bf
+     health: HEALTH_OK
 
-     The mgr service is now showing 1 active on the node we chose.
+    services:
+     mon: 3 daemons, quorum ncn-s001,ncn-s002,ncn-s003 (age 70s)
+     mgr: ncn-s002.fumzfm(active, since 14s)
+     mds: cephfs:1 {0=cephfs.ncn-s001.juehkw=up:active} 1 up:standby-replay 1 up:standby
+     osd: 6 osds: 6 up (since 4d), 6 in (since 4d)
+     rgw: 2 daemons active (site1.zone1.ncn-s005.hzfbkd, site1.zone1.ncn-s006.vjuwkf)
 
-  5. Scale the service back up to 3 mgrs.
+    task status:
 
-     ```bash
-     ceph orch apply mgr --placement="3 ncn-s001 ncn-s002 ncn-s003"
-     ```
+    data:
+     pools:   7 pools, 193 pgs
+     objects: 256 objects, 7.5 MiB
+     usage:   9.1 GiB used, 261 GiB / 270 GiB avail
+     pgs:     193 active+clean
 
-     The returned output will be "Scheduled mgr update...".
+    io:
+     client:   663 B/s rd, 1 op/s rd, 0 op/s wr
+    ```
 
-  6. When the Ceph status output shows there are 3 running mgr daemons, scale the last daemon back down and up.
+    In the example output, the `mgr` service is now showing 1 active on the chosen node.
 
-     **If it is the MDS or MGR daemons, then REMEMBER we have to fail over the active daemon.**
+1. Scale the service back up to 3.
 
-      ```bash
-      ceph mgr fail ncn-s002.fumzfm   # This was our active MGR.
-      ```
+    ```bash
+    ceph orch apply mgr --placement="3 ncn-s001 ncn-s002 ncn-s003"
+    ```
 
-     In the Ceph status output, the will be an ACTIVE ceph mgr process change.
+    The returned output will be `Scheduled mgr update...`.
 
-     ```bash
-     mgr: ncn-s003.wtvbtz(active, since 2m), standbys: ncn-s001.cgbxdw
-     ```
+1. When the Ceph status output shows there are 3 running `mgr` daemons, scale the last daemon back down and up.
 
-  7. Scale the service back to its original deployment size.
+    > If it is the `mds` or `mgr` daemon, then **it is required to fail over the active daemon.**
 
-     ```bash
-     ceph orch apply mgr  --placement="3 ncn-s001 ncn-s002 ncn-s003"
-     ```
+    ```bash
+    ceph mgr fail ncn-s002.fumzfm   # This was the active mgr.
+    ```
 
-     The returned output will be "Scheduled mgr update...".
+    In the Ceph status output, the will be an active Ceph `mgr` process change.
 
-  8. Monitor the Ceph status to make sure all the daemons come back online.
+    ```text
+    mgr: ncn-s003.wtvbtz(active, since 2m), standbys: ncn-s001.cgbxdw
+    ```
+
+1. Scale the service back to its original deployment size.
+
+    ```bash
+    ceph orch apply mgr  --placement="3 ncn-s001 ncn-s002 ncn-s003"
+    ```
+
+    The returned output will be `Scheduled mgr update...`.
+
+1. Monitor the Ceph status to make sure all the daemons come back online.

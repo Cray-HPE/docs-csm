@@ -22,7 +22,7 @@ The SNMP counters for e.g are `Udp MemError`, `Udp IgnoredMulti`, `Tcp ActiveOpe
    ```
 
 1. (`ncn-m001#`) Apply `node-exporter-config.yml` file.
-  
+
    ```bash
    ceph orch apply -i node-exporter-config.yml
    ```
@@ -34,19 +34,19 @@ The SNMP counters for e.g are `Udp MemError`, `Udp IgnoredMulti`, `Tcp ActiveOpe
    ```
 
 1. (`ncn-m001#`) Redeploy node-exporter.
-  
+
    ```bash
    ceph orch redeploy node-exporter
    ```
 
 1. (`ncn-m001#`) Verify the changes.
-  
+
    ```bash
    ceph orch ls --service_name node-exporter --export
    ```
-  
-   Example Output:
-  
+
+   Example output:
+
    ```yaml
    service_type: node-exporter
    service_name: node-exporter
@@ -65,7 +65,7 @@ The SNMP counters for e.g are `Udp MemError`, `Udp IgnoredMulti`, `Tcp ActiveOpe
    ceph orch ps | grep node
    ```
 
-   Example Output:
+   Example output:
 
    ```text
    node-exporter.ncn-s001           ncn-s001  *:9100       running (4m)     4m ago   8w    24.5M        -  1.5.0    adb3cf430d1a  1b339a84138e
@@ -74,5 +74,5 @@ The SNMP counters for e.g are `Udp MemError`, `Udp IgnoredMulti`, `Tcp ActiveOpe
    node-exporter.ncn-s004           ncn-s004  *:9100       running (4m)     4m ago   8w    23.3M        -  1.5.0    adb3cf430d1a  eb9e85bb2414
    node-exporter.ncn-s005           ncn-s005  *:9100       running (4m)     4m ago   8w    23.3M        -  1.5.0    adb3cf430d1a  75b7bdd64c45
    ```
-  
+
    NOTE: The node-exporter containers are restarted on all the storage nodes.

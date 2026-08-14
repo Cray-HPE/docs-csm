@@ -4,17 +4,17 @@ These general commands for Ceph are helpful for obtaining information pertinent 
 
 As a reference, the Ceph commands below are run from a ceph-mon node. Certain commands will work on different systems. For example, the `rbd` command can be used on the worker nodes if specifying the proper key.
 
-## Ceph Log and File Locations
+## Ceph log and file locations
 
-- Ceph configurations are located under /etc/ceph/ceph.conf
-- Ceph data structure and bootstrap is located under /var/lib/ceph/<fsid>/
+- Ceph configurations are located under `/etc/ceph/ceph.conf`
+- Ceph data structure and bootstrap is located under `/var/lib/ceph/<fsid>/`
 - Ceph logs are now accessible by a couple of different methods
-  - Utilizing `cephadm ls` to retrieve the systemd_unit on the node for the process, then utilize `journalctl` to dump the logs
-  - `ceph log last [<num:int>] [debug|info|sec|warn|error] [*|cluster|audit|cephadm]`
-    - Note that that this will dump general cluster logs
-  - `cephadm logs [-h] [--fsid FSID] --name <systemd_unit>`
+    - Utilizing `cephadm ls` to retrieve the `systemd_unit` on the node for the process, then utilize `journalctl` to dump the logs
+    - `ceph log last [<num:int>] [debug|info|sec|warn|error] [*|cluster|audit|cephadm]`
+        - Note that that this will dump general cluster logs
+    - `cephadm logs [-h] [--fsid FSID] --name <systemd_unit>`
 
-## Check the Status of Ceph
+## Check the status of Ceph
 
 Print the status of the Ceph cluster with the following command:
 
@@ -24,7 +24,7 @@ ceph -s
 
 Example output:
 
-```
+```text
   cluster:
   id:     5f3b4031-d6c0-4118-94c0-bffd90b534eb
   health: HEALTH_OK  <<-- WARN/ERROR/CRITICAL are other states
@@ -58,7 +58,7 @@ ceph osd tree
 
 Example output:
 
-```
+```text
 ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 -1       62.85938 root default
 -7       20.95312     host ncn-s001
@@ -84,7 +84,7 @@ ID CLASS WEIGHT   TYPE NAME         STATUS REWEIGHT PRI-AFF
 17   ssd  3.49219         osd.17        up  1.00000 1.00000
 ```
 
-### Storage Utilization
+### Storage utilization
 
 The following command shows the storage utilization of the cluster and pools:
 
@@ -94,7 +94,7 @@ ceph df
 
 Example output:
 
-```
+```text
 RAW STORAGE:
     CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
     kube      27 GiB     15 GiB     9.2 GiB       12 GiB         45.25
@@ -115,9 +115,10 @@ POOLS:
     smf                            11     8.1 GiB       2.11k      24 GiB     47.71       8.9 GiB
 ```
 
-### Show OSD Usage
+### Show OSD usage
 
-Show the utilization of the OSDs with the following command. This is very helpful to see if the data is not balanced across OSDs, which can create hotspots.
+Show the utilization of the OSDs with the following command.
+This is very helpful to see if the data is not balanced across OSDs, which can create hotspots.
 
 ```bash
 ceph osd df
@@ -125,7 +126,7 @@ ceph osd df
 
 Example output:
 
-```
+```text
 ID CLASS WEIGHT  REWEIGHT SIZE   RAW USE DATA    OMAP META  AVAIL   %USE  VAR  PGS STATUS
  1  kube 0.00879  1.00000  9 GiB 4.1 GiB 3.1 GiB  0 B 1 GiB 4.9 GiB 45.25 0.96  99     up
  4   smf 0.01859  1.00000 19 GiB 9.1 GiB 8.1 GiB  0 B 1 GiB 9.9 GiB 48.09 1.02 141     up
@@ -137,9 +138,10 @@ ID CLASS WEIGHT  REWEIGHT SIZE   RAW USE DATA    OMAP META  AVAIL   %USE  VAR  P
 MIN/MAX VAR: 0.96/1.02  STDDEV: 1.51
 ```
 
-### Check the Status of a Single OSD
+### Check the status of a single OSD
 
-Use the following command to obtain information about a single OSD using the OSD number. For example, osd.0 would be an OSD number.
+Use the following command to obtain information about a single OSD using the OSD number.
+For example, `osd.0` would be an OSD number.
 
 ```bash
 ceph osd find OSD.ID
@@ -147,7 +149,7 @@ ceph osd find OSD.ID
 
 Example output:
 
-```
+```json
 {
     "osd": 1,
     "addrs": {
@@ -168,9 +170,9 @@ Example output:
 }
 ```
 
-### List Storage Pools
+### List storage pools
 
-List the storage pools with the following commands:
+List the storage pools with the following command:
 
 ```bash
 ceph osd lspools
@@ -178,7 +180,7 @@ ceph osd lspools
 
 Example output:
 
-```
+```text
 1 cephfs_data
 2 cephfs_metadata
 3 .rgw.root
@@ -190,4 +192,3 @@ Example output:
 10 kube
 11 smf
 ```
-

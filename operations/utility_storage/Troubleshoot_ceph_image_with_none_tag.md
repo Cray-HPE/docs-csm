@@ -1,19 +1,18 @@
-# Troubleshoot Ceph image with tag:'&lt;none&gt;'
+# Troubleshoot Ceph image with tag `<none>`
 
-Use the following procedure to fix a Ceph image with tag: '&lt;none&gt;'.
+Use the following procedure to fix a Ceph image with tag `<none>`.
 
-All of the following commands should be run from the storage node that contains Ceph image with tag: '&lt;none&gt;'.
+All of the following commands should be run from the storage node that contains Ceph image with tag `<none>`.
 
-1. Run `podman images`.
+1. (`ncn-s#`) Run `podman images`.
 
-   ```bash
+    ```bash
     podman images
     ```
 
     Expected output:
 
-    ```bash
-    ncn-s002:~ # podman images
+    ```text
     REPOSITORY                                                                          TAG         IMAGE ID      CREATED        SIZE
     localhost:5000/ceph/ceph                                                            v17.2.5     1fa37f0e9d66  7 days ago     1.44 GB
     registry.local/ceph/ceph                                                            v17.2.5     1fa37f0e9d66  7 days ago     1.44 GB
@@ -33,7 +32,7 @@ All of the following commands should be run from the storage node that contains 
     ...
     ```
 
-1. Fix the tag by running the following script on the storage node with the tag: '&lt;none&gt;'.
+1. (`ncn-s#`) Fix the tag by running the following script.
 
     1. Copy the script below and paste it into `/usr/share/doc/csm/scripts/fix_ceph_image_tag.sh`.
 
@@ -62,14 +61,15 @@ All of the following commands should be run from the storage node that contains 
         /usr/share/doc/csm/scripts/fix_ceph_image_tag.sh
         ```
 
-1. Verify the tag has been fixed by re-running `podman images`.
+1. (`ncn-s#`) Verify that the tag has been fixed by re-running `podman images`.
 
     ```bash
     podman images
     ```
 
-    ```bash
-    ncn-s002:~ # podman images
+    Example output:
+
+    ```text
     REPOSITORY                                                                          TAG         IMAGE ID      CREATED        SIZE
     localhost:5000/ceph/ceph                                                            v17.2.5     1fa37f0e9d66  7 days ago     1.44 GB
     registry.local/ceph/ceph                                                            v17.2.5     1fa37f0e9d66  7 days ago     1.44 GB
