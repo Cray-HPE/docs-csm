@@ -26,7 +26,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
         Example output:
 
-        ```bash
+        ```text
             cluster:
             id:     56cdd77c-7184-11ef-9f67-42010afc0104
             health: HEALTH_WARN
@@ -87,7 +87,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
         Example output:
 
-        ```bash
+        ```text
         NAME                       HOST      PORTS   STATUS        REFRESHED  AGE  MEM USE  MEM LIM  VERSION  IMAGE ID      CONTAINER ID
         rgw.site1.ncn-s001.xoaosp  ncn-s001  *:8080  running (6d)     7m ago   6d     516M        -  17.2.6   6eebe3129025  fdd8842a0b16
         rgw.site1.ncn-s002.qsibkp  ncn-s002  *:8080  running (6d)     7m ago   6d     478M        -  17.2.6   6eebe3129025  86bd2327ab81
@@ -110,7 +110,7 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
 
     Example output:
 
-    ```bash
+    ```text
     Removed service rgw.site1.zone1
     ```
 
@@ -119,12 +119,12 @@ See [Collect Information about the Ceph Cluster](Collect_Information_About_the_C
    Rerun the command to check the ceph admin tool
 
     ```bash
-        ceph -W cephadm
+    ceph -W cephadm
     ```
 
     Healthy example output:
 
-    ```bash
+    ```text
     cluster:
         id:     56cdd77c-7184-11ef-9f67-42010afc0104
         health: HEALTH_OK

@@ -4,11 +4,11 @@
 * [Use cases](#use-cases)
 * [Best practices](#best-practices)
 * [Procedures](#procedures)
-  * [Create a storage pool](#create-a-storage-pool)
-  * [Create and map an `rbd` device](#create-and-map-an-rbd-device)
-  * [Move an `rbd` device to another node](#move-an-rbd-device-to-another-node)
-  * [Unmount, unmap, and delete an `rbd` device](#unmount-unmap-and-delete-an-rbd-device)
-  * [Remove a storage pool](#remove-a-storage-pool)
+    * [Create a storage pool](#create-a-storage-pool)
+    * [Create and map an `rbd` device](#create-and-map-an-rbd-device)
+    * [Move an `rbd` device to another node](#move-an-rbd-device-to-another-node)
+    * [Unmount, unmap, and delete an `rbd` device](#unmount-unmap-and-delete-an-rbd-device)
+    * [Remove a storage pool](#remove-a-storage-pool)
 
 ## Description
 
@@ -22,12 +22,12 @@ Creating, maintaining, and removing Ceph storage pools.
 ## Best practices
 
 * Apply a proper quota to any pools created.
-  * This will use storage from the default crush rule which is utilizing every OSD.
-  * Improper use of this procedure can have a negative impact on the cluster and space available to running services.
-    * Failure to set a quota and not policing space usage can result in the Ceph cluster going into read-only mode.
-      * This will cause running services to crash if the space issue is not resolved quickly.
+    * This will use storage from the default crush rule which is utilizing every OSD.
+    * Improper use of this procedure can have a negative impact on the cluster and space available to running services.
+        * Failure to set a quota and not policing space usage can result in the Ceph cluster going into read-only mode.
+            * This will cause running services to crash if the space issue is not resolved quickly.
 * Cleanup after the criteria for the pool creation has been met.
-  * This can be as simple as removing volumes but leaving the pool for future use.
+    * This can be as simple as removing volumes but leaving the pool for future use.
 
 ## Procedures
 
@@ -65,12 +65,11 @@ quotas for pool 'csm-release':
   max bytes  : 500 GiB  (current num bytes: 0 bytes)
 ```
 
-**NOTES:**
-
-* The above example sets the quota to 500 GiB.
-  * If this pool is fully utilized it will be using 1.5 TiB of raw space.
-  * This space counts against the total space provided by the cluster; Use cautiously.
-  * If this pool or any pool reaches 95-100% utilization, then all volumes for the fully utilized pool will go into read-only mode.
+> **NOTE:** The above example sets the quota to 500 GiB.
+>
+> * If this pool is fully utilized, then it will be using 1.5 TiB of raw space.
+> * This space counts against the total space provided by the cluster; Use cautiously.
+> * If this pool or any pool reaches 95-100% utilization, then all volumes for the fully utilized pool will go into read-only mode.
 
 ### Create and map an `rbd` device
 
@@ -98,11 +97,10 @@ id  pool         namespace  image            snap  device
 0   csm-release             release_version  -     /dev/rbd0
 ```
 
-**IMPORTANT NOTE:**
-
-* Master nodes normally do not have `rbd` devices mapped via Ceph provisioner.
-  * If mapping to a worker node where there are mapped PVCs, then ensure the proper `rbd` device is being captured for the following steps.
-  * Failure to do this most likely will result in data corruption or loss.
+> **IMPORTANT NOTE:** Master nodes normally do not have `rbd` devices mapped via Ceph provisioner.
+>
+> * If mapping to a worker node where there are mapped PVCs, then ensure the proper `rbd` device is being captured for the following steps.
+> * Failure to do this most likely will result in data corruption or loss.
 
 ### Mount an `rbd` device
 
@@ -161,7 +159,7 @@ Then run the following commands on the destination node (that is, the node where
 ```bash
 rbd map -p csm-release release_version
 rbd showmapped
-mkdir -pv /etc/cray/csm/csm-release 
+mkdir -pv /etc/cray/csm/csm-release
 mount /dev/rbd0 /etc/cray/csm/csm-release
 ```
 

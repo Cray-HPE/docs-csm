@@ -4,9 +4,9 @@
 
 The following sections include common examples:
 
-## Invoke Shells to Run Traditional Ceph Commands
+## Invoke shells to run traditional Ceph commands
 
-On ncn-s001/2/3:
+On `ncn-s001/2/3`:
 
 ```bash
 ncn-s00[123]# cephadm shell  # creates a container with access to run ceph commands the traditional way
@@ -18,7 +18,7 @@ Optionally, execute the following command:
 ncn-s00[123]# cephadm shell -- ceph -s
 ```
 
-## Ceph-Volume
+## `ceph-volume`
 
 There are multiple ways to do Ceph device operations now.
 
@@ -40,10 +40,12 @@ cephadm shell -- ceph-volume
 
 Optionally, the following command will allow users to specify a single node name to just list that nodes drives.
 
-```
-ncn-s00[123]# ceph orch device ls
+On `ncn-s001/2/3`:
+
+```bash
+ceph orch device ls
 ```
 
-```
-ncn-s00[123]# ceph orch device ls <node name>
+```bash
+ceph orch device ls <node name>
 ```

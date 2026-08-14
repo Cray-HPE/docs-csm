@@ -16,14 +16,16 @@ usage:  ceph-service-status.sh # runs a simple Ceph health check
         ceph-service-status.sh -s <service name> # will find the where the service is running and report its status
 ```
 
-> **Important:** By default, the output of this command will not be verbose. This is to accommodate goss testing. For manual runs, please use the `-v true` flag.
+> **Important:** By default, the output of this command will not be verbose. This is to accommodate Goss testing.
+> For manual runs, use the `-v true` flag.
 
-**Troubleshooting** If the message `parse error: Invalid numeric literal at line 1, column 5` is displayed, it is indicating that the cached SSH keys in known_hosts are no longer valid. The simple fix is `> ~/.ssh/known_hosts` and re-run the script.
-It will update the keys.
+**Troubleshooting** If the message `parse error: Invalid numeric literal at line 1, column 5` is displayed, it is
+indicating that the cached SSH keys in the `known_hosts` file are no longer valid. The simple fix is
+to clear the file using `> ~/.ssh/known_hosts` and then re-run the script. It will update the keys.
 
 ## Examples
 
-### Simple Ceph Health Check
+### Simple Ceph health check
 
 ```bash
 /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -v true
@@ -31,14 +33,14 @@ It will update the keys.
 
 Example output:
 
-```bash
+```text
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating SSH keys..
 Tests run: 1  Tests Passed: 1
 ```
 
-### Service Check for a Single Service on a Single Node
+### Service check for a single service on a single node
 
 ```bash
 /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -v true -s mon.ncn-s001
@@ -46,7 +48,7 @@ Tests run: 1  Tests Passed: 1
 
 Example output:
 
-```bash
+```text
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating SSH keys..
@@ -59,7 +61,7 @@ Status: running
 Tests run: 2  Tests Passed: 2
 ```
 
-### Service Check for All Services on a Single Node
+### Service check for all services on a single node
 
 ```bash
 /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh -n ncn-s001 -a true -v true
@@ -67,7 +69,7 @@ Tests run: 2  Tests Passed: 2
 
 Example output:
 
-```bash
+```text
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating SSH keys..
@@ -120,7 +122,7 @@ Status: running
 Tests run: 12  Tests Passed: 12
 ```
 
-### Service Check for a Service Type
+### Service check for a service type
 
 ```bash
 /opt/cray/tests/install/ncn/scripts/ceph-service-status.sh  -v true -s mon
@@ -128,7 +130,7 @@ Tests run: 12  Tests Passed: 12
 
 Example output:
 
-```bash
+```text
 FSID: c84ecf41-c535-4588-96c3-f6892bbd81ce  FSID_STR: ceph-c84ecf41-c535-4588-96c3-f6892bbd81ce
 Ceph is reporting a status of HEALTH_OK
 Updating SSH keys..
@@ -153,7 +155,7 @@ Status: running
 Tests run: 4  Tests Passed: 4
 ```
 
-### Service Check for All Services and All Nodes
+### Service check for all services and all nodes
 
 The output of the following command is similar to the above output, except it shows all services on all nodes.
 It is excluded in this case for brevity.
@@ -163,4 +165,5 @@ It is excluded in this case for brevity.
 ```
 
 > **IMPORTANT:** This script can be run without the verbose flag and with an echo for the return code `echo $?`.
-A return code of `0` means the check was clean. A return code of `1` or greater means that there was an issue. In the latter case, re-run the command with the `-v true` flag.
+A return code of `0` means the check was clean. A return code of `1` or greater means that there was an issue.
+In the latter case, re-run the command with the `-v true` flag.

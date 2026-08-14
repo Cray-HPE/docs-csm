@@ -40,7 +40,7 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
    [ceph: root@ncn-s003 /]#
    ```
 
-   > **`NOTE`** Messages such as "WARNING: The same type, major and minor should not be used for multiple devices" can be ignored. There is an upstream bug to address this issue.
+   > **NOTE** Messages such as "WARNING: The same type, major and minor should not be used for multiple devices" can be ignored. There is an upstream bug to address this issue.
 
 1. (`ceph#`) Dump in-flight ops from the active MDS.
 
@@ -72,9 +72,9 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
       }
       ```
 
-      > **`NOTE`** The example above is about how to run the command. Recreating the exact scenario to provide a full example is not easily done. This will be updated when the information is available.
+      > **NOTE** The example above is about how to run the command. Recreating the exact scenario to provide a full example is not easily done. This will be updated when the information is available.
 
-## General Steps from Upstream
+## General steps from upstream
 
 1. Identify the stuck commands and examine why they are stuck.
 
@@ -91,4 +91,3 @@ Use this procedure to troubleshoot Ceph MDS reporting slow requests after follow
       > **IMPORTANT:** If it is a result of a bug in the capabilities code, restarting the MDS is likely to resolve the problem.
 
    1. If there are no slow requests reported on the MDS, and it is not reporting that clients are misbehaving, either the client has a problem or its requests are not reaching the MDS.
-
