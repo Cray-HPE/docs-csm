@@ -1,8 +1,8 @@
 # Adding a Ceph Node to the Ceph Cluster
 
-**`NOTE`** This operation can be done to add more than one node at the same time.
+**NOTE** This operation can be done to add more than one node at the same time.
 
-## Add Join Script
+## Add join script
 
 1. Start monitoring the Ceph health alongside the main procedure.
 
@@ -20,14 +20,16 @@
     /srv/cray/scripts/common/join_ceph_cluster.sh
     ```
 
-    **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state. This is expected. Most commonly you will see an alert about `failed to probe daemons or devices`, but this should clear on its own.
-    In addition, it may take up to 5 minutes for the added OSDs to report as `up`. This is dependent on the Ceph Orchestrator performing an inventory and completing batch processing to add the OSDs.
+    **IMPORTANT:** In the output from `watch ceph -s` the health should go to a `HEALTH_WARN` state.
+    This is expected. Most common is an alert about `failed to probe daemons or devices`, but this should clear on its own.
+    In addition, it may take up to 5 minutes for the added OSDs to report as `up`.
+    This is dependent on the Ceph Orchestrator performing an inventory and completing batch processing to add the OSDs.
 
 ## Zapping OSDs
 
-**IMPORTANT:** Only do this if you are 100% certain you need to erase data from a previous install.
+**IMPORTANT:** Administrators should do this only if they are 100% certain it is necessary to erase data from a previous install.
 
-**`NOTE`** The commands in this section will need to be run from a node running `ceph-mon`. Typically `ncn-s001`, `ncn-s002`, or `ncn-s003`.
+**NOTE** The commands in this section will need to be run from a node running `ceph-mon`. Typically `ncn-s001`, `ncn-s002`, or `ncn-s003`.
 
 1. Find the devices on the node being rebuilt.
 
@@ -35,7 +37,7 @@
    ceph orch device ls $NODE
    ```
 
-   Example Output:
+   Example output:
 
    ```screen
    Hostname  Path      Type  Serial          Size   Health   Ident  Fault  Available
@@ -47,9 +49,11 @@
    ncn-s003  /dev/sdh  ssd   S455NY0MB42468  1920G  Unknown  N/A    N/A    No
    ```
 
-   **IMPORTANT:** In the above example the drives on our rebuilt node are showing `Available = no`. This is expected because the check is based on the presence of an LVM on the volume.
+   **IMPORTANT:** In the above example the drives on the rebuilt node are showing `Available = no`.
+   This is expected because the check is based on the presence of an LVM on the volume.
 
-   **`NOTE`** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that you are not seeing OS drives. These will have a size of `480G`.
+   **NOTE** The `ceph orch device ls $NODE` command excludes the drives being used for the OS.
+   Double check that OS drives are not being shown. These will have a size of `480G`.
 
 1. Zap the drives.
 
@@ -67,16 +71,17 @@
 
    The OSD `up` and `in` counts should increase. If the `in` count increases but does not reflect the amount of drives being added back in, then fail over the `ceph-mgr` daemon. This is a known bug and is addressed in newer releases.
 
-   If you need to fail over the `ceph-mgr` daemon, run:
+   To fail over the `ceph-mgr` daemon, run:
 
    ```bash
    ceph mgr fail
    ```
 
-## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
+## Regenerate Rados Gateway load balancer configuration for the rebuilt nodes
 
    **IMPORTANT:** `radosgw` by default is deployed to the first three storage nodes. This includes `haproxy` and `keepalived`.
-   This is automated as part of the install, but the configuration may need to be regenerated if not running on the first three storage nodes or all nodes.
+   This is automated as part of the install, but the configuration may need to be regenerated if not running on the first three
+   storage nodes or all nodes.
 
 1. `ncn-s00[1/2/3]#` Deploy Rados Gateway containers to the new nodes. The placement should be all nodes that Rados Gateway should be running on, not only the new node.
 
@@ -120,7 +125,7 @@
      cloud-init query ds | jq -r ".meta_data[].host_records[] | select(.aliases[]? == \"$(hostname)\") | .ip" 2>/dev/null
      ```
 
-     Example Output:
+     Example output:
 
      ```text
      10.252.1.13
@@ -162,7 +167,7 @@
      pdsh -w ncn-s00[1-(end node number)] -f 2 'systemctl restart haproxy.service; systemctl restart keepalived.service'
      ```
 
-## Next Step
+## Next step
 
 - If rebuilding the storage node, then proceed to [Storage Node Validation](../node_management/Rebuild_NCNs/Post_Rebuild_Storage_Node_Validation.md).
 - If adding the storage node, return to [Boot NCN](../node_management/Add_Remove_Replace_NCNs/Boot_NCN.md#boot-ncn) for the next step.

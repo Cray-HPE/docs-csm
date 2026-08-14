@@ -4,7 +4,7 @@ Resynchronize system clocks after Ceph reports a clock skew.
 
 Systems use `chronyd` to synchronize their system clocks. If systems are not able to communicate, then the clocks can drift,
 causing clock skew. Clock skew can also be caused by an individual or an automated task manually changing the clocks.
-In this case, `chronyd` may require a series of steps \(time adjustments\) to resynchronize the clocks.
+In this case, `chronyd` may require a series of steps (time adjustments) to resynchronize the clocks.
 
 Major time jumps where the clock is set back in time will require a full restart of all Ceph services.
 
@@ -49,7 +49,10 @@ This procedure requires admin privileges.
        client:   919 KiB/s wr, 0 op/s rd, 16 op/s wr
     ```
 
-    **`IMPORTANT:`** If you see this message in the Ceph logs `unable to obtain rotating service keys; retrying`, it also indicates clock skew. You may have to run `xzgrep skew *.xz` to see the skew if your logs have rolled over.
+    > **IMPORTANT:** If the following message is found in the Ceph logs, it also indicates clock skew:
+    > `unable to obtain rotating service keys; retrying`
+    >
+    > It may be necessary to run `xzgrep skew *.xz` to see the skew, if the logs have rolled over.
 
 1. View the Ceph health details.
 

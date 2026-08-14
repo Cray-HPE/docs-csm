@@ -1,16 +1,14 @@
 # Troubleshoot Insufficient Standby MDS Daemons Available
 
-## Procedure
+1. Log into a node running `ceph-mon`. Typically this will be `ncn-s001/2/3`.
 
-1. Log into a node running ceph-mon. Typically this will be ncn-s001/2/3.
-
-1. Check the ceph health.
+1. Check the Ceph health.
 
    ```bash
    ceph health detail
    ```
 
-   Example Output:
+   Example output:
 
    ```screen
    HEALTH_WARN insufficient standby MDS daemons available
@@ -18,7 +16,7 @@
    have 0; want 1 more
    ```
 
-   This output explicitly states that you need at least 1 more to clear the alert.
+   This output explicitly states that at least 1 more is required in order to clear the alert.
 
 1. Determine which MDS daemons are down.
 
@@ -26,7 +24,7 @@
    ceph orch ps --daemon_type mds
    ```
 
-   Example Output:
+   Example output:
 
    ```screen
    NAME                        HOST      STATUS         REFRESHED  AGE  VERSION    IMAGE NAME                        IMAGE ID      CONTAINER ID
@@ -37,7 +35,7 @@
 
    **IMPORTANT:** Depending on the configuration and the number of MDS daemons, the number of MDS daemons in a `stopped` or `error` state may vary.
 
-1. Start the stopped MDS daemon(s).
+1. Start the stopped MDS daemons.
 
    ```bash
    ceph orch daemon start <MDS daemon name>
@@ -51,10 +49,10 @@
    ceph health detail
    ```
 
-   Expected Output:
+   Expected output:
 
    ```screen
    HEALTH_OK
    ```
 
-**IMPORTANT:** If the daemon is not starting using the method above, please refer to [Manage Ceph Services](Manage_Ceph_Services.md)
+**IMPORTANT:** If the daemon is not starting using the method above, then see [Manage Ceph Services](Manage_Ceph_Services.md).

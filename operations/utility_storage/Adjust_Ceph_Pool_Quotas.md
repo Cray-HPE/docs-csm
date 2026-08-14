@@ -26,7 +26,7 @@ Currently, only `smf` includes a quota.
 
     Example output:
 
-    ```bash
+    ```text
     RAW STORAGE:
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62
@@ -49,19 +49,19 @@ Currently, only `smf` includes a quota.
 
 1. Determine the maximum quota percentage.
 
-    `6TiB` must be left for Kubernetes, Ceph RGW, and other services. To calculate the quota percentage, use the following equation:
+    6 TiB must be left for Kubernetes, Ceph RGW, and other services. To calculate the quota percentage, use the following equation:
 
-    ```bash
+    ```text
     (TOTAL_SIZE-6)/TOTAL_SIZE
     ```
 
     Using the example output in step 2, the following would be the quota percentage:
 
-    ```bash
+    ```text
     (21-6)/21 = .71
     ```
 
-1. Edit the quota percentage as wanted.
+1. Edit the quota percentage.
 
     Do not exceed the percentage determined in the previous step.
 
@@ -69,16 +69,18 @@ Currently, only `smf` includes a quota.
     vim /etc/ansible/ceph-rgw-users/roles/ceph-pool-quotas/defaults/main.yml
     ```
 
-    Example ceph-pool-quotas.yml:
+    Example `ceph-pool-quotas.yml`:
 
-    ```bash
+    ```yaml
     ceph_pool_quotas:
       - pool_name: smf
-        percent_of_total: .71 <-- Change this to desired percentage
+        percent_of_total: .71
         replication_factor: 2.0
     ```
 
-1. Run the `ceph-pool-quotas.yml` playbook from `ncn-s001`.
+    The `percent_of_total` field is what should be changed to the desired percentage.
+
+1. (`ncn-s001#`) Run the `ceph-pool-quotas.yml` playbook.
 
     ```bash
     /etc/ansible/boto3_ansible/bin/ansible-playbook /etc/ansible/ceph-rgw-users/ceph-pool-quotas.yml
@@ -86,7 +88,7 @@ Currently, only `smf` includes a quota.
 
 1. View the quota/pool usage.
 
-    Look at the USED and QUOTA BYTES columns to view usage and the new quota setting.
+    Look at the `USED` and `QUOTA BYTES` columns to view usage and the new quota setting.
 
     ```bash
     ceph df detail
@@ -94,7 +96,7 @@ Currently, only `smf` includes a quota.
 
     Example output:
 
-    ```bash
+    ```text
     RAW STORAGE:
       CLASS     SIZE       AVAIL      USED        RAW USED     %RAW USED
       ssd       21 TiB     21 TiB     122 GiB      134 GiB          0.62

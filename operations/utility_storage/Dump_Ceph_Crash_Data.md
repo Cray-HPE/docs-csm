@@ -4,7 +4,7 @@ Ceph includes an option to dump crash data. Retrieve this data to get more infor
 
 ## Prerequisites
 
-Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recently crashed error in the output of the `ceph -s` or `ceph health detail` commands.
+Ceph is reporting the cluster `[WRN\] overall HEALTH_WARN 1 daemons have recently crashed` error in the output of the `ceph -s` or `ceph health detail` commands.
 
 ## Procedure
 
@@ -16,14 +16,14 @@ Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recent
 
     Example output:
 
-    ```
+    ```text
     ID                                                               ENTITY       NEW
     2021-02-02_13:45:18.543633Z_a31173f7-44c8-45b1-a253-80efa25b45f1 mon.ncn-s003  *
     ```
 
 1. Get information about the crash to include in a support ticket.
 
-    Replace the CRASH\_ID value with the ID returned in the previous step.
+    Replace the `CRASH_ID` value with the ID returned in the previous step.
 
     ```bash
     ceph crash info CRASH_ID
@@ -31,7 +31,7 @@ Ceph is reporting the cluster \[WRN\] overall HEALTH\_WARN 1 daemons have recent
 
     Example output:
 
-    ```
+    ```json
     {
         "crash_id": "2021-02-02_13:45:18.543633Z_a31173f7-44c8-45b1-a253-80efa25b45f1",
         "timestamp": "2021-02-02 13:45:18.543633Z",

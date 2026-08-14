@@ -1,16 +1,19 @@
 # Troubleshoot Ceph OSDs Reporting Full
 
-Use this procedure to examine the Ceph cluster and troubleshoot issues where Ceph runs out of space and the Kubernetes cluster cannot write data. The OSDs need to be reweighed to move data from the drive and get it back under the warning threshold.
+Use this procedure to examine the Ceph cluster and troubleshoot issues where Ceph runs out of space and
+the Kubernetes cluster cannot write data. The OSDs need to be reweighed to move data from the drive and get
+it back under the warning threshold.
 
-When a single OSD for a pool fills up, the pool will go into read-only mode to protect the data. This can occur if the data distribution is unbalanced or if more storage nodes are needed.
+When a single OSD for a pool fills up, the pool will go into read-only mode to protect the data.
+This can occur if the data distribution is unbalanced or if more storage nodes are needed.
 
 Return the Ceph cluster to a healthy state after it reports a full OSD.
 
 ## Prerequisites
 
-The commands in this procedure need to be run on a ceph-mon node.
+The commands in this procedure need to be run on a `ceph-mon` node.
 
-### Procedure
+## Procedure
 
 1. View the status of the Ceph cluster.
 
@@ -20,7 +23,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     Example output:
 
-    ```
+    ```text
       cluster:
         id:     64e553c3-e7d9-4636-81a4-56f26c1b20e1
         health: HEALTH_ERR
@@ -46,7 +49,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
 1. View the Ceph health detail.
 
-    The OSD\_NEARFULL list can have multiple results. Take a note of the returned results to compare with the output of the `ceph osd df` output.
+    The `OSD_NEARFULL` list can have multiple results. Take a note of the returned results to compare with the output of the `ceph osd df` output.
 
     ```bash
     ceph health detail
@@ -54,7 +57,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     Example output:
 
-    ```
+    ```text
     HEALTH_ERR 1 nearfull osd(s); 13 pool(s) nearfull; Degraded data redundancy (low space): 3 pgs backfill_toofull
     OSD_NEARFULL 1 nearfull osd(s)
         osd.9 is near full  <<-- Note this value
@@ -68,7 +71,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     Example output:
 
-    ```
+    ```text
     RAW STORAGE:
        CLASS    SIZE       AVAIL      USED       RAW USED     %RAW USED
        ssd      56 TiB     24 TiB     32 TiB       32 TiB         57.15
@@ -93,7 +96,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
 1. View the utilization of the OSDs to see if data is not balanced across them.
 
-    In the example below, the OSD.9 value is showing that it is 95.17 percent full.
+    In the example below, the `OSD.9` value is showing that it is 95.17 percent full.
 
     ```bash
     ceph osd df
@@ -101,7 +104,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     Example output:
 
-    ```
+    ```text
     ID CLASS WEIGHT  REWEIGHT SIZE    RAW USE DATA    OMAP     META    AVAIL   %USE  VAR  PGS STATUS
      1   ssd 3.49219  1.00000 3.5 TiB 2.1 TiB 2.1 TiB  6.3 MiB 3.9 GiB 1.4 TiB 60.81 1.06  57     up
      4   ssd 3.49219  1.00000 3.5 TiB 2.0 TiB 2.0 TiB  133 KiB 3.7 GiB 1.5 TiB 57.58 1.01  56     up
@@ -123,15 +126,15 @@ The commands in this procedure need to be run on a ceph-mon node.
 
 1. Use the `ceph osd reweight` command on the OSD to move data from the drive and get it back under the warning threshold of 85 percent.
 
-    This command tells Ceph that the drive can now only hold 80 percent of the usable space \(CRUSH weight\).
+    This command tells Ceph that the drive can now only hold 80 percent of the usable space (CRUSH weight).
 
     ```bash
     ceph osd reweight osd.9 0.80
     ```
 
-1. Confirm the reweight command made the change.
+1. Confirm the `reweight` command made the change.
 
-    In this example, the new reweight is .79999 and the use is now at 80 percent.
+    In this example, the new `reweight` is .79999 and the use is now at 80 percent.
 
     ```bash
     ceph osd df
@@ -139,7 +142,7 @@ The commands in this procedure need to be run on a ceph-mon node.
 
     Example output:
 
-    ```
+    ```text
     ID CLASS WEIGHT  REWEIGHT SIZE    RAW USE DATA    OMAP     META    AVAIL   %USE  VAR  PGS STATUS
      1   ssd 3.49219  1.00000 3.5 TiB 2.1 TiB 2.1 TiB  7.1 MiB 4.7 GiB 1.4 TiB 60.91 1.07  57     up
      4   ssd 3.49219  1.00000 3.5 TiB 2.0 TiB 2.0 TiB  137 KiB 3.7 GiB 1.5 TiB 57.65 1.01  56     up

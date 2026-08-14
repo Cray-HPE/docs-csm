@@ -81,7 +81,7 @@ This procedure requires administrative privileges.
 
         The following commands must be run on the storage nodes that held the OSDs being removed.
 
-        **`NOTE`** Be sure to replace the `<CLUSTER_ID>` field in the following command with the actual Ceph cluster ID.
+        **NOTE** Be sure to replace the `<CLUSTER_ID>` field in the following command with the actual Ceph cluster ID.
 
         ```bash
         cd /var/lib/ceph/<CLUSTER_ID>

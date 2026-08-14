@@ -10,15 +10,15 @@ This procedure requires admin privileges.
 
 ## Procedure
 
-1. Identify the down OSDs.
+1. (`ncn-m#|ncn-s00[1-3]`) Identify the down OSDs.
 
     ```bash
-    ncn-m/s(001/2/3)# ceph osd tree down
+    ceph osd tree down
     ```
 
     Example output:
 
-    ```
+    ```text
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         62.87558  root default
     -7         20.95853      host ncn-s002
@@ -34,23 +34,23 @@ This procedure requires admin privileges.
 
    * **Option 1:**
 
-     1. Restart the OSD utilizing `ceph orch`
+     1. (`ncn-m#|ncn-s00[1-3]`) Restart the OSD utilizing `ceph orch`
 
         ```bash
-        ncn-m/s00(1/2/3)# ceph orch daemon restart osd.<number>
+        ceph orch daemon restart osd.<number>
         ```
 
    * **Option 2:**
 
-     1. Check the logs for the OSD that is down.
+     1. (`ncn-m#|ncn-s00[1-3]`) Check the logs for the OSD that is down.
 
-        Use the OSD number for the down OSD returned in the command above.
+        Use the OSD number for the down OSD returned in the earlier command.
 
         ```bash
-        ncn-m/s(001/2/3)# ceph osd find OSD_ID
+        ceph osd find OSD_ID
         ```
 
-     2. Manually restart the OSD.
+     1. (`ncn-s#`) Manually restart the OSD.
 
         This step **must be done on the node with the reported down OSD.**
 
@@ -60,15 +60,15 @@ This procedure requires admin privileges.
 
     **Troubleshooting:** If the service is not restarted with `ceph orch`, restart it using [Manage Ceph Services](Manage_Ceph_Services.md).
 
-2. Verify the OSDs are running again.
+1. (`ncn-m#|ncn-s00[1-3]`) Verify the OSDs are running again.
 
     ```bash
-    # ceph osd tree down
+    ceph osd tree down
     ```
 
     Example output:
 
-    ```
+    ```text
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         62.87558  root default
     -7         20.95853      host ncn-s002
@@ -80,5 +80,4 @@ This procedure requires admin privileges.
     16    ssd   3.49309          osd.16         up   1.00000  1.00000
     ```
 
-If the OSD dies again, check dmesg for drive failures.
-
+If the OSD dies again, check `dmesg` for drive failures.
