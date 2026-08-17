@@ -13,9 +13,9 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 
 * [Disks](#disks)
 * [NICs](#nics)
-  * [Kubernetes Masters](#kubernetes-masters)
-  * [Kubernetes Workers](#kubernetes-workers)
-  * [Ceph Storage](#ceph-storage)
+    * [Kubernetes masters](#kubernetes-masters)
+    * [Kubernetes workers](#kubernetes-workers)
+    * [Ceph storage](#ceph-storage)
 
 ## Disks
 
@@ -41,16 +41,16 @@ see [`metal.md-level`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/ma
 
 ## NICs
 
-### Kubernetes Masters
+### Kubernetes masters
 
-> **`NOTE:`** The 2nd port on each card is unused/empty (reserved for future use).
+> **NOTE:** The 2nd port on each card is unused/empty (reserved for future use).
 
 * *Management Network:* `2x` PCIe cards, with 1 or 2 heads/ports each for a total of 4 ports split
   between two PCIe cards
 
-### Kubernetes Workers
+### Kubernetes workers
 
-> **`NOTE:`** There is no PCIe redundancy for the management network for worker NCNs. The only
+> **NOTE:** There is no PCIe redundancy for the management network for worker NCNs. The only
 > redundancy set up for workers is port redundancy.
 
 * *Management Network:* `1x` PCIe card with 2 heads/ports for a total of 2 ports dedicated to a
@@ -58,9 +58,9 @@ see [`metal.md-level`](https://github.com/Cray-HPE/dracut-metal-mdsquash/blob/ma
 * *High-Speed Network:* `1x` PCIe card capable of `100Gbps` (e.g. ConnectX-5 or Cassini), with 1 or
   2 heads/ports
 
-### Ceph Storage
+### Ceph storage
 
-> **`NOTE:`** The 2nd port on each card is filled but not configured (reserved for future use).
+> **NOTE:** The 2nd port on each card is filled but not configured (reserved for future use).
 
 * *Management Network:* `2x` PCIe cards, each with two heads/ports for a total of four ports split
   between two PCIe cards

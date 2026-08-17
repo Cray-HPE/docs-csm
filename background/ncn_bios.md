@@ -2,7 +2,7 @@
 
 This page specifies the BIOS settings that are desirable for non-compute nodes (NCNs).
 
-> **`NOTES`**
+> **NOTES**
 >
 > - Any tunables on this page are in the interest of performance and stability. If either of those facets seem to be infringed by any of the content on this page, then contact HPE Cray for support.
 > - The table below declares desired settings; unlisted settings should remain at vendor default. This table may be expanded as new settings are adjusted.

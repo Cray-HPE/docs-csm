@@ -25,7 +25,7 @@ installation-centric artifacts, such as:
 
 ## 2. Create and initialize `site-init` directory
 
-> **`NOTE`** If the pre-installation is resuming here, ensure the environment variables have been properly set
+> **NOTE** If the pre-installation is resuming here, ensure the environment variables have been properly set
 > by following [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
 > to this page.
 
@@ -86,7 +86,7 @@ with system-specific customizations.
     - `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
     - Replace the `Username` and `Password` references in match the existing settings of your system hardware components.
 
-    > **`NOTE`**
+    > **NOTE**
     >
     > - The `cray_reds_credentials` are used by the River Endpoint Discovery Service (REDS) for River components.
     > - The `cray_meds_credentials` are used by the Mountain Endpoint Discovery Service (MEDS) for the liquid-cooled components in an Olympus (Mountain) cabinet.
@@ -111,8 +111,8 @@ with system-specific customizations.
 
     - Validate REDS credentials:
 
-        > **`NOTE`** These credentials are used by the REDS and HMS discovery services, targeting River Redfish
-        BMC endpoints and management switches
+        > **NOTE** These credentials are used by the REDS and HMS discovery services, targeting River Redfish
+        > BMC endpoints and management switches
         >
         > - For `vault_redfish_defaults`, the only entry used is:
         >
@@ -145,11 +145,11 @@ with system-specific customizations.
 1. To customize the PKI Certificate Authority (CA) used by the platform, see
     [Certificate Authority](../background/certificate_authority.md).
 
-    > **`IMPORTANT`** The CA may not be modified after install.
+    > **IMPORTANT** The CA may not be modified after install.
 
 ### Setup LDAP configuration
 
-> **`NOTE`** Skip past LDAP configuration to [here](#customize-dns-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
+> **NOTE** Skip past LDAP configuration to [here](#customize-dns-configuration) if there is no LDAP configuration at this time. If LDAP should be enabled later,
 > follow [Add LDAP User Federation](../operations/security_and_authentication/Add_LDAP_User_Federation.md) after installation.
 
 1. (`pit#`) Set environment variables for the LDAP server and its port.
@@ -163,7 +163,7 @@ with system-specific customizations.
 
 1. (`pit#`) Load the `openjdk` container image.
 
-   > **`NOTE`** Requires a properly configured Docker or Podman
+   > **NOTE** Requires a properly configured Docker or Podman
    > environment.
 
    ```bash
@@ -185,7 +185,7 @@ with system-specific customizations.
     certificate into `cacert.pem`, or try the following commands to
     create it automatically.
 
-    > **`NOTE`** The following commands were verified using OpenSSL
+    > **NOTE** The following commands were verified using OpenSSL
     > version `1.1.1d` and use the `-nameopt RFC2253` option to ensure
     > consistent formatting of distinguished names.
     > Unfortunately, older versions of OpenSSL may not support
@@ -217,7 +217,7 @@ with system-specific customizations.
 
     1. (`pit#`) Extract the issuer's certificate.
 
-        > **`NOTE`** The issuer DN is properly escaped as part of the
+        > **NOTE** The issuer DN is properly escaped as part of the
         > `awk` pattern below. It must be changed to match the value
         > for `emailAddress`, `CN`, `OU`, etc. for your LDAP. If the value
         > you are using is different, be sure to escape it properly!
@@ -230,7 +230,7 @@ with system-specific customizations.
 
 1. (`pit#`) Create `certs.jks`.
 
-    > **`NOTE`** The alias used in this command for `cray-data-center-ca` should be changed to match your LDAP.
+    > **NOTE** The alias used in this command for `cray-data-center-ca` should be changed to match your LDAP.
 
     ```bash
     podman run --rm -v "$(pwd):/data" \
@@ -239,7 +239,7 @@ with system-specific customizations.
             -keystore /data/certs.jks -storepass password -noprompt
     ```
 
-    > **`NOTE`** If the command is executed multiple times by oversight, then the console will display the following and may be ignored
+    > **NOTE** If the command is executed multiple times by oversight, then the console will display the following and may be ignored
     > to proceed further.
 
     ```text
@@ -291,13 +291,13 @@ with system-specific customizations.
 1. Configure the `ldapSearchBase` and `localRoleAssignments` settings for
     the `cray-keycloak-users-localize` chart in `customizations.yaml`.
 
-    > **`NOTE`** There may be one or more groups in LDAP for admins and one or more for users.
+    > **NOTE** There may be one or more groups in LDAP for admins and one or more for users.
     > Each admin group needs to be assigned to role `admin` and set to both `shasta` and `cray` clients in Keycloak.
     > Each user group needs to be assigned to role `user` and set to both `shasta` and `cray` clients in Keycloak.
 
     1. (`pit#`) Set `ldapSearchBase` in `customizations.yaml`.
 
-       > **`NOTE`** This example sets `ldapSearchBase` to `dc=dcldap,dc=dit`
+       > **NOTE** This example sets `ldapSearchBase` to `dc=dcldap,dc=dit`
 
        ```bash
        yq write -i "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-keycloak-users-localize.ldapSearchBase 'dc=dcldap,dc=dit'
@@ -305,7 +305,7 @@ with system-specific customizations.
 
     1. (`pit#`) Set `localRoleAssignments` in `customizations.yaml`.
 
-       > **`NOTE`** This example sets `localRoleAssignments` for the LDAP groups `employee`,
+       > **NOTE** This example sets `localRoleAssignments` for the LDAP groups `employee`,
        > `craydev`, and `shasta_admins` to be the `admin` role, and the LDAP group `shasta_users`
        > to be the `user` role.
 
@@ -380,7 +380,7 @@ with system-specific customizations.
 
     1. (`pit#`) Review the `cray-dns-unbound` values.
 
-        > **`IMPORTANT`** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
+        > **IMPORTANT** **Do not** remove the `domain_name` entry, it is required for Unbound to forward requests to PowerDNS correctly.
 
         ```bash
         yq read "${SITE_INIT}/customizations.yaml" spec.kubernetes.services.cray-dns-unbound
@@ -461,7 +461,7 @@ section for links to the relevant procedures.
 
 1. (`pit#`) Load the `zeromq` container image required by Sealed Secret Generators.
 
-    > **`NOTE`** Requires a properly configured Docker or Podman environment.
+    > **NOTE** Requires a properly configured Docker or Podman environment.
 
     ```bash
     "${CSM_PATH}/hack/load-container-image.sh" artifactory.algol60.net/csm-docker/stable/docker.io/zeromq/zeromq:v4.0.5

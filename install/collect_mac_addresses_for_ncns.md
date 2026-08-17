@@ -11,7 +11,7 @@ This assumes that the HMN is not setup on the PIT node; these steps cater to bar
 
 1. (`pit#`) Change into the preparation directory.
 
-   > **`NOTE`** If `PITDATA` is not defined, then see [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables).
+   > **NOTE** If `PITDATA` is not defined, then see [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables).
 
    ```bash
    cd ${PITDATA}/prep

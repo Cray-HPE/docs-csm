@@ -1,25 +1,25 @@
 # SHCD HMN Tab/HMN Connections Rules
 
-1. [Introduction](#introduction)
-   1. [Chassis selection](#chassis-selection)
-1. [Compute node](#compute-node)
-    1. [Dense four-node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
-    1. [Single-node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
-    1. [Dual-node chassis - Apollo 6500 XL645D](#dual-node-chassis---apollo-6500-xl645d)
-1. [Chassis Management Controller (CMC)](#chassis-management-controller-cmc)
-1. [Management node](#management-node)
-    1. [Master](#master)
-    1. [Worker](#worker)
-    1. [Storage](#storage)
-1. [Application node](#application-node)
-    1. [Single-node chassis](#single-node-chassis)
-        1. [Building component names (xnames) for nodes in a single application node chassis](#building-component-names-xnames-for-nodes-in-a-single-application-node-chassis)
-    1. [Dual-node chassis](#dual-node-chassis)
-        1. [Building component names (xnames) for nodes in a dual application node chassis](#building-component-names-xnames-for-nodes-in-a-dual-application-node-chassis)
-1. [Columbia Slingshot switch](#columbia-slingshot-switch)
-1. [PDU cabinet controller](#pdu-cabinet-controller)
-1. [Cooling door](#cooling-door)
-1. [Management switches](#management-switches)
+- [Introduction](#introduction)
+    - [Chassis selection](#chassis-selection)
+- [Compute node](#compute-node)
+    - [Dense four-node chassis - Gigabyte or Intel chassis](#dense-four-node-chassis---gigabyte-or-intel-chassis)
+    - [Single-node chassis - Apollo 6500 XL675D](#single-node-chassis---apollo-6500-xl675d)
+    - [Dual-node chassis - Apollo 6500 XL645D](#dual-node-chassis---apollo-6500-xl645d)
+- [Chassis Management Controller (CMC)](#chassis-management-controller-cmc)
+- [Management node](#management-node)
+    - [Master](#master)
+    - [Worker](#worker)
+    - [Storage](#storage)
+- [Application node](#application-node)
+    - [Single-node chassis](#single-node-chassis)
+        - [Building component names (xnames) for nodes in a single application node chassis](#building-component-names-xnames-for-nodes-in-a-single-application-node-chassis)
+    - [Dual-node chassis](#dual-node-chassis)
+        - [Building component names (xnames) for nodes in a dual application node chassis](#building-component-names-xnames-for-nodes-in-a-dual-application-node-chassis)
+- [Columbia Slingshot switch](#columbia-slingshot-switch)
+- [PDU cabinet controller](#pdu-cabinet-controller)
+- [Cooling door](#cooling-door)
+- [Management switches](#management-switches)
 
 ## Introduction
 
@@ -53,7 +53,7 @@ Column mapping from SHCD to `hmn_connections.json`:
 | `T20`       |                  | `not used`              |                                                                                                                                                                                              |
 | `U20`       | `Port`           | `DestinationPort`       | Switch port on the management switch                                                                                                                                                         |
 
-> **`NOTE`** Only `J20` needs to have the column name of `Source`. There are no requirements on what the other columns should be named.
+> **NOTE** Only `J20` needs to have the column name of `Source`. There are no requirements on what the other columns should be named.
 
 Some conventions for this document:
 
@@ -73,12 +73,12 @@ All of the following examples assume air-cooled hardware is located within a sta
 The `Source` field needs to match these conditions in order to be considered a compute node:
 
 - Has one of the following prefixes:
-  - `nid`
-  - `cn`
+    - `nid`
+    - `cn`
 
 - Ends with an integer that matches this regular expression: `(\d+$)`
-  - This integer is the Node ID (NID) for the node
-  - Each node should have a unique NID value
+    - This integer is the Node ID (NID) for the node
+    - Each node should have a unique NID value
 
 For example, the following are valid `Source` field values for compute nodes:
 
@@ -90,7 +90,7 @@ Depending on the type of compute node, additional rules may apply. Compute nodes
 
 ### Dense four-node chassis - Gigabyte or Intel chassis
 
-> **`NOTE`** Apollo 2000 compute nodes are not currently supported by CSM.
+> **NOTE** Apollo 2000 compute nodes are not currently supported by CSM.
 
 Air-cooled compute nodes are typically in a `2U` chassis that contains four compute nodes. Each of the compute nodes in the chassis gets its own row in the `HMN` tab,
 plus a parent row.
@@ -123,7 +123,7 @@ the chassis. Refer to [Chassis Management Controller](#chassis-management-contro
 | `nid000004`       | `x3000` | `u17`      | `L` | `SubRack-001-CMC` | `-` | `j3`   | `sw-smn01`    | `x3000` | `u14`      | `-` | `j33`  |
 | `SubRack-001-CMC` | `x3000` | `u17`      |     |                   | `-` | `cmc`  | `sw-smn01`    | `x3000` | `u14`      | `-` | `j32`  |
 
-> **`NOTE`** `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 Example: Four compute nodes in the same chassis without a CMC connected to the HMN network.
 
@@ -135,7 +135,7 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 | `nid000004`       | `x3000` | `u17`      | `L` | `SubRack-001-CMC` | `-` | `j3`   | `sw-smn01`    | `x3000` | `u14`      | `-` | `j33`  |
 | `SubRack-001-CMC` | `x3000` | `u17`      |     |                   | `-` |        |               |         |            |     |        |
 
-> **`NOTE`** `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` names like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Four-node chassis: HMN connections
 
@@ -151,11 +151,11 @@ compute node BMCs are connected to ports 33-36 in the management `leaf-bmc-bmc` 
 {"Source":"SubRack-001-CMC","SourceRack":"x3000","SourceLocation":"u17","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j32"}
 ```
 
-> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 Example: Four compute nodes in the same chassis without a CMC connected to the HMN network.
 
-> **`NOTE`** The `SourceParent` for the compute nodes `SubRack-001-CMC` is not connected the HMN network.
+> **NOTE** The `SourceParent` for the compute nodes `SubRack-001-CMC` is not connected the HMN network.
 
 ```json
 {"Source":"nid000001","SourceRack":"x3000","SourceLocation":"u17","SourceSubLocation":"R","SourceParent":"SubRack-001-CMC","DestinationRack":"x3000","DestinationLocation":"u14","DestinationPort":"j36"}
@@ -165,7 +165,7 @@ Example: Four compute nodes in the same chassis without a CMC connected to the H
 {"Source":"SubRack-001-CMC","SourceRack":"x3000","SourceLocation":"u17","DestinationLocation":" ","DestinationPort":" "}
 ```
 
-> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Four-node chassis: SLS
 
@@ -210,7 +210,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
     }
     ```
 
-    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
+    > **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
 ##### Compute: Four-node chassis: SLS: Compute node with NID 2
 
@@ -251,7 +251,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
     }
     ```
 
-    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/35`. Dell `leaf-bmc` switches will have value `ethernet1/1/35`.
+    > **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/35`. Dell `leaf-bmc` switches will have value `ethernet1/1/35`.
 
 ##### Compute: Four-node chassis: SLS: Compute node with NID 3
 
@@ -292,7 +292,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
     }
     ```
 
-    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/34`. Dell `leaf-bmc` switches will have value `ethernet1/1/34`.
+    > **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/34`. Dell `leaf-bmc` switches will have value `ethernet1/1/34`.
 
 ##### Compute: Four-node chassis: SLS: Compute node with NID 4
 
@@ -333,7 +333,7 @@ The CSI tool will generate the following SLS representations for compute nodes a
     }
     ```
 
-    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/33`. Dell `leaf-bmc` switches will have value `ethernet1/1/33`.
+    > **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/33`. Dell `leaf-bmc` switches will have value `ethernet1/1/33`.
 
 ### Single-node chassis - Apollo 6500 XL675D
 
@@ -353,7 +353,7 @@ slot 40 of cabinet 3000.
 |-------------|---------|------------|-------|----------|-----|--------|---------------|---------|------------|-----|--------|
 | `nid000001` | `x3000` | `u02`      |       |          | `-` | `j03`  | `sw-smn01`    | `x3000` | `u40`      | `-` | `j36`  |
 
-> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Single-node chassis: HMN connections
 
@@ -363,7 +363,7 @@ The HMN connections representation for the two SHCD table rows above:
 {"Source":"nid000001","SourceRack":"x3000","SourceLocation":"u02","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j36"}
 ```
 
-> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Single-node chassis: SLS
 
@@ -404,7 +404,7 @@ The HMN connections representation for the two SHCD table rows above:
     }
     ```
 
-> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
+> **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/36`. Dell `leaf-bmc` switches will have value `ethernet1/1/36`.
 
 ### Dual-node chassis - Apollo 6500 XL645D
 
@@ -416,9 +416,9 @@ In addition to the top-level compute node naming requirements, when there are tw
 `SourceSubLocation` can contain one of the following values: `L`, `l`, `R`, `r`. These values are used to determine the BMC ordinal for the node.
 
 - `L` or `l` translates into the component name (xname) having `b1`.
-  - For example, `x3000c0s10b1b0`
+    - For example, `x3000c0s10b1b0`
 - `R` or `r` translates into the component name (xname) having `b2`.
-  - For example, `x3000c0s10b1b0`
+    - For example, `x3000c0s10b1b0`
 
 This convention applies to all compute nodes that have two nodes in a chassis, such as the Apollo XL645D.
 
@@ -432,7 +432,7 @@ The two node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` 
 | `nid000001` | `x3000` | `u08`      | `L` |          | `-` | `j03`  | `sw-smn01`    | `x3000` | `u40`      | `-` | `j38`  |
 | `nid000002` | `x3000` | `u08`      | `R` |          | `-` | `j03`  | `sw-smn01`    | `x3000` | `u40`      | `-` | `j37`  |
 
-> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Dual-node chassis: HMN connections
 
@@ -443,7 +443,7 @@ The HMN connections representation for the two SHCD table rows above:
 {"Source":"nid000002","SourceRack":"x3000","SourceLocation":"u08","SourceSubLocation":"R","DestinationRack":"x3000","DestinationLocation":"u40","DestinationPort":"j38"}
 ```
 
-> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Compute: Dual-node chassis: SLS
 
@@ -486,7 +486,7 @@ The HMN connections representation for the two SHCD table rows above:
     }
     ```
 
-    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/38`. Dell `leaf-bmc` switches will have value `ethernet1/1/38`.
+    > **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/38`. Dell `leaf-bmc` switches will have value `ethernet1/1/38`.
 
 ##### Compute: Dual-node chassis: SLS: Compute node with NID 2
 
@@ -527,11 +527,11 @@ The HMN connections representation for the two SHCD table rows above:
     }
     ```
 
-    > **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/37`. Dell `leaf-bmc` switches will have value `ethernet1/1/37`.
+    > **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/37`. Dell `leaf-bmc` switches will have value `ethernet1/1/37`.
 
 ## Chassis Management Controller (CMC)
 
-> **`NOTE`** This is not the same as an RCM (Rack Consolidation Module) that is present in Apollo 2000 chassis.
+> **NOTE** This is not the same as an RCM (Rack Consolidation Module) that is present in Apollo 2000 chassis.
 
 Matching conditions:
 
@@ -591,7 +591,7 @@ The HMN connections representation for the SHCD table row above:
   }
   ```
 
-> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/32`. Dell `leaf-bmc` switches will have value `ethernet1/1/32`.
+> **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/32`. Dell `leaf-bmc` switches will have value `ethernet1/1/32`.
 
 ## Management node
 
@@ -635,8 +635,8 @@ Example: master node where its BMC is connected to the site network, and no conn
 {"Source":"mn01","SourceRack":"x3000","SourceLocation":"u01"}
 ```
 
-> **`NOTE`** The following is also equivalent to a master node with not connection to the HMN. The values `DestinationRack`, `DestinationLocation`, and
-> **`NOTE`** `DestinationPort` can all contain whitespace and it is still considered to have no connection the HMN.
+> **NOTE** The following is also equivalent to a master node with not connection to the HMN. The values `DestinationRack`, `DestinationLocation`, and
+> **NOTE** `DestinationPort` can all contain whitespace and it is still considered to have no connection the HMN.
 >
 > ```json
 > {"Source":"mn01","SourceRack":"x3000","SourceLocation":"u01","DestinationRack":" ","DestinationLocation":" ","DestinationPort":" "}
@@ -682,7 +682,7 @@ Example: master node where its BMC is connected to the site network, and no conn
     }
     ```
 
-> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/25`. Dell `leaf-bmc` switches will have value `ethernet1/1/25`.
+> **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/25`. Dell `leaf-bmc` switches will have value `ethernet1/1/25`.
 
 ### Worker
 
@@ -749,7 +749,7 @@ The HMN connections representation for the SHCD table row above:
     }
     ```
 
-> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/48`. Dell `leaf-bmc` switches will have value `ethernet1/1/48`.
+> **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/48`. Dell `leaf-bmc` switches will have value `ethernet1/1/48`.
 
 ### Storage
 
@@ -816,18 +816,18 @@ The HMN connections representation for the SHCD table row above:
     }
     ```
 
-> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/29`. Dell `leaf-bmc` switches will have value `ethernet1/1/29`.
+> **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/29`. Dell `leaf-bmc` switches will have value `ethernet1/1/29`.
 
 ## Application node
 
 The `Source` field needs to match these conditions to be considered an application node:
 
 - Has one of the following prefixes:
-  - `uan`
-  - `gn`
-  - `ln`
+    - `uan`
+    - `gn`
+    - `ln`
 
-> **`NOTE`** The naming conventions for application nodes can be unique to a system. Refer to the
+> **NOTE** The naming conventions for application nodes can be unique to a system. Refer to the
 > [Create Application Node Configuration YAML](create_application_node_config_yaml.md)
 > procedure for the process to add additional `Source` name prefixes for application nodes.
 
@@ -862,8 +862,8 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
 - `xX`: where `X` is the cabinet or rack identification number.
 - `cC`: where `C` is the chassis identification number.
-  - If the node is within an air-cooled cabinet, then this should be `0`.
-  - If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+    - If the node is within an air-cooled cabinet, then this should be `0`.
+    - If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
 - `sS`: where `S` is the lowest slot the node chassis occupies.
 - `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
 - `nN`: where `N` is the ordinal of the node This should be `0`.
@@ -880,10 +880,9 @@ In addition to the top-level compute node naming requirements, when there are tw
 `SourceSubLocation` can contain one of the following values: `L`, `l`, `R`, `r`. These values are used to determine the BMC ordinal for the node.
 
 - `L` or `l` translates into the component name (xname) having `b1`
-  - For example, `x3000c0s10b1b0`
-
+    - For example, `x3000c0s10b1b0`
 - `R` or `r` translates into the component name (xname) having `b2`
-  - For example, `x3000c0s10b1b0`
+    - For example, `x3000c0s10b1b0`
 
 This convention applies to all application nodes that have two nodes in a single chassis.
 
@@ -897,7 +896,7 @@ node BMCs are connected to ports 37 and 38 of the management `leaf-bmc` switch i
 | `uan01`  | `x3000` | `u08`      | `L` |          | `-` | `j03`  | `sw-smn01`    | `x3000` | `u40`      | `-` | `j38`  |
 | `uan02`  | `x3000` | `u08`      | `R` |          | `-` | `j03`  | `sw-smn01`    | `x3000` | `u40`      | `-` | `j37`  |
 
-> **`NOTE`** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
+> **NOTE** `Source` values like `cn1` and `cn-01` are equivalent to the value `nid000001`.
 
 #### Application node: Dual-node chassis: HMN connections
 
@@ -914,12 +913,12 @@ The component name (xname) format for nodes takes the form of `xXcCsSbBnN`:
 
 - `xX`: where `X` is the Cabinet or Rack identification number.
 - `cC`: where `C` is the chassis identification number.
-  - If the node is within an air-cooled cabinet, then this should be `0`.
-  - If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+    - If the node is within an air-cooled cabinet, then this should be `0`.
+    - If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
 - `sS`: where `S` is the lowest slot the node chassis occupies.
 - `bB`: where `B` is the ordinal of the node BMC.
-  - If the `SourceSubLocation` is `L` or `l`, then this should be `1`.
-  - If the `SourceSubLocation` is `R` or `r`, then this should be `2`.
+    - If the `SourceSubLocation` is `L` or `l`, then this should be `1`.
+    - If the `SourceSubLocation` is `R` or `r`, then this should be `2`.
 - `nN`: where `N` is the ordinal of the node This should be `0`.
 
 For example:
@@ -948,7 +947,7 @@ Example: A Columbia Slingshot switch in slot 42 of cabinet 3000. Its BMC is conn
 |------------|---------|------------|-----|----------|-------|--------|---------------|---------|------------|-----|--------|
 | `sw-hsn01` | `x3000` | `u42`      | `-` |          |       | `j3`   | `sw-smn01`    | `x3000` | `u38`      | `-` | `j45`  |
 
-> **`NOTE`** `Source` values like `Columbia` or `columbia` are also valid.
+> **NOTE** `Source` values like `Columbia` or `columbia` are also valid.
 
 ### Columbia Slingshot switch: HMN connections
 
@@ -994,7 +993,7 @@ The HMN connections representation for the SHCD table row above:
     }
     ```
 
-> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/45`. Dell `leaf-bmc` switches will have value `ethernet1/1/45`.
+> **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/45`. Dell `leaf-bmc` switches will have value `ethernet1/1/45`.
 
 ## PDU cabinet controller
 
@@ -1070,7 +1069,7 @@ The HMN connections representation for alternative naming convention.
     }
     ```
 
-> **`NOTE`** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/41`. Dell `leaf-bmc` switches will have value `ethernet1/1/41`.
+> **NOTE** For Aruba `leaf-bmc` switches, the `VendorName` value will be `1/1/41`. Dell `leaf-bmc` switches will have value `ethernet1/1/41`.
 
 ## Cooling door
 

@@ -23,7 +23,7 @@ which device will be used for it.
 
 1. (`external#`) Identify the USB device.
 
-   > **`NOTE`** This example shows the USB device is `/dev/sdd` on the host.
+   > **NOTE** This example shows the USB device is `/dev/sdd` on the host.
 
    ```bash
    lsscsi
@@ -57,7 +57,7 @@ which device will be used for it.
 
     - If CSI is unavailable, then fetch and use the `write-livecd.sh` script:
 
-        > **`NOTE`** This assumes the `write-livecd.sh` script was extracted from the tarball's
+        > **NOTE** This assumes the `write-livecd.sh` script was extracted from the tarball's
         > `cray-site-init` RPM. If that was skipped in
         > [the USB section of Boot the LiveCD](../pre-installation.md#12-boot-the-livecd), the script
         > is also available on GitHub:
@@ -90,7 +90,7 @@ then use `efibootmgr` to set the boot order to be the USB device. See the
 [set boot order](../../background/ncn_boot_workflow.md#setting-boot-order) page for more information about how to set the
 boot order to have the USB device first.
 
-> **`NOTE`** UEFI booting must be enabled in order for the system to find the USB device's EFI bootloader.
+> **NOTE** UEFI booting must be enabled in order for the system to find the USB device's EFI bootloader.
 
 1. (`external#`) Confirm that the IPMI credentials work for the BMC by checking the power status.
 
@@ -108,7 +108,7 @@ boot order to have the USB device first.
 
 1. (`external#`) Power the NCN on and connect to the IPMI console.
 
-   > **`NOTE`** The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect,
+   > **NOTE** The boot device can be set via IPMI; the example below uses the `floppy` option. At a glance this seems incorrect,
    > however it selects the primary removable media. This step instructs the user to power off the node to ensure
    > the BIOS has the best chance at finding the USB via a cold boot.
    >

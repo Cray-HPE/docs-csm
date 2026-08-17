@@ -16,7 +16,7 @@ the NCNs have been deployed (e.g. there is no more PIT node).
 
 ## Quiesce application and compute nodes
 
-> **`NOTE`** Skip this section if compute nodes and application nodes are not booted.
+> **NOTE** Skip this section if compute nodes and application nodes are not booted.
 
 The application and compute nodes must be shutdown prior to a reinstallation. If they are left on, then they will
 potentially end up in an undesirable state.
@@ -25,7 +25,7 @@ See [Shut Down and Power Off Compute and User Access Nodes](../operations/power_
 
 ## Disable DHCP service
 
-> **`NOTE`** Skip this section if the CSM install was incomplete or not started.
+> **NOTE** Skip this section if the CSM install was incomplete or not started.
 
 The DHCP service running in Kubernetes needs to be disabled or it will conflict with the PIT's DHCP services.
 
@@ -56,7 +56,7 @@ The upcoming procedures use `ipmitool`. Set IPMI credentials for the BMCs of the
 
 ## Power off booted nodes
 
-> **`NOTE`** Skip this section if none of the management nodes are booted.
+> **NOTE** Skip this section if none of the management nodes are booted.
 
 Power each NCN off using `ipmitool` from `ncn-m001` (or the PIT node, if reinstalling an incomplete install).
 
@@ -91,7 +91,7 @@ Power each NCN off using `ipmitool` from `ncn-m001` (or the PIT node, if reinsta
 During the install of the management nodes, their BMCs get set to static IP addresses. The installation expects these
 BMCs to be set back to DHCP before proceeding.
 
-> **`NOTE`** These steps require that the **[Set IPMI credentials](#set-ipmi-credentials)** steps have been performed.
+> **NOTE** These steps require that the **[Set IPMI credentials](#set-ipmi-credentials)** steps have been performed.
 
 1. Get the inventory of BMCs.
 
@@ -144,11 +144,11 @@ BMCs to be set back to DHCP before proceeding.
    bmcs_cold_reset
    ```
 
-   > **`NOTE`** As long as every BMC is either not reachable or receives a cold reset, this step is successful.
+   > **NOTE** As long as every BMC is either not reachable or receives a cold reset, this step is successful.
 
 ## Power off PIT node
 
-> **`NOTE`** Skip this step if planning to use this node as a staging area to create the USB LiveCD.
+> **NOTE** Skip this step if planning to use this node as a staging area to create the USB LiveCD.
 
 1. (`ncn-m001#` or `pit#`) Shut down the LiveCD or `ncn-m001` node.
 
