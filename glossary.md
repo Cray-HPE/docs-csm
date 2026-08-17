@@ -221,7 +221,7 @@ where the `XXXXXX` is a six digit number starting with zero padding.
 
 ## Compute Rolling Upgrade Service (CRUS)
 
-> **`NOTE`** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.5.0. See [Deprecated Features](introduction/deprecated_features/README.md).
+> **NOTE** CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.5.0. See [Deprecated Features](introduction/deprecated_features/README.md).
 
 See [Rolling Upgrades using BOS](operations/boot_orchestration/Rolling_Upgrades.md).
 

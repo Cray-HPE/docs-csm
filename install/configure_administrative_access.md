@@ -24,7 +24,7 @@ and BMC/controller passwords.
 1. [Configure management nodes with CFS](#8-configure-management-nodes-with-cfs)
 1. [Proceed to next topic](#9-proceed-to-next-topic)
 
-> **`NOTE`** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
+> **NOTE** The procedures in this section of installation documentation are intended to be done in order, even though the topics are
 > administrative or operational procedures. The topics themselves do not have navigational links to the next topic in the sequence.
 
 ## 1. Configure the Cray and SAT command line interfaces
@@ -110,7 +110,7 @@ For more information about locking and unlocking nodes, see [Lock and Unlock Nod
 
 ## 4. Configure BMC and controller parameters with SCSD
 
-> **`NOTE`** If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
+> **NOTE** If there are no liquid-cooled cabinets present in the HPE Cray EX system, then this step can be skipped.
 
 The [System Configuration Service (SCSD)](../glossary.md#system-configuration-service-scsd) allows administrators to set
 various BMC and controller parameters for components in liquid-cooled cabinets. At this point in the install, SCSD should

@@ -6,11 +6,11 @@ This page will guide a user on booting the LiveCD `.iso` file directly onto a BM
 
 - [Prerequisites](#prerequisites)
 - [BMCs' virtual mounts](#bmcs-virtual-mounts)
-  - [HPE iLO BMCs](#hpe-ilo-bmcs)
-  - [Gigabyte BMCs](#gigabyte-bmcs)
+    - [HPE iLO BMCs](#hpe-ilo-bmcs)
+    - [Gigabyte BMCs](#gigabyte-bmcs)
 - [Configuring](#configuring)
-  - [Backing up the overlay COW FS](#backing-up-the-overlay-cow-fs)
-  - [Restoring from an overlay COW FS backup](#restoring-from-an-overlay-cow-fs-backup)
+    - [Backing up the overlay COW FS](#backing-up-the-overlay-cow-fs)
+    - [Restoring from an overlay COW FS backup](#restoring-from-an-overlay-cow-fs-backup)
 
 ## Prerequisites
 
@@ -42,7 +42,7 @@ HPE iLO BMCs allow for booting directly from an HTTP-accessible ISO location.
 
 1. Open the virtual terminal by choosing the `HTML5 Console` option when clicking the terminal image in the bottom left corner.
 
-   > **`NOTE`** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it begins downloading the ISO's SquashFS root file system, which can take a few minutes.
+   > **NOTE** It may appear that the boot is stalled at a line of `EXT4-fs (loop1): mounted ...` or `Starting dracut pre-mount hook...`. This is the step when it begins downloading the ISO's SquashFS root file system, which can take a few minutes.
 
 ### Gigabyte BMCs
 
@@ -60,7 +60,7 @@ Gigabyte BMCs allow for booting over HTTP.
 
    ![Screen Shot of Gigabyte BMC General Settings](../../img/bmc-virtual-media-settings-gigabyte.png)
 
-   > **`NOTE`** The Gigabyte URL appears to not allow certain characters and has a limit on path length. You may need to move or rename the ISO to a location with a smaller file name.
+   > **NOTE** The Gigabyte URL appears to not allow certain characters and has a limit on path length. You may need to move or rename the ISO to a location with a smaller file name.
 
 1. Navigate to `Image Redirection` -> `Remote Images`.
 
@@ -81,7 +81,7 @@ The ISO boots with no password, requiring one be set on first login.
 Continue the bootstrap process by setting the root password
 following the procedure [First log in](../pre-installation.md#13-first-log-in).
 
-> **`NOTE`** The root OS `/` directory is writable without persistence. This means that restarting
+> **NOTE** The root OS `/` directory is writable without persistence. This means that restarting
 > the machine will result in all changes being lost. Before restarting, consider following
 > [Backing up the overlay COW FS](#backing-up-the-overlay-cow-fs) and the accompanying
 > [Restoring from an overlay COW FS backup](#restoring-from-an-overlay-cow-fs-backup) section.
@@ -97,7 +97,7 @@ tar czf /run/overlay.tar.gz -C /run/overlayfs/rw .
 scp /run/overlay.tar.gz <somelocation>
 ```
 
-> **`NOTE`** To reduce the size of the backup, delete any SquashFS files first, or exclude them
+> **NOTE** To reduce the size of the backup, delete any SquashFS files first, or exclude them
 > in the `tar` command using `--exclude='*.squashfs'`. Those will need to be repopulated after
 > restoring the backup.
 

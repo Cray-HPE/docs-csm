@@ -70,7 +70,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 1. (`pit#`) Upload SLS file.
 
-    > **`NOTE`** The environment variable `SYSTEM_NAME` must be set.
+    > **NOTE** The environment variable `SYSTEM_NAME` must be set.
 
     ```bash
     csi upload-sls-file --sls-file "${PITDATA}/prep/${SYSTEM_NAME}/sls_input_file.json"
@@ -116,7 +116,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 1. (`pit#`) Get a token to use for authenticated communication with the gateway.
 
-    > **`NOTE`** `api-gw-service-nmn.local` is legacy, and will be replaced with `api-gw-service.nmn`.
+    > **NOTE** `api-gw-service-nmn.local` is legacy, and will be replaced with `api-gw-service.nmn`.
 
     ```bash
     export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client \
@@ -126,7 +126,7 @@ The steps in this section load hand-off data before a later procedure reboots th
 
 1. (`pit#`) Upload the `data.json` file to BSS, the `cloud-init` data source.
 
-    > **`NOTE`** This step will prompt for the root password of the NCNs.
+    > **NOTE** This step will prompt for the root password of the NCNs.
 
     ```bash
     csi handoff bss-metadata \
@@ -256,7 +256,7 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
 
 1. (`pit#`) Wait for the node to boot, acquire its hostname (`ncn-m001`), and run `cloud-init`.
 
-    > **`NOTE`** If the node has PXE boot issues, such as getting PXE errors or not pulling the `ipxe.efi` binary, see [PXE boot troubleshooting](troubleshooting_pxe_boot.md).
+    > **NOTE** If the node has PXE boot issues, such as getting PXE errors or not pulling the `ipxe.efi` binary, see [PXE boot troubleshooting](troubleshooting_pxe_boot.md).
     If the node comes up and indicates `Failed to start etcd` -- see [Fix `Failed to start etcd` on Master NCN](../operations/kubernetes/Fix_Failed_to_start_etcd_on_Master.md).
 
 1. (`external#`) Once `cloud-init` has completed successfully, log in and start a typescript (the IP address used here is the one noted for `ncn-m002` in an earlier step).
@@ -294,7 +294,7 @@ It is important to backup some files from `ncn-m001` before it is rebooted.
     [Backup](#33-backup) step. Set the `FM` variable to the `first-master-hostname`
     value noted in that section.
 
-    > **`NOTE`** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
+    > **NOTE** Do NOT change any default NCN hostname; otherwise, unexpected deployment or upgrade errors may happen.
 
     ```bash
     SYSTEM_NAME=eniac
@@ -383,7 +383,7 @@ The next steps require `csi` from the installation media. `csi` is installed on 
 
 ## 6. Configure DNS and NTP on each BMC
 
- > **`NOTE`** Only follow this section if the NCNs are HPE hardware. If the system uses
+ > **NOTE** Only follow this section if the NCNs are HPE hardware. If the system uses
  > Gigabyte or Intel hardware, then skip this section.
 
 Configure DNS and NTP on the BMC for each management node **except `ncn-m001`**.
@@ -399,7 +399,7 @@ However, the commands in this section are all run **on** `ncn-m001`.
 
     Set the `IPMI_PASSWORD` and `USERNAME` variables to the BMC credentials for the NCNs.
 
-    > **`NOTE`** Using `read -s` for this prevents the credentials from being echoed to the screen or saved in the shell history.
+    > **NOTE** Using `read -s` for this prevents the credentials from being echoed to the screen or saved in the shell history.
 
     ```bash
     USERNAME=root

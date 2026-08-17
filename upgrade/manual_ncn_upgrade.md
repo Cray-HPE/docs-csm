@@ -85,7 +85,7 @@ Follow one of two procedures below.
 
 ### Manually upgrade `ncn-m002` or `ncn-m003`
 
-> **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
+> **NOTE** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
 then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
 1. (`ncn-m001#`) Start a typescript.
@@ -115,7 +115,7 @@ then backup the `/etc/cray/kubernetes/encryption` directory on the master node b
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh $master_node
    ```
 
-   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted. Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up.
+   > **NOTE** The `root` user password for the node may need to be reset after it is rebooted. Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up.
    Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
    See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
@@ -148,7 +148,7 @@ Follow the steps below to upgrade `ncn-m001`.
 
 1. Log in to `ncn-m002` from outside the cluster.
 
-    > **`NOTE`** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
+    > **NOTE** Very rarely, a password hash for the `root` user that works properly on a SLES SP2 NCN is
     > not recognized on a SLES SP3 NCN. If password login fails, then log in to `ncn-m002` from
     > `ncn-m001` and use the `passwd` command to reset the password. Then log in using the CMN IP address as directed
     > below. Once `ncn-m001` has been upgraded, log in from `ncn-m002` and use the `passwd` command to reset
@@ -203,14 +203,14 @@ Follow the steps below to upgrade `ncn-m001`.
 
 1. (`ncn-m002#`) Upgrade `ncn-m001`.
 
-   > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
+   > **NOTE** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../operations/kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
    ```bash
    /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
    ```
 
-   > **`NOTE`** The `root` user password for the node may need to be reset after it is rebooted.
+   > **NOTE** The `root` user password for the node may need to be reset after it is rebooted.
    Additionally, the `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up.
    Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
    See [Kubernetes `kube-apiserver` Failing](../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
