@@ -7,16 +7,16 @@ This document outlines the hardware necessary to meet CSM's Plan of Record (PoR)
 
 * [Disks](#disks)
 * [Masters NCNs](#masters-ncns)
-  * [Disks](#master-disks)
-  * [NICs](#master-nics)
+    * [Disks](#master-disks)
+    * [NICs](#master-nics)
 * [Workers NCNs](#workers-ncns)
-  * [Disks](#worker-disks)
-  * [NICs](#worker-nics)
+    * [Disks](#worker-disks)
+    * [NICs](#worker-nics)
 * [Storage NCNs](#storage-ncns)
-  * [Disks](#storage-disks)
-  * [NICs](#storage-nics)
+    * [Disks](#storage-disks)
+    * [NICs](#storage-nics)
 
-> **`NOTE:`** Several components below are necessary to provide redundancy in the event of hardware failure.
+> **NOTE:** Several components below are necessary to provide redundancy in the event of hardware failure.
 
 ## Disks
 
@@ -42,7 +42,7 @@ The number of OS disks can be modified by the [`metal.disks` kernel parameter](h
 
 ### Master NICs
 
-> **`NOTE:`** The 2nd port on each card is unused/empty (reserved for future use).
+> **NOTE:** The 2nd port on each card is unused/empty (reserved for future use).
 
 * *Management Network:* `2x` PCIe cards, with 1 or 2 heads/ports each for a total of 4 ports split between two PCIe cards
 
@@ -55,7 +55,7 @@ The number of OS disks can be modified by the [`metal.disks` kernel parameter](h
 
 ### Worker NICs
 
-> **`NOTE:`** There is no PCIe redundancy for the management network for worker NCNs. The only redundancy set up for workers is port redundancy.
+> **NOTE:** There is no PCIe redundancy for the management network for worker NCNs. The only redundancy set up for workers is port redundancy.
 
 * *Management Network:* `1x` PCIe card with 2 heads/ports for a total of 2 ports dedicated to a single PCIe card
 * *High-Speed Network:* `1x` PCIe card capable of `100Gbps` (e.g. ConnectX-5 or Cassini), with 1 or 2 heads/ports
@@ -67,10 +67,10 @@ The number of OS disks can be modified by the [`metal.disks` kernel parameter](h
 * *Operating System:* `2x` SSDs of equal size that are at least `500GiB` (`524288000000 bytes`)
 * *CEPH:* `8x` SSDs of any size
 
-> **`NOTE:`** Any available disk that is not consumed by the operating system will be used for Ceph, but a node needs a minimum of 8 disks for making an ideal Ceph pool for CSM.
+> **NOTE:** Any available disk that is not consumed by the operating system will be used for Ceph, but a node needs a minimum of 8 disks for making an ideal Ceph pool for CSM.
 
 ### Storage NICs
 
-> **`NOTE:`** The 2nd port on each card is filled but not configured (reserved for future use).
+> **NOTE:** The 2nd port on each card is filled but not configured (reserved for future use).
 
 * *Management Network:* `2x` PCIe cards, each with two heads/ports for a total of four ports split between two PCIe cards

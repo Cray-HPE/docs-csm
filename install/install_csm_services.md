@@ -2,7 +2,7 @@
 
 This procedure will install CSM applications and services into the CSM Kubernetes cluster.
 
-> **`NOTE`** Check the information in [Known issues](#known-issues) before starting this procedure
+> **NOTE** Check the information in [Known issues](#known-issues) before starting this procedure
 > to be warned about possible problems.
 
 1. [Install CSM services](#1-install-csm-services)
@@ -16,7 +16,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
 
 ## 1. Install CSM services
 
-> **`NOTE`**: During this step, only on systems with only three worker nodes (typically Testing and
+> **NOTE**: During this step, only on systems with only three worker nodes (typically Testing and
 > Development Systems (TDS)), the `customizations.yaml` file will be automatically edited to lower
 > pod
 > CPU requests for some services, in order to better facilitate scheduling on smaller systems. See
@@ -41,7 +41,7 @@ This procedure will install CSM applications and services into the CSM Kubernete
    popd
    ```
 
-   > **`NOTE`**
+   > **NOTE**
    >
    > * This command may take up to 90 minutes to complete.
    > * If any errors are encountered, then potential fixes should be displayed where the error

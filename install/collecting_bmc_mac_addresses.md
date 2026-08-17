@@ -14,7 +14,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
    See [Connect to Switch over USB-Serial Cable](../operations/network/Connect_to_Switch_Over_USB_Serial_Cable.md), if wanting to use that option.
 
-   > **`NOTE`** These IP addresses are examples; `10.X.0.4` may not match the setup.
+   > **NOTE** These IP addresses are examples; `10.X.0.4` may not match the setup.
 
    - For bare-metal switches, log in over the MTL network:
 
@@ -32,7 +32,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
    If they exist on the same VLAN, then dump the VLAN to get the MAC addresses. In order to find the ports of the BMCs, cross-reference the `HMN` tab of the SHCD file.
 
-   > **`NOTE`** Reference the CLI for more information (press `?` or `tab`).
+   > **NOTE** Reference the CLI for more information (press `?` or `tab`).
 
    - DellOS 10
 
@@ -107,7 +107,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
                                     BMC MAC address
    ```
 
-   > **`NOTE`** The column heading line must match that shown above in order for `csi` to parse it correctly.
+   > **NOTE** The column heading line must match that shown above in order for `csi` to parse it correctly.
 
 1. (`pit#`) Collect the BMC MAC address information for the PIT node.
 
@@ -123,7 +123,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
    MAC Address             : a4:bf:01:37:87:32
    ```
 
-   > **`NOTE`** An Intel node needs to use `ipmitool lan print 3` instead of the above command.
+   > **NOTE** An Intel node needs to use `ipmitool lan print 3` instead of the above command.
 
 1. Add this information for `ncn-m001` to the `ncn_metadata.csv` file.
 
@@ -137,7 +137,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
 1. Verify that the `ncn_metadata.csv` file has a row for every management node in the SHCD.
 
-   > **`NOTE`** There may be placeholder entries for some MAC addresses.
+   > **NOTE** There may be placeholder entries for some MAC addresses.
 
    Below is a sample file showing storage nodes 3, 2, and 1, then worker nodes 3, 2, and 1, and finally master nodes 3, 2, and 1, with valid `BMC MAC`
    addresses, but placeholder value `de:ad:be:ef:00:00` for the `Bootstrap MAC`, `Bond0 MAC0`, and `Bond0 MAC1`.
@@ -159,7 +159,7 @@ The BMC MAC address is the exclusive, dedicated LAN for the onboard BMC.
 
    Ignore errors regarding `site-init` (because it may not exist at this time).
 
-   > **`NOTE`** This assumes all other topology files are present in `$PITDATA/prep` from the
+   > **NOTE** This assumes all other topology files are present in `$PITDATA/prep` from the
    > [Create system configuration](pre-installation.md#3-create-system-configuration) procedure.
 
    ```bash

@@ -229,7 +229,7 @@ required to upgrade compute nodes.
 * For more information on CRUS, see [Compute Rolling Upgrades](operations/README.md#compute-rolling-upgrades).
 * For more information on the CRUS API, see [CRUS API](api/crus.md).
 
-> **`NOTES`**
+> **NOTES**
 >
 > * CRUS was deprecated in CSM 1.2.0 and it will be removed in CSM 1.5.0.
 >   See the following links for more information:

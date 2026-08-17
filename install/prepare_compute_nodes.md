@@ -163,7 +163,7 @@ Configure the switch port for the iLO to use HMN VLAN.
    Make sure that the MAC address shown for that port matches the `ILOMAC` address
    noted previously from the **Information** section of the web user interface.
 
-   > **`NOTE`** If the MAC address is not correct, double check the server cabling and
+   > **NOTE** If the MAC address is not correct, double check the server cabling and
    SHCD for the correct port then start this section over. **Do not** move on
    until the `ILOMAC` address has been found on the switch at the expected
    port.
@@ -220,7 +220,7 @@ Configure the switch port for the iLO to use HMN VLAN.
 
 Clear bad MAC and IP address out of Kea.
 
- > **`NOTE`** Skip this section if there was no bad MAC address and IP address found in section 1.
+ > **NOTE** Skip this section if there was no bad MAC address and IP address found in section 1.
 
 1. (`ncn-mw#`) Retrieve an API token, if not done previously.
 
@@ -250,7 +250,7 @@ Clear bad MAC and IP address out of Kea.
 
 Clear bad ID out of HSM.
 
-> **`NOTE`** Skip this section if there was no bad ID found in section 1.
+> **NOTE** Skip this section if there was no bad ID found in section 1.
 
 (`ncn-mw#`) Tell HSM to delete the bad ID out of the Ethernet interfaces table.
 

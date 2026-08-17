@@ -14,11 +14,11 @@ the `hmn_connections.json` file.
 - SHCD Excel file for the system
 - Podman is available
 
-> **`NOTE`** Podman is available on the CSM LiveCD and NCN images.
+> **NOTE** Podman is available on the CSM LiveCD and NCN images.
 
 ## Procedure
 
-> **`NOTE`** Ensure that the environment variables have been properly set by following
+> **NOTE** Ensure that the environment variables have been properly set by following
 > [Set reusable environment variables](pre-installation.md#15-set-reusable-environment-variables) and then coming back
 > to this page.
 
@@ -50,7 +50,7 @@ the `hmn_connections.json` file.
 
 1. (`pit#`) Set a variable to point to the system's SHCD Excel file.
 
-    > **`NOTE`** Make sure to quote the SHCD file path if there is whitespace in the document's path or filename.
+    > **NOTE** Make sure to quote the SHCD file path if there is whitespace in the document's path or filename.
 
     ```bash
     SHCD_FILE="/path/to/systems/SHCD.xlsx"
