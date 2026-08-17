@@ -173,6 +173,6 @@ In the following procedures, unless otherwise directed, run the commands on the 
         ```
 
        This command will not return anything, but will show the `ttyS0` console of the node. Use `~.` to disconnect.
-       **`NOTE`** The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
+       **NOTE** The same `~.` keystroke can also break an SSH session. After doing this, the connection to the SSH session may need to be reestablished.
 
 1. (`ncn-mw#`) Try running a `kubectl` command on the node where it was previously unresponsive.

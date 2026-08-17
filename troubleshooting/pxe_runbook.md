@@ -250,7 +250,7 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 
      Each NCN Worker node should have two TFTP rules: one in the PREROUTING chain and one in the OUTPUT chain.
 
-     **`NOTE`** If the system has been migrated to the Cilium Container Network Interface, there will be extra rules in the above output.
+     **NOTE** If the system has been migrated to the Cilium Container Network Interface, there will be extra rules in the above output.
 
   1. (`ncn-w#`) Apply the TFTP helper `iptables` rules to any worker that has missing `Conntrack` helpers.
 

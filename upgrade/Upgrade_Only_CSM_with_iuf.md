@@ -45,7 +45,7 @@ The upgrade from CSM 1.6 to CSM 1.7 uses the IUF framework. The CSM upgrade step
    1. [Cilium Migration](../operations/iuf/workflows/cilium_migration.md)
    1. [Validate Deployment](../operations/iuf/workflows/validate_deployment.md)
 
-   **`NOTE`** After completing this step, run the [Validate CSM Health](../operations/validate_csm_health.md) checks to verify the upgrade was successful.
+   **NOTE** After completing this step, run the [Validate CSM Health](../operations/validate_csm_health.md) checks to verify the upgrade was successful.
 
 The IUF upgrade workflow is now complete. Exit any typescript sessions created during the upgrade
 procedure and remove any installation artifacts, if desired.

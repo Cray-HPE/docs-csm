@@ -54,7 +54,7 @@ cray-dns-unbound-coredns   1/1           65s        64d
 
 Verify that `COMPLETIONS` is `1/1`.
 
-**`NOTE`** The `cray-dns-unbound-coredns` job may not be found if it gets automatically
+**NOTE** The `cray-dns-unbound-coredns` job may not be found if it gets automatically
 removed by Kyverno once the TTL expires (3 days).
 
 ### Check `cray-dns-unbound-manager` cronjob

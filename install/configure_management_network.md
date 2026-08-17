@@ -52,7 +52,7 @@ Hence, administrators need to manually configure the uplinks for site connection
 
 Example configuration:
 
-**`NOTE`** These are very simplistic examples and depending on the install scenario, administrators may need to also configure LAGs, etc.
+**NOTE** These are very simplistic examples and depending on the install scenario, administrators may need to also configure LAGs, etc.
 
 ### Site connections: Mellanox
 

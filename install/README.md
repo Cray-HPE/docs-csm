@@ -76,7 +76,7 @@ shown here with numbered topics.
 - [Installation of additional HPE Cray EX software products](#installation-of-additional-hpe-cray-ex-software-products)
 - [Fabric Manager Node redeployment](#fabric-manager-node-redeployment)
 
-> **`NOTE`** If problems are encountered during the installation,
+> **NOTE** If problems are encountered during the installation,
 > [Troubleshooting installation problems](#12-troubleshooting-installation-problems) and
 > [Cray System Management (CSM) Administration Guide](../operations/README.md) will offer assistance.
 
@@ -208,7 +208,7 @@ These [Non-Compute Nodes (NCNs)](../glossary.md#non-compute-node-ncn) will host 
 
 See [Deploy Management Nodes](deploy_non-compute_nodes.md).
 
-> **`NOTE`** The PIT node will join Kubernetes after it is rebooted later in [Deploy final NCN](#4-deploy-final-ncn).
+> **NOTE** The PIT node will join Kubernetes after it is rebooted later in [Deploy final NCN](#4-deploy-final-ncn).
 
 ### 2. Install CSM services
 

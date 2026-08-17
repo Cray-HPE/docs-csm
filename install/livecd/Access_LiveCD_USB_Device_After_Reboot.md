@@ -2,7 +2,7 @@
 
 This is a procedure that only applies to the LiveCD USB device after the PIT node has been rebooted.
 
-> **`USB ONLY`** If the installation above was done from a [Remote ISO](../pre-installation.md).
+> **USB ONLY** If the installation above was done from a [Remote ISO](../pre-installation.md).
 
 After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and available to an administrator.
 
@@ -19,7 +19,7 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
 
     Example output:
 
-    ```
+    ```text
     drwxr-xr-x  2 root root 4096 Jan 28 15:47 /mnt/cow/rw/boot
     drwxr-xr-x  8 root root 4096 Jan 29 07:25 /mnt/cow/rw/etc
     drwxr-xr-x  3 root root 4096 Feb  5 04:02 /mnt/cow/rw/mnt
@@ -38,7 +38,7 @@ After deploying the LiveCD's NCN, the LiveCD USB itself is unharmed and availabl
 
     Example output:
 
-    ```
+    ```text
     drwxr-xr-x  2 root root        4096 Feb  3 04:32 /mnt/pitdata/configs
     drwxr-xr-x 14 root root        4096 Feb  3 07:26 /mnt/pitdata/csm-0.7.29
     -rw-r--r--  1 root root 22159328586 Feb  2 22:18 /mnt/pitdata/csm-0.7.29.tar.gz
