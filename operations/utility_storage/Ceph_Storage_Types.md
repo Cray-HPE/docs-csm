@@ -89,7 +89,6 @@ cephfs - 0 clients <<-- Containers or hosts attached to cephfs are represented h
 |   ceph-3    |
 +-------------+
 MDS version: ceph version 14.2.0-300-gacd2f2b9e1 (acd2f2b9e196222b0350b3b59af9981f91706c7f) nautilus (stable)
-
 ```
 
 ## Ceph Rados gateway (`object/s3`)

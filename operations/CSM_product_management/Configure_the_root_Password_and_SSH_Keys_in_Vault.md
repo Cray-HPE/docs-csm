@@ -1,4 +1,4 @@
-# Configure the `root` password and SSH keys in Vault
+# Configure the `root` Password and SSH Keys in Vault
 
 This procedure sets the `root` user password and SSH keys on management nodes. The `root` password
 and SSH keys are set and managed in Vault, and they are applied on management nodes by the
@@ -56,7 +56,7 @@ Proceed to [Apply configuration with CFS node personalization](#apply-configurat
 
 ### Option 2: Manual
 
-> **`NOTE`**: Information on writing the `root` user password and the SSH keys to Vault is documented
+> **NOTE**: Information on writing the `root` user password and the SSH keys to Vault is documented
 > in two separate procedures. However, if both the password and the SSH keys are to be stored
 > in Vault (the standard case), then the two procedures must be combined. Specifically, only
 > a single `write` command must be made to Vault, containing both the password and the

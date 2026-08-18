@@ -1,14 +1,14 @@
 # MetalLB in BGP-Mode
 
-MetalLB is a component in Kubernetes that manages access to `LoadBalancer` services from outside the Kubernetes cluster. There are `LoadBalancer` services on the Node Management Network \(NMNLB\),
-Hardware Management Network \(HMNLB\), Customer Management Network \(CMN\), Customer High-Speed Network \(CHN\), and Customer Access Network \(CAN\).
+MetalLB is a component in Kubernetes that manages access to `LoadBalancer` services from outside the Kubernetes cluster. There are `LoadBalancer` services on the Node Management Network (NMNLB),
+Hardware Management Network (HMNLB), Customer Management Network (CMN), Customer High-Speed Network (CHN), and Customer Access Network (CAN).
 
-MetalLB can run in either Layer 2 mode or BGP mode for each address pool it manages. BGP mode is used for the NMNLB, HMNLB, and CAN. This enables true load balancing \(Layer 2 mode does failover, not
-load balancing\) and allows for a more robust layer 3 configuration for these networks.
+MetalLB can run in either Layer 2 mode or BGP mode for each address pool it manages. BGP mode is used for the NMNLB, HMNLB, and CAN. This enables true load balancing (Layer 2 mode does failover, not
+load balancing) and allows for a more robust layer 3 configuration for these networks.
 
 In BGP mode, the MetalLB speakers will peer with the BGP router on the spine switches and advertise the service `LoadBalancer` IP addresses. If the system is configured to use the CHN for the user network, then
 the speakers will also peer with the BGP router on the edge switches. The BGP routers will accept those advertised prefixes and add them to the route table. The spine and edge switches are configured with
-Equal-Cost Multi-Path \(ECMP\), meaning that each of these BGP route prefixes will load balance to any of the workers that has advertised the prefix. This process allows clients outside the cluster with access
+Equal-Cost Multi-Path (ECMP), meaning that each of these BGP route prefixes will load balance to any of the workers that has advertised the prefix. This process allows clients outside the cluster with access
 to the NMNLB, HMNLB, CMN, CHN or CAN to be able to route to these Kubernetes services.
 
 BGP peering is only between the MetalLB speakers and the spine/edge switches. It does not do any peering beyond that.

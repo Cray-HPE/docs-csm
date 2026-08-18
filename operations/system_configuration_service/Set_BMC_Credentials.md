@@ -3,7 +3,7 @@
 Redfish BMCs are installed on the system with default credentials. After the
 machine is shipped, all BMC credentials must be changed.
 
-BMC credentials may be set with either the System Configuration Service \(SCSD\),
+BMC credentials may be set with either the System Configuration Service (SCSD),
 or with the System Admin Toolkit's (SAT) `sat bmccreds` command. Both methods
 enable administrators to set a unique value for each credential, or to set the same
 value for every credential.
@@ -20,9 +20,9 @@ conveniently automates the steps of the SCSD procedure.
 
 - [Prerequisites](#prerequisites)
 - [Procedures](#procedures)
-  - [Generate a unique random password for each BMC in the system](#generate-a-unique-random-password-for-each-bmc-in-the-system)
-  - [Generate a single random password for all BMCs in the system](#generate-a-single-random-password-for-all-bmcs-in-the-system)
-  - [Provide a user-defined password for all BMCs in the system](#provide-a-user-defined-password-for-all-bmcs-in-the-system)
+    - [Generate a unique random password for each BMC in the system](#generate-a-unique-random-password-for-each-bmc-in-the-system)
+    - [Generate a single random password for all BMCs in the system](#generate-a-single-random-password-for-all-bmcs-in-the-system)
+    - [Provide a user-defined password for all BMCs in the system](#provide-a-user-defined-password-for-all-bmcs-in-the-system)
 
 ## Prerequisites
 
