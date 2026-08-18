@@ -1,8 +1,8 @@
 # Manage Artifacts with the Cray CLI
 
-The artifacts \(objects\) available for use on the system are created and managed with the Cray CLI.
+The artifacts (objects) available for use on the system are created and managed with the Cray CLI.
 The `cray artifacts` command provides the ability to manage any given artifact. The Cray CLI automatically
-authenticates users and provides Simple Storage Service \(S3\) credentials.
+authenticates users and provides Simple Storage Service (S3) credentials.
 
 - [Authenticate with the CLI](#authenticate-with-the-cli)
 - [View S3 buckets](#view-s3-buckets)

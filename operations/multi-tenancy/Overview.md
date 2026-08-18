@@ -2,23 +2,23 @@
 
 - [Disclaimer](#disclaimer)
 - [Components](#components)
-  - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
-  - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
-  - [Slurm operator](#slurm-operator)
-  - [Vault integration](#vault-integration)
+    - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
+    - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
+    - [Slurm operator](#slurm-operator)
+    - [Vault integration](#vault-integration)
 - [Getting started](#getting-started)
-  - [Create a tenant](#create-a-tenant)
-  - [Modify a tenant](#modify-a-tenant)
-  - [Remove a tenant](#remove-a-tenant)
-  - [Tenant administrator configuration](#tenant-administrator-configuration)
+    - [Create a tenant](#create-a-tenant)
+    - [Modify a tenant](#modify-a-tenant)
+    - [Remove a tenant](#remove-a-tenant)
+    - [Tenant administrator configuration](#tenant-administrator-configuration)
 
 ## Disclaimer
 
-**`IMPORTANT`** This feature is in alpha, collectively denoted by the API versioning strategy associated with TAPMS and other operators represented herein.
+**IMPORTANT** This feature is in alpha, collectively denoted by the API versioning strategy associated with TAPMS and other operators represented herein.
 Users should expect breaking changes in the API across CSM releases as the feature set gains operational exposure and enhancements are introduced, ultimately leading to more stable API version series (for example, beta, and then stable).
 While we do not anticipate that users will experience issues with pre-stable APIs, additional care should be taken to validate desired functionality in test environments prior to use in production.
 
-**`IMPORTANT`** This feature is intended for _soft_ multi-tenancy use cases at this time.
+**IMPORTANT** This feature is intended for _soft_ multi-tenancy use cases at this time.
 _Soft_ multi-tenancy is defined as tenants that are hospitable, analogous to business units (as opposed to different companies), and the tenants are not considered to have malicious intent.
 
 ## Components

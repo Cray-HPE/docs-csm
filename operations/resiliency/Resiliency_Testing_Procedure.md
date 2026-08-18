@@ -6,17 +6,16 @@ the loss of a single non-compute node (NCN).
 It is assumed that some procedures are already known by admins and thus does not go into great detail or attempt to encompass every command necessary for execution. It is intended to be higher level guidance (with some command
 examples) to inform internal users and customers about our process.
 
-- [Resiliency Testing Procedure](#resiliency-testing-procedure)
-  - [Prepare for resiliency testing](#prepare-for-resiliency-testing)
-  - [Establish system health before beginning](#establish-system-health-before-beginning)
-  - [Monitor for changes](#monitor-for-changes)
-  - [Launch a non-interactive batch job](#launch-a-non-interactive-batch-job)
+- [Prepare for resiliency testing](#prepare-for-resiliency-testing)
+- [Establish system health before beginning](#establish-system-health-before-beginning)
+- [Monitor for changes](#monitor-for-changes)
+- [Launch a non-interactive batch job](#launch-a-non-interactive-batch-job)
     - [Launch on a UAI](#launch-on-a-uai)
     - [Launch on a UAN](#launch-on-a-uan)
-  - [Shut down an NCN](#shut-down-an-ncn)
-  - [Conduct testing](#conduct-testing)
-  - [Power on the downed NCN](#power-on-the-downed-ncn)
-  - [Execute post-boot health checks](#execute-post-boot-health-checks)
+- [Shut down an NCN](#shut-down-an-ncn)
+- [Conduct testing](#conduct-testing)
+- [Power on the downed NCN](#power-on-the-downed-ncn)
+- [Execute post-boot health checks](#execute-post-boot-health-checks)
 
 ## Prepare for resiliency testing
 
@@ -322,7 +321,7 @@ UAI. It is still good to ensure that non-interactive batch jobs are uninterrupte
       ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
       ```
 
-      **`NOTE`** In previous releases, an `ipmitool` command has been used to simply yank the power to an NCN. There have been times where this resulted in a longer recovery procedure under Shasta 1.5 (mostly due to issues with
+      **NOTE** In previous releases, an `ipmitool` command has been used to simply yank the power to an NCN. There have been times where this resulted in a longer recovery procedure under Shasta 1.5 (mostly due to issues with
       getting nodes physically booted up again), so the preference has been to simply use the `shutdown` command.
 
       If the NCN shutdown is a master or worker node, within 5-6 minutes of the node being shut down, Kubernetes will begin reporting `Terminating` pods on the target node and start rescheduling pods to other NCN nodes. New

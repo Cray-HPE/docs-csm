@@ -15,10 +15,10 @@ This procedure prevents services from being taken out of service when a node goe
 
 ## Prerequisites
 
-- A StatefulSet pod failed to be moved to another healthy non-compute node \(NCN\) acting as a worker node.
+- A StatefulSet pod failed to be moved to another healthy non-compute node (NCN) acting as a worker node.
 - If the network is being brought down temporarily during testing, ignore any issues with StatefulSet pods until the
   testing is complete. These errors should be ignored because the nodes could have the network restored, and then
-  the `Terminating` pod may go `ACTIVE` temporarily \(causing a race and corruption\) if it comes up at the same time as
+  the `Terminating` pod may go `ACTIVE` temporarily (causing a race and corruption) if it comes up at the same time as
   another StatefulSet running the pod. This is much more likely to occur during testing of a network outage.
 
 ## Procedure
@@ -92,7 +92,7 @@ This procedure prevents services from being taken out of service when a node goe
 
 1. Delete the StatefulSet pod in a `Terminating` state.
 
-   The StatefulSet \(the controller\) will recreate the pod on a working node when the pod or the node it sits on is
+   The StatefulSet (the controller) will recreate the pod on a working node when the pod or the node it sits on is
    deleted. The command below assumes the pod is located on the downed node and is currently in a `Terminating` state.
 
    ```bash
