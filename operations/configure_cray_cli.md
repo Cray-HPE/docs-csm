@@ -84,7 +84,7 @@ install and should be removed when the install is complete.
 
 As the script leverages Keycloak administrative APIs, the `--keycloakHost` command line option must be set to use the CMN load balancer, as detailed below.
 
-> **`NOTES:`**
+> **NOTES:**
 >
 > - This script creates a `temporary user` that can be used for basic `cray` CLI command only until Keycloak is populated with real users. At which point, the `cray` CLI should be re-initialized with a real user.
 > - The `temporary user` that was created is only in Keycloak - it is not a `real` user with login shells and home directories.

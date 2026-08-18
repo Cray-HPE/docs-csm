@@ -1,4 +1,4 @@
-# View CSM documentation
+# View CSM Documentation
 
 View the CSM documentation online or offline in one of the following formats:
 

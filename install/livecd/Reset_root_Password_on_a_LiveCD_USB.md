@@ -1,4 +1,4 @@
-# Reset root Password on a LiveCD USB
+# Reset `root` Password on a LiveCD USB
 
 It may become desirable to clear the password on the LiveCD.
 
