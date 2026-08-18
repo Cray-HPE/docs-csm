@@ -1,13 +1,14 @@
 # Troubleshoot Prometheus Alerts
 
-- [`CephMgrIsAbsent` and `CephMgrIsMissingReplicas`](#cephmgrisabsent-and-cephmgrismissingreplicas)
-- [`CephNetworkPacketsDropped`](#cephnetworkpacketsdropped)
-- [`CPUThrottlingHigh`](#cputhrottlinghigh)
-- [`PostgresqlFollowerReplicationLagSMA`](#postgresqlfollowerreplicationlagsma)
-- [`PostgresqlHighRollbackRate`](#postgresqlhighrollbackrate)
-- [`PostgresqlInactiveReplicationSlot`](#postgresqlinactivereplicationslot)
-- [`PostgresqlNotEnoughConnections`](#postgresqlnotenoughconnections)
-- [`TargetDown`](#targetdown)
+- [Troubleshoot Prometheus Alerts](#troubleshoot-prometheus-alerts)
+  - [`CephMgrIsAbsent` and `CephMgrIsMissingReplicas`](#cephmgrisabsent-and-cephmgrismissingreplicas)
+  - [`CephNetworkPacketsDropped`](#cephnetworkpacketsdropped)
+  - [`CPUThrottlingHigh`](#cputhrottlinghigh)
+  - [`PostgresqlFollowerReplicationLagSMA`](#postgresqlfollowerreplicationlagsma)
+  - [`PostgresqlHighRollbackRate`](#postgresqlhighrollbackrate)
+  - [`PostgresqlInactiveReplicationSlot`](#postgresqlinactivereplicationslot)
+  - [`PostgresqlNotEnoughConnections`](#postgresqlnotenoughconnections)
+  - [`TargetDown`](#targetdown)
 
 ## `CephMgrIsAbsent` and `CephMgrIsMissingReplicas`
 
@@ -74,7 +75,7 @@ Alerts for `PostgresqlFollowerReplicationLagSMA` on `sma-postgres-cluster` pods 
 
 ## `PostgresqlHighRollbackRate`
 
-Alerts for `PostgresqlHighRollbackRate` on `spire-postgres` and `smd-postgres` pods can be ignored. This is caused by an idle session that requires a timeout. This will be fixed in a future release.
+Alerts for `PostgresqlHighRollbackRate` on `spire-postgres`, `smd-postgres` and `keycloak-postgres` pods can be ignored. This is caused by an idle session that requires a timeout. This will be fixed in a future release.
 
 ## `PostgresqlInactiveReplicationSlot`
 
