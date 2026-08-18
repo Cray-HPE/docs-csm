@@ -1,6 +1,6 @@
 # Nexus Deployment
 
-Nexus is deployed with the `cray-nexus` chart to the `nexus` namespace as part of the Cray System Management \(CSM\) release. Nexus is deployed
+Nexus is deployed with the `cray-nexus` chart to the `nexus` namespace as part of the Cray System Management (CSM) release. Nexus is deployed
 after critical platform services are up and running. Product installers configure and populate Nexus blob stores and repositories using the
 `cray-nexus-setup` container image. As a result, there is no singular product that provides all Nexus repositories or assets; instead, individual
 products must be installed. However, CSM configures the `charts` Helm repository and the `registry` Docker repository, which all products may use.
@@ -15,11 +15,11 @@ products must be installed. However, CSM configures the `charts` Helm repository
 For a complete set of available settings, consult the `values.yaml` file for the `cray-nexus` chart. The most common customizations to set are
 specified in the following table. They must be set in the `customizations.yaml` file under the `spec.kubernetes.services.cray-nexus` setting.
 
-|Customization|Default|Description|
-|-------------|-------|-----------|
-|`istio.ingress.hosts.ui.enabled`|`true`|Enables ingress from the CAN \(default chart value is `false`\)|
-|`istio.ingress.hosts.ui.authority`|`nexus.cmn.{{ network.dns.external }}`|Sets the CAN hostname \(default chart value is `nexus.local`\)|
-|`sonatype-nexus.persistence.storageSize`|`1000Gi`|Nexus storage size, may be increased after installation; critical if `spec.kubernetes.services.cray-nexus-setup.s3.enabled` is `false`|
+| Customization                            | Default                                | Description                                                                                                                            |
+|------------------------------------------|----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
+| `istio.ingress.hosts.ui.enabled`         | `true`                                 | Enables ingress from the CAN (default chart value is `false`)                                                                        |
+| `istio.ingress.hosts.ui.authority`       | `nexus.cmn.{{ network.dns.external }}` | Sets the CAN hostname (default chart value is `nexus.local`)                                                                         |
+| `sonatype-nexus.persistence.storageSize` | `1000Gi`                               | Nexus storage size, may be increased after installation; critical if `spec.kubernetes.services.cray-nexus-setup.s3.enabled` is `false` |
 
 (`ncn-mw#`) If modifying the `customizations.yaml` file, be sure to upload the new file to Kubernetes, otherwise the changes will not persist
 through future installs or upgrades.

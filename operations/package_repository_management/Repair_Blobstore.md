@@ -54,7 +54,7 @@ An example of what the resulting URL will look like is: `https://nexus.cmn.eniac
 
 1. Log in to the Nexus web UI.
 
-    ![Access Nexus with the web UI](./Manage_Repositories_with_Nexus.md#access-nexus-with-the-web-ui)]
+    ![Access Nexus with the web UI](Manage_Repositories_with_Nexus.md#access-nexus-with-the-web-ui)
 
     ![Nexus Web UI](../../img/operations/Nexus_Web_UI.png "Nexus Web UI")
 

@@ -2,18 +2,18 @@
 
 - [Disclaimer](#disclaimer)
 - [Components](#components)
-  - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
-  - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
-  - [Slurm operator](#slurm-operator)
+    - [Hierarchical Namespace Controller (HNC)](#hierarchical-namespace-controller-hnc)
+    - [Tenant and Partition Management System (TAPMS)](#tenant-and-partition-management-system-tapms)
+    - [Slurm operator](#slurm-operator)
 - [Getting started](#getting-started)
-  - [Create a tenant](#create-a-tenant)
-  - [Modify a tenant](#modify-a-tenant)
-  - [Remove a tenant](#remove-a-tenant)
-  - [Tenant administrator configuration](#tenant-administrator-configuration)
+    - [Create a tenant](#create-a-tenant)
+    - [Modify a tenant](#modify-a-tenant)
+    - [Remove a tenant](#remove-a-tenant)
+    - [Tenant administrator configuration](#tenant-administrator-configuration)
 
 ## Disclaimer
 
-**`IMPORTANT`** Beginning in the CSM 1.3 release, this feature is offered as a preview only, and is not considered production-ready.
+**IMPORTANT** Beginning in the CSM 1.3 release, this feature is offered as a preview only, and is not considered production-ready.
 This first release should be considered _soft_ multi-tenancy, with additional functionality which hardens this feature in subsequent releases.
 _Soft_ multi-tenancy is defined as tenants that are hospitable, analogous to business units (as opposed to different companies), and the tenants are not considered to have malicious intent.
 
