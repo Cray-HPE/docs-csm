@@ -1,11 +1,11 @@
-# Fresh Install: Setting NodeBMC and RouterBMC Redfish Credentials
+# Fresh Install: Setting `NodeBMC` and `RouterBMC` Redfish Credentials
 
 These steps are performed before the installation of Shasta System Management
 or HPCM management software stacks. The goal is to set the BMC Redfish
 credentials to values that the management software will be expecting so that
 all software systems work smoothly with the Redfish hardware.
 
-### Prerequisites
+## Prerequisites
 
 Before doing these operations, the following is assumed:
 
@@ -14,7 +14,7 @@ Before doing these operations, the following is assumed:
 - The hostname or IP address of each BMC is known or obtainable.
 - The default BMC password is obtainable for each target BMC.
 
-### Set BMC Passwords on All Air-Cooled BMC Hardware
+## Set BMC passwords on all air-cooled BMC hardware
 
 This involves interaction with the BMC hardware itself.
 
@@ -31,13 +31,13 @@ Each Redfish BMC will have at least one "account", and often several accounts.
 Each account has an ordinal number, and only one of the accounts is the `root`
 account. This account is the one that must have its password changed.
 
-#### Procedure
+### Procedure
 
 Use the following procedure for each BMC:
 
 1. Get the default BMC password and the hostname or IP address of the BMC.
 
-2. Determine which Redfish account is the root account:
+1. Determine which Redfish account is the root account:
 
    ```bash
    curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountService/Accounts | jq
@@ -45,7 +45,7 @@ Use the following procedure for each BMC:
 
    Example output:
 
-   ```
+   ```json
    {
      "@odata.context": "/redfish/v1/$metadata#ManagerAccountCollection.ManagerAccountCollection",
      "@odata.id": "/redfish/v1/AccountService/Accounts",
@@ -70,11 +70,11 @@ Use the following procedure for each BMC:
    }
    ```
 
-3. For each account listed, use `curl` to find the one which describes the `root` account ("UserName": "root").
+1. For each account listed, use `curl` to find the one which describes the `root` account (`"UserName": "root"`).
 
    **NOTES:**
    - The `root` account can be any of the listed accounts -- no guarantees as to which one it will be.
-   - If the account information contains an *etag* entry, note this number, as it will be required when setting the password.
+   - If the account information contains an `etag` entry, note this number, because it will be required when setting the password.
 
    ```bash
    curl -s -k -u root:<DFLTPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountService/Accounts/1 | jq
@@ -82,7 +82,7 @@ Use the following procedure for each BMC:
 
    Example output:
 
-   ```
+   ```json
    {
      "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount",
      "@odata.id": "/redfish/v1/AccountService/Accounts/1",
@@ -103,13 +103,13 @@ Use the following procedure for each BMC:
    }
    ```
 
-4. Set the new password for this account. Use the ETAG in the header if needed.
+1. Set the new password for this account. Use the `ETAG` in the header if needed.
 
    ```bash
    curl -s -k -u root:<DFLTPW> -H "If-None-Match: 570254F2" -H "Content-Type: application/json" -X PATCH -d '{"Password":"<NEWPW>"}' https://<BLADENAME_OR_IP>/redfish/v1/AccountService/Accounts/1
    ```
 
-5. Test to be sure the new password works. If the password set operation did not work, then this will fail.
+1. Test to be sure the new password works. If the password set operation did not work, then this will fail.
 
    ```bash
    curl -s -k -u root:<NEWPW> https://<BLADENAME_OR_IP>/redfish/v1/AccountService
@@ -117,7 +117,7 @@ Use the following procedure for each BMC:
 
    Example output:
 
-   ```
+   ```json
    {
      "@odata.context": "/redfish/v1/$metadata#ManagerAccount.ManagerAccount",
      "@odata.id": "/redfish/v1/AccountService/Accounts/1",
@@ -138,7 +138,7 @@ Use the following procedure for each BMC:
    }
    ```
 
-### Set Default Credentials for High-Speed Network (HSN) Switch BMCs
+## Set default credentials for High-speed Network (HSN) switch BMCs
 
 This is the exact same procedure as for node BMCs, except that the source of
 the default BMC passwords is different.
@@ -150,5 +150,4 @@ Once this password, and any HSN BMC IP addresses or hostnames are obtained,
 the procedure above can be used to set the Redfish root account passwords to
 the new value.
 
-**`NOTE`** The default credentials for both air-cooled and liquid-cooled high-speed network switch BMCs should be identical.
-
+**NOTE** The default credentials for both air-cooled and liquid-cooled high-speed network switch BMCs should be identical.

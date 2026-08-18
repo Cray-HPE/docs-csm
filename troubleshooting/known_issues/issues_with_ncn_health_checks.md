@@ -1,4 +1,4 @@
-# Known issues with NCN health checks
+# Known Issues With NCN Health Checks
 
 - [General issues](#general-issues)
 - [Specific test issues](#specific-test-issues)

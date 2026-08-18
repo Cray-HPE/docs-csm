@@ -1,7 +1,7 @@
 # MetalLB Configuration
 
-MetalLB provides a more robust configuration for the Node Management Network \(NMNLB\), Hardware Management Network \(HMNLB\), Customer Management Network \(CMN\), Customer High-Speed Network \(CHN\), and
-Customer Access Network \(CAN\). This configuration is generated from the `csi config init` input values.
+MetalLB provides a more robust configuration for the Node Management Network (NMNLB), Hardware Management Network (HMNLB), Customer Management Network (CMN), Customer High-Speed Network (CHN), and
+Customer Access Network (CAN). This configuration is generated from the `csi config init` input values.
 
 ## MetalLB Peer Configuration
 
@@ -32,7 +32,7 @@ To retrieve data about BGP peers:
 kubectl get cm metallb -n metallb-system -o yaml
 ```
 
-The speakers get their peering configuration from the MetalLB ConfigMap. This configuration specifies the IP address of the spine or aggregate switch, as well as the Autonomous System Number \(ASN\) for the speaker and the switch with which it is peering.
+The speakers get their peering configuration from the MetalLB ConfigMap. This configuration specifies the IP address of the spine or aggregate switch, as well as the Autonomous System Number (ASN) for the speaker and the switch with which it is peering.
 
 ## CMN Configuration
 
@@ -43,11 +43,11 @@ View the address pool configurations in the MetalLB ConfigMap after system insta
 of the values for the CMN address pools in the ConfigMap:
 
 ```text
-- name: customer-management 
+- name: customer-management
   protocol: bgp
   addresses:
     **- 10.102.5.64/26**
-- name: customer-management-static 
+- name: customer-management-static
   protocol: bgp
   addresses:
     **- 10.102.5.60/30**
@@ -85,7 +85,7 @@ The following is an example of the values for the CAN address pool in the Config
 The following is an example of the values for the CHN address pool in the ConfigMap:
 
 ```text
-- name: customer-high-speed 
+- name: customer-high-speed
   protocol: bgp
   addresses:
     **- 10.102.6.160/27**
