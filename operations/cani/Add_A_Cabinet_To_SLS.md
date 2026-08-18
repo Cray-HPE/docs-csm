@@ -1,4 +1,4 @@
-# Add A Cabinet To SLS using CANI
+# Add A Cabinet To SLS Using CANI
 
 1. (`ncn#`|`external#`) Begin by [initializing a session](https://cray-hpe.github.io/cani/latest/commands/cani_alpha_session_init/), which will import data from SLS and create metadata in SLS' `ExtraProperties` field allowing the process to continue.
 
@@ -26,4 +26,4 @@
     cani alpha session apply # push changes to SLS
     ```
 
-    > **`NOTE`**: No hardware in these new cabinets will be discovered until the management network has been reconfigured to support the new cabinets, and routes have been added to the management NCNs in the system.
+    > **NOTE**: No hardware in these new cabinets will be discovered until the management network has been reconfigured to support the new cabinets, and routes have been added to the management NCNs in the system.

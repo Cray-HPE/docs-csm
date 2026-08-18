@@ -12,7 +12,7 @@ The Argo UI is accessed through a URL. The URL for a system can be found by the 
 (`ncn-mw#`) Get Argo UI URL
 
 ```bash
-kubectl get virtualservice -n argo | grep "argo" | awk '{print $3}' 
+kubectl get virtualservice -n argo | grep "argo" | awk '{print $3}'
 ```
 
 Credentials can be used to access the Argo UI as long as they have been configured in Keycloak.

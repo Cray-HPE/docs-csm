@@ -300,7 +300,7 @@ For Example:
 cray sls hardware describe x3000c0s28b0n0
 ```
 
-Example Output:
+Example output:
 
 ```text
 Parent = "x3000c0s28b0"
@@ -326,7 +326,7 @@ For Example:
 cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --format json
 ```
 
-Example Output:
+Example output:
 
 ```json
 [
