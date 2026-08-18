@@ -468,7 +468,7 @@ from the following locations in order from highest to lowest precedence:
       associated with each product provided in the recipe.
     - Note that the `product_vars.yaml` file delivered with the HPC CSM Software
       Recipe now contains more complex variables that can only be resolved by
-      the Install and Upgrade Framework (IUF). See [SAT and IUF](./SAT_and_IUF.md#iuf-variable-substitutions)
+      the Install and Upgrade Framework (IUF). See [SAT and IUF](SAT_and_IUF.md#iuf-variable-substitutions)
       for more information.
 
 Beginning with the introduction of IUF in CSM 1.4.0, the default `sat
@@ -476,7 +476,7 @@ bootprep` input files now use more complex variables that are only resolved
 properly by IUF. It is still possible to call `sat bootprep` directly with
 variables defined in a file, but if the default `bootprep` input files are used,
 the `session_vars.yaml` file from an IUF activity must be passed to `sat
-bootprep`. See [SAT and IUF](./SAT_and_IUF.md) for details.
+bootprep`. See [SAT and IUF](SAT_and_IUF.md) for details.
 
 #### View HPC CSM Software Recipe variables
 

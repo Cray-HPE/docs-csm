@@ -264,7 +264,7 @@ for management nodes and assign them to the management nodes.
    CFS. It disables the components and does not clear their configuration states
    or error counts. When the nodes are rebooted to their new images, they will
    automatically be enabled in CFS, and node personalization will occur.
-  
+
    1. Get the xnames of the master and worker management nodes.
 
       ```bash

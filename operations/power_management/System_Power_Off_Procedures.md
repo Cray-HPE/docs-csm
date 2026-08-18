@@ -4,10 +4,11 @@ The procedures in this section detail the high-level tasks required to power off
 
 ## Note about Services Used During System Power Off
 
-- The Power Control Service \(PCS\) service controls power to major components. PCS sequences the power off tasks in the correct order, but  **does not** determine if the required software services are running on the components.
-- The Cray Advanced Platform Monitoring and Control \(CAPMC\) service can also control power to major components. CAPMC sequences the power off tasks in the correct order, but **does not** determine if the required software services are running on the components.
-- The Boot Orchestration Service \(BOS\) manages proper shutdown and power off tasks for compute nodes and User Access Nodes \(UANs\).
-- The System Admin Toolkit \(SAT\) automates shutdown services by stage.
+- The Power Control Service (PCS) service controls power to major components. PCS sequences the power off tasks in the correct order, but  **does not** determine if the required software services are running on the components.
+- The Cray Advanced Platform Monitoring and Control (CAPMC) service can also control power to major components.
+  CAPMC sequences the power off tasks in the correct order, but **does not** determine if the required software services are running on the components.
+- The Boot Orchestration Service (BOS) manages proper shutdown and power off tasks for compute nodes and User Access Nodes (UANs).
+- The System Admin Toolkit (SAT) automates shutdown services by stage.
 
 ## Prepare the System for Power Off
 
@@ -15,7 +16,7 @@ To make sure that the system is healthy before power off and all the information
 
 ## Shut Down Compute Nodes and UANs
 
-To shut down compute nodes and User Access Nodes \(UANs\), refer to [Shut Down and Power Off Managed Nodes](Shut_Down_and_Power_Off_Managed_Nodes.md).
+To shut down compute nodes and User Access Nodes (UANs), refer to [Shut Down and Power Off Managed Nodes](Shut_Down_and_Power_Off_Managed_Nodes.md).
 
 ## Power Off the External File Systems
 

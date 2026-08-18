@@ -255,7 +255,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
     +----------------+-------------+-----------+------------------------------+
     ```
 
-    **`NOTE`** The above command may show a value of `MISSING` for the `Most Recent Session
+    **NOTE** The above command may show a value of `MISSING` for the `Most Recent Session
     Template`. This means the BOS session last used to boot the node was deleted. BOS automatically
     deletes sessions after the number of days specified in the BOS setting
     `cleanup_completed_session_ttl`. The default value is seven days. To view the value of this
@@ -347,7 +347,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 
     1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
-        **Important:** SDU may take about 45 minutes to run on a small system \(longer for large systems\).
+        **Important:** SDU may take about 45 minutes to run on a small system (longer for large systems).
 
         ```bash
         sdu --scenario triage --start_time '-4 hours' \
@@ -514,7 +514,7 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
-    **`NOTE`** If the System Diagnostic Utility (SDU) has not been configured on master nodes, message like this will appear for the master nodes
+    **NOTE** If the System Diagnostic Utility (SDU) has not been configured on master nodes, message like this will appear for the master nodes
     which are not configured for SDU. If the warning appears for all master nodes, then to enable this after the system has been powered up again,
     see the Configure section of the HPE Cray EX with CSM System Diagnostic Utility (SDU) Installation Guide to configure SDU and the optional RDA.
 

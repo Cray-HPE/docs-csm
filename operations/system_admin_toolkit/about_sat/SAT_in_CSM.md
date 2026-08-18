@@ -5,7 +5,7 @@ without installing the SAT product stream. Starting in CSM 1.6.0, SAT is fully i
 There is no longer a separate SAT product stream to install. SAT 2.6 releases, which accompanied
 CSM 1.5, are the last releases of SAT as a separate product.
 
-## Differences from Old SAT Product Stream
+## Differences from old SAT product stream
 
 There are several notable differences between the separate 2.6 releases of SAT and the release of
 SAT included in CSM 1.6. They are described below.
@@ -21,7 +21,7 @@ SAT included in CSM 1.6. They are described below.
   It is still possible to uninstall older versions of SAT that were installed as a separate product.
   However, it is not necessary to do so. Doing so will free up a small amount of space in Nexus and
   remove old SAT entries from the `cray-product-catalog`.
-  
+
   For more information, see [Uninstall: Remove a Version of SAT](../SAT_Uninstall_and_Downgrade.md#uninstall-remove-a-version-of-sat).
 
 - The `docs-sat` RPM is no longer provided.
@@ -36,9 +36,9 @@ SAT included in CSM 1.6. They are described below.
   longer required to use a separate layer which references the `sat-config-management` repository
   in CFS configurations targeting the management nodes.
 
-## Frequently Asked Questions (FAQs)
+## Frequently asked questions
 
-**Question: How can I tell which version of SAT is installed on a system?**
+### How can I tell which version of SAT is installed on a system
 
 It is still possible to view the semantic version of the `sat` command that is installed and
 active on a system. The semantic version is distinct from versions of the SAT product stream.
@@ -55,13 +55,13 @@ This command outputs the semantic version on the system:
 3.26.0
 ```
 
-**Question: Which version of SAT takes precedence on a system with both CSM 1.6 and older versions of SAT installed?**
+### Which version of SAT takes precedence on a system with both CSM 1.6 and older versions of SAT installed
 
 When CSM 1.6 is installed, it overrides any version of SAT installed as a separate product stream.
 For example, on a system being upgraded from CSM 1.5 and SAT 2.6 to CSM 1.6, the version of SAT
 included in CSM 1.6 takes precedence.
 
-**Question: How do I revert to using older versions of SAT on a CSM 1.6 system?**
+### How do I revert to using older versions of SAT on a CSM 1.6 system
 
 Although needing to revert to an older version of SAT is uncommon, it can be done using environment
 variables. Specifically, set the environment variable `SAT_IMAGE` to the name and tag of the
@@ -71,7 +71,7 @@ registry, use `podman image search`.
 For more information, see
 [Downgrade: Switch Between SAT Versions](../SAT_Uninstall_and_Downgrade.md#downgrade-switch-between-sat-versions).
 
-**Question: Do SAT commands have any dependencies?**
+### Do SAT commands have any dependencies
 
 Most `sat` subcommands depend on services or components from CSM or from other products in the
 HPE Cray EX software stack.

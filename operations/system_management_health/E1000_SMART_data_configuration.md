@@ -155,7 +155,7 @@ the Redfish Exporter must be configured with the domain name from ClusterStor pr
    Example output:
 
    ```text
-   ---------------------------------------------------------------------------------------- 
+   ----------------------------------------------------------------------------------------
    Hostname   Role         Power State  Service State  Targets  HA Partner  HA Resources
    ----------------------------------------------------------------------------------------
    kjlmo1200  (MGMT)       On           N/a            0 / 0    kjlmo1201   None
@@ -252,10 +252,10 @@ NOTE: The following steps need to be performed on the CSM cluster, either on the
         TARGET=""
         curl -o /tmp/redfish-smart-1.prom cray-sysmgmt-health-redfish-exporter.sysmgmt-health.svc:9220/health?target=${TARGET}
     ```
-  
+
     NOTE: If the ClusterStor has more than one or multiple primary management node, then multiple targets and `curl` commands can be used.
     The above script file `fetch_health.sh` under data section will look similar to:
-  
+
     ```yaml
     data:
       fetch_health.sh: |

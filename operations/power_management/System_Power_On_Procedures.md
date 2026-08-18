@@ -2,16 +2,17 @@
 
 The procedures in this section detail the high-level tasks required to power on an HPE Cray EX system.
 
-**Important:** If an emergency power off \(EPO\) event occurred, then see [Recover from a Liquid-Cooled Cabinet EPO Event](Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) for recovery procedures.
+**Important:** If an emergency power off (EPO) event occurred, then see [Recover from a Liquid-Cooled Cabinet EPO Event](Recover_from_a_Liquid_Cooled_Cabinet_EPO_Event.md) for recovery procedures.
 
 If user IDs or passwords are needed, then see step 1 of the [Prepare the System for Power Off](Prepare_the_System_for_Power_Off.md#procedure) procedure.
 
 ## Note about services used during system power on
 
-- The Power Control Service \(PCS\) service controls power to major components. PCS sequences the power on tasks in the correct order, but  **does not** determine if the required software services are running on the components.
-- The Cray Advanced Platform Monitoring and Control \(CAPMC\) service can also control power to major components. CAPMC sequences the power on tasks in the correct order, but **does not** determine if the required software services are running on the components.
-- The Boot Orchestration Service \(BOS\) manages and configures power on and boot tasks.
-- The System Admin Toolkit \(SAT\) automates boot and shutdown services by stage.
+- The Power Control Service (PCS) service controls power to major components. PCS sequences the power on tasks in the correct order, but  **does not** determine if the required software services are running on the components.
+- The Cray Advanced Platform Monitoring and Control (CAPMC) service can also control power to major components.
+  CAPMC sequences the power on tasks in the correct order, but **does not** determine if the required software services are running on the components.
+- The Boot Orchestration Service (BOS) manages and configures power on and boot tasks.
+- The System Admin Toolkit (SAT) automates boot and shutdown services by stage.
 
 ## Power on cabinet circuit breakers and PDUs
 

@@ -8,9 +8,9 @@ Use this procedure as a general guide to power on an external ClusterStor system
 
 Power up storage nodes in the following sequence:
 
-1. Storage Management Unit \(SMU\) nodes
+1. Storage Management Unit (SMU) nodes
 1. Metadata Server MGS/MDS nodes
-1. Object Storage Server \(OSS\) nodes
+1. Object Storage Server (OSS) nodes
 
 ## Prerequisites
 
@@ -19,13 +19,13 @@ Power up storage nodes in the following sequence:
 
 ## Procedure
 
-1. Set the System Management Unit \(SMU\) chassis power switches to ON.
+1. Set the System Management Unit (SMU) chassis power switches to ON.
 
-1. Set the Metadata Unit \(MDU\) chassis power switches to ON.
+1. Set the Metadata Unit (MDU) chassis power switches to ON.
 
-1. Set the Metadata Management Unit \(MMU\) or Advanced Metadata Management Unit \(AMMU\) chassis power switches to ON.
+1. Set the Metadata Management Unit (MMU) or Advanced Metadata Management Unit (AMMU) chassis power switches to ON.
 
-1. Set the object storage server \(OSS\), scalable storage unit \(SSU\), extension storage unit \(ESU\), and Scalable Flash Unit \(SFU\) chassis power switches to ON.
+1. Set the object storage server (OSS), scalable storage unit (SSU), extension storage unit (ESU), and Scalable Flash Unit (SFU) chassis power switches to ON.
 
 1. `ssh` to the primary management node.
 
@@ -74,7 +74,7 @@ Power up storage nodes in the following sequence:
 
     The output indicates that all resources have started and are balanced between two nodes.
 
-1. In cases when all resources started on a single node \(for example, all resources have started on node 00 and did not fail back to node 01, run the failback operation:
+1. In cases when all resources started on a single node (for example, all resources have started on node 00 and did not fail back to node 01, run the failback operation:
 
     ```bash
     cscli failback –n primary_MGMT_node

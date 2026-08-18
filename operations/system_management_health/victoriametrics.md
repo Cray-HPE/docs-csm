@@ -29,7 +29,7 @@ To access `vmselect` GUI, use `ssh` port-forwarding.
     ```yaml
     kubectl get service -n sysmgmt-health vmselect-vms
     ```
-  
+
    Expected output looks similar to the following:
 
     ```text
@@ -64,7 +64,7 @@ To access `vmagent` GUI, use `ssh` port-forwarding.
     ```yaml
     kubectl get svc -n sysmgmt-health  vmagent-vms
     ```
-  
+
    Expected output looks similar to the following:
 
     ```text
