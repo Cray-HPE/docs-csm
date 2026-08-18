@@ -1,8 +1,8 @@
 # Power On and Boot Compute and User Access Nodes
 
-Use Boot Orchestration Service \(BOS\) and choose the appropriate session template to power on and boot compute and UANs.
+Use Boot Orchestration Service (BOS) and choose the appropriate session template to power on and boot compute and UANs.
 
-This procedure boots all compute nodes and user access nodes \(UANs\) in the context of a full system power-up.
+This procedure boots all compute nodes and user access nodes (UANs) in the context of a full system power-up.
 
 ## Prerequisites
 

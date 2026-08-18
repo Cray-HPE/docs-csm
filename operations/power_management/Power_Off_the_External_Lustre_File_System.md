@@ -81,7 +81,7 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     1. Shows MGS and MDS nodes in a partial stopped state.
 
         ```bash
-        [MGS]# crm_mon -1r | grep fsys
+        crm_mon -1r | grep fsys
         ```
 
         Example output:
@@ -94,8 +94,8 @@ Use this procedure as a general guide to power off an external ClusterStor syste
     1. If the output of the previous command shows a partial stopped state (`Stopped` and `Started`), issue the `stop_xyraid` command and verify that the node is stopped.
 
         ```bash
-        [MGS]# stop_xyraid nodename_md65-group
-        [MGS]# crm\_mon -1r | grep fsys
+        stop_xyraid nodename_md65-group
+        crm_mon -1r | grep fsys
         ```
 
         Example output:
@@ -113,34 +113,34 @@ Use this procedure as a general guide to power off an external ClusterStor syste
 
 1. (`n000#`) Power off the non-MGMT diskless nodes.
 
-    1. Check power state of all non-MGMT nodes and list the node hostnames \(in this example `cls01234n[02-15]`\) before power off.
-  
+    1. Check power state of all non-MGMT nodes and list the node hostnames (in this example `cls01234n[02-15]`) before power off.
+
         ```bash
         pm -q
         ```
-  
+
         Example output:
-  
+
         ```text
         on: cls01234n[000-001]
         on: cls01234n[002-015]
         unknown:
         ```
-  
+
     1. Power off all non-MGMT nodes.
-  
+
         ```bash
         cscli power_manage -n cls01234n[02-15] --power-off
         ```
-  
+
     1. Check the power status of the nodes.
-  
+
         ```bash
         pm -q
         ```
-  
+
         Example output:
-  
+
         ```text
         on: cls01234n[000-001]
         off: cls01234n[002-015]

@@ -1,6 +1,6 @@
 # Recover from a Liquid Cooled Cabinet EPO Event
 
-Identify an emergency power off \(EPO\) has occurred and restore cabinets to a healthy state.
+Identify an emergency power off (EPO) has occurred and restore cabinets to a healthy state.
 
 **CAUTION:** Verify the reason why the EPO occurred and resolve that problem before clearing the EPO state.
 
@@ -24,7 +24,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     off = [ "x9000c1", "x9000c3",]
     ```
 
-1. (`ncn-mw#`) Check the Chassis Controller Module \(CCM\) log for `Critical` messages and the EPO event.
+1. (`ncn#`) Check the Chassis Controller Module (CCM) log for `Critical` messages and the EPO event.
 
     ```bash
     ssh x9000c1b0 egrep \"Critical\|= No\" /var/log/messages
@@ -62,7 +62,7 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     err_msg = ""
     ```
 
-    The HPE Cray EX EX TDS cabinet contains only two chassis: 1 \(bottom\) and 3 \(top\).
+    The HPE Cray EX TDS cabinet contains only two chassis: 1 (bottom) and 3 (top).
 
     ```bash
     cray capmc xname_off create --xnames x9000c[1,3] --force true --format toml
@@ -102,6 +102,6 @@ If a Cray EX liquid-cooled cabinet or cooling group experiences an EPO event, th
     * The *Slingshot Administration Guide* PDF for HPE Cray EX systems.
     * The *Slingshot Troubleshooting Guide* PDF.
 
-1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+1. After the components have powered on, boot the nodes using the Boot Orchestration Services (BOS).
 
     See [Power On and Boot Compute and User Access Nodes](Power_On_and_Boot_Compute_Nodes_and_User_Access_Nodes.md).

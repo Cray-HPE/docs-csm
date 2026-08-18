@@ -13,9 +13,9 @@ to access these services are available on any system with CMN, BGP, MetalLB, and
 
 ## Prerequisites
 
-- Access to the System Management Health web UIs is through Istio's ingress gateway and requires clients \(browsers\) to set the appropriate HTTP Host header to route traffic to the desired service.
+- Access to the System Management Health web UIs is through Istio's ingress gateway and requires clients (browsers) to set the appropriate HTTP Host header to route traffic to the desired service.
 - Access to these URLs may require administrative privileges on the workstation running the user's web browser.
-- The Customer Management Network \(CMN\), Border Gateway Protocol \(BGP\), MetalLB, and external DNS are properly configured.
+- The Customer Management Network (CMN), Border Gateway Protocol (BGP), MetalLB, and external DNS are properly configured.
 
 ## System domain name
 

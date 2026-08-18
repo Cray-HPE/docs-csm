@@ -204,16 +204,16 @@ This procedure adds one or more liquid-cooled cabinets and associated [CDU][cdu]
 1. **For each** new [CDU][cdu] switch being added to the system, collect the following information about it:
 
     - [Coolant Distribution Unit (CDU)][cdu] switch component name ([xname][xname])
-      - If within a CDU: `dDwW`
+        - If within a CDU: `dDwW`
             - `dD` : where `D` is the CDU.
             - `wW` : where `W` is the management switch in a CDU.
-      - If within a standard rack: `xXcChHsS`
-        - `xX` : where `X` is the [River][river] cabinet identification number (the figure above is `3000`).
-        - `cC` : where `C` is the chassis identification number.
-          - If the switch is within an air-cooled cabinet, then this should be `0`.
-          - If the switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
-        - `hH` : where `H` is the slot number in the cabinet (height).
-        - `sS` : where `S` is the horizontal space number.
+        - If within a standard rack: `xXcChHsS`
+            - `xX` : where `X` is the [River][river] cabinet identification number (the figure above is `3000`).
+            - `cC` : where `C` is the chassis identification number.
+                - If the switch is within an air-cooled cabinet, then this should be `0`.
+                - If the switch is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+            - `hH` : where `H` is the slot number in the cabinet (height).
+            - `sS` : where `S` is the horizontal space number.
     - [CDU][cdu] switch brand (for example Dell or Aruba)
     - [CDU][cdu] switch alias (for example `sw-cdu-004` )
 
@@ -297,7 +297,7 @@ This procedure adds one or more liquid-cooled cabinets and associated [CDU][cdu]
 
 <!-- markdownlint-disable MD053 -->
 <!---
-    For references that are likely to appear on a lot of pages (glossary references, for example), 
+    For references that are likely to appear on a lot of pages (glossary references, for example),
     we allow definitions for entries that are not used on the page, as a convenience.
 -->
 
