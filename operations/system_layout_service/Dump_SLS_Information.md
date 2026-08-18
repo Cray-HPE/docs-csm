@@ -1,6 +1,6 @@
 # Dump SLS Information
 
-Perform a dump of the System Layout Service \(SLS\) database.
+Perform a dump of the System Layout Service (SLS) database.
 
 This procedure will create the file `sls_dump.json` in the current directory.
 

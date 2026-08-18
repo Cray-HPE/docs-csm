@@ -8,7 +8,7 @@ Power off HPE Cray EX liquid-cooled cabinets and managed nodes in standard racks
 
 HPE Cray EX liquid-cooled cabinet CDU and PDU circuit breakers are controlled manually.
 
-When the PDU breakers are switched to `OFF`, the Chassis Management Modules \(CMMs\) and Cabinet Environmental Controllers \(CECs\) are also powered off.
+When the PDU breakers are switched to `OFF`, the Chassis Management Modules (CMMs) and Cabinet Environmental Controllers (CECs) are also powered off.
 
 **Warning:** The cabinet 480VAC power bus bars remain energized. Facility power must be disconnected to completely remove power from the cabinet. Follow `lockout-tagout` procedures for the site before maintenance.
 
@@ -140,7 +140,7 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
     1. (`ncn-m001#`) Check the power status with PCS.
        This example shows nodes in cabinets 3001 - 3003.
 
-       The `cray power status` command requires that the list of components be explicitly listed. In this example, the system includes only 2U servers and there are no state manager entries for even-numbered U-positions \(slots\); those would return an error.
+       The `cray power status` command requires that the list of components be explicitly listed. In this example, the system includes only 2U servers and there are no state manager entries for even-numbered U-positions (slots); those would return an error.
 
        ```bash
        cray power status list --xnames x300[1-3]c0s[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]b[1-4]n0 --format json
@@ -195,7 +195,7 @@ HPE Cray standard EIA racks typically include two redundant PDUs. Some PDU model
        [...]
        ```
 
-       The command does not filter nonexistent component names \(xnames\) and
+       The command does not filter nonexistent component names (xnames) and
        displays an error for each invalid component names specified. Use `cray power status list`
        with no `--xnames` option to show everything.
 
@@ -268,7 +268,7 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
        cray power status list --xnames x[1000-1003]c[0-7] --format json
        ```
 
-1. Rectifiers \(PSUs\) in the liquid-cooled cabinets should indicate that DC power is `OFF` \(`AC OK` means the power is on\).
+1. Rectifiers (PSUs) in the liquid-cooled cabinets should indicate that DC power is `OFF` (`AC OK` means the power is on).
 
 1. (`ncn-m#`) Check the power status for nodes in the standard racks after shutdown.
 
@@ -280,11 +280,11 @@ liquid-cooled cabinet chassis, compute modules, and router modules, then powers 
 
 1. Set the cabinet PDU circuit breakers to `OFF` for each shelf.
 
-    The `AC OK` LED on each PSU will remain amber for about 30 seconds \(`AC lost`\) until the system de-energizes, then it will extinguish.
+    The `AC OK` LED on each PSU will remain amber for about 30 seconds (`AC lost`) until the system de-energizes, then it will extinguish.
 
     ![Liquid-cooled Cabinet PDU](../../img/operations/Liquid_Cooled_Cabinet_PDU.svg)
 
-    **`NOTE`** If the TDS cabinet rack-mounted coolant distribution unit \(MCDU\) is receiving power from the PDUs in the management cabinet, then the MCDU may stay on after the TDS cabinet PDU
+    **NOTE** If the TDS cabinet rack-mounted coolant distribution unit (MCDU) is receiving power from the PDUs in the management cabinet, then the MCDU may stay on after the TDS cabinet PDU
     circuit breakers are set to `OFF`. This is expected.
 
     ![Liquid-cooled TDS Cabinet PDU](../../img/operations/Liquid_Cooled_TDS_Cabinet_PDU.svg)

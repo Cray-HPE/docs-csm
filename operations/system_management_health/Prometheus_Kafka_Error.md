@@ -5,9 +5,9 @@
 On a fresh install of CSM, the Prometheus log has errors similar to the following:
 
 ```text
-ts=2022-12-05T13:35:53.495Z caller=dedupe.go:112 component=remote level=warn remote_name=2eb187 
+ts=2022-12-05T13:35:53.495Z caller=dedupe.go:112 component=remote level=warn remote_name=2eb187
 url=http://prometheus-kafka-adapter.sma.svc.cluster.local:80/receive msg="Failed to send batch, retrying"
-err="Post \"http://prometheus-kafka-adapter.sma.svc.cluster.local:80/receive\": 
+err="Post \"http://prometheus-kafka-adapter.sma.svc.cluster.local:80/receive\":
 dial tcp: lookup prometheus-kafka-adapter.sma.svc.cluster.local on 10.16.0.10:53: no such host"
 ```
 

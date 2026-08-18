@@ -9,15 +9,15 @@ include support for the Prometheus API. The System Management Health service rel
 
 - Prometheus is the standard cloud-native metrics and monitoring tool, which includes Alertmanager, a tool that handles
   alert duplication, silences, and notifications
-- The Prometheus operator provides custom resource definitions \(CRDs\) that make it easy to operate Prometheus and
+- The Prometheus operator provides custom resource definitions (CRDs) that make it easy to operate Prometheus and
   Alertmanager instances, scrape metrics from service endpoints, and trigger alerts
 - Grafana supports pulling data from Prometheus, and dashboards for system components are readily available from the
   open source community
 - The `stable/kube-prometheus-stack` Helm chart integrates the Prometheus operator, Prometheus, Alertmanager, Grafana,
-  node exporters \(DaemonSet\), and `kube-state-metrics` to provide a monitoring solution for Kubernetes clusters
+  node exporters (DaemonSet), and `kube-state-metrics` to provide a monitoring solution for Kubernetes clusters
 - Istio supports service mesh observability using Kiali
 
-The System Management Health service is intended to complement the System Monitoring Application \(SMA\) Framework, but
+The System Management Health service is intended to complement the System Monitoring Application (SMA) Framework, but
 the two are currently not integrated. The System Management Health metrics are not available using the Telemetry API.
 This service scrapes metrics from system components like Ceph, Kubernetes, and the hosts using node exporter,
 `kube-state-metrics`, and `cadvisor`. The design is flexible and supports:
@@ -27,6 +27,6 @@ This service scrapes metrics from system components like Ceph, Kubernetes, and t
 - Independent retention and persistence settings based on needs for specific services; the current default configuration
   retains metrics for ten days at the top level and four hours at intermediate levels
 - Component-specific tooling for more detailed visibility:
-  - Grafana dashboards for Kubernetes
-  - Grafana dashboards and Kiali for Istio
-  - Grafana dashboards for Ceph
+    - Grafana dashboards for Kubernetes
+    - Grafana dashboards and Kiali for Istio
+    - Grafana dashboards for Ceph

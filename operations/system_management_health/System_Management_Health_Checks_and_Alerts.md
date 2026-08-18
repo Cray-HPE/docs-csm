@@ -4,7 +4,7 @@ A health check corresponds to a Prometheus query against metrics aggregated to t
 components like Kubernetes and Istio collect service-related metrics by default, which enables the System Management
 Health service to implement generic service health checks without custom instrumentation. Health checks are intended to
 be coarse-grained and comprehensive, as opposed to fine-grained and exhaustive. Health checks related to infrastructure
-adhere to the Utilization Saturation Errors \(USE\) method whereas services follow the Rate Errors Duration \(RED\)
+adhere to the Utilization Saturation Errors (USE) method whereas services follow the Rate Errors Duration (RED)
 method.
 
 Prometheus alerting rules periodically evaluate health checks and trigger alerts to Alertmanager, which manages
@@ -13,15 +13,15 @@ options, but the most relevant ones are listed below:
 
 - Email - Sends notification emails periodically regarding alerts
 - Slack - Publishes notifications to a Slack channel
-- Webhook- Send an HTTP request to a configurable URL \(requires custom integration\)
+- Webhook- Send an HTTP request to a configurable URL (requires custom integration)
 
 Similar to Prometheus metrics, alerts use labels to identify a particular dimensional instantiation, and the
 Alertmanager dashboard enables operators to preemptively silence alerts based on them.
 
-## Check Active Alerts from NCNs
+## Check active alerts from NCNs
 
 Prometheus includes the `/api/v1/alerts` endpoint, which returns a JSON object containing the active alerts. From a
-non-compute node \(NCN\), can connect to `sysmgmt-health/cray-sysmgmt-health-kube-p-prometheus` directly and bypass
+non-compute node (NCN), can connect to `sysmgmt-health/cray-sysmgmt-health-kube-p-prometheus` directly and bypass
 service authentication and authorization.
 
 Obtain the cluster IP address:
@@ -80,7 +80,6 @@ is the actual number of pods on `ncn-w003`.
 
 **Troubleshooting:** If an alert titled `KubeCronJobRunning` is encountered, this could be an indication that a
 Kubernetes cronjob is misbehaving. The Labels section under the firing alert will indicate the name of the cronjob that
-is taking longer than expected to complete. Refer to the "CHECK CRON JOBS" header in
-the [Power On and Start the Management Kubernetes Cluster](../power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md)
-procedure for instructions on how to troubleshoot the cronjob, as well as how to restart \(export and reapply\) the
-cronjob.
+is taking longer than expected to complete.
+For instructions on how to troubleshoot the cronjob, as well as how to restart (export and reapply) the cronjob, see
+[Check `cronjobs`](../power_management/Power_On_and_Start_the_Management_Kubernetes_Cluster.md#check-cronjobs).

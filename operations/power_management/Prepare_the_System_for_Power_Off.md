@@ -39,12 +39,12 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
    other nodes because the `ssh` will execute commands from `/root/.bashrc`.
 
       * Commands affected during the power down
-         * `sat bootsys shutdown --stage platform-services`
-         * `sat bootsys shutdown --stage ncn-power`
+          * `sat bootsys shutdown --stage platform-services`
+          * `sat bootsys shutdown --stage ncn-power`
 
       * Commands affected during the power up
-         * `sat bootsys boot --stage ncn-power`
-         * `sat bootsys boot --stage platform-services`
+          * `sat bootsys boot --stage ncn-power`
+          * `sat bootsys boot --stage platform-services`
 
       1. Here is a sample command in `/root/.bashrc` which sets an environment variable using the output from `kubectl` which has the problem.
 
@@ -218,7 +218,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
 ### Identify BOS session templates for managed nodes
 
-1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down compute nodes and UANs.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service (BOS) templates to use to shut down compute nodes and UANs.
 
    There will be separate session templates for UANs and computes nodes.
 
@@ -263,7 +263,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
        +----------------+-------------+-----------+------------------------------+
        ```
 
-       **`NOTE`** When the `Most Recent Session Template` shows `MISSING`, it means the BOS session information was removed.
+       **NOTE** When the `Most Recent Session Template` shows `MISSING`, it means the BOS session information was removed.
        Old BOS sessions are cleaned up based on the numbers of days in `cleanup_completed_session_ttl`. The default value is seven days.
 
        1. Check the current setting for `cleanup_completed_session_ttl`.
@@ -323,7 +323,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
-        **Important:** SDU may take about 45 minutes to run on a small system \(longer for large systems\).
+        **Important:** SDU may take about 45 minutes to run on a small system (longer for large systems).
 
         ```bash
         sdu --scenario triage --start_time '-4 hours' \
@@ -490,7 +490,7 @@ HPE Cray EX System Admin Toolkit (SAT) product stream documentation (`S-8031`) f
 
     If active sessions are running, either wait for them to complete or cancel the session. See the following step.
 
-    **`NOTE`** If the System Diagnostic Utility (SDU) has not been configured on master nodes, message like this will appear for the master nodes
+    **NOTE** If the System Diagnostic Utility (SDU) has not been configured on master nodes, message like this will appear for the master nodes
     which are not configured for SDU. If the warning appears for all master nodes, then to enable this after the system has been powered up again,
     see the Configure section of the HPE Cray EX with CSM System Diagnostic Utility (SDU) Installation Guide to configure SDU and the optional RDA.
 
