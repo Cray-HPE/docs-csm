@@ -74,7 +74,7 @@ Alerts for `PostgresqlFollowerReplicationLagSMA` on `sma-postgres-cluster` pods 
 
 ## `PostgresqlHighRollbackRate`
 
-Alerts for `PostgresqlHighRollbackRate` on `spire-postgres`, `smd-postgres` and `keycloak-postgres` pods can be ignored. This is caused by an idle session that requires a timeout. This will be fixed in a future release.
+Alerts for `PostgresqlHighRollbackRate` on `spire-postgres`, `smd-postgres`, and `keycloak-postgres` pods can be ignored. This is caused by an idle session that requires a timeout. This will be fixed in a future release.
 
 ## `PostgresqlInactiveReplicationSlot`
 
