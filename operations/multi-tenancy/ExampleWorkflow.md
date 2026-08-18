@@ -136,7 +136,7 @@ These configuration settings are made:
 
 #### `SlurmCluster` IP addresses
 
-**`IMPORTANT`** Each High-Speed Network (HSN) IP address must be unique, within all the `SlurmClusters` on any one system.
+**IMPORTANT** Each High-Speed Network (HSN) IP address must be unique, within all the `SlurmClusters` on any one system.
 
 * These HSN IP addresses are assigned in the USS configuration, below
     * **You will need to know the base HSN IP address for each system**
@@ -177,7 +177,7 @@ These configuration settings are made in each `SlurmCluster's` `/etc/slurm/slurm
 
 #### `SlurmCluster` Slingshot VNI allocation
 
-**`IMPORTANT`** Each block of HPE Slingshot `VNIs` on the High-Speed Network (HSN) must not overlap with other blocks on the same system.
+**IMPORTANT** Each block of HPE Slingshot `VNIs` on the High-Speed Network (HSN) must not overlap with other blocks on the same system.
 
 * Note that there is one `/etc/slurm/slurm.conf` file in each tenant's `SlurmCluster`
 * Example with no tenants:
@@ -725,7 +725,7 @@ spec:
 
 ### Appendix B - `Development` `SlurmCluster`
 
-**`IMPORTANT`** The values for `cpu` and `memory` and `initialDelaySeconds` are recommended by the WLM team.
+**IMPORTANT** The values for `cpu` and `memory` and `initialDelaySeconds` are recommended by the WLM team.
 
 This is filename `devcls01a.yaml`; complete file is shown.
 
