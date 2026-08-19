@@ -1,6 +1,6 @@
 # Set Limits for a Configuration Session
 
-The configuration layers and session hosts can be limited when running a Configuration Framework Service \(CFS\) session.
+The configuration layers and session hosts can be limited when running a Configuration Framework Service (CFS) session.
 
 ## Limit CFS session hosts
 
@@ -61,8 +61,8 @@ It is possible to limit the session to only specific layers of the configuration
 configuration of a specific layer and applying the other layers is not necessary or desired. This option may also reduce the number
 of configurations that need to be created and stored by CFS because sessions can specify layers from a master configuration layer list.
 
-Use the `--configuration-limit` option when creating a CFS session to apply configuration layer limits. Multiple layers to limit the
-session are specified as a comma-separated list either by name \(if layers were given names when created\) or by zero-based index as
+Use the `--configuration-limit` option when creating a CFS session to apply configuration layer limits.
+Multiple layers to limit the session are specified as a comma-separated list either by name (if layers were given names when created) or by zero-based index as
 defined in the configuration submitted to CFS.
 
 (`ncn-mw#`) Use the following command to create a CFS session to run only on `example-layer1`, and then `example-layer5` of a

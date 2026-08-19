@@ -79,7 +79,7 @@ procedure below.
    ```bash
    IMS_IMAGE_ID=$(cray bss bootparameters list --name "${NODE_XNAME}" --format json | \
                      jq -r '.[0].params' | \
-                     sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
+                     sed 's#(^.*[[:space:]]\|^)metal[.]server=[^[:space:]]*/boot-images/([^[:space:]]\+)/rootfs.*#\2#')
    echo "${IMS_IMAGE_ID}"
    ```
 
@@ -117,7 +117,7 @@ the booted node.
 
    ```bash
    IMS_IMAGE_ID=$(ssh "${BOOTED_NODE}" sed \
-                    "'s#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#'" \
+                    "'s#(^.*[[:space:]]\|^)metal[.]server=[^[:space:]]*/boot-images/([^[:space:]]\+)/rootfs.*#\2#'" \
                     /proc/cmdline)
    echo "${IMS_IMAGE_ID}"
    ```
@@ -225,8 +225,8 @@ The following procedure describes how to find the CFS configuration applied to t
    +----------------+------------+---------+-------------------+
    ```
 
-   The value of the `Desired Config` column is the name of the CFS configuration currently applied
-   to the nodes. There will typically be only one CFS configuration applied to all management nodes.
+   The value of the `Desired Config` column is the name of the CFS configuration currently applied to the nodes. There
+   will typically be only one CFS configuration applied to all management nodes.
 
 #### Option 2: Create a new CFS configuration for management nodes
 
@@ -275,8 +275,8 @@ layers provided by CSM.
 
 1. (`ncn-mw#`) Record the name of the CFS configuration to use for image customization.
 
-    Set the `CFS_CONFIG_NAME` variable to the name of the CFS configuration identified or created
-    in the previous section, [2. Find or create a CFS configuration](#2-find-or-create-a-cfs-configuration).
+    Set the `CFS_CONFIG_NAME` variable to the name of the CFS configuration identified or created in the previous
+    section, [2. Find or create a CFS configuration](#2-find-or-create-a-cfs-configuration).
 
     ```bash
     CFS_CONFIG_NAME=management-23.4.0
@@ -293,7 +293,8 @@ layers provided by CSM.
 
 1. (`ncn-mw#`) Create an image customization CFS session.
 
-    See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional information.
+    See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional
+    information.
 
     1. Set a name for the session.
 

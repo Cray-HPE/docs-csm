@@ -5,7 +5,8 @@ A "rebuild" is a reboot operation that clears the persistent OverlayFS file syst
 An "upgrade" is similar to a rebuild, but it intentionally does not clear all information off of NCN storage and master nodes.
 IUF will account for the necessary minimum number of critical software instances running on the nodes to ensure the `management-nodes-rollout` stage operates without impacting software availability.
 
-**`NOTE`** `management-nodes-rollout` has a different procedure depending on whether or not CSM itself is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes, but both procedures use
+**NOTE** `management-nodes-rollout` has a different procedure depending on whether or not CSM itself is being
+upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes, but both procedures use
 the same steps for rebuilding/upgrading NCN worker nodes.
 
 1. If CSM **is not** being upgraded, then NCN storage and master nodes will not be upgraded with a new image but will be updated with a CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md).
@@ -89,8 +90,8 @@ the original incomplete worker rebuild workflow will continue and no new workflo
 
 If it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, the failed workflow must be deleted from Kubernetes first.
 
-**`WARNING`** Deleting a workflow will delete information about the state of that workflow and the steps that have been completed.
-Deleting a partially complete workflow should be done cautiously and only if needed.
+**WARNING** Deleting a workflow will delete information about the state of that workflow and the steps that have been
+completed. Deleting a partially complete workflow should be done cautiously and only if needed.
 
 To delete a failed Argo workflow, complete the following steps.
 

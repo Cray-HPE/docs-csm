@@ -24,7 +24,7 @@ The chassis management module (CMM) controller (cC), node controller (nC), and S
 
 1. (`ncn-mw#`) Power off all compute slots in the cabinets the passwords are to be changed on.
 
-  > **`NOTE`**: If a chassis is not fully populated, specify each slot individually.
+   > **NOTE**: If a chassis is not fully populated, specify each slot individually.
 
    Example showing fully populated cabinets 1000-1003:
 

@@ -13,16 +13,16 @@ The following practices should also be followed:
 
 * When it is necessary to add more functionality beyond an Ansible playbook provided by an HPE Cray product, include the product playbook in a new playbook instead of modifying it directly.
   Any modifications to a product playbook will result in a merge being required during a product upgrade.
-* Do not modify default Ansible role variables, override all values using inventory \(`group_vars` and `host_vars` directories\). Cray products do not import any content to inventory locations,
-  so merges of new product content will not cause conflicts if variables are located in inventory.
+* Do not modify default Ansible role variables, override all values using inventory (`group_vars` and `host_vars` directories).
+  Cray products do not import any content to inventory locations, so merges of new product content will not cause conflicts if variables are located in inventory.
 * Do not put any sensitive or secret information, such as passwords, in the Git repository. These values should be pulled during runtime from an external key management system.
 
 ## Handling sensitive information
 
-Passwords and other sensitive content should not be stored in a Version Control Service \(VCS\) repository. Instead, consider writing Ansible tasks/roles
+Passwords and other sensitive content should not be stored in a Version Control Service (VCS) repository. Instead, consider writing Ansible tasks/roles
 that pull the value in dynamically while the playbook is running from an external secrets management system.
 
-At this time, the Ansible Vault is not supported by the Configuration Framework Service \(CFS\).
+At this time, the Ansible Vault is not supported by the Configuration Framework Service (CFS).
 
 ## Example: Override a role default value
 
@@ -46,7 +46,7 @@ If the override pertains to an entire Ansible group of nodes, then create a file
 
 1. Stage the file in the Git branch, commit it, and promote the change.
 
-This change will be applied to all nodes by using the group name `all`. To narrow the variable scope to a specific group \(`Compute` for example\), use the group name instead of `all` as follows:
+This change will be applied to all nodes by using the group name `all`. To narrow the variable scope to a specific group (`Compute` for example), use the group name instead of `all` as follows:
 
 ```bash
 mkdir -p group_vars/Compute && touch group_vars/Compute/[role name].yml

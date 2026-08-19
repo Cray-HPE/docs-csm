@@ -57,18 +57,18 @@ For information on the administrative user, including changing its password, see
 
 The default username is `admin`.
 
-> **`NOTE`** Contact HPE Cray service in order to obtain the default password for Grafana and Kiali.
+> **NOTE** Contact HPE Cray service in order to obtain the default password for Grafana and Kiali.
 
 ## Management network switches
 
 Each rack type includes a different set of passwords. During different stages of installation, these passwords are subject to change.
 
-> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
+> **NOTE** Contact HPE Cray service in order to obtain the default passwords.
 
 The tables below include the default login credentials for each rack type. These passwords can be changed by going into the console on a given switch and changing it.
 However, if the user gets locked out attempting to change the password or the configuration gets corrupted for an individual switch, it can wipe out the entire network configuration for the system.
 
-> **`NOTE`** IP addresses can be found from the generated SLS file.
+> **NOTE** IP addresses can be found from the generated SLS file.
 
 ### Liquid-cooled cabinet
 
@@ -114,7 +114,7 @@ Three accounts are created by default:
 | `operator`   | `Operator`   | Power components on/off, read values, and configure accounts |
 | `guest`      | `ReadOnly`   | Log in, configure self, and read values                      |
 
-> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
+> **NOTE** Contact HPE Cray service in order to obtain the default passwords.
 
 The System Configuration Service (SCSD) is used to set the credentials for Redfish BMCs.
 Refer to [Set BMC Credentials](../system_configuration_service/Set_BMC_Credentials.md) for more information.
@@ -262,7 +262,7 @@ For SSH access, the system controllers have the following default credentials:
 | Switch controller (sC)                     | `root`   |
 | sC minimal recovery firmware image (rec)   | `root`   |
 
-> **`NOTE`** Contact HPE Cray service in order to obtain the default passwords.
+> **NOTE** Contact HPE Cray service in order to obtain the default passwords.
 
 Passwords for nC, cC, and sC controllers are all managed with the following process.
 The `cfgsh` tool is a configuration shell that can be used interactively or scripted. Interactively, it may be used as follows after logging in as `root` using SSH:
@@ -317,7 +317,7 @@ To adjust the SNMP credentials, perform the following tasks:
 
 The default username is `admin`.
 
-> **`NOTE`** Contact HPE Cray service in order to obtain the default password for Gigabyte.
+> **NOTE** Contact HPE Cray service in order to obtain the default password for Gigabyte.
 
 ## Passwords managed in other product streams
 

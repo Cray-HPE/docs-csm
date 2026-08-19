@@ -1,6 +1,6 @@
 # BOS Workflows
 
-The following workflows present a high-level overview of common Boot Orchestration Service \(BOS\) operations.
+The following workflows present a high-level overview of common Boot Orchestration Service (BOS) operations.
 These workflows depict how services interact with each other when booting, configuring, or shutting down nodes.
 They also help provide a quicker and deeper understanding of how the system functions.
 
@@ -18,7 +18,7 @@ They also help provide a quicker and deeper understanding of how the system func
 
 The following are mentioned in the workflows:
 
-* Boot Orchestration Service \(BOS\) is responsible for booting, configuring, and shutting down collections of nodes.
+* Boot Orchestration Service (BOS) is responsible for booting, configuring, and shutting down collections of nodes.
   The Boot Orchestration Service has the following components:
     * A BOS session template is a collection of one or more boot sets. A boot set defines a collection of nodes and the information about the boot artifacts and parameters.
       Session templates also include information on which [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs) configuration should
@@ -32,10 +32,10 @@ The following are mentioned in the workflows:
   for nodes in the system. CAPMC interfaces directly with the Redfish APIs to the controller infrastructure to effect power and environmental changes on the system.
 * [Hardware State Manager (HSM)](../../glossary.md#hardware-state-manager-hsm) tracks the state of each node and its group and role associations.
 * [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) stores per-node information about the iPXE boot script.
-  When booting or rebooting, nodes consult BSS for boot artifacts \(kernel, `initrd`, image root\) and boot parameters.
+  When booting or rebooting, nodes consult BSS for boot artifacts (kernel, `initrd`, image root) and boot parameters.
 * [Simple Storage Service (S3)](../../glossary.md#simple-storage-service-s3) is an artifact repository that stores boot artifacts.
 * CFS configures nodes using the configuration framework. Launches and aggregates the status from one or more Ansible instances against nodes
-  \(node personalization\) or images \(image customization\).
+  (node personalization) or images (image customization).
 
 ## BOS v2 workflows
 
@@ -140,7 +140,7 @@ The following workflows are included in this section:
 
 1. **CFS applies configuration**
 
-    If needed, CFS runs Ansible on the nodes and applies post-boot configuration \(also called node personalization\).
+    If needed, CFS runs Ansible on the nodes and applies post-boot configuration (also called node personalization).
 
 1. **Status operator (complete)**
 
@@ -270,7 +270,7 @@ The following workflows are included in this section:
 
 1. **CFS applies configuration**
 
-    If needed, CFS runs Ansible on the nodes and applies post-boot configuration \(also called node personalization\).
+    If needed, CFS runs Ansible on the nodes and applies post-boot configuration (also called node personalization).
 
 1. **Status operator (complete)**
 

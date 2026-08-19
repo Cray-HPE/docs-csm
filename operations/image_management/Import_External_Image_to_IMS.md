@@ -1,6 +1,6 @@
 # Import an External Image to IMS
 
-The Image Management Service \(IMS\) is typically used to build images from IMS recipes and customize Images that are already known to IMS.
+The Image Management Service (IMS) is typically used to build images from IMS recipes and customize Images that are already known to IMS.
 However, it is sometimes the case that an image is built using a mechanism other than by IMS and needs to be added to IMS. In these cases,
 the following procedure can be used to add this external image to IMS and upload the image's artifacts to the Simple Storage Service (S3).
 
@@ -21,17 +21,17 @@ An automated tool is available to help the specific case of starting with image 
 ## Prerequisites
 
 * CSM is fully installed, configured, and healthy.
-  * The Image Management Service \(IMS\) is healthy.
-  * The Simple Storage Service \(S3\) is healthy.
-  * The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
-  * These may be validated by performing the following health checks:
-    * [Platform health checks](../validate_csm_health.md#1-platform-health-checks)
-    * [Software Management Service health checks](../validate_csm_health.md#3-software-management-services-sms-health-checks)
+    * The Image Management Service (IMS) is healthy.
+    * The Simple Storage Service (S3) is healthy.
+    * The NCN Certificate Authority (CA) public key has been properly installed into the CA cache for this system.
+    * These may be validated by performing the following health checks:
+        * [Platform health checks](../validate_csm_health.md#1-platform-health-checks)
+        * [Software Management Service health checks](../validate_csm_health.md#3-software-management-services-sms-health-checks)
 * The Cray CLI is configured.
-  * See [Configure the Cray CLI](../configure_cray_cli.md).
+    * See [Configure the Cray CLI](../configure_cray_cli.md).
 * Image artifact files are available.
-  * An image root file is required.
-  * Optionally, additional image artifacts may be specified including a kernel, `initrd`, and kernel parameters file.
+    * An image root file is required.
+    * Optionally, additional image artifacts may be specified including a kernel, `initrd`, and kernel parameters file.
 
 ## Limitations
 
@@ -184,7 +184,7 @@ Set variables for all of the image artifact files, if needed. For example, `IMS_
 
 ### 6. Create, upload, and register image manifest
 
-HPE Cray uses a manifest file that associates multiple related boot artifacts \(kernel, `initrd`, image root, etc.\) into
+HPE Cray uses a manifest file that associates multiple related boot artifacts (kernel, `initrd`, image root, etc.) into
 an image description that is used by IMS and other services to boot nodes. Artifacts listed within the manifest are
 identified by a `type` value:
 
@@ -193,7 +193,7 @@ identified by a `type` value:
 * `application/vnd.cray.image.kernel`
 * `application/vnd.cray.image.parameters.boot`
 
-1. (`ncn-mw#`) Collect etag values for uploaded files.
+1. (`ncn-mw#`) Collect `etag` values for uploaded files.
 
     ```bash
     ROOTFS_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/${IMS_ROOTFS_FILENAME} --format json | jq -r .artifact.ETag  | tr -d '"' )
@@ -252,7 +252,7 @@ identified by a `type` value:
     cray artifacts create boot-images "${IMS_IMAGE_ID}/manifest.json" manifest.json
     ```
 
-1. (`ncn-mw#`) Collect the etag for the manifest file.
+1. (`ncn-mw#`) Collect the `etag` for the manifest file.
 
     ```bash
     MANIFEST_ETAG=$( cray artifacts describe boot-images ${IMS_IMAGE_ID}/manifest.json --format json | jq -r .artifact.ETag  | tr -d '"' )

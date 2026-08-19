@@ -1,6 +1,6 @@
 # CFS Global Options
 
-The Configuration Framework Service \(CFS\) provides a global service options endpoint for modifying the base configuration of the service itself.
+The Configuration Framework Service (CFS) provides a global service options endpoint for modifying the base configuration of the service itself.
 
 View the options with the following command:
 
@@ -82,7 +82,7 @@ needing configuration has not reached the [batch size][bat-siz] limit.
 * Default: `60` seconds
 
 The batch window time-boxes the creation of sessions so no component needs to wait for the queue to fill.
-  
+
 > **WARNING:** Lower values will cause CFS batcher to be more responsive to creating sessions, but values too low may result in
 > degraded performance of both the CFS APIs as well as the overall system.
 

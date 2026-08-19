@@ -1,24 +1,24 @@
 # Customize an Image Root Using IMS
 
-The Image Management Service \(IMS\) customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized
+The Image Management Service (IMS) customization workflow sets up a temporary image customization environment within a Kubernetes pod and mounts the image to be customized
 in that environment. A system administrator then makes the desired changes to the image root within the customization environment.
 
 Afterwards, the IMS customization workflow automatically copies the NCN CA public key to `/etc/cray/ca/certificate_authority.crt` within the image root being customized, in order
-to enable secure communications between NCNs and client nodes. IMS then compresses the customized image root and uploads it and its associated `initrd` image and kernel image \(needed
-to boot a node\) to the artifact repository.
+to enable secure communications between NCNs and client nodes. IMS then compresses the customized image root and uploads it and its associated `initrd` image and kernel image (needed
+to boot a node) to the artifact repository.
 
 ## Prerequisites
 
-* System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the following deployments:
-    * `cray-ims`, the Image Management Service \(IMS\)
+* System management services (SMS) are running in a Kubernetes cluster on non-compute nodes (NCN) and include the following deployments:
+    * `cray-ims`, the Image Management Service (IMS)
     * `cray-nexus`, the Nexus repository manager service
 * `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 * An IMS registered image root archive or a pre-built image root SquashFS archive is available to customize.
-* The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
-* A token providing Simple Storage Service \(S3\) credentials has been generated.
-* When customizing an image using IMS Image Customization, once inside the image root using `chroot` \(if using a \`jailed\` environment\), the image will only have access to
+* The NCN Certificate Authority (CA) public key has been properly installed into the CA cache for this system.
+* A token providing Simple Storage Service (S3) credentials has been generated.
+* When customizing an image using IMS Image Customization, once inside the image root using `chroot` (if using a `jailed` environment), the image will only have access to
   whatever configuration the image already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other
-  settings. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable DNS resolution.
+  settings. A base level of customization is provided by the default Ansible plays used by the Configuration Framework Service (CFS) to enable DNS resolution.
 
 ## Limitations
 
@@ -31,8 +31,8 @@ to boot a node\) to the artifact repository.
 
 1. Check for an existing IMS public key.
 
-    > **`NOTE`** If it is known that a public key associated with the user account being used was not previously uploaded to the IMS service, then skip this
-    > step and proceed to [upload the SSH public key to the IMS service](#upload-ssh-public-key-to-ims).
+    > **NOTE** If it is known that a public key associated with the user account being used was not previously uploaded to the IMS service, then skip this
+    > step and proceed to `Upload the SSH public key to the IMS service`.
 
     The following query may return multiple public key records. The correct one will have a name value including the current username in use.
 
@@ -50,13 +50,13 @@ to boot a node\) to the artifact repository.
     created = "2018-11-21T17:19:07.830000+00:00"
     ```
 
-    * If a public key associated with the username in use is not returned, then proceed to [upload the SSH public key to the IMS service](#upload-ssh-public-key-to-ims).
-    * Otherwise, if a public key associated with the username does exist, then note the value of its `id` field and proceed to [record the IMS public key ID](#record-ims-public-key-id).
+    * If a public key associated with the username in use is not returned, then proceed to `upload the SSH public key to the IMS service`.
+    * Otherwise, if a public key associated with the username does exist, then note the value of its `id` field and proceed to `record the IMS public key ID`.
 
 1. Upload the SSH public key to the IMS service.
 
     > If an IMS public key record has already been created for the account being used, then note the value of its `id` field and proceed
-    > to [record the IMS public key ID](#record-ims-public-key-id).
+    > to `record the IMS public key ID`.
 
     The IMS debug/configuration shell relies on passwordless SSH. This SSH public key needs to be uploaded to IMS to enable interaction with the image customization environment later
     in this procedure.
@@ -76,7 +76,7 @@ to boot a node\) to the artifact repository.
     created = "2018-11-21T17:19:07.830000+00:00"
     ```
 
-    Note the value of the `id` field and proceed to [record the IMS public key ID](#record-ims-public-key-id).
+    Note the value of the `id` field and proceed to `record the IMS public key ID`.
 
 1. Record the IMS public key ID.
 
@@ -88,7 +88,7 @@ to boot a node\) to the artifact repository.
 
 1. Determine if the image root being used is in IMS and ready to be customized.
 
-    * If the image to be customized is already known to IMS, then proceed to [Locate an IMS Image to Customize](#locate).
+    * If the image to be customized is already known to IMS, then proceed to `Locate an IMS image to customize`.
     * If the image to be customized was created outside of IMS and is not yet known to IMS, then proceed to [Import External Image to IMS](Import_External_Image_to_IMS.md).
     * To build an image from an existing IMS recipe, proceed to [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md).
 
@@ -122,7 +122,7 @@ to boot a node\) to the artifact repository.
 
 1. Create an IMS job record in order to start the image customization job.
 
-    After customizing the image, IMS will automatically upload any build artifacts \(root file system, kernel, and `initrd`\) to S3, and associate the S3 artifacts with IMS.
+    After customizing the image, IMS will automatically upload any build artifacts (root file system, kernel, and `initrd`) to S3, and associate the S3 artifacts with IMS.
     Unfortunately, IMS is not able to dynamically determine the names of the Linux kernel and `initrd` to look for, because the file name for these vary depending upon Linux
     distribution, Linux version, `dracut` configuration, and more. Therefore the user must pass into IMS the name of the kernel and `initrd` in the resultant image root's `/boot` directory.
 
@@ -141,7 +141,7 @@ to boot a node\) to the artifact repository.
     >
     > A jailed environment lets users SSH into the SSH container and be immediately within the image root for the image being customized. Users do not need to `cd` or `chroot` into
     > the image root. Using a jailed environment has some advantages, such as making the IMS SSH job shell look more like a compute node. This allows applications like the CFS to
-    > perform actions on both IMS job pods \(pre-boot\) and compute nodes \(post-boot\).
+    > perform actions on both IMS job pods (pre-boot) and compute nodes (post-boot).
     >
     > Before running the following command, replace the `MY_CUSTOMIZED_IMAGE` value with the name of the image root being used.
 
@@ -203,11 +203,11 @@ to boot a node\) to the artifact repository.
 
     The IMS customization job enables customization of the image root via an SSH shell accessible by one or more dynamic host names. The user needs to know if they will SSH from
     inside or outside the Kubernetes cluster to determine which host name to use. Typically, customers access the system from outside the Kubernetes cluster using the Customer
-    Access Network \(CAN\).
+    Access Network (CAN).
 
     Before setting the SSH values, determine the appropriate method to SSH into the customization pod:
 
-    * `[ssh_containers.connection_info.customer_access]` values \(**preferred**\): The `customer_access` address is a dynamic hostname that is made available for use by the customer
+    * `[ssh_containers.connection_info.customer_access]` values (**preferred**): The `customer_access` address is a dynamic hostname that is made available for use by the customer
       to access the IMS job from outside the Kubernetes cluster.
     * `[ssh_containers.connection_info."cluster.local"]` values: The `cluster.local` address is used when trying to access an IMS job from a pod that is running within the HPE Cray
       EX Kubernetes cluster. For example, this is the address that CFS uses to talk to the IMS job during a pre-boot customization session.
@@ -299,7 +299,7 @@ to boot a node\) to the artifact repository.
 
 1. Customize the image in the image customization environment.
 
-    > Once in the image root using `chroot` \(or if using a \`jailed\` environment\) during image customization, the image will only have access to whatever configuration the image
+    > Once in the image root using `chroot` (or if using a `jailed` environment) during image customization, the image will only have access to whatever configuration the image
     > already contains. In order to talk to services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. A base level of
     > customization is provided by the default Ansible plays used by the CFS to enable DNS resolution.
 
@@ -320,10 +320,10 @@ to boot a node\) to the artifact repository.
         After changes have been made, run the `touch` command on the `complete` file. The location of the `complete` file depends on whether or not the SSH job shell was created
         using the `--ssh-containers-jail True` parameter. See the table below for more information.
 
-        |`--ssh-containers-jail`|Command used to create the `complete` file|
-        |-----------------------|------------------------------------------|
-        | `False` \(default\)   | `touch /mnt/image/complete`              |
-        | `True`                | `touch /tmp/complete`                    |
+        | `--ssh-containers-jail` | Command used to create the `complete` file |
+        |-------------------------|--------------------------------------------|
+        | `False` (default)     | `touch /mnt/image/complete`                |
+        | `True`                  | `touch /tmp/complete`                      |
 
         ```bash
         [root@POD image]# cd /mnt/image/
@@ -355,7 +355,7 @@ to boot a node\) to the artifact repository.
         }
         ```
 
-        The Ansible inventory file below can also be used. The private key \(`./pod_rsa_key`\) corresponds to the public key file the container has in its `authorized_keys` file.
+        The Ansible inventory file below can also be used. The private key (`./pod_rsa_key`) corresponds to the public key file the container has in its `authorized_keys` file.
 
         ```text
         myimage-customize ansible_user=root ansible_host=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com ansible_port=22 \

@@ -3,7 +3,7 @@
 Ansible logs are now recorded with ARA and are accessible through the ARA UI.
 See [Ansible Log Collection](Ansible_Log_Collection.md) for more information.
 
-Logs for the other steps of a session are available via the `kubectl log` command for each container of a Configuration Framework Service \(CFS\) session. Refer to
+Logs for the other steps of a session are available via the `kubectl log` command for each container of a Configuration Framework Service (CFS) session. Refer to
 [Configuration Sessions](Configuration_Sessions.md) for more info about these containers.
 
 These can be run on any master or worker NCN.

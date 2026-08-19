@@ -1,4 +1,4 @@
-# Access Console Log Data Via the System Monitoring Framework \(SMF\)
+# Access Console Log Data Via the System Monitoring Framework (SMF)
 
 Console log data is collected by SMF and can be queried through the Kibana UI or Elasticsearch. Each line of the console logs are an individual record in the SMF database.
 
@@ -8,7 +8,7 @@ Console log data is collected by SMF and can be queried through the Kibana UI or
 
 ## Prerequisites
 
-This procedure requires the Kibana service to be up and running on a non-compute node \(NCN\).
+This procedure requires the Kibana service to be up and running on a non-compute node (NCN).
 
 ## System domain name
 
@@ -32,13 +32,14 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
 1. Navigate to the following URL in a web browser: `https://sma-kibana.cmn.SYSTEM_DOMAIN_NAME/app/kibana`
 
-    |If this appears|Do this|
-    |----------------|--------|
-    |**the Keycloak login page**|Supply valid credentials, then wait to be redirected to the Kibana dashboard before continuing to the next step.|
-    |**the error `Kibana did not load properly. Check the server output for more information.`**|Clear browser cookies for `https://sma-kibana.cmn.SYSTEM_DOMAIN_NAME`|
-    |**The Kibana dashboard \(see example below\)**|Proceed to next step|
+    | If this appears                                                                                            | Do this                                                                                                          |
+    |------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+    | **the Keycloak login page**                                                                                | Supply valid credentials, then wait to be redirected to the Kibana dashboard before continuing to the next step. |
+    | **the error `Kibana did not load properly. Check the server output for more information.`**                | Clear browser cookies for `https://sma-kibana.cmn.SYSTEM_DOMAIN_NAME`                                            |
+    | **The Kibana dashboard (see example below)**                                                               | Proceed to next step                                                                                             |
 
-    When the Kibana dashboard loads, the web UI displays the Discover page by default. Note that even without entering a search pattern, an index pattern shows entries ordered in time.
+    When the Kibana dashboard loads, the web UI displays the Discover page by default.
+    Note that even without entering a search pattern, an index pattern shows entries ordered in time.
 
     ![Kibana Discover Dashboard](../../img/operations/Kibana_Discover_Dashboard.png)
 
@@ -57,7 +58,7 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
     console.hostname: x3000c0s19b4n0 2020-10-09 15:11:39 Keepalived_vrrp[38]: bogus VRRP packet received on bond0.nmn0 !!!
     ```
 
-1. Enter **Search** terms for the specific console component name (xname) using the `console.hostname: XNAME` string.
+1. Enter **Search** terms for the specific console component name (xname) using the `"console.hostname: XNAME"` string.
 
 1. Click the time range drop-down menu to select the time period for which logs are displayed.
 

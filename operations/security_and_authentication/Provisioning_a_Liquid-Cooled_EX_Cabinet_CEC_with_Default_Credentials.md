@@ -12,17 +12,17 @@ in the Slingshot product documentation. Refer to  "Change Rosetta Login and Redf
 - Physical access to the CEC LCD panel to enable privileged command mode. The CEC does not enable users to set, display, or clear the password hash in restricted command mode.
 - A laptop with a terminal program such as Netcat (`nc`), `telnet`, or PuTTY that supports `10/100Mb` IPv6 Ethernet connectivity to the CEC Ethernet port is required.
 - A generated SHA-512 hash for the CEC credentials:
-  - The `passhash` tool that is installed on the CMMs can be used to generate a SHA-512 password hash. This HPE tool is provided for convenience, but any tool
-    that generates an SHA-512 hash that is compatible with `glibc` can be used. The salt portion must be between 8 and 16 chars inclusive. The CEC does not support
-    the optional "`rounds=`" parameter in the hash.
-  - See the `man 3 crypt` page for a description: `https://man7.org/linux/man-pages/man3/crypt.3.html`
+    - The `passhash` tool that is installed on the CMMs can be used to generate a SHA-512 password hash. This HPE tool is provided for convenience, but any tool
+      that generates an SHA-512 hash that is compatible with `glibc` can be used. The salt portion must be between 8 and 16 chars inclusive. The CEC does not support
+      the optional "`rounds=`" parameter in the hash.
+    - See the `man 3 crypt` page for a description: `https://man7.org/linux/man-pages/man3/crypt.3.html`
 
   ```screen
   passhash PASSWORD
   $6$v5YlqfghB$scBci.GbT8...
   ```
 
- > **`NOTE`**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
+ > **NOTE**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
 
 ## Procedure
 
@@ -49,7 +49,7 @@ in the Slingshot product documentation. Refer to  "Change Rosetta Login and Redf
 
    - Enter return a few times to start the connection.
 
-   > **`NOTE`**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow
+   > **NOTE**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow
    > on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection.
    >
    >  ![CEC Front Panel Controls](../../img/CEC_Display_Controls_CEC_Actions.svg)
@@ -97,7 +97,7 @@ in the Slingshot product documentation. Refer to  "Change Rosetta Login and Redf
     set_hash $6$v5YlqxKB$scBci.GbT8...
     ```
 
-  > **`NOTE`**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
+  > **NOTE**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
 
 1. Exit privileged command mode.
 

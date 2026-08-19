@@ -46,10 +46,10 @@ For more information on complex host targets, see the
     - include_role:
         role: cos-services-install
 
-- name: Node personalization play  
+- name: Node personalization play
   hosts: Management_Worker:!cfs_image
   tasks:
-    - include_role: 
+    - include_role:
         role: cos-services-restart
 ```
 

@@ -112,7 +112,7 @@ This procedure requires administrative privileges.
 
         The BMC username and password must be known for this command to work.
 
-        > **`NOTE`** `read -s` is used to prevent the password from appearing in the command history.
+        > **NOTE** `read -s` is used to prevent the password from appearing in the command history.
 
         ```bash
         IPMI_USERNAME=root

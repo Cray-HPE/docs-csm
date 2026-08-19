@@ -5,9 +5,9 @@ product stream installer.
 
 * [Prerequisites](#prerequisites)
 * [Overview](#overview)
-* [Remove Slingshot Diagnostics RPM From Default UAN Recipe](#remove-slingshot-diagnostics-rpm-from-default-uan-recipe)
-* [Build the UAN Image Automatically Using IMS](#build-the-uan-image-automatically-using-ims)
-* [Build the UAN Image By Customizing It Manually](#build-the-uan-image-by-customizing-it-manually)
+* [Remove Slingshot Diagnostics RPM from default UAN recipe](#remove-slingshot-diagnostics-rpm-from-default-uan-recipe)
+* [Build the UAN image automatically using IMS](#build-the-uan-image-automatically-using-ims)
+* [Build the UAN image by customizing it manually](#build-the-uan-image-by-customizing-it-manually)
 
 ## Prerequisites
 
@@ -16,14 +16,14 @@ product stream installer.
 
 ## Overview
 
-The Cray EX User Access Node \(UAN\) recipe currently requires the Slingshot Diagnostics package, which is not installed with the UAN product
+The Cray EX User Access Node (UAN) recipe currently requires the Slingshot Diagnostics package, which is not installed with the UAN product
 itself. Therefore, the UAN recipe can only be built after either the Slingshot product is installed, or the Slingshot Diagnostics package is
 removed from the recipe.
 
 First, determine if the Slingshot product stream is installed on the HPE Cray EX system. The Slingshot Diagnostics RPM must be removed from
 the default recipe if the Slingshot product is not installed.
 
-## Remove Slingshot Diagnostics RPM From Default UAN Recipe
+## Remove Slingshot Diagnostics RPM from default UAN recipe
 
 This procedure does not need to be followed if the Slingshot package is installed.
 
@@ -45,7 +45,7 @@ This procedure does not need to be followed if the Slingshot package is installe
 1. Perform the [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md) procedure in order to build the UAN image
    from the modified recipe. Use the `id` of the new image recipe.
 
-## Build the UAN Image Automatically Using IMS
+## Build the UAN image automatically using IMS
 
 This procedure does not need to be followed if choosing to build the UAN image manually.
 
@@ -81,7 +81,7 @@ This procedure does not need to be followed if choosing to build the UAN image m
 1. Using the saved IMS recipe ID, follow the [Build an Image Using IMS REST Service](Build_an_Image_Using_IMS_REST_Service.md) procedure to
    build the UAN image.
 
-## Build the UAN Image By Customizing It Manually
+## Build the UAN image by customizing it manually
 
 This procedure does not need to be followed if the previous procedure was used to build the UAN image automatically.
 

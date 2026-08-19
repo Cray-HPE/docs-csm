@@ -4,7 +4,7 @@
 
 Audit logs are used to monitor the system and search for suspicious behavior.
 Host and Kubernetes API audit logging can be enabled to produce extra audit logs for analysis.
-Enabling audit logging is optional. If enabled it generates some load and data on the non-compute nodes \(NCNs\).
+Enabling audit logging is optional. If enabled it generates some load and data on the non-compute nodes (NCNs).
 
 By default, host and Kubernetes API audit logging are not enabled.
 It is not required for both to be enabled or disabled at the same time.
@@ -17,12 +17,12 @@ The Kubernetes API audit logs are stored in the `/var/log/audit/kl8s/apiserver` 
 Kubernetes API audit logging uses a maximum of 1GB on each master NCN when using log rotation settings.
 
 * [Enable or disable audit logging for host and Kubernetes APIs](#enable-or-disable-audit-logging-for-host-and-kubernetes-apis)
-  * [During CSM install, from the PIT node](#enable-audit-logging-during-csm-install-from-the-pit-node)
-    * [Use `csi` tool](#use-csi-tool)
-    * [Edit `system_config.yaml`](#edit-system_configyaml)
-  * [After CSM install](#enable-audit-logging-after-csm-install)
-    * [Use `csi` tool from `ncn-m001`](#use-csi-tool-from-ncn-m001)
-    * [Modify BSS from a Kubernetes NCN](#modify-bss-from-a-kubernetes-ncn)
+    * [During CSM install, from the PIT node](#enable-audit-logging-during-csm-install-from-the-pit-node)
+        * [Use `csi` tool](#use-csi-tool)
+        * [Edit `system_config.yaml`](#edit-system_configyaml)
+    * [After CSM install](#enable-audit-logging-after-csm-install)
+        * [Use `csi` tool from `ncn-m001`](#use-csi-tool-from-ncn-m001)
+        * [Modify BSS from a Kubernetes NCN](#modify-bss-from-a-kubernetes-ncn)
 * [Verify that audit logging is enabled](#verify-that-audit-logging-is-enabled)
 * [Restart NCNs to make settings take effect](#restart-ncns-in-order-to-make-settings-take-effect)
 
@@ -43,7 +43,7 @@ For each of the following options, only enable the desired level of audit loggin
 (`pit#`) To update the audit log settings during the installation, use one of the following options:
 
 * [Use `csi` tool](#use-csi-tool)
-* [Edit `system_config.yaml`](#edit-systemconfigyaml)
+* [Edit `system_config.yaml`](#edit-system_configyaml)
 
 #### Use `csi` tool
 
@@ -106,6 +106,14 @@ Choose either of the following options:
    ```
 
    It is also possible to enable audit logging without `csi`. See [Modify BSS from a Kubernetes NCN](#modify-bss-from-a-kubernetes-ncn).
+
+1. Acquire an authentication token.
+
+   ```console
+   export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client \
+           -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
+           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
+   ```
 
 1. Enable audit logging.
 

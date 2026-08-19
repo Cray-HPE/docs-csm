@@ -1,7 +1,8 @@
 # Ansible Inventory
 
-The Configuration Framework Service \(CFS\) provides several options for targeting nodes or boot images for configuration by Ansible. The contents of the Ansible inventory determine which nodes are
-available for configuration in each CFS session and how default configuration values can be customized. For more information on what it means to define an inventory, see
+The Configuration Framework Service (CFS) provides several options for targeting nodes or boot images for configuration by Ansible.
+The contents of the Ansible inventory determine which nodes are available for configuration in each CFS session and how default configuration values can be customized.
+For more information on what it means to define an inventory, see
 [Specifying Hosts and Groups](Specifying_Hosts_and_Groups.md).
 
 The following are the inventory options provided by CFS:
@@ -12,8 +13,9 @@ The following are the inventory options provided by CFS:
 
 ## Dynamic inventory and host groups
 
-Dynamic inventory is the default inventory when creating a CFS session. CFS automatically generates an Ansible hosts file with data provided by the Hardware State Manager \(HSM\) when using a dynamic
-inventory. CFS automatically generates Ansible hosts groups for each group defined in HSM and creates Ansible host groups for nodes based on hardware roles and sub-roles.
+Dynamic inventory is the default inventory when creating a CFS session.
+CFS automatically generates an Ansible hosts file with data provided by the Hardware State Manager (HSM) when using a dynamic inventory.
+CFS automatically generates Ansible hosts groups for each group defined in HSM and creates Ansible host groups for nodes based on hardware roles and sub-roles.
 
 (`ncn-mw#`) Retrieve a list of HSM groups with the following command:
 
@@ -61,8 +63,9 @@ information.
 
 ## Image customization
 
-Inventory for image customization is also provided by the user. This type of configuration session does not target live nodes, so HSM has no knowledge of either the host or the groups it belongs to.
-Instead, when creating a configuration session meant to customize a boot image, the Image Management Service \(IMS\) image IDs are used as hosts and grouped according to user input to the session
-creation.
+Inventory for image customization is also provided by the user.
+This type of configuration session does not target live nodes, so HSM has no knowledge of either the host or the groups it belongs to.
+Instead, when creating a configuration session meant to customize a boot image,
+the Image Management Service (IMS) image IDs are used as hosts and grouped according to user input to the session creation.
 
 See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for more information.

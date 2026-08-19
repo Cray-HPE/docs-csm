@@ -36,10 +36,10 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
 `prepare-images` and `update-cfs-config` stages respectively; see the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation for details on how to query the images and CFS configurations and see the
 [update-cfs-config](../stages/update_cfs_config.md) documentation for details about how the CFS configuration is updated.
 
-**`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
+**NOTE** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
-**`IMPORTANT`** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN master nodes. If CSM is not
+**IMPORTANT** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN master nodes. If CSM is not
 being upgraded, then NCN master nodes will not be upgraded with new images and will be updated by the CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md) only. If CSM is being
 upgraded, the NCN master nodes will be upgraded with new images and the new CFS configuration. Both procedures use the same steps for rebuilding/upgrading NCN worker nodes and personalizing NCN storage nodes. Select **one** of the following
 procedures based on whether or not CSM is being upgraded:
@@ -89,7 +89,7 @@ Refer to that table and any corresponding product documents before continuing to
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Master
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
         See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m002` booted successfully with the desired image and CFS configuration.
@@ -121,7 +121,7 @@ Refer to that table and any corresponding product documents before continuing to
         iuf -a "${ACTIVITY_NAME}" run -r management-nodes-rollout --limit-management-rollout Management_Master
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
 
     1. Use `kubectl` to remove the `iuf-prevent-rollout=true` label from `ncn-m002`.
 
@@ -189,7 +189,7 @@ Refer to that table and any corresponding product documents before continuing to
         /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-master-nodes.sh ncn-m001
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
         See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 1. Follow the steps documented in [Stage 1.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_1.md#stage-14---upgrade-weave-and-multus)

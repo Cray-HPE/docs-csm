@@ -11,7 +11,7 @@ The following is a high-level overview of the boot sequence for compute nodes:
     1. The name of the file to download from the TFTP server.
 1. The node's PXE sends a TFTP request to the TFTP server.
 1. If the TFTP server has the requested file, it sends it to the node's PXE. In this case, the file name is `ipxe.efi`,
-   which is a Cray-crafted iPXE binary that points at the Boot Script Service \(BSS\). The BSS will then serve up
+   which is a Cray-crafted iPXE binary that points at the Boot Script Service (BSS). The BSS will then serve up
    another iPXE boot script.
 1. The `ipxe.efi` file downloads another iPXE boot script from the BSS.
 

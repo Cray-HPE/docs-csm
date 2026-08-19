@@ -8,8 +8,6 @@ The user performing this procedure needs to have access permission to the `cray-
 
 ## Procedure
 
-> **`NOTE`** this procedure has changed since the CSM 0.9 release.
-
 1. Log on to a Kubernetes master or worker node.
 
 1. (`ncn-mw#`) Find the `cray-console-operator` pod.

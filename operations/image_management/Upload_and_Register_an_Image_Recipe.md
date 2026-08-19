@@ -12,11 +12,11 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-* System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCNs\) and include the following deployment:
-    * `cray-ims`, the Image Management Service \(IMS\)
-* The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
-* A token providing Simple Storage Service \(S3\) credentials has been generated.
+* The Cray command line interface (CLI) tool is initialized and configured on the system.
+* System management services (SMS) are running in a Kubernetes cluster on non-compute nodes (NCNs) and include the following deployment:
+    * `cray-ims`, the Image Management Service (IMS)
+* The NCN Certificate Authority (CA) public key has been properly installed into the CA cache for this system.
+* A token providing Simple Storage Service (S3) credentials has been generated.
 
 ## Limitations
 
@@ -78,7 +78,7 @@ Download and expand recipe archives from S3 and IMS. Modify and upload a recipe 
     * Edit the `config.xml` file to modify the name of the recipe, the set of RPM packages being installed, or the RPM repositories being
       referenced.
     * Kiwi-NG supports multiple ways to modify the post-install configuration of the image root, including some shell scripts
-      \(`config.sh`, `images.sh`\) and the root/overlay directory. To learn how these can be used to add specific configuration to the image
+      (`config.sh`, `images.sh`) and the root/overlay directory. To learn how these can be used to add specific configuration to the image
       root, see the [Kiwi-NG documentation](https://doc.opensuse.org/projects/kiwi/doc/).
     * Recipes built by IMS are required to reference repositories that are hosted on the NCN by the Nexus service.
 
@@ -203,7 +203,7 @@ the following procedures must all be completed.
    ```
 
    IMS will template the indicated files "in place" -- that is, the listed file will be replaced with the templated copy.
-   **`NOTE`** Only files listed under the `template_files` key will be templated by IMS.
+   **NOTE** Only files listed under the `template_files` key will be templated by IMS.
 
 1. For each indicated file above, add appropriate Jinja2 variables where required to enable the results that are sought.
    In the example below, the Jinja2 variable `{{ CSM_RELEASE_VERSION }}` is used to help identify the fully qualified
@@ -221,7 +221,7 @@ the following procedures must all be completed.
    </repository>
    ```
 
-   **`NOTE`** The repository referenced above is for documentation purposes only and may not actually exist.
+   **NOTE** The repository referenced above is for documentation purposes only and may not actually exist.
 
 1. Create a `tgz` archive of the image recipe.
 

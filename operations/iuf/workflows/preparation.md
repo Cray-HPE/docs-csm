@@ -36,7 +36,7 @@ Once this step has completed:
 
 ## 2. Use of `iuf activity`
 
-**`NOTE`** This section is informational only. There are no operations to perform.
+**NOTE** This section is informational only. There are no operations to perform.
 
 IUF can record time spent performing operations associated with an IUF activity. While `iuf` automatically records all `iuf run` operations within an IUF activity, any other administrative operations can also be recorded within an
 IUF activity by using [`iuf activity`](../IUF.md#activity). The following example shows how to record the time spent downloading HPE software and associate it with an IUF activity:

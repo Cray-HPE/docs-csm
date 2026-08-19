@@ -100,7 +100,7 @@ the values in the Ansible role. See `roles/csm.password/README.md` in the reposi
    > **Any fields omitted from the `write` command will be cleared from Vault.**
 
     * The `vault login` command will request the token value from the output of the previous step.
-    * **`NOTE`**: It is important to enclose the hash in single quotes to preserve any special characters.
+    * **NOTE**: It is important to enclose the hash in single quotes to preserve any special characters.
     * The `vault read` command allows the administrator to verify that the contents of the secret were stored correctly.
 
     ```bash
@@ -143,7 +143,7 @@ the values in the Ansible role. See `roles/csm.ssh_keys/README.md` in the reposi
     * The `vault login` command will request the token value from the output of the previous step.
     * The `ssh_private_key` and `ssh_public_key` fields should contain the exact content from the
       `id_rsa` and `id_rsa.pub` files (if using RSA key types).
-    * **`NOTE`**: It is important to enclose the key content in single quotes to preserve any special characters.
+    * **NOTE**: It is important to enclose the key content in single quotes to preserve any special characters.
     * The `vault read` command allows the administrator to verify that the contents of the secret were stored correctly.
 
     ```bash
@@ -177,7 +177,7 @@ the values in the Ansible role. See `roles/csm.ssh_keys/README.md` in the reposi
    > **Any fields omitted from the `write` command will be cleared from Vault.**
     * The `vault login` command will request the token value from the output of the previous step.
     * The `ssh_config` field should contain the exact content from the SSH configuration file.
-    * **`NOTE`**: It is important to enclose the key content in single quotes to preserve any special characters.
+    * **NOTE**: It is important to enclose the key content in single quotes to preserve any special characters.
     * The `vault read` command allows the administrator to verify that the contents of the secret were stored correctly.
 
     ```bash

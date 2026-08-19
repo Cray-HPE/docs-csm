@@ -1,9 +1,11 @@
 # Delete or Recover Deleted IMS Content
 
-The Image Management System \(IMS\) manages user-supplied SSH public keys, customizable image recipes, images, and IMS jobs that are used to build or customize images.
-In previous versions of IMS, deleting an IMS public key, recipe, or image resulted in that item being permanently deleted. Additionally, IMS recipes and images store
-linked artifacts in the Simple Storage Service \(S3\) datastore. These artifacts are referenced by the IMS recipe and image records. The default option when deleting
-an IMS recipe and image record was to also delete these linked S3 artifacts.
+The Image Management System (IMS) manages user-supplied SSH public keys, customizable image recipes,
+images, and IMS jobs that are used to build or customize images. In previous versions of IMS, deleting
+an IMS public key, recipe, or image resulted in that item being permanently deleted. Additionally, IMS
+recipes and images store linked artifacts in the Simple Storage Service (S3) datastore. These artifacts
+are referenced by the IMS recipe and image records. The default option when deleting an IMS recipe and
+image record was to also delete these linked S3 artifacts.
 
 ```bash
 cray ims recipes list --format toml
@@ -41,20 +43,23 @@ path = "/4e78488d-4d92-4675-9d83-97adfc17cb19/sles_15_image.squashfs"
 etag = ""
 ```
 
-Deleting an IMS image can create a situation where boot artifacts referenced by a Boot Orchestration Service \(BOS\) session template no longer exist, making that
-template unable to boot. Previously, to recover from this situation, an administrator would have had to rebuild the boot image using IMS and/or reinstall the prebuilt
-image from the installer, reapply any Cray and site customizations, and recreate a new BOS template for the IMS image.
+Deleting an IMS image can create a situation where boot artifacts referenced by a Boot Orchestration Service (BOS)
+session template no longer exist, making that template unable to boot. Previously, to recover from this situation,
+an administrator would have had to rebuild the boot image using IMS and/or reinstall the prebuilt image from the installer,
+reapply any Cray and site customizations, and recreate a new BOS template for the IMS image.
 
-New functionality has been added to IMS to enable administrators to soft delete, recover \(undelete\), or hard delete public keys, recipes, and images. The added
-functionality provides a way to recover IMS items that were mistakenly deleted. There is no undelete operation for IMS jobs.
+New functionality has been added to IMS to enable administrators to soft delete, recover (undelete), or hard delete
+public keys, recipes, and images. The added functionality provides a way to recover IMS items that were mistakenly
+deleted. There is no undelete operation for IMS jobs.
 
-Soft deleting an IMS record effectively removes the record being deleted from the default collection, and moves it to a new deleted collection. Recovering a deleted
-IMS record \(undelete operation\) moves the IMS record from the deleted collection back to the collection of available items. Hard deleting an IMS record permanently
-deletes it from the deleted collection.
+Soft deleting an IMS record effectively removes the record being deleted from the default collection, and moves it
+to a new deleted collection. Recovering a deleted IMS record (undelete operation) moves the IMS record from the
+deleted collection back to the collection of available items. Hard deleting an IMS record permanently deletes it from
+the deleted collection.
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+* The Cray command line interface (CLI) tool is initialized and configured on the system.
   See [Configure the Cray CLI](../configure_cray_cli.md).
 * IMS and Nexus are running.
 
@@ -62,14 +67,15 @@ deletes it from the deleted collection.
 
 Use the `cray` CLI utility to delete either soft delete or hard delete an IMS public key, recipe, or image.
 
-Soft deleting an IMS public key, recipe, or image removes the records from the collection of available items. Hard deleting permanently removes the item from the deleted collection.
-Additionally, any linked artifacts are also permanently removed.
+Soft deleting an IMS public key, recipe, or image removes the records from the collection of available items.
+Hard deleting permanently removes the item from the deleted collection. Additionally, any linked artifacts are also
+permanently removed.
 
 Deleting an IMS public key, recipe, or image record performs the following actions:
 
 1. The IMS records being deleted are moved from the collection of available items to a new deleted collection. Any newly created records within the deleted collection will have the
    same IMS ID values as before being moved there.
-1. Any Simple Storage Service \(S3\) artifacts that are associated with the record or records being deleted are renamed within their S3 buckets so as to make them unavailable under
+1. Any Simple Storage Service (S3) artifacts that are associated with the record or records being deleted are renamed within their S3 buckets so as to make them unavailable under
    their original key name.
 
 ### Delete procedure
@@ -176,7 +182,7 @@ Use the IMS undelete command to update the records within the deleted collection
 Recovering a deleted IMS public key, recipe, or image record uses the following workflow:
 
 1. The records being undeleted are moved to from the deleted collection to the collection of available items. Any restored records will have the same IMS ID values as before being undeleted.
-1. Any Simple Storage Service \(S3\) artifacts that are associated with the records being undeleted are renamed within their S3 buckets so as to make them available under their original key name.
+1. Any Simple Storage Service (S3) artifacts that are associated with the records being undeleted are renamed within their S3 buckets so as to make them available under their original key name.
 
 ### Undelete procedure
 

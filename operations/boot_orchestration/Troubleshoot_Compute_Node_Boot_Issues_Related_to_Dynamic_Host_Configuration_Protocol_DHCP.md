@@ -1,4 +1,4 @@
-# Troubleshoot Compute Node Boot Issues Related to Dynamic Host Configuration Protocol \(DHCP\)
+# Troubleshoot Compute Node Boot Issues Related to Dynamic Host Configuration Protocol (DHCP)
 
 DHCP issues can result in node boot failures. This procedure helps investigate and resolve such issues.
 
@@ -7,6 +7,8 @@ DHCP issues can result in node boot failures. This procedure helps investigate a
 - This procedure requires administrative privileges.
 
 ## Procedure
+
+1. Log in to a non-compute node (NCN) as root.
 
 1. (`ncn-mw#`) Check that the DHCP service is running.
 
@@ -56,5 +58,6 @@ DHCP issues can result in node boot failures. This procedure helps investigate a
 
 ## Troubleshooting
 
-If the DHCP discover request is not visible on the NCN, it may be due to a firewall issue. If the DHCP discover request is not visible inside the pod,
-double check if the request was issued over the correct interface for the Node Management Network \(NMN\). If it was, it could indicate a firewall issue.
+If the DHCP Discover request is not visible on the NCN, it may be due to a firewall issue. If the DHCP
+Discover request is not visible inside the pod, double check if the request was issued over the correct
+interface for the Node Management Network (NMN). If it was, it could indicate a firewall issue.

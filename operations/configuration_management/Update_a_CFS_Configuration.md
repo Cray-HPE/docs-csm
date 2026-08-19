@@ -1,12 +1,12 @@
 # Update a CFS Configuration
 
-Modify a Configuration Framework Service \(CFS\) configuration by specifying the JSON of the configuration and its layers. Use the
+Modify a Configuration Framework Service (CFS) configuration by specifying the JSON of the configuration and its layers. Use the
 `cray cfs configurations update` command, similar to creating a configuration.
 
 ## Prerequisites
 
 * A CFS configuration has been created.
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+* The Cray command line interface (CLI) tool is initialized and configured on the system.
   See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure

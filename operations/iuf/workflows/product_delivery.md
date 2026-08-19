@@ -62,7 +62,7 @@ Once this step has completed:
 
 ## 4. Perform manual product delivery operations
 
-**`NOTE`** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
+**NOTE** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
 
 Some products provide instructions for delivering third-party content to the system outside of IUF. If this content is desired, refer to the following documentation for instructions and execute the procedures before continuing
 with the workflow.
