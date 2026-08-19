@@ -22,7 +22,7 @@ The following covers redeploying the Keycloak service and restoring the data.
    1. List the Postgres logical backups by date.
 
       ```bash
-      cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/keycloak")) | "\(.LastModified) \(.Key)"'
+      cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/keycloak")) | "(.LastModified) (.Key)"'
       ```
 
       Example output:

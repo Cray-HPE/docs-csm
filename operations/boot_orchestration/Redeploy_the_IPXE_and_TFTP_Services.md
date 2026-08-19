@@ -1,6 +1,6 @@
 # Redeploy the iPXE and TFTP Services
 
-Redeploy the iPXE and TFTP services if a pod with a `ceph-fs` Process Virtualization Service \(PVS\) on a Kubernetes worker node is causing a `HEALTH_WARN` error.
+Redeploy the iPXE and TFTP services if a pod with a `ceph-fs` Process Virtualization Service (PVS) on a Kubernetes worker node is causing a `HEALTH_WARN` error.
 
 Resolve issues with `ceph-fs` and `ceph-mds` by restarting the iPXE and TFTP services. The Ceph cluster will return to a healthy state after this procedure.
 

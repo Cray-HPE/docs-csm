@@ -1,6 +1,6 @@
 # Automatic Session Deletion with `session_ttl`
 
-By default, the Configuration Framework Service \(CFS\) will delete completed CFS sessions whose start date was more than seven days prior.
+By default, the Configuration Framework Service (CFS) will delete completed CFS sessions whose start date was more than seven days prior.
 Kubernetes jobs associated with these sessions will also be deleted as part of this process.
 This is done to ensure that CFS sessions do not accumulate and eventually adversely affect the performance of the Kubernetes cluster.
 

@@ -12,16 +12,16 @@ see [Set NCN Image Root Password, SSH Keys, and Timezone](Change_NCN_Image_Root_
 
 - [Overview](#overview)
 - [SSH keys](#ssh-keys)
-  - [Script-generated keys](#script-generated-keys)
-  - [Administrator-provided keys](#administrator-provided-keys)
+    - [Script-generated keys](#script-generated-keys)
+    - [Administrator-provided keys](#administrator-provided-keys)
 - [Password](#password)
-  - [Use PIT node password](#use-pit-node-password)
-  - [Enter password and generate hash](#enter-password-and-generate-hash)
+    - [Use PIT node password](#use-pit-node-password)
+    - [Enter password and generate hash](#enter-password-and-generate-hash)
 - [Timezone](#timezone)
 - [Examples](#examples)
-  - [Example 1: New keys, copy PIT password, keep UTC](#example-1--new-keys-copy-pit-password-keep-utc)
-  - [Example 2: Provide keys, prompt for password, change timezone](#example-2--provide-keys-prompt-for-password-change-timezone)
-  - [Example 3: New keys, copy PIT password, keep UTC, no prompting](#example-3--new-keys-copy-pit-password-keep-utc-no-prompting)
+    - [Example 1: New keys, copy PIT password, keep UTC](#example-1-new-keys-copy-pit-password-keep-utc)
+    - [Example 2: Provide keys, prompt for password, change timezone](#example-2-provide-keys-prompt-for-password-change-timezone)
+    - [Example 3: New keys, copy PIT password, keep UTC, no prompting](#example-3-new-keys-copy-pit-password-keep-utc-no-prompting)
 - [Cleanup](#cleanup)
 
 ## Overview
@@ -58,8 +58,8 @@ To have the script generate the SSH keys automatically, it must be provided with
 
 - To view the complete list of supported `ssh-keygen` options, view the script usage statement by running it with the `-h` argument.
 - If the `-N` option is not used to specify the passphrase, then the script will prompt for the passphrase when it generates the keys.
-  - Even specifying an empty passphrase will prevent being prompted to enter the passphrase during script execution.
-    See [Example 3](#example-3--new-keys-copy-pit-password-keep-utc-no-prompting).
+    - Even specifying an empty passphrase will prevent being prompted to enter the passphrase during script execution.
+      See [Example 3](#example-3-new-keys-copy-pit-password-keep-utc-no-prompting).
 
 ### Administrator-provided keys
 
@@ -69,8 +69,8 @@ To provide SSH keys to the script, specify the directory containing them with th
 - The entire contents of this directory will be copied into the `/root/.ssh` directory in the images.
 - After copying the directory contents, the script updates the `/root/.ssh/authorized_keys` file in the images
   with the new public keys.
-  - This is usually the desired behavior, but it can be overridden by specifying the `-a` argument. In that
-    case, the script will **not** update the `authorized_keys` file after copying the directory contents.
+    - This is usually the desired behavior, but it can be overridden by specifying the `-a` argument. In that
+      case, the script will **not** update the `authorized_keys` file after copying the directory contents.
 
 ## Password
 
@@ -128,7 +128,7 @@ copies the `root` user password from the PIT node. It does not change the timezo
 export SQUASHFS_ROOT_PW_HASH=$(awk -F':' /^root:/'{print $2}' < /etc/shadow)
 KUBERNETES_VERSION="$(find ${CSM_PATH}/images/kubernetes -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
 CEPH_VERSION="$(find ${CSM_PATH}/images/storage-ceph -name '*.squashfs' -exec basename {} .squashfs \; | awk -F '-' '{print $(NF-1)}')"
-   
+
 $NCN_MOD_SCRIPT -p \
                 -t rsa \
                 -k "${PITDATA}/data/k8s/${KUBERNETES_VERSION}/kubernetes-${KUBERNETES_VERSION}-$(uname -i).squashfs" \

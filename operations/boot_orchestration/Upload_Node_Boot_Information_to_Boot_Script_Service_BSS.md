@@ -77,7 +77,7 @@ Set variables identifying the boot artifacts and parameters.
 1. (`ncn-mw#`) Set `ETAG` to the `etag` of the `rootfs` in [S3][s3].
 
     ```bash
-    S3_BUCKET_KEY=$(echo "${ROOTFS}" | sed 's#^s3://\([^/]\+\)/\(.*rootfs\)$#\1 \2#')
+    S3_BUCKET_KEY=$(echo "${ROOTFS}" | sed 's#^s3://([^/]\+)/(.*rootfs)$#\1 \2#')
     ETAG=$(cray artifacts describe ${S3_BUCKET_KEY} --format json | jq -r '.artifact.ETag' | tr -d '"')
     ```
 
@@ -235,7 +235,7 @@ cray bss bootparameters list
 
 <!-- markdownlint-disable MD053 -->
 <!---
-    For references that are likely to appear on a lot of pages (glossary references, for example), 
+    For references that are likely to appear on a lot of pages (glossary references, for example),
     we allow definitions for entries that are not used on the page, as a convenience.
 -->
 

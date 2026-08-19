@@ -22,7 +22,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
 1. Perform an install of CSM.
 
-   **`NOTE`** Skip this step if CSM is already installed.
+   **NOTE** Skip this step if CSM is already installed.
 
    Follow the [Cray System Management Install](../../../install/README.md) instructions.
 
@@ -63,7 +63,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
    Follow the IUF [Validate Deployment](validate_deployment.md) instructions.
 
-   **`NOTE`** After completing this step, run the [Validate CSM Health](../../validate_csm_health.md) checks, as well as any product-specific health checks for items installed or upgraded during this activity.
+   **NOTE** After completing this step, run the [Validate CSM Health](../../validate_csm_health.md) checks, as well as any product-specific health checks for items installed or upgraded during this activity.
 
 1. Perform managed node rollout.
 

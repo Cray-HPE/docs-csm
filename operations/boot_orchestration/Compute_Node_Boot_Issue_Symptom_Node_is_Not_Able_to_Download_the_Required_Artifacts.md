@@ -1,16 +1,16 @@
-# Compute Node Boot Issue Symptom: Node is Not Able to Download the Required Artifacts
+# Compute Node Boot Issue Symptom: Node Is Not Able to Download the Required Artifacts
 
-If either or both of the `kernel` or the `initrd` boot artifacts are missing from the artifact repository, Boot Script Service \(BSS\), or both, the node will not be able to download the required boot artifacts and will fail to boot.
+If either or both of the `kernel` or the `initrd` boot artifacts are missing from the artifact repository, Boot Script Service (BSS), or both, the node will not be able to download the required boot artifacts and will fail to boot.
 
-### Symptoms
+## Symptoms
 
-The node's console or log will display lines beginning with, ''`Could not start download`''. Refer to the image below for an example of this error message.
+The node's console or log will display lines beginning with `Could not start download`. Refer to the image below for an example of this error message.
 
 ![BSS Missing Artifact](../../img/operations/BSS_Missing_an_Artifact.png)
 
-### Problem Detection
+## Problem detection
 
-Use the following command from a non-compute node \(NCN\) to see which boot artifacts BSS assumes as those used for booting the node.
+Use the following command from a non-compute node (NCN) to see which boot artifacts BSS assumes as those used for booting the node.
 
 ```bash
 cray bss bootparameters list
@@ -18,7 +18,7 @@ cray bss bootparameters list
 
 Each boot artifact has a download URL, as shown in the following example output:
 
-```text
+```toml
 [[results]]
 kernel = "s3://boot-images/dc87a741-f7cc-4167-afae-592c5a8ca7ec/vmlinuz-4.12.14-197.29_9.1.14-cray_shasta_c"
 
@@ -57,11 +57,10 @@ Use the artifact's S3 key to download it:
 cray artifacts get S3_BUCKET S3_OBJECT_KEY DOWNLOAD_FILE_PATH
 ```
 
-For example, if s3://boot-images/97b548b9-2ea9-45c9-95ba-dfc77e5522eb/initrd is the S3 URI for the file initrd, run the following command:
+For example, if `s3://boot-images/97b548b9-2ea9-45c9-95ba-dfc77e5522eb/initrd` is the S3 URI for the file initrd, then run the following command:
 
 ```bash
-cray artifacts get boot-images \
-97b548b9-2ea9-45c9-95ba-dfc77e5522eb/initrd initrd
+cray artifacts get boot-images 97b548b9-2ea9-45c9-95ba-dfc77e5522eb/initrd initrd
 ```
 
 This command will return 404 errors if the specified object does not exist in the S3 bucket.
@@ -69,4 +68,3 @@ This command will return 404 errors if the specified object does not exist in th
 ### Resolution
 
 Ensure that the required boot artifacts are stored in the artifact repository and/or BSS. If the artifact's name is different than what is already in BSS, then BSS needs to be updated to match.
-

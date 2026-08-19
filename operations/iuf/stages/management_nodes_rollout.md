@@ -7,7 +7,7 @@ similar to a rebuild, but it intentionally does not clear all information off of
 account for the necessary minimum number of critical software instances running on the nodes to ensure
 the `management-nodes-rollout` stage operates without impacting software availability.
 
-**`NOTE`** `management-nodes-rollout` has a different procedure depending on whether or not CSM itself is being
+**NOTE** `management-nodes-rollout` has a different procedure depending on whether or not CSM itself is being
 upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes, but both procedures use
 the same steps for rebuilding/upgrading NCN worker nodes.
 
@@ -77,7 +77,7 @@ Management master and storage nodes only need to upgraded when performing a CSM 
 then NCN master nodes should not be upgraded with a new image and should only be configured with the new CFS configuration
 created during the [update-cfs-config](../stages/update_cfs_config.md) stage.
 
-**`NOTE`** In CSM 1.7 and later, the `management-nodes-rollout` stage supports a new rollout strategy called  `reboot` which performs a controlled reboot of worker and storage nodes only,
+**NOTE** In CSM 1.7 and later, the `management-nodes-rollout` stage supports a new rollout strategy called  `reboot` which performs a controlled reboot of worker and storage nodes only,
 please refer to [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md) for instructions.
 
 ## Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF
@@ -117,7 +117,7 @@ workflow will continue and no new workflow will be created.
 If it is necessary to start an entirely new worker rebuild workflow after a previous worker rebuild workflow failed, the
 failed workflow must be deleted from Kubernetes first.
 
-**`WARNING`** Deleting a workflow will delete information about the state of that workflow and the steps that have been
+**WARNING** Deleting a workflow will delete information about the state of that workflow and the steps that have been
 completed. Deleting a partially complete workflow should be done cautiously and only if needed.
 
 To delete a failed Argo workflow, complete the following steps.

@@ -65,7 +65,7 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
       kubectl -n kube-system get secret sealed-secrets-key -o jsonpath='{.data.tls\.key}' | base64 -d - > certs/sealed_secrets.key
       ```
 
-   > **`NOTE`** All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
+   > **NOTE** All subsequent steps of this procedure should be performed within the `/root/site-init` directory created in this step.
 
 1. (`ncn-mw#`) Repopulate the `keycloak_users_localize` and `cray-keycloak` sealed secrets in the `customizations.yaml` file with the desired configuration.
 
@@ -292,7 +292,7 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
    1. Load the `openjdk` container image.
 
-      > **`NOTE`** Requires a properly configured Docker or Podman environment.
+      > **NOTE** Requires a properly configured Docker or Podman environment.
 
       ```bash
       ${CSM_DISTDIR}/hack/load-container-image.sh artifactory.algol60.net/csm-docker/stable/docker.io/library/openjdk:11-jre-slim
@@ -358,7 +358,7 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
       certificate into `cacert.pem`, or try the following commands to
       create it automatically.
 
-      > **`NOTE`** The following commands were verified using OpenSSL
+      > **NOTE** The following commands were verified using OpenSSL
       > version `1.1.1d` and use the `-nameopt RFC2253` option to ensure
       > consistent formatting of distinguished names.
       > Older versions of OpenSSL may not support
@@ -383,7 +383,7 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
 
       1. Extract the issuer's certificate using the `awk` command.
 
-         > **`NOTE`** The issuer DN is properly escaped as part of the
+         > **NOTE** The issuer DN is properly escaped as part of the
          > `awk` pattern below. If the value being used is
          > different, then be sure to escape it properly!
 
@@ -709,7 +709,7 @@ Be sure to modify the example URLs on this page by replacing `SYSTEM_DOMAIN_NAME
    1. Log in to the Keycloak UI using the `admin` user and the password obtained in the previous step.
 
       The Keycloak UI URL is typically similar to the following: `https://auth.cmn.SYSTEM_DOMAIN_NAME/keycloak`
-  
+
    1. Ensure that the selected `Realm` is `Shasta`, and not `Master`
 
    1. Click on the `Users` tab in the navigation pane on the left.
