@@ -21,9 +21,9 @@ The [Boot Orchestration Service (BOS)](../../glossary.md#boot-orchestration-serv
 UAN boots are performed in three phases:
 
 1. PXE booting an iPXE binary that will load the `initrd` of the chosen UAN image to boot.
-1. Booting the `initrd` \(dracut\) image which configures the UAN for booting the UAN image. This process consists of two phases:
-    1. Configuring the UAN node to use the [Content Projection Service \(CPS\)](../../glossary.md#content-projection-service-cps) and
-       [Data Virtualization Service \(DVS\)](../../glossary.md#data-virtualization-service-dvs).
+1. Booting the `initrd` (dracut) image which configures the UAN for booting the UAN image. This process consists of two phases:
+    1. Configuring the UAN node to use the [Content Projection Service (CPS)](../../glossary.md#content-projection-service-cps) and
+       [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs).
        These services manage the UAN image `rootfs` mounting and make that image available to the UANs.
     1. Mounting the `rootfs`.
 1. Booting the UAN image `rootfs`.
@@ -31,7 +31,7 @@ UAN boots are performed in three phases:
 ## PXE issues
 
 Most failures to PXE are the result of misconfigured network switches and/or BIOS settings. The UAN must PXE boot over the
-[Node Management Network \(NMN\)](../../glossary.md#node-management-network-nmn) and the switches must be configured to allow connectivity to the NMN. The cable for the NMN must be
+[Node Management Network (NMN)](../../glossary.md#node-management-network-nmn) and the switches must be configured to allow connectivity to the NMN. The cable for the NMN must be
 connected to the first port of the OCP card,on HPE DL325 and DL385 nodes, or to the first port of the built-in LAN-On-Motherboard (LOM), on Gigabyte nodes.
 
 ## `initrd` (dracut) issues

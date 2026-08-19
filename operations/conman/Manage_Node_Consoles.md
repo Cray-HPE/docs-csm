@@ -17,8 +17,6 @@ See [ConMan](ConMan.md) for other procedures related to remote consoles and node
 This procedure can be run from any member of the Kubernetes cluster to verify node consoles are being managed
 by ConMan and to connect to a console.
 
-**`NOTE`** this procedure has changed since the CSM 0.9 release.
-
 1. (`ncn-mw#`) Find the `cray-console-operator` pod.
 
     ```bash

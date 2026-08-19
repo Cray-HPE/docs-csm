@@ -61,7 +61,7 @@ Refer to that table and any corresponding product documents before continuing to
    Additional arguments are available to control the behavior of the `deliver-product` stage (for example, `-rv`). See the [`deliver-product` stage documentation](../stages/deliver_product.md)
    for details and adjust the example below if necessary.
 
-     **`NOTE`** When installing USS 1.1 or higher, select either Slurm or PBS Pro Products to use on the system before running this stage. This should be specified in `site_vars.yaml`.
+     **NOTE** When installing USS 1.1 or higher, select either Slurm or PBS Pro Products to use on the system before running this stage. This should be specified in `site_vars.yaml`.
      For more information, see the `deliver-product` stage details in the "Install and Upgrade Framework" section of the _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)_.
 
       (`ncn-m001#`) Execute the `deliver-product` stage. Use site variables from the `site_vars.yaml` file found in `${ADMIN_DIR}` and recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`.
@@ -84,7 +84,7 @@ Once this step has completed:
 
 ## 5. Perform manual product delivery operations
 
-**`NOTE`** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
+**NOTE** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
 
 Some products provide instructions for delivering third-party content to the system outside of IUF. If this content is desired, refer to the following documentation for instructions and execute the procedures before continuing
 with the workflow.

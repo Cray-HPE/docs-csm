@@ -1,4 +1,4 @@
-# BOS databases
+# BOS Databases
 
 * [Overview](#overview)
 * [BOS v2 databases](#bos-v2-databases)

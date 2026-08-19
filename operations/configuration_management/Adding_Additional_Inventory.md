@@ -2,7 +2,7 @@
 
 Many configuration layers may be present in a single configuration for larger systems that configure multiple Cray products.
 When common values for each of these layers need to be customized, it can be tedious to override values in each of the respective repositories.
-The CFS `additional_inventory_url` option allows for static inventory files to be automatically added to the hosts directory of the Ansible Execution Environment \(AEE\).
+The CFS `additional_inventory_url` option allows for static inventory files to be automatically added to the hosts directory of the Ansible Execution Environment (AEE).
 This allows the additional Ansible inventory information to be available to all configuration layers in a session.
 
 Additional inventory is stored in a Git repository in VCS with the inventory files in the base directory of the repository.

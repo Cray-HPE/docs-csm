@@ -24,9 +24,9 @@ The appropriate token must be retrieved from the gateway to access services on t
 
 1. Retrieve a token.
 
-    Retrieving a token depends on whether the request is based on a regular user \(as defined directly in Keycloak or backed by LDAP\) or a service account.
+    Retrieving a token depends on whether the request is based on a regular user (as defined directly in Keycloak or backed by LDAP) or a service account.
 
-    - **Resource owner password grant \(user account\)**
+    - **Resource owner password grant (user account)**
 
         In this case, the user account flow requires the username, password, and the client ID.
 
@@ -58,7 +58,7 @@ The appropriate token must be retrieved from the gateway to access services on t
 
         Use the value of `access_token` to make requests.
 
-    - **Client credentials \(service account\)**
+    - **Client credentials (service account)**
 
         The client credentials flow requires a client ID and client secret.
 

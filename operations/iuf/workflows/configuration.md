@@ -62,7 +62,7 @@ corresponding customer working branch.
 
 ### 1.2 Procedure
 
-**`NOTE`** Additional arguments are available to control the behavior of the `update-vcs-config` stage, for example `-rv`. See the [`update-vcs-config` stage
+**NOTE** Additional arguments are available to control the behavior of the `update-vcs-config` stage, for example `-rv`. See the [`update-vcs-config` stage
 documentation](../stages/update_vcs_config.md) for details and adjust the examples below if necessary.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"

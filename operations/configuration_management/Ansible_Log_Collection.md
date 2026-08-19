@@ -4,10 +4,10 @@
 * [Accessing the UI](#accessing-the-ui)
 * [Disabling ARA](#disabling-ara)
 
-## ARA Records Ansible \(ARA\)
+## ARA Records Ansible (ARA)
 
-The Ansible logs from all Configuration Framework Service \(CFS\) sessions are recorded using
-ARA Records Ansible \(ARA\), which provides an Ansible-friendly way to view the logs for CFS.
+The Ansible logs from all Configuration Framework Service (CFS) sessions are recorded using
+ARA Records Ansible (ARA), which provides an Ansible-friendly way to view the logs for CFS.
 ARA is an open-source log collector, API, and UI, specifically for collecting and parsing
 Ansible logs. For more information on ARA in general, see
 [the ARA home page](https://ara.recordsansible.org/).

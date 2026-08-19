@@ -5,7 +5,7 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
 
 ## Prerequisites
 
-- This procedure uses `SYSTEM_DOMAIN_NAME` as an example for the DNS name of the non-compute node \(NCN\). Replace this name with the actual NCN's DNS name while executing this procedure.
+- This procedure uses `SYSTEM_DOMAIN_NAME` as an example for the DNS name of the non-compute node (NCN). Replace this name with the actual NCN's DNS name while executing this procedure.
 - This procedure assumes that the password for the Keycloak `admin` account is known. The Keycloak password is set during the software installation process.
   (`ncn-mw#`) The password can be obtained with the following command
 
@@ -36,7 +36,7 @@ See [Create Internal User Accounts in the Keycloak Shasta Realm](Create_Internal
         ```
 
     See [Make HTTPS Requests from Sources Outside the Management Kubernetes Cluster](Make_HTTPS_Requests_from_Sources_Outside_the_Management_Kubernetes_Cluster.md)
-    for more information on getting the Certificate Authority \(CA\) certificate on the system.
+    for more information on getting the Certificate Authority (CA) certificate on the system.
 
 1. Click the `Administration Console` link.
 

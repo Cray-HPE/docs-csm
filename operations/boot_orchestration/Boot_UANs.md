@@ -67,7 +67,7 @@ UAN boot images and a BOS session template have been created. See [Create UAN Bo
 
 1. (`ncn-mw#`) List the CFS sessions.
 
-    > **`NOTE`** Skip this step if CFS was not enabled in the boot session template used to boot the UANs.
+    > **NOTE** Skip this step if CFS was not enabled in the boot session template used to boot the UANs.
 
     If CFS was enabled in the boot session template, then BOS will set configuration in CFS that will trigger a CFS session.
 

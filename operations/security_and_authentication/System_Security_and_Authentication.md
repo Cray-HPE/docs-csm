@@ -11,11 +11,11 @@ The system uses a number of mechanisms to ensure the security and authentication
 ## API gateway service
 
 The Cray API gateway service provides a common access gateway for all of the systems management REST APIs.
-Authentication is provided by an Identity and Access Management \(IAM\) service that integrates with Istio.
+Authentication is provided by an Identity and Access Management (IAM) service that integrates with Istio.
 
 ## Keycloak
 
-Keycloak is an open source Identity and Access Management \(IAM\) solution. It provides authentication and authorization
+Keycloak is an open source Identity and Access Management (IAM) solution. It provides authentication and authorization
 services that are used to secure access to services on the system.
 
 To learn more about Keycloak, see:

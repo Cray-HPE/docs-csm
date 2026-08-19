@@ -586,7 +586,7 @@ Below is a procedure to provide the IMS builder node with additional storage.
 
         mkdir -p /mnt/cache/var/lib/containers/
         mount --bind /mnt/cache/var/lib/containers/ /var/lib/containers/
-        
+
         mkdir -p /mnt/cache/var/tmp
         mount --bind /mnt/cache/var/tmp/ /var/tmp/
         ```

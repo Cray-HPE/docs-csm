@@ -22,7 +22,7 @@ the steps below it provide detailed instructions which must be executed in the o
 
 1. Perform an install of CSM.
 
-   **`NOTE`** Skip this step if CSM is already installed.
+   **NOTE** Skip this step if CSM is already installed.
 
    Follow the [Cray System Management Install](../../../install/README.md) instructions.
 
