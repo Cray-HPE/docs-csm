@@ -8,31 +8,42 @@ understanding of how the system functions.
 The workflows in this section include:
 
 * [Create a new image](#create-a-new-image)
+    * [Use case for creating a new image](#use-case-for-creating-a-new-image)
+    * [Components involved in creating a new image](#components-involved-in-creating-a-new-image)
+    * [Workflow overview for creating a new image](#workflow-overview-for-creating-a-new-image)
 * [Customize an image](#customize-an-image)
+    * [Use case for customizing an image](#use-case-for-customizing-an-image)
+    * [Components involved in customizing an image](#components-involved-in-customizing-an-image)
+    * [Workflow overview for customizing an image](#workflow-overview-for-customizing-an-image)
 * [Manage image labels](#manage-image-labels)
-    1. [List images](#1-list-images)
-    1. [Set image metadata](#2-set-image-metadata)
-    1. [Describe an image](#3-describe-an-image)
-    1. [Remove image metadata](#4-remove-image-metadata)
+    * [Use case for managing image labels](#use-case-for-managing-image-labels)
+    * [Components involved in managing image labels](#components-involved-in-managing-image-labels)
+    * [Workflow overview for managing image labels](#workflow-overview-for-managing-image-labels)
 
 ## Create a new image
 
-**Use Case:** The system administrator creates an image root from a customized recipe. The new image can be used to boot compute nodes.
+## Use case for creating a new image
 
-**Components:** This workflow is based on the interaction of the Image Management Service \(IMS\) with other services during the image build process. The process of image creation builds an image from a recipe.
+The system administrator creates an image root from a customized recipe. The new image can be used to boot compute nodes.
+
+## Components involved in creating a new image
+
+This workflow is based on the interaction of the Image Management Service (IMS) with other services during the image build process. The process of image creation builds an image from a recipe.
 An administrator may choose to use the Cray-provided recipes or customize Kiwi recipes to define the image to be built.
 
 Mentioned in this workflow:
 
-* Image Management Service \(IMS\) allows administrators and users to build or customize \(pre-boot\) images from kiwi-ng recipes. This service is responsible for enabling the creation of bootable and non-bootable
-  images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts \(`kernel`, `rootfs`, `initrd`, etc\) with a new IMS image record.
+* Image Management Service (IMS) allows administrators and users to build or customize (pre-boot) images from Kiwi-NG recipes. This service is responsible for enabling the creation of bootable and non-bootable
+  images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts (`kernel`, `rootfs`, `initrd`, etc) with a new IMS image record.
 * Nexus is needed for image creation and image customization. Nexus provides local RPM repositories for use when building or customizing an image. Administrators may define `zypper` or Yum package repositories and provide
   the RPM content for installing and updating software for every compute and non-compute node in the system.
-* The Simple Storage Service \(Ceph S3\) is an artifact repository that stores boot artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
+* The Simple Storage Service (Ceph S3) is an artifact repository that stores boot artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
 
 ![image-create](../../img/operations/image-create.gif)
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+## Workflow overview for creating a new image
+
+The following sequence of steps occurs during this workflow.
 
 1. Administrator downloads an existing recipe from S3.
 
@@ -62,7 +73,8 @@ Mentioned in this workflow:
 
 1. (`ncn-mw#`) Administrator starts the creation job.
 
-    Create a new IMS image by providing request body parameter, job\_type="create". The following steps 6-10 happen automatically as a part of the image creation process.
+    Create a new IMS image by providing the `--job_type create` argument to the `cray ims jobs create` command.
+    The remaining steps happen automatically as a part of the image creation process.
 
     ```bash
     cray ims jobs create \
@@ -83,17 +95,17 @@ Mentioned in this workflow:
 
 1. IMS creates a custom RPM.
 
-    IMS creates a custom RPM to install the CA root certificate from the system into the image. The build-ca-rpm container creates an RPM with the private root-CA certificate for the system and this RPM is
+    IMS creates a custom RPM to install the CA root certificate from the system into the image. The `build-ca-rpm` container creates an RPM with the private root CA certificate for the system and this RPM is
     installed automatically by Kiwi-NG. The CA root certificate is required to enable secure HTTPS access to the RPM repositories when building the image root.
 
 1. IMS calls Kiwi-NG to build the image.
 
-    IMS calls Kiwi-NG to build the image root from the recipe and accesses packages in `zypper`/Yum repositories. The building of the image using kiwi happens in the `build-image` container. After kiwi is
-    done building the image \(either success or fail\), the `buildenv-sidecar` container packages the artifacts, or in the case of failure, enables the debug shell if enable-debug is True. In the `buildenv-sidecar`
+    IMS calls Kiwi-NG to build the image root from the recipe and accesses packages in `zypper` or Yum repositories. The building of the image using Kiwi happens in the `build-image` container. After Kiwi is
+    done building the image (either success or fail), the `buildenv-sidecar` container packages the artifacts, or in the case of failure, enables the debug shell if `enable-debug` is True. In the `buildenv-sidecar`
     container, the image artifacts are packaged and new image artifact records are created for each.
 
-    If there is a failure and enable-debug is true, a debug SSH shell is established. Admin can inspect image build root. Use commands touch `/mnt/image/complete` in a non-jailed environment or touch `/tmp/complete`
-    in a jailed \(`chroot`\) environment to exit.
+    If there is a failure and `enable-debug` is true, then a debug SSH shell is established. An administrator can inspect image build root. Use commands `touch /mnt/image/complete` in a non-jailed environment or `touch /tmp/complete`
+    in a jailed (`chroot`) environment to exit.
 
 1. Save the new image record in IMS.
 
@@ -105,25 +117,31 @@ Mentioned in this workflow:
 
 ## Customize an image
 
-**Use Case:** The system administrator customizes an existing image and makes desired changes.
+### Use case for customizing an image
 
-**Components:** This workflow is based on the interaction of the Image Management Service \(IMS\) with Ceph S3 during the image customization process. The customization workflow sets up a temporary image
+The system administrator customizes an existing image and makes desired changes.
+
+## Components involved in customizing an image
+
+This workflow is based on the interaction of the Image Management Service (IMS) with Ceph S3 during the image customization process. The customization workflow sets up a temporary image
 customization environment within a Kubernetes pod and mounts the image to be customized in that environment. A system administrator then makes the desired changes to the image root within the customization
-environment. IMS then compresses the customized image root and uploads it and its associated `initrd` image and `kernel` image \(needed to boot a node\) to Ceph S3.
+environment. IMS then compresses the customized image root and uploads it and its associated `initrd` image and `kernel` image (needed to boot a node) to Ceph S3.
 
 Mentioned in this workflow:
 
-* Image Management Service \(IMS\) allows administrators and users to build or customize \(pre-boot\) images from kiwi-ng recipes. This service is responsible for enabling the creation of bootable and non-bootable
-  images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts \(`kernel`, `rootfs`, `initrd`, etc\) with a new IMS image record.
-* The Simple Storage Service \(Ceph S3\) is an artifact repository that stores artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
+* Image Management Service (IMS) allows administrators and users to build or customize (pre-boot) images from Kiwi-NG recipes. This service is responsible for enabling the creation of bootable and non-bootable
+  images, enabling image customization via an SSH-able environment, and packaging and association of new/customized image artifacts (`kernel`, `rootfs`, `initrd`, etc) with a new IMS image record.
+* The Simple Storage Service (Ceph S3) is an artifact repository that stores artifacts. Recipes are stored in the `ims` bucket and images are stored in the `boot-images` bucket.
 
 ![image-customize](../../img/operations/image-customize.gif)
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+## Workflow overview for customizing an image
+
+The following sequence of steps occurs during this workflow.
 
 1. (`ncn-mw#`) The administrator identifies an existing image to be customized.
 
-    Retrieve a list of `ImageRecords` indicating images that have been registered with IMS. IMS uses the `ImageRecord` to read the image's `manifest.yaml` to find the image's root file system \(`rootfs`\) artifact.
+    Retrieve a list of `ImageRecords` indicating images that have been registered with IMS. IMS uses the `ImageRecord` to read the image's `manifest.yaml` to find the image's root file system (`rootfs`) artifact.
     Note the id of the image that you want to customize.
 
     ```bash
@@ -140,7 +158,8 @@ Mentioned in this workflow:
 
 1. (`ncn-mw#`) The administrator starts the image customization job.
 
-    Create a new IMS image by providing the `--job-type customize` argument to the `cray ims jobs create` command. The following steps \(4-8\) happen automatically as a part of the image customization process.
+    Create a new IMS image by providing the `--job-type customize` argument to the `cray ims jobs create` command.
+    The remaining steps happen automatically as a part of the image customization process.
 
     ```bash
     cray ims jobs create \
@@ -155,12 +174,12 @@ Mentioned in this workflow:
 
 1. IMS to Ceph S3.
 
-    IMS downloads the image root \(`rootfs`\) from Ceph S3 and decompresses the image root to a temporary directory.
+    IMS downloads the image root (`rootfs`) from Ceph S3 and decompresses the image root to a temporary directory.
 
 1. IMS creates an SSH environment for image customization.
 
     IMS spins up an `sshd` container so that the administrator can modify the image. The administrator accesses the `sshd` container and makes changes to the image. For example, it may be necessary to modify the
-    timezone, or modify the programming environment, etc. Use `touch /mnt/image/complete` in a non-jailed environment or `touch /tmp/complete` in a jailed \(`chroot`\) environment to exit. The shell can be run in
+    timezone, or modify the programming environment, etc. Use `touch /mnt/image/complete` in a non-jailed environment or `touch /tmp/complete` in a jailed (`chroot`) environment to exit. The shell can be run in
     either a jailed or non-jailed mode.
 
     The output is a new image. Note that the original image also exists. IMS customizes a copy of the original image.
@@ -168,7 +187,7 @@ Mentioned in this workflow:
 1. `buildenv-sidecar` container packages new image artifacts.
 
     The `buildenv-sidecar` container waits for the administrator to exit the SSH session. Upon completion, new records are created for each image artifact. It also adds the root CA certificate to the image and packages
-    the new image artifacts \(`kernel`, `initrd`, `rootfs`\).
+    the new image artifacts (`kernel`, `initrd`, `rootfs`).
 
 1. Save the new image record in IMS.
 
@@ -180,86 +199,80 @@ Mentioned in this workflow:
 
 ## Manage image labels
 
-> * IMS image metadata is sometimes referred to as image labels.
-> * There known issues related to IMS image metadata:
->     * [IMS Created Image Stores Incorrect Metadata](../../troubleshooting/known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
->     * [Soft Deleted IMS Image Metadata is Lost](../../troubleshooting/known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
+* IMS image metadata is sometimes referred to as image labels.
+* There known issues related to IMS image metadata:
+    * [IMS Created Image Stores Incorrect Metadata](../../troubleshooting/known_issues/IMS_Created_Image_Stores_Incorrect_Metadata.md)
+    * [Soft Deleted IMS Image Metadata is Lost](../../troubleshooting/known_issues/IMS_Soft_Deleted_Image_Metadata_is_Lost.md)
 
-**Use Case:** The system administrator would like to apply user supplied information about IMS
-images or remove metadata that has been previously set.
+### Use case for managing image labels
 
-**Components:** This workflow is based on the interaction of the Image Management Service \(IMS\)
-with other services after the image build process completes. The information added or removed can
-be used by separate APIs or processes for whatever specific purposes they implement for, as it
-involves specific images. Generally, downstream APIs define specific keys and values that can be
-associated with an image, then perform specific actions against those image records in a way that
-is consistent with their API's behavior. Typically, this allows administrators to attach general
-purpose information about IMS images that will help them manage the lifecycle of images that
-IMS maintains.
+The system administrator would like to apply user supplied information about IMS images or remove metadata that has been previously set.
 
-**Workflow Overview:** The following sequence of steps occurs during this workflow.
+### Components involved in managing image labels
 
-1. [List images](#1-list-images)
-1. [Set image metadata](#2-set-image-metadata)
-1. [Describe an image](#3-describe-an-image)
-1. [Remove image metadata](#4-remove-image-metadata)
+This workflow is based on the interaction of the Image Management Service (IMS) with other services after the image build process completes. The information added or removed can be used by separate
+APIs or processes for whatever specific purposes they implement for, as it involves specific images. Generally, downstream APIs define specific keys and values that can be associated with an image, then perform specific
+actions against those image records in a way that is consistent with their API's behavior. Typically, this allows administrators to attach general purpose information about IMS images that will help them manage the lifecycle
+of images that IMS maintains.
 
-### 1. List images
+### Workflow overview for managing image labels
 
-(`ncn-mw#`) Administrator identifies the image to add metadata information to.
+1. (`ncn-mw#`) List images.
 
-> Administrators may already know the image ID in question to label. If not, examining the existing images may be of help.
+    Administrator identifies the image to add metadata information to.
 
-```bash
-cray ims images list
-```
+    > Administrators may already know the image ID in question to label. If not, examining the existing images may be of help.
 
-### 2. Set image metadata
+    ```bash
+    cray ims images list
+    ```
 
-(`ncn-mw#`) Administrators may set a new label in the metadata of an existing IMS image.
+1. (`ncn-mw#`) Set image metadata.
 
-> * One label may be set during each update.
-> * Existing values for the provided key may be overwritten if already part of the image record.
+    Administrators may set a new label in the metadata of an existing IMS image.
 
-```bash
-cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation set --metadata-value desired_value --metadata-key desired_key
-```
+    > * One label may be set during each update.
+    > * Existing values for the provided key may be overwritten if already part of the image record.
 
-### 3. Describe an image
+    ```bash
+    cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation set --metadata-value desired_value --metadata-key desired_key
+    ```
 
-(`ncn-mw#`) Administrators and downstream APIs may obtain the active record for a given image.
+1. (`ncn-mw#`) Describe an image.
 
-> Image metadata information is also available when listing images. See [List images](#1-list-images).
+    Administrators and downstream APIs may obtain the active record for a given image.
 
-```bash
-cray ims images describe a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --format toml
-```
+    > Image metadata information is also available when listing images. See the earlier list images step.
 
-Example output:
+    ```bash
+    cray ims images describe a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --format toml
+    ```
 
-```toml
-arch = "x86_64"
-created = "2024-06-27T15:41:22.467177"
-id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
-[metadata]
-key = "value"
-```
+    Example output:
 
-### 4. Remove image metadata
+    ```toml
+    arch = "x86_64"
+    created = "2024-06-27T15:41:22.467177"
+    id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
+    [metadata]
+    key = "value"
+    ```
 
-(`ncn-mw#`) Administrators may remove previously set image metadata.
+1. (`ncn-mw#`) Remove image metadata.
 
-> * One label may be removed during each update.
-> * When specifying `--metadata-operation remove`, omit the `--metadata-value` command line argument.
+    Administrators may remove previously set image metadata.
 
-```bash
-cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation remove --metadata-key key_to_remove --format toml
-```
+    > * One label may be removed during each update.
+    > * When specifying `--metadata-operation remove`, omit the `--metadata-value` command line argument.
 
-Example output:
+    ```bash
+    cray ims images update a506a6f6-54d9-4e5a-9e8d-1fc052d62504 --metadata-operation remove --metadata-key key_to_remove --format toml
+    ```
 
-```toml
-arch = "x86_64"
-created = "2024-06-27T15:41:22.467177"
-id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
-```
+    Example output:
+
+    ```toml
+    arch = "x86_64"
+    created = "2024-06-27T15:41:22.467177"
+    id = "a506a6f6-54d9-4e5a-9e8d-1fc052d62504"
+    ```

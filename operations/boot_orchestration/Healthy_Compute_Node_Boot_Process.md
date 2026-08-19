@@ -35,11 +35,11 @@ A healthy TFTP exchange between server and client looks like the following.
 | `Data Packet, Block: 1`                                                           | The server sends the first data packet.                                                   | Server |
 | `Acknowledgement, Block: 1`                                                       | The client acknowledges reception of block 1.                                             | Client |
 
-The last two steps repeat until the file transfer is complete. The last block from the server will be labeled as \(`Last`\). The TFTP server listens on port 69. Kubernetes forwards port 69 on every node in the Kubernetes cluster to the TFTP pod.
+The last two steps repeat until the file transfer is complete. The last block from the server will be labeled as (`Last`). The TFTP server listens on port 69. Kubernetes forwards port 69 on every node in the Kubernetes cluster to the TFTP pod.
 
-## Boot Script Service \(BSS\)
+## Boot Script Service (BSS)
 
-(`ncn-mw#`) A healthy transaction with the Boot Script Service \(BSS\) looks similar to the following:
+(`ncn-mw#`) A healthy transaction with the Boot Script Service (BSS) looks similar to the following:
 
 ```bash
 cray bss bootscript list --mac a4:bf:01:3e:c0:a2

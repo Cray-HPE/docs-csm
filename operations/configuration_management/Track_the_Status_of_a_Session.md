@@ -1,7 +1,7 @@
 # Track the Status of a Session
 
 A configuration session can be a long-running process, and depends on many system factors, as well as the number of configuration layers and Ansible
-tasks that are run in each layer. The Configuration Framework Service \(CFS\) provides the session status through the session metadata to allow for
+tasks that are run in each layer. The Configuration Framework Service (CFS) provides the session status through the session metadata to allow for
 tracking progress and session state.
 
 - [Prerequisites](#prerequisites)
@@ -12,7 +12,7 @@ tracking progress and session state.
 
 - A configuration session exists in CFS.
 - The Cray CLI must be configured on the node where the commands are being run.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## View session status
 

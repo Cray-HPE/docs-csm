@@ -59,7 +59,7 @@ in time using the [Restore Keycloak Postgres from Backup](../kubernetes/Restore_
     ncn-mw# kubectl scale statefulset ${CLIENT} -n ${NAMESPACE} --replicas=0
 
     # Wait for the pods to terminate
-    ncn-mw# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do 
+    ncn-mw# while [ $(kubectl get pods -n ${NAMESPACE} -l app.kubernetes.io/instance="${CLIENT}" | grep -v NAME | wc -l) != 0 ] ; do
                 echo "  waiting for pods to terminate"; sleep 2
             done
     ```

@@ -1,6 +1,6 @@
 # Boot Orchestration
 
-The Boot Orchestration Service \(BOS\) currently supports API version v2.
+The Boot Orchestration Service (BOS) currently supports API version v2.
 For historical context,
 the following is a summary of the changes BOS v2 made from v1, and the upgrade path from v1 to v2.
 
@@ -50,7 +50,7 @@ BOS v1 versions of the session templates will also remain with `_v1_deprecated` 
 
 ## Mechanical differences
 
-When a session was created in BOS v1, BOS started a Kubernetes job called the Boot Orchestration Agent \(BOA\), which managed all of the nodes.
+When a session was created in BOS v1, BOS started a Kubernetes job called the Boot Orchestration Agent (BOA), which managed all of the nodes.
 BOA moved through one phase at a time, ensuring that all nodes had completed the phase before moving on to the next. This meant that all nodes proceeded in lock step.
 
 BOS v2 does away with BOA, replacing it with long-running operators that are each responsible for moving nodes through a particular phase transition.

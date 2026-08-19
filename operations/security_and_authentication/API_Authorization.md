@@ -1,6 +1,6 @@
 # API Authorization
 
-Authorization for REST API calls is only done at the API gateway. This is facilitated through policy checks to the Open Policy Agent \(OPA\).
+Authorization for REST API calls is only done at the API gateway. This is facilitated through policy checks to the Open Policy Agent (OPA).
 Every REST API call into the system is sent to the OPA to make an authorization decision.
 The decision is based on the authenticated [JSON Web Token (JWT)](../../glossary.md#json-web-token-jwt) passed into the request.
 

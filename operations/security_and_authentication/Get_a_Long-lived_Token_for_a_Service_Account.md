@@ -8,9 +8,9 @@ Refer to [Offline Access](https://www.keycloak.org/docs/latest/server_admin/inde
 ## Prerequisites
 
 - A client or service account has been created.
-  - See [Create a Service Account in Keycloak](Create_a_Service_Account_in_Keycloak.md).
+    - See [Create a Service Account in Keycloak](Create_a_Service_Account_in_Keycloak.md).
 - The `CLIENT_SECRET` variable has been set up.
-  - See [Retrieve the Client Secret for Service Accounts](Retrieve_the_Client_Secret_for_Service_Accounts.md).
+    - See [Retrieve the Client Secret for Service Accounts](Retrieve_the_Client_Secret_for_Service_Accounts.md).
 
 ## Get a long-lived token for a service account
 
@@ -42,7 +42,7 @@ Example output:
 Two things are important in the returned response compared to when requesting an "online" token:
 
 - The `refresh_expires_in` value is 0. The refresh token will not expire and become invalid by itself. The refresh tokens can be revoked via administrative action in Keycloak.
-- The `refresh_token` value can be used to get a fresh token any time and will be needed if the access token expires \(which will happen in 31,536,000 seconds after the access token was issued\).
+- The `refresh_token` value can be used to get a fresh token any time and will be needed if the access token expires (which will happen in 31,536,000 seconds after the access token was issued).
 
 ## Refresh a long-lived token for a service account
 

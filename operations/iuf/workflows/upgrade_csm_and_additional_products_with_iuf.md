@@ -72,7 +72,7 @@ The CSM upgrade steps are run automatically, either directly through IUF stages 
 
    1. [Deploy Product](deploy_product.md)
    1. [Validate Deployment](validate_deployment.md)
-   1. [Perform Slingshot Switch and Management Network Switch Firmware Updates](slingshot_management_network_switch_updates.md)
+   1. [Perform HPE Slingshot Switch and Management Network Switch Firmware Updates](slingshot_management_network_switch_updates.md)
 
 1. Managed rollout
 

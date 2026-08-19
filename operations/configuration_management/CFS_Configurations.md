@@ -1,6 +1,6 @@
 # CFS Configurations
 
-The Configuration Framework Service \(CFS\) uses configurations to allow users to define the Ansible content that CFS should run when configuring a target.
+The Configuration Framework Service (CFS) uses configurations to allow users to define the Ansible content that CFS should run when configuring a target.
 Configurations consists of one or more layers which define a Git repository clone URL, a Git commit id, and the path in the repository to an Ansible playbook to execute.
 Layers can also contain an optional name, and an optional Git branch, which is converted into a Git commit id when the configuration is uploaded to CFS.
 

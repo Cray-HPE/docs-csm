@@ -4,9 +4,9 @@ At times the easiest way to get console services back up and running is to do a 
 reset of the services. There is no persistent state so there is no backup/restore operation
 needed.
 
-> **`NOTE`** The console connections to all nodes will be disrupted for the duration of this
-procedure. Any active console sessions will be terminated and no console logging will occur.
-The existing console log files will be retained, but there will be a gap in the log file coverage.
+> **NOTE** The console connections to all nodes will be disrupted for the duration of this
+> procedure. Any active console sessions will be terminated and no console logging will occur.
+> The existing console log files will be retained, but there will be a gap in the log file coverage.
 
 1. (`ncn-mw#`) Find the `cray-console-operator` pod.
 
@@ -160,7 +160,7 @@ The existing console log files will be retained, but there will be a gap in the 
                 |___\      Shipping your Helm workloads with Loftsman
             \--||___/
         ~~~~~~\_____/~~~~~~~
-        
+
         2023-07-12T19:57:08Z INF Ensuring that the loftsman namespace exists command=ship
         2023-07-12T19:57:08Z INF Loftsman will use the charts repo at https://packages.local/repository/charts as the
         Helm install source command=ship
@@ -182,7 +182,7 @@ The existing console log files will be retained, but there will be a gap in the 
         REVISION: 1
         TEST SUITE: None
         chart=cray-console-data command=ship namespace=services version=1.6.3
-        2023-07-12T19:57:15Z INF Ship status: success. Recording status, manifest to configmap 
+        2023-07-12T19:57:15Z INF Ship status: success. Recording status, manifest to configmap
         loftsman-cray-console-data-20230712194246 in namespace loftsman command=ship
         2023-07-12T19:57:15Z INF Recording log data to configmap loftsman-cray-console-data-20230712194246-ship-log in
         namespace loftsman command=ship

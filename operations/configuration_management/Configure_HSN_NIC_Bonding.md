@@ -75,11 +75,11 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
 #### Prepare VCS branch
 
-1. Use the [Cloning a VCS repository](./Version_Control_Service_VCS.md#cloning-a-vcs-repository) procedure to clone the `csm-config-management` repository.
+1. Use the [Cloning a VCS repository](Version_Control_Service_VCS.md#cloning-a-vcs-repository) procedure to clone the `csm-config-management` repository.
 
 1. Determine the import branch to use.
 
-   > **`NOTE`** Update `CSM_RELEASE` for the version being used.
+   > **NOTE** Update `CSM_RELEASE` for the version being used.
 
    ```bash
    CSM_RELEASE=1.6.0
@@ -106,7 +106,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
    Switched to a new branch 'integration-1.26.0'
    ```
 
-   Refer to [VCS Branching Strategy](./VCS_Branching_Strategy.md) for more information about git branches.
+   Refer to [VCS Branching Strategy](VCS_Branching_Strategy.md) for more information about git branches.
 
 #### Configure the `csm.ncn.hsn_bonding` Ansible role
 
@@ -144,7 +144,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
    The DMAC used should match the one defined in the fabric LAG configuration. The four parameters in this table _must_ be provided. The values for
    `hsn_bond_mac`, `hsn_bond_ip`, and `hsn_bond_netmask` cannot be derived so must be set. Interface configuration will fail if these values are not provided.
 
-   > **`NOTE`** The `hsn_bond_options` parameter defaults to `"mode=802.3ad xmit_hash_policy=layer2+3 miimon=100 ad_select=bandwidth lacp_rate=fast"` and may need changing if static mode
+   > **NOTE** The `hsn_bond_options` parameter defaults to `"mode=802.3ad xmit_hash_policy=layer2+3 miimon=100 ad_select=bandwidth lacp_rate=fast"` and may need changing if static mode
    > LAGs are to be used instead of LACP. See `roles/csm.nmn_hsn_bonding/README.md` in the `csm-config-management` repository for a full list Ansible variables that can be changed.
 
 1. Create the node-specific variables file.
@@ -401,7 +401,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
 ## Troubleshooting
 
-Refer to [View Configuration Session Logs](./View_Configuration_Session_Logs.md) to troubleshoot why the CFS session failed to complete successfully.
+Refer to [View Configuration Session Logs](View_Configuration_Session_Logs.md) to troubleshoot why the CFS session failed to complete successfully.
 
 If the underlying HSN interfaces are not up or present refer to the Slingshot documentation listed in [References](#references) to verify the fabric is healthy.
 Troubleshooting HPE Slingshot is beyond the scope of this document. See the _HPE Slingshot Troubleshooting Guide_ for troubleshooting information.

@@ -335,7 +335,7 @@ running rather than look at the results after.
     + echo 'ChrootDirectory /mnt/image/image-root/'
     + mkdir -p /root/.ssh
     + ssh-keygen -A
-    ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519 
+    ssh-keygen: generating new host keys: RSA DSA ECDSA ED25519
     + echo 'SetEnv IMS_JOB_ID=a818004a-4ee4-4670-a938-2a353960b803 IMS_ARCH=x86_64 IMS_DKMS_ENABLED=True'
     + /usr/sbin/sshd -E /etc/cray/ims/sshd.log -f /etc/cray/ims/sshd_config
     + set +x

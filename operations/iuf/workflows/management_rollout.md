@@ -13,7 +13,7 @@ This section updates the software running on management NCNs.
 
 ## 1. Update management host firmware (FAS)
 
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+**NOTE** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
 Refer to [Update Non-Compute Node (NCN) BIOS and BMC Firmware](../../firmware/FAS_Use_Cases.md#update-non-compute-node-ncn-bios-and-bmc-firmware) for details on how to upgrade the firmware on management nodes.
 
@@ -28,10 +28,10 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
 `prepare-images` and `update-cfs-config` stages respectively; see the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation for details on how to query the images and CFS configurations and see the
 [update-cfs-config](../stages/update_cfs_config.md) documentation for details about how the CFS configuration is updated.
 
-**`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
+**NOTE** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
-**`NOTE`** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
+**NOTE** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
 
 1. (`ncn-m001#`) Verify if any nodes are labeled with `iuf-prevent-rollout=true`.
 
@@ -45,9 +45,9 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
     kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
     ```
 
-**`NOTE`** Known Issue: If IUF reports that multiple sessions are in progress for an activity, refer to [IUF does not run the next stage for an activity.](../../../troubleshooting/known_issues/iuf_unable_to_run_next_stage.md)
+**NOTE** Known issue: If IUF reports that multiple sessions are in progress for an activity, refer to [IUF does not run the next stage for an activity.](../../../troubleshooting/known_issues/iuf_unable_to_run_next_stage.md).
 
-**`IMPORTANT`** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not
+**IMPORTANT** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not
 being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded with new images and will be updated by the CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md) only. If CSM is being
 upgraded, the NCN storage nodes and NCN master nodes will be upgraded with new images and the new CFS configuration. Both procedures use the same steps for rebuilding/upgrading NCN worker nodes. Select **one** of the following
 procedures based on whether or not CSM is being upgraded:
@@ -65,13 +65,14 @@ Follow the steps below to upgrade all management nodes.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. _management-nodes-rollout prehook:_ A script named `management-nodes-rollout-prehook.sh` runs before `management-nodes-rollout` stage. This hook is only executed before the first NCN is upgraded (for instance, `STORAGE_CANARY`).  
+1. _management-nodes-rollout prehook:_ A script named `management-nodes-rollout-prehook.sh` runs before `management-nodes-rollout` stage. This hook is only executed before the first NCN is upgraded(i.e `STORAGE_CANARY`).
+
 This hook executes operations including upgrading CSM applications and services and validating CSM health post-service upgrade.
 The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh` and `/opt/cray/tests/install/ncn/automated/ncn-k8s-combined-healthcheck iuf` .
 
 1. Perform the NCN storage node upgrades. This upgrades a single storage node first to test the storage node image and then upgrades the remaining storage nodes.
 
-    **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
+    **NOTE** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
     If monitoring progress with the Argo UI, remember to include these workflows.
 
     > **Known Issue:** If `cloud-init` fails on the storage node with a timed out error, see [storage node `cloud-init` fails with 'Timed out waiting for device' error](../../../troubleshooting/known_issues/storage_node_cloud_init_fails_with_timed_out.md).
@@ -119,7 +120,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
 1. Perform the NCN master node upgrade of `ncn-m002` and `ncn-m003`.
 
-    > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+    > **NOTE** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
     >
     > **Known Issue:** If the IUF CLI reports the error: `The management-nodes-rollout stage failed, but argo must run to the completion of the stage`,
@@ -134,7 +135,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ncn-m002
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
         See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m002` booted successfully with the desired image and CFS configuration.
@@ -154,7 +155,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
 
     1. Verify that `ncn-m003` booted successfully with the desired image and CFS configuration.
 
@@ -168,7 +169,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
 1. Perform the NCN master node upgrade of `ncn-m001`.
 
-    > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+    > **NOTE** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
     >
     > **Known Issue:** If the IUF CLI reports the error: `The management-nodes-rollout stage failed, but argo must run to the completion of the stage`,
@@ -197,7 +198,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         iuf -a "${ACTIVITY_NAME}" --media-host ncn-m002 run -r management-nodes-rollout --limit-management-rollout ncn-m001
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should    be restarted.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should    be restarted.
         See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m001` booted successfully with the desired image and CFS configuration.
@@ -208,7 +209,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         cray cfs components describe "${XNAME}"
         ```
 
-    > **`NOTE`** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
+    > **NOTE** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
 
     Once this step has completed:
 
@@ -364,7 +365,7 @@ rolling it out to the other NCN worker nodes. Modify the procedure as necessary 
 The images and CFS configurations used are created by the `prepare-images` and `update-cfs-config` stages respectively; see the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation
 for details on how to query the images and CFS configurations and see the [update-cfs-config](../stages/update_cfs_config.md) documentation for details about how the CFS configuration is updated.
 
-**`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
+**NOTE** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
@@ -402,7 +403,7 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
-    **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
+    **NOTE** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
     node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
     with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
@@ -450,7 +451,7 @@ either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-
 
 ## 3. Restart `goss-servers` on all NCNs
 
-**`NOTE`** Skip this step if the CSM version is 1.6.1 or above. This step will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
+**NOTE** Skip this step if the CSM version is 1.6.1 or above. This step will cause no harm if done on CSM 1.6.1 or higher, but it is unnecessary.
 
 If the CSM version is 1.6.0 or lower, then the `goss-servers` service needs to be restarted on all NCNs. This ensures the correct tests are run on each NCN.
 This is necessary due to a timing issue that is fixed in CSM 1.6.1.
@@ -465,7 +466,7 @@ pdsh -S -b -w $ncn_nodes 'systemctl restart goss-servers'
 
 ## 4. Update management host Slingshot NIC firmware
 
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+**NOTE** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Installation Guide for CSM_
 for details on how to update NIC firmware on management nodes.

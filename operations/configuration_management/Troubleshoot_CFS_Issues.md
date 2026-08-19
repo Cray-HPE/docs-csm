@@ -50,7 +50,7 @@ For issues where the `cfs-debugger` is not available or not able to diagnose an 
 
 ## Debug on failure
 
-> **`NOTE`** This feature is only available in the v3 CFS API.
+> **NOTE** This feature is only available in the v3 CFS API.
 
 (`ncn-mw#`) CFS sessions can be created with the `debug_on_failure` flag.
 If set to true this will cause sessions that fail during Ansible execution to remain running so that users can exec into the pod.
@@ -63,7 +63,7 @@ Once debugging is complete users should touch the `/tmp/complete` file to comple
 
 ## Debug playbooks
 
-> **`NOTE`** This feature is only available in the v3 CFS API.
+> **NOTE** This feature is only available in the v3 CFS API.
 
 CFS supports special debug playbooks, which are part of the AEE image and always available.
 These playbooks can be used without requiring a special configuration to be created.
