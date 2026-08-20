@@ -16,11 +16,11 @@ That data needs to be repopulated in order for the cluster to go back to a healt
 
 The following services need their data repopulated in the etcd cluster:
 
-- Boot Orchestration Service \(BOS\)
-- Boot Script Service \(BSS\)
-- Firmware Action Service \(FAS\)
-- HMS Notification Fanout Daemon \(HMNFD\)
-- Mountain Endpoint Discovery Service \(MEDS\)
+- Boot Orchestration Service (BOS)
+- Boot Script Service (BSS)
+- Firmware Action Service (FAS)
+- HMS Notification Fanout Daemon (HMNFD)
+- Mountain Endpoint Discovery Service (MEDS)
 
 ## Prerequisites
 

@@ -285,7 +285,7 @@ See [Update ceph node-exporter configuration](../operations/utility_storage/upda
 
 ## 10. Update firmware with FAS
 
-> **IMPORTANT:** Before Firmware can be updated the HPC Firmware Pack (HFP) must be installed  refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
+> **IMPORTANT:** Before firmware can be updated, the HPC Firmware Pack (HFP) must be installed. Refer to the [HPE Cray EX System Software Getting Started Guide S-8000](https://www.hpe.com/support/ex-S-8000)
 >on the HPE Customer Support Center for more information about how to install the HPE Cray EX HPC Firmware Pack (HFP) product.
 
 Now that all management nodes and CSM services have been validated as healthy, the firmware on other components in the system can be checked and updated. The Firmware Action Service (FAS) communicates with many devices on the system.

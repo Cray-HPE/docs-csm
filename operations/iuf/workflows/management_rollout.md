@@ -2,14 +2,14 @@
 
 This section updates the software running on management NCNs.
 
-- [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
-- [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
-    - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
-    - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
-    - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
-- [3. Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns)
-- [4. Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
-- [5. Next steps](#5-next-steps)
+1. [Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
+1. [Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
+    1.[`management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
+    1.[`management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
+    1.[NCN worker nodes](#23-ncn-worker-nodes)
+1. [Restart `goss-servers` on all NCNs](#3-restart-goss-servers-on-all-ncns)
+1. [Update management host Slingshot NIC firmware](#4-update-management-host-slingshot-nic-firmware)
+1. [Next steps](#5-next-steps)
 
 ## 1. Update management host firmware (FAS)
 
@@ -81,9 +81,6 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
         ```bash
         STORAGE_CANARY=ncn-s001
-        ```
-
-        ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
@@ -104,9 +101,6 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         ```bash
         STORAGE_NODES="$(ceph orch host ls | grep ncn-s | grep -v "$STORAGE_CANARY" | awk '{print $1}' | xargs echo)"
         echo "$STORAGE_NODES"
-        ```
-
-        ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
         ```
 
@@ -179,8 +173,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
         See [Configure the Cray Command Line Interface](../../configure_cray_cli.md) for details on how to do this.
 
-    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the    new CFS configuration and image built in
-    previous steps of the workflow.
+    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the new CFS configuration and image built in previous steps of the workflow.
 
         (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
@@ -198,8 +191,8 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         iuf -a "${ACTIVITY_NAME}" --media-host ncn-m002 run -r management-nodes-rollout --limit-management-rollout ncn-m001
         ```
 
-        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should    be restarted.
-        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m001` booted successfully with the desired image and CFS configuration.
 
@@ -209,7 +202,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         cray cfs components describe "${XNAME}"
         ```
 
-    > **NOTE** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
+    > **NOTE** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md).
 
     Once this step has completed:
 
@@ -228,8 +221,8 @@ can update NCN master and storage nodes using CFS configuration only.
 Follow the following steps to complete the `management-nodes-rollout` stage.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
-section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
-Refer to that table and any corresponding product documents before continuing to the next step.
+   section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
+   Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Rebuild the NCN worker nodes. Follow the procedure in section [2.3 NCN worker nodes](#23-ncn-worker-nodes) and then return to this procedure to complete the next step.
 
