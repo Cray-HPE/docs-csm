@@ -271,7 +271,7 @@ For more information on Velero, refer to the [external Velero documentation](htt
 
     This is done to minimize the risk of Vault being in a partially restored state.
 
-    Vault will be inaccessible \(if not already\) after running the following commands.
+    Vault will be inaccessible (if not already) after running the following commands.
 
     ```bash
     kubectl -n vault delete vault -l vault_cr=cray-vault

@@ -122,7 +122,7 @@ The prerequisite operations include upgrading service charts, updating the `cray
     iuf -a ${ACTIVITY_NAME} -m "${MEDIA_DIR}" run -e pre-install-check
     ```
 
-> **`IMPORTANT`*** If upgrading CSM manually, ensure that the `docs-csm-latest.noarch.rpm` and `libcsm-latest.noarch.rpm` RPMs are available at path `/root/<rpm>` before executing the above command.
+> **IMPORTANT*** If upgrading CSM manually, ensure that the `docs-csm-latest.noarch.rpm` and `libcsm-latest.noarch.rpm` RPMs are available at path `/root/<rpm>` before executing the above command.
 
 Once this step has completed:
 
@@ -132,7 +132,7 @@ Once this step has completed:
 
 ## 3. Update `customizations.yaml`
 
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+**NOTE** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
 Some products require modifications to the `customizations.yaml` file before executing the `deliver-product` stage. Currently, this is limited to the Slurm and PBS Workload Manager (WLM) products, CSM Diags, and the UAN product. Refer to the
 "Install and Upgrade Framework" section of the Slurm, PBS, CSM Diags, and UAN product documents to determine the actions that need to be performed to update `customizations.yaml`.
@@ -155,7 +155,7 @@ Refer to that table and any corresponding product documents before continuing to
    Additional arguments are available to control the behavior of the `deliver-product` stage (for example, `-rv`). See the [`deliver-product` stage documentation](../stages/deliver_product.md)
    for details and adjust the example below if necessary.
 
-     **`NOTE`** When installing USS 1.1 or higher, select either Slurm or PBS Pro Products to use on the system before running this stage. This should be specified in `site_vars.yaml`.
+     **NOTE** When installing USS 1.1 or higher, select either Slurm or PBS Pro Products to use on the system before running this stage. This should be specified in `site_vars.yaml`.
      For more information, see the `deliver-product` stage details in the "Install and Upgrade Framework" section of the _HPE Cray Supercomputing User Services Software Administration Guide: CSM on HPE Cray Supercomputing EX Systems (S-8063)_.
 
       (`ncn-m001#`) Execute the `deliver-product` stage. Use site variables from the `site_vars.yaml` file found in `${ADMIN_DIR}` and recipe variables from the `product_vars.yaml` file found in `${ADMIN_DIR}`.
@@ -181,9 +181,9 @@ Once this step has completed:
 
 ## 6. Perform manual product delivery operations
 
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+**NOTE** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
-**`NOTE`** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
+**NOTE** This subsection is optional and can be skipped if third-party GPU and/or programming environment software is not needed.
 
 Some products provide instructions for delivering third-party content to the system outside of IUF. If this content is desired, refer to the following documentation for instructions and execute the procedures before continuing
 with the workflow.

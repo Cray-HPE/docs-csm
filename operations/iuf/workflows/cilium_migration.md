@@ -4,7 +4,7 @@ This describes how to migrate Kubernetes CNI from Weave to Cilium during a CSM u
 
 - [Steps](#steps)
 - [Known issues](#known-issues)
-    - [Missing BSS Global Metadata Parameter](#missing-bss-global-metadata-parameter)
+    - [Missing BSS Global metadata parameter](#missing-bss-global-metadata-parameter)
     - [Node drain blocked by Kafka](#node-drain-blocked-by-kafka)
     - [Node drain blocked by an `etcd` cluster](#node-drain-blocked-by-an-etcd-cluster)
 
@@ -19,33 +19,34 @@ This describes how to migrate Kubernetes CNI from Weave to Cilium during a CSM u
     ```
 
     This script will:
+
     - Create and execute the migration workflow in the `argo` namespace.
     - Migrate the CNI from Weave to Cilium.
     - Continuously monitor the workflow status using `kubectl`.
 
-1. (`ncn-mw#`) Monitor the migration workflow:
+1. (`ncn-mw#`) Monitor the migration workflow.
 
-    The workflow status can also be tracked using the Argo CLI:
+    The workflow status can also be tracked using the Argo CLI.
 
-    The Argo CLI watch function can be used to view the overall progress of the workflow.
+    The Argo CLI watch function can be used to view the overall progress of the workflow:
 
     ```bash
     argo watch <workflow-name> -n argo
     ```
 
-    The Argo CLI logs function can be used to monitor the workflow in more detail.
+    The Argo CLI logs function can be used to monitor the workflow in more detail:
 
     ```bash
     argo logs <workflow-name> -n argo -f
     ```
 
-    Replace `<workflow-name>` with the actual name of the workflow created by the cilium_migration.sh script.
+    Replace `<workflow-name>` with the actual name of the workflow created by the `cilium_migration.sh` script.
 
 ## Known issues
 
-### Missing BSS Global Metadata Parameter
+### Missing BSS Global metadata parameter
 
-On systems originally installed with CSM 1.3 or earlier, the Cilium migration process may fail if the `k8s-primary-cni` BSS Global meta-data parameter is not set.
+On systems originally installed with CSM 1.3 or earlier, the Cilium migration process may fail if the `k8s-primary-cni` BSS Global `meta-data` parameter is not set.
 
 See [Cilium Migration Failure Due to Missing BSS Global Metadata Parameter](../../../troubleshooting/known_issues/cilium_migration_k8s_primary_cni_not_set.md) for details and resolution steps.
 
@@ -57,7 +58,7 @@ Example output:
 
 ```console
 evicting pod services/cray-shared-kafka-kafka-1
-error when evicting pods/"cray-shared-kafka-kafka-1" -n "services" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget. 
+error when evicting pods/"cray-shared-kafka-kafka-1" -n "services" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
 ```
 
 The issue is that one of the restarted Kafka pods cannot communicate with Zookeeper. This is the problem described in
@@ -84,7 +85,7 @@ Example output:
 
 ```console
 evicting pod services/cray-hbtd-bitnami-etcd-2
-error when evicting pods/"cray-hbtd-bitnami-etcd-2" -n "services" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget. 
+error when evicting pods/"cray-hbtd-bitnami-etcd-2" -n "services" (will retry after 5s): Cannot evict pod as it would violate the pod's disruption budget.
 ```
 
 See [`etcd` Pods in CLBO State](../../../troubleshooting/known_issues/etcd_pods_in_CLBO_state.md) for more information and a workaround.

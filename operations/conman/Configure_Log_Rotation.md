@@ -9,10 +9,10 @@ history that needs to be kept in the form of the log files.
 
 All of the console log information is kept in the System Monitoring Framework so these
 log files are not required for a permanent record of the console activity. See
-[Access Console Log Data Via the System Monitoring Framework](./Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
+[Access Console Log Data Via the System Monitoring Framework](Access_Console_Log_Data_Via_the_System_Monitoring_Framework_SMF.md)
 for more information on this topic.
 
-> **`NOTE`** Log rotation will move the current log file and create a new one with the original
+> **NOTE** Log rotation will move the current log file and create a new one with the original
     location and name. If you are using a `tail` operation to watch the console log output,
     make sure to use the `tail -F` option to automatically switch the `tail` to the new
     file through a log rotation. Otherwise the `tail` will follow the old file which has
@@ -124,4 +124,4 @@ On a regular schedule, the log rotation will execute the following steps:
 
     If none of these steps are appropriate for the requirements of the system, the size of the
     PVC may be increased by following the directions here:
-    [Console Services Troubleshooting Guide](./Console_Services_Troubleshooting_Guide.md#check-the-capacity-of-the-pvc)
+    [Console Services Troubleshooting Guide](Console_Services_Troubleshooting_Guide.md#check-the-capacity-of-the-pvc)

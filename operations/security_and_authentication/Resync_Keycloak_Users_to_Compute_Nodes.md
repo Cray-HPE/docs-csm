@@ -67,7 +67,7 @@ The Slurm or PBS product must be installed.
     pdsh -w <computes> /usr/local/sbin/keycloak-passwd-sync.sh
     ```
 
-    Or, reboot the compute nodes with the Boot Orchestration Service \(BOS\).
+    Or, reboot the compute nodes with the Boot Orchestration Service (BOS).
 
     ```bash
     cray bos v2 sessions create --template-name BOS_TEMPLATE --operation reboot

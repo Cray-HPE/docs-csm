@@ -3,7 +3,7 @@
 This procedure changes the credential for liquid-cooled EX cabinet chassis controllers and node controller (BMCs) used by CSM services after the CECs have been set to a new
 global default credential.
 
-**`NOTE`** This procedure does not provision HPE Slingshot switch BMCs (`RouterBMCs`). HPE Slingshot switch BMC default credentials must be changed using the procedures in the HPE Slingshot
+**NOTE** This procedure does not provision HPE Slingshot switch BMCs (`RouterBMCs`). HPE Slingshot switch BMC default credentials must be changed using the procedures in the HPE Slingshot
 product documentation. To update HPE Slingshot switch BMCs, refer to "Change HPE Slingshot switch login and Redfish API credentials" in the *HPE Slingshot Installation Guide for CSM (S-9004)*.
 
 This procedure provisions only the default Redfish `root` account passwords. It does not modify Redfish accounts that have been added after an initial system installation.
@@ -16,7 +16,7 @@ This procedure provisions only the default Redfish `root` account passwords. It 
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+- The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 - The `hms-discovery` Kubernetes CronJob has been disabled.
 - All blades in the cabinets have been powered off.
 - The procedures in [Provisioning a Liquid-Cooled EX Cabinet CEC with Default Credentials](Provisioning_a_Liquid-Cooled_EX_Cabinet_CEC_with_Default_Credentials.md) have
@@ -353,7 +353,7 @@ Follow the [Redeploying a Chart](../CSM_product_management/Redeploying_a_Chart.m
 
 ### 3. Reapply BMC settings if a `StatefulReset` was performed on any BMC
 
-> **`NOTE`** This section only needs to be performed if any liquid-cooled node or chassis BMCs that had to be `StatefulReset`.
+> **NOTE** This section only needs to be performed if any liquid-cooled node or chassis BMCs that had to be `StatefulReset`.
 
 1. For each liquid-cooled BMC to which the `StatefulReset` action was applied, delete the BMC from HSM.
 

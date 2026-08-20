@@ -164,7 +164,7 @@ In order to completely restore the VCS data, first the Postgres data must be res
     1. List the available backups.
 
         ```bash
-        cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/gitea")) | "\(.LastModified) \(.Key)"'
+        cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/gitea")) | "(.LastModified) (.Key)"'
         ```
 
         Example output:
@@ -254,13 +254,13 @@ In order to completely restore the VCS data, first the Postgres data must be res
 1. (`ncn-mw#`) Copy the database dump file to the Postgres member.
 
     ```bash
-    kubectl cp "./${DUMPFILE}" "${POSTGRESQL}-0:/home/postgres/${DUMPFILE}" -c postgres -n "${NAMESPACE}" 
+    kubectl cp "./${DUMPFILE}" "${POSTGRESQL}-0:/home/postgres/${DUMPFILE}" -c postgres -n "${NAMESPACE}"
     ```
 
 1. (`ncn-mw#`) Restore the data.
 
     ```bash
-    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- bash -c "zcat -f ${DUMPFILE} | psql -U postgres" 
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- bash -c "zcat -f ${DUMPFILE} | psql -U postgres"
     ```
 
     Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.

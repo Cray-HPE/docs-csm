@@ -130,7 +130,7 @@ The following is an explanation of the values used in this example:
 To use the Node Management Network (NMN) for content projection, the service is set to `_sbps-nmn`.
 
 - `"rootfs_provider_passthrough"`: Set to `"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-nmn._tcp.my-system.my-site-domain:300"`
-  
+
 To use the High Speed Network (HSN) for content projection, the service is set to `_sbps-hsn`.
 
 - `"rootfs_provider_passthrough"`: Set to `"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"`
