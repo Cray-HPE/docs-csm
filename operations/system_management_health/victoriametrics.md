@@ -92,5 +92,5 @@ This is a shared nothing architecture. It increases cluster availability, and si
 
 Cluster performance and capacity can be scaled up in two ways:
 
-- Vertical scalability:  Adding more resources (CPU, RAM, disk IO, disk space, and so on).
+- Vertical scalability: Adding more resources (CPU, RAM, disk IO, disk space, and so on).
 - Horizontal scalability: Adding more of each component to the cluster.

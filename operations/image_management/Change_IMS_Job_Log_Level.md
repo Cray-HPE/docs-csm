@@ -44,7 +44,7 @@ for all steps or for specific steps to debug particular issues.
    kubectl -n services edit cm cray-configmap-ims-v2-image-create-kiwi-ng
    ```
 
-1. Locate the log level configuration for the steps you want to modify.
+1. Locate the log level configuration for the steps to be modified.
 
    There are 4 steps where the log level can be changed:
 

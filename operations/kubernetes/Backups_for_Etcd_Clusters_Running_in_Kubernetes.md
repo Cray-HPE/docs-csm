@@ -1,6 +1,6 @@
 # Backups for Etcd Clusters Running in Kubernetes
 
-Backups are periodically created for etcd clusters. These backups are stored in the Ceph Rados Gateway \(S3\). Not all services are backed up automatically.
+Backups are periodically created for etcd clusters. These backups are stored in the Ceph Rados Gateway (S3). Not all services are backed up automatically.
 Services that are not backed up automatically will need to be manually rediscovered if the cluster is unhealthy.
 
 - [Clusters with automated backups](#clusters-with-automated-backups)
@@ -10,15 +10,15 @@ Services that are not backed up automatically will need to be manually rediscove
 
 ## Clusters with automated backups
 
-The following services are backed up daily \(one week of backups retained\) as part of the automated solution:
+The following services are backed up daily (one week of backups retained) as part of the automated solution:
 
-- Boot Orchestration Service \(BOS\)
-- Boot Script Service \(BSS\)
+- Boot Orchestration Service (BOS)
+- Boot Script Service (BSS)
 - Controller Diagnostics Orchestration (FOX)
-- Firmware Action Service \(FAS\)
-- Heartbeat Tracking Daemon \(HBTD\)
-- HMS Notification Fanout Daemon \(HMNFD\)
-- Power Control Service \(PCS\)
+- Firmware Action Service (FAS)
+- Heartbeat Tracking Daemon (HBTD)
+- HMS Notification Fanout Daemon (HMNFD)
+- Power Control Service (PCS)
 
 ## Test for recent etcd cluster backups
 
@@ -60,7 +60,7 @@ PASS: backup found less than 24 hours old.
 
 -- cray-power-control -- backups
 PASS: backup found less than 24 hours old.
- --- PASSED --- 
+ --- PASSED ---
 ```
 
 If a particular service is not included, it is an indication
