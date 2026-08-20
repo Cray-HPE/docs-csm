@@ -1,15 +1,14 @@
 # Configure IMS to Validate RPMs
 
-Configuring the Image Management Service (IMS) to validate the GPG signatures of RPMs during IMS Build operations involves the following two steps:
+Configuring the Image Management Service (IMS) to validate the GPG signatures of RPMs during IMS build operations involves the following two steps:
 
-1. Create and update IMS to use a new Kiwi-NG Image with the Signing Keys embedded.
+1. [Update IMS to use a new Kiwi-NG image with an embedded signing key](#1-update-ims-to-use-a-new-kiwi-ng-image-with-an-embedded-signing-key)
+1. [Update IMS recipes to require GPG verification](#2-update-ims-recipes-to-require-gpg-verification)
 
-   > **`NOTE`** The default IMS Kiwi-NG Image is already configured with the signing keys needed to
-   validate HPE and SuSE RPMs and repositories.
+## 1. Update IMS to use a new Kiwi-NG image with an embedded signing key
 
-2. Update IMS Recipes to require GPG verification of RPMs, repositories, or both.
-
-## Create and Update IMS to Use a New Kiwi-NG Image with an Embedded Signing Key
+> **NOTE** The default IMS Kiwi-NG Image is already configured with the signing keys needed to
+validate HPE and SuSE RPMs and repositories.
 
 1. (`ncn-mw#`) Create a temporary directory to perform the actions necessary to configure IMS to validate
    RPM signatures.
@@ -200,7 +199,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     ENTRYPOINT ["/scripts/entrypoint.sh"]
     ```
 
-    > **`NOTE`** Make sure that the version of the `cray-ims-kiwi-ng-opensuse-x86_64-builder`
+    > **NOTE** Make sure that the version of the `cray-ims-kiwi-ng-opensuse-x86_64-builder`
     image in the `FROM` line matches the version of the image above.
 
 1. (`ncn-mw#`) Verify that the following files are in the temporary directory.
@@ -321,7 +320,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     [...]
     ```
 
-   > **`NOTE`** It may take several minutes for this change to take effect. Restarting IMS is not necessary.
+   > **NOTE** It may take several minutes for this change to take effect. Restarting IMS is not necessary.
 
 1. (`ncn-mw#`) Cleanup and remove the temporary directory
 
@@ -330,7 +329,9 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
     rm -rfv ims-validate/
     ```
 
-## Update IMS Recipes to Require GPG Verification of RPMs/Repos
+## 2. Update IMS recipes to require GPG verification
+
+Update IMS recipes to require GPG verification of RPMs, repositories, or both.
 
 1. (`ncn-mw#`) List the IMS recipes and determine which recipes need to be updated.
 
@@ -342,9 +343,6 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
 
     ```json
     [
-
-      ...
-
       {
         "created": "2021-06-29T21:50:38.319526+00:00",
         "id": "1aab3dbb-a654-4c84-b820-a293bd4ab2b4",
@@ -356,10 +354,7 @@ Configuring the Image Management Service (IMS) to validate the GPG signatures of
         "linux_distribution": "sles15",
         "name": "uss-1.4.0-93-csm.x86_64",
         "recipe_type": "kiwi-ng"
-      },
-
-      ...
-
+      }
     ]
     ```
 

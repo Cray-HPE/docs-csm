@@ -62,7 +62,7 @@ corresponding customer working branch.
 
 ### 1.2 Procedure
 
-**`NOTE`** Additional arguments are available to control the behavior of the `update-vcs-config` stage, for example `-rv`. See the [`update-vcs-config` stage
+**NOTE** Additional arguments are available to control the behavior of the `update-vcs-config` stage, for example `-rv`. See the [`update-vcs-config` stage
 documentation](../stages/update_vcs_config.md) for details and adjust the examples below if necessary.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
@@ -121,7 +121,7 @@ required for initial installation scenarios.
     - Generate SAT S3 credentials
     - Configure system revision information via `sat setrev`
 
-**`NOTE`** If the system is using the Customer High Speed Network(CHN), uncomment the following playbook in the `management-bootprep.yaml` file.
+**NOTE** If the system is using the Customer High Speed Network(CHN), uncomment the following playbook in the `management-bootprep.yaml` file.
 
  ```yaml
 #BEGIN_CHN_SUPPORT
@@ -130,7 +130,7 @@ required for initial installation scenarios.
     product:
     name: csm
     version: "{{csm.version}}"
-#END_CHN_SUPPORT         
+#END_CHN_SUPPORT
 ```
 
 In order to check whether the system is using Customer High Speed Network(CHN), see the [Procedure to check CHN](../../../operations/network/management_network/chn_test.md#procedure-to-check-chn)

@@ -23,7 +23,7 @@ the process requires another set of node reboots where the node is not accessibl
 /opt/cray/platform-utils/spire/spire-enable-tpm.sh
 ```
 
-Example Output
+Example output
 
 ```bash
 ncn-m001:~ # /opt/cray/platform-utils/spire/spire-enable-tpm.sh

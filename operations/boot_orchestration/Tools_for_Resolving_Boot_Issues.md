@@ -31,7 +31,7 @@ Use `nmap` to send out DHCP discover requests to test DHCP. `nmap` can be instal
 zypper install nmap
 ```
 
-To reach the DHCP server, the request generally needs to be sent over the Node Management network \(NMN\) from a non-compute node \(NCN\).
+To reach the DHCP server, the request generally needs to be sent over the Node Management network (NMN) from a non-compute node (NCN).
 
 In the following example, `nmap` is used to send a broadcast request over the `eth1` interface:
 
@@ -119,7 +119,7 @@ Example output:
 -rw-r--r-- 1 root root 951904 Sep 11 10:44 test-ipxe.efi
 ```
 
-## Serial Over LAN \(SOL\) sessions
+## Serial Over LAN (SOL) sessions
 
 There are two tools that can be used to access a BMC's console via SOL:
 

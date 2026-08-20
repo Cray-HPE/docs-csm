@@ -40,7 +40,7 @@ in environments with intermittent network issues.
 
    This will retry API calls up to 3 times with a `backoff` factor of 0.5 seconds.
 
-## Retry Behavior
+## Retry behavior
 
 - Retries are implemented using the `urllib3.util.Retry` class. It will only occur for
   status codes in the 500 range (e.g., server errors) or for network errors.
@@ -56,5 +56,5 @@ in environments with intermittent network issues.
     - 2nd retry: 1.0 seconds
     - 3rd retry: 2.0 seconds
 
-These options are documented in the main sat(8) man page.
+These options are documented in the main `sat(8)` man page.
 Refer to the man page for additional details on using these options effectively.

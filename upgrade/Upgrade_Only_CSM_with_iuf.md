@@ -1,4 +1,4 @@
-# Upgrade only CSM through IUF
+# Upgrade Only CSM Through IUF
 
 This option describes how to upgrade Cray Systems Management (CSM) software on a CSM-only system
 using IUF.

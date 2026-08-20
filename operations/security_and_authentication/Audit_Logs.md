@@ -4,7 +4,7 @@
 
 Audit logs are used to monitor the system and search for suspicious behavior.
 Host and Kubernetes API audit logging can be enabled to produce extra audit logs for analysis.
-Enabling audit logging is optional. If enabled it generates some load and data on the non-compute nodes \(NCNs\).
+Enabling audit logging is optional. If enabled it generates some load and data on the non-compute nodes (NCNs).
 
 By default, host and Kubernetes API audit logging are not enabled.
 It is not required for both to be enabled or disabled at the same time.
@@ -103,7 +103,7 @@ ncn-mgmt-node-auditing-enabled: false
    ```console
    export TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client \
            -d client_secret=`kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d` \
-           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')  
+           https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
    ```
 
 1. Enable audit logging.

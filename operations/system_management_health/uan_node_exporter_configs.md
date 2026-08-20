@@ -155,7 +155,6 @@ by editing the manifest and deploying the `cray-sysmgmt-health` Helm chart.
       endpoints:
       - 10.252.1.18
       - 10.252.1.13
-
    ```
 
 1. (`ncn-mw#`) Redeploy the same chart version but with the desired UAN Node Exporter configuration settings.
@@ -191,5 +190,5 @@ by editing the manifest and deploying the `cray-sysmgmt-health` Helm chart.
      {
        "ip": "10.252.1.13"
      }
-   ]    
+   ]
    ```

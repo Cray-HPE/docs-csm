@@ -8,7 +8,7 @@
 
 This page provides describes how an infrastructure administrator (not a tenant administrator) can remove a tenant when appropriate.
 
-**`IMPORTANT`** Removing a tenant is a permanent operation and cannot be reverted. Removing a tenant will remove all tenant-related namespaces from Kubernetes,
+**IMPORTANT** Removing a tenant is a permanent operation and cannot be reverted. Removing a tenant will remove all tenant-related namespaces from Kubernetes,
 along with any Kubernetes resources in those namespaces.
 
 ## Remove the Slurm operator Custom Resource (CR)

@@ -4,8 +4,13 @@ Overview of RPM repositories and container registry in Nexus.
 
 - [RPM repositories](#rpm-repositories)
     - [Creating a new RPM repository](#creating-a-new-rpm-repository)
+        - [Authenticating to Nexus](#authenticating-to-nexus)
+        - [Creating a repository](#creating-a-repository)
+    - [Adding/removing a repository from Zypper](#addingremoving-a-repository-from-zypper)
+    - [Removing a repository from Nexus](#removing-a-repository-from-nexus)
 - [Container registry](#container-registry)
     - [Adding images](#adding-images)
+        - [Prerequisites before adding images](#prerequisites-before-adding-images)
     - [Registry mirror configuration](#registry-mirror-configuration)
     - [Pull example using CRI](#pull-example-using-cri)
     - [Pull example using `containerd`](#pull-example-using-containerd)
@@ -14,7 +19,7 @@ Overview of RPM repositories and container registry in Nexus.
 ## RPM repositories
 
 (`ncn#`) Repositories are available at `https://packages.local/repository/REPO_NAME`. For example, to configure the `csm-sle-15sp2` repository on a
-non-compute node \(NCN\):
+non-compute node (NCN):
 
 ```bash
 zypper addrepo -fG https://packages.local/repository/csm-sle-15sp2 csm-sle-15sp2
@@ -45,11 +50,11 @@ The `-G` option is used in this example to disable GPG checks. However, if the n
 
 ### Creating a new RPM repository
 
-This section will create a new repo called `sample-repo` in Nexus and add a single rpm `example.rpm` to it.  
+This section will create a new repository called `sample-repo` in Nexus and add a single RPM (`example.rpm`) to it.
 
 #### Authenticating to Nexus
 
-(`ncn-mw#`) Use the following function to get the Nexus local admin account after a fresh install:
+(`ncn-mw#`) Use the following function to get the Nexus local administrator account after a fresh install:
 
 ```bash
 function nexus-get-credential() {
@@ -72,7 +77,7 @@ function nexus-get-credential() {
 }
 ```
 
-#### Creating a repo
+#### Creating a repository
 
 1. (`ncn-mw#`) Create and export the repository name:
 
@@ -84,7 +89,7 @@ function nexus-get-credential() {
 
    ```bash
    nexus-get-credential
-   
+
    curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD \
    https://packages.local/service/rest/v1/repositories/yum/hosted \
    --header "Content-Type: application/json" --request POST --data-binary \
@@ -112,11 +117,11 @@ function nexus-get-credential() {
 
    ```bash
    REPOURL=https://packages.local/service/rest/v1/repositories
-   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD ${REPOURL} -s --header "Content -type: application/json"  \
+   curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD ${REPOURL} -s --header "Content -type: application/json" \
    --http1.1 | grep $REPO
    ```
 
-1. (`ncn-mw#`) Upload the `example` rpm to the new repo:
+1. (`ncn-mw#`) Upload the RPM to the new repo:
 
    ```bash
    curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD -v --upload-file ./example*.rpm --max-time 600 \
@@ -131,7 +136,7 @@ function nexus-get-credential() {
    curl -u $NEXUS_USERNAME:$NEXUS_PASSWORD --request POST $NEXUSRI
    ```
 
-#### Adding/Removing a repo from Zypper
+### Adding/removing a repository from Zypper
 
 1. (`ncn-mw#`) Add the repository with the Zypper command to the current node:
 
@@ -152,21 +157,21 @@ function nexus-get-credential() {
    zypper ref
    ```
 
-1. (`ncn-mw#`) Confirm the new rpm can be found by Zypper:
+1. (`ncn-mw#`) Confirm the new RPM can be found by Zypper:
 
    ```bash
    zypper pa $REPO
    ```
 
-1. (`ncn-mw#`) Remove the Zypper repo from the current node:
+1. (`ncn-mw#`) Remove the Zypper repository from the current node:
 
    ```bash
    zypper rr $REPO
    ```
 
-#### Removing a Repo from Nexus
+### Removing a repository from Nexus
 
-(`ncn-mw#`) Use the following function to remove a repo from Nexus:
+(`ncn-mw#`) Use the following function to remove a repository from Nexus:
 
 ```bash
 function nexus-delete-repo() {
@@ -199,7 +204,7 @@ nexus-delete-repo sample-repo
 ## Container registry
 
 (`ncn-mw#`) The container registry is available at `https://registry.local` on the NCNs or compute nodes. By default, access to the container registry
-is not available over the Customer Access Network \(CAN\). If desired, a corresponding route may be added to the `nexus` `VirtualService` resource in the
+is not available over the Customer Access Network (CAN). If desired, a corresponding route may be added to the `nexus` `VirtualService` resource in the
 `nexus` namespace:
 
 **WARNING:** If access to the container registry in Nexus is exposed over CAN, it is strongly recommended to setup and configure fine-grained access control.
@@ -221,7 +226,7 @@ nexus   [services/services-gateway]   [packages.local registry.local nexus.odin.
 Images can only be added to the container registry through the Docker API. To push images, product installers will need to use a compatible client, such as Skopeo, Podman, or Docker.
 
 By default, product installers depend on Podman, paired with a vendor-specific Skopeo image, to synchronize container images from a release distribution to `registry.local`.
-The Cray System Management \(CSM\) product adds a recent version of `quay.io/skopeo/stable` to the container registry, and it may be used to copy images into
+The Cray System Management (CSM) product adds a recent version of `quay.io/skopeo/stable` to the container registry, and it may be used to copy images into
 `registry.local`.
 
 Starting in CSM 1.6.0, the container images are signed and signatures are available along with the images.
@@ -267,7 +272,6 @@ Copying config sha256:74bd2f6f62afddb128691920e64818dac6fad1a07ca1ad8f4ad861047c
 Writing manifest to image destination
 Storing signatures
 time="2025-07-02T06:41:57Z" level=info msg="Synced 1 images from 1 sources"
-
 ```
 
 This ensures that both the image and its signature (if available) are successfully uploaded to Nexus.
@@ -278,13 +282,13 @@ Kubernetes pods are expected to rely on the registry mirror configuration in `/e
 using upstream references. By default, the following upstream registries are automatically redirected to `registry.local`:
 
 - `dtr.dev.cray.com`
-- `docker.io` \(and `registry-1.docker.io`\)
+- `docker.io` (and `registry-1.docker.io`)
 - `quay.io`
 - `gcr.io`
 - `k8s.gcr.io`
 
 **WARNING:** The registry mirror configuration in `/etc/containerd/config.toml` only applies to the CRI. When using the `ctr` command or another
-container runtime \(For example, `podman` or `docker`\), the administrator must explicitly reference `registry.local`.
+container runtime (For example, `podman` or `docker`), the administrator must explicitly reference `registry.local`.
 
 ### Pull example using CRI
 

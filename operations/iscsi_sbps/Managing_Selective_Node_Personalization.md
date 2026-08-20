@@ -388,7 +388,7 @@ flood of messages may be seen in the console log of target node:
 2025-10-09 20:26:13 [ 1872.525585][T241717] iSCSI Login negotiation failed.
 ```
 
-Hence removal of this stale iSCSI session need to be done for the above mentioned scenarios and steps are below:  
+Hence removal of this stale iSCSI session need to be done for the above mentioned scenarios and steps are below:
 
 1. Login to iSCSI client (Compute/UAN node):
 
@@ -457,7 +457,7 @@ Hence removal of this stale iSCSI session need to be done for the above mentione
    ```bash
    nid000001:~ # iscsiadm -m session
    ```
-  
+
    Example command output:
 
    ```text

@@ -22,47 +22,62 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
     }
     ```
 
-2. Verify that the new get\_master\_token function is working.
+1. Verify that the new `get_master_token` function is working.
 
     If the function is working, it will return a long string that is base-64-encoded.
 
     ```bash
     get_master_token
+    ```
+
+    Example output:
+
+    ```text
     eyJhbGciO...YceX4Ig
     ```
 
-3. Get the ID of the LDAP user federation.
+1. Get the ID of the LDAP user federation.
 
-    Replace SHASTA-USER-FEDERATION-LDAP in the command below with the name of the user federation being used.
+    Replace `SHASTA-USER-FEDERATION-LDAP` in the command below with the name of the user federation being used.
 
     ```bash
     FEDERATION_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
-    "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/components?name=shasta-user-federation-ldap" \
-    | jq .[0].id -r)
+        "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/components?name=shasta-user-federation-ldap" \
+        | jq .[0].id -r)
 
     echo $FEDERATION_ID
+    ```
+
+    Example output:
+
+    ```text
     e080d20a-51b0-40ad-8f21-98f7b752e39c
     ```
 
-4. Get the ID of the email mapper.
+1. Get the ID of the email mapper.
 
     ```bash
     EMAIL_COMPONENT_ID=$(curl -s -H "Authorization: Bearer $(get_master_token)" \
-    "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/components?name=email&parent=$FEDERATION_ID" \
-    | jq .[0].id -r)
+        "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/components?name=email&parent=$FEDERATION_ID" \
+        | jq .[0].id -r)
 
     echo $EMAIL_COMPONENT_ID
+    ```
+
+    Example output:
+
+    ```text
     ba3cfe20-c2ed-4c92-aac0-3b6fc865989c
     ```
 
-5. Delete the email mapper.
+1. Delete the email mapper.
 
     ```bash
     curl -i -s -XDELETE -H "Authorization: Bearer $(get_master_token)" \
-    "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/components/$EMAIL_COMPONENT_ID"
+        "https://${AUTH_FQDN}/keycloak/admin/realms/shasta/components/$EMAIL_COMPONENT_ID"
     ```
 
-6. Verify in the Keycloak UI that there is no longer an email mapper for the LDAP user federation.
+1. Verify in the Keycloak UI that there is no longer an email mapper for the LDAP user federation.
 
     For more information on accessing the Keycloak UI, see [Access the Keycloak User Management UI](Access_the_Keycloak_User_Management_UI.md).
 
@@ -70,6 +85,6 @@ If there are duplicate email addresses for LDAP users, it can cause Keycloak to 
 
     ![LDAP User Federation Mappers](../../img/operations/LDAP_User_Federation_Mappers.png)
 
-7. Click the **Synchronize all users** button in the **Settings** tab for the LDAP user federation.
+1. Click the `Synchronize all users` button in the `Settings` tab for the LDAP user federation.
 
-    The **Synchronize all users** button will be at the bottom of the page.
+    The `Synchronize all users` button will be at the bottom of the page.

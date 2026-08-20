@@ -1,6 +1,6 @@
 # Manage Repositories with Nexus
 
-This section describes how to connect to Nexus with the Web UI, as well as how to access the REST API from non-compute nodes \(NCNs\) or compute nodes to manage repositories.
+This section describes how to connect to Nexus with the Web UI, as well as how to access the REST API from non-compute nodes (NCNs) or compute nodes to manage repositories.
 
 - [System domain name](#system-domain-name)
 - [Access Nexus with the web UI](#access-nexus-with-the-web-ui)
@@ -197,7 +197,7 @@ Neither the `v1` or `beta/repositories` endpoints are paginated.
 
 ### List assets
 
-(`ncn-mw#`) Use the `/service/rest/v1/components` endpoint to list the assets in a specific repository \(`REPO_NAME`\). The `/service/rest/v1/components` endpoint is paginated.
+(`ncn-mw#`) Use the `/service/rest/v1/components` endpoint to list the assets in a specific repository (`REPO_NAME`). The `/service/rest/v1/components` endpoint is paginated.
 
 ```bash
 paginate 'https://packages.local/service/rest/v1/components?repository=REPO_NAME' | jq -r '.items[] | .name'
