@@ -53,7 +53,7 @@ The following sequence of steps occurs during this workflow.
 
 1. (`ncn-mw#`) Administrator registers the recipe with IMS.
 
-    Registering the recipe creates a recipe record for your custom recipe in IMS.
+    Registering the recipe creates a recipe record for the custom recipe in IMS.
 
     ```bash
     cray ims recipes list
@@ -138,7 +138,7 @@ The following sequence of steps occurs during this workflow.
 1. (`ncn-mw#`) The administrator identifies an existing image to be customized.
 
     Retrieve a list of `ImageRecords` indicating images that have been registered with IMS. IMS uses the `ImageRecord` to read the image's `manifest.yaml` to find the image's root file system (`rootfs`) artifact.
-    Note the id of the image that you want to customize.
+    Note the ID of the image to be customized.
 
     ```bash
     cray ims images list

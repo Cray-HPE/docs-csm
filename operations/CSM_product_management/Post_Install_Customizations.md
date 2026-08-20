@@ -277,7 +277,7 @@ Using the values from the above table, follow the [Redeploying a Chart](Redeploy
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    Verify that the pods restart and that the desired resources have been applied. Commands in this section  use the
+    Verify that the pods restart and that the desired resources have been applied. Commands in this section use the
     `$CHART_NAME` variable which should have been set as part of the [Redeploying a Chart](Redeploying_a_Chart.md) procedure.
 
     1. Set the `ns` variable to the name of the appropriate Kubernetes namespace from the earlier table.
@@ -496,7 +496,7 @@ Using the values from the above table, follow the [Redeploying a Chart](Redeploy
 
     **Only follow these steps as part of the previously linked chart redeploy procedure.**
 
-    Verify that the pods restart and that the desired resources have been applied. Commands in this section  use the
+    Verify that the pods restart and that the desired resources have been applied. Commands in this section use the
     `$CHART_NAME` variable which should have been set as part of the [Redeploying a Chart](Redeploying_a_Chart.md) procedure.
 
     1. Set the `ns` variable to the name of the appropriate Kubernetes namespace from the earlier table.

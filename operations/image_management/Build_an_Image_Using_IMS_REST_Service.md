@@ -122,15 +122,15 @@ The commands in this procedure must be run as the `root` user.
    in the resultant image root's `/boot` directory.
 
    Use the following table to help determine the default kernel and `initrd` file names to specify when submitting the
-   job to customize an image. These are just default names. Please consult with the site administrator to determine if
+   job to customize an image. These are just default names. Consult with the site administrator to determine if
    these names have been changed for a given image or recipe.
 
    | Recipe                          | Recipe Name                                    | Kernel File Name | `initrd` File Name |
    |---------------------------------|------------------------------------------------|------------------|--------------------|
    | SLES 15 SP5 `x86_64` Barebones  | `cray-sles15sp3-barebones`                     | `vmlinuz`        | `initrd`           |
    | SLES 15 SP5 `aarch64` Barebones | `cray-sles15sp3-barebones`                     | `Image`          | `initrd`           |
-   | COS                             | `cray-shasta-compute-sles15sp5.x86_64-1.4.66`  | `vmlinuz`        | `initrd`           |
-   | COS                             | `cray-shasta-compute-sles15sp5.aarch64-1.4.66` | `Image`          | `initrd`           |
+   | COS `x86`                       | `cray-shasta-compute-sles15sp5.x86_64-1.4.66`  | `vmlinuz`        | `initrd`           |
+   | COS `aarch64`                   | `cray-shasta-compute-sles15sp5.aarch64-1.4.66` | `Image`          | `initrd`           |
 
    ```bash
    cray ims jobs create \

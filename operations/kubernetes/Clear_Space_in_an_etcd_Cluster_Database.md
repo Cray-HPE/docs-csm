@@ -37,7 +37,7 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
          --- PASSED ---
         ```
 
-    1. Check to see if the default 3G disk usage space \(unless defined differently in the Helm chart\) is currently exceeded. `all_clusters` can be substituted with a cluster name (`cray-bss`) for an individual cluster
+    1. Check to see if the default 3G disk usage space (unless defined differently in the Helm chart) is currently exceeded. `all_clusters` can be substituted with a cluster name (`cray-bss`) for an individual cluster
 
         ```bash
         /opt/cray/platform-utils/etcd/etcd-util.sh pvc_usage all_clusters
@@ -86,7 +86,7 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
 
         ```text
         **************************************************************************
-        
+
         === Check the health of Etcd Cluster's database in the Services Namespace. ===
         === PASS or FAIL status returned. ===
         ### cray-bos-bitnami-etcd-0 Etcd Database Check: ###
@@ -100,7 +100,7 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
 
 1. (`ncn-mw#`) Clear the `NOSPACE` alarm. If the database needs to be defragged, then the alarm will be reset.
 
-    1. Check to see if the default 3G disk usage space \(unless defined differently in the Helm chart\) is currently exceeded. `all_clusters` can be substituted with a cluster name (`cray-bss`) for an individual cluster
+    1. Check to see if the default 3G disk usage space (unless defined differently in the Helm chart) is currently exceeded. `all_clusters` can be substituted with a cluster name (`cray-bss`) for an individual cluster
 
         ```bash
         /opt/cray/platform-utils/etcd/etcd-util.sh pvc_usage all_clusters

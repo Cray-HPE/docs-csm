@@ -8,7 +8,7 @@ If user IDs or passwords are needed, then see step 1 of the [Prepare the System 
 
 ## Note about services used during system power on
 
-- The Power Control Service (PCS) service controls power to major components. PCS sequences the power on tasks in the correct order, but  **does not** determine if the required software services are running on the components.
+- The Power Control Service (PCS) service controls power to major components. PCS sequences the power on tasks in the correct order, but **does not** determine if the required software services are running on the components.
 - The Cray Advanced Platform Monitoring and Control (CAPMC) service can also control power to major components.
   CAPMC sequences the power on tasks in the correct order, but **does not** determine if the required software services are running on the components.
 - The Boot Orchestration Service (BOS) manages and configures power on and boot tasks.
@@ -23,7 +23,7 @@ cabinets are powered on, wait at least 10 minutes for systems to initialize.
 
 After all the system cabinets are powered on, be sure that all management network and Slingshot network switches are powered on, and that there are no error LEDS or hardware failures.
 
-## Power On the External File Systems
+## Power on the external file systems
 
 To power on an external Lustre file system (ClusterStor), refer to [Power On the External Lustre File System](Power_On_the_External_Lustre_File_System.md).
 
