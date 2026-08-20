@@ -28,7 +28,7 @@ and to follow navigational links within a topic file and to other files.
 
 There are many tools which render the Markdown format and provide these advantages. Any Internet search
 for Markdown tools will provide a long list of these tools. Some of the tools are better than others
-at displaying the images and allowing you to follow the navigational links.
+at displaying the images and allowing readers to follow the navigational links.
 
 ## File formats
 

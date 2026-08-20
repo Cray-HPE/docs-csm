@@ -17,13 +17,13 @@ For general Kubernetes troubleshooting information, including more information o
 This page is broken into different sections, based on the errors found in the log.
 
 - [`UF,URX` with TLS error](#ufurx-with-tls-error)
-  - [Symptom](#symptom-ufurx-with-tls-error)
-  - [Description](#description-ufurx-with-a-tls-error)
-  - [Remediation](#remediation-ufurx-with-a-tls-error)
+    - [Symptom](#symptom-ufurx-with-tls-error)
+    - [Description](#description-ufurx-with-a-tls-error)
+    - [Remediation](#remediation-ufurx-with-a-tls-error)
 - [`UAEX`](#uaex)
-  - [Symptom](#symptom-uaex)
-  - [Description](#description-uaex)
-  - [Remediation](#remediation-uaex)
+    - [Symptom](#symptom-uaex)
+    - [Description](#description-uaex)
+    - [Remediation](#remediation-uaex)
 - [Other error codes](#other-error-codes)
 
 ## `UF,URX` with TLS error
@@ -62,7 +62,10 @@ are being created.
 
 Once the roll out is complete, or the new pod is running, then the HTTP 503 message should clear.
 
-To ensure there are no further pods in this state you may run this script:
+To ensure there are no further pods in this state, run this script:
+
+> Running this script requires the latest CSM documentation RPM.
+> See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ```bash
 /usr/share/doc/csm/scripts/operations/known-issues.sh
@@ -112,6 +115,9 @@ This error code typically indicates an issue with the authorization service (for
 Once the restarts are all complete, the HTTP 503 message should clear.
 
 NOTE: If the `UAEX` issue keeps happening, run the following script as the workaround:
+
+> Running this script requires the latest CSM documentation RPM.
+> See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ```bash
 /usr/share/doc/csm/scripts/operations/istio_opa_503_UAEX_repair.sh

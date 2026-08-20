@@ -218,7 +218,7 @@ Each node will have `Success` reported if everything worked, the node was initia
 and the `cray` CLI is operational for that node. For nodes with problems, there will be a
 brief warning message that reports what the problem is on that node.
 
-For all debugging steps, ensure you add `--keycloakHost` to the command line, else Keycloak requests may fail.
+For all debugging steps, ensure that `--keycloakHost` is added to the command line, otherwise Keycloak requests may fail.
 
 Results with problems on some nodes may look like the following:
 

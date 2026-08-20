@@ -29,7 +29,7 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         Error: etcdserver: mvcc: database space exceeded
         ```
 
-    1. Check to see if the default 2G disk usage space \(unless defined differently in the Helm chart\) is currently exceeded.
+    1. Check to see if the default 2G disk usage space (unless defined differently in the Helm chart) is currently exceeded.
 
         In the following example, the disk usage is 375.5 M, which means the disk space has not been exceeded.
 
@@ -109,7 +109,7 @@ Defragging the database cluster and clearing the etcd cluster `NOSPACE` alarm wi
         [pod/cray-hbtd-56bc4f6fdb-92bqx/cray-hbtd] 2020/09/15 20:01:05 INTERNAL ERROR storing key  {"Component":"x3005c0s19b1n0","Last_hb_rcv_time":"5f611d81","Last_hb_timestamp":"2020-09-15T15:01:05.983828-06:00","Last_hb_status":"OK","Had_warning":""} :  etcdserver: mvcc: database space exceeded
         ```
 
-    1. Check if the default 2G \(unless defined differently in the Helm chart\) disk usage has been exceeded.
+    1. Check if the default 2G (unless defined differently in the Helm chart) disk usage has been exceeded.
 
         Replace `ETCD_CLUSTER_NAME` before running the following command.
         For example, `cray-hbtd-etcd-6p4tc4jdgm` could be used.

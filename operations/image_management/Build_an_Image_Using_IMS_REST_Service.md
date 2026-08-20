@@ -115,13 +115,14 @@ The commands in this procedure must be run as the `root` user.
     `dracut` configuration, and more. Thus, the user must pass the name of the kernel and `initrd` that IMS will look for
     in the resultant image root's `/boot` directory.
 
-    Use the following table to help determine the default kernel and `initrd` file names to specify when submitting the job to customize an image. These are just default names.
-    Please consult with the site administrator to determine if these names have been changed for a given image or recipe.
+    Use the following table to help determine the default kernel and `initrd` file names to specify when submitting the
+    job to customize an image. These are just default names. Consult with the site administrator to determine if
+    these names have been changed for a given image or recipe.
 
-    |Recipe|Recipe Name|Kernel File Name|`initrd` File Name|
-    |------|-----------|----------------|----------------|
-    |SLES 15 SP3 Barebones|`cray-sles15sp3-barebones`|`vmlinuz`|`initrd`|
-    |COS|`cray-shasta-compute-sles15sp3.x86_64-1.4.66`|`vmlinuz`|`initrd`|
+    | Recipe                          | Recipe Name                                    | Kernel File Name | `initrd` File Name |
+    |---------------------------------|------------------------------------------------|------------------|--------------------|
+    | SLES 15 SP3 Barebones           | `cray-sles15sp3-barebones`                     | `vmlinuz`        | `initrd`           |
+    | COS                             | `cray-shasta-compute-sles15sp3.x86_64-1.4.66`  | `vmlinuz`        | `initrd`           |
 
     ```bash
     cray ims jobs create \

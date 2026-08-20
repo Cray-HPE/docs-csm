@@ -2,16 +2,16 @@
 
 This section updates the software running on management NCNs.
 
-- [1. Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
-- [2. Update management host firmware (FAS)](#2-update-management-host-firmware-fas)
-- [3. Execute the IUF `management-nodes-rollout` stage](#3-execute-the-iuf-management-nodes-rollout-stage)
-    - [3.1 `management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
-    - [3.2 `management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
-    - [3.3 NCN worker nodes](#33-ncn-worker-nodes)
-    - [3.4 Personalize NCN storage nodes](#34-personalize-ncn-storage-nodes)
-- [4. Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns)
-- [5. Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware)
-- [6. Next steps](#6-next-steps)
+1. [Perform Slingshot switch firmware updates](#1-perform-slingshot-switch-firmware-updates)
+1. [Update management host firmware (FAS)](#2-update-management-host-firmware-fas)
+1. [Execute the IUF `management-nodes-rollout` stage](#3-execute-the-iuf-management-nodes-rollout-stage)
+    1. [`management-nodes-rollout` with CSM upgrade](#31-management-nodes-rollout-with-csm-upgrade)
+    1. [`management-nodes-rollout` without CSM upgrade](#32-management-nodes-rollout-without-csm-upgrade)
+    1. [NCN worker nodes](#33-ncn-worker-nodes)
+    1. [Personalize NCN storage nodes](#34-personalize-ncn-storage-nodes)
+1. [Restart `goss-servers` on all NCNs](#4-restart-goss-servers-on-all-ncns)
+1. [Update management host Slingshot NIC firmware](#5-update-management-host-slingshot-nic-firmware)
+1. [Next steps](#6-next-steps)
 
 ## 1. Perform Slingshot switch firmware updates
 
@@ -190,7 +190,7 @@ Refer to that table and any corresponding product documents before continuing to
         ```
 
         > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
-        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
+        > See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
 1. Follow the steps documented in [Stage 1.4 - Upgrade `weave` and `multus`](../../../upgrade/Stage_1.md#stage-14---upgrade-weave-and-multus)
 
@@ -215,8 +215,8 @@ can update NCN master and storage nodes using CFS configuration only.
 Follow the following steps to complete the `management-nodes-rollout` stage.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
-section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
-Refer to that table and any corresponding product documents before continuing to the next step.
+   section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
+   Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. Rebuild the NCN worker nodes. Follow the procedure in section [3.3 NCN worker nodes](#33-ncn-worker-nodes) and then return to this procedure to complete the next step.
 

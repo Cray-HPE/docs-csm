@@ -83,9 +83,9 @@ with system-specific customizations.
     - `spec.kubernetes.sealed_secrets.cray_reds_credentials`
     - `spec.kubernetes.sealed_secrets.cray_meds_credentials`
     - `spec.kubernetes.sealed_secrets.cray_hms_rts_credentials`
-    - Replace the `Username` and `Password` references in match the existing settings of your system hardware components.
+    - Replace the `Username` and `Password` references to match the existing settings of the system hardware components.
 
-    > **NOTE**
+    > **NOTES**
     >
     > - The `cray_reds_credentials` are used by the River Endpoint Discovery Service (REDS) for River components.
     > - The `cray_meds_credentials` are used by the Mountain Endpoint Discovery Service (MEDS) for the liquid-cooled components in an Olympus (Mountain) cabinet.
@@ -98,7 +98,7 @@ with system-specific customizations.
     vim "${SITE_INIT}/customizations.yaml"
     ```
 
-1. (`pit#`) Review the changes that you made.
+1. (`pit#`) Review the changes that were made.
 
     ```bash
     diff ${SITE_INIT}/customizations.yaml ${SITE_INIT}/customizations.yaml.prepassword
@@ -218,8 +218,8 @@ with system-specific customizations.
 
         > **NOTE** The issuer DN is properly escaped as part of the
         > `awk` pattern below. It must be changed to match the value
-        > for `emailAddress`, `CN`, `OU`, etc. for your LDAP. If the value
-        > you are using is different, be sure to escape it properly!
+        > for `emailAddress`, `CN`, `OU`, etc. for the site LDAP. If the value
+        > being used is different, be sure to escape it properly!
 
         ```bash
         openssl s_client -showcerts -nameopt RFC2253 -connect "${LDAP}:${PORT}" </dev/null 2>/dev/null |
@@ -229,7 +229,7 @@ with system-specific customizations.
 
 1. (`pit#`) Create `certs.jks`.
 
-    > **NOTE** The alias used in this command for `cray-data-center-ca` should be changed to match your LDAP.
+    > **NOTE** The alias used in this command for `cray-data-center-ca` should be changed to match the site LDAP.
 
     ```bash
     podman run --rm -v "$(pwd):/data" \

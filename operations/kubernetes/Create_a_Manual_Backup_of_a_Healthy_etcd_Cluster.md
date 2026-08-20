@@ -4,7 +4,7 @@ Manually create a backup of a healthy etcd cluster and check to see if the backu
 
 Backups of healthy etcd clusters can be used to restore the cluster if it becomes unhealthy at any point.
 
-The commands in this procedure can be run on any master node \(`ncn-mXXX`\) or worker node \(`ncn-wXXX`\) on the system.
+The commands in this procedure can be run on any master node (`ncn-mXXX`) or worker node (`ncn-wXXX`) on the system.
 
 ## Prerequisites
 
@@ -15,9 +15,7 @@ A healthy etcd cluster is available on the system. See [Check the Health and Bal
 1. Create a backup for the desired etcd cluster.
 
     Create variables which will be used throughout this procedure.
-    In this example we are making a backup of the Boot Orchestration Service \(BOS\) etcd cluster
-    which will be named `cray-bos-etcd-backup_DATE_TIME`.
-    NOTE: backup name can be anything you would like.
+    The example below is backing up the etcd cluster for the Boot Orchestration Service (BOS) named `cray-bos-etcd-backup_DATE_TIME`.
 
     ```bash
     SERVICE=cray-bos

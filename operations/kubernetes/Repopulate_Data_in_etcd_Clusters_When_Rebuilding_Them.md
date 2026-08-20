@@ -6,27 +6,27 @@ That data needs to be repopulated in order for the cluster to go back to a healt
 - [Applicable services](#applicable-services)
 - [Prerequisites](#prerequisites)
 - [Procedures](#procedures)
-  - [BOS](#bos)
-  - [BSS](#bss)
-  - [CPS](#cps)
-  - [CRUS](#crus)
-  - [FAS](#fas)
-  - [HMNFD](#hmnfd)
-  - [MEDS](#meds)
-  - [REDS](#reds)
+    - [BOS](#bos)
+    - [BSS](#bss)
+    - [CPS](#cps)
+    - [CRUS](#crus)
+    - [FAS](#fas)
+    - [HMNFD](#hmnfd)
+    - [MEDS](#meds)
+    - [REDS](#reds)
 
 ## Applicable services
 
 The following services need their data repopulated in the etcd cluster:
 
-- Boot Orchestration Service \(BOS\)
-- Boot Script Service \(BSS\)
-- Content Projection Service \(CPS\)
-- Compute Rolling Upgrade Service \(CRUS\)
-- Firmware Action Service \(FAS\)
-- HMS Notification Fanout Daemon \(HMNFD\)
-- Mountain Endpoint Discovery Service \(MEDS\)
-- River Endpoint Discovery Service \(REDS\)
+- Boot Orchestration Service (BOS)
+- Boot Script Service (BSS)
+- Content Projection Service (CPS)
+- Compute Rolling Upgrade Service (CRUS)
+- Firmware Action Service (FAS)
+- HMS Notification Fanout Daemon (HMNFD)
+- Mountain Endpoint Discovery Service (MEDS)
+- River Endpoint Discovery Service (REDS)
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ Reconstruct boot session templates for impacted product streams to repopulate da
 Boot preparation information for other product streams can be found in the following locations:
 
 - UANs: Refer to the UAN product stream repository and search for the "PREPARE UAN BOOT SESSION TEMPLATES" header in the "Install and Configure UANs" procedure.
-- Cray Operating System \(COS\): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
+- Cray Operating System (COS): Refer to the "Create a Boot Session Template" header in the "Boot COS" procedure in the COS product stream documentation.
 
 ### BSS
 

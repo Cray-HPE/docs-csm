@@ -2,16 +2,16 @@
 
 Administrators are able to customize many aspects of the system in order to address problems or tailor it to better suit their requirements.
 Often this requires redeploying one or more Helm charts. This page outlines the procedure for doing this in CSM. Other parts of the CSM
-documentation will reference this page if you are instructed to redeploy a chart. In those cases, the source page that links to this one should
-specify which charts should be redeployed and what customizations (if any) should be made to them.
+documentation will reference this page when administrators are instructed to redeploy a chart.
+In those cases, the source page that links to this one should specify which charts should be redeployed and what customizations (if any) should be made to them.
 
 * [Prerequisites](#prerequisites)
 * [Procedure](#procedure)
-  1. [Preparation](#1-preparation)
-  1. [Obtain and optionally update customizations](#2-obtain-and-optionally-update-customizations)
-  1. [Redeploy charts](#3-redeploy-charts)
-  1. [Save updated customizations](#4-save-updated-customizations)
-  1. [Cleanup](#5-cleanup)
+    1. [Preparation](#1-preparation)
+    1. [Obtain and optionally update customizations](#2-obtain-and-optionally-update-customizations)
+    1. [Redeploy charts](#3-redeploy-charts)
+    1. [Save updated customizations](#4-save-updated-customizations)
+    1. [Cleanup](#5-cleanup)
 
 ## Prerequisites
 
@@ -19,10 +19,10 @@ specify which charts should be redeployed and what customizations (if any) shoul
 * The latest CSM documentation RPMs are installed on the node where this procedure is being performed. See
   [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 * If this procedure was linked from another page, the administrator must have the following information from that other page:
-  * The name of the charts to be redeployed (for example, `cray-hms-bss`, `cray-sysmgmt-health`, or `spire`).
-  * The base name of the manifest for each of these charts (for example, `sysmgmt`, `platform`, or `storage`).
-  * The customization changes to make, if any.
-  * The steps to validate that the chart deployment was successful.
+    * The name of the charts to be redeployed (for example, `cray-hms-bss`, `cray-sysmgmt-health`, or `spire`).
+    * The base name of the manifest for each of these charts (for example, `sysmgmt`, `platform`, or `storage`).
+    * The customization changes to make, if any.
+    * The steps to validate that the chart deployment was successful.
 
 ## Procedure
 
