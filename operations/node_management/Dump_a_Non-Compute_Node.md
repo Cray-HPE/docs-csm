@@ -26,7 +26,7 @@ An NCN has crashed or an administrator has triggered a node crash.
     For more information on the SDU command options, use the `sdu --help` command.
 
     ```bash
-    sdu scenario triage --start_time DATE_OR_TIME_STRING --end_time DATE_OR_TIME_STRING --plugin ncn.gather.nodes --plugin ncn.gather.kernel.dumps
+    sdu scenario triage --start-time DATE_OR_TIME_STRING --end-time DATE_OR_TIME_STRING --plugin ncn.gather.nodes --plugin ncn.gather.kernel.dumps
     ```
 
     Refer to the [SUSE documentation](https://documentation.suse.com/) for more information on memory dumps or crash dumps.
