@@ -1,6 +1,6 @@
 # Git Operations
 
-Use the `git` command to manage repository content in the Version Control Service \(VCS\).
+Use the `git` command to manage repository content in the Version Control Service (VCS).
 
 Once a repository is cloned, the git command line tool is available to interact with a repository from VCS.
 The `git` command is used for making commits, creating new branches, and pushing new branches, tags, and commits to the remote repository stored in VCS.

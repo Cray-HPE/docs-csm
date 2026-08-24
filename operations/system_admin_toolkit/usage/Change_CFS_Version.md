@@ -22,7 +22,7 @@ section with the CFS version desired in the `api_version` setting.
 
    In this example, SAT is using CFS version `"v3"`.
 
-2. Change the line specifying the `api_version` to the CFS version desired (for
+1. Change the line specifying the `api_version` to the CFS version desired (for
    example, `"v2"`).
 
    ```toml
@@ -30,7 +30,7 @@ section with the CFS version desired in the `api_version` setting.
    api_version = "v2"
    ```
 
-3. If applicable, uncomment the `api_version` line.
+1. If applicable, uncomment the `api_version` line.
 
    If the system is using an existing SAT configuration file from a recent
    version of SAT, the `api_version` line might be commented out like this:
@@ -44,7 +44,7 @@ section with the CFS version desired in the `api_version` setting.
    version. To ensure a different CFS version is used, uncomment the
    `api_version` line by removing `#` at the beginning of the line.
 
-## Key Changes and Improvements with CFS V3
+## Key changes and improvements with CFS v3
 
 - CFS V3 on SAT provides optimized results for larger systems, offering quicker responses.
 - Paging is only available when using the CFS V3 API. This ensures that even with a large number
@@ -53,8 +53,10 @@ section with the CFS version desired in the `api_version` setting.
   system by paginating the results. This is an improvement over CFS v2 on SAT, which would
   return an error when number of components exceeds the response limit.
   For more information on paging see [Paging CFS Records](../../configuration_management/Paging_CFS_Records.md).
+- For more information on the differences between CFS v2 and v3, see
+  [Differences between the V2 and V3 CFS APIs](../../configuration_management/Differences_Between_the_V2_and_V3_CFS_APIs.md).
 
-## Limitations with CFS V2
+## Limitations with CFS v2
 
 - When using CFS V2, the number of entries returned in a single query is
   limited by the `default_page_size` parameter, which is 1000.

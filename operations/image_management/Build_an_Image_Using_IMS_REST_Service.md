@@ -4,16 +4,16 @@ Create an image root from an IMS recipe.
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
-* System management services \(SMS\) are running in a Kubernetes cluster on non-compute nodes \(NCN\) and include the
+* The Cray command line interface (CLI) tool is initialized and configured on the system.
+* System management services (SMS) are running in a Kubernetes cluster on non-compute nodes (NCN) and include the
   following deployments:
-    * `cray-ims`, the Image Management Service \(IMS\)
+    * `cray-ims`, the Image Management Service (IMS)
     * `cray-nexus`, the Nexus repository manager service
-* The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
+* The NCN Certificate Authority (CA) public key has been properly installed into the CA cache for this system.
 * `kubectl` is installed locally and configured to point at the SMS Kubernetes cluster.
 * A Kiwi image recipe uploaded as a gzipped tar file and registered with IMS.
   See [Upload and Register an Image Recipe](Upload_and_Register_an_Image_Recipe.md).
-* A token providing Simple Storage Service \(S3\) credentials has been generated.
+* A token providing Simple Storage Service (S3) credentials has been generated.
 
 ## Limitations
 
@@ -31,27 +31,27 @@ The commands in this procedure must be run as the `root` user.
    The following query may return multiple public key records. The correct one will have a name value including the
    current username in use.
 
-    ```bash
-    cray ims public-keys list
-    ```
+   ```bash
+   cray ims public-keys list --format toml
+   ```
 
    Example output excerpt:
 
-    ```toml
-    [[results]]
-    public_key = "ssh-rsa AAAAB3NzaC1yc2EA ... AsVruw1Zeiec2IWt"
-    id = "a252ff6f-c087-4093-a305-122b41824a3e"
-    name = "username public key"
-    created = "2018-11-21T17:19:07.830000+00:00"
-    ```
+   ```toml
+   [[results]]
+   public_key = "ssh-rsa AAAAB3NzaC1yc2EA ... AsVruw1Zeiec2IWt"
+   id = "a252ff6f-c087-4093-a305-122b41824a3e"
+   name = "username public key"
+   created = "2018-11-21T17:19:07.830000+00:00"
+   ```
 
    If a public key associated with the username in use is not returned, proceed to the next step. If a public key
    associated with the username does exist, create a variable for the IMS public key `id` value in the returned data and
    then proceed to step 3.
 
-    ```bash
-    IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
-    ```
+   ```bash
+   IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
+   ```
 
 1. (`ncn-mw#`) Upload the SSH public key to the IMS service.
 
@@ -63,7 +63,7 @@ The commands in this procedure must be run as the `root` user.
    Replace the username value with the actual username being used on the system when setting the public key name.
 
    ```bash
-   cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub
+   cray ims public-keys create --name "username public key" --public-key ~/.ssh/id_rsa.pub --format toml
    ```
 
    Example output:
@@ -73,20 +73,20 @@ The commands in this procedure must be run as the `root` user.
    id = "a252ff6f-c087-4093-a305-122b41824a3e"
    name = "username public key"
    created = "2018-11-21T17:19:07.830000+00:00"
-    ```
+   ```
 
-    If successful, create a variable for the IMS public key `id` value in the returned data.
+   If successful, create a variable for the IMS public key `id` value in the returned data.
 
-    ```bash
-    IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
-    ```
+   ```bash
+   IMS_PUBLIC_KEY_ID=a252ff6f-c087-4093-a305-122b41824a3e
+   ```
 
 ### Get the IMS recipe to build
 
 1. (`ncn-mw#`) Locate the IMS recipe needed to build the image.
 
    ```bash
-   cray ims recipes list
+   cray ims recipes list --format toml
    ```
 
    Example output excerpt:
@@ -107,30 +107,30 @@ The commands in this procedure must be run as the `root` user.
 
   If successful, create a variable for the IMS recipe `id` in the returned data.
 
-   ```bash
-   IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
-   ```
+  ```bash
+  IMS_RECIPE_ID=2233c82a-5081-4f67-bec4-4b59a60017a6
+  ```
 
 ### Submit the Kubernetes image create job
 
 1. (`ncn-mw#`) Create an IMS job record and start the image creation job.
 
-   After building an image, IMS will automatically upload any build artifacts \(root file system, kernel and `initrd`\)
+   After building an image, IMS will automatically upload any build artifacts (root file system, kernel and `initrd`)
    to the artifact repository, and associate them with IMS. IMS is not able to dynamically determine the Linux kernel
    and `initrd` to look for because the file name for these vary depending upon Linux distribution, Linux version,
    `dracut` configuration, and more. Thus, the user must pass the name of the kernel and `initrd` that IMS will look for
    in the resultant image root's `/boot` directory.
 
    Use the following table to help determine the default kernel and `initrd` file names to specify when submitting the
-   job to customize an image. These are just default names. Please consult with the site administrator to determine if
+   job to customize an image. These are just default names. Consult with the site administrator to determine if
    these names have been changed for a given image or recipe.
 
-    | Recipe                        | Recipe Name                                            | Kernel File Name | `initrd` File Name |
-    |-------------------------------|--------------------------------------------------------|------------------|--------------------|
-    | SLES 15 SP6 Barebones x86     | `cray-shasta-csm-sles15sp6-barebones-csm-1.7-x86_64`   | `vmlinuz`        | `initrd`           |
-    | SLES 15 SP6 Barebones aarch64 | `cray-shasta-csm-sles15sp6-barebones-csm-1.7-aarch64`  | `Image`          | `initrd`           |
-    | USS x86                       | `uss-1.4.0-93-csm.x86_64`                              | `vmlinuz`        | `initrd`           |
-    | USS aarch64                   | `uss-1.4.0-93-csm.aarch64`                             | `Image`          | `initrd`           |
+   | Recipe                          | Recipe Name                                            | Kernel File Name | `initrd` File Name |
+   |---------------------------------|--------------------------------------------------------|------------------|--------------------|
+   | SLES 15 SP6 Barebones `x86`     | `cray-shasta-csm-sles15sp6-barebones-csm-1.7-x86_64`   | `vmlinuz`        | `initrd`           |
+   | SLES 15 SP6 Barebones `aarch64` | `cray-shasta-csm-sles15sp6-barebones-csm-1.7-aarch64`  | `Image`          | `initrd`           |
+   | USS `x86`                       | `uss-1.4.0-93-csm.x86_64`                              | `vmlinuz`        | `initrd`           |
+   | USS `aarch64`                   | `uss-1.4.0-93-csm.aarch64`                             | `Image`          | `initrd`           |
 
    ```bash
     cray ims jobs create \
@@ -138,7 +138,8 @@ The commands in this procedure must be run as the `root` user.
      --image-root-archive-name cray-sles15-barebones \
      --artifact-id $IMS_RECIPE_ID \
      --public-key-id $IMS_PUBLIC_KEY_ID \
-     --enable-debug False
+     --enable-debug False \
+     --format toml
    ```
 
    Example output:
@@ -171,29 +172,29 @@ The commands in this procedure must be run as the `root` user.
 
 1. (`ncn-mw#`) Describe the image create job.
 
-    ```bash
-    kubectl -n ims describe job $IMS_KUBERNETES_JOB
-    ```
+   ```bash
+   kubectl -n ims describe job $IMS_KUBERNETES_JOB
+   ```
 
    Example output:
 
-    ```text
-    Name: ims-myimage-create
-    Namespace: default
+   ```text
+   Name: ims-myimage-create
+   Namespace: default
 
-    [...]
+   [...]
 
-    Events:
-    Type Reason Age From Message
-    ---- ------ ---- ---- -------
-    Normal SuccessfulCreate 4m job-controller Created pod: cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create-lt69t
-    ```
+   Events:
+   Type Reason Age From Message
+   ---- ------ ---- ---- -------
+   Normal SuccessfulCreate 4m job-controller Created pod: cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create-lt69t
+   ```
 
    If successful, create a variable for the pod name that was created above, displayed in the `Events` section.
 
-    ```bash
-    POD=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create-lt69t
-    ```
+   ```bash
+   POD=cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create-lt69t
+   ```
 
 1. (`ncn-mw#`) Watch the logs from the `fetch-recipe`, `wait-for-repos`, `build-ca-rpm`, `build-image`,
    and `buildenv-sidecar` containers to monitor the image creation process.
@@ -202,156 +203,155 @@ The commands in this procedure must be run as the `root` user.
 
    The `fetch-recipe` container is responsible for fetching the recipe archive from S3 and uncompressing the recipe.
 
-    ```bash
-    kubectl -n ims logs -f $POD -c fetch-recipe
-    ```
+   ```bash
+   kubectl -n ims logs -f $POD -c fetch-recipe
+   ```
 
    Example output:
 
-    ```text
-    INFO:/scripts/fetch.py:IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
-    INFO:/scripts/fetch.py:Setting job status to 'fetching_recipe'.
-    INFO:ims_python_helper:image_set_job_status: {{ims_job_id: ad5163d2-398d-4e93-94f0-2f439f114fe7, job_status: fetching_recipe}}
-    INFO:ims_python_helper:PATCH https://api-gw-service-nmn.local/apis/ims/jobs/ad5163d2-398d-4e93-94f0-2f439f114fe7 status=fetching_recipe
-    INFO:/scripts/fetch.py:Fetching recipe http://rgw.local:8080/ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/my_recipe.tgz?AWSAccessKeyId=GQZKV1HAM80ZFDZJFFS7&Expires=1586891507&Signature=GzRzuTWo3p5CoKHzT2mIuPQXLGM%3D
-    INFO:/scripts/fetch.py:Saving file as '/mnt/recipe/recipe.tgz'
-    INFO:/scripts/fetch.py:Verifying md5sum of the downloaded file.
-    INFO:/scripts/fetch.py:Successfully verified the md5sum of the downloaded file.
-    INFO:/scripts/fetch.py:Uncompressing recipe into /mnt/recipe
-    INFO:/scripts/fetch.py:Deleting compressed recipe /mnt/recipe/recipe.tgz
-    INFO:/scripts/fetch.py:Done
-    ```
+   ```text
+   INFO:/scripts/fetch.py:IMS_JOB_ID=ad5163d2-398d-4e93-94f0-2f439f114fe7
+   INFO:/scripts/fetch.py:Setting job status to 'fetching_recipe'.
+   INFO:ims_python_helper:image_set_job_status: {{ims_job_id: ad5163d2-398d-4e93-94f0-2f439f114fe7, job_status: fetching_recipe}}
+   INFO:ims_python_helper:PATCH https://api-gw-service-nmn.local/apis/ims/jobs/ad5163d2-398d-4e93-94f0-2f439f114fe7 status=fetching_recipe
+   INFO:/scripts/fetch.py:Fetching recipe http://rgw.local:8080/ims/recipes/2233c82a-5081-4f67-bec4-4b59a60017a6/my_recipe.tgz?AWSAccessKeyId=GQZKV1HAM80ZFDZJFFS7&Expires=1586891507&Signature=GzRzuTWo3p5CoKHzT2mIuPQXLGM%3D
+   INFO:/scripts/fetch.py:Saving file as '/mnt/recipe/recipe.tgz'
+   INFO:/scripts/fetch.py:Verifying md5sum of the downloaded file.
+   INFO:/scripts/fetch.py:Successfully verified the md5sum of the downloaded file.
+   INFO:/scripts/fetch.py:Uncompressing recipe into /mnt/recipe
+   INFO:/scripts/fetch.py:Deleting compressed recipe /mnt/recipe/recipe.tgz
+   INFO:/scripts/fetch.py:Done
+   ```
 
    The `wait-for-repos` container will ensure that any HTTP/HTTPS repositories referenced by the Kiwi-NG recipe can be
    accessed and are available. This helps ensure that the image will be built successfully. If 301 responses are
    returned instead of 200 responses, that does not indicate an error.
 
-    ```bash
-    kubectl -n ims logs -f $POD -c wait-for-repos
-    ```
+   ```bash
+   kubectl -n ims logs -f $POD -c wait-for-repos
+   ```
 
    Example output:
 
-    ```text
-    2019-05-17 09:53:47,381 - INFO    - __main__ - Recipe contains the following repos: ['http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/', 'http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/', 'http://api-gw-service-nmn.local/repositories/cray-sle15']
-    2019-05-17 09:53:47,381 - INFO    - __main__ - Attempting to get http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/repodata/repomd.xml
-    2019-05-17 09:53:47,404 - INFO    - __main__ - 200 response getting http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/repodata/repomd.xml
-    2019-05-17 09:53:47,404 - INFO    - __main__ - Attempting to get http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/repodata/repomd.xml
-    2019-05-17 09:53:47,431 - INFO    - __main__ - 200 response getting http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/repodata/repomd.xml
-    2019-05-17 09:53:47,431 - INFO    - __main__ - Attempting to get http://api-gw-service-nmn.local/repositories/cray-sle15/repodata/repomd.xml
-    2019-05-17 09:53:47,458 - INFO    - __main__ - 200 response getting http://api-gw-service-nmn.local/repositories/cray-sle15/repodata/repomd.xml
-    ```
+   ```text
+   2019-05-17 09:53:47,381 - INFO    - __main__ - Recipe contains the following repos: ['http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/', 'http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/', 'http://api-gw-service-nmn.local/repositories/cray-sle15']
+   2019-05-17 09:53:47,381 - INFO    - __main__ - Attempting to get http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/repodata/repomd.xml
+   2019-05-17 09:53:47,404 - INFO    - __main__ - 200 response getting http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/repodata/repomd.xml
+   2019-05-17 09:53:47,404 - INFO    - __main__ - Attempting to get http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/repodata/repomd.xml
+   2019-05-17 09:53:47,431 - INFO    - __main__ - 200 response getting http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/repodata/repomd.xml
+   2019-05-17 09:53:47,431 - INFO    - __main__ - Attempting to get http://api-gw-service-nmn.local/repositories/cray-sle15/repodata/repomd.xml
+   2019-05-17 09:53:47,458 - INFO    - __main__ - 200 response getting http://api-gw-service-nmn.local/repositories/cray-sle15/repodata/repomd.xml
+   ```
 
    The `build-ca-rpm` container creates an RPM with the private root CA certificate for the system. This RPM is
    installed automatically by Kiwi-NG to ensure that Kiwi can securely talk to the Nexus repositories when building the
    image root.
 
-    ```bash
-    kubectl -n ims logs -f $POD -c build-ca-rpm
-    ```
+   ```bash
+   kubectl -n ims logs -f $POD -c build-ca-rpm
+   ```
 
    Example output:
 
-    ```text
-    cray_ca_cert-1.0.0/
-    cray_ca_cert-1.0.0/etc/
-    cray_ca_cert-1.0.0/etc/cray/
-    cray_ca_cert-1.0.0/etc/cray/ca/
-    cray_ca_cert-1.0.0/etc/cray/ca/certificate_authority.crt
-    Executing(%prep): /bin/sh -e /var/tmp/rpm-tmp.pgDBLk
-    + umask 022
-    + cd /root/rpmbuild/BUILD
-    + cd /root/rpmbuild/BUILD
-    + rm -rf cray_ca_cert-1.0.0
-    + /bin/gzip -dc /root/rpmbuild/SOURCES/cray_ca_cert-1.0.0.tar.gz
-    + /bin/tar -xof -
-    + STATUS=0
-    + '[' 0 -ne 0 ]
-    + cd cray_ca_cert-1.0.0
-    + /bin/chmod -Rf a+rX,u+w,g-w,o-w .
-    + exit 0
-    Executing(%build): /bin/sh -e /var/tmp/rpm-tmp.gILKaJ
-    + umask 022
-    + cd /root/rpmbuild/BUILD
-    + cd cray_ca_cert-1.0.0
-    + exit 0
-    Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.PGhobB
-    + umask 022
-    + cd /root/rpmbuild/BUILD
-    + cd cray_ca_cert-1.0.0
-    + install -d /root/rpmbuild/BUILDROOT/cray_ca_cert-1.0.0-1.x86_64/usr/share/pki/trust/anchors
-    + install -m 644 /etc/cray/ca/certificate_authority.crt /root/rpmbuild/BUILDROOT/cray_ca_cert-1.0.0-1.x86_64/usr/share/pki/trust/anchors/cray_certificate_authority.crt
-    + /usr/lib/rpm/brp-compress
-    + /usr/lib/rpm/brp-strip /usr/bin/strip
-    + /usr/lib/rpm/brp-strip-static-archive /usr/bin/strip
-    find: file: No such file or directory
-    + /usr/lib/rpm/brp-strip-comment-note /usr/bin/strip /usr/bin/objdump
-    Processing files: cray_ca_cert-1.0.0-1.x86_64
-    Provides: cray_ca_cert = 1.0.0-1 cray_ca_cert(x86-64) = 1.0.0-1
-    Requires(interp): /bin/sh
-    Requires(rpmlib): rpmlib(CompressedFileNames) <= 3.0.4-1 rpmlib(PayloadFilesHavePrefix) <= 4.0-1
-    Requires(post): /bin/sh
-    Checking for unpackaged file(s): /usr/lib/rpm/check-files /root/rpmbuild/BUILDROOT/cray_ca_cert-1.0.0-1.x86_64
-    Wrote: /root/rpmbuild/RPMS/x86_64/cray_ca_cert-1.0.0-1.x86_64.rpm
-    Executing(%clean): /bin/sh -e /var/tmp/rpm-tmp.jHaFMC
-    + umask 022
-    + cd /root/rpmbuild/BUILD
-    + cd cray_ca_cert-1.0.0
-    + exit 0
-    ```
+   ```text
+   cray_ca_cert-1.0.0/
+   cray_ca_cert-1.0.0/etc/
+   cray_ca_cert-1.0.0/etc/cray/
+   cray_ca_cert-1.0.0/etc/cray/ca/
+   cray_ca_cert-1.0.0/etc/cray/ca/certificate_authority.crt
+   Executing(%prep): /bin/sh -e /var/tmp/rpm-tmp.pgDBLk
+   + umask 022
+   + cd /root/rpmbuild/BUILD
+   + cd /root/rpmbuild/BUILD
+   + rm -rf cray_ca_cert-1.0.0
+   + /bin/gzip -dc /root/rpmbuild/SOURCES/cray_ca_cert-1.0.0.tar.gz
+   + /bin/tar -xof -
+   + STATUS=0
+   + '[' 0 -ne 0 ]
+   + cd cray_ca_cert-1.0.0
+   + /bin/chmod -Rf a+rX,u+w,g-w,o-w .
+   + exit 0
+   Executing(%build): /bin/sh -e /var/tmp/rpm-tmp.gILKaJ
+   + umask 022
+   + cd /root/rpmbuild/BUILD
+   + cd cray_ca_cert-1.0.0
+   + exit 0
+   Executing(%install): /bin/sh -e /var/tmp/rpm-tmp.PGhobB
+   + umask 022
+   + cd /root/rpmbuild/BUILD
+   + cd cray_ca_cert-1.0.0
+   + install -d /root/rpmbuild/BUILDROOT/cray_ca_cert-1.0.0-1.x86_64/usr/share/pki/trust/anchors
+   + install -m 644 /etc/cray/ca/certificate_authority.crt /root/rpmbuild/BUILDROOT/cray_ca_cert-1.0.0-1.x86_64/usr/share/pki/trust/anchors/cray_certificate_authority.crt
+   + /usr/lib/rpm/brp-compress
+   + /usr/lib/rpm/brp-strip /usr/bin/strip
+   + /usr/lib/rpm/brp-strip-static-archive /usr/bin/strip
+   find: file: No such file or directory
+   + /usr/lib/rpm/brp-strip-comment-note /usr/bin/strip /usr/bin/objdump
+   Processing files: cray_ca_cert-1.0.0-1.x86_64
+   Provides: cray_ca_cert = 1.0.0-1 cray_ca_cert(x86-64) = 1.0.0-1
+   Requires(interp): /bin/sh
+   Requires(rpmlib): rpmlib(CompressedFileNames) <= 3.0.4-1 rpmlib(PayloadFilesHavePrefix) <= 4.0-1
+   Requires(post): /bin/sh
+   Checking for unpackaged file(s): /usr/lib/rpm/check-files /root/rpmbuild/BUILDROOT/cray_ca_cert-1.0.0-1.x86_64
+   Wrote: /root/rpmbuild/RPMS/x86_64/cray_ca_cert-1.0.0-1.x86_64.rpm
+   Executing(%clean): /bin/sh -e /var/tmp/rpm-tmp.jHaFMC
+   + umask 022
+   + cd /root/rpmbuild/BUILD
+   + cd cray_ca_cert-1.0.0
+   + exit 0
+   ```
 
    The `build-image` container builds the recipe using the Kiwi-NG tool.
 
-    ```bash
-    kubectl -n ims logs -f $POD -c build-image
-    ```
+   ```bash
+   kubectl -n ims logs -f $POD -c build-image
+   ```
 
    Example output:
 
-    ```text
-    + RECIPE_ROOT_PARENT=/mnt/recipe
-    + IMAGE_ROOT_PARENT=/mnt/image
-    + PARAMETER_FILE_BUILD_FAILED=/mnt/image/build_failed
-    + PARAMETER_FILE_KIWI_LOGFILE=/mnt/image/kiwi.log
+   ```text
+   + RECIPE_ROOT_PARENT=/mnt/recipe
+   + IMAGE_ROOT_PARENT=/mnt/image
+   + PARAMETER_FILE_BUILD_FAILED=/mnt/image/build_failed
+   + PARAMETER_FILE_KIWI_LOGFILE=/mnt/image/kiwi.log
 
-    [...]
+   [...]
 
-    + kiwi-ng --logfile=/mnt/image/kiwi.log --type tbz system build --description /mnt/recipe --target /mnt/image
-    [ INFO    ]: 16:14:31 | Loading XML description
-    [ INFO    ]: 16:14:31 | --> loaded /mnt/recipe/config.xml
-    [ INFO    ]: 16:14:31 | --> Selected build type: tbz
-    [ INFO    ]: 16:14:31 | Preparing new root system
-    [ INFO    ]: 16:14:31 | Setup root directory: /mnt/image/build/image-root
-    [ INFO    ]: 16:14:31 | Setting up repository http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/
-    [ INFO    ]: 16:14:31 | --> Type: rpm-md
-    [ INFO    ]: 16:14:31 | --> Translated: http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/
-    [ INFO    ]: 16:14:31 | --> Alias: SLES15_Module_Basesystem
-    [ INFO    ]: 16:14:32 | Setting up repository http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/
-    [ INFO    ]: 16:14:32 | --> Type: rpm-md
-    [ INFO    ]: 16:14:32 | --> Translated: http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/
-    [ INFO    ]: 16:14:32 | --> Alias: SLES15_Product_SLES
-    [ INFO    ]: 16:14:32 | Setting up repository http://api-gw-service-nmn.local/repositories/cray-sle15
-    [ INFO    ]: 16:14:32 | --> Type: rpm-md
-    [ INFO    ]: 16:14:32 | --> Translated: http://api-gw-service-nmn.local/repositories/cray-sle15
-    [ INFO    ]: 16:14:32 | --> Alias: DST_built_rpms
+   + kiwi-ng --logfile=/mnt/image/kiwi.log --type tbz system build --description /mnt/recipe --target /mnt/image
+   [ INFO    ]: 16:14:31 | Loading XML description
+   [ INFO    ]: 16:14:31 | --> loaded /mnt/recipe/config.xml
+   [ INFO    ]: 16:14:31 | --> Selected build type: tbz
+   [ INFO    ]: 16:14:31 | Preparing new root system
+   [ INFO    ]: 16:14:31 | Setup root directory: /mnt/image/build/image-root
+   [ INFO    ]: 16:14:31 | Setting up repository http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/
+   [ INFO    ]: 16:14:31 | --> Type: rpm-md
+   [ INFO    ]: 16:14:31 | --> Translated: http://api-gw-service-nmn.local/repositories/sle15-Module-Basesystem/
+   [ INFO    ]: 16:14:31 | --> Alias: SLES15_Module_Basesystem
+   [ INFO    ]: 16:14:32 | Setting up repository http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/
+   [ INFO    ]: 16:14:32 | --> Type: rpm-md
+   [ INFO    ]: 16:14:32 | --> Translated: http://api-gw-service-nmn.local/repositories/sle15-Product-SLES/
+   [ INFO    ]: 16:14:32 | --> Alias: SLES15_Product_SLES
+   [ INFO    ]: 16:14:32 | Setting up repository http://api-gw-service-nmn.local/repositories/cray-sle15
+   [ INFO    ]: 16:14:32 | --> Type: rpm-md
+   [ INFO    ]: 16:14:32 | --> Translated: http://api-gw-service-nmn.local/repositories/cray-sle15
+   [ INFO    ]: 16:14:32 | --> Alias: DST_built_rpms
+   [...]
 
-    [...]
-
-    [ INFO    ]: 16:19:19 | Calling images.sh script
-    [ INFO    ]: 16:19:55 | Creating system image
-    [ INFO    ]: 16:19:55 | Creating XZ compressed tar archive
-    [ INFO    ]: 16:21:31 | --> Creating archive checksum
-    [ INFO    ]: 16:21:51 | Export rpm packages metadata
-    [ INFO    ]: 16:21:51 | Export rpm verification metadata
-    [ INFO    ]: 16:22:09 | Result files:
-    [ INFO    ]: 16:22:09 | --> image_packages: /mnt/image/cray-sles15-barebones.x86_64-1.0.1.packages
-    [ INFO    ]: 16:22:09 | --> image_verified: /mnt/image/cray-sles15-barebones.x86_64-1.0.1.verified
-    [ INFO    ]: 16:22:09 | --> root_archive: /mnt/image/cray-sles15-barebones.x86_64-1.0.1.tar.xz
-    [ INFO    ]: 16:22:09 | --> root_archive_md5: /mnt/image/cray-sles15-barebones.x86_64-1.0.1.md5
-    + rc=0
-    + '[' 0 -ne 0 ']'
-    + exit 0
-    ```
+   [ INFO    ]: 16:19:19 | Calling images.sh script
+   [ INFO    ]: 16:19:55 | Creating system image
+   [ INFO    ]: 16:19:55 | Creating XZ compressed tar archive
+   [ INFO    ]: 16:21:31 | --> Creating archive checksum
+   [ INFO    ]: 16:21:51 | Export rpm packages metadata
+   [ INFO    ]: 16:21:51 | Export rpm verification metadata
+   [ INFO    ]: 16:22:09 | Result files:
+   [ INFO    ]: 16:22:09 | --> image_packages: /mnt/image/cray-sles15-barebones.x86_64-1.0.1.packages
+   [ INFO    ]: 16:22:09 | --> image_verified: /mnt/image/cray-sles15-barebones.x86_64-1.0.1.verified
+   [ INFO    ]: 16:22:09 | --> root_archive: /mnt/image/cray-sles15-barebones.x86_64-1.0.1.tar.xz
+   [ INFO    ]: 16:22:09 | --> root_archive_md5: /mnt/image/cray-sles15-barebones.x86_64-1.0.1.md5
+   + rc=0
+   + '[' 0 -ne 0 ']'
+   + exit 0
+   ```
 
    The `buildenv-sidecar` container determines if the Kiwi-NG build was successful or not.
 
@@ -473,7 +473,7 @@ If the image creation operation fails, the build artifacts will not be uploaded 
 to `true`, then the IMS creation job will enable a debug SSH shell that is accessible by one or more dynamic host names.
 The user needs to know if they will SSH from inside or outside the Kubernetes cluster to determine which host name to
 use. Typically, customers access the system from outside the Kubernetes cluster using the Customer Access Network
-\(CAN\).
+(CAN).
 
 1. If no errors are observed, skip to the 1. [Verify that the new image was created correctly](#verify-creation) step.
 
@@ -483,49 +483,49 @@ use. Typically, customers access the system from outside the Kubernetes cluster 
 
    There may be multiple records returned. Ensure that the correct record is selected in the returned data.
 
-    ```bash
-    cray ims jobs describe $IMS_JOB_ID
-    ```
+   ```bash
+   cray ims jobs describe $IMS_JOB_ID --format toml
+   ```
 
    Example output:
 
-    ```toml
-    status = "waiting_on_user"
-    enable_debug = false
-    kernel_file_name = "vmlinuz"
-    artifact_id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
-    build_env_size = 10
-    job_type = "create"
-    kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
-    kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create"
-    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
-    image_root_archive_name = "my_customized_image"
-    initrd_file_name = "initrd"
-    created = "2018-11-21T18:22:53.409405+00:00"
-    kubernetes_namespace = "ims"
-    arch = "x86_64"
-    require_dkms = false
-    public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
-    kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
-    [[ssh_containers]]
-    status = "pending"
-    jail = false
-    name = "debug"
+   ```toml
+   status = "waiting_on_user"
+   enable_debug = false
+   kernel_file_name = "vmlinuz"
+   artifact_id = "4e78488d-4d92-4675-9d83-97adfc17cb19"
+   build_env_size = 10
+   job_type = "create"
+   kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
+   kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-create"
+   id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
+   image_root_archive_name = "my_customized_image"
+   initrd_file_name = "initrd"
+   created = "2018-11-21T18:22:53.409405+00:00"
+   kubernetes_namespace = "ims"
+   arch = "x86_64"
+   require_dkms = false
+   public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
+   kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
+   [[ssh_containers]]
+   status = "pending"
+   jail = false
+   name = "debug"
 
-    [ssh_containers.connection_info."cluster.local"]
-    host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
-    port = 22
-    [ssh_containers.connection_info.customer_access]
-    host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com" <<-- Note this host
-    port = 22 <<-- Note this port
-    ```
+   [ssh_containers.connection_info."cluster.local"]
+   host = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service.ims.svc.cluster.local"
+   port = 22
+   [ssh_containers.connection_info.customer_access]
+   host = "ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com" <<-- Note this host
+   port = 22 <<-- Note this port
+   ```
 
    If successful, create variables for the SSH connection information.
 
-    ```bash
-    IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com
-    IMS_SSH_PORT=22
-    ```
+   ```bash
+   IMS_SSH_HOST=ad5163d2-398d-4e93-94f0-2f439f114fe7.ims.cmn.shasta.cray.com
+   IMS_SSH_PORT=22
+   ```
 
 1. (`ncn-mw#`) Connect to the IMS debug shell.
 
@@ -534,127 +534,126 @@ use. Typically, customers access the system from outside the Kubernetes cluster 
 
    > **IMPORTANT:** The following command will not work when run on a node within the Kubernetes cluster.
 
-    ```bash
-    ssh -p $IMS_SSH_PORT root@$IMS_SSH_HOST
-    ```
+   ```bash
+   ssh -p $IMS_SSH_PORT root@$IMS_SSH_HOST
+   ```
 
    Example output:
 
-    ```text
-    Last login: Tue Sep  4 18:06:27 2018 from gateway
-    [root@POD ~]#
-    ```
+   ```text
+   Last login: Tue Sep  4 18:06:27 2018 from gateway
+   [root@POD ~]#
+   ```
 
-1. Investigate using the IMS debug shell.
+1. (`pod#`) Investigate using the IMS debug shell.
 
-1. Change to the `/mnt/image/` directory.
+   1. Change to the `/mnt/image/` directory.
 
-    ```bash
-    [root@POD image]# cd /mnt/image/
-    ```
+      ```bash
+      cd /mnt/image/
+      ```
 
-1. Access the image root.
+   1. Access the image root.
 
-    ```bash
-    [root@POD image]# chroot image-root/
-    ```
+      ```bash
+      chroot image-root/
+      ```
 
-1. Investigate inside the image debug shell.
+   1. Investigate inside the image debug shell.
 
-1. Exit the image root.
+   1. Exit the image root.
 
-    ```bash
-    :/ # exit
-    [root@POD image]#
-    ```
+      ```bash
+      exit
+      ```
 
-1. Touch the `complete` file once investigations are complete.
+   1. Touch the `complete` file once investigations are complete.
 
-    ```bash
-    [root@POD image]# touch /mnt/image/complete
-    ```
+      ```bash
+      touch /mnt/image/complete
+      ```
 
-#### Verify Creation
+#### Verify creation
 
 1. (`ncn-mw#`) Verify that the new image was created correctly.
 
-    ```bash
-    cray ims jobs describe $IMS_JOB_ID
-    ```
+   ```bash
+   cray ims jobs describe $IMS_JOB_ID --format toml
+   ```
 
    Example output:
 
-    ```toml
-    status = "success"
-    enable_debug = false
-    kernel_file_name = "vmlinuz"
-    artifact_id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
-    build_env_size = 10
-    job_type = "create"
-    kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
-    kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize"
-    id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
-    image_root_archive_name = "sles15_barebones_image"
-    resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388"
-    initrd_file_name = "initrd"
-    arch = "x86_64"
-    require_dkms = false
-    created = "2018-11-21T18:22:53.409405+00:00"
-    kubernetes_namespace = "ims"
-    public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
-    kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
-    ```
+   ```toml
+   status = "success"
+   enable_debug = false
+   kernel_file_name = "vmlinuz"
+   artifact_id = "2233c82a-5081-4f67-bec4-4b59a60017a6"
+   build_env_size = 10
+   job_type = "create"
+   kubernetes_service = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-service"
+   kubernetes_job = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-customize"
+   id = "ad5163d2-398d-4e93-94f0-2f439f114fe7"
+   image_root_archive_name = "sles15_barebones_image"
+   resultant_image_id = "d88521c3-b339-43bc-afda-afdfda126388"
+   initrd_file_name = "initrd"
+   arch = "x86_64"
+   require_dkms = false
+   created = "2018-11-21T18:22:53.409405+00:00"
+   kubernetes_namespace = "ims"
+   public_key_id = "a252ff6f-c087-4093-a305-122b41824a3e"
+   kubernetes_configmap = "cray-ims-ad5163d2-398d-4e93-94f0-2f439f114fe7-configmap"
+   ```
 
    If successful, create a variable for the IMS `resultant_image_id`.
 
-    ```bash
-    IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
-    ```
+   ```bash
+   IMS_RESULTANT_IMAGE_ID=d88521c3-b339-43bc-afda-afdfda126388
+   ```
 
 1. (`ncn-mw#`) Verify that the new IMS image record exists.
 
-    ```bash
-    cray ims images describe $IMS_RESULTANT_IMAGE_ID
-    ```
+   ```bash
+   cray ims images describe $IMS_RESULTANT_IMAGE_ID --format toml
+   ```
 
    Example output:
 
-    ```toml
-    created = "2018-12-17T22:59:43.264129+00:00"
-    id = "d88521c3-b339-43bc-afda-afdfda126388"
-    name = "sles15_barebones_image"
+   ```toml
+   created = "2018-12-17T22:59:43.264129+00:00"
+   id = "d88521c3-b339-43bc-afda-afdfda126388"
+   name = "sles15_barebones_image"
 
-    [link]
-    path = "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/manifest.json"
-    etag = "180883770442235de747e9d69855f269"
-    type = "s3"
-    ```
+   [link]
+   path = "s3://boot-images/d88521c3-b339-43bc-afda-afdfda126388/manifest.json"
+   etag = "180883770442235de747e9d69855f269"
+   type = "s3"
+   ```
 
 ### Clean up the creation environment
 
-1. (`ncn-mw#`) Delete the IMS job record.
+(`ncn-mw#`) Delete the IMS job record.
 
-    ```bash
-    cray ims jobs delete $IMS_JOB_ID
-    ```
+```bash
+cray ims jobs delete $IMS_JOB_ID
+```
 
-   Deleting the job record will delete the underlying Kubernetes job, service, and ConfigMap that were created when the
-   job record was submitted.
+Deleting the job record will delete the underlying Kubernetes job, service, and ConfigMap that were created when the
+job record was submitted.
 
 Jobs created with the flag `--enable-debug true` will remain in a 'Running' state and continue to consume Kubernetes
 resources until the job is manually completed, or deleted. If there are enough 'Running' IMS jobs on the system it may
 not be possible to schedule more pods on worker nodes.
 
 Images built by IMS contain only the packages and settings that are referenced in the Kiwi-NG recipe used to build the
-image. The only exception is that IMS will dynamically install the system's root CA certificate to allow Zypper \(via
-Kiwi-NG\) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or
+image. The only exception is that IMS will dynamically install the system's root CA certificate to allow Zypper (via
+Kiwi-NG) to talk securely with the required Nexus RPM repositories. Images that are intended to be used to boot a CN or
 other node must be configured with DNS and other settings that enable the image to talk to vital services. A base level
-of customization is provided by the default Ansible plays used by the Configuration Framework Service \(CFS\) to enable
+of customization is provided by the default Ansible plays used by the Configuration Framework Service (CFS) to enable
 DNS resolution; these plays are typically run against an image after it is built by IMS.
 
 When customizing an image via [Customize an Image Root Using IMS](Customize_an_Image_Root_Using_IMS.md), once in the
-image root using `chroot` \(or if using a \`jailed\`
-environment\), the image will only have access to whatever configuration the image already contains. In order to talk to
+image root using `chroot` (or if using a `jailed`
+environment), the image will only have access to whatever configuration the image already contains. In order to talk to
 services, including Nexus RPM repositories, the image root must first be configured with DNS and other settings. That
 base level of customization is provided by the default Ansible plays used by CFS to enable DNS resolution.
 

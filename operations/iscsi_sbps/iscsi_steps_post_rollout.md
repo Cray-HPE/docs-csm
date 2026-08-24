@@ -1,4 +1,4 @@
-# Steps to follow after the worker node rollout during CSM upgrade
+# Steps To Follow After The Worker Node Rollout During CSM Upgrade
 
 This document presents the steps to perform to avoid issues with iSCSI SBPS
 during the CSM upgrade of worker nodes which are iSCSI target nodes.

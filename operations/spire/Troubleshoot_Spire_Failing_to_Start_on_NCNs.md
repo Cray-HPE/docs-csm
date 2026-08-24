@@ -1,7 +1,7 @@
 # Troubleshoot Spire Failing to Start on NCNs
 
 The spire-agent service may fail to start on Kubernetes non-compute nodes
-\(NCNs\). A key indication of this failure is when logging errors occur with
+(NCNs). A key indication of this failure is when logging errors occur with
 the `journalctl` command. The following are logging errors that will indicate
 if the spire-agent is failing to start:
 

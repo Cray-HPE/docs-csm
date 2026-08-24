@@ -1,4 +1,4 @@
-# SLS Updates Expert mode
+# SLS Updates Expert Mode
 
 The 1.2 SLS Upgrader aims to make the upgrade of SLS from pre-CMS 1.2 to CSM 1.2 as seamless as possible. However, certain system constraints and subnet sizes quickly necessitate overriding standard input.
 
@@ -7,9 +7,9 @@ The 1.2 SLS Upgrader aims to make the upgrade of SLS from pre-CMS 1.2 to CSM 1.2
 * [Minimal input review](#minimal-input-review)
 * [Forcing preservation of some existing values](#forcing-preservation-of-some-existing-values)
 * [Expert mode: Overriding defaults and forced guiding of upgrades](#expert-mode-overriding-defaults-and-forced-guiding-of-upgrades)
-  * [Expert mode: Prerequisites](#expert-mode-prerequisites)
-  * [Expert mode: Process](#expert-mode-process)
-  * [Expert mode: Example](#expert-mode-example)
+    * [Expert mode: Prerequisites](#expert-mode-prerequisites)
+    * [Expert mode: Process](#expert-mode-process)
+    * [Expert mode: Example](#expert-mode-example)
 
 ## Key takeaways
 
@@ -159,9 +159,9 @@ Due to pre-upgrade subnet sizes or multiple constraints, the "easy" input values
 
 * Knowledge of system and site network parameters (IPv4 addresses, subnets, and VLANs).
 * The ability to:
-  * Create subnets from a given network.
-  * Read output subnet values.
-  * Based on upgrade output, make an educated decision on how to modify upgrader input values for the next run.
+    * Create subnets from a given network.
+    * Read output subnet values.
+    * Based on upgrade output, make an educated decision on how to modify upgrader input values for the next run.
 * Slow down, be patient.
 
 ### Expert mode: Process

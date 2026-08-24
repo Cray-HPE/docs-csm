@@ -209,7 +209,7 @@ The purpose of this procedure is to launch a non-interactive, long-running batch
       ipmitool -I lanplus -U root -P <password> -H <ncn-node-name> chassis power status
       ```
 
-      **`NOTE`** In previous releases, an `ipmitool` command has been used to simply yank the power to an NCN. There have been times where this resulted in a longer recovery procedure under Shasta 1.5 (mostly due to issues with
+      **NOTE** In previous releases, an `ipmitool` command has been used to simply yank the power to an NCN. There have been times where this resulted in a longer recovery procedure under Shasta 1.5 (mostly due to issues with
       getting nodes physically booted up again), so the preference has been to simply use the `shutdown` command.
 
       If the NCN shutdown is a master or worker node, within 5-6 minutes of the node being shut down, Kubernetes will begin reporting `Terminating` pods on the target node and start rescheduling pods to other NCN nodes. New

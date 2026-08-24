@@ -3,7 +3,7 @@
 HPE Cray provides Ansible plays and roles for software products deemed necessary for the system to function.
 Customers are free to write their own Ansible plays and roles to augment what HPE Cray provides or implement new features.
 Basic knowledge of Ansible is needed to write plays and roles.
-The information below includes recommendations and best practices for writing and running Ansible code on the system successfully with the Configuration Framework Service \(CFS\).
+The information below includes recommendations and best practices for writing and running Ansible code on the system successfully with the Configuration Framework Service (CFS).
 
 Help with Ansible can be found in the external Ansible documentation:
 
@@ -12,7 +12,7 @@ Help with Ansible can be found in the external Ansible documentation:
 
 ## Ansible code structure
 
-The Version Control Service \(VCS\), which is setup during the Cray System Management \(CSM\) product installation, is the appropriate place to store configuration content.
+The Version Control Service (VCS), which is setup during the Cray System Management (CSM) product installation, is the appropriate place to store configuration content.
 Individual product installations include the Ansible code to properly configure each product.
 
 The structure of the individual repository directories matches the [recommended directory layout](https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html#content-organization) from the external Ansible documentation.
@@ -50,7 +50,7 @@ See [Create an Image Customization CFS Session](Create_an_Image_Customization_CF
 For more information on `gather_subset`, see the external [Ansible module setup](https://docs.ansible.com/projects/ansible/2.9/modules/setup_module.html) documentation.
 * Reducing fact gathering time is especially important when importing multiple playbooks from a top level playbook.
   Fact gathering will trigger for each imported playbook, potentially collecting the same information multiple times.
-  
+
 ### Avoid repeated conditionals with `group_by` and `add_host`
 
 The `group_by` and `add_host` modules can both be used to dynamically generate new hosts groups for the Ansible inventory.
@@ -74,8 +74,6 @@ Example of `group_by`:
 - name: centOS playbook
   hosts: os_CentOS
   tasks:
-    ...
-
 ```
 
 `add_host` is useful for cases where the property is true or false.
@@ -97,7 +95,6 @@ Example of `add_host`:
 - name: Sample playbook
   hosts: sample_group
   tasks:
-    ...
 ```
 
 To target only a subset of a set of nodes, plays should use the following syntax.
@@ -152,9 +149,9 @@ and [Re-using files and roles](https://docs.ansible.com/ansible/latest/user_guid
 
 * Use the included Ansible modules rather than making shell calls or running scripts. Ansible optimizes these and makes them flexible so the same module can be used for different systems. This will also improve the log output for debugging.
 * Use loops rather than individual tasks where modules are called multiple times.
-Some Ansible modules will optimize the command, such as grouping package installations into a single transaction \(Refer to the external [Ansible playbook loops](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) documentation\).
+Some Ansible modules will optimize the command, such as grouping package installations into a single transaction (Refer to the external [Ansible playbook loops](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) documentation).
 * Use Ansible retries for small, recoverable failures. CFS supports retries on a large scale, but it takes far more time for CFS to detect a failed component and spin up a new session than it does for Ansible to retry a task.
-* Do not use Ansible retries for failures that take a long time to recover from. Retrying for a significant amount of time on one node can hold up all the other successful nodes in a batch. If you cannot recover from a failure quickly,
+* Do not use Ansible retries for failures that take a long time to recover from. Retrying for a significant amount of time on one node can hold up all the other successful nodes in a batch. If it is not possible to recover from a failure quickly,
   then let the node fail and CFS will separate it out from the successful nodes when new sessions are started.
 * Avoid `any_errors_fatal`. In addition to not working with all Ansible strategies, this can cause an Ansible run to exit early, and the nodes that did not have the error will have to start from the beginning of the playbook in the next session.
 * Design playbooks to be run with the `free` Ansible strategy. This means avoiding situations where all nodes in a batch need to complete a task before moving onto the next, and can save time by allowing nodes to proceed through a playbook at their own pace.

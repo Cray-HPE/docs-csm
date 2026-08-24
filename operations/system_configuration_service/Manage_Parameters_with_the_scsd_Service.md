@@ -1,12 +1,15 @@
-# Manage Parameters with the scsd Service
+# Manage Parameters With The SCSD Service
 
-The System Configuration Service commands below enable administrators to set various BMC and controller parameters. These parameters are controlled with the scsd command in the Cray CLI.
+The System Configuration Service commands below enable administrators to set various BMC and controller parameters. These parameters are controlled with the `scsd` command in the Cray CLI.
 
-### Retrieve Current Information from Targets
+## Retrieve current information from targets
 
-Get the network protocol parameters \(NTP/syslog server, SSH keys\) and boot order for the targets in the payload. All fields are only applicable to Liquid Cooled controllers. Attempts to set them for Air Cooled BMCs will be ignored, and retrieving them for Air Cooled BMCs will return empty strings.
+Get the network protocol parameters (NTP/syslog server, SSH keys) and boot order for the targets in the payload.
+All fields are only applicable to Liquid Cooled controllers. Attempts to set them for Air Cooled BMCs will be ignored,
+and retrieving them for Air Cooled BMCs will return empty strings.
 
-Command line options can be used to set parameters as desired. For example, if only the NTP server info is to be set, only the "NTPServer" value has to be present.
+Command line options can be used to set parameters as desired. For example, if only the NTP server info is to be set,
+only the `NTPServer` value has to be present.
 
 The following is an example payload file that was used to generate the output in the command below:
 
@@ -32,6 +35,8 @@ To retrieve information from the targets:
 ```bash
 cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
 ```
+
+Example output:
 
 ```json
 {
@@ -86,7 +91,7 @@ cray scsd bmc dumpcfg create PAYLOAD_FILE --format json
 }
 ```
 
-### Retrieve Information from a Single Target
+## Retrieve information from a single target
 
 Retrieve NTP server information, syslog information, or the SSH key from a single target.
 
@@ -121,12 +126,16 @@ Example output:
 }
 ```
 
-Individual parameters can be specified in the command line with the `--param` option. Multiple parameters can be specified by using a comma-separated list with the `--params` option. This makes it easier to find information for certain parameters. For example, to only view the NTP server information, the following option can be used:
+Individual parameters can be specified in the command line with the `--param` option.
+Multiple parameters can be specified by using a comma-separated list with the `--params` option.
+This makes it easier to find information for certain parameters.
+For example, to only view the NTP server information, the following option can be used:
 
+```bash
+cray scsd bmc cfg describe --param NTPServerInfo XNAME --format json
 ```
-cray scsd bmc cfg describe --param NTPServerInfo \
-XNAME --format json
-```
+
+Example output:
 
 ```json
 {
@@ -142,7 +151,7 @@ XNAME --format json
 }
 ```
 
-### Set Parameters for Targets
+## Set parameters for targets
 
 Set syslog, NTP server information, or SSH key for a set of targets.
 
@@ -182,6 +191,8 @@ To set parameters for the specified targets:
 cray scsd bmc loadcfg create PAYLOAD_FILE --format json
 ```
 
+Example output:
+
 ```json
 {
     "Targets": [
@@ -199,13 +210,13 @@ cray scsd bmc loadcfg create PAYLOAD_FILE --format json
 }
 ```
 
-### Set Parameters for a Single BMC or Controller
+## Set parameters for a single BMC or controller
 
 Set the BMC configuration for a single target using a specific component name (xname). If no form data is specified, all network protocol data is returned for the target; otherwise, only the requested data is returned.
 
 The following is an example payload file that was used to generate the output in the command below:
 
-```screen
+```json
 {
     "Force": true,
     "Params":
@@ -231,9 +242,11 @@ The following is an example payload file that was used to generate the output in
 
 To set the parameters for a single BMC or controller:
 
-```
+```bash
 cray scsd bmc cfg create XNAME --format json
 ```
+
+Example output:
 
 ```json
 {
@@ -241,7 +254,7 @@ cray scsd bmc cfg create XNAME --format json
 }
 ```
 
-### Set Redfish Credentials for Multiple Targets
+## Set Redfish credentials for multiple targets
 
 Use the following command to set Redfish credentials for BMCs and controllers. Note that this is different than SSH keys, which are only used on controllers. These credentials are for Redfish access, not SSH access into a controller.
 
@@ -275,9 +288,11 @@ The following is an example payload file that was used to generate the output in
 
 To set the Redfish credentials for multiple targets:
 
-```bas
+```bash
 cray scsd bmc discreetcreds create PAYLOAD_FILE --format json
 ```
+
+Example output:
 
 ```json
 {
@@ -296,7 +311,7 @@ cray scsd bmc discreetcreds create PAYLOAD_FILE --format json
 }
 ```
 
-### Set Redfish Credentials for a Single Target
+### Set Redfish credentials for a single target
 
 Set Redfish credentials for a single target. This command is similar to the `cray scsd bmc discreetcreds create` command, except it cannot be used to set different credentials for multiple targets.
 

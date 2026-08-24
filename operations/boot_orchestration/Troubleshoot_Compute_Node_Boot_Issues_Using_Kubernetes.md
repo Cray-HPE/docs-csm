@@ -9,7 +9,7 @@ Thus, traffic must first travel through the NCN to reach these services inside t
 it is helpful to set up `tcpdump` on the NCN where the pod is resident to ensure that the request got that far.
 The `NODE` column in the output of `kubectl get pods -o wide` shows which node the pod is running on.
 
-## Troubleshooting Tips
+## Troubleshooting tips
 
 - (`ncn-mw#`) Check if a Kubernetes pod is running.
 

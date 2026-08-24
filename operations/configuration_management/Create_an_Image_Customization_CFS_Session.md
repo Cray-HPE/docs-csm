@@ -1,7 +1,7 @@
 # Create an Image Customization CFS Session
 
-A configuration session that is meant to customize image roots tracked by the Image Management Service \(IMS\) can be created using the `--target-definition image` option.
-This option will instruct the Configuration Framework Service \(CFS\) to prepare the image IDs specified and assign them to the groups specified in Ansible inventory.
+A configuration session that is meant to customize image roots tracked by the Image Management Service (IMS) can be created using the `--target-definition image` option.
+This option will instruct the Configuration Framework Service (CFS) to prepare the image IDs specified and assign them to the groups specified in Ansible inventory.
 IMS will then provide SSH connection information to each image root that CFS will configure with Ansible.
 
 Along with the `--target-definition` option, users must also provide the `--target-group` option.
@@ -23,9 +23,9 @@ Tearing down the configuration session will also require additional time while I
 ## Prerequisites
 
 - The Cray CLI must be configured on the node where the commands are being run.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 - The image being customized must be registered in IMS.
-  - See [Check if image is registered with IMS](#1-check-if-image-is-registered-with-ims).
+    - See [Check if image is registered with IMS](#1-check-if-image-is-registered-with-ims).
 
 ## 1. Check if image is registered with IMS
 
@@ -135,4 +135,4 @@ Example output:
 ]
 ```
 
-This resultant image ID can be used to be further customized pre-boot, or if it is ready, in a Boot Orchestration Service \(BOS\) boot session template.
+This resultant image ID can be used to be further customized pre-boot, or if it is ready, in a Boot Orchestration Service (BOS) boot session template.

@@ -3,7 +3,7 @@
 Redfish BMCs are installed on the system with default credentials. After the
 machine is shipped, all BMC credentials must be changed.
 
-BMC credentials may be set with either the System Configuration Service \(SCSD\),
+BMC credentials may be set with either the System Configuration Service (SCSD),
 or with the System Admin Toolkit's (SAT) `sat bmccreds` command. Both methods
 enable administrators to set a unique value for each credential, or to set the same
 value for every credential.

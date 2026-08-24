@@ -9,15 +9,15 @@ include support for the Prometheus API. The System Management Health service rel
 
 - VictoriaMetrics is the standard cloud-native metrics and monitoring tool, which includes Alertmanager, a tool that handles
   alert duplication, silences, and notifications
-- The `victoria-metrics operator` provides custom resource definitions \(CRDs\) that make it easy to operate VictoriaMetrics and
+- The `victoria-metrics operator` provides custom resource definitions (CRDs) that make it easy to operate VictoriaMetrics and
   Alertmanager instances, scrape metrics from service endpoints, and trigger alerts
 - Grafana supports pulling data from VictoriaMetrics, and dashboards for system components are readily available from the
   open source community
 - The `victoria-metrics-k8s-stack` Helm chart integrates the victoria operator, VictoriaMetrics, Alertmanager, Grafana,
-  node exporters \(DaemonSet\), and `kube-state-metrics` to provide a monitoring solution for Kubernetes clusters
+  node exporters (DaemonSet), and `kube-state-metrics` to provide a monitoring solution for Kubernetes clusters
 - Istio supports service mesh observability using Kiali
 
-The System Management Health service is intended to complement the System Monitoring Application \(SMA\) Framework, but
+The System Management Health service is intended to complement the System Monitoring Application (SMA) Framework, but
 the two are currently not integrated. The System Management Health metrics are not available using the Telemetry API.
 This service scrapes metrics from system components like Ceph, Kubernetes, and the hosts using node exporter,
 `kube-state-metrics`, and `cadvisor`. The design is flexible and supports:

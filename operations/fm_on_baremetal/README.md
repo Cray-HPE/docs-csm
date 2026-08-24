@@ -1,10 +1,10 @@
 # Slingshot Fabric Manager on baremetal
 
 - [Introduction](#introduction)
-- [Terminology and Components](#terminology-and-components)
+- [Terminology and components](#terminology-and-components)
 - [Architecture](#architecture)
 - [Configure FM on baremetal](#configure-fm-on-baremetal)
-- [Slingshot Switch Firmware Update](#slingshot-switch-firmware-update)
+- [Slingshot switch firmware update](#slingshot-switch-firmware-update)
 
 ## Introduction
 
@@ -13,7 +13,7 @@ that manage and monitor Slingshot fabric operations outside of the Kubernetes en
 
 CSM 1.7.1 includes bare-metal FM support, which provides the necessary base OS image, networking, and storage configurations for running the Slingshot Fabric Manager natively within the CSM environment.
 
-Please note that this feature is only available from CSM 1.7.1 onwards.
+Note that this feature is only available starting in CSM 1.7.1.
 
 **NOTE**:
 
@@ -22,7 +22,7 @@ Please note that this feature is only available from CSM 1.7.1 onwards.
 - The two `FMNs` must be part of two different management racks to support Rack Resiliency.
 - This feature will not be supported on systems with Dell/ Mellanox based management networks.
 
-## Terminology and Components
+## Terminology and components
 
 | *Component*                                   | *Reference*                                                                           |
 | --------------------------------------------- | ------------------------------------------------------------------------------------- |
@@ -54,9 +54,9 @@ for running the Slingshot Fabric Manager natively within the CSM environment to 
 
 ## Configure FM on baremetal
 
-To configure FM on baremetal please follow the [procedure](Configure_FM_On_Baremetal.md).
+See [Configure FM on Baremetal](Configure_FM_On_Baremetal.md).
 
-## Slingshot Switch Firmware Update
+## Slingshot switch firmware update
 
 - For clusters using the FM pod: CSM will continue to handle switch firmware uploads and updates as [before](../../operations/iuf/workflows/slingshot_management_network_switch_updates.md#perform-slingshot-switch-and-management-network-switch-firmware-updates).
 - For clusters with bare-metal FM: FMN will host the switch firmware, and FM will be responsible for managing switch updates. Refer section "3.2.6 (Optional) Update HPE Slingshot switch firmware" in HPE Slingshot Installation Guide for CSM PDF.

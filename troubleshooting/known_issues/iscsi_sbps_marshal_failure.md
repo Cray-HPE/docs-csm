@@ -1,4 +1,4 @@
-# iSCSI SBPS `systemd` service (`sbps-marshal`) may fail during upgrade
+# iSCSI SBPS `systemd` Service (`sbps-marshal`) May Fail During Upgrade
 
 ## Symptom
 
