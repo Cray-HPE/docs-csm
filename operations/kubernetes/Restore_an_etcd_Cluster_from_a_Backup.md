@@ -141,7 +141,7 @@ Use the `etcd-util.sh` script to list available backups and restore from a speci
     statefulset rolling update complete 3 pods at revision cray-bss-bitnami-etcd-5d4978bfb...
     Setting cluster state for cray-bss to back to 'existing'
     statefulset.apps/cray-bss-bitnami-etcd env updated
-    
+
     Checking endpoint health.
     cray-bss etcd cluster health verified from cray-bss-bitnami-etcd-1
     ```
