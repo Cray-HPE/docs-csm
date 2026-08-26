@@ -33,7 +33,7 @@ A system administrator would typically setup the subdomain `system.dev.cray.com`
 
 The administrator would then delegate queries to `system.dev.cray.com` to `ins1.system.dev.cray.com` making it authoritative for that subdomain allowing CSM to respond to queries for services like `grafana.system.dev.cray.com`
 
-The specifics of how to configure to configuring DNS forwarding is dependent on the DNS server in use, please consult the documentation provided by the DNS server vendor for more information.
+The specifics of how to configure to configuring DNS forwarding is dependent on the DNS server in use; consult the documentation provided by the DNS server vendor for more information.
 
 ## Authoritative Zone Transfer
 
@@ -88,7 +88,7 @@ If the default value is used then PowerDNS will attempt to transfer all zones.
 
 An example configuration demonstrating how to configure BIND as a secondary server for zone transfer.
 
-For other DNS servers please consult the documentation provided by the DNS server vendor.
+For other DNS servers, consult the documentation provided by the DNS server vendor.
 
 ```text
 // This is the primary configuration file for the BIND DNS server named.
@@ -172,7 +172,7 @@ IDIwMjEwODE3MDgxOTAyCg==
 
 Populate the generate block in `customizations.yaml` with the encoded key.
 
-> **`IMPORTANT`** the name of the key in SealedSecret **must** match the name of the zone being secured, in the below example the zone name is `system.dev.cray.com`.
+> **IMPORTANT** the name of the key in SealedSecret **must** match the name of the zone being secured, in the below example the zone name is `system.dev.cray.com`.
 If multiple zones are to be secured each zone should have its own entry even if the same key is used.
 
 ```yaml
@@ -224,7 +224,7 @@ spec:
                   key:       dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=
 ```
 
-> **`IMPORTANT`** The key used for TSIG **must** have `.tsig` in the name and unlike the zone signing key it should not be `base64` encoded.
+> **IMPORTANT** The key used for TSIG **must** have `.tsig` in the name and unlike the zone signing key it should not be `base64` encoded.
 
 #### Example configuration for BIND and TSIG key
 
@@ -243,4 +243,4 @@ server 10.101.8.113 {
 };
 ```
 
-For other DNS servers please consult the documentation provided by the DNS server vendor.
+For other DNS servers, consult the documentation provided by the DNS server vendor.

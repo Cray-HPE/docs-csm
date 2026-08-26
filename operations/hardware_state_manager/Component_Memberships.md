@@ -2,7 +2,7 @@
 
 Memberships are a read-only resource that is generated automatically by changes to groups and partitions. Each component
 in `/hsm/v2/State/Components` is represented. Filter options are available to prune the list, or a specific component name
-(xname) can be given. All groups and the partition \(if any\) of each component are listed.
+(xname) can be given. All groups and the partition (if any) of each component are listed.
 
 Membership information is only needed for node components. The `--type` node filter option is used in the
 commands on this page to retrieve information about node memberships only.

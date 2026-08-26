@@ -432,7 +432,7 @@ Add CHN to `customizations.yaml`
    error_count = 0
    id = "x3000c0s4b0n0"
    state = []
-   
+
    [tags]
    ```
 
@@ -454,7 +454,7 @@ For more information on management node personalization, see
 1. (`ncn-m001#`) Apply MetalLB configuration map with CHN data to the system.
 
    ```bash
-   kubectl apply -f ${UPDATEDIR}/metallb.yaml 
+   kubectl apply -f ${UPDATEDIR}/metallb.yaml
    ```
 
 1. (`ncn-m001#`) Reload MetalLB with CHN data to activate new services.
@@ -526,7 +526,7 @@ Administrators should enable CFS for UAN, ensure plays run successfully and then
              valid_lft forever preferred_lft forever
           inet 10.103.11.200/26 scope global hsn0
              valid_lft forever preferred_lft forever
-          inet6 fe80::ff:fe00:7/64 scope link 
+          inet6 fe80::ff:fe00:7/64 scope link
              valid_lft forever preferred_lft forever
       ```
 
