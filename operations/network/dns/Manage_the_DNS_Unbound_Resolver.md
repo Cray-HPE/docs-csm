@@ -41,7 +41,7 @@ cray-dns-unbound-manager-1596222180-sf46q    1/2   NotReady     0   7s
 For more information about the pods displayed in the output above:
 
 - `cray-dns-unbound-xxx` - These are the main unbound pods.
-- `cray-dns-unbound-manager-yyy` - These are job pods that run periodically to update DNS from DHCP \(Kea\) and the SLS/SMD content for the Hardware State Manager \(HSM\).
+- `cray-dns-unbound-manager-yyy` - These are job pods that run periodically to update DNS from DHCP (Kea) and the SLS/SMD content for the Hardware State Manager (HSM).
   Pods will go into the `Completed` status, and then independently be reaped later by Kubernetes.
 - `cray-dns-unbound-coredns-zzz` - This pod is run one time during installation of Unbound and reconfigures CoreDNS/ExternalDNS to point to Unbound for all site/internet lookups.
 
@@ -90,10 +90,10 @@ If there are any errors in the Unbound logs:
 - Typically, any error seen in Unbound, including the example above, falls under one of two categories:
     - A bad configuration from a misconfiguration in the Helm chart. Currently, only the site/external DNS lookup can be at fault.
         - **ACTION:** See the `customization.yaml` file and look at the `system_to_site_lookup` values. Ensure that the external lookup values are valid and working.
-    - Bad data \(as shown in the above example\) comes only from the DNS Helper and can be seen in the manager logs.
+    - Bad data (as shown in the above example) comes only from the DNS Helper and can be seen in the manager logs.
         - **ACTION:** See [View manager (DNS Helper) logs](#view-manager-dns-helper-logs).
 
-## View manager \(DNS Helper\) logs
+## View manager (DNS Helper) logs
 
 Manager logs will show the status of the latest "true up" of DNS with respect to DHCP actual leases and SLS/SMD status.
 
@@ -128,7 +128,7 @@ The manager runs periodically, about once every minute. Check if this is a one-t
     - Bad network connections to DHCP or SLS/SMD.
         - **ACTION:** Capture as much log data as possible and contact customer support.
     - Bad data from DHCP or SLS/SMD.
-        - **ACTION:** If connections to DHCP \(Kea\) are involved, then refer to [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md).
+        - **ACTION:** If connections to DHCP (Kea) are involved, then refer to [Troubleshoot DHCP Issues](../dhcp/Troubleshoot_DHCP_Issues.md).
 
 ## Restart Unbound
 
@@ -150,9 +150,9 @@ This is useful in the following cases:
 
 - A transient failure in any Unbound process or required services has left the configuration data in a bad state.
 - SLS and SMD data needed to be reset because of bad or incorrect data there.
-- DHCP \(Kea\) has been restarted to clear errors.
+- DHCP (Kea) has been restarted to clear errors.
 
-(`ncn-mw#`) The following clears the \(DNS Helper\) manager generated data in the ConfigMap. This is generally safe as Unbound runtime data is held elsewhere.
+(`ncn-mw#`) The following clears the (DNS Helper) manager generated data in the ConfigMap. This is generally safe as Unbound runtime data is held elsewhere.
 
 ```bash
 kubectl -n services patch configmaps cray-dns-unbound --type merge -p '{"binaryData":{"records.json.gz":"H4sICLQ/Z2AAA3JlY29yZHMuanNvbgCLjuUCAETSaHADAAAA"}}'
