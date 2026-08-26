@@ -12,7 +12,7 @@ There are multiple ways to connect to the HPE Cray EX environment. The various m
 |---------------------------------|-------------------------------------------------------------------------------------------------------|
 | Administrative                  | External customer network connection to the worker node's hardware management and administrative port |
 | Application node access         | External customer network connection to an Application Node                                           |
-| Customer Access Network (CAN) | Customer connection to the CAN gateway to access the HPE Cray EX CAN                                  |
+| Customer Access Network (CAN)   | Customer connection to the CAN gateway to access the HPE Cray EX CAN                                  |
 
 There are also several ways to physically connect to the nodes on the system. The following table describes the physical connections to the administrative and application nodes:
 

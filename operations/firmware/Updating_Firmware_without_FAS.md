@@ -10,10 +10,10 @@
 - [Prerequisites](#prerequisites)
 - [Obtain the required firmware](#obtain-the-required-firmware)
 - [Flash the firmware](#flash-the-firmware)
-  - [Gigabyte NCNs](#gigabyte-ncns)
-  - [HPE NCNs](#hpe-ncns)
-    - [Using the `ilorest` command](#using-the-ilorest-command)
-    - [Using the iLO GUI](#using-the-ilo-gui)
+    - [Gigabyte NCNs](#gigabyte-ncns)
+    - [HPE NCNs](#hpe-ncns)
+        - [Using the `ilorest` command](#using-the-ilorest-command)
+        - [Using the iLO GUI](#using-the-ilo-gui)
 
 ## Prerequisites
 
