@@ -4,15 +4,15 @@ There are generally two networks accessible by devices outside of the CSM cluste
 
 ## Customer Management Network
 
-The Customer Management Network \(CMN\) provides access from outside the customer network to administrative services and non-compute nodes \(NCNs\). This allows for the following:
+The Customer Management Network (CMN) provides access from outside the customer network to administrative services and non-compute nodes (NCNs). This allows for the following:
 
 - Administrator clients outside of the system:
-  - Log in to NCNs.
-  - Access administrative web UIs within the system \(e.g. Prometheus, Grafana, and more\).
-  - Access the administrative REST APIs.
-  - Access a DNS server within the system for resolution of names for the webUI and REST API services.
-  - Run administrative Cray CLI commands from outside the system.
-- NCNs to access systems outside the cluster \(e.g. LDAP, license servers, and more\).
+    - Log in to NCNs.
+    - Access administrative web UIs within the system (e.g. Prometheus, Grafana, and more).
+    - Access the administrative REST APIs.
+    - Access a DNS server within the system for resolution of names for the webUI and REST API services.
+    - Run administrative Cray CLI commands from outside the system.
+- NCNs to access systems outside the cluster (e.g. LDAP, license servers, and more).
 - Services within the cluster to access systems outside the cluster.
 
 These nodes and services need an IP address that routes to the customer's network in order to be accessed from outside the network.
@@ -21,10 +21,10 @@ These nodes and services need an IP address that routes to the customer's networ
 
 - No direct access to the NCNs other than `ncn-m001`. Will need to hop through `ncn-m001` to get to the rest of the NCNs.
 - No direct access to the UANs unless the UAN has a direct connection to the customer network.
-- NCNs other than `ncn-m001` do not have access to services outside of the system \(e.g. LDAP, license servers, and more\).
-  - These nodes will not have an interface on any network with access outside of the HPE Cray EX system.
-  - These nodes will not have a default route.
-  - This includes access to any of the externally exposed services from these nodes.
+- NCNs other than `ncn-m001` do not have access to services outside of the system (e.g. LDAP, license servers, and more).
+    - These nodes will not have an interface on any network with access outside of the HPE Cray EX system.
+    - These nodes will not have a default route.
+    - This includes access to any of the externally exposed services from these nodes.
 - Pods running on NCNs other than `ncn-m001` will not have access to services outside of the system.
 - No access to externally exposed services. See [Externally Exposed Services](Externally_Exposed_Services.md) for more information.
 
@@ -37,12 +37,12 @@ The Customer Access Network (CAN) will use a VLAN on the management switches. Th
 The user network will allow for the following:
 
 - User clients outside of the system:
-  - Log in to UANs.
-  - Access user web UIs within the system \(e.g. Capsules\).
-  - Access the user REST APIs.
-  - Run user Cray CLI commands from outside the system.
-  - Access the User Access Instances \(UAI\).
-- UANs to access systems outside the cluster \(e.g. LDAP, license servers, and more\).
+    - Log in to UANs.
+    - Access user web UIs within the system (e.g. Capsules).
+    - Access the user REST APIs.
+    - Run user Cray CLI commands from outside the system.
+    - Access the User Access Instances (UAI).
+- UANs to access systems outside the cluster (e.g. LDAP, license servers, and more).
 
 ## Subnet configuration
 
@@ -51,11 +51,11 @@ The user network will allow for the following:
 CMN IP addresses are allocated from a single IP subnet that is configured as the `cmn-cidr` value in the `csi config init` input. This subnet is further divided into three smaller subnets:
 
 - Subnet for NCNs and switches.
-- Subnet for the MetalLB static pool \(`cmn-static-pool`\).
-  - This is used for services that need to be pinned to the same IP address. For example, the PowerDNS service that needs to be configured in the upstream DNS server.
-  - This subnet currently needs only a few IP addresses.
-- Subnet for the MetalLB dynamic pool \(`cmn-dynamic-pool`\).
-  - This is used for the rest of the externally exposed services and are allocated dynamically. These IP addresses can be allocated differently across deployments because these services are accessed by DNS name rather than by IP address.
+- Subnet for the MetalLB static pool (`cmn-static-pool`).
+    - This is used for services that need to be pinned to the same IP address. For example, the PowerDNS service that needs to be configured in the upstream DNS server.
+    - This subnet currently needs only a few IP addresses.
+- Subnet for the MetalLB dynamic pool (`cmn-dynamic-pool`).
+    - This is used for the rest of the externally exposed services and are allocated dynamically. These IP addresses can be allocated differently across deployments because these services are accessed by DNS name rather than by IP address.
 
 The minimum size for the CMN subnet is /25. The CMN /25 subnet allows for the following:
 
@@ -75,8 +75,8 @@ CAN or CHN IP addresses are allocated from a single IP subnet that is configured
 network subnet is further divided into two smaller subnets:
 
 - Subnet for NCNs, UANs, and switches.
-- Subnet for the MetalLB dynamic pool \(`can-dynamic-pool`\) or \(`chn-dynamic-pool`\).
-  - This is used for all of the externally exposed services and are allocated dynamically. These IP addresses can be allocated differently across deployments because these services are accessed by DNS name rather than by IP address.
+- Subnet for the MetalLB dynamic pool (`can-dynamic-pool`) or (`chn-dynamic-pool`).
+    - This is used for all of the externally exposed services and are allocated dynamically. These IP addresses can be allocated differently across deployments because these services are accessed by DNS name rather than by IP address.
 
 The minimum size for the CAN or CHN subnet is /27. The /27 subnet allows for the following:
 

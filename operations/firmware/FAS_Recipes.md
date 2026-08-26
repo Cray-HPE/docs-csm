@@ -2,7 +2,7 @@
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 The following example JSON files are useful to reference when updating specific hardware components. In all of these examples, the `overrideDryrun` field will be set to `false`; set them to `true` to perform a live update.
@@ -22,7 +22,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:** Before updating a CMM, make sure all slot and rectifier power is off and the discovery job is stopped.
@@ -87,7 +87,7 @@ See [Update Chassis Management Module (CMM) Firmware](FAS_Use_Cases.md#update-ch
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:**
@@ -124,16 +124,16 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 }
 ```
 
-> **`NOTE`** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#compute-node-bios-workaround-for-hpe-cray-ex425) procedure.
+> **NOTE** If this update does not work as expected, follow the [Compute Node BIOS Workaround for HPE CRAY EX425](FAS_Use_Cases.md#compute-node-bios-workaround-for-hpe-cray-ex425) procedure.
 
 ### (Cray) Device Type: `NodeBMC` | Target: Redstone FPGA (`AccFPGA0`)
 
-**`NOTE`**: Redstone FPGAs requires HFP release 23.12 or later.
+**NOTE**: Redstone FPGAs requires HFP release 23.12 or later.
 Previous versions did not contain the Redstone FPGA firmware.
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:**
@@ -171,7 +171,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ```json
@@ -205,7 +205,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ```json
@@ -240,7 +240,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:**
@@ -277,7 +277,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 > **IMPORTANT:**
@@ -313,7 +313,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 }
 ```
 
-> **`NOTE`** Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
+> **NOTE** Update of System ROM may report as an error when it actually succeeded because of an incorrect string in the image metadata in FAS. Manually check the update version to get around this error.
 
 ## Manufacturer: Gigabyte
 
@@ -321,7 +321,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ```json
@@ -351,7 +351,7 @@ For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 }
 ```
 
-> **`NOTE`** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
+> **NOTE** The `timeLimit` is `4000` because the Gigabytes can take a lot longer to update.
 
 #### Troubleshooting
 
@@ -375,7 +375,7 @@ Make sure to wait for the current firmware to be updated before starting a new F
 
 **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
 
-**`NOTE`** This is a collection of various FAS recipes for performing updates.
+**NOTE** This is a collection of various FAS recipes for performing updates.
 For step by step directions and commands, see [FAS Use Cases](FAS_Use_Cases.md).
 
 ```json

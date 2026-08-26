@@ -14,7 +14,7 @@ Refer to [FAS Filters](FAS_Filters.md) for more information on the content used 
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+* The Cray command line interface (CLI) tool is initialized and configured on the system.
 See [Configure the Cray CLI](../configure_cray_cli.md).
 
 The following procedures are included in this section:
@@ -25,16 +25,16 @@ The following procedures are included in this section:
 * [Update NCN BIOS and BMC firmware with FAS](#update-non-compute-node-ncn-bios-and-bmc-firmware)
 * [Compute node BIOS workaround for HPE CRAY EX425](#compute-node-bios-workaround-for-hpe-cray-ex425)
 
-> **NOTE:** To update switch Controllers \(sC\) or `RouterBMCs`, refer to the Rosetta documentation.
+> **NOTE:** To update switch Controllers (sC) or `RouterBMCs`, refer to the Rosetta documentation.
 
 ## Update liquid-cooled nodes BMC, `AccFPGA0`, management Ethernet, `AccVBIOS`, `AccUC` and node BIOS
 
-Update firmware for a liquid-cooled node controller \(nC\) using FAS.
+Update firmware for a liquid-cooled node controller (nC) using FAS.
 This section includes templates for JSON files that can be used and the procedure for running the update.
 
 All of the example JSON files below are set to run a dry-run. Update the `overrideDryrun` value to `true` to update the firmware.
 
-This procedure updates node controller \(nC\) firmware.
+This procedure updates node controller (nC) firmware.
 
 **NOTE:**: `AccFPGA0` and `AccUC` updates requires HFP release 23.12 or later.
 Previous versions did not contain these firmware.
@@ -201,11 +201,13 @@ There may be more than one node that must be updated on each BMC; these have the
 The targets can be run in the same action (as shown in the example) or run separately by only including one target in the action.
 On larger systems, it is recommended to run as separate actions one after each other as the output will be shorter.
 
-> **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field \(`softwareId`\) that the `NodeX.BIOS` update will require.
+> **IMPORTANT:** The Cray `nodeBMC` device needs to be updated before the `nodeBIOS` because the `nodeBMC` adds a new Redfish field (`softwareId`) that the `NodeX.BIOS` update will require.
 See [Update liquid-cooled node firmware](#update-liquid-cooled-nodes-bmc-accfpga0-management-ethernet-accvbios-accuc-and-node-bios) for more information.
+>
 > **IMPORTANT:** The nodes themselves must be powered **off** in order to update the BIOS on the nodes.
 The BMC will still have power and will perform the update.
 If nodes are not off when the update command is issued, it will report as a failed update.
+>
 > **IMPORTANT:** When the BMC is updated or rebooted after updating the `Node0.BIOS` and/or `Node1.BIOS` liquid-cooled nodes, the node BIOS version will not report the new version string until the nodes are powered back on.
 It is recommended that the `Node0/1` BIOS be updated in a separate action, after a BMC update.
 It is also recommended that the nodes be powered back on after the updates are completed.
@@ -409,9 +411,9 @@ or `cray_nodeBMC_nodeAccUC.json` for `AccUC` updates.
 
 ## Update Chassis Management Module firmware
 
-Update the Chassis Management Module \(CMM\) controller \(cC\) firmware using FAS. This procedure uses the dry-run feature to verify that the update will be successful.
+Update the Chassis Management Module (CMM) controller (cC) firmware using FAS. This procedure uses the dry-run feature to verify that the update will be successful.
 
-The CMM firmware update process also checks and updates the Cabinet Environmental Controller \(CEC\) firmware.
+The CMM firmware update process also checks and updates the Cabinet Environmental Controller (CEC) firmware.
 
 ### Manufacturer: Cray | Device Type: `ChassisBMC` | Target: BMC
 
@@ -580,7 +582,7 @@ Use the file `cray_chassisBMC_BMC.json` for chassis BMC updates.
 
     The `--prereq` option ensures all required components are powered on first. The `--continue` option allows the command to complete in systems without fully populated hardware.
 
-1. After the components have powered on, boot the nodes using the Boot Orchestration Services \(BOS\).
+1. After the components have powered on, boot the nodes using the Boot Orchestration Services (BOS).
 
 ## Update air-cooled compute node BMC, BIOS, iLO 5, and system ROM
 
@@ -591,7 +593,7 @@ All of the example JSON files below are set to run a dry-run. Update the `overri
 
 After updating the BIOS or System ROM, the compute node will need to be rebooted before the new version will be displayed in the Redfish output.
 
-This procedure updates node controller \(nC\) firmware.
+This procedure updates node controller (nC) firmware.
 
 ### Gigabyte compute nodes
 
@@ -926,7 +928,7 @@ or the file `hpe_nodeBMC_systemRom.json` for HPE node `System ROM` updates.
 
 ## Update Non-Compute Node (NCN) BIOS and BMC firmware
 
-Gigabyte and HPE non-compute nodes \(NCNs\) firmware can be updated with FAS. This section includes templates for JSON files that can be used to update firmware with the `cray fas actions create` command.
+Gigabyte and HPE non-compute nodes (NCNs) firmware can be updated with FAS. This section includes templates for JSON files that can be used to update firmware with the `cray fas actions create` command.
 
 After creating the JSON file for the device being upgraded, use the following command to run the FAS job:
 
@@ -987,7 +989,7 @@ To resolve this issue, do either of the following actions:
 * Check the update status by looking at the Redfish `FirmwareInventory` (`/redfish/v1/UpdateService/FirmwareInventory/BMC`)
 * Rerun FAS to verify that the BMC firmware was updated.
 
-Make sure you have waited for the current firmware to be updated before starting a new FAS action on the same node.
+Make sure to wait for the current firmware to be updated before starting a new FAS action on the same node.
 
 #### Manufacturer: Gigabyte | Device Type: NCN `NodeBMC` | Target: BIOS
 
@@ -1145,7 +1147,7 @@ Example output:
       See [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md).
    1. Run the FAS action on the NCN. **NEW**: The [`FASUpdate.py script`](FASUpdate_Script.md) can be used to perform default updates to firmware and BIOS.
    1. Reboot the node. The node must be rebooted for the new BIOS to be used.
-      You may reboot the node(s) at a later time, but the BIOS version will not reflect the updated version until rebooted.
+      It is not necessary to immediately reboot the nodes, but the BIOS version will not reflect the updated version until rebooted.
       Make sure to run the next step for `HPE` NCNs after rebooting the node.
       See [Reboot NCNs](../node_management/Reboot_NCNs.md).
    1. For `HPE` NCNs, run the script `/opt/cray/csm/scripts/node_management/set-bmc-ntp-dns.sh`.
@@ -1165,7 +1167,7 @@ Prerequisites:
     * The BIOS in question is running a version less than or equal to `1.2.5` as reported by Redfish or described by the `noSolution` operation in FAS.
 * The hardware model reported by Redfish is `wnc-rome`, which is now designated as `HPE CRAY EX425`.
 
-  (`ncn#`) If the Redfish model is different \(ignoring casing\) and the blades in question are not `Windom`, contact customer support. To find the model reported by Redfish, run the following:
+  (`ncn#`) If the Redfish model is different (ignoring casing) and the blades in question are not `Windom`, contact customer support. To find the model reported by Redfish, run the following:
 
   ```bash
   cray fas operations describe {operationID} --format json

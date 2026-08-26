@@ -2,7 +2,7 @@
 
 Retrieve the model name and firmware image required to update an HPE or Gigabyte `ncn-m001` node.
 
-> **`NOTE`**
+> **NOTE**
 >
 > - On HPE nodes, the BMC firmware is iLO 5 and BIOS is System ROM.
 > - The commands in the procedure must be run on `ncn-m001`.
@@ -118,7 +118,7 @@ Use one of the following commands to find the model name for the node type in us
 
 The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM (BIOS) on the HPE `ncn-m001` node.
 
-1. (`linux#`) Copy the iLO 5 firmware and/or System ROM files to a local computer from `ncn-m001` using `scp` or other secure copy tools.
+1. (`linux/win/mac#`) Copy the iLO 5 or iLO 6 firmware and/or System ROM files to a local computer from `ncn-m001` using `scp` or other secure copy tools.
 
     ```bash
     scp root@ipaddressOfM001Node:pathToFile/filename .
@@ -135,4 +135,7 @@ The web interface will be used to update iLO 5 (BMC) firmware and/or System ROM 
     1. Click `"Confirm TPM override"`.
     1. Click `"Flash"`.
 
-    > After updating System ROM (BIOS), `ncn-m001` will need to be rebooted. Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.
+1. Reboot `ncn-m001`.
+
+    After updating System ROM (BIOS), `ncn-m001` must be rebooted.
+    Follow the [Reboot NCNs](../node_management/Reboot_NCNs.md) procedure to reboot `ncn-m001`.

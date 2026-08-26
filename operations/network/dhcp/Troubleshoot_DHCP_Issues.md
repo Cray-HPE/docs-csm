@@ -1,6 +1,6 @@
 # Troubleshoot DHCP Issues
 
-There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol \(DHCP\) servers.
+There are several things to check for when troubleshooting issues with Dynamic Host Configuration Protocol (DHCP) servers.
 
 ## Incorrect DHCP IP addresses
 
@@ -125,12 +125,12 @@ Once a token has been generated, the DHCP lease database can be viewed. The comm
     select(."hostname"=="xNAME")'
   ```
 
-## Check the Hardware State Manager \(HSM\) for issues
+## Check the Hardware State Manager (HSM) for issues
 
 The HSM includes two important components:
 
-- Systems Layout Service \(SLS\): This is the expected state of the system.
-- State Manager Daemon \(SMD\): This is the discovered or active state of the system during runtime.
+- Systems Layout Service (SLS): This is the expected state of the system.
+- State Manager Daemon (SMD): This is the discovered or active state of the system during runtime.
 
 (`ncn-mw#`) To view the information stored in SLS for a specific component name (xname):
 
@@ -175,7 +175,7 @@ waiting 10 seconds for any leases to be given out...
 tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
 ```
 
-This will create a file named `dhcp.pcap` in the current directory. It will collect all DHCP traffic on the specified port. In this example. it would be the DHCP traffic on interface `bond0.nmn0` \(`10.252.0.0/17`\).
+This will create a file named `dhcp.pcap` in the current directory. It will collect all DHCP traffic on the specified port. In this example. it would be the DHCP traffic on interface `bond0.nmn0` (`10.252.0.0/17`).
 
 (`ncn#`) To view the DHCP traffic:
 
@@ -227,7 +227,7 @@ BGP neighbor: 10.252.0.4, remote AS: 65533, link: internal:
   Minimum holdtime from neighbor in seconds            : 90
 ```
 
-(`sw-spine#`) Confirm that routes to Kea \(`10.92.100.222`\) via all the NCN worker nodes are available:
+(`sw-spine#`) Confirm that routes to Kea (`10.92.100.222`) via all the NCN worker nodes are available:
 
 ```text
 show ip route 10.92.100.222

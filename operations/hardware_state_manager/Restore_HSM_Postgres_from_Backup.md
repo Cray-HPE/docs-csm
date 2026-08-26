@@ -456,7 +456,7 @@ automatic backup created by the `cray-smd-postgresql-db-backup` Kubernetes cronj
     ```bash
     UNKNOWN_NCN_MAC_ADDRESSES=$(cray hsm inventory ethernetInterfaces list --component-id "" --format json | jq '.[] | select(.Description == "- kea") | .MACAddress'  -r)
 
-    for UNKNOWN_MAC_ADDRESS in $UNKNOWN_NCN_MAC_ADDRESSES; do 
+    for UNKNOWN_MAC_ADDRESS in $UNKNOWN_NCN_MAC_ADDRESSES; do
         XNAME=$(cray bss bootparameters list --format json | jq --arg MAC "${UNKNOWN_MAC_ADDRESS}" '.[] | select(.params != null) | select(.params | test($MAC)) | .hosts[]' -r)
 
 

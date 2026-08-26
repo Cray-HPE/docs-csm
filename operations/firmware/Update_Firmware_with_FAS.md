@@ -45,7 +45,7 @@ This includes NCNs which are manually locked to prevent accidental rebooting and
 
 Follow the process outlined in [FAS CLI](FAS_CLI.md) to update the system. Use the recipes listed in [FAS Use Cases](FAS_Use_Cases.md) to update each supported type.
 
-> **`NOTE`** Each system is different and may not have all hardware options.
+> **NOTE** Each system is different and may not have all hardware options.
 
 ## Current capabilities
 
@@ -105,7 +105,7 @@ After identifying which hardware is in the system, start with the top item on th
 > **IMPORTANT:**
 > This process does not communicate the SAFE way to update NCNs. If the NCNs and their BMCs have not been locked, or if FAS is blindly used to update NCNs without following the correct process, then **THE STABILITY OF THE SYSTEM WILL BE JEOPARDIZED**.
 > Read the corresponding recipes before updating. There are sometimes ancillary actions that must be completed in order to ensure update integrity.
-> **`NOTE`** To update Switch Controllers \(sC\) or `RouterBMC`, refer to the Rosetta Documentation.
+> **NOTE** To update Switch Controllers (sC) or `RouterBMC`, refer to the Rosetta Documentation.
 
 * [Cray](FAS_Use_Cases.md#liquid-cooled-nodes-update-procedures)
     * [`ChassisBMC`](FAS_Use_Cases.md#update-chassis-management-module-firmware)
@@ -178,7 +178,7 @@ FAS operations will have one of the following states:
 
 ## Firmware images
 
-FAS requires images in order to update firmware for any device on the system. An image contains the data that allows FAS to establish a link between an administrative command, available devices \(xname/targets\), and available firmware.
+FAS requires images in order to update firmware for any device on the system. An image contains the data that allows FAS to establish a link between an administrative command, available devices (xname/targets), and available firmware.
 
 The following is an example of an image:
 
@@ -211,7 +211,7 @@ The main components of an image are described in the following sections.
 
 ### Firmware image: key
 
-This includes the `deviceType`, `manufacturer`, `model`, `target`, `tag`, `semanticFirmwareVersion` \(firmware version\) fields.
+This includes the `deviceType`, `manufacturer`, `model`, `target`, `tag`, `semanticFirmwareVersion` (firmware version) fields.
 
 These fields are how administrators assess what firmware is on a device, and if an image is applicable to that device.
 
