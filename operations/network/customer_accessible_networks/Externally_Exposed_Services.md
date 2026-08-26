@@ -1,6 +1,6 @@
 # Externally Exposed Services
 
-The following services are exposed on one or more of the external networks \([CMN](../../../glossary.md#customer-management-network-cmn),
+The following services are exposed on one or more of the external networks ([CMN](../../../glossary.md#customer-management-network-cmn),
 [CAN](../../../glossary.md#customer-access-network-can), and [CHN](../../../glossary.md#customer-high-speed-network-chn))\.
 Each of these services requires an IP address in the relevant subnets so they are reachable on that network. This IP address is allocated by the MetalLB component.
 
@@ -35,4 +35,4 @@ See [External DNS](../external_dns/External_DNS.md) for more information.
 | CSMS                                   | `csms`         |                                        |                         | No                 | Uses the IP address of OAuth2 Proxy Ingress (CMN)          |
 | Nexus                                  | `nexus`        |                                        |                         | No                 | Uses the IP address of Istio Ingress Gateway (CMN)         |
 | Rsyslog Aggregator                     | `rsyslog`      | customer-management                    | Yes                     | 514/8514           |                                                            |
-| [IMS](../../../glossary.md#image-management-service-ims)                                    | `<uid\>.ims`   | customer-management                    | Yes \(multiple\)        | 22                 | Can be several of these each with a unique ID              |
+| [IMS](../../../glossary.md#image-management-service-ims)                                    | `<uid\>.ims`   | customer-management                    | Yes (multiple)        | 22                 | Can be several of these each with a unique ID              |

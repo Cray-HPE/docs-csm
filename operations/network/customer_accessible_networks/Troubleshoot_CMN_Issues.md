@@ -1,10 +1,10 @@
-# Troubleshoot CMN issues
+# Troubleshoot CMN Issues
 
 Various connection points to check when using the CMN and how to fix any issues that arise.
 
-The most frequent issue with the Customer Management Network \(CMN\) is trouble accessing IP addresses outside of the HPE Cray EX system from a node or pod inside the system.
+The most frequent issue with the Customer Management Network (CMN) is trouble accessing IP addresses outside of the HPE Cray EX system from a node or pod inside the system.
 
-The best way to resolve this issue is to try to ping an outside IP address from one of the NCNs other than `ncn-m001`, which has a direct connection that it can use instead of the Customer Management Network \(CMN\).
+The best way to resolve this issue is to try to ping an outside IP address from one of the NCNs other than `ncn-m001`, which has a direct connection that it can use instead of the Customer Management Network (CMN).
 The following are some things to check to make sure CMN is configured correctly:
 
 ## Does the NCN have an IP Address Configured on the `bond0.cmn0` Interface?

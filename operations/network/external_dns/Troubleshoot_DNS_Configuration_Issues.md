@@ -2,7 +2,7 @@
 
 Troubleshoot issues when DNS is not properly configured to delegate name resolution to the core DNS instance on a specific cluster.
 Although the CMN/CAN/CHN IP address may still be routable using the IP address directly, it may not work because Istio's ingress gateway
-depends on the hostname \(or SNI\) to route traffic. For command line tools like cURL, using the `--resolve` option to force correct
+depends on the hostname (or SNI) to route traffic. For command line tools like cURL, using the `--resolve` option to force correct
 resolution can be used to work around this issue.
 
 To get names to resolve correctly in a browser, modifying `/etc/hosts` to map the external hostname to the appropriate CMN/CAN/CHN IP address may be necessary.
@@ -14,7 +14,7 @@ This document also covers how to gain access to system services when external DN
 
 ## Prerequisites
 
-The Domain Name Service \(DNS\) is not configured properly.
+The Domain Name Service (DNS) is not configured properly.
 
 ## Procedure
 
@@ -44,7 +44,7 @@ The Domain Name Service \(DNS\) is not configured properly.
 
 1. (`external#`) Use the IP address to direct DNS requests directly to the `cray-dns-powerdns-cmn-udp` service.
 
-    Replace the example IP address \(`10.101.5.61`\) with the `EXTERNAL-IP` value returned in step 1.
+    Replace the example IP address (`10.101.5.61`) with the `EXTERNAL-IP` value returned in step 1.
     If an IP address is returned, then it means upstream DNS is not configured correctly.
 
     ```bash
@@ -53,7 +53,7 @@ The Domain Name Service \(DNS\) is not configured properly.
 
 1. (`ncn-mw#`) Direct DNS requests to the cluster IP address from an NCN.
 
-    Replace the example cluster IP address \(`10.25.156.88`\) with the `CLUSTER-IP` value returned in step 1.
+    Replace the example cluster IP address (`10.25.156.88`) with the `CLUSTER-IP` value returned in step 1.
     If an IP address is returned, then external DNS is configured on the cluster and something is likely wrong with the CMN or BGP.
 
     ```bash

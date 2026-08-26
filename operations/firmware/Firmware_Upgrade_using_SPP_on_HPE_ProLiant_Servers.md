@@ -1,4 +1,4 @@
-# Firmware Upgrade using SPP on HPE ProLiant Servers
+# Firmware Upgrade Using SPP on HPE ProLiant Servers
 
 * [Download SPP image](#download-spp-image)
 * [Deploying individual firmware components](#deploying-individual-firmware-components)
