@@ -75,7 +75,7 @@ Swap an HPE Cray EX liquid-cooled [compute][cn] blade between two systems.
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateName` value with BOS.
+   1. Find the required `template_name` value with BOS.
 
       ```bash
       cray bos v2 sessions describe BOS_SESSION --format toml | grep template_name
