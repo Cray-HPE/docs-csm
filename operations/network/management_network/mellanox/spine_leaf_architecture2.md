@@ -1,15 +1,16 @@
-# Spine-leaf architecture
+# Spine-leaf Architecture
 
-How does a spine-leaf architecture differ from traditional network designs?
+## How does a spine-leaf architecture differ from traditional network designs?
+
 Traditionally, data center networks were based on a three-tier model:
 
-1.	Access switches connect to servers
-2.	Aggregation or distribution switches provide redundant connections to access switches
-3.	Core switches provide fast transport between aggregation switches, typically connected in a redundant pair for high availability
+1. Access switches connect to servers
+1. Aggregation or distribution switches provide redundant connections to access switches
+1. Core switches provide fast transport between aggregation switches, typically connected in a redundant pair for high availability
 
 At the most basic level, a spine-leaf architecture collapses one of these tiers, as depicted in these diagrams.
 
-![](../../../../img/network/management_network/architecture_comparison.png)
+![Architecture comparison](../../../../img/network/management_network/architecture_comparison.png "Architecture comparison")
 
 Other common differences in spine-leaf topologies include:
 

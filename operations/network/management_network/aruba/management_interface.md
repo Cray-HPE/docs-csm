@@ -1,10 +1,12 @@
 # Management Interface
 
-The management interface can be used to gain remote management access to the switch. The management interface is accessible using the "mgmt" VRF and is separate from the data plane interfaces, which are in the "default" VRF.
+The management interface can be used to gain remote management access to the switch.
+The management interface is accessible using the "mgmt" VRF and is separate from the
+data plane interfaces, which are in the "default" VRF.
 
 Alternatively, a loopback interface can be configured to be used as management interface.
 
-```
+```text
 Address Mode
 Admin State
 Mac Address
@@ -25,7 +27,7 @@ Secondary Nameserver
 : 10.93.56.1
 ```
 
-## Configuration Commands
+## Configuration commands
 
 Enable/disable the management interface:
 
@@ -56,10 +58,10 @@ switch(config)# interface loopback 0
 8325-Core1(config-loopback-if)# ip address <IP-ADDR>
 ```
 
-## Expected Results
+## Expected results
 
-1. Administrators can enable/disable the management interface.
-2. Administrators can assign an IP address to the management interface
-3. Administrators can configure a loopback interface to be use for Switch management.
+- Administrators can enable/disable the management interface.
+- Administrators can assign an IP address to the management interface
+- Administrators can configure a loopback interface to be use for switch management.
 
 [Back to Index](../README.md)

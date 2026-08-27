@@ -12,7 +12,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
+- The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 
 - The Slingshot fabric must be configured with the desired topology for both blades.
 
@@ -27,7 +27,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
     - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
     - Review the *HPE Cray EX Hand Pump User Guide H-6200*
 
-- The System Admin Toolkit \(SAT\) is installed and configured on the system.
+- The System Admin Toolkit (SAT) is installed and configured on the system.
 
 ## Remove blade from source system
 
@@ -35,7 +35,7 @@ Swap an HPE Cray EX liquid-cooled compute blade between two systems.
 
 1. Using the work load manager (WLM), drain running jobs from the affected nodes on the blade. Refer to the vendor documentation for the WLM for more information.
 
-1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service (BOS) templates to use to shut down nodes on the target blade.
 
    There will be separate session templates for UANs and computes nodes.
 

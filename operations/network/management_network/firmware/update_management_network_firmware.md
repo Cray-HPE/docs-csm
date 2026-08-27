@@ -191,7 +191,7 @@ Login into the switch being upgraded.
 1. Check images
 
    ```console
-   show images                        
+   show images
    ```
 
    Example output:
@@ -361,7 +361,7 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
       show vsx status
       ```
 
-      Example Output:
+      Example output:
 
       ```console
       VSX Operational State
@@ -379,7 +379,7 @@ In this example we are pre-staging the firmware to `sw-spine-001` and `sw-spine-
       System MAC          02:00:00:00:01:00   02:00:00:00:01:00
       Platform            8325                8325
       Software Version    GL.10.13.1080       GL.10.13.1080
-      Device Role         primary             secondary     
+      Device Role         primary             secondary
       ```
 
    1. Determine partner switch.

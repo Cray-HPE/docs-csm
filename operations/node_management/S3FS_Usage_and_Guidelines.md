@@ -4,12 +4,12 @@
 
 [S3FS](https://github.com/s3fs-fuse/s3fs-fuse) is a FUSE-based filesystem backed by Amazon S3. CSM uses it to provide temporary overflow storage, as well as to support SDU and NMD services to provide space for dumps.
 
-## When to Use
+## When to use
 
 * If the need is a landing point for large files that may fill up the root volume.
 * Short term storage of large files or rpms.
 
-## When NOT to Use
+## When NOT to use
 
 * For long term storage of code, test images, test rpms, or tar files.
     * This is ONLY meant to provide temporary relief. Exercising a vigilant practice of cleaning up unused files should be enforced.
@@ -18,7 +18,7 @@
     * Running programs from the S3FS mount point.
         * Although this can be done but will eat into memory for long running programs and may not perform properly.
 
-## Cache Pruning
+## Cache pruning
 
 S3FS maintains a [local cache](https://github.com/s3fs-fuse/s3fs-fuse/wiki/Fuse-Over-Amazon#details), which can fill up if left unchecked, so CSM periodically clears the cache. The S3FS cache parent directory is `/var/lib/s3fs_cache`, with a subdirectory
 corresponding to a given S3FS mount point. On master nodes, this will contain an `sds/` subdirectory. Otherwise, on all other nodes, it will contain a `boot-images/` subdirectory.
@@ -27,46 +27,47 @@ Periodically, one of two cron jobs runs to clear out cache files. `sds/` is clea
 
 **Note**: Other arbitrary files and directories directly under `/var/lib/s3fs_cache` will **not** be pruned, and will continue to occupy disk space until they are deleted manually. Do not store large files in this directory expecting them to be pruned.
 
-## Additional Considerations
+## Additional considerations
 
 * Ensure it is only temporary use on master nodes.
     * SDU utilizes S3FS on the master servers and ideally we would like to reserve the S3FS cache partition for SDU.
     * The cache partition is shared if utilizing automatically mounted partitions.
     * Make sure you are utilizing the correct S3 credentials and buckets.
 
-## How To Use
+## How to use
 
-1. Gather creds from radosgw
+### Gather credentials from the Rados Gateway
 
-   ***NOTES:***
+***NOTES:***
 
-   * Please replace \<radosgw-user> below with the UID for the radosgw/s3 user id.
-   * Make sure to use a meaningful filename for storing the credentials and replace \<filename> below.
-   * Make sure to create a mount location and use that below to replace \<mount path>
+* Replace `<radosgw-user>` below with the UID for the radosgw/s3 user id.
+* Make sure to use a meaningful filename for storing the credentials and replace `<filename>` below.
+* Make sure to create a mount location and use that below to replace `<mount path>`
 
-    ```bash
-    radosgw-admin user info --uid <radosgw-user>|jq -r '.keys[]|.access_key +":"+ .secret_key' >>${HOME}/.<filename>.s3fs
-    chmod 600 ~/.<filename>.s3fs
-    mkdir <mount path>
-    ```
+```bash
+radosgw-admin user info --uid <radosgw-user>|jq -r '.keys[]|.access_key +":"+ .secret_key' >>${HOME}/.<filename>.s3fs
+chmod 600 ~/.<filename>.s3fs
+mkdir <mount path>
+```
 
-1. Mounting the volume
-   1. Mount without cache
+### Mounting the volume
 
-      ```text
-      # s3fs <radosgw-user> <mount path>  -o passwd_file=${HOME}/.<filename>.s3fs,url=http://rgw-vip.nmn,use_path_request_style
-      ```
+#### Mounting without cache
 
-   2. Mount w/ cache
+```bash
+s3fs <radosgw-user> <mount path>  -o passwd_file=${HOME}/.<filename>.s3fs,url=http://rgw-vip.nmn,use_path_request_style
+```
 
-      ***IMPORTANT:*** To use this option there must be a dedicated landing space that is a partition. This ensures that the usage does not impact the root drive.
+#### Mounting with cache
 
-      ```text
-      s3fs <radosgw-user> <mount path>  -o passwd_file=${HOME}/.<filename>.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_cache=<dedicated_cache_partition_location>,check_cache_dir_exist=true
-      ```
+***IMPORTANT:*** To use this option there must be a dedicated landing space that is a partition. This ensures that the usage does not impact the root drive.
 
-1. Unmounting the volume
+```bash
+s3fs <radosgw-user> <mount path>  -o passwd_file=${HOME}/.<filename>.s3fs,url=http://rgw-vip.nmn,use_path_request_style,use_cache=<dedicated_cache_partition_location>,check_cache_dir_exist=true
+```
 
-   ```bash
-   umount <mount path>
-   ```
+### Unmounting the volume
+
+```bash
+umount <mount path>
+```

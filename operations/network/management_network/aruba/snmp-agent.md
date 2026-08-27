@@ -1,8 +1,12 @@
 # Simple Network Management Protocol (SNMP) Agent
 
-Simple Network Management Protocol (SNMP) minimizes the number and complexity of management functions. For monitoring and control, it is extensible to accommodate additional, possibly unanticipated aspects of network operation and management. SNMP is universal and independent of the architecture and mechanisms of particular hosts or particular gateways. SNMP server is supported either on the default or mgmt VRF.
+Simple Network Management Protocol (SNMP) minimizes the number and complexity
+of management functions. For monitoring and control, it is extensible to
+accommodate additional, possibly unanticipated aspects of network operation and management.
+SNMP is universal and independent of the architecture and mechanisms of particular hosts or
+particular gateways. SNMP server is supported either on the default or management VRF.
 
-## Configuration Commands
+## Configuration commands
 
 Enable SNMP agent:
 
@@ -34,7 +38,7 @@ Show commands to validate functionality:
 show snmp [agent-port|community|trap|vrf] [vsx-peer]
 ```
 
-## Example Output
+## Example output
 
 ```text
 switch(config)# snmp-server vrf default
@@ -64,10 +68,10 @@ Host                     Port  Type      Version SecName                        
 1.2.3.4                  162   inform    v2c     public                        default
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure the port number
-2. The output of all `show` commands is correct
-3. Administrators can connect to the switch from the workstation
+1. The output of all `show` commands is correct
+1. Administrators can connect to the switch from the workstation
 
 [Back to Index](../README.md)

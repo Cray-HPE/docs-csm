@@ -1,12 +1,12 @@
 # Enable Nodes
 
-Use the Hardware State Manager \(HSM\) Cray CLI commands to enable nodes on the system.
+Use the Hardware State Manager (HSM) Cray CLI commands to enable nodes on the system.
 
 Enabling nodes that are available provides an accurate system configuration and node map.
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface (CLI) tool is initialized and configured on the system.
   See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure

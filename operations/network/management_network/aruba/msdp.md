@@ -1,14 +1,18 @@
 # Multicast Source Discovery Protocol (MSDP)
 
-The Multicast Source Discovery Protocol (MSDP) describes a mechanism to connect multiple IP Version 4 Protocol Independent Multicast Sparse-Mode (PIM-SM) domains together. Each PIM-SM domain uses its own independent Rendezvous Point (RP) and does not have to depend on RPs in other domains. When an RP in a PIM-SM domain first learns of a new sender, e.g., via PIM register messages, it constructs a "Source-Active" (SA) message and sends it to its MSDP peers. The SA message contains the following fields:
+The Multicast Source Discovery Protocol (MSDP) describes a mechanism to connect multiple IP Version 4
+Protocol Independent Multicast Sparse-Mode (PIM-SM) domains together. Each PIM-SM domain uses its own
+independent Rendezvous Point (RP) and does not have to depend on RPs in other domains. When an RP in a
+PIM-SM domain first learns of a new sender, e.g., via PIM register messages, it constructs a
+"Source-Active" (SA) message and sends it to its MSDP peers. The SA message contains the following fields:
 
 * The source address of the data source.
 * The group address the data source sends to.
 * The IP address of the RP.
 
-–rfc3618
+– RFC 3618
 
-## Configuration Commands
+## Configuration commands
 
 MSDP is typically run on an IP address bound to a loopback interface. In order for two devices to establish an MSDP neighbor relationship, L3 connectivity must already be established.
 
@@ -28,13 +32,13 @@ show ip msdp count
 show ip msdp sa-cache
 ```
 
-## Test Steps
+## Test steps
 
 1. Configure a loopback interface on both 8325 that are acting as core devices.
-2. Enable PIM on loopback interface
-3. Configure MSDP and create a peer relationship between 8325's using a loopback as the source.
+1. Enable PIM on loopback interface
+1. Configure MSDP and create a peer relationship between `8325s` using a loopback as the source.
 
-## Expected Results
+## Expected results
 
 Verify MSDP session is up and it is using loopback interface as source.
 

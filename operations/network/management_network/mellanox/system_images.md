@@ -1,37 +1,43 @@
-# System images
+# System Images
 
-Mellanox switches can hold two firmware images. These images, once uploaded, are called the Running and Image available for install.
+Mellanox switches can hold two firmware images. These images, once uploaded, are called the "Running" and "Image available for install".
 
-Relevant Configuration
+## Relevant configuration
 
-Copy an image from a local server using sftp
+(`switch (config)#`) Delete old images, if any exist
 
-```
-switch (config)#image delete XXX // --> delete old images, if exist
-switch (config)#image fetch scp://root:password@server/path-to-image/image-X86_64-3.4.2002.img
-switch (config)#image install image-X86_64-3.4.2002.img
+```console
+image delete XXX
 ```
 
-Boot the switch into the new firmware
+(`switch (config)#`) Copy an image from a local server using `sftp`.
 
-```
-switch (config)#image boot next
-switch (config)#configuration write
-switch (config)#reload
+```console
+image fetch scp://root:password@server/path-to-image/image-X86_64-3.4.2002.img
+image install image-X86_64-3.4.2002.img
 ```
 
-Show Commands to Validate Functionality
+(`switch (config)#`) Boot the switch into the new firmware.
 
+```console
+image boot next
+configuration write
+reload
 ```
+
+## Show commands to validate functionality
+
+(`switch#`)
+
+```console
 show version
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: You can upload an image to the switch
-* Step 2: You can see the versions of code for the primary and secondary images
-* Step 3: You can boot into the uploaded image
-* Step 4: You can see you are running the uploaded image
+* Administrators can upload an image to the switch
+* Administrators can see the versions of code for the primary and secondary images
+* Administrators can boot into the uploaded image
+* Administrators can confirm the switch is running the uploaded image
 
 [Back to Index](../README.md)
-

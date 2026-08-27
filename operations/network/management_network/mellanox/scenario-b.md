@@ -1,9 +1,9 @@
-# Scenario B: network connection via high speed network
+# Scenario B: Network Connection Via High-Speed Network
 
-Description
-The example here covers outside connections achieved via highspeed network.
+This example covers outside connections achieved via the high-speed network.
 
-### Summary
+## Summary
+
 * Create a new VRF
 * Move interfaces to the new VRF
 * Create a new BGP process for the new VRF
@@ -13,8 +13,8 @@ The example here covers outside connections achieved via highspeed network.
 * Configure default route for workers
 * Verification of external communication
 
-### Topology
+## Topology
 
-![](../../../../img/network/management_network/scenario-b-topology.png)
+![Scenario B topology](../../../../img/network/management_network/scenario-b-topology.png "Scenario B topology")
 
 [Back to Index](../README.md)

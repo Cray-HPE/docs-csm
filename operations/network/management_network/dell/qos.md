@@ -4,7 +4,7 @@ Network traffic is processed based on classification and policies that are creat
 
 QoS trust is by default disabled.
 
-## Configuration Commands
+## Configuration commands
 
 Create a `dot1p` trust map:
 

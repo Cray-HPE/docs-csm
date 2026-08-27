@@ -4,7 +4,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
+- The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 
 - Knowledge of whether SBPS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 
@@ -16,7 +16,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
 
 - Check the status of the high-speed network (HSN) and record link status before the procedure.
 
-- The System Admin Toolkit \(SAT\) is installed and configured on the system.
+- The System Admin Toolkit (SAT) is installed and configured on the system.
 
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
     - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
@@ -80,7 +80,7 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
 
 ## Power on and boot the nodes
 
-1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service (BOS) templates to use to shut down nodes on the target blade.
 
    There will be separate session templates for UANs and computes nodes.
 

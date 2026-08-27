@@ -1,24 +1,25 @@
-# Domain name
+# Domain Name
 
-A domain name is a name to identify the person, group, or organization that controls the devices within an area. An example of a domain name could be us.cray.com
+A domain name is a name to identify the person, group, or organization that controls the devices within an area.
+An example of a domain name is `us.cray.com`.
 
-Relevant Configuration
+## Relevant configuration
 
-Creating a domain name
+(`switch(config)#`) Creating a domain name:
 
+```console
+ip map-hostname
 ```
-switch(config)# ip map-hostname
-```
 
-Show Commands to Validate Functionality
+## Show commands to validate functionality
 
-```
+```console
 show hosts
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: You can configure the domain name
-* Step 2: The output of all show commands is correct
+* The domain name can be configured.
+* The output of all show commands is correct.
 
 [Back to Index](../README.md)

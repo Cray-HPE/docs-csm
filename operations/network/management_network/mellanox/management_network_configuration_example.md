@@ -1,23 +1,21 @@
-# Example of how to configure Scenario A or B
+# Management Network Configuration Example
 
-Create the CAN VRF
+Create the CAN VRF.
 
-Aruba
+(`switch#`) Aruba
 
-> switch#config
->
-> switch(config)#vrf CAN
-
-Move interfaces into CAN VRF
-
-* If you have existing CAN interface configuration it will be deleted once you move the interface into the new VRF. You will have to re-apply it.
-* NOTE: These are example configs only, most implementations of Bi-CAN will be different.
-
-Aruba
-
-Aruba Primary Config
-
+```console
+vrf CAN
 ```
+
+Move interfaces into CAN VRF.
+
+* Existing CAN interface configurations will be deleted once the interface is moved into the new VRF; the deleted configurations must be re-applied.
+* NOTE: These are example configurations only; most implementations of Bi-CAN will be different.
+
+(`switch#`) Aruba primary configuration
+
+```console
 interface vlan 7
     vsx-sync active-gateways
     vrf attach CAN
@@ -29,9 +27,9 @@ interface vlan 7
     ip ospf 2 area 0.0.0.210
 ```
 
-Aruba Secondary Config
+(`switch#`) Aruba secondary configuration
 
-```
+```console
 interface vlan 7
     vsx-sync active-gateways
     vrf attach CAN
@@ -43,14 +41,14 @@ interface vlan 7
     ip ospf 2 area 0.0.0.210
 ```
 
-Create BGP process in CAN VRF
+Create BGP process in CAN VRF.
 
-* A new BGP process will need to be running in the CAN VRF, this will peer with the CAN IP addresses on the NCN-Workers.
-* These are example configs only, the neighbors below are the IP addresses of the CAN interface on the Workers.
+* A new BGP process will need to be running in the CAN VRF; this will peer with the CAN IP addresses on the NCN workers.
+* These are example configurations only; the neighbors below are the IP addresses of the CAN interface on the workers.
 
-Aruba Config
+(`switch#`) Aruba configuration
 
-```
+```console
 router bgp 65533
 vrf CAN
     maximum-paths 8
@@ -63,15 +61,15 @@ vrf CAN
         neighbor 128.55.176.27 passive
 ```
 
-Setup Customer Edge Router
+Setup customer edge router
 
-* The customer Edge router has to be certified by the Slingshot team.
+* The customer edge router has to be certified by the Slingshot team.
 * The configuration for this is going to be unique for most customers.
 * Below is an example configuration of a single Arista switch with a static LAG to a single Slingshot switch.
 
-Arista LAG Config
+(`switch#`) Arista LAG configuration
 
-```
+```console
 interface Ethernet24/1
    mtu 9214
    flowcontrol send on
@@ -95,22 +93,27 @@ interface Port-Channel1
    switchport mode trunk
 ```
 
-* We are using VLAN 2 for the HSN network.
+* VLAN 2 is being used for the HSN network.
 
-VLAN 2 config
+(`switch#`) VLAN 2 configuration
 
-```
+```console
 interface Vlan2
    ip address 10.101.10.1/24
 ```
 
-* The following is the Arista BGP config for peering over the HSN.
-	* The BGP neighbor IP addresses used are HSN IP addresses of Worker Nodes.
+* The following is the Arista BGP configuration for peering over the HSN.
+    * The BGP neighbor IP addresses used are HSN IP addresses of worker nodes.
 
-Example HSN IP
+(`ncn-w#`) Example HSN IP configuration
 
+```bash
+ip a show hsn0
 ```
-ncn-w001:~ # ip a show hsn0
+
+Example output:
+
+```text
 8: hsn0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 9000 qdisc mq state UP group default qlen 1000
     link/ether 02:00:00:00:00:0d brd ff:ff:ff:ff:ff:ff
     inet 10.101.10.10/24 scope global hsn0
@@ -119,11 +122,11 @@ ncn-w001:~ # ip a show hsn0
        valid_lft forever preferred_lft forever
 ```
 
-* We are creating a prefix list and route-map to only accept routes from the HSN network.
+* Create a prefix list and `route-map` to only accept routes from the HSN network.
 
-Arista BGP Config
+(`switch#`) Arista BGP configuration
 
-```
+```console
 ip prefix-list HSN seq 10 permit 10.101.10.0/24 ge 24
 
 route-map HSN permit 5
@@ -144,9 +147,9 @@ route-map HSN permit 5
 
 Configure MetalLB
 
-* We will need to configure MetalLB to peer with the new CAN VRF interfaces and the new HSN interface on the customer edge router.
+MetalLB must be configured to peer with the new CAN VRF interfaces and the new HSN interface on the customer edge router.
 
-```
+```yaml
 apiVersion: v1
 data:
   config: |
@@ -193,14 +196,19 @@ data:
       - 10.92.100.0/24
 ```
 
-Verify BGP and Routes
+Verify BGP and routes
 
-* Once MetalLB is configured the BGP peers on the Customer Edge router and the CAN VRF should be established.
+* Once MetalLB is configured, the BGP peers on the customer edge router and the CAN VRF should be established.
 
-Arista Edge Router
+(`sw-edge01(config-router-bgp)#`) Arista edge router
 
+```console
+show ip bgp summary
 ```
-sw-edge01(config-router-bgp)#show ip bgp summary
+
+Example output:
+
+```text
 BGP summary information for VRF default
 Router identifier 192.168.50.50, local AS number 65534
 Neighbor Status Codes: m - Under maintenance
@@ -210,11 +218,18 @@ Neighbor Status Codes: m - Under maintenance
   10.101.10.12     4  65533             23        11    0    0 00:03:49 Estab  14     14
 ```
 
-* The Arista routing table should now include the external IP addresses exposed by metalLB.
-* The onsite network team will be responsible for distributing these routes to the rest of their network.
+* The Arista routing table should now include the external IP addresses exposed by MetalLB.
+* The on site network team is responsible for distributing these routes to the rest of their network.
 
+(`sw-edge01(config)#`)
+
+```console
+show ip route
 ```
-sw-edge01(config)#show ip route
+
+Example output:
+
+```text
 B E    10.101.8.113/32 [200/0] via 10.101.10.10, Vlan2
                                 via 10.101.10.11, Vlan2
                                 via 10.101.10.12, Vlan2
@@ -231,11 +246,15 @@ B E    10.101.8.113/32 [200/0] via 10.101.10.10, Vlan2
                                via 192.168.75.1, Ethernet2/1
 ```
 
-Example of how BGP routes would look like in the switch located in Highspeed network.
+(`sw-spine-001 [standalone: master] #`) Example of how BGP routes would look like in the switch located in the High-speed network.
 
+```console
+show ip bgp vrf CAN summary
 ```
-sw-spine-001 [standalone: master] # show ip bgp vrf CAN summary
 
+Example output:
+
+```text
 VRF name                  : CAN
 BGP router identifier     : 192.168.75.1
 local AS number           : 65533
@@ -253,36 +272,57 @@ Neighbor          V    AS           MsgRcvd   MsgSent   TblVer    InQ    OutQ   
 10.101.8.10       4    65536        24704     27741     665       0      0      0:08:44:18    ESTABLISHED/14
 ```
 
-Configure default routes on Workers
+Configure default routes on workers.
 
-* The default route will need to change on the workers so they send their traffic out the HSN interface.
+(`ncn-w#`) The default route will need to change on the workers so they send their traffic out of the HSN interface.
 
-> ip route replace default via 10.101.10.1 dev hsn0
-
-* To make it persistent we will need to create an ifcfg file for hsn0 and remove the old vlan7 default route.
-
-> mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
->
-> echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
-
-* Verify the routing table and external connectivity.
-
+```bash
+ip route replace default via 10.101.10.1 dev hsn0
 ```
-ip route
-default via 10.101.10.1 dev hsn0
 
+(`ncn-w#`) In order to make it persistent, create an `ifcfg` file for `hsn0` and remove the old `vlan7` default route.
+
+```bash
+mv /etc/sysconfig/network/ifroute-bond0.cmn0 /etc/sysconfig/network/ifroute-bond0.cmn0.old
+echo "default 10.101.10.1 - -" > /etc/sysconfig/network/ifroute-hsn0
+```
+
+(`ncn-w#`) Verify the routing table.
+
+```bash
+ip route
+```
+
+Example output:
+
+```text
+default via 10.101.10.1 dev hsn0
+```
+
+(`ncn-w#`) Verify external connectivity.
+
+```bash
 ping 8.8.8.8 -c 1
+```
+
+Example output:
+
+```text
 PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 64 bytes from 8.8.8.8: icmp_seq=1 ttl=110 time=13.6 ms
 ```
 
-Verify External Connectivity
+There should now be external connectivity from outside the Shasta system to the external services offered by MetalLB over the HSN.
 
-* You should now have external connectivity from outside the Shasta system to the external services offered by MetalLB over the HSN.
-* Verify you are going over the HSN by a traceroute.
+(`ncn-mw#`) Verify this is going over the HSN by a `traceroute`.
 
+```bash
+traceroute 10.101.8.113
 ```
-NCN-m001 ~ % traceroute 10.101.8.113
+
+Example output:
+
+```text
 traceroute to 10.101.8.113 (10.101.8.113), 64 hops max, 52 byte packets
  1  172.30.252.234 (172.30.252.234)  37.652 ms  37.930 ms  36.574 ms
  2  10.103.255.228 (10.103.255.228)  37.684 ms  37.180 ms  36.765 ms
@@ -297,11 +337,16 @@ traceroute to 10.101.8.113 (10.101.8.113), 64 hops max, 52 byte packets
 11  10.101.8.113 (10.101.8.113)  39.937 ms  38.565 ms  36.524 ms
 ```
 
-* You can also listen on all the HSN interfaces for ping/traceroute while you ping the external facing iP, in this example 10.101.8.113.
+(`ncn-mw#`) Administrators can also listen on all the HSN interfaces for `ping`/`traceroute` while pinging the external facing
+IP address (`10.101.8.113` in this example).
 
-```
+```bash
 nodes=$(kubectl get nodes| awk '{print $1}' | grep  ncn-w | awk -vORS=, '{print $1}'); pdsh -w ${nodes} "tcpdump -envli hsn0 icmp"
+```
 
+Example output:
+
+```text
 ncn-w002: tcpdump: listening on hsn0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ncn-w003: tcpdump: listening on hsn0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ncn-w001: tcpdump: listening on hsn0, link-type EN10MB (Ethernet), capture size 262144 bytes

@@ -1,16 +1,16 @@
-# Check KEA DHCP logs
+# Check KEA DHCP Logs
 
-In order to check the logs for the pod you will need to know the pod name, run this command to see the pod name:
+## View logs
 
-```
+(`ncn-mw#`) View the Kubernetes logs.
+
+```bash
 kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
 ```
 
-Example:
+Example output:
 
-```
-kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea
-
+```text
 2020-08-03 21:47:50.580 INFO  [kea-dhcp4.dhcpsrv/10] DHCPSRV_MEMFILE_LEASE_FILE_LOAD loading leases from file /cray-dhcp-kea-socket/dhcp4.leases
 2020-08-03 21:47:50.580 INFO  [kea-dhcp4.dhcpsrv/10] DHCPSRV_MEMFILE_LFC_SETUP setting up the Lease File Cleanup interval to 3600 sec
 2020-08-03 21:47:50.580 WARN  [kea-dhcp4.dhcpsrv/10] DHCPSRV_OPEN_SOCKET_FAIL failed to open socket: the interface eth0 has no usable IPv4 addresses configured
@@ -25,15 +25,11 @@ waiting 10 seconds for any leases to be given out...
 2020-08-03 21:48:22.734 INFO  [kea-dhcp4.commands/10] COMMAND_RECEIVED Received command 'config-get'
 ```
 
-This command will output kea logs:
+## Shell into pod
 
-```
-kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea | grep -i error
-```
+(`ncn-mw#`) Shell into a Kea pod.
 
-Shell into a Kea Pod
-
-```
+```bash
 kubectl exec -n services -it pod/$(kubectl get -n services pods | grep kea | head -n 1) -c cray-dhcp-kea -- /bin/bash
 ```
 
