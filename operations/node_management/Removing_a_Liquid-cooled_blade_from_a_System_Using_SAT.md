@@ -4,20 +4,15 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
 
 ## Prerequisites
 
-- The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
-
+- The Cray command line interface (CLI) tool is initialized and configured on the system.
+    - See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 - Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
-
 - The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
-
 - The System Layout Service (SLS) must have the desired HSN configuration.
-
 - Check the status of the high-speed network (HSN) and record link status before the procedure.
-
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
     - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
     - Review the *HPE Cray EX Hand Pump User Guide H-6200*
-
 - The System Admin Toolkit (SAT) is installed and configured on the system.
 
 ## Prepare the system blade for removal

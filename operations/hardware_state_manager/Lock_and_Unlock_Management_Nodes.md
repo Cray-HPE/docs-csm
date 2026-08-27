@@ -28,13 +28,14 @@ failure.
 * [When to unlock management nodes](#when-to-unlock-management-nodes)
 * [How to lock management nodes](#how-to-lock-management-nodes)
     * [Script](#script)
-        * [Manual steps](#manual-steps)
+    * [Manual steps](#manual-steps)
         * [To lock all nodes (and their BMCs) with the `Management` role](#to-lock-all-nodes-and-their-bmcs-with-the-management-role)
         * [To lock single nodes or lists of specific nodes (and their BMCs)](#to-lock-single-nodes-or-lists-of-specific-nodes-and-their-bmcs)
     * [How to check for locked management nodes](#how-to-check-for-locked-management-nodes)
     * [How to unlock management nodes](#how-to-unlock-management-nodes)
         * [To unlock all nodes (and their BMCs) with the `Management` role](#to-unlock-all-nodes-and-their-bmcs-with-the-management-role)
     * [To unlock single or lists of specific nodes (and their BMCs)](#to-unlock-single-or-lists-of-specific-nodes-and-their-bmcs)
+* [Additional information](#additional-information)
 
 ## When to lock management nodes
 
@@ -139,7 +140,7 @@ Failure = 0
 ComponentIDs = [ "x3000c0s6b0n0", "x3000c0s6b0",]
 ```
 
-## How To Check For Locked Management Nodes
+## How to check for locked management nodes
 
 > **NOTE** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore would not show up in the following command output.
 
@@ -309,3 +310,10 @@ Failure = 0
 [Success]
 ComponentIDs = [ "x3000c0s6b0n0", "x3000c0s6b0",]
 ```
+
+## Additional information
+
+* [HSM Locking API](Hardware_Management_Services_HMS_Locking_API.md)
+* [Manage HSM Locks](Manage_HMS_Locks.md)
+* [BOS v2 sessions and HSM locks](../boot_orchestration/Sessions.md#bos-v2-sessions-and-hsm-locks)
+* [HSM API specification](../../api/smd.md)
