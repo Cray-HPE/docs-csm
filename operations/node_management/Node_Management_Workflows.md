@@ -1,13 +1,39 @@
 # Node Management Workflows
 
-The following workflows are intended to be high-level overviews of node management tasks. These workflows depict how services interact with each other during node management and help to provide a quicker and deeper understanding of how the system functions.
+The following workflows are high-level overviews of node management tasks.
+These workflows depict how services interact with each other during node management,
+and help to provide a deeper understanding of how the system functions.
 
 The workflows and procedures in this section include:
 
+- [Components involved in adding or removing nodes](#components-involved-in-adding-or-removing-nodes)
 - [Add nodes](#add-nodes)
 - [Remove nodes](#remove-nodes)
 - [Replace nodes](#replace-nodes)
 - [Move nodes](#move-nodes)
+
+## Components involved in adding or removing nodes
+
+Both of these workflows are based on the interaction of the [System Layout Service (SLS)][sls]
+with other hardware management services (e.g. [HSM][hsm], [HBTD][hbtd], [HMNFD][hmnfd],
+[MEDS][meds]).
+
+Mentioned in these workflows:
+
+- [System Layout Service (SLS)][sls] serves as a "single source of truth" for the system design.
+  It details the physical locations of network hardware, [compute nodes][cn] and cabinets. Further,
+  it stores information about the network, such as which port on which switch should be connected
+  to each compute node.
+- [Hardware State Manager (HSM)][hsm] monitors and interrogates hardware components in an HPE Cray
+  EX system, tracking hardware state and inventory information, and making it available via REST
+  queries and message bus events when changes occur.
+- [HMS Notification Fanout Daemon (HMNFD)][hmnfd] receives component state change notifications
+  from the HSM. It fans notifications out to subscribers (typically compute nodes).
+- Endpoint Discovery Service (HMS Discovery/[MEDS][meds]) manages initial discovery, configuration,
+  and geolocation of Redfish-enabled [BMCs][bmc]. It periodically makes Redfish requests to determine
+  if hardware is present or missing.
+- [Heartbeat Tracker Service (HBTD)][hbtd] listens for heartbeats from components (mainly compute
+  nodes). It tracks changes in heartbeats and conveys changes to the HSM.
 
 ## Add nodes
 
@@ -20,16 +46,7 @@ Administrator permanently adds select compute nodes to expand the system.
 
 ### Components involved in adding nodes
 
-This workflow is based on the interaction of the System Layout Service (SLS) with other hardware management services (HMS).
-
-Mentioned in this workflow:
-
-- System Layout Service (SLS) serves as a "single source of truth" for the system design. It details the physical locations of network hardware, compute nodes and cabinets. Further, it stores information about the network, such as which port on which
-  switch should be connected to each compute node.
-- Hardware State Manager (HSM) monitors and interrogates hardware components in an HPE Cray EX system, tracking hardware state and inventory information, and making it available via REST queries and message bus events when changes occur.
-- HMS Notification Fanout Daemon (HMNFD) receives component state change notifications from the HSM. It fans notifications out to subscribers (typically compute nodes).
-- Endpoint Discovery Service (HMS Discovery/MEDS) manages initial discovery, configuration, and geolocation of Redfish-enabled BMCs. It periodically makes Redfish requests to determine if hardware is present or missing.
-- Heartbeat Tracker Service (HBTD) listens for heartbeats from components (mainly compute nodes). It tracks changes in heartbeats and conveys changes to HSM.
+See [Components involved in adding or removing nodes](#components-involved-in-adding-or-removing-nodes).
 
 ### Workflow overview for adding nodes
 
@@ -37,29 +54,37 @@ Mentioned in this workflow:
 
 The following sequence of steps occur during this workflow.
 
-1. Administrator updates SLS.
+1. Administrator updates [SLS][sls].
 
-    Administrator creates a new hardware entry for the select component names (xnames) in SLS. Enter the node component names (xnames) in the SLS input file.
+    Administrator creates a new hardware entry for the select component names ([xnames][xname]) in SLS.
+    Administrator enters the node component names (xnames) in the SLS input file.
 
-1. Administrator adds compute nodes.
+1. Administrator adds [compute nodes][cn].
 
-    The Administrator physically adds select compute nodes and powers them on. Because the nodes are unknown, the DHCP and TFTP servers give it the special initialization ram disk. The compute nodes performs local configuration.
+    The administrator physically adds select compute nodes and powers them on.
+    Because the nodes are unknown, the DHCP and TFTP servers give them the special initialization RAM disk.
+    The compute nodes performs local configuration.
 
-    The following steps (3-11) occur automatically as different APIs interact with each other.
+    The remaining steps occur automatically as different APIs interact with each other.
 
-1. HMS Discovery/MEDS to SLS and HSM.
+1. HMS Discovery/[MEDS][meds] to SLS and [HSM][hsm].
 
     For Cray EX hardware:
 
-    1. MEDS reaches out to SLS for Mountain/Hill Chassis that exist in the system.
-    1. Calculate Algorithmic MAC address for each possible controller (Chassis Controller, Node Controller, and Switch controller) in the chassis based off the devices xname.
-    1. Create Ethernet Interface in HSM for each possible controller.
+    1. MEDS reaches out to SLS for [Mountain][mountain]/Hill chassis that exist in the system.
+    1. Calculate algorithmic MAC address for each possible controller (chassis controller,
+       [node controller][nc], and switch controller) in the chassis, based off the device xname.
+    1. Create Ethernet interface in HSM for each possible controller.
 
-        For example, MEDS would create the following Ethernet Interface in HSM for the node controller `x1000c0s0b0`:
+        For example, the following [CLI][cli] command displays the Ethernet interface in HSM
+        for `x1000c0s0b0`.
 
         ```bash
         cray hsm inventory ethernetInterfaces list --component-id x1000c0s0b0 --format toml
         ```
+
+        Example output for HSM Ethernet interface that was created by MEDS for node
+        controller `x1000c0s0b0`:
 
         Example output:
 
@@ -75,15 +100,19 @@ The following sequence of steps occur during this workflow.
         IPAddress = ""
         ```
 
-    1. Controller requests an IP address from KEA via DHCP, and KEA's DHCP helper will update the ethernet interface in HSM with a IP Address:
+    1. Controller requests an IP address from KEA via DHCP.
 
-        For example, KEA's DHCP helper will update the node controller `x1000c0s0b0` ethernet interface in HSM a IP:
+    1. KEA's DHCP helper updates the Ethernet interface in HSM with a IP address.
+
+        For example, the following [CLI][cli] command displays the Ethernet interface in HSM
+        for `x1000c0s0b0`.
 
         ```bash
         cray hsm inventory ethernetInterfaces list --component-id x1000c0s0b0 --format toml
         ```
 
-        Example output:
+        Example output for an HSM Ethernet interface for node controller `x1000c0s0b0`,
+        after KEA's DHCP helper has updated it with an IP address:
 
         ```toml
         [[results]]
@@ -97,73 +126,79 @@ The following sequence of steps occur during this workflow.
         IPAddress = "10.104.0.19"
         ```
 
-    1. For all possible controllers MEDS is performing a GET request for their Redfish root (`https://x1000c0s0b0/redfish/v1`). Once a 200 status code is received MEDS will configure NTP on the controller.
+    1. For all possible controllers, [MEDS][meds] performs a GET request for their Redfish root
+       (e.g. `https://x1000c0s0b0/redfish/v1`).
 
-    For standard 19 inch rack hardware:
+       Once a 200 status code is received, MEDS configures NTP on the controller.
 
-    1. HMS Discovery retrieves all Ethernet Interfaces from HSM without a Component ID set.
-    1. HMS Discovery queries SLS for MgmtSwith (`sw-leaf-bmc-XXX`) switches present in the system.
-    1. HMS Discovery retrieves the MAC address table from each MgmtSwitch via SNMP.
-    1. For each Ethernet Interface without a Component ID set:
+    1. For standard 19 inch rack hardware:
 
-        1. Search through the retried MAC address tables to identify which switch port the MAC address is connected to.
-        1. Query SLS for a corresponding MgmtSwitchConnector to identify what is connected to the switch port.
+       1. HMS Discovery retrieves all Ethernet interfaces from HSM without a component ID set.
+       1. HMS Discovery queries SLS for `MgmtSwitch` (`sw-leaf-bmc-XXX`) switches present in the system.
+       1. HMS Discovery retrieves the MAC address table from each `MgmtSwitch` via SNMP.
+       1. For each Ethernet interface without a component ID set:
 
-            For example, determine what node controller is connected to port 35 on leaf-bmc switch `x3000c0w35`:
+          1. Search through the retried MAC address tables to identify which switch port the MAC address is connected to.
+          1. Query SLS for a corresponding `MgmtSwitchConnector` to identify what is connected to the switch port.
 
-            ```bash
-            cray sls hardware describe x3000c0w22j35 --format toml
-            ```
+             For example, determine what node controller is connected to port 35 on `leaf-bmc` switch `x3000c0w35`:
 
-            Example output:
+             ```bash
+             cray sls hardware describe x3000c0w22j35 --format toml
+             ```
 
-            ```toml
-            Parent = "x3000c0w22"
-            Xname = "x3000c0w22j35"
-            Type = "comptype_mgmt_switch_connector"
-            Class = "River"
-            TypeString = "MgmtSwitchConnector"
-            LastUpdated = 1689284887
-            LastUpdatedTime = "2023-07-13 21:48:07.146163 +0000 +0000"
+             Example output:
 
-            [ExtraProperties]
-            NodeNics = [ "x3000c0s19b3",]
-            VendorName = "ethernet1/1/35"
-            ```
+             ```toml
+             Parent = "x3000c0w22"
+             Xname = "x3000c0w22j35"
+             Type = "comptype_mgmt_switch_connector"
+             Class = "River"
+             TypeString = "MgmtSwitchConnector"
+             LastUpdated = 1689284887
+             LastUpdatedTime = "2023-07-13 21:48:07.146163 +0000 +0000"
 
-            The node controller `x3000c0s19b3` is connected to switch port 35 on switch `x3000c0w35`.
+             [ExtraProperties]
+             NodeNics = [ "x3000c0s19b3",]
+             VendorName = "ethernet1/1/35"
+             ```
 
-1. HMS Discovery/MEDS to HSM
+             The node controller `x3000c0s19b3` is connected to switch port 35 on switch `x3000c0w35`.
 
-    Discovery services update HSM about the new Redfish endpoint for the node. Details like component name (xname) and credentials.
+1. HMS Discovery/MEDS to HSM.
 
-1. HSM to SLS
+    Discovery services update HSM about the new Redfish endpoint for the node
+    (e.g. xname and credentials).
 
-    HSM queries SLS for NID and role assignments for the new node.
+1. HSM to SLS.
 
-1. SLS to HSM
+    HSM queries SLS for [NID][nid] and [role](../hardware_state_manager/HSM_Roles_and_Subroles.md)
+    assignments for the new node.
+
+1. SLS to HSM.
 
     HSM updates the node map based on information received from SLS.
 
-1. Node to KEA
+1. Node to KEA.
 
-    Node requests a Node Management Network (NMN) IP via DHCP when it boots.
+    Node requests a [Node Management Network (NMN)][nmn] IP address via DHCP when it boots.
 
-1. KEA to HSM
+1. KEA to HSM.
 
-    KEA's DHCP helper updates the nodes MAC address in HSM Ethernet Interfaces.
+    KEA's DHCP helper updates the node's MAC address in its HSM Ethernet interfaces.
 
-1. Node to Heartbeat Tracker Service
+1. Node to [HBTD][hbtd].
 
     The Heartbeat Tracker Service receives heartbeats from the new compute node after the node is powered on.
 
-1. Heartbeat Tracker Service to HSM
+1. HBTD to HSM.
 
     The Heartbeat Tracker Service report the heartbeat status to HSM.
 
-1. HSM to HMNFD
+1. HSM to [HMNFD][hmnfd].
 
-    HSM sends the new compute node state information with State as ON to HMNFD. HMNFD fans out these notifications to the subscribing compute nodes.
+    HSM sends the new compute node state information with `State` as `ON` to HMNFD.
+    HMNFD fans out these notifications to the subscribing compute nodes.
 
 ## Remove nodes
 
@@ -173,16 +208,7 @@ Administrator permanently removes select compute nodes to contract the system.
 
 ### Components involved in removing nodes
 
-This workflow is based on the interaction of the System Layout Service (SLS) with other hardware management services (HMS).
-
-Mentioned in this workflow:
-
-- System Layout Service (SLS) serves as a "single source of truth" for the system design. It details the physical locations of network hardware, compute nodes and cabinets. Further, it stores information about the network, such as which port on which
-  switch should be connected to each compute node.
-- Hardware State Manager (HSM) monitors and interrogates hardware components in an HPE Cray EX system, tracking hardware state and inventory information, and making it available via REST queries and message bus events when changes occur.
-- HMS Notification Fanout Daemon (HMNFD) receives component state change notifications from the HSM. It fans notifications out to subscribers (typically compute nodes).
-- Endpoint Discovery Service (HMS Discovery/MEDS) manages initial discovery, configuration, and geolocation of Redfish-enabled BMCs. It periodically makes Redfish requests to determine if hardware is present or missing.
-- Heartbeat Tracker Service (HBTD) listens for heartbeats from components (mainly compute nodes). It tracks changes in heartbeats and conveys changes to HSM.
+See [Components involved in adding or removing nodes](#components-involved-in-adding-or-removing-nodes).
 
 ### Workflow overview for removing nodes
 
@@ -190,40 +216,45 @@ Mentioned in this workflow:
 
 The following sequence of steps occur during this workflow.
 
-1. Administrator updates SLS
+1. Administrator updates [SLS][sls].
 
-    Administrator deletes the node entries with the specific component name (xname) from SLS. Note that if deleting a parent object, then the children are also deleted from SLS. If the child object happens to be a parent, then the deletion can cascade
-    down levels. If deleting a child object, it does not affect the parent.
+    Administrator deletes the node entries with the specific component name ([xname][xname]) from SLS.
+    Note that if deleting a parent object, then the children are also deleted from SLS. If the child
+    object happens to be a parent, then the deletion can cascade down levels. If deleting a child
+    object, it does not affect the parent.
 
-1. Administrator physically removes the compute nodes
+1. Administrator physically removes the [compute nodes][cn].
 
-    The Administrator powers off and physically removes the compute nodes.
+    The administrator powers off and physically removes the compute nodes.
 
-    The following steps (3-9) occur automatically as different APIs interact with each other.
+1. No heartbeats in [HBTD][hbtd].
 
-1. No heartbeats
+    The Heartbeat Tracker Service stops receiving heartbeats and updates the node status, first as
+    `Standby` and then `Off`, as per Redfish event.
 
-    The Heartbeat Tracker Service stops receiving heartbeats and marks the nodes status as `standby` and then `off` as per Redfish event.
+    `Standby` status implies that the node is no longer ready and presumed dead.
+    It typically means that the heartbeat is lost.
+    `Off` status implies that the location is not populated with a component.
 
-    `Standby` status implies that the node is no longer ready and presumed dead. It typically means that the heartbeat is lost. `Off` status implies that the location is not populated with a component.
+1. Administrator to [HSM][hsm].
 
-1. Administrator to HSM
-
-    Administrator update HSM that the BMC Redfish endpoints for the nodes were removed by marking it disabled. HSM marks the state of BMCs and the nodes as `empty`.
+    Administrator informs the HSM that the [BMC][bmc] Redfish endpoints for the nodes were
+    removed by marking them disabled. HSM marks the state of BMCs and the nodes as `Empty`.
 
     `Empty` state implies that the location is not populated with a component.
 
-1. HSM to HMNFD
+1. HSM to [HMNFD][hmnfd].
 
-    HSM sends the compute node state information with State as `empty` to HMNFD. HMNFD fans out this notification to the subscribing compute nodes.
+    HSM sends the compute node state information with `State` as `Empty` to HMNFD.
+    HMNFD fans out this notification to the subscribing compute nodes.
 
-1. Administrator to HSM
+1. Administrator to HSM.
 
-    The following information from HSM is removed:
+    For the removed node, the administrator removes the following from the HSM:
 
-    1. Redfish Endpoint is deleted.
-    1. Corresponding Components are deleted.
-    1. Ethernet Interfaces are removed.
+    - Redfish endpoint
+    - Corresponding components
+    - Ethernet interfaces
 
 ## Replace nodes
 
@@ -234,3 +265,74 @@ The following sequence of steps occur during this workflow.
 
 - [Move a Standard Rack Node](Move_a_Standard_Rack_Node.md)
 - [Move a Standard Rack Node (Same HSN Ports)](Move_a_Standard_Rack_Node_SameRack_SameHSNPorts.md)
+
+<!--- Define the reference-style Markdown links used to make the page easier to edit -->
+
+<!-- markdownlint-disable MD053 -->
+<!---
+    For references that are likely to appear on a lot of pages (glossary references, for example),
+    we allow definitions for entries that are not used on the page, as a convenience.
+-->
+
+<!-- non-glossary common links -->
+
+[config-cli]: ../configure_cray_cli.md
+[check-latest-docs]: ../../update_product_stream/README.md#check-for-latest-documentation
+
+<!-- glossary entries -->
+
+[aee]: ../../glossary.md#ansible-execution-environment-aee
+[an]: ../../glossary.md#application-node-an
+[ara]: ../../glossary.md#ara-records-ansible-ara
+[bmc]: ../../glossary.md#baseboard-management-controller-bmc
+[bos]: ../../glossary.md#boot-orchestration-service-bos
+[bss]: ../../glossary.md#boot-script-service-bss
+[can]: ../../glossary.md#customer-access-network-can
+[canu]: ../../glossary.md#csm-automatic-network-utility-canu
+[capmc]: ../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc
+[cdu]: ../../glossary.md#coolant-distribution-unit-cdu
+[cec]: ../../glossary.md#cabinet-environmental-controller-cec
+[cfs]: ../../glossary.md#configuration-framework-service-cfs
+[chn]: ../../glossary.md#customer-high-speed-network-chn
+[cli]: ../../glossary.md#cray-cli-cray
+[cmn]: ../../glossary.md#customer-management-network-cmn
+[cn]: ../../glossary.md#compute-node-cn
+[csi]: ../../glossary.md#cray-site-init-csi
+[fas]: ../../glossary.md#firmware-action-service-fas
+[hbtd]: ../../glossary.md#heartbeat-tracker-daemon-hbtd
+[hmn]: ../../glossary.md#hardware-management-network-hmn
+[hmnfd]: ../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd
+[hsm]: ../../glossary.md#hardware-state-manager-hsm
+[hsn]: ../../glossary.md#high-speed-network-hsn
+[ims]: ../../glossary.md#image-management-service-ims
+[iuf]: ../../glossary.md#install-and-upgrade-framework-iuf
+[meds]: ../../glossary.md#mountain-endpoint-discovery-service-meds
+[mgmt-ncns]: ../../glossary.md#management-nodes
+[mountain]: ../../glossary.md#mountain-cabinet
+[nc]: ../../glossary.md#node-controller-nc
+[ncn]: ../../glossary.md#non-compute-node-ncn
+[nid]: ../../glossary.md#node-id-nid
+[nmn]: ../../glossary.md#node-management-network-nmn
+[pcs]: ../../glossary.md#power-control-service-pcs
+[pdu]: ../../glossary.md#power-distribution-unit-pdu
+[pit]: ../../glossary.md#pre-install-toolkit-pit
+[river]: ../../glossary.md#river-cabinet
+[rts]: ../../glossary.md#redfish-translation-service-rts
+[s3]: ../../glossary.md#simple-storage-service-s3
+[sat]: ../../glossary.md#system-admin-toolkit-sat
+[sbps]: ../../glossary.md#scalable-boot-projection-service-sbps
+[scsd]: ../../glossary.md#system-configuration-service-scsd
+[shcd]: ../../glossary.md#shasta-cabling-diagram-shcd
+[slingshot]: ../../glossary.md#slingshot
+[sls]: ../../glossary.md#system-layout-service-sls
+[sma]: ../../glossary.md#system-monitoring-application-sma
+[smd]: ../../glossary.md#hardware-state-manager-smd
+[sops]: ../../glossary.md#secrets-operations-sops
+[tapms]: ../../glossary.md#tenant-and-partition-management-system-tapms
+[uan]: ../../glossary.md#user-access-node-uan
+[uss]: ../../glossary.md#user-services-software-uss
+[vcs]: ../../glossary.md#version-control-service-vcs
+[vnid]: ../../glossary.md#virtual-network-identifier-daemon-vnid
+[xname]: ../../glossary.md#xname
+
+<!-- markdownlint-restore -->
