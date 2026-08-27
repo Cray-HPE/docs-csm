@@ -2,9 +2,10 @@
 
 Verify the DNSMASQ configuration file matches what is configured on the switches.
 
-## Example DNSMASQ Configuration File
+## Example DNSMASQ configuration file
 
-Here is a DNSMASQ configuration file for the Metal network (VLAN1). As you can see the router is `10.1.0.1`, this has to match what the IP address is on the switches doing the routing for the MTL network.
+Here is a DNSMASQ configuration file for the Metal network (VLAN 1).
+The router is `10.1.0.1`, which must match what the IP address is on the switches doing the routing for the MTL network.
 
 This is most commonly on the spines.
 

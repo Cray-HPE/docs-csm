@@ -15,15 +15,15 @@
 
 ## External DNS
 
-PowerDNS replaces the CoreDNS server that earlier versions of CSM used to provide External DNS services.
+PowerDNS replaces the CoreDNS server that earlier versions of CSM used to provide external DNS services.
 
 The `cray-dns-powerdns-can-tcp` and `cray-dns-powerdns-can-udp` `LoadBalancer` resources are configured to service external DNS requests using the IP address specified by the CSI `--cmn-external-dns` command line argument.
 
-The CSI `--system-name` and `--site-domain` command line arguments are combined to form the subdomain used for External DNS.
+The CSI `--system-name` and `--site-domain` command line arguments are combined to form the subdomain used for external DNS.
 
 ### Site setup
 
-(`ncn-mw#`) In the following example, the IP address `10.101.8.113` is used for External DNS and the system has the subdomain `system.dev.cray.com`
+(`ncn-mw#`) In the following example, the IP address `10.101.8.113` is used for external DNS and the system has the subdomain `system.dev.cray.com`
 
 ```bash
 kubectl -n services get service -l app.kubernetes.io/name=cray-dns-powerdns
@@ -68,7 +68,7 @@ This is the name of the PowerDNS server. This is combined with the system domain
 system.dev.cray.com.    1890    IN  NS  primary.system.dev.cray.com.
 ```
 
-This record will also point to the External DNS IP address
+This record will also point to the external DNS IP address
 
 ```bash
 dig +short primary.system.dev.cray.com

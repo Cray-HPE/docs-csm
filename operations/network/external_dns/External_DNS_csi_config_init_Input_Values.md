@@ -1,6 +1,6 @@
 # External DNS CSI Input Values
 
-External DNS requires the `system-name`, `site-domain`, and `cmn-external-dns` values that are defined with the `csi config init` command. These values are used to customize the External DNS configuration during installation.
+External DNS requires the `system-name`, `site-domain`, and `cmn-external-dns` values that are defined with the `csi config init` command. These values are used to customize the external DNS configuration during installation.
 
 ## The `system-name` and `site-domain` values
 

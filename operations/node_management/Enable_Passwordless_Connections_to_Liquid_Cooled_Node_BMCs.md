@@ -1,6 +1,6 @@
 # Enable Passwordless Connections to Liquid Cooled Node BMCs
 
-Set the passwordless SSH keys for the root account and/or console of all liquid-cooled Baseboard Management Controllers \(BMCs\) on the system. This procedure will not work on BMCs for air-cooled hardware.
+Set the passwordless SSH keys for the root account and/or console of all liquid-cooled Baseboard Management Controllers (BMCs) on the system. This procedure will not work on BMCs for air-cooled hardware.
 
 **Warning:** If administrator uses SCSD to update the `SSHConsoleKey` value outside of ConMan, it will disrupt the ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md) for more information.
 
@@ -8,7 +8,7 @@ Setting up SSH keys enables administrators to view recent console messages and i
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface (CLI) tool is initialized and configured on the system.
   See [Configure the Cray CLI](../configure_cray_cli.md).
 - This procedure requires administrative privileges.
 

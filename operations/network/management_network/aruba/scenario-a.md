@@ -2,7 +2,7 @@
 
 The example here covers outside connections achieved with the management network.
 
-### Summary
+## Summary
 
 * Create a new VRF
 * Move interfaces to the new VRF
@@ -13,10 +13,10 @@ The example here covers outside connections achieved with the management network
 * Configure default route for workers
 * Verification of external communication
 
-### Topology
+## Topology
 
 The following is an example topology:
 
-![](../../../../img/network/management_network/scenario-a-topology.png)
+![Scenario A topology](../../../../img/network/management_network/scenario-a-topology.png "Scenario A topology")
 
 [Back to Index](../README.md)

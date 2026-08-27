@@ -2,32 +2,31 @@
 
 A hostname is a human-friendly name used to identify a device. An example of a hostname could be the name "Test."
 
-## Configuration Commands
+## Configuration commands
 
-Create a hostname:
+(`switch(config)#`) Create a hostname:
 
+```console
+hostname <NAME>
 ```
-switch(config)# hostname <NAME>
-```
 
-Show commands to validate functionality:
+(`switch#`) Show commands to validate functionality:
 
-```
+```console
 show hostname
 ```
 
-## Example Output
+## Example output
 
-```
+```console
 switch(config)# hostname switch-test
 show hostname
 switch-test
 ```
 
-## Expected Results
+## Expected results
 
-1. Administrators can configure the hostname
-2. The output of all show commands is correct
+- Administrators can configure the hostname
+- The output of all show commands is correct
 
 [Back to Index](../README.md)
-

@@ -1,19 +1,19 @@
 # Performing Upgrade On Mellanox Switches
 
-Supported Software Upgrades
+## Supported software upgrades
 
-|Target Version |Verified Starting Versions|
-| ------------- | ------------------------ |
-| 3.9.3xxx      | 3.9.2xxx, 3.9.1xxx       |
-| 3.9.2xxx      | 3.9.1xxx, 3.9.0xxx       |
-| 3.9.1xxx      | 3.9.0xxx, 3.8.2xxx       |
-| 3.9.0xxx      | 3.8.2xxx, 3.8.1xxx       |
+| Target version | Verified starting versions |
+|----------------|----------------------------|
+| `3.9.3xxx`     | `3.9.2xxx`, `3.9.1xxx`     |
+| `3.9.2xxx`     | `3.9.1xxx`, `3.9.0xxx`     |
+| `3.9.1xxx`     | `3.9.0xxx`, `3.8.2xxx`     |
+| `3.9.0xxx`     | `3.8.2xxx`, `3.8.1xxx`     |
 
 Repeated the following procedure for each "upgrade hop".
 
-## Upgrading the Switch Using the CLI
+## Upgrading the switch using the CLI
 
-The Switch OS software packages include the switch firmware and the CPU software for the specific switch board CPU (x86).
+The switch OS software packages include the switch firmware and the CPU software for the specific switch board CPU (x86).
 
 Installing the CPU software also automatically installs the embedded firmware. Similarly, once the OS is upgraded, the firmware is upgraded as well.
 
@@ -35,7 +35,7 @@ The switch's OS image and its documentation collateral (release notes, user manu
 1. In order to verify that the installation was completed successfully, run:
 
    ```text
-   # show version
+   show version
    ```
 
    Example output looks similar to the following:

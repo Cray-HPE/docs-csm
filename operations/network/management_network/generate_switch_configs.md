@@ -36,12 +36,13 @@ Generating a configuration file can be done for a single switch, or for the full
 
 **Important:** Modify the following items in the command:
 
-* `--csm` : Which CSM version configuration do you want to use? For example, `1.3`, `1.2` or `1.0`
-NOTE: Only major and minor versions of CSM are tracked at this time. CANU bug fixes are captured in the latest CANU version and do not align with CSM bug fix versions.
-* `--a`   : What is the system architecture? (See above)
-* `--ccj` : Match the `ccj.json` file to the one you created for your system.
-* `--sls` : Match the `sls_file.json` to the one you created for your system.
-* `--custom-config` : Pass in a switch configuration file that CANU will inject into the generated configuration. More documentation can be found from the official [CANU documentation](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/custom_config.md).
+* `--csm`: Which CSM version configuration to use. For example, `1.3`, `1.2` or `1.0`
+  NOTE: Only major and minor versions of CSM are tracked at this time. CANU bug fixes are captured in the latest CANU version and do not align with CSM bug fix versions.
+* `--a`: What is the system architecture? (See above)
+* `--ccj`: Match the `ccj.json` file to the one created for the system.
+* `--sls`: Match the `sls_file.json` to the one created for the system.
+* `--custom-config`: Pass in a switch configuration file that CANU will inject into the generated configuration.
+  More documentation can be found from the official [CANU documentation](https://github.com/Cray-HPE/canu/blob/main/docs/network_configuration_and_upgrade/custom_config.md).
 
 * (`ncn#`) Generate a CSM 1.3 configuration file for a single switch:
 

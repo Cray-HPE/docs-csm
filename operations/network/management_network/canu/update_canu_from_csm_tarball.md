@@ -13,7 +13,7 @@ If doing a CSM install or upgrade, the release tarball contains a CANU RPM. It c
 1. Set the `TARBALL` variable to the path and filename of the CSM release tarball:
 
     ```bash
-    TARBALL=/your/path/here/csm-version.tar.gz
+    TARBALL=/actual/path/here/csm-version.tar.gz
     ```
 
 1. Extract the CANU RPM from the tarball:

@@ -2,9 +2,9 @@
 
 LLDP is used to advertise the device's identity and abilities and read other devices connected to the same network.
 
-> **`NOTE`** LLDP is enabled by default.
+> **NOTE** LLDP is enabled by default.
 
-## Configuration Commands
+## Configuration commands
 
 Enable an interface to receive or transmit LLDP packets:
 
@@ -18,7 +18,7 @@ Show commands to validate functionality:
 show lldp [local-device|neighbor-info|statistics]
 ```
 
-## Example Output
+## Example output
 
 ```text
 show lldp configuration
@@ -54,13 +54,12 @@ Port-ID        Tx-Packets     Rx-packets     Rx-discarded   TLVs-Unknown
 1/1/3          70             70             0              0
 ```
 
-## Expected Results
+## Expected results
 
-1. Link status between the peer devices is UP
-2. LLDP is enabled
-3. Local device LLDP Information is displayed
-4. Remote device LLDP information is displayed
-5. LLDP statistics are displayed
+1. Link status between the peer devices is `UP`
+1. LLDP is enabled
+1. Local device LLDP Information is displayed
+1. Remote device LLDP information is displayed
+1. LLDP statistics are displayed
 
 [Back to Index](../README.md)
-

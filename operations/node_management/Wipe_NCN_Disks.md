@@ -196,10 +196,10 @@ wiping a different type of node than what a step specifies, then skip that step.
 
 1. Unmount volumes.
 
-    > **`NOTE`** Some of the following `umount` commands may fail or have warnings depending on the state of the NCN. Failures in this
+    > **NOTE** Some of the following `umount` commands may fail or have warnings depending on the state of the NCN. Failures in this
     > section can be ignored and will not inhibit the wipe process.
     >
-    > **`NOTE`** There is an edge case where the overlay may keep the drive from being unmounted. If this is a rebuild, ignore this.
+    > **NOTE** There is an edge case where the overlay may keep the drive from being unmounted. If this is a rebuild, ignore this.
 
     The exact commands used depends on the node type:
 
@@ -310,7 +310,7 @@ wiping a different type of node than what a step specifies, then skip that step.
         dmsetup remove $(dmsetup ls | grep -i etcd | awk '{print $1}')
         ```
 
-        > **`NOTE`** The following output means that the `etcd` volume mapper is not present. This is okay.
+        > **NOTE** The following output means that the `etcd` volume mapper is not present. This is okay.
 
         ```text
         No device specified.

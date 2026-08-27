@@ -1,5 +1,5 @@
-# Verify the switches are forwarding DHCP traffic
+# Verify the Switches are Forwarding DHCP Traffic
 
-If you made it this far and still cannot pxe boot, you may have run into the IP-Helper breaking on the switch.
+At this point, if still unable to PXE boot, then the `IP-Helper` may be broken on the switch.
 
 [Back to Index](../README.md)

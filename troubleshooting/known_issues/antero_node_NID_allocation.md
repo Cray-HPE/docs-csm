@@ -142,7 +142,7 @@ Optionally, during a system maintenance window, the Antero [NID][nid] numbering 
 
 <!-- non-glossary common links -->
 
-[config-cli]: ../configure_cray_cli.md
+[config-cli]: ../../operations/configure_cray_cli.md
 [check-latest-docs]: ../../update_product_stream/README.md#check-for-latest-documentation
 
 <!-- glossary entries -->

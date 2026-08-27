@@ -1,8 +1,9 @@
 # Port Mirroring
 
-Port mirroring, also known as Switched Port Analyzer (SPAN), enables traffic on one or more switch interfaces to be replicated on another interface for purposes such as monitoring.
+Port mirroring, also known as Switched Port Analyzer (SPAN), enables traffic on one or more switch interfaces
+to be replicated on another interface for purposes such as monitoring.
 
-## Configuration Commands
+## Configuration commands
 
 Create and enable a mirror session:
 
@@ -49,12 +50,13 @@ show mirror <1-4>
 ```
 
 > **NOTES:**
-> * Administrators can set the Switch CPU as the destination for mirrored traffic. Keep in mind that all the traffic from an  interface will be sent to the CPU and could create high CPU utilization.
-> * It is not recommended to use this method on taking captures in live network as the amount of traffic could negatively hit the CPU; so in those cases, the recommendation would be to use external capture station.
+>
+> * Administrators can set the switch CPU as the destination for mirrored traffic. Keep in mind that all the traffic from an interface will be sent to the CPU and could create high CPU utilization.
+> * It is not recommended to use this method on taking captures in live network because the amount of traffic could negatively hit the CPU; in those cases, the recommendation would be to use external capture station.
 
 To do a port capture directly on device:
 
-```
+```console
 8325(config)# mirror session 1
 8325(config-mirror-1)# destination cpu
 8325(config-mirror-1)# source interface 1/1/1
@@ -67,7 +69,7 @@ To do a port capture directly on device:
 
 To start TCPDUMP from shell:
 
-```
+```console
 start-shell
 8325:~$ sudo su
 8325:/home/ip netns
@@ -102,12 +104,12 @@ listening on MirrorRxNet, link-type EN10MB (Ethernet), capture size 262144 bytes
 0 packets dropped by kernel
 ```
 
-> **`NOTE`** host/dst arguments to the `tcpdump` command can help to restrict the filter to only capture the desired packets.
+> **NOTE** `host/dst` arguments to the `tcpdump` command can help to restrict the filter to only capture the desired packets.
 
-## Expected Results
+## Expected results
 
-1. Administrators can configure port mirroring
-2. The output of the `show` commands is correct
-3. Administrators can see the traffic for the source interface on the sniffer
+* Administrators can configure port mirroring
+* The output of the `show` commands is correct
+* Administrators can see the traffic for the source interface on the sniffer
 
 [Back to Index](../README.md)

@@ -53,8 +53,8 @@ See [External DNS](../external_dns/External_DNS.md) for more information.
 
 <!-- non-glossary common links -->
 
-[config-cli]: ../configure_cray_cli.md
-[check-latest-docs]: ../../update_product_stream/README.md#check-for-latest-documentation
+[config-cli]: ../../configure_cray_cli.md
+[check-latest-docs]: ../../../update_product_stream/README.md#check-for-latest-documentation
 
 <!-- glossary entries -->
 

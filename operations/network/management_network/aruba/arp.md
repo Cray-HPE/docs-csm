@@ -16,7 +16,7 @@ ARP is commonly used for mapping IPv4 addresses to MAC addresses.
     show arp
     ```
 
-## Expected Results
+## Expected results
 
 1. Administrators are able to ping the connected device
 1. Administrators can view the ARP entries

@@ -1,34 +1,33 @@
-# VLAN interface
+# VLAN Interface
 
-The switch also supports classic L3 VLAN interfaces.
+The switch supports classic L3 VLAN interfaces.
 
-Relevant Configuration
+## Relevant configuration
 
-Configure the VLAN
+(`switch (config)#`) Configure the VLAN:
 
-```
-switch (config) # vlan 6
-switch (config vlan 6) #
-```
-
-Create and enable the VLAN interface, and assign it an IP address
-
-```
-switch(config vlan 6)# ip address 10.1.0.2/16
+```console
+vlan 6
 ```
 
-Show Commands to Validate Functionality
+(`switch(config vlan 6)#`) Create and enable the VLAN interface, and assign it an IP address:
 
+```console
+ip address 10.1.0.2/16
 ```
+
+## Show commands to validate functionality
+
+```console
 show vlan
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: You can configure the VLAN
-* Step 2: You can enable the interface and associate it with the VLAN
-* Step 3: You can create an IP-enabled VLAN interface, and it is up
-* Step 4: You validate the configuration is correct
-* Step 5: You can ping from the switch to the client and from the client to the switch
+* Administrators can configure the VLAN
+* Administrators can enable the interface and associate it with the VLAN
+* Administrators can create an IP-enabled VLAN interface, and it is up
+* Administrators validate the configuration is correct
+* Administrators can ping from the switch to the client and from the client to the switch
 
 [Back to Index](../README.md)

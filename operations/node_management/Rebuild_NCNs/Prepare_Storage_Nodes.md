@@ -115,8 +115,8 @@ Upload Ceph container images into Nexus.
     Daemons for Ceph cluster 5f79a490-c281-11ed-b6ec-fa163e741e89 stopped on host ncn-s003. Host ncn-s003 moved to maintenance mode
     ```
 
-    **IMPORTANT**: The --force flag is used to bypass warnings. These pertain to Ceph services which can handle failures, like `rgw`.  
-    * ***IF*** the command returns any lines with an **ALERT** status then please follow the output to remedy.  
+    **IMPORTANT**: The --force flag is used to bypass warnings. These pertain to Ceph services which can handle failures, like `rgw`.
+    * ***IF*** the command returns any lines with an **ALERT** status then please follow the output to remedy.
       * Typically this will be something like the active MGR process is on that node and it must be failed over first.
 
     Example:
@@ -214,7 +214,7 @@ Upload Ceph container images into Nexus.
 
     Example output:
 
-    ```bash
+    ```text
     ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
     -1         62.87758  root default
     -7         20.95853      host ncn-s003
@@ -227,7 +227,7 @@ Upload Ceph container images into Nexus.
     ```
 
 1. (`ncn-s#`) Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
-  
+
     By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
     This will result in OSDs that no longer exist appearing to be down.
 
@@ -239,7 +239,7 @@ Upload Ceph container images into Nexus.
 
     Example output:
 
-    ```bash
+    ```text
     destroyed osd.1
     purged osd.1
     destroyed osd.4

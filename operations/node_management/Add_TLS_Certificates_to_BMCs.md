@@ -1,6 +1,6 @@
 # Add TLS Certificates to BMCs
 
-Use the System Configuration Service \(SCSD\) tool to create TLS certificates and store them in Vault secure storage. Once certificates are created, they are placed on to the target BMCs.
+Use the System Configuration Service (SCSD) tool to create TLS certificates and store them in Vault secure storage. Once certificates are created, they are placed on to the target BMCs.
 
 - [Prerequisites](#prerequisites)
 - [Limitations](#limitations)
@@ -9,7 +9,7 @@ Use the System Configuration Service \(SCSD\) tool to create TLS certificates an
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+- The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Limitations
 
@@ -120,9 +120,9 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
 
         **Only follow this step as part of the previously linked chart redeploy procedure.**
 
-        Enable the `CA_URI` variable in all Hardware Management Services \(HMS\) that use Redfish.
+        Enable the `CA_URI` variable in all Hardware Management Services (HMS) that use Redfish.
 
-        The `customizations.yaml` file needs an entry to specify the URI where the Certificate Authority \(CA\) bundle can be found.
+        The `customizations.yaml` file needs an entry to specify the URI where the Certificate Authority (CA) bundle can be found.
 
         ```bash
         vi customizations.yaml
@@ -136,7 +136,7 @@ TLS certificates can only be set for liquid-cooled BMCs. TLS certificate support
         ```
 
         ```yaml
-          cray-hms-reds:    
+          cray-hms-reds:
             hms_ca_uri: "{{ hms_ca_info.hms_svc_ca_uri}}"
           cray-hms-capmc:
             hms_ca_uri: "{{ hms_ca_info.hms_svc_ca_uri}}"
