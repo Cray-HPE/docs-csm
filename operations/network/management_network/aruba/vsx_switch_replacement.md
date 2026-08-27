@@ -16,7 +16,7 @@ config
 Switch(config)# interface 1/1/1-1/1/52 shutdown
 ```
 
-> **`NOTE`** Restoring firmware is required only if replacing the primary VSX member. Otherwise, restore the configuration because VSX sync would force automatic
+> **NOTE** Restoring firmware is required only if replacing the primary VSX member. Otherwise, restore the configuration because VSX sync would force automatic
 > software upgrade on secondary member.
 
 * Re-cable
@@ -24,7 +24,7 @@ Switch(config)# interface 1/1/1-1/1/52 shutdown
 
 The switch should now enable the VSX ports. Once VSX sync is completed, all ports should get enabled after hold-down timer has expired.
 
-> **`NOTE`** If replacing the secondary member and a software upgrade was not done prior to enabling the ports, there will be a reboot on the secondary unit after it has detected
+> **NOTE** If replacing the secondary member and a software upgrade was not done prior to enabling the ports, there will be a reboot on the secondary unit after it has detected
 > the primary VSX member and received new software from it before normal ports would come up.
 
 [Back to Index](../README.md)

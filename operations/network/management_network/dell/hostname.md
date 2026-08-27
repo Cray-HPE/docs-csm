@@ -2,7 +2,7 @@
 
 A hostname is a human-friendly name used to identify a device. An example of a hostname could be the name `Test`.
 
-## Configuration Commands
+## Configuration commands
 
 Create a hostname:
 
@@ -16,17 +16,16 @@ Show commands to validate functionality:
 show hostname
 ```
 
-## Example Output
+## Example output
 
 ```text
 hostname switch-test
 show hostname
-
 ```
 
-## Expected Results
+## Expected results
 
-1. Administrators can configure the hostname
-2. The output of all `show` commands is correct
+* Administrators can configure the hostname
+* The output of all `show` commands is correct
 
 [Back to Index](../README.md)

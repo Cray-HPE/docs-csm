@@ -36,7 +36,7 @@ Collect the input data needed to generate switch configurations.
 
     Example output:
 
-    ```
+    ```text
     Enter the switch password:
     -
     Running Configs Saved

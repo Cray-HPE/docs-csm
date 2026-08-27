@@ -15,7 +15,7 @@ This section provides an example of how to configure the management network.
 
    If there is an existing CAN interface configuration, it will be deleted the interface is moved into the new VRF; it will have to be re-applied.
 
-   > **`NOTE`** These are example configurations only; most implementations of BICAN will be different.
+   > **NOTE** These are example configurations only; most implementations of BICAN will be different.
 
    * Example Aruba primary configuration:
 
@@ -101,7 +101,7 @@ This section provides an example of how to configure the management network.
 
    * Example VLAN 2 configuration:
 
-      > **`NOTE`** VLAN 2 is used for the HSN.
+      > **NOTE** VLAN 2 is used for the HSN.
 
       ```text
       interface Vlan2

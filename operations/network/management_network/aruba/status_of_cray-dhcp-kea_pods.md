@@ -1,18 +1,19 @@
-# Confirm the Status of the cray-dhcp-kea Pods
+# Confirm the Status of the `cray-dhcp-kea` Pods
 
-Use this procedure to verify the status of the `cray-dhcp-kea` pods and services. The commands in this procedure must be run on `ncn-w001` or a worker/manager NCN with `kubectl` installed.
+Use this procedure to verify the status of the `cray-dhcp-kea` pods and services.
+The commands in this procedure must be run on `ncn-w001` or a worker/manager NCN with `kubectl` installed.
 
 ## Procedure
 
-1. Check if the Kea DHCP services are running.
+1. (`ncn-mw#`) Check if the Kea DHCP services are running.
 
-    ```text
+    ```bash
     kubectl get -n services pods | grep kea
     ```
 
     The following services should be returned as output:
 
-    ```
+    ```text
     cray-dhcp-kea-api Cluster IP 10.31.247.201   <none> 8000/TCP 3h36m
     cray-dhcp-kea-tcp-hmn LoadBalancer 10.25.109.178   10.94.100.222 67:30833/TCP 3h36m
     cray-dhcp-kea-tcp-nmn LoadBalancer 10.21.240.208 10.92.100.222   67:31915/TCP 3h36m
@@ -20,9 +21,9 @@ Use this procedure to verify the status of the `cray-dhcp-kea` pods and services
     cray-dhcp-kea-udp-nmn LoadBalancer 10.24.246.19 10.92.100.222 67:32188/UDP 3h36m
     ```
 
-2. View the Kea pods.
+1. (`ncn-mw#`) View the Kea pods.
 
-    ```text
+    ```bash
     kubectl get pods -n services -o wide | grep kea
     ```
 
@@ -35,6 +36,6 @@ Use this procedure to verify the status of the `cray-dhcp-kea` pods and services
     cray-dhcp-kea-postgres-2 2/2 Running 0 5d23h 10.39.0.208 ncn-w001 <none> <none>
     ```
 
-    This output will also show which worker node the kea-dhcp pod is currently on.
+    This output will also show which worker node the `kea-dhcp pod` is currently on.
 
 [Back to Index](../README.md)

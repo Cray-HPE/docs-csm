@@ -10,7 +10,7 @@ What are the benefits of MLAG
 
 * To achieve HA on a switch level without the using of STP
 
-Key limitations of MLAG in mellanox:
+Key limitations of MLAG in Mellanox:
 
 * Only one MLAG domain supported per device
 
@@ -18,8 +18,7 @@ Key limitations of MLAG in mellanox:
 
 * At least one port per switch (in MLAG domain) MUST be reserved for inter-switch link.
 
-More details, requirements and limitations on Mellanox devices can be found from:
-
-[https://docs.mellanox.com/display/ONYXv381174/MLAG]()
+More details, requirements and limitations on Mellanox devices can be found
+in the [Mellanox MLAG documentation](https://docs.mellanox.com/display/ONYXv381174/MLAG).
 
 [Back to Index](../README.md)

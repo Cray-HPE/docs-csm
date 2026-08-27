@@ -1,6 +1,6 @@
 # Network Time Protocol (NTP) Client
 
-Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
+Summary of NTP from [RFC 1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
 
 > NTP is used to synchronize timekeeping among a set of distributed time servers and clients
 > ...

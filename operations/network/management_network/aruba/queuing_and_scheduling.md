@@ -19,7 +19,7 @@ The supported scheduling disciplines are:
   depending on the weights assigned to each queue; the larger the weight, the greater the potential amount of service.
   WFQ accommodates variable traffic and services each packet as fairly as possible.
 
-## Configuration Commands
+## Configuration commands
 
 Create a profile:
 
@@ -50,14 +50,14 @@ show qos queue-profile [QUEUE-NAME]
 show qos schedule-profile [SCHED-NAME]
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure a new queue profile and a schedule profile
 1. Administrators can apply queue profile and schedule profile
 1. The output of the `show` commands is correct
 1. The traffic pattern matches the scheduler configuration
 
-## Example Output
+## Example output
 
 ```text
 qos queue-profile VOICE-Q-PROFILE

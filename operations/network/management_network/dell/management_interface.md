@@ -5,7 +5,7 @@ The management interface is accessible using the `mgmt` VRF and is separate from
 
 Alternatively, a loopback interface can be configured to be used as management interface.
 
-## Configuration Commands
+## Configuration commands
 
 Configure the Management interface in CONFIGURATION mode:
 
@@ -29,10 +29,10 @@ Enable the Management interface in INTERFACE mode:
 no shutdown
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can enable/disable the management interface
-2. Administrators can assign an IP address to the management interface
-3. Administrators can configure a loopback interface to be use for switch management
+1. Administrators can assign an IP address to the management interface
+1. Administrators can configure a loopback interface to be use for switch management
 
 [Back to Index](../README.md)

@@ -1,8 +1,10 @@
 # Link Aggregation Group (LAG)
 
-Link Aggregation allows you to assign multiple physical links to one logical link that functions as a single, higher-speed link providing dramatically increased bandwidth.
+Link Aggregation allows multiple physical links to be assigned to one logical link
+that functions as a single, higher-speed link, providing dramatically increased
+bandwidth.
 
-## Configuration Commands
+## Configuration commands
 
 Create and configure the LAG interface:
 
@@ -26,7 +28,7 @@ Show commands to validate functionality:
 show lacp <interfaces|aggregates|configuration>
 ```
 
-## Example Output
+## Example output
 
 ```text
 show interface lag1
@@ -78,7 +80,7 @@ Aggregate mode        : active
 F - Aggregable I - Individual
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can create and configure a LAG
 2. Administrators can add ports to a LAG

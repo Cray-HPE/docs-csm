@@ -1,55 +1,55 @@
-# Link layer discovery protocol (LLDP)
+# Link Layer Discovery Protocol (LLDP)
 
 By default, LLDP is enabled for each interface and globally.
 Administrators can disable LLDP on an interface or globally.
 If LLDP is disabled globally, LLDP is disabled on all interfaces irrespective of whether LLDP is previously enabled or disabled on an interface.
 When administrators enable LLDP globally, the LLDP configuration at the interface level takes precedence over the global LLDP configuration.
 
-## Configuration Commands
+## Configuration commands
 
-Disable the LLDPDU transmit or receive in INTERFACE mode:
+Disable the LLDPDU transmit or receive in interface mode:
 
 ```text
 no lldp transmit
 no lldp receive
 ```
 
-Disable the LLDP `holdtime-multiplier` value in CONFIGURATION mode:
+Disable the LLDP `holdtime-multiplier` value in configuration mode:
 
 ```text
 no lldp holdtime-multiplier
 ```
 
-Disable the LLDP initialization in CONFIGURATION mode:
+Disable the LLDP initialization in configuration mode:
 
 ```text
 no lldp reinit
 ```
 
-Disable the LLDP MED in CONFIGURATION or INTERFACE mode:
+Disable the LLDP MED in configuration or interface mode:
 
 ```text
 no lldp med
 ```
 
-Disable LLDP TLV in INTERFACE mode:
+Disable LLDP TLV in interface mode:
 
 ```text
 no lldp tlv-select
 ```
 
-Disable LLDP globally in CONFIGURATION mode:
+Disable LLDP globally in configuration mode:
 
 ```text
 no lldp enable
 ```
 
-## Expected Results
+## Expected results
 
 1. Link status between the peer devices is UP
-2. LLDP is enabled
-3. Local device LLDP Information is displayed
-4. Remote device LLDP information is displayed
-5. LLDP statistics are displayed
+1. LLDP is enabled
+1. Local device LLDP Information is displayed
+1. Remote device LLDP information is displayed
+1. LLDP statistics are displayed
 
 [Back to Index](../README.md)

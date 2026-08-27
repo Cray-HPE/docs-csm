@@ -1,6 +1,8 @@
 # Backup a Switch Configuration
 
-Copies the running configuration or the startup configuration to a remote location as a file. The configuration can be exported to a file of either type CLI or type JSON format. The `<VRF-NAME>` is used for the configuration of interfaces on a particular VRF.
+Copies the running configuration or the startup configuration to a remote location as a file.
+The configuration can be exported to a file of either type CLI or type JSON format.
+The `<VRF-NAME>` is used for the configuration of interfaces on a particular VRF.
 
 ## Procedure
 

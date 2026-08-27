@@ -5,7 +5,7 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
 ## Prerequisites
 
 * [Add a blade to a cabinet using CANI using CANI](../cani/Add_A_Blade_To_A_Cabinet_In_SLS.md).
-* The [Cray command line interface \(CLI\) tool](../../glossary.md#cray-cli-cray) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+* The [Cray command line interface (CLI) tool](../../glossary.md#cray-cli-cray) is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 * Knowledge of whether [Data Virtualization Service (DVS)](../../glossary.md#data-virtualization-service-dvs) is operating over the
   [Node Management Network (NMN)](../../glossary.md#node-management-network-nmn) or the [High Speed Network (HSN)](../../glossary.md#high-speed-network-hsn).
 * Blade is being added to an existing liquid-cooled cabinet in the system.
@@ -223,7 +223,7 @@ This procedure will add a liquid-cooled blades to an HPE Cray EX system.
         }"
         ```
 
-        **`NOTE`** Kea must be restarted when the `curl` command is issued.
+        **NOTE** Kea must be restarted when the `curl` command is issued.
 
         ```bash
         kubectl rollout restart deployment -n services cray-dhcp-kea
@@ -714,8 +714,8 @@ There should be one or more `cray-cps` pods.
         If there is a duplicate IP address in the HSM, then an error message similar to the message below will be returned.
 
         ```text
-        [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': 
-        failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the 
+        [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf':
+        failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the
         address 10.100.0.105: There's already a reservation for this address"}]
         ```
 

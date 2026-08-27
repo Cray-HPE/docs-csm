@@ -1,10 +1,10 @@
 # Remote Logging
 
-Configure remote logging to view log files from the switch on a remote server. This functionality is enabled by syslog.
+Configure remote logging to view log files from the switch on a remote server. This functionality is enabled by `syslog`.
 
-> **`NOTE`** The default facility is three (DAEMON).
+> **NOTE** The default facility is three (DAEMON).
 
-## Configuration Commands
+## Configuration commands
 
 Configure logging:
 
@@ -12,7 +12,7 @@ Configure logging:
 switch(config)# logging IP-ADDR
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure remote logging
 1. Administrators can see the log files from the switch on the remote server

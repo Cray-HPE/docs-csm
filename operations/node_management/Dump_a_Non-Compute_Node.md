@@ -1,6 +1,6 @@
 # Dump a Non-Compute Node
 
-Trigger a non-compute node \(NCN\) memory dump and send the dump for analysis. This procedure is helpful for debugging NCN crashes.
+Trigger a non-compute node (NCN) memory dump and send the dump for analysis. This procedure is helpful for debugging NCN crashes.
 
 ## Prerequisites
 

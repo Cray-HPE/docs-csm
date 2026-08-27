@@ -1,35 +1,37 @@
-# Routed interfaces
+# Routed Interfaces
 
-By default Mellanox interfaces are set as "switchports" which is to allow L2 communication. To change to routed only port, you have to disable L2 functionality.
+By default Mellanox interfaces are set as `switchports`, which is to allow L2 communication.
+To change to routed only port, L2 functionality must be disabled.
 
-Relevant Configuration
+## Relevant configuration
 
-Disable L2 functionality
+(`switch (config) #`) Disable L2 functionality:
 
+```console
+interface ethernet 1/4
+no switchport force
 ```
-Switch (config) # interface ethernet ¼
-Switch (config-int) no switchport force
-```
 
-Give an interface an IP address
+(`switch (config) #`) Give an interface an IP address:
 
-```
-switch (config) # interface ethernet 1/14 ip address 192.168.75.1/31
+```console
+interface ethernet 1/14 ip address 192.168.75.1/31
 primary
 ```
 
-Show Commands to Validate Functionality
+## Show commands to validate functionality
 
-```
+(`switch #`)
+
+```console
 show ethernet interface IFACE
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: You are able to configure an IP address on the interface
-* Step 2: You can configure an IP address on the connected network client
-* Step 3: The interface is up, and you can validate the IP address and subnet are correct
-* Step 4: You can ping from the switch to the client and from the client to the switch
+* Administrators are able to configure an IP address on the interface
+* Administrators can configure an IP address on the connected network client
+* The interface is up, and administrators can validate that the IP address and subnet are correct
+* Administrators can ping from the switch to the client and from the client to the switch
 
 [Back to Index](../README.md)
-

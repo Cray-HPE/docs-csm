@@ -2,24 +2,25 @@
 
 There are no configuration commands for switch power supply functionality.
 
-> **`NOTE`** HA will be covered in HA section.
-
 Show commands to validate functionality:
 
 ```bash
 show environment power-supply
 ```
 
-## Expected Results
+## Expected results
 
 1. Validate the switch recognizes the additional power supplies
-2. Validate system remains powered after removing power from all but one power supply
-3. Validate all power supplies are operational
+1. Validate system remains powered after removing power from all but one power supply
+1. Validate all power supplies are operational
 
-## Example Output
+## Example output
 
-```bash
+```console
 show environment power-supply
+```
+
+```text
          Product  Serial           PSU
 Wattage
 Mbr/PSU  Number   Number           Status

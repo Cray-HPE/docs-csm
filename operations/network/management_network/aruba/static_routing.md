@@ -1,8 +1,12 @@
 # Static Routing
 
-"Static routing is manually performed by the network administrator. The administrator is responsible for discovering and propagating routes through the network. These definitions are manually programmed in every routing device in the environment. After a device has been configured, it simply forwards packets out the predetermined ports. There is no communication between routers regarding the current topology of the network." –IBM Redbook, TCP/IP Tutorial and Technical Overview
+"Static routing is manually performed by the network administrator.
+The administrator is responsible for discovering and propagating routes through the network.
+These definitions are manually programmed in every routing device in the environment.
+After a device has been configured, it simply forwards packets out the predetermined ports.
+There is no communication between routers regarding the current topology of the network." – IBM Redbook, TCP/IP Tutorial and Technical Overview
 
-## Configuration Commands
+## Configuration commands
 
 ```text
 switch(config)# <ip|ipv6> route IP-ADDR/<SUBNET|PREFIX> IP-ADDR
@@ -14,7 +18,7 @@ Show commands to validate functionality:
 show <ip|ipv6> route [static]
 ```
 
-## Example Output
+## Example output
 
 ```text
 show ip route
@@ -45,10 +49,10 @@ Displaying ipv6 routes selected for forwarding
         via  2001:10::2,  [1/0],  static, vrf default
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure a static route on the DUT
-2. Administrators can validate using the `show` command(s)
-3. Administrators can ping the connected device
+1. Administrators can validate using the `show` commands
+1. Administrators can ping the connected device
 
 [Back to Index](../README.md)

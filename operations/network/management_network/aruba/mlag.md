@@ -2,7 +2,7 @@
 
 Multi-Chassis Link Aggregation Group (MCLAG) is a link aggregation technique where two or more links across two switches are aggregated together to form a trunk.
 
-## Configuration Commands
+## Configuration commands
 
 Create the MCLAG interface:
 
@@ -24,7 +24,7 @@ Show commands to validate functionality:
 show mclag <brief|configuration|status>
 ```
 
-## Example Output
+## Example output
 
 ```text
 switch(config)# interface lag 23 multi-chassis
@@ -36,11 +36,11 @@ switch(config-if)# lag 23
 switch(config-if)# end
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure MCLAG
-2. Administrators can create an MCLAG interface
-3. Administrators can add ports to the MCLAG interface
-4. The output of the `show` commands is correct
+1. Administrators can create an MCLAG interface
+1. Administrators can add ports to the MCLAG interface
+1. The output of the `show` commands is correct
 
 [Back to Index](../README.md)

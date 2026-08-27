@@ -11,12 +11,12 @@ Intrusion detection enables a device to notify the user or shutdown the port in 
 
 The violation state of a port is reset with the port is administratively shutdown, port security is disabled on the port, or the port comes back up due to auto-recovery.
 
-**IMPORTANT:**
+> **IMPORTANT:**
+>
+> * Port security is only supported on physical ports and is mutually exclusive with `dot1x` and MAC authentication
+> * Port security is feature of "edge" switches such as 63/6400 and not available on `83xx`
 
-  * Port security is only supported on physical ports and is mutually exclusive with dot1x and MAC auth
-  * Port security is feature of "edge" switches such as 63/6400 and not available on 83xx
-
-## Configuration Commands
+## Configuration commands
 
 Enable port security globally:
 
@@ -61,9 +61,9 @@ Show commands to validate functionality:
 show port-access port-security interface <all|IFACE> <client-status|portstatistics>
 ```
 
-## Example Output
+## Example output
 
-```
+```console
 switch(config)# port-access port-security enable
 switch(config)# interface 1/1/1
 switch(config-if)# port-access port-security
