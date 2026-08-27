@@ -4,21 +4,15 @@ Replace an HPE Cray EX liquid-cooled compute blade.
 
 ## Prerequisites
 
-- The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
-
+- The Cray command line interface (CLI) tool is initialized and configured on the system.
+    - See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 - The Slingshot fabric must be configured with the desired topology.
-
 - The System Layout Service (SLS) must have the desired HSN configuration.
-
 - Check the status of the high-speed network (HSN) and record link status before the procedure.
-
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
-
     - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
     - Review the *HPE Cray EX Hand Pump User Guide H-6200*
-
 - The System Admin Toolkit (SAT) is installed and configured on the system.
-
 - DVS must be running over the HSN.
 
 ## Shutdown nodes on the compute blade
@@ -68,16 +62,16 @@ Replace an HPE Cray EX liquid-cooled compute blade.
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateName` value with BOS.
+   1. Find the required `template_name` value with BOS.
 
       ```bash
-      cray bos v2 sessions describe BOS_SESSION --format toml | grep templateName
+      cray bos v2 sessions describe BOS_SESSION --format toml | grep template_name
       ```
 
       Example output:
 
       ```toml
-      templateName = "compute-nid1-4-sessiontemplate"
+      template_name = "compute-nid1-4-sessiontemplate"
       ```
 
    1. Determine the list of xnames associated with the desired boot session template.

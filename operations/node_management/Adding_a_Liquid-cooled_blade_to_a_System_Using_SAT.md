@@ -123,16 +123,16 @@ This procedure will add a liquid-cooled blade to an HPE Cray EX system.
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateName` value with BOS.
+   1. Find the required `template_name` value with BOS.
 
       ```bash
-      cray bos v2 sessions describe BOS_SESSION --format toml | grep templateName
+      cray bos v2 sessions describe BOS_SESSION --format toml | grep template_name
       ```
 
       Example output:
 
       ```toml
-      templateName = "compute-nid1-4-sessiontemplate"
+      template_name = "compute-nid1-4-sessiontemplate"
       ```
 
    1. Determine the list of xnames associated with the desired session template.
