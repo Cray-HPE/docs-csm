@@ -1,8 +1,8 @@
-# You are getting an IP address, but not the correct one. Duplicate IP address check
+# Duplicate IP Address Check
 
-A sign of a duplicate IP address is seeing a DECLINE message from the client to the server.
+A sign of a duplicate IP address is seeing a `DECLINE` message from the client to the server.
 
-```
+```text
 10.40.0.0.337 > 10.42.0.58.67: BOOTP/DHCP, Request from b4:2e:99:be:1a:d3, length 301, hops 1, xid 0x9d1210d, Flags [none]
      Gateway-IP 10.252.0.2
      Client-Ethernet-Address b4:2e:99:be:1a:d3
@@ -16,6 +16,7 @@ A sign of a duplicate IP address is seeing a DECLINE message from the client to 
          Circuit-ID SubOption 1, length 20: vlan2-ethernet1/1/12
 ```
 
-To test for Duplicate IP addresses you can ping the suspected address while you turn off the node, if you continue to get responses, then you have a duplicate IP.
+To test for duplicate IP addresses, ping the suspected address while turning off the node.
+If the ping continues to get responses, then there is a duplicate IP address.
 
 [Back to Index](../README.md)

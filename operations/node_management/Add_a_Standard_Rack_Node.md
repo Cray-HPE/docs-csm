@@ -2,9 +2,9 @@
 
 These procedures are intended for trained technicians and support personnel only. Always follow ESD precautions when handling this equipment.
 
-The example is this procedure adds a User Access Node \(UAN\) or compute node to an HPE Cray standard rack system. This example adds a node to rack number 3000 at U27.
+The example is this procedure adds a User Access Node (UAN) or compute node to an HPE Cray standard rack system. This example adds a node to rack number 3000 at U27.
 
-Procedures for updating the Hardware State Manager \(HSM\) or System Layout Service \(SLS\) are similar when adding additional compute nodes or User Application Nodes \(UANs\). The contents of the node object in the SLS are slightly different
+Procedures for updating the Hardware State Manager (HSM) or System Layout Service (SLS) are similar when adding additional compute nodes or User Application Nodes (UANs). The contents of the node object in the SLS are slightly different
 for each node type.
 
 Refer to the OEM documentation for information about the node architecture, installation, and cabling.
@@ -13,7 +13,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+* The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 * Knowledge of whether DVS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 * Node is being added to an existing air-cooled cabinet in the system.
 * The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
@@ -36,19 +36,21 @@ For this procedure, a new object must be created in the SLS and modifications wi
 1. (`ncn#`) Create a new node object in SLS.
 
     New node objects require the following information:
+
     * `Xname`: The component name (xname) for the Node in the form of `xXcCsSbBnN`
-      * `xX`: where `X` is the cabinet or rack identification number.
-      * `cC`: where `C` is the chassis identification number.
-        * If the node is within an air-cooled cabinet, then this should be `0`.
-        * If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
-      * `sS`: where `S` is the lowest slot the node chassis occupies.
-      * `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
-      * `nN`: where `N` is the ordinal of the node This should be `0`.
+        * `xX`: where `X` is the cabinet or rack identification number.
+        * `cC`: where `C` is the chassis identification number.
+            * If the node is within an air-cooled cabinet, then this should be `0`.
+            * If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
+        * `sS`: where `S` is the lowest slot the node chassis occupies.
+        * `bB`: where `B` is the ordinal of the node BMC. This should be `0`.
+        * `nN`: where `N` is the ordinal of the node This should be `0`.
 
     * `Role`: `Compute` or `Application`.
     * `Aliases`: Array of aliases for the node. For compute nodes, this is in the form of `nid000000`
     * NID: The Node ID integer for the node. This applies only to compute nodes.
     * SubRole: Such as `UAN`, `Gateway`, or other valid HSM SubRoles.
+
         > (`ncn#`) Valid HSM SubRoles can be viewed with the following command. To add additional sub roles to HSM refer to [Add Custom Roles and Subroles](../hardware_state_manager/HSM_Roles_and_Subroles.md#add-custom-roles-and-subroles).
         >
         > ```bash
@@ -68,9 +70,9 @@ For this procedure, a new object must be created in the SLS and modifications wi
         ALIAS=nid000001
         jq -n --arg ALIAS "${ALIAS}" --argjson NID "${NID}" '{
             Aliases:[$ALIAS],
-            NID: $NID, 
+            NID: $NID,
             Role: "Compute"
-        }' | tee node_extraproperties.json  
+        }' | tee node_extraproperties.json
         ```
 
         Expected output:
@@ -94,7 +96,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
             Aliases:[$ALIAS],
             Role: "Application",
             SubRole: $SUB_ROLE
-        }' | tee node_extraproperties.json  
+        }' | tee node_extraproperties.json
         ```
 
         Expected output:
@@ -122,17 +124,16 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     * The management switch port that is connected to the new node's BMC
     * `Xname`: The component name (xname) for the `MgmtSwitchConnector` in the form of `xXcCwWjJ`
-      * `xX`: where `X` is the cabinet or rack identification number.
-      * `cC`: where `C` is the chassis identification number.
-        * If the destination `LeafBMC` switch is within a standard rack, then this should be `0`
-        * If the destination `LeafBMC` switch is located within an air-cooled chassis in an EX2500 cabinet, then this should be `4`
-      * `wW`: where `W` is the rack U position of the management network leaf switch
-      * `jJ`: where `J` is the switch port number
-
+        * `xX`: where `X` is the cabinet or rack identification number.
+        * `cC`: where `C` is the chassis identification number.
+            * If the destination `LeafBMC` switch is within a standard rack, then this should be `0`
+            * If the destination `LeafBMC` switch is located within an air-cooled chassis in an EX2500 cabinet, then this should be `4`
+        * `wW`: where `W` is the rack U position of the management network leaf switch
+        * `jJ`: where `J` is the switch port number
     * `NodeNics`: The component name (xname) of the new node's BMC; this field is an array in the payloads below, but should only contain one element
-      * `VendorName`: This field varies depending on the OEM for the management switch; for example, if the BMC is plugged into switch port 36, then the following vendor names could apply:
-      * Aruba leaf switches use this format: `1/1/36`
-      * Dell leaf switches use this format: `ethernet1/1/36`
+        * `VendorName`: This field varies depending on the OEM for the management switch; for example, if the BMC is plugged into switch port 36, then the following vendor names could apply:
+        * Aruba leaf switches use this format: `1/1/36`
+        * Dell leaf switches use this format: `ethernet1/1/36`
 
     1. Build up the hardware extra properties:
 
@@ -172,7 +173,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
         ```bash
         /usr/share/doc/csm/scripts/operations/node_management/allocate_uan_ip.py allocate-uan-ip \
             --xname "${NODE_XNAME}"
-        ```  
+        ```
 
         Example output:
 
@@ -258,13 +259,14 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 1. (`ncn#`) Set `CMC_XNAME` environment variable with the xname of the CMC.
 
-   The xname for the CMC in the form of `xXcCsSbB`
-      * `xX`: where `X` is the cabinet or rack identification number.
-      * `cC`: where `C` is the chassis identification number.
+    The xname for the CMC in the form of `xXcCsSbB`
+
+    * `xX`: where `X` is the cabinet or rack identification number.
+    * `cC`: where `C` is the chassis identification number.
         * If the node is within an air-cooled cabinet, then this should be `0`.
         * If the node is within an air-cooled chassis in an EX2500 cabinet, then this should be `4`.
-      * `sS`: where `S` is the lowest slot the node chassis occupies.
-      * `bB`: where `B` is the ordinal of the node BMC. This should be `999`.
+    * `sS`: where `S` is the lowest slot the node chassis occupies.
+    * `bB`: where `B` is the ordinal of the node BMC. This should be `999`.
 
     ```bash
     CMC_XNAME=x3000c0s17b999
@@ -284,17 +286,16 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
     * The management switch port that is connected to the new node's BMC
     * `Xname`: The component name (xname) for the `MgmtSwitchConnector` in the form of `xXcCwWjJ`
-      * `xX`: where `X` is the cabinet or rack identification number.
-      * `cC`: where `C` is the chassis identification number.
-        * If the destination `LeafBMC` switch is within a standard rack, then this should be `0`
-        * If the destination `LeafBMC` switch is located within an air-cooled chassis in an EX2500 cabinet, then this should be `4`
-      * `wW`: where `W` is the rack U position of the management network leaf switch
-      * `jJ`: where `J` is the switch port number
-
+        * `xX`: where `X` is the cabinet or rack identification number.
+        * `cC`: where `C` is the chassis identification number.
+            * If the destination `LeafBMC` switch is within a standard rack, then this should be `0`
+            * If the destination `LeafBMC` switch is located within an air-cooled chassis in an EX2500 cabinet, then this should be `4`
+        * `wW`: where `W` is the rack U position of the management network leaf switch
+        * `jJ`: where `J` is the switch port number
     * `NodeNics`: The component name (xname) of the new node's BMC; this field is an array in the payloads below, but should only contain one element
-      * `VendorName`: This field varies depending on the OEM for the management switch; for example, if the BMC is plugged into switch port 36, then the following vendor names could apply:
-      * Aruba leaf switches use this format: `1/1/37`
-      * Dell leaf switches use this format: `ethernet1/1/37`
+        * `VendorName`: This field varies depending on the OEM for the management switch; for example, if the BMC is plugged into switch port 36, then the following vendor names could apply:
+        * Aruba leaf switches use this format: `1/1/37`
+        * Dell leaf switches use this format: `ethernet1/1/37`
 
     1. Build up the hardware extra properties:
 
@@ -326,7 +327,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 ### Step 4: Install the node hardware in the rack
 
-1. Install the new node hardware in the rack and connect power cables, HSN cables, and management network cables \(if it has not already been installed\).
+1. Install the new node hardware in the rack and connect power cables, HSN cables, and management network cables (if it has not already been installed).
 
     If the node was added before modifying the SLS, then the node's BMC should have been able to DHCP with Kea, and there will be an unknown MAC address in the HSM Ethernet interfaces table.
 
@@ -357,7 +358,7 @@ Follow the [Added Hardware](../network/management_network/added_hardware.md) pro
     ping "${BMC_XNAME}"
     ```
 
-1. If adding Foxconn (Paradise) nodes to the system, follow the [Replacing Foxconn Usernames and Passwords in Vault](./Replacing_Foxconn_User_Pass.md) procedure if nodes fail to discover.
+If adding Foxconn (Paradise) nodes to the system, follow the [Replacing Foxconn Usernames and Passwords in Vault](Replacing_Foxconn_User_Pass.md) procedure if nodes fail to discover.
 
 1. (`ncn#`) Verify that discovery has completed.
 
@@ -513,7 +514,7 @@ Follow the [Added Hardware](../network/management_network/added_hardware.md) pro
       configuration to include any new compute nodes added to the system.
    * **If PBS Pro is the installed workload manager**: *Coming soon*
 
-1. (`ncn-mw#`) Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
+1. (`ncn-mw#`) Use the Boot Orchestration Service (BOS) to power on and boot the nodes.
 
     Use the appropriate BOS template for the node type.
 
@@ -717,8 +718,8 @@ There should be one or more `cray-cps` pods.
         If there is a duplicate IP address in the HSM, then an error message similar to the message below will be returned.
 
         ```text
-        [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': 
-        failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the 
+        [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf':
+        failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the
         address 10.100.0.105: There's already a reservation for this address"}]
         ```
 

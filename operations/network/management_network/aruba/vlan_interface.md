@@ -2,7 +2,7 @@
 
 The switch also supports classic L3 VLAN interfaces.
 
-## Configuration Commands
+## Configuration commands
 
 Configure the VLAN:
 
@@ -24,7 +24,7 @@ Show commands to validate functionality:
 show vlan [VLAN|interface IFACE|summary]
 ```
 
-## Example Output
+## Example output
 
 ```text
 vlan 10
@@ -39,12 +39,12 @@ end
 108 bytes from 10.0.0.101: icmp_seq=5 ttl=64 time=1.79 ms
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure the VLAN
-2. Administrators can enable the interface and associate it with the VLAN
-3. Administrators can create an IP-enabled VLAN interface, and it is up
-4. Administrators validate the configuration is correct
-5. Administrators can ping from the switch to the client and from the client to the switch
+1. Administrators can enable the interface and associate it with the VLAN
+1. Administrators can create an IP-enabled VLAN interface, and it is up
+1. Administrators validate the configuration is correct
+1. Administrators can ping from the switch to the client and from the client to the switch
 
 [Back to Index](../README.md)

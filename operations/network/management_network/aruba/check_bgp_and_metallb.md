@@ -1,6 +1,7 @@
 # Check BGP and MetalLB
 
-Use the following procedure to verify if the spine switches are available and that MetalLB peering to the spine switches via Border Gateway Protocol (BGP) is established.
+Use the following procedure to verify if the spine switches are available and that
+MetalLB peering to the spine switches via Border Gateway Protocol (BGP) is established.
 
 ## Prerequisites
 

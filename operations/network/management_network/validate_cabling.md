@@ -1,6 +1,6 @@
 # Validate Cabling
 
-> **Warning:**  If this step is completed when NCNs are offline or shutdown, the information compared here will not match the actual connections. Therefore, this step should be re-run again once the whole system is up.
+> **Warning:** If this step is completed when NCNs are offline or shutdown, the information compared here will not match the actual connections. Therefore, this step should be re-run again once the whole system is up.
 
 1. To validate the cabling you can run command similar to below:
 
@@ -8,7 +8,7 @@
     canu validate shcd-cabling --ips 10.252.0.2,10.252.0.3 --tabs 40G_10G --corners J12,T36 --shcd ./SHCD.xlsx
     ```
 
-    > **`NOTE`** Modify the command to use the correct SHCD file and correct `--tabs`, `--corners`, and IP addresses.
+    > **NOTE** Modify the command to use the correct SHCD file and correct `--tabs`, `--corners`, and IP addresses.
 
     The output should look as follows:
 
@@ -48,7 +48,7 @@
 
 1. Return to [deploying the management nodes](../../../install/deploy_non-compute_nodes.md).
 
-> **`NOTE`** The values for `--tabs` is the sheet within `SHCD.xlsx` file with a name in format `<number>G_<number>G`. For example, `25G_10G`, `40G_10G`, and so on.
+> **NOTE** The values for `--tabs` is the sheet within `SHCD.xlsx` file with a name in format `<number>G_<number>G`. For example, `25G_10G`, `40G_10G`, and so on.
 > The values for `--corners` options are start cell and end cell of rightmost table (including table headers) on sheet specified with `--tabs` option.
 > The value for `--shcd` is the path of `SHCD.xlsx` file to be used for the cluster under install.
 > The cluster type, such as Full, TDS, or V1, can be obtained from [Generate Switch Configurations](generate_switch_configs.md).

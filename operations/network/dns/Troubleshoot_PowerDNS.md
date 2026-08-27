@@ -3,8 +3,8 @@
 * [List DNS zone contents](#list-dns-zone-contents)
 * [PowerDNS logging](#powerdns-logging)
 * [Verify DNSSEC operation](#verify-dnssec-operation)
-  * [Verify zones are being signed with the zone signing key](#verify-zones-are-being-signed-with-the-zone-signing-key)
-  * [Verify TSIG operation](#verify-tsig-operation)
+    * [Verify zones are being signed with the zone signing key](#verify-zones-are-being-signed-with-the-zone-signing-key)
+    * [Verify TSIG operation](#verify-tsig-operation)
 
 ## List DNS zone contents
 
@@ -13,7 +13,7 @@ The PowerDNS zone database is populated with data from two sources:
 * The `cray-powerdns-manager` service creates the zones and DNS records based on data sourced from the System Layout Service (SLS).
 * The external DNS records are populated by the `cray-externaldns-external-dns` service using data sourced from Kubernetes annotations and virtual service definitions.
 
-Use the `cray-powerdns-visualizer` command to view the zone structure that `cray-powerdns-manager` will create.
+(`ncn-mw#`) Use the `cray-powerdns-visualizer` command to view the zone structure that `cray-powerdns-manager` will create.
 
 ```bash
 kubectl -n services exec deployment/cray-powerdns-manager -c cray-powerdns-manager -- cray-powerdns-visualizer
@@ -44,13 +44,13 @@ Example output:
 [...]
 ```
 
-For more information on External DNS and troubleshooting steps, see the [External DNS documentation](../external_dns/External_DNS.md).
+For more information on external DNS and troubleshooting steps, see [External DNS](../external_dns/External_DNS.md).
 
 ## PowerDNS logging
 
 When troubleshooting DNS problems, it may prove helpful to increase the level of logging from the default value of 3 (error).
 
-1. Edit the `cray-dns-powerdns` Kubernetes ConfigMap.
+1. (`ncn-mw#`) Edit the `cray-dns-powerdns` Kubernetes ConfigMap.
 
    ```bash
    kubectl -n services edit cm cray-dns-powerdns
@@ -70,7 +70,7 @@ When troubleshooting DNS problems, it may prove helpful to increase the level of
       version-string=anonymous
    ```
 
-1. Restart the PowerDNS service.
+1. (`ncn-mw#`) Restart the PowerDNS service.
 
    ```bash
    kubectl -n services rollout restart deployment cray-dns-powerdns
@@ -88,7 +88,7 @@ Refer to the external [PowerDNS documentation](https://doc.powerdns.com/authorit
 
 ### Verify zones are being signed with the zone signing key
 
-Check that the required zone has a DNSKEY entry; this should match the public key portion of the zone signing key.
+(`ncn-mw#`) Check that the required zone has a DNSKEY entry; this should match the public key portion of the zone signing key.
 
 > In the command below, be sure to replace `system.dev.cray.com` with the correct value for the system.
 
@@ -124,7 +124,7 @@ and that the desired zone signing key was used. See the [PowerDNS Configuration 
 > **IMPORTANT:** These examples are for informational purposes only. The use of the `dig` command `-y` option to present the key should be avoided in favor of the `-k` option
 with the secret in a file, in order to avoid the key being displayed in `ps` command output or the shell history.
 
-1. Determine the IP address of the external DNS service.
+1. (`ncn-mw#`) Determine the IP address of the external DNS service.
 
    ```bash
    kubectl -n services get service cray-dns-powerdns-can-tcp
@@ -137,7 +137,7 @@ with the secret in a file, in order to avoid the key being displayed in `ps` com
    cray-dns-powerdns-can-tcp   LoadBalancer   10.27.91.157   10.101.8.113   53:30726/TCP   6d
    ```
 
-2. Verify that an AXFR query to the external DNS service works when the correct TSIG key is presented.
+1. (`ncn-mw#`) Verify that an AXFR query to the external DNS service works when the correct TSIG key is presented.
 
    ```bash
    dig -t axfr system.dev.cray.com @10.101.8.113 -y \ "hmac-sha256:system-key:dnFC5euKixIKXAr6sZhI7kVQbQCXoDG5R5eHSYZiBxY=" +nocrypto | head

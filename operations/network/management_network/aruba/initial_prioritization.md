@@ -1,12 +1,17 @@
 # Initial Prioritization
 
-For most switches, the local-priority has eight levels (0-7). Zero is the lowest priority. The allowed maximum will vary per product family. Local priority is used to determine which queue a packet will use. There are multiple options to configure the local-priority:
+For most switches, the local-priority has eight levels (0-7).
+Zero is the lowest priority. The allowed maximum will vary per product family.
+Local priority is used to determine which queue a packet will use.
+There are multiple options to configure the local priority:
 
 * `qos cos-map`: Maps Class of Services (CoS) values from VLAN tags in incoming packets to specific local priorities
 * `qos dscp-map`: Maps the DSCP from incoming packets to specific local priorities
-* `qos trust`: Assumes incoming packets are marked correctly, and takes the local-priority from either the CoS or Differentiated Service Code-Points (DSCP) field of the packet, or ignores any values set on incoming packets and places the packets into the default local-priority queue if the none option is given
+* `qos trust`: Assumes incoming packets are marked correctly, and takes the local-priority from either the CoS or
+  Differentiated Service Code-Points (DSCP) field of the packet, or ignores any values set on incoming packets and
+  places the packets into the default local priority queue if the none option is given
 
-## Configuration Commands
+## Configuration commands
 
 Map incoming 802.1p values to a local priority:
 
@@ -33,13 +38,13 @@ Show commands to validate functionality:
 show qos [cos-map|dscp-map|trust]
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can enable QoS trust to CoS on an interface
-2. Administrators can map incoming 802.1p values to local priorities
-3. The output of all `show` commands is correct
+1. Administrators can map incoming 802.1p values to local priorities
+1. The output of all `show` commands is correct
 
-## Example Output
+## Example output
 
 ```text
 switch(config)# qos dscp-map 46 local-priority 7 color green name VOICE

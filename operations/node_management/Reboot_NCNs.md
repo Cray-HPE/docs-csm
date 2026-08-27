@@ -1,12 +1,12 @@
 # Reboot NCNs
 
-The following is a high-level overview of the non-compute node \(NCN\) reboot workflow:
+The following is a high-level overview of the non-compute node (NCN) reboot workflow:
 
 1. Run the NCN pre-reboot checks and procedures.
 
    1. Ensure that `ncn-m001` is not booted to the LiveCD / PIT node.
    1. Check the `metal.no-wipe` settings for all NCNs.
-   1. Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions.
+   1. Run all platform health checks, including checks on the Border Gateway Protocol (BGP) peering sessions.
    1. [Validate the current boot order](../../background/ncn_boot_workflow.md#determine-the-current-boot-order)
       (or [specify the boot order](../../background/ncn_boot_workflow.md#setting-boot-order)).
 
@@ -21,7 +21,7 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
 
 1. Re-run all platform health checks.
 
-The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with nine management nodes.
+The time duration for this procedure (if health checks are being executed in between each boot, as recommended) could take between two to four hours for a system with nine management nodes.
 
 This same procedure can be used to reboot a single management node as outlined above.
 Be sure to carry out the NCN pre-reboot checks and procedures before and after rebooting the node.
@@ -646,7 +646,7 @@ Before rebooting NCNs:
 
     1. Disconnect from the console.
 
-    1. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number, until all master nodes have successfully rebooted.
+    1. Repeat all of the sub-steps above for the remaining master nodes (excluding `ncn-m001`), going from the highest to lowest number, until all master nodes have successfully rebooted.
 
 1. Reboot `ncn-m001`.
 

@@ -2,7 +2,7 @@
 
 Configure the physical interfaces for a switch.
 
-## Configuration Commands
+## Configuration commands
 
 Enable the interface:
 
@@ -17,11 +17,11 @@ Show commands to validate functionality:
 show interface IFACE [transceiver|brief|dom|extended]
 ```
 
-## Expected Results
+## Expected results
 
 1. The switch recognizes the transceiver without errors
-2. Administrators can enter the interface context for the port and enable it
-3. Administrators can establish a link with a partner
-4. Administrators can pass traffic as expected
+1. Administrators can enter the interface context for the port and enable it
+1. Administrators can establish a link with a partner
+1. Administrators can pass traffic as expected
 
 [Back to Index](../README.md)

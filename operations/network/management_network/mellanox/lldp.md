@@ -1,34 +1,36 @@
-# Link layer discovery protocol (LLDP)
+# Link Layer Discovery Protocol (LLDP)
 
-LLDP is used to advertise the device's identity and abilities and read other devices connected to the same network. Note: LLDP is enabled by default.
+LLDP is used to advertise the device's identity and abilities and read other devices connected to the same network.
 
-Relevant Configuration
+> Note: LLDP is enabled by default.
 
-Enable lldp
+## Relevant configuration
 
-```
-switch(config)# lldp
-```
+(`switch(config)#`) Enable LLDP.
 
-Enable lldp on interface
-
-```
-switch (config interface ethernet 1/1) # lldp receive
-switch (config interface ethernet 1/1) # lldp transmit
+```console
+lldp
 ```
 
-Show Commands to Validate Functionality
+(`switch (config interface ethernet 1/1) #`) Enable LLDP on interface.
 
+```console
+lldp receive
+lldp transmit
 ```
+
+## Show commands to validate functionality
+
+```console
 show lldp local
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: Link status between the peer devices is UP
-* Step 2: LLDP is enabled
-* Step 3: Local device LLDP Information is displayed
-* Step 4: Remote device LLDP information is displayed
-* Step 5: LLDP statistics are displayed
+* Link status between the peer devices is `UP`
+* LLDP is enabled
+* Local device LLDP Information is displayed
+* Remote device LLDP information is displayed
+* LLDP statistics are displayed
 
 [Back to Index](../README.md)

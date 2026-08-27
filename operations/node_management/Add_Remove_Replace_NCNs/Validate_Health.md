@@ -15,12 +15,12 @@ The following procedures can be run from any master NCN.
    /opt/cray/platform-utils/ncnPostgresHealthChecks.sh
    ```
 
-   **`NOTE`**
+   **NOTE**
    If workers have been removed and the worker count is currently at two, the following failures can be ignored. A re-check will be needed once workers are added and the count returns to three or above.
    - the `ncnPostgresHealthChecks` may report `Unable to determine a leader` and one of the three Postgres pods may be in `Pending` state.
    - the `ncnHealthChecks` may report `Error from server...FAILED - Pod Not Healthy`, `FAILED DATABASE CHECK` and one of the three Etcd pods may be in `Pending` state.
 
-   **`NOTE`**
+   **NOTE**
    If `ncn-s001`, `ncn-s002`, or `ncn-s003` has been temporarily removed, `HEALTH_WARN` may be seen until the storage node is added back to the cluster.
    - the `ncnHealthChecks` may report `FAIL: Ceph's health status is not "HEALTH_OK"`. If Ceph health is `HEALTH_WARN`, this failure can be ignored.
 
@@ -45,14 +45,14 @@ The following procedures can be run from any master NCN.
    /opt/cray/tests/install/ncn/automated/ncn-healthcheck-master
    /opt/cray/tests/install/ncn/automated/ncn-healthcheck-worker
    /opt/cray/tests/install/ncn/automated/ncn-healthcheck-storage
-   /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks 
+   /opt/cray/tests/install/ncn/automated/ncn-kubernetes-checks
    ```
 
-   **`NOTE`**
+   **NOTE**
    The following errors can be ignored if `<NODE>` has been removed and it is one of the first three worker, master, or storage nodes:
    - `Server URL: http://<NODE> ... ERROR: Server endpoint could not be reached`.
 
-   **`NOTE`**
+   **NOTE**
    If workers have been removed and the worker count is currently at two, then failures for the following tests can be ignored:
    - `Kubernetes Postgres Clusters have the Correct Number of Pods 'Running'`
    - `Kubernetes Postgres Clusters Have Leaders`
@@ -61,7 +61,7 @@ The following procedures can be run from any master NCN.
 
    A re-check will be needed once workers are added and the count returns to three or above.
 
-   **`NOTE`**
+   **NOTE**
    If a storage node has been added, then `ncn-healthcheck-storage` failures for the following test may need to be remediated based on the test description information.
    After that is done, the `ncn-healthcheck-storage` tests should then be re-run to verify that all tests pass.
    - `Spire Health Check`

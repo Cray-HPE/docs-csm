@@ -1,10 +1,11 @@
 # VSX: ISL HA
 
-The intent here is to showcase an inter-switch-link (ISL) link failover scenario where one of the two links between spine switches goes down, but ISL is still connected with single link.
+This document showcases an inter-switch-link (ISL) link failover scenario where
+one of the two links between spine switches goes down, but ISL is still connected with single link.
 
 The following image is a visualization of disconnected ISL link:
 
-![](../../../../img/network/management_network/vsx_isl_ha.png)
+![Disconnected ISL link](../../../../img/network/management_network/vsx_isl_ha.png "Disconnected ISL link")
 
 The following things are expected to be seen in this scenario:
 

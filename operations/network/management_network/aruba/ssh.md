@@ -1,8 +1,12 @@
 # Secure Shell (SSH)
 
-SSH server enables an SSH client to make a secure and encrypted connection to a switch. Currently, switch supports SSH version 2.0 only. The user authentication mechanisms supported for SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server and sftp-client via the copy command are supported for managing the router.
+SSH server enables an SSH client to make a secure and encrypted connection to a switch.
+Switches support SSH version 2.0 only. The user authentication mechanisms supported for
+SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally
+stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server
+and `sftp-client` via the copy command are supported for managing the router.
 
-## Configuration Commands
+## Configuration commands
 
 Configure SSH authentication:
 
@@ -36,7 +40,7 @@ Show commands to validate functionality:
 show ssh server [vrf VRF|all-vrfs]
 ```
 
-## Example Output
+## Example output
 
 ```text
 show ssh server all-vrfs
@@ -58,11 +62,11 @@ MACs      :  umac-64-etm@openssh.com,umac-128-etm@openssh.com,
              hmac-sha2-256,hmac-sha2-512,hmac-sha1
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can create the user account
-2. Administrators can generate working SSH keys
-3. The output of the `show` commands is correct
-4. Administrators can successfully connect to the switch via an SSH client using SSH 2.0
+1. Administrators can generate working SSH keys
+1. The output of the `show` commands is correct
+1. Administrators can successfully connect to the switch via an SSH client using SSH 2.0
 
 [Back to Index](../README.md)

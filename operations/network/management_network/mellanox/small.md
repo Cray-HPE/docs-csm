@@ -1,4 +1,4 @@
-# Small
+# Small Network
 
 ![Small network](../img/small.png)
 

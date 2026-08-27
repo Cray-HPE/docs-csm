@@ -1,62 +1,67 @@
-# Multi-chassis interface
+# Multi-Chassis Interface
 
-Multi-Chassis Link Aggregation Group (MCLAG) is a link aggregation technique where two or more links across two switches are aggregated together to form a trunk.
+Multi-Chassis Link Aggregation Group (MCLAG) is a link aggregation technique where two or more links across
+two switches are aggregated together to form a trunk.
 
-Creating an MLAG interface:
+## Creating an MLAG interface
 
-Create an MLAG interface for the host. Run:
+(`switch (config)#`) Create an MLAG interface for the host. Run:
 
-```
-switch (config)# interface mlag-port-channel 1
-switch (config interface mlag-port-channel 1)#
+```console
+interface mlag-port-channel 1
 ```
 
 The MPO interfaces should be configured in the same sequence on both switches of MLAG cluster.
 
 Example:
 
-On Switch 1:
+On switch 1:
 
-```
+```console
 interface mlag-port-channel 1-10
 interface mlag-port-channel 30-40
 ```
 
-On Switch 2:
+On switch 2:
 
-```
+```console
 interface mlag-port-channel 1-10
 interface mlag-port-channel 30-40
 ```
 
-Bind an Ethernet port to the MLAG interface:
+(`switch (config interface ethernet 1/1)#`) Bind an Ethernet port to the MLAG interface:
 
-```
-switch (config interface ethernet 1/1)# mlag-channel-group 1 mode on
-```
-
-Create and enable the MLAG interface:
-
-```
-switch (config interface mlag-port-channel 1)# no shutdown
+```console
+mlag-channel-group 1 mode on
 ```
 
-Enabling MLAG:
+(`switch (config interface mlag-port-channel 1)#`) Create and enable the MLAG interface:
 
-Enable MLAG:
-
-```
-switch (config mlag)# no shutdown
+```console
+no shutdown
 ```
 
-When running MLAG as L2/L3 border point, MAGP VIP must be deployed as the default GW for MPOs.
+## Enabling MLAG
 
-Verifying MLAG Configuration
+(`switch (config mlag)#`) Enable MLAG:
 
-Examine MLAG configuration and status. Run show mlag on the switch:
-
+```console
+no shutdown
 ```
-Switch 1 [my-vip: master] (config)# show mlag
+
+When running MLAG as L2/L3 border point, MAGP VIP must be deployed as the default gateway for MPOs.
+
+## Verifying MLAG configuration
+
+(`switch (config)#`) Examine MLAG configuration and status. Run `show mlag` on the switch:
+
+```console
+show mlag
+```
+
+Example output:
+
+```text
 Admin status: Enabled
 Operational status: Up
 Reload-delay: 1 sec
@@ -86,11 +91,15 @@ F4:52:14:2D:9B:88  Up      <Switch 1>
 F4:52:14:2D:9B:08  Up       Switch 2
 ```
 
-Examine the MLAG summary table:
+(`switch (config)#`) Examine the MLAG summary table:
 
+```console
+show interfaces mlag-port-channel summary
 ```
-Switch 1 [my-vip: master] (config) # show interfaces mlag-port-channel summary
 
+Example output:
+
+```text
 MLAG Port-Channel Flags: D-Down, U-Up, P-Partial UP, S-suspended by MLAG
 
 Port Flags:
@@ -108,10 +117,15 @@ MLAG Port-Channel Summary:
   1 Mpo2(U)          Static   Eth1/2(P)                 Eth1/2(P)
 ```
 
-Examine the MLAG statistics. Run:
+(`switch (config)#`) Examine the MLAG statistics. Run:
 
+```console
+show mlag statistics
 ```
-Switch 1 [my-vip: master] (config)# show mlag statistics
+
+Example output:
+
+```text
 IPL 1
   Rx Heartbeat           : 516
   Tx Heartbeat           : 516
@@ -129,10 +143,15 @@ IPL 1
   TX LACP manager        : 0
 ```
 
-(Optional) In case MLAG-VIP was configured, its functionality can be examined using "show mlag-vip" command.
+(`switch (config)#`) (Optional) In case `MLAG-VIP` was configured, its functionality can be examined using `show mlag-vip` command.
 
+```console
+show mlag-vip
 ```
-Switch 1 [my-vip: master] (config)# show mlag-vip
+
+Example output if `MLAG-VIP` is configured (no output will appear if it is not configured):
+
+```text
 MLAG VIP
 ========
 MLAG group name: my-mlag-group
@@ -144,13 +163,12 @@ Hostname             VIP-State            IP Address
 Switch 1              master               10.234.23.1
 Switch 2              standby              10.234.23.2
 ```
-No output will appear, if MLAG-VIP is not configured.
 
-Expected Results
+## Expected results
 
-* Step 1: You can configure MCLAG
-* Step 2: You can create an MCLAG interface
-* Step 3: You can add ports to the MCLAG interface
-* Step 4: The output of the show commands is correct
+* Administrators can configure MCLAG
+* Administrators can create an MCLAG interface
+* Administrators can add ports to the MCLAG interface
+* The output of the show commands is correct
 
 [Back to Index](../README.md)

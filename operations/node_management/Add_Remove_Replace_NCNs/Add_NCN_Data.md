@@ -5,11 +5,11 @@
 * [Description](#description)
 * [Prerequisites](#prerequisites)
 * [Procedure](#procedure)
-  * [Collect information from the NCN](#collect-information-from-the-ncn)
-    * [Saving/reloading](#savingreloading)
-  * [Collect MAC addresses from the NCN](#collect-mac-addresses-from-the-ncn)
-    * [Swapping/moving an NCN](#swappingmoving-an-ncn)
-    * [Adding a new NCN](#adding-a-new-ncn)
+    * [Collect information from the NCN](#collect-information-from-the-ncn)
+        * [Saving/reloading](#savingreloading)
+    * [Collect MAC addresses from the NCN](#collect-mac-addresses-from-the-ncn)
+        * [Swapping/moving an NCN](#swappingmoving-an-ncn)
+        * [Adding a new NCN](#adding-a-new-ncn)
 * [Next step](#next-step)
 
 ## Description
@@ -19,15 +19,15 @@ Add NCN data to the System Layout Service (SLS), Boot Script Service (BSS), and 
 Scenarios where this procedure is applicable:
 
 * Adding a management NCN that has not previously been in the system:
-  * Add an additional NCN to an existing cabinet
-  * Add an NCN that is replacing another NCN of the same type and in the same slot
-  * Add a new NCN that replaces an NCN removed from the system in a different location
+    * Add an additional NCN to an existing cabinet
+    * Add an NCN that is replacing another NCN of the same type and in the same slot
+    * Add a new NCN that replaces an NCN removed from the system in a different location
 * Adding a management NCN that has been present in the system previously:
-  * Add an NCN that was previously removed from the system to move it to a new location
+    * Add an NCN that was previously removed from the system to move it to a new location
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../../configure_cray_cli.md).
+* The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray CLI](../../configure_cray_cli.md).
 * The latest CSM documentation is installed on the system. See [Check for latest documentation](../../../update_product_stream/README.md#check-for-latest-documentation).
 
 ## Procedure
@@ -222,7 +222,7 @@ Scenarios where this procedure is applicable:
     export NODE=${NODE}
     export MGMT_SWITCH_CONNECTOR=${MGMT_SWITCH_CONNECTOR}
     export XNAME=${XNAME}
-    EOF 
+    EOF
     ```
 
 1. (`ncn-mw#`) if resuming this procedure, reload the values.

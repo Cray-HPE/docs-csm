@@ -90,9 +90,9 @@ under the `spec.kubernetes.services.cray-sysmgmt-health.prometheus-snmp-exporter
 
 | Customization            | Default      | Description                                                                         |
 |--------------------------|--------------|-------------------------------------------------------------------------------------|
-| `serviceMonitor.enabled` | `true`       | Enables `serviceMonitor` for SNMP Exporter \(default chart value is `true`\)        |
-| `params.enabled`         | `true`       | Sets the SNMP Exporter `params` change to `true` \(default chart value is `false`\) |
-| `params.conf.module`     | `if_mib`     | SNMP Exporter to select which module \(default chart value is `if_mib`\)            |
+| `serviceMonitor.enabled` | `true`       | Enables `serviceMonitor` for SNMP Exporter (default chart value is `true`)          |
+| `params.enabled`         | `true`       | Sets the SNMP Exporter `params` change to `true` (default chart value is `false`)   |
+| `params.conf.module`     | `if_mib`     | SNMP Exporter to select which module (default chart value is `if_mib`)              |
 | `params.conf.target`     | `10.252.0.2` | Add list of switch targets to SNMP Exporter to monitor                              |
 
 For a complete set of available parameters, consult the `values.yaml` file for the `cray-sysmgmt-health` chart.

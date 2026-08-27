@@ -1,25 +1,27 @@
-# Physical interfaces
+# Physical Interfaces
 
 Interfaces in Mellanox are enabled by default.
 
-Relevant Configuration
+## Relevant configuration
 
-Enter interface context
+(`switch (config) #`) Enter interface context
 
+```console
+interface ethernet 1/1
 ```
-switch (config) # interface ethernet 1/1
-```
 
-Show Commands to Validate Functionality
+## Show commands to validate functionality
 
-```
+(`switch#`)
+
+```console
 show interfaces ethernet 1/1
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: You can enter the interface context for the port
-* Step 2: You can establish a link with a partner
-* Step 3: You can pass traffic as expected
+* Administrators can enter the interface context for the port
+* Administrators can establish a link with a partner
+* Administrators can pass traffic as expected
 
 [Back to Index](../README.md)

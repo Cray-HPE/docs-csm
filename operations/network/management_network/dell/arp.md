@@ -2,7 +2,7 @@
 
 ARP is commonly used for mapping IPv4 addresses to MAC addresses.
 
-## Configuration Commands
+## Configuration commands
 
 Configure static ARP on an interface:
 
@@ -16,9 +16,9 @@ Show commands to validate functionality:
 show ip arp
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators are able to ping the connected device
-2. Administrators can view the ARP entries
+1. Administrators can view the ARP entries
 
 [Back to Index](../README.md)

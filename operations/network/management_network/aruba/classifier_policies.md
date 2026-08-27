@@ -1,14 +1,17 @@
 # Classifier Policies
 
-Classifier policies allow a network administrator to define sets of rules based on network traffic addressing or other header content and use these rules to restrict or alter the
+Classifier policies allow a network administrator to define sets of rules based
+on network traffic addressing or other header content and use these rules to restrict or alter the
 passage of traffic through the switch.
 
 Choosing the rule criteria is called classification, and one such rule, or list, is called a policy.
 
-Classification is achieved by creating a traffic class. There are three types of classes – MAC, IPv4, and IPv6 – which are each focused on relevant frame/packet characteristics.
+Classification is achieved by creating a traffic class. There are three types of classes – MAC, IPv4,
+and IPv6 – which are each focused on relevant frame/packet characteristics.
 Classes can be configured to match or ignore almost any frame or packet header field.
 
-A policy contains one or more policy entries which are listed according to priority by sequence number. A single policy entry contains a class and corresponding policy action.
+A policy contains one or more policy entries which are listed according to priority by sequence number.
+A single policy entry contains a class and corresponding policy action.
 Policy action is taken on traffic matched by its corresponding class.
 
 ## Configuration commands
@@ -39,23 +42,23 @@ Policy action is taken on traffic matched by its corresponding class.
 
 * Apply a policy
 
-  * (`switch(config-if)#`)
+    * (`switch(config-if)#`)
 
-    ```console
-    apply policy NAME [in|routed-in]
-    ```
+        ```console
+        apply policy NAME [in|routed-in]
+        ```
 
-  * (`switch(config-vlan)#`)
+    * (`switch(config-vlan)#`)
 
-    ```console
-    apply policy NAME [in|routed-in]
-    ```
+        ```console
+        apply policy NAME [in|routed-in]
+        ```
 
-  * (`switch(config-tunnel)#`)
+    * (`switch(config-tunnel)#`)
 
-    ```console
-    apply policy NAME [in|routed-in]
-    ```
+        ```console
+        apply policy NAME [in|routed-in]
+        ```
 
 * (`switch#`) Show commands to validate functionality
 
