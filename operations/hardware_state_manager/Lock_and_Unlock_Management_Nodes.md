@@ -142,7 +142,7 @@ Failure = 0
 ComponentIDs = [ "x3000c0s6b0n0", "x3000c0s6b0",]
 ```
 
-## How To Check For Locked Management Nodes
+## How to check for locked management nodes
 
 > **NOTE** The BMC of `ncn-m001` typically does not exist in HSM under HSM State Components, and therefore would not show up in the following command output.
 
