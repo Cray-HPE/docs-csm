@@ -24,7 +24,7 @@ For a full list of CSM 1.7.1 patch releases, see
 
 ### Configuration Framework Service (CFS)
 
-This patch includes many fixes and improvements for CFS.
+This patch includes many fixes and improvements for [CFS](glossary.md#configuration-framework-service-cfs).
 
 * Improvements
     * Improved Kafka reliability in the CFS
