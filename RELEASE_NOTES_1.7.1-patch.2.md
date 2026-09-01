@@ -41,7 +41,8 @@ This patch includes many fixes and improvements for [CFS](glossary.md#configurat
     * [CFS Operator Creating Multiple Jobs For Same Session](troubleshooting/known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
     * [CFS Component State Updates Allow Invalid Values](troubleshooting/known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
     * [CFS Component State Update Does Not Preserve Layer Timestamps](troubleshooting/known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
-* Several CVEs patched in CFS Batcher and CFS Operator.
+* Several CVEs patched in CFS Batcher, CFS Operator, and the
+  [Ansible execution environment](operations/configuration_management/Ansible_Execution_Environments.md).
 
 ## Upgrade steps
 
