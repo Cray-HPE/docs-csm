@@ -1345,7 +1345,6 @@ Create a new configuration session. A configuration session stages Ansible inven
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V2Session](#schemav2session)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A session with the same name already exists.|[ProblemDetails](#schemaproblemdetails)|
-|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The request could not be completed because of a Kafka-related timeout.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2211,7 +2210,6 @@ Create a new configuration session. A configuration session stages Ansible inven
 |201|[Created](https://tools.ietf.org/html/rfc7231#section-6.3.2)|A single configuration session|[V3SessionData](#schemav3sessiondata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|A session with the same name already exists.|[ProblemDetails](#schemaproblemdetails)|
-|503|[Service Unavailable](https://tools.ietf.org/html/rfc7231#section-6.6.4)|The request could not be completed because of a Kafka-related timeout.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -2620,7 +2618,6 @@ Update the status of an existing configuration framework session
 |200|[OK](https://tools.ietf.org/html/rfc7231#section-6.3.1)|A single configuration session|[V3SessionData](#schemav3sessiondata)|
 |400|[Bad Request](https://tools.ietf.org/html/rfc7231#section-6.5.1)|Bad Request|[ProblemDetails](#schemaproblemdetails)|
 |404|[Not Found](https://tools.ietf.org/html/rfc7231#section-6.5.4)|The resource was not found.|[ProblemDetails](#schemaproblemdetails)|
-|409|[Conflict](https://tools.ietf.org/html/rfc7231#section-6.5.8)|The patch cannot be applied because the job field cannot be updated after it is set.|[ProblemDetails](#schemaproblemdetails)|
 
 <aside class="warning">
 To perform this operation, you must be authenticated by means of one of the following methods:
@@ -7661,7 +7658,6 @@ A collection of session data.
 ```
 
 An inventory reference to include in a set of configurations.
-commit and branch are mutually exclusive.
 
 ### Properties
 
@@ -7669,8 +7665,8 @@ commit and branch are mutually exclusive.
 |---|---|---|---|---|
 |name|string|false|none|The name of the inventory layer.|
 |cloneUrl|string|true|none|The clone URL of the configuration content repository.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.<br>Mutually exclusive with branch field.|
-|branch|string|false|none|The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added.<br>Mutually exclusive with commit field.|
+|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
+|branch|string|false|none|The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added.|
 
 <h2 id="tocS_V3AdditionalInventoryLayer">V3AdditionalInventoryLayer</h2>
 <!-- backwards compatibility -->
@@ -7691,7 +7687,6 @@ commit and branch are mutually exclusive.
 ```
 
 An inventory reference to include in a set of configurations.
-commit and branch are mutually exclusive.
 Either clone_url or source must be specified -- it is required to specify one,
 but they are mutually exclusive.
 
@@ -7700,10 +7695,10 @@ but they are mutually exclusive.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|false|none|The name of the inventory layer.|
-|clone_url|string|false|none|The clone URL of the configuration content repository.<br>Mutually exclusive with source field.|
-|source|string|false|none|A CFS source with directions to the configuration content repository.<br>Mutually exclusive with clone_url field.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.<br>Mutually exclusive with branch field.|
-|branch|string|false|none|The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added.<br>Mutually exclusive with commit field.|
+|clone_url|string|false|none|The clone URL of the configuration content repository.|
+|source|string|false|none|A CFS source with directions to the configuration content repository|
+|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
+|branch|string|false|none|The repository branch to use. This will automatically set `commit` to master on the branch<br>when the configuration is added.|
 
 <h2 id="tocS_V2ConfigurationLayer">V2ConfigurationLayer</h2>
 <!-- backwards compatibility -->
@@ -7727,7 +7722,6 @@ but they are mutually exclusive.
 ```
 
 A single desired configuration state for a component.
-commit and branch are mutually exclusive.
 
 ### Properties
 
@@ -7736,8 +7730,8 @@ commit and branch are mutually exclusive.
 |name|string|false|none|The name of the configuration layer.|
 |cloneUrl|string|true|none|The clone URL of the configuration content repository.|
 |playbook|string|false|none|The Ansible playbook to run.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.<br>Mutually exclusive with branch field.|
-|branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.<br>Mutually exclusive with commit field.|
+|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
+|branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.|
 |specialParameters|object|false|none|Optional parameters that do not affect the configuration content or are only used in<br>special circumstances.|
 |» imsRequireDkms|boolean|false|none|If true, any image customization sessions that use this configuration will enable DKMS in IMS.|
 
@@ -7764,7 +7758,6 @@ commit and branch are mutually exclusive.
 ```
 
 A single desired configuration state for a component.
-commit and branch are mutually exclusive.
 Either clone_url or source must be specified -- it is required to specify one,
 but they are mutually exclusive.
 
@@ -7773,11 +7766,11 @@ but they are mutually exclusive.
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
 |name|string|false|none|The name of the configuration layer.|
-|clone_url|string|false|none|The clone URL of the configuration content repository.<br>Mutually exclusive with source field.|
-|source|string|false|none|A CFS source with directions to the configuration content repository.<br>Mutually exclusive with clone_url field.|
+|clone_url|string|false|none|The clone URL of the configuration content repository.|
+|source|string|false|none|A CFS source with directions to the configuration content repository|
 |playbook|string|true|none|The Ansible playbook to run.|
-|commit|string|false|none|The commit hash of the configuration repository when the state is set.<br>Mutually exclusive with branch field.|
-|branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.<br>Mutually exclusive with commit field.|
+|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
+|branch|string|false|none|The configuration branch to use.  This will automatically set commit to master on the branch<br>when the configuration is added.|
 |special_parameters|object|false|none|Optional parameters that do not affect the configuration content or are only used in<br>special circumstances.|
 |» ims_require_dkms|boolean|false|none|If true, any image customization sessions that use this configuration will enable DKMS in IMS.|
 
@@ -7825,7 +7818,7 @@ A collection of ConfigurationLayers.
 |description|string|false|none|A user-defined description. This field is not used by CFS.|
 |lastUpdated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
 |layers|[[V2ConfigurationLayer](#schemav2configurationlayer)]|false|none|A list of ConfigurationLayer(s).|
-|additional_inventory|[V2AdditionalInventoryLayer](#schemav2additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.<br>commit and branch are mutually exclusive.|
+|additional_inventory|[V2AdditionalInventoryLayer](#schemav2additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.|
 
 <h2 id="tocS_V3ConfigurationData">V3ConfigurationData</h2>
 <!-- backwards compatibility -->
@@ -7875,7 +7868,7 @@ A collection of ConfigurationLayers.
 |tenant_name|string|false|none|The name of a tenant that owns this set of configuration.|
 |last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
 |layers|[[V3ConfigurationLayer](#schemav3configurationlayer)]|false|none|A list of ConfigurationLayer(s).|
-|additional_inventory|[V3AdditionalInventoryLayer](#schemav3additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.<br>commit and branch are mutually exclusive.<br>Either clone_url or source must be specified -- it is required to specify one,<br>but they are mutually exclusive.|
+|additional_inventory|[V3AdditionalInventoryLayer](#schemav3additionalinventorylayer)|false|none|An inventory reference to include in a set of configurations.<br>Either clone_url or source must be specified -- it is required to specify one,<br>but they are mutually exclusive.|
 
 <h2 id="tocS_V2ConfigurationArray">V2ConfigurationArray</h2>
 <!-- backwards compatibility -->
@@ -8098,11 +8091,11 @@ The current configuration state for a component.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|cloneUrl|string|true|none|The clone URL of the configuration content repository.|
-|playbook|string|true|none|The Ansible playbook to run.|
-|commit|string|true|none|The commit hash of the configuration repository when the state is set,<br>possibly with one of the following suffixes: _failed, _skipped, _applied.<br>The suffix indicates the status of this layer. The absence of a suffix is<br>interpreted by CFS the same way as the _applied suffix.|
-|lastUpdated|string(date-time)|true|read-only|The date/time when the state was last updated in RFC 3339 format.|
-|sessionName|string|true|none|The name of the CFS session that last configured the component.|
+|cloneUrl|string|false|none|The clone URL of the configuration content repository.|
+|playbook|string|false|none|The Ansible playbook to run.|
+|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
+|lastUpdated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
+|sessionName|string|false|none|The name of the CFS session that last configured the component.|
 
 <h2 id="tocS_V3ConfigurationStateLayer">V3ConfigurationStateLayer</h2>
 <!-- backwards compatibility -->
@@ -8129,12 +8122,12 @@ The current configuration state for a component.
 
 |Name|Type|Required|Restrictions|Description|
 |---|---|---|---|---|
-|clone_url|string|true|none|The clone URL of the configuration content repository.|
-|playbook|string|true|none|The Ansible playbook to run.|
-|commit|string|true|none|The commit hash of the configuration repository when the state is set.|
-|status|string|true|none|The status of the configuration layer.|
-|last_updated|string(date-time)|true|read-only|The date/time when the state was last updated in RFC 3339 format.|
-|session_name|string|true|none|The name of the CFS session that last configured the component.|
+|clone_url|string|false|none|The clone URL of the configuration content repository.|
+|playbook|string|false|none|The Ansible playbook to run.|
+|commit|string|false|none|The commit hash of the configuration repository when the state is set.|
+|status|string|false|none|The status of the configuration layer.|
+|last_updated|string(date-time)|false|read-only|The date/time when the state was last updated in RFC 3339 format.|
+|session_name|string|false|none|The name of the CFS session that last configured the component.|
 
 #### Enumerated Values
 
