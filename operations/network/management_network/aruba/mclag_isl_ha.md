@@ -5,7 +5,7 @@ one of the two links between spine switches goes down, but ISL is still connecte
 
 The following image is a visualization of disconnected ISL link:
 
-![Disconnected ISL link](../../../../img/network/management_network/vsx_isl_ha.png "Disconnected ISL link")
+![Disconnected ISL link](../img/vsx_isl_ha.png "Disconnected ISL link")
 
 The following things are expected to be seen in this scenario:
 

@@ -17,6 +17,6 @@ This example covers outside connections achieved via high-speed network.
 
 The following is an example topology:
 
-![Scenario B topology](../../../../img/network/management_network/scenario-b-topology.png "Scenario B topology")
+![Scenario B topology](../img/scenario-b-topology.png "Scenario B topology")
 
 [Back to Index](../README.md)

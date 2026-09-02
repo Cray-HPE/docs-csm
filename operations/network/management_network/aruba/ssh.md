@@ -4,46 +4,53 @@ SSH server enables an SSH client to make a secure and encrypted connection to a 
 Switches support SSH version 2.0 only. The user authentication mechanisms supported for
 SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally
 stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server
-and `sftp-client` via the copy command are supported for managing the router.
+and `sftp-client` via the `copy` command are supported for managing the router.
 
 ## Configuration commands
 
-Configure SSH authentication:
+(`switch(config)#`) Configure SSH authentication:
 
 ```text
-switch(config)# ssh password-authentication
+ssh password-authentication
 ```
 
-Generate SSH server key:
+(`switch(config)#`) Generate SSH server key:
 
 ```text
-switch(config)# ssh host-key <rsa [bits 2048]|ecdsa CURVE|ed25519>
+ssh host-key <rsa [bits 2048]|ecdsa CURVE|ed25519>
 ```
 
-Enable SSH on the VRF:
+(`switch(config)#`) Enable SSH on the VRF:
 
 ```text
-switch(config)# ssh server vrf <default|mgmt|VRF>
+ssh server vrf <default|mgmt|VRF>
 ```
 
-Configure SSH options:
+(`switch(config)#`) Configure SSH options:
 
 ```text
-switch(config)# ssh certified-algorithms-only
-switch(config)# ssh maximum-auth-attempts VALUE
-switch(config)# ssh known-host remove <all|IP-ADDR>
+ssh certified-algorithms-only
+ssh maximum-auth-attempts VALUE
+ssh known-host remove <all|IP-ADDR>
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```text
 show ssh server [vrf VRF|all-vrfs]
 ```
 
-## Example output
+(`switch(config)#`)
 
 ```text
 show ssh server all-vrfs
+```
+
+Example output:
+
+```text
 SSH server configuration on VRF vrf_default :
 IP Version
 TCP Port
@@ -64,9 +71,9 @@ MACs      :  umac-64-etm@openssh.com,umac-128-etm@openssh.com,
 
 ## Expected results
 
-1. Administrators can create the user account
-1. Administrators can generate working SSH keys
-1. The output of the `show` commands is correct
-1. Administrators can successfully connect to the switch via an SSH client using SSH 2.0
+* Administrators can create the user account.
+* Administrators can generate working SSH keys.
+* The output of the `show` commands is correct.
+* Administrators can successfully connect to the switch via an SSH client using SSH 2.0.
 
 [Back to Index](../README.md)

@@ -1,9 +1,11 @@
-# Multi-Chassis Interface
+# Multi-Chassis Link Aggregation Group (MCLAG)
 
 Multi-Chassis Link Aggregation Group (MCLAG) is a link aggregation technique where two or more links across
 two switches are aggregated together to form a trunk.
 
-## Creating an MLAG interface
+## Configuration commands
+
+### Creating an MLAG interface
 
 (`switch (config)#`) Create an MLAG interface for the host. Run:
 
@@ -41,7 +43,7 @@ mlag-channel-group 1 mode on
 no shutdown
 ```
 
-## Enabling MLAG
+### Enabling MLAG
 
 (`switch (config mlag)#`) Enable MLAG:
 
@@ -51,7 +53,7 @@ no shutdown
 
 When running MLAG as L2/L3 border point, MAGP VIP must be deployed as the default gateway for MPOs.
 
-## Verifying MLAG configuration
+## Show commands to validate functionality
 
 (`switch (config)#`) Examine MLAG configuration and status. Run `show mlag` on the switch:
 
@@ -166,9 +168,9 @@ Switch 2              standby              10.234.23.2
 
 ## Expected results
 
-* Administrators can configure MCLAG
-* Administrators can create an MCLAG interface
-* Administrators can add ports to the MCLAG interface
-* The output of the show commands is correct
+* Administrators can configure MCLAG.
+* Administrators can create an MCLAG interface.
+* Administrators can add ports to the MCLAG interface.
+* The output of the `show` commands is correct.
 
 [Back to Index](../README.md)

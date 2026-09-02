@@ -4,14 +4,16 @@ Configure the physical interfaces for a switch.
 
 ## Configuration commands
 
-Enable the interface:
+(`switch(config)#`) Enable the interface:
 
 ```text
-switch(config)# interface IFACE
-switch(config-if)# no shutdown
+interface IFACE
+no shutdown
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```text
 show interface IFACE [transceiver|brief|dom|extended]
@@ -19,9 +21,9 @@ show interface IFACE [transceiver|brief|dom|extended]
 
 ## Expected results
 
-1. The switch recognizes the transceiver without errors
-1. Administrators can enter the interface context for the port and enable it
-1. Administrators can establish a link with a partner
-1. Administrators can pass traffic as expected
+* The switch recognizes the transceiver without errors.
+* Administrators can enter the interface context for the port and enable it.
+* Administrators can establish a link with a partner.
+* Administrators can pass traffic as expected.
 
 [Back to Index](../README.md)

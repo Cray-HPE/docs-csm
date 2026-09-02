@@ -3,7 +3,7 @@
 Link Aggregation allows administrators to assign multiple physical links to one logical link.
 This logical link functions as a single, higher-speed link, providing dramatically increased bandwidth.
 
-## Relevant configuration
+## Configuration commands
 
 (`switch (config) #`) Create and configure the LAG interface:
 
@@ -32,14 +32,16 @@ lacp rate fast
 
 ## Show commands to validate functionality
 
+(`switch#`)
+
 ```console
 show interface port-channel
 ```
 
 ## Expected results
 
-* Administrators can create and configure a LAG
-* Administrators can add ports to a LAG
-* Administrators can configure a LAG interface
+* Administrators can create and configure a LAG.
+* Administrators can add ports to a LAG.
+* Administrators can configure a LAG interface.
 
 [Back to Index](../README.md)

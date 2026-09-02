@@ -38,13 +38,13 @@ Synchronize VLAN memberships and ACLs on physical or LAG interfaces:
 switch(config-if)# vsx-sync access-lists vlans
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show run vsx-sync
 ```
 
-## Example output
+Example output:
 
 On the first switch:
 

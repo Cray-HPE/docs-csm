@@ -10,15 +10,17 @@ to all the PIM routers in a domain." – RFC 5059
 
 ## Configuration commands
 
-Configure the BSR and RP
+(`switch(config)#`) Configure the BSR and RP.
 
 ```console
-switch(config)# router pim
-switch(config-pim)# bsr-candidate source-ip-interface IFACE
-switch(config-pim)# rp-candidate source-ip-interface IFACE
+router pim
+bsr-candidate source-ip-interface IFACE
+rp-candidate source-ip-interface IFACE
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```console
 show ip pim bsr
@@ -38,11 +40,11 @@ show ip pim rp-set
 
 ## Expected results
 
-* Administrators can configure `loopback1` on both `8325s` using the same IP address
-* Administrators can configure OSPF routing for `loopback1`
-* Administrators successfully enabled `PIM-SM` on `loopback1`
-* Administrators configured `loopback1` to act as a `PIM-SM` RP
-* Administrators configured the specific `group-prefix` that will be used in the next test
-* Administrators successfully enabled the BSR on both `8325s` using `loopback0` as the BSR source IP address
+* Administrators can configure `loopback1` on both `8325s` using the same IP address.
+* Administrators can configure OSPF routing for `loopback1`.
+* Administrators successfully enabled `PIM-SM` on `loopback1`.
+* Administrators configured `loopback1` to act as a `PIM-SM` RP.
+* Administrators configured the specific `group-prefix` that will be used in the next test.
+* Administrators successfully enabled the BSR on both `8325s` using `loopback0` as the BSR source IP address.
 
 [Back to Index](../README.md)

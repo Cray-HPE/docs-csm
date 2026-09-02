@@ -1,6 +1,6 @@
 # Network Time Protocol (NTP) Client
 
-Summary of NTP from [RFC 1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
+Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.ietf.org/html/rfc1305):
 
 > NTP is used to synchronize timekeeping among a set of distributed time servers and clients
 > ...
@@ -10,15 +10,15 @@ Summary of NTP from [RFC 1305 Network Time Protocol (Version 3)](https://tools.i
 The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system.
 This document shows how to view NTP status and configure NTP on an Aruba switch.
 
-- [Specify a remote NTP server](#specify-a-remote-ntp-server)
-- [Force NTP to use a specific VRF for requests](#force-ntp-to-use-a-specific-vrf-for-requests)
-- [Configure the system timezone](#configure-the-system-timezone)
-- [Validate functionality](#validate-functionality)
-- [Expected results](#expected-results)
+* [Specify a remote NTP server](#specify-a-remote-ntp-server)
+* [Force NTP to use a specific VRF for requests](#force-ntp-to-use-a-specific-vrf-for-requests)
+* [Configure the system timezone](#configure-the-system-timezone)
+* [Validate functionality](#validate-functionality)
+* [Expected results](#expected-results)
 
 ## Specify a remote NTP server
 
-Specify a remote NTP server to use for time synchronization:
+(`switch#`) Specify a remote NTP server to use for time synchronization:
 
 ```console
 ntp server <FQDN|IP-ADDR>
@@ -26,17 +26,23 @@ ntp server <FQDN|IP-ADDR>
 
 ## Force NTP to use a specific VRF for requests
 
+(`switch#`)
+
 ```console
 ntp vrf VRF
 ```
 
 ## Configure the system timezone
 
+(`switch#`)
+
 ```console
 clock timezone TIMEZONE
 ```
 
 ## Validate functionality
+
+(`switch#`)
 
 ```console
 show ntp status
@@ -58,8 +64,8 @@ Reference time: Thu Jan 28 2016 0:57:06.647 (UTC)
 
 ## Expected results
 
-1. The NTP client can be configured.
-1. The functionality can be validated using the `show` command.
-1. The system time of the switch matches that of the NTP server.
+* The NTP client can be configured.
+* The functionality can be validated using the `show` command.
+* The system time of the switch matches that of the NTP server.
 
 [Back to Index](../README.md)
