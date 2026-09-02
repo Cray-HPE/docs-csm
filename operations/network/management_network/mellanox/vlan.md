@@ -2,7 +2,7 @@
 
 VLANs allow for the logical grouping of switch interfaces, enabling communication as if all connected devices were on the same isolated network.
 
-## Relevant configuration
+## Configuration commands
 
 (`switch(config)#`) Create VLAN:
 
@@ -50,7 +50,7 @@ show vlan [VLAN]
 
 ## Expected results
 
-* Administrators can create a VLAN
-* Administrators can assign a VLAN to the physical interface
+* Administrators can create a VLAN.
+* Administrators can assign a VLAN to the physical interface.
 
 [Back to Index](../README.md)

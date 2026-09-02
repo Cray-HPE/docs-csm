@@ -34,13 +34,13 @@ switch(config)# vsf member <ID>
 switch(vsf-member)# link <ID> <IFACE-RANGE>
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show vsf <brief|configuration|status>
 ```
 
-## Example output
+Example output:
 
 ```text
 show vsf topology

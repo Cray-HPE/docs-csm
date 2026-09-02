@@ -13,13 +13,13 @@ Create a banner:
 switch(config)# banner <motd|exec> DELIM
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show banner <motd|exec>
 ```
 
-## Example output
+Example output:
 
 ```text
 switch(config)# banner motd $

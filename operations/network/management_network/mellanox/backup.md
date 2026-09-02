@@ -1,18 +1,14 @@
-# Backing up switch configuration
+# Backing Up A Switch Configuration
 
-Backing up current configuration of the switch in text format.
+This document describes how to back up the current configuration of the switch in text format.
 
 ## Back up configuration
 
-To create a new text-based configuration file, complete the following steps:
+(`switch (config) #`) Save the configuration to a text file.
 
-1. Log in to the switch as `Admin`.
-
-1. (`switch (config) #`) Save the configuration to a text file.
-
-    ```console
-    configuration text generate active running save my-filename
-    ```
+```console
+configuration text generate active running save my-filename
+```
 
 ## Copy configuration to external location
 

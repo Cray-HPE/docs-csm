@@ -1,16 +1,16 @@
 # Native VLAN
 
-Untagged ingress packets are destined to the native VLAN. An interface can be configured in one of 2 native modes - native untagged or native tagged.
+Untagged ingress packets are destined to the native VLAN. An interface can be configured
+in one of two native modes - native untagged or native tagged.
 
 A native untagged port accepts any untagged or tagged (with native VLAN ID) traffic on ingress.
-
 Packets that egress on a native untagged port in the native VLAN will not have an `802.1Q` header.
-A native tagged port accepts only tagged traffic (with native VLAN ID) on ingress.
 
+A native tagged port accepts only tagged traffic (with native VLAN ID) on ingress.
 Any untagged packet ingress on a native tagged port is always dropped.
 Packets that egress on a native tagged port in the native VLAN will always have an `802.1Q` header.
 
-## Relevant configuration
+## Configuration commands
 
 (`switch#`) Configure a VLAN as native.
 

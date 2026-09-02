@@ -21,13 +21,13 @@ Enable UDLD:
 switch(config-if)# udld
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show udld [interface IFACE]
 ```
 
-## Example output
+Example output:
 
 ```text
 switch(config)# interface 1/1/1

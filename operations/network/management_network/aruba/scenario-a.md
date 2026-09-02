@@ -1,6 +1,6 @@
 # Scenario A: Network Connection via Management Network
 
-The example here covers outside connections achieved with the management network.
+This example covers outside connections achieved using the management network.
 
 ## Summary
 
@@ -17,6 +17,6 @@ The example here covers outside connections achieved with the management network
 
 The following is an example topology:
 
-![Scenario A topology](../../../../img/network/management_network/scenario-a-topology.png "Scenario A topology")
+![Scenario A topology](../img/scenario-a-topology.png "Scenario A topology")
 
 [Back to Index](../README.md)

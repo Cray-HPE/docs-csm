@@ -19,7 +19,7 @@ switch(config)# aaa authentication login default group radius local
 switch(config)# aaa accounting all default start-stop group radius
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show radius-server [detail]

@@ -4,7 +4,7 @@ Banners are custom messages displayed to users attempting to connect to the mana
 MOTD banners are displayed pre-login while `exec` banners are displayed post-login.
 Multiple lines of text can be stored using a custom delimiter to mark the end of message.
 
-## Relevant configuration
+## Configuration commands
 
 (`switch(config)#`) Create a banner.
 
@@ -21,7 +21,6 @@ show banner
 Example output
 
 ```text
-ufmapl [ mgmt-sa ] (config) # show banner
 Banners:
     MOTD:
 Mellanox UFM Appliance

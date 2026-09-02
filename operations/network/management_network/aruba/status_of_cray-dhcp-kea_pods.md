@@ -23,11 +23,13 @@ The commands in this procedure must be run on `ncn-w001` or a worker/manager NCN
 
 1. (`ncn-mw#`) View the Kea pods.
 
+    > This also shows which worker node the `kea-dhcp pod` is currently on.
+
     ```bash
     kubectl get pods -n services -o wide | grep kea
     ```
 
-    A list of the following pods will be returned as output:
+    Expected output resembles the following:
 
     ```text
     cray-dhcp-kea-788b4c899b-x6ltd 3/3 Running 0 36h 10.40.3.183 ncn-w002 <none> <none>
@@ -35,7 +37,5 @@ The commands in this procedure must be run on `ncn-w001` or a worker/manager NCN
     cray-dhcp-kea-postgres-1 2/2 Running 0 5d23h 10.42.2.181 ncn-w003 <none> <none>
     cray-dhcp-kea-postgres-2 2/2 Running 0 5d23h 10.39.0.208 ncn-w001 <none> <none>
     ```
-
-    This output will also show which worker node the `kea-dhcp pod` is currently on.
 
 [Back to Index](../README.md)

@@ -43,7 +43,7 @@ diag utilities tshark [file]
 copy tshark-pcap REMOTE-URL vrf VRF
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show mirror <1-4>

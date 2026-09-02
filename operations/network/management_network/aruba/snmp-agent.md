@@ -32,13 +32,13 @@ Configure a SNMPv2c trap receiver host:
 switch(config)# snmp-server host IP-ADDR <trap|inform> version v2c [community NAME]
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show snmp [agent-port|community|trap|vrf] [vsx-peer]
 ```
 
-## Example output
+Example output:
 
 ```text
 switch(config)# snmp-server vrf default

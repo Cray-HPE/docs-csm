@@ -27,7 +27,7 @@ switch(config)# aaa authorization commands default group tacacs
 switch(config)# aaa accounting all default start-stop group tacacs
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show tacacs-server [detail]

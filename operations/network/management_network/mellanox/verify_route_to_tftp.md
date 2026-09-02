@@ -19,7 +19,8 @@ Displaying ipv4 routes selected for forwarding
     via  10.252.1.9,  [70/0],  bgp
 ```
 
-* This route can be a static route or a BGP route that is pinned to a single worker. (1.4.2 patch introduces the BGP pinned route)
+* This route can be a static route or a BGP route that is pinned to a single worker.
+    * CSM 1.4.2 introduced the BGP pinned route.
 * Verify that the next hop of this route is pingable.
     * For the example above, verify that `10.252.1.9` is pingable.
     * If this is not reachable, then this is a problem that must be resolved.

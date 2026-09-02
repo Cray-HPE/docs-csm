@@ -3,7 +3,7 @@
 By default Mellanox interfaces are set as `switchports`, which is to allow L2 communication.
 To change to routed only port, L2 functionality must be disabled.
 
-## Relevant configuration
+## Configuration commands
 
 (`switch (config) #`) Disable L2 functionality:
 
@@ -29,9 +29,9 @@ show ethernet interface IFACE
 
 ## Expected results
 
-* Administrators are able to configure an IP address on the interface
-* Administrators can configure an IP address on the connected network client
-* The interface is up, and administrators can validate that the IP address and subnet are correct
-* Administrators can ping from the switch to the client and from the client to the switch
+* Administrators are able to configure an IP address on the interface.
+* Administrators can configure an IP address on the connected network client.
+* The interface is up, and administrators can validate that the IP address and subnet are correct.
+* Administrators can ping from the switch to the client and from the client to the switch.
 
 [Back to Index](../README.md)

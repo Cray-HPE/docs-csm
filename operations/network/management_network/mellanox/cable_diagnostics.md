@@ -53,7 +53,7 @@ TX4 Power: 0.000 mW, -999.999 dBm
 
 ## Expected results
 
-* Administrators can enter diagnostics mode successfully
-* Administrators can test the cable and see the results in the CLI output
+* Administrators can enter diagnostics mode successfully.
+* Administrators can test the cable and see the results in the CLI output.
 
 [Back to Index](../README.md)
