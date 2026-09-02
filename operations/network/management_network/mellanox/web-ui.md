@@ -3,7 +3,7 @@
 A web-based management user interface provides a visual representation of a subset of the current switch configuration and states.
 The Web UI allows for easy access from modern browsers to modify some aspects of the configuration.
 
-## Relevant configuration
+## Configuration commands
 
 (`switch(config)#`) Enable the web UI:
 

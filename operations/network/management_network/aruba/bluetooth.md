@@ -20,13 +20,13 @@ Enable Bluetooth:
 bluetooth enable
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```console
 show bluetooth
 ```
 
-## Example output
+Example output:
 
 (`Switch(config)#`) Bluetooth enabled:
 
@@ -75,9 +75,9 @@ Enabled             : No
 
 ## Expected results
 
-- The USB mounts properly
-- Administrators can see and connect to the Bluetooth PAN
-- Administrators can edit the configuration via the Bluetooth connection
-- The output of the show commands looks correct
+* The USB mounts properly
+* Administrators can see and connect to the Bluetooth PAN
+* Administrators can edit the configuration via the Bluetooth connection
+* The output of the show commands looks correct
 
 [Back to Index](../README.md)

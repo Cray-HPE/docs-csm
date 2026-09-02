@@ -3,9 +3,9 @@
 "In its most simplistic terms, the `syslog` protocol provides a transport to allow a machine to send event notification
 messages across IP networks to event message collectors - also known as `syslog` servers." – RFC 3164
 
-Note: the default facility is `3(DAEMON)`
+> **NOTE** The default facility is `3(DAEMON)`.
 
-## Relevant configuration
+## Configuration commands
 
 (`switch(config)#`) Configure logging:
 

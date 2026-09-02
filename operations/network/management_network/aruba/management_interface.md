@@ -1,8 +1,8 @@
 # Management Interface
 
 The management interface can be used to gain remote management access to the switch.
-The management interface is accessible using the "mgmt" VRF and is separate from the
-data plane interfaces, which are in the "default" VRF.
+The management interface is accessible using the `mgmt` VRF and is separate from the
+data plane interfaces, which are in the `default` VRF.
 
 Alternatively, a loopback interface can be configured to be used as management interface.
 
@@ -29,39 +29,46 @@ Secondary Nameserver
 
 ## Configuration commands
 
-Enable/disable the management interface:
+(`switch(config)#`) Enable the management interface:
 
 ```text
-switch(config)# interface mgmt
-switch(config-if-mgmt)# no shutdown
-switch(config)# interface mgmt
-switch(config-if-mgmt)# shutdown
+interface mgmt
+no shutdown
 ```
 
-Assign an IP address to the interface:
+(`switch(config)#`) Disable the management interface:
 
 ```text
-switch(config-if-mgmt)# ip <dhcp|static IP-ADDR>
+interface mgmt
+shutdown
 ```
 
-Show commands to validate functionality:
+(`switch(config-if-mgmt)#`) Assign an IP address to the interface:
+
+```text
+ip <dhcp|static IP-ADDR>
+```
+
+(`switch(config)#`) Create and configure loopback interface:
+
+```text
+interface loopback 0
+ip address <IP-ADDR>
+```
+
+## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```text
 show interface mgmt
 show interface loopback 0
 ```
 
-Create and configure loopback interface:
-
-```text
-switch(config)# interface loopback 0
-8325-Core1(config-loopback-if)# ip address <IP-ADDR>
-```
-
 ## Expected results
 
-- Administrators can enable/disable the management interface.
-- Administrators can assign an IP address to the management interface
-- Administrators can configure a loopback interface to be use for switch management.
+* Administrators can enable/disable the management interface.
+* Administrators can assign an IP address to the management interface
+* Administrators can configure a loopback interface to be use for switch management.
 
 [Back to Index](../README.md)

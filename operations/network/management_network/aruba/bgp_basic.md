@@ -55,10 +55,10 @@ show bgp all [summary|neighbors]
 
 ## Expected results
 
-- Administrators can configure BGP on the switch
-- Administrators can create the network statements and the routes are in the routing table
-- Administrators can configure a BGP neighbor that uses an MD5 encrypted password
-- Administrators can validate the BGP relationship is established and that the network statement is advertised to the peer
-- Soft reconfiguration is enabled
+* Administrators can configure BGP on the switch.
+* Administrators can create the network statements and the routes are in the routing table.
+* Administrators can configure a BGP neighbor that uses an MD5 encrypted password.
+* Administrators can validate the BGP relationship is established and that the network statement is advertised to the peer.
+* Soft reconfiguration is enabled.
 
 [Back to Index](README.md)

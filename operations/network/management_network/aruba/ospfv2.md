@@ -10,59 +10,61 @@ additional level of routing protection and a reduction in routing protocol traff
 
 ## Configuration commands
 
-Enable an OSPF instance:
+(`switch(config)#`) Enable an OSPF instance:
 
 ```text
-switch(config)# router ospf INSTANCE [vrf NAME] switch(config-ospf)# router-id ROUTER
+router ospf INSTANCE [vrf NAME] switch(config-ospf)# router-id ROUTER
 ```
 
-Configure an OSPF area:
+(`switch(config-ospf)#`) Configure an OSPF area:
 
 ```text
-switch(config-ospf)# area AREA [stub|nssa|default-metric COST] Configure external
+area AREA [stub|nssa|default-metric COST] Configure external
 ```
 
-Route redistribution and control:
+(`switch(config-ospf)#`) Route redistribution and control:
 
 ```text
-switch(config-ospf)# redistribute <bgp|connected|static>
-switch(config-ospf)# default-metric VALUE switch(config-ospf)# maximum-paths VALUE
+redistribute <bgp|connected|static>
+default-metric VALUE switch(config-ospf)# maximum-paths VALUE
 ```
 
-Influence route choice by changing the administrative distance:
+(`switch(config-ospf)#`) Influence route choice by changing the administrative distance:
 
 ```text
-switch(config-ospf)# distance VALUE
+distance VALUE
 ```
 
-Enable OSPF on an interface:
+(`switch(config-if)#`) Enable OSPF on an interface:
 
 ```text
-switch(config-if)# ip ospf PROCESS-ID area AREA
+ip ospf PROCESS-ID area AREA
 ```
 
-Configure optional OSPF interface settings:
+(`switch(config-if)#`) Configure optional OSPF interface settings:
 
 ```text
-switch(config-if)# ip ospf cost COST
-switch(config-if)# ip ospf hello-interval SECONDS
-switch(config-if)# ip ospf dead-interval SECONDS
-switch(config-if)# ip ospf retransmit-interval SECONDS
-switch(config-if)# ip ospf transit-delay SECONDS
-switch(config-if)# ip ospf network <broadcast|point-to-point>
-switch(config-if)# ip ospf priority VALUE
-switch(config-if)# ip ospf <active|passive>
-switch(config-if)# ip ospf bfd
+ip ospf cost COST
+ip ospf hello-interval SECONDS
+ip ospf dead-interval SECONDS
+ip ospf retransmit-interval SECONDS
+ip ospf transit-delay SECONDS
+ip ospf network <broadcast|point-to-point>
+ip ospf priority VALUE
+ip ospf <active|passive>
+ip ospf bfd
 ```
 
-Configure OSPF interface authentication:
+(`switch(config-if)#`) Configure OSPF interface authentication:
 
 ```text
-switch(config-if)# ip ospf authentication <message-digest|simple-text|null> switch(config-if)# ip ospf authentication-key PSWD
-switch(config-if)# ip ospf message-digest-key md5 <cipher|plain>text KEY
+ip ospf authentication <message-digest|simple-text|null> switch(config-if)# ip ospf authentication-key PSWD
+ip ospf message-digest-key md5 <cipher|plain>text KEY
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```text
 show ip ospf [interface|neighbors]
@@ -71,8 +73,8 @@ show ip route ospf
 
 ## Expected results
 
-1. Administrators can enable OSPF globally on the switch
-1. Administrators can enable OSPF on the loopback, SVI or routed interfaces
-1. The output of the `show` commands looks correct
+* Administrators can enable OSPF globally on the switch.
+* Administrators can enable OSPF on the loopback, SVI or routed interfaces.
+* The output of the `show` commands looks correct.
 
 [Back to Index](../README.md)

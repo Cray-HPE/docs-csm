@@ -1,37 +1,43 @@
 # Link Aggregation Group (LAG)
 
-Link Aggregation allows multiple physical links to be assigned to one logical link
-that functions as a single, higher-speed link, providing dramatically increased
-bandwidth.
+Link Aggregation allows administrators to assign multiple physical links to one logical link.
+This logical link functions as a single, higher-speed link, providing dramatically increased bandwidth.
 
 ## Configuration commands
 
-Create and configure the LAG interface:
+(`switch(config)#`) Create and configure the LAG interface:
 
 ```text
-switch(config)# interface lag LAG
-switch(config-lag-if)# no shutdown
-switch(config-lag-if)# lacp mode active
+interface lag LAG
+no shutdown
+lacp mode active
 ```
 
-Associate member links with the LAG interface:
+(`switch(config)#`) Associate member links with the LAG interface:
 
 ```text
-switch(config)# interface IFACE
-switch(config-if)# no shutdown
-switch(config-if)# lag LAG
+interface IFACE
+no shutdown
+lag LAG
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```text
 show lacp <interfaces|aggregates|configuration>
 ```
 
-## Example output
+(`switch(config)#`)
 
 ```text
 show interface lag1
+```
+
+Example output:
+
+```text
 Aggregate-name lag1
 Aggregated-interfaces : 1/1/1 1/1/4
 Aggregation-key : 1
@@ -52,7 +58,17 @@ TX
     0 dropped
 56975 bytes
     0 dropped
+```
+
+(`switch(config)#`)
+
+```text
 show lacp interfaces
+```
+
+Example output:
+
+```text
 State abbreviations :
 A - Active        P - Passive
 S - Short-timeout L - Long-timeout N - InSync     O - OutofSync
@@ -72,7 +88,17 @@ Intf Aggregate  Partner Port     State   System-id         System   Aggr
 ------------------------------------------------------------------------------
 1/1/1lag1       0       65534    PLFOEX  00:00:00:00:00:00 65534    0
 1/1/4lag1       0       65534    PLFOEX  00:00:00:00:00:00 65534    0
+```
+
+(`switch(config)#`)
+
+```text
 show lacp aggregates
+```
+
+Example output:
+
+```text
 Aggregate-name        : lag1
 Aggregated-interfaces : 1/1/1 1/1/4
 Heartbeat rate        : slow
@@ -82,8 +108,8 @@ F - Aggregable I - Individual
 
 ## Expected results
 
-1. Administrators can create and configure a LAG
-2. Administrators can add ports to a LAG
-3. Administrators can configure a LAG interface
+* Administrators can create and configure a LAG.
+* Administrators can add ports to a LAG.
+* Administrators can configure a LAG interface.
 
 [Back to Index](../README.md)

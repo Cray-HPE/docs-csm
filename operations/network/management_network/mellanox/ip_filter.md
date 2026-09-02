@@ -7,7 +7,7 @@ There are two types of malicious traffic that can be received from external sour
 * Traffic that targets the data center servers transferred via the switch.
     * To protect or filter this traffic, use the switch's ACL set of commands.
 
-## Relevant configuration
+## Configuration commands
 
 (`switch (config) #`) Enable IP filter globally.
 

@@ -156,9 +156,9 @@ Statistics for Policy USERPORTS:
 Interface 1/1/1* (in):
            Hit Count  Configuration
 10 class ip NMS_CLASS action pcp 6 action dscp CS6
-                   -  10 match udp any any  eq 161
+                   *  10 match udp any any  eq 161
 20 class ip BROWSER action pcp 1 action dscp CS1
-- 10matchtcpanyany eq80 - 20 match tcp any any eq 8080 - 30 match tcp any any eq 8081 - 40 (null) any any any
+* 10matchtcpanyany eq80 - 20 match tcp any any eq 8080 - 30 match tcp any any eq 8081 - 40 (null) any any any
 * policy statistics are shared among all applied interfaces
   use 'policy NAME copy' to create a uniquely-named policy
 ```

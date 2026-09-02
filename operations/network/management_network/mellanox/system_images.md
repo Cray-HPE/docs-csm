@@ -2,7 +2,7 @@
 
 Mellanox switches can hold two firmware images. These images, once uploaded, are called the "Running" and "Image available for install".
 
-## Relevant configuration
+## Configuration commands
 
 (`switch (config)#`) Delete old images, if any exist
 

@@ -2,7 +2,7 @@
 
 The switch supports `SNMPv2c` community-based security for read-only access.
 
-## Relevant configuration
+## Configuration commands
 
 Configure an `SNMPv2c` community name.
 

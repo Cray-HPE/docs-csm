@@ -1,6 +1,7 @@
-# Configure Hostnames
+# Hostname
 
-A hostname is a human-friendly name used to identify a device. An example of a hostname could be the name "Test."
+A hostname is a human-friendly name used to identify a device.
+An example of a hostname could be the name `test`.
 
 ## Configuration commands
 
@@ -10,23 +11,30 @@ A hostname is a human-friendly name used to identify a device. An example of a h
 hostname <NAME>
 ```
 
-(`switch#`) Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch#`)
 
 ```console
 show hostname
 ```
 
-## Example output
+(`switch(config)#`)
 
 ```console
-switch(config)# hostname switch-test
+hostname switch-test
 show hostname
+```
+
+Example output:
+
+```text
 switch-test
 ```
 
 ## Expected results
 
-- Administrators can configure the hostname
-- The output of all show commands is correct
+* Administrators can configure the hostname.
+* The output of all `show` commands is correct.
 
 [Back to Index](../README.md)

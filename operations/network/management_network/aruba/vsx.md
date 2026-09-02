@@ -69,13 +69,13 @@ switch(config-portgroup)# vsx-sync
 switch(config-addrgroup)# vsx-sync
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show vsx <brief|configuration|status> [config-sync]
 ```
 
-## Example output
+Example output:
 
 ```text
 switch(config)# int 1/1/49

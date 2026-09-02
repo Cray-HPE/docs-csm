@@ -4,7 +4,7 @@ This document showcases a complete inter-switch-link (ISL) link failure scenario
 
 The following is a visualization of a disconnected ISL link and how the traffic pattern would look:
 
-![Disconnected ISL link](../../../../img/network/management_network/vsx_split.png "Disconnected ISL link")
+![Disconnected ISL link](../img/vsx_split.png "Disconnected ISL link")
 
 The following is expected in this scenario:
 

@@ -1,4 +1,4 @@
-# Check for Duplicate IP Addresses
+# Duplicate IP Addresses
 
 It is common to get an IP address that is not the correct one.
 A sign of a duplicate IP address is seeing a `DECLINE` message from the client to the server.
@@ -19,6 +19,7 @@ For example:
          Circuit-ID SubOption 1, length 20: vlan2-ethernet1/1/12
 ```
 
-To test for duplicate IP addresses, ping the suspected address while turning off the node. If there continues to be responses, then there is a duplicate IP address.
+To test for duplicate IP addresses, ping the suspected address while turning off the node.
+If the ping continues to get responses, then there is a duplicate IP address.
 
-[Back to index](README.md).
+[Back to Index](README.md).

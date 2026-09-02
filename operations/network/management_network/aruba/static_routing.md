@@ -8,41 +8,77 @@ There is no communication between routers regarding the current topology of the 
 
 ## Configuration commands
 
-```text
-switch(config)# <ip|ipv6> route IP-ADDR/<SUBNET|PREFIX> IP-ADDR
+(`switch(config)#`)
+
+```console
+<ip|ipv6> route IP-ADDR/<SUBNET|PREFIX> IP-ADDR
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
-```text
+(`switch(config)#`)
+
+```console
 show <ip|ipv6> route [static]
 ```
 
-## Example output
+(`switch(config)#`)
+
+```console
+show ip route
+```
+
+Example output:
 
 ```text
-show ip route
 Displaying ipv4 routes selected for forwarding
 '[x/y]' denotes [distance/metric]30.0.0.0/30,  1 (null) next-hops
         via  1/1/3,  [0/0],  connected, vrf vrf_default
 40.0.0.0/24,  1 (null) next-hops
         via  30.0.0.2,  [1/0],  static, vrf vrf_default
+```
 
+(`switch(config)#`)
+
+```console
 show ip route static
+```
+
+Example output:
+
+```text
 Displaying ipv4 routes selected for forwarding
 '[x/y]' denotes [distance/metric]
 40.0.0.0/24,  1 (null) next-hops
         via  30.0.0.2,  [1/0],  static, vrf vrf_default
+```
 
+(`switch(config)#`)
+
+```console
 show ipv6 route
+```
+
+Example output:
+
+```text
 Displaying ipv6 routes selected for forwarding
 '[x/y]' denotes [distance/metric]
 2001:10::/64,  1 (null) next-hops
         via  1/1/1,  [0/0],  connected, vrf default
 2001:30::/64,  1 (null) next-hops
         via  2001:10::2,  [1/0],  static, vrf default
+```
 
+(`switch(config)#`)
+
+```console
 show ipv6 route static
+```
+
+Example output:
+
+```text
 Displaying ipv6 routes selected for forwarding
 '[x/y]' denotes [distance/metric]
 2001:30::/64,  1 (null) next-hops
@@ -51,8 +87,8 @@ Displaying ipv6 routes selected for forwarding
 
 ## Expected results
 
-1. Administrators can configure a static route on the DUT
-1. Administrators can validate using the `show` commands
-1. Administrators can ping the connected device
+* Administrators can configure a static route on the DUT.
+* Administrators can validate using the `show` commands.
+* Administrators can ping the connected device.
 
 [Back to Index](../README.md)
