@@ -4,13 +4,13 @@ VLANs allow for the logical grouping of switch interfaces, enabling communicatio
 
 ## Configuration commands
 
-Create VLAN:
+(`switch#`) Create VLAN:
 
 ```text
 vlan <VLAN>
 ```
 
-Configure an interface to associate it with a VLAN:
+(`switch#`) Configure an interface to associate it with a VLAN:
 
 ```text
 interface <IFACE>
@@ -18,22 +18,22 @@ no shutdown
 no routing
 ```
 
-Configure an interface as an access port:
+(`switch#`) Configure an interface as an access port:
 
 ```text
 vlan access VLAN
 ```
 
-Configure an interface as a trunk port:
+(`switch#`) Configure an interface as a trunk port:
 
 ```text
 vlan trunk native <VLAN>
 vlan trunk allowed <VLAN>
 ```
 
-Configure VLAN as voice:
+(`switch#`) Configure VLAN as voice:
 
-> **NOTE** To give a specific VLAN a voice designation and add the proper hooks,
+> **NOTE** In order to give a specific VLAN a voice designation and add the proper hooks,
 > it is necessary to add the `voice` command in the VLAN context.
 > This configuration is the same for all CX-series switches.
 
@@ -42,13 +42,15 @@ vlan <VLAN>
 voice
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch#`)
 
 ```text
 show vlan [VLAN]
 ```
 
-## Example output
+Example output:
 
 ```text
 show vlan
@@ -61,7 +63,7 @@ VLAN  Name                              Status  Reason          Type      Interf
 
 ## Expected results
 
-1. Administrators can create a VLAN
-1. Administrators can assign a VLAN to the physical interface
+* Administrators can create a VLAN.
+* Administrators can assign a VLAN to the physical interface.
 
 [Back to Index](../README.md)

@@ -4,7 +4,7 @@ Use this procedure to check the logs for a `cray-dhcp-kea` Kubernetes pod.
 
 ## View Kea logs
 
-(`ncn-mw#`) View the Kea logs.
+(`ncn-mw#`) View the Kea Kubernetes pod logs.
 
 ```bash
 kubectl logs -n services -l app.kubernetes.io/instance=cray-dhcp-kea -c cray-dhcp-kea

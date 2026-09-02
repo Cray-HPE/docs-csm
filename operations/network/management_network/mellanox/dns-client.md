@@ -1,7 +1,9 @@
 # Domain Name System (DNS) Client
 
-The Domain Name System (DNS) translates domain and host names to and from IP addresses.
+The Domain Name Service (DNS) translates domain and host names to and from IP addresses.
 A DNS client resolves hostnames to IP addresses by querying assigned DNS servers for the appropriate IP address.
+
+## Configuration commands
 
 (`switch(config)#`) Configure the switch to resolve queries via a DNS server.
 
@@ -16,6 +18,8 @@ ip domain-list mydomain2.com
 ```
 
 ## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```console
 show hosts

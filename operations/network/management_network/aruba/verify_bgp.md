@@ -1,8 +1,8 @@
 # Verify BGP
 
-Verify the BGP neighbors are in the established state on BOTH the switches.
+Verify that the BGP neighbors are in the established state on **both** of the switches.
 
-Check Aruba BGP status.
+(`switch#`) Check Aruba BGP status.
 
 ```console
 show bgp ipv4 u s

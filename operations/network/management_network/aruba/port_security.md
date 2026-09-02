@@ -55,13 +55,13 @@ switch(config-if-port-security)# mac-address <MAC-ADDR>
 switch(config-if-port-security)# client-limit <1-64>
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show port-access port-security interface <all|IFACE> <client-status|portstatistics>
 ```
 
-## Example output
+Example output:
 
 ```console
 switch(config)# port-access port-security enable

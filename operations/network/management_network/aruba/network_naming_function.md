@@ -1,6 +1,6 @@
 # Network Types – Naming and Segment Function
 
-The following table provides an overview of the different network services defined inside of the spine and leaf architectures.
+Below is an overview of the different network services defined inside CSM spine and leaf architecture.
 
 |                      |  Administration: Hardware   | Administration: Cloud/Job |     Customer: Jobs      |  Customer: Administration   |              Storage |
 |:---------------------|:---------------------------:|:-------------------------:|:-----------------------:|:---------------------------:|---------------------:|

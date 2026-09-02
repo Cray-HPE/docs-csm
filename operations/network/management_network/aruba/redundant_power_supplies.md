@@ -2,7 +2,7 @@
 
 There are no configuration commands for switch power supply functionality.
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```bash
 show environment power-supply
@@ -14,7 +14,7 @@ show environment power-supply
 1. Validate system remains powered after removing power from all but one power supply
 1. Validate all power supplies are operational
 
-## Example output
+Example output:
 
 ```console
 show environment power-supply

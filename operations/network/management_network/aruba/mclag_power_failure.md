@@ -4,7 +4,7 @@ This document showcases a complete member failure scenario where the `spine-01` 
 
 The following is a visualization of the powered down `spine-01`:
 
-![Powered down spine 01](../../../../img/network/management_network/member_power_failure.png "powered down spine 01")
+![Powered down spine 01](../img/member_power_failure.png "powered down spine 01")
 
 The following is expected in this scenario:
 

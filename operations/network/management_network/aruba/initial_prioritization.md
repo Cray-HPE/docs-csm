@@ -32,7 +32,7 @@ switch(config)# qos trust [none|cos|dscp]
 switch(config-if)# qos trust [none|cos|dscp]
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show qos [cos-map|dscp-map|trust]
@@ -44,7 +44,7 @@ show qos [cos-map|dscp-map|trust]
 1. Administrators can map incoming 802.1p values to local priorities
 1. The output of all `show` commands is correct
 
-## Example output
+Example output:
 
 ```text
 switch(config)# qos dscp-map 46 local-priority 7 color green name VOICE

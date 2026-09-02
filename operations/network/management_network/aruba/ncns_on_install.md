@@ -1,12 +1,13 @@
 # NCNs on Install
 
-Use this procedure to verify the DNSMASQ config file on the NCNs is accurate.
+Use this procedure to verify that the DNSMASQ configuration file on the NCNs is accurate.
 
 ## Procedure
 
-1. Verify the DNSMASQ config file matches what is configured on the switches.
+1. Verify that the DNSMASQ configuration file matches what is configured on the switches.
 
-    The following is a DNSMASQ config file for the Metal network (VLAN1). The router is `10.1.0.1`, which has to match what the IP address is on the switches doing the routing for the Metal (MTL) network.
+    The following is a DNSMASQ configuration file for the Metal network (`VLAN1`).
+    The router is `10.1.0.1`, which has to match what the IP address is on the switches doing the routing for the Metal (MTL) network.
 
     Example MTL DNSMASQ file:
 
@@ -22,14 +23,14 @@ Use this procedure to verify the DNSMASQ config file on the NCNs is accurate.
 
     This is most commonly on the spines. This configuration is commonly missed on the CSI input file.
 
-1. Verify it points to the LiveCD IP address for provisioning in bare-metal environments:
+1. Verify that it points to the LiveCD IP address for provisioning in bare-metal environments:
 
     ```text
     dhcp-option=interface:bond0,option:dns-server,10.1.1.2
     dhcp-option=interface:bond0,option:ntp-server,10.1.1.2
     ```
 
-1. Verify it points at the router for the network; the L3/IP for the VLAN:
+1. Verify that it points at the router for the network; the L3/IP for the VLAN:
 
     ```text
     dhcp-option=interface:bond0,option:router,10.1.0.1
@@ -40,8 +41,15 @@ Use this procedure to verify the DNSMASQ config file on the NCNs is accurate.
 
 The following is an example Aruba configuration for the spine:
 
+(`switch#`) Spine 1:
+
 ```text
 show run int vlan 1
+```
+
+Example output:
+
+```text
 interface vlan1
     vsx-sync active-gateways
     ip address 10.1.0.2/16
@@ -51,8 +59,17 @@ interface vlan1
     ip bootp-gateway 10.1.0.2
     ip helper-address 10.92.100.222
     exit
+```
 
+(`switch#`) Spine 2:
+
+```text
 show run int vlan 1
+```
+
+Example output:
+
+```text
 interface vlan1
     vsx-sync active-gateways
     ip address 10.1.0.3/16

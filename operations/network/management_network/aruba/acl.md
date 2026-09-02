@@ -12,45 +12,48 @@ For ACL filtering to take effect, configure an ACL and then assign it in the inb
 
 ## Configuration commands
 
-Create an ACL:
+(`switch(config)#`) Create an ACL:
 
 ```text
-switch(config)# access-list <ip|ipv6|mac> ACL
+access-list <ip|ipv6|mac> ACL
 ```
 
-Copy an existing ACL:
+(`switch(config)#`) Copy an existing ACL:
 
 ```text
-switch(config)# access-list <ip|ipv6|mac> ACL copy NEW-ACL
+access-list <ip|ipv6|mac> ACL copy NEW-ACL
 ```
 
-Resequence an ACL:
+(`switch(config)#`) Resequence an ACL:
 
 ```text
-switch(config)# access-list <ip|ipv6|mac> ACL resequence VALUE INC
+access-list <ip|ipv6|mac> ACL resequence VALUE INC
 ```
 
-Apply an ACL to the control plane:
+(`switch(config)#`) Apply an ACL to the control plane:
 
 ```text
-switch(config)# apply access-list <ip|ipv6> ACL control-plane [vrf VRF]
+apply access-list <ip|ipv6> ACL control-plane [vrf VRF]
 ```
 
-Add ACEs in the appropriate order:
+(`switch(config-acl-ip)#`) Add ACEs in the appropriate order:
 
 ```text
-switch(config-acl-ip)#  [SEQ] <deny|permit> <any|PROTOCOL> <any|SRC> <any|DST> [count] [log]
-switch(config-acl-ip)#  [SEQ] comment TEXT
+[SEQ] <deny|permit> <any|PROTOCOL> <any|SRC> <any|DST> [count] [log]
+[SEQ] comment TEXT
 ```
 
-Apply the ACL to a physical interface, a logical interface, or a VLAN (note: ACLs on L3 VLAN interfaces are not supported):
+(`switch(config-if)#`) Apply the ACL to a physical interface, a logical interface, or a VLAN:
+
+> Note: ACLs on L3 VLAN interfaces are not supported.
 
 ```text
-switch(config-if)# apply access-list <ip|ipv6|mac> ACL <in|out>
-switch(config-vlan)# apply access-list <ip|ipv6|mac> ACL <in|out>
+apply access-list <ip|ipv6|mac> ACL <in|out>
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch#`)
 
 ```text
 show access-list [hitcounts] [ip|ipv6|mac ACL] [control-plane vrf VRF]

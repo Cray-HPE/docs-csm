@@ -1,26 +1,26 @@
 # Update Management Network Firmware
 
-- [Prerequisites](#prerequisites)
-- [Switch firmware](#switch-firmware)
-- [Identifying switch models](#identifying-switch-models)
-    - [Aruba](#aruba)
-    - [Mellanox](#mellanox)
-    - [Dell](#dell)
-- [Verify current switch firmware levels](#verify-current-switch-firmware-levels)
-- [Aruba firmware best practices](#aruba-firmware-best-practices)
-- [Aruba firmware update - Standalone](#aruba-firmware-update---standalone)
-- [Aruba firmware update - VSX software upgrade](#aruba-firmware-update---vsx-software-upgrade)
-- [Mellanox firmware update](#mellanox-firmware-update)
-- [Dell firmware update](#dell-firmware-update)
+* [Prerequisites](#prerequisites)
+* [Switch firmware](#switch-firmware)
+* [Identifying switch models](#identifying-switch-models)
+    * [Aruba](#aruba)
+    * [Mellanox](#mellanox)
+    * [Dell](#dell)
+* [Verify current switch firmware levels](#verify-current-switch-firmware-levels)
+* [Aruba firmware best practices](#aruba-firmware-best-practices)
+* [Aruba firmware update - Standalone](#aruba-firmware-update---standalone)
+* [Aruba firmware update - VSX software upgrade](#aruba-firmware-update---vsx-software-upgrade)
+* [Mellanox firmware update](#mellanox-firmware-update)
+* [Dell firmware update](#dell-firmware-update)
 
 This page describes how to update firmware on the management network switches. More details and other options to upgrade
 firmware can be found in the switch user guides, available from the specific switch manufacturer.
 
 ## Prerequisites
 
-- Access to the switches.
-- Firmware in a location that the switches can reach.
-    - Examples in this document will use `/root/firmware/` on `ncn-m001`
+* Access to the switches.
+* Firmware in a location that the switches can reach.
+    * Examples in this document will use `/root/firmware/` on `ncn-m001`
 
 Aruba firmware can be found in the HFP package provided with the HPE Cray EX release.
 Dell and Mellanox firmware must be downloaded from the manufacturer.
@@ -136,9 +136,9 @@ Aruba software version number explained:
 
 For example: `10.11.1010`
 
-- 10 = OS
-- 13 = Major branch (new features)
-- 1040 = CPE release (bug fixes)
+* 10 = OS
+* 13 = Major branch (new features)
+* 1040 = CPE release (bug fixes)
 
 It is considered to be a best practice to keep all Aruba CX platform devices running the same software version.
 
@@ -178,8 +178,8 @@ VSX software upgrade command can automatically upgrade both of the peers in VSX 
 automatically doing traffic shifting between peers to minimize impact to network. The following examples include the
 option for standalone and vsx-pair upgrade.
 
-- Aruba 6300 series switches that are deployed as `sw-leaf-bmc` devices should use the [Aruba Firmware Update - Standalone](#aruba-firmware-update---standalone) procedure.
-- Aruba 8325, 8320, and 8360 switches that are deployed as `sw-spine`, `sw-leaf`, or `sw-cdu` devices should use the
+* Aruba 6300 series switches that are deployed as `sw-leaf-bmc` devices should use the [Aruba Firmware Update - Standalone](#aruba-firmware-update---standalone) procedure.
+* Aruba 8325, 8320, and 8360 switches that are deployed as `sw-spine`, `sw-leaf`, or `sw-cdu` devices should use the
   [Aruba Firmware Update - VSX Software Upgrade](#aruba-firmware-update---vsx-software-upgrade) procedure.
 
 ## Aruba firmware update - Standalone

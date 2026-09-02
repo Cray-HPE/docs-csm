@@ -7,7 +7,7 @@ In the following image, a typical traffic pattern coming off from MCLAG connecte
 The traffic is going north to south and ISL is not carrying any traffic.
 The only time ISL will carry traffic is if one of the links to downstream devices is down.
 
-![MCLAG traffic pattern](../../../../img/network/management_network/mclag_link_ha.png "MCLAG traffic pattern")
+![MCLAG traffic pattern](../img/mclag_link_ha.png "MCLAG traffic pattern")
 
 The network is now fully configured up.
 If an administrator decides to test HA functionality by pulling MCLAG link off

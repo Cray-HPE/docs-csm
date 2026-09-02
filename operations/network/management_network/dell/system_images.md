@@ -16,7 +16,7 @@ Install image:
 image install file-url
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show boot detail

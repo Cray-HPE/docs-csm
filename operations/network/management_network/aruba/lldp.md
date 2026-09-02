@@ -6,22 +6,29 @@ LLDP is used to advertise the device's identity and abilities and read other dev
 
 ## Configuration commands
 
-Enable an interface to receive or transmit LLDP packets:
+(`switch(config-if)#`) Enable an interface to receive or transmit LLDP packets:
 
 ```text
-switch(config-if)# lldp <receive|transmit>
+lldp <receive|transmit>
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```text
 show lldp [local-device|neighbor-info|statistics]
 ```
 
-## Example output
+(`switch(config)#`)
 
 ```text
 show lldp configuration
+```
+
+Example output:
+
+```text
 LLDP Global Configuration:
 LLDP Enabled :Yes
 LLDP Transmit Interval :30
@@ -39,7 +46,17 @@ LLDP Port Configuration:
 Port           Tx-Enabled          Rx-Enabled
 1/1/1          Yes                 Yes
 ...
+```
+
+(`switch(config)#`)
+
+```text
 show lldp local-device
+```
+
+Example output:
+
+```text
 Global Data
 ---------------
 Chassis-id
@@ -53,13 +70,5 @@ Port-ID        Tx-Packets     Rx-packets     Rx-discarded   TLVs-Unknown
 1/1/1          70             43             0              0
 1/1/3          70             70             0              0
 ```
-
-## Expected results
-
-1. Link status between the peer devices is `UP`
-1. LLDP is enabled
-1. Local device LLDP Information is displayed
-1. Remote device LLDP information is displayed
-1. LLDP statistics are displayed
 
 [Back to Index](../README.md)

@@ -6,13 +6,13 @@ The switch supports `SNMPv2c` community-based security for read-only and read-wr
 
 ### Configure the SNMP community
 
-1. Enter configuration mode.
+1. (`switch#`) Enter configuration mode.
 
    ```console
    configure terminal
    ```
 
-1. Configure the `SNMPv2c` community name
+1. (`switch#`) Configure the `SNMPv2c` community name.
 
    ```console
    snmp-server community community-name access-mode
@@ -27,7 +27,7 @@ The switch supports `SNMPv2c` community-based security for read-only and read-wr
 
 ### Example
 
-The following command configures a read-only SNMP community called "public".
+(`switch#`) The following command configures a read-only SNMP community called "public".
 
 ```text
 snmp-server community public ro
@@ -37,7 +37,7 @@ When successful this command returns no output.
 
 ### Show configured SNMP community
 
-The following command displays information about any SNMP community that may have been configured.
+(`switch#`) The following command displays information about any SNMP community that may have been configured.
 
 ```console
 show snmp community
@@ -52,8 +52,8 @@ Access         : read-only
 
 ## Expected results
 
-1. Administrators can configure the community name.
-1. Administrators can bind the SNMP server to the default VRF.
-1. Administrators can connect from the workstation using the community name.
+* Administrators can configure the community name.
+* Administrators can bind the SNMP server to the default VRF.
+* Administrators can connect from the workstation using the community name.
 
 [Back to Index](../README.md)

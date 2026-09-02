@@ -42,7 +42,7 @@ strict queue <0-7>
 wfq queue <0-7> weight <0-253>
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show interface IFACE queues
@@ -57,7 +57,7 @@ show qos schedule-profile [SCHED-NAME]
 1. The output of the `show` commands is correct
 1. The traffic pattern matches the scheduler configuration
 
-## Example output
+Example output:
 
 ```text
 qos queue-profile VOICE-Q-PROFILE

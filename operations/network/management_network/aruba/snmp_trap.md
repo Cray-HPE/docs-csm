@@ -11,13 +11,13 @@ Configure a SNMPv2c trap receiver host:
 switch(config)# snmp-server host IP-ADDR trap version v2c community xxx
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```console
 show snmp trap
 ```
 
-## Example output
+Example output:
 
 ```console
 show snmp trap
