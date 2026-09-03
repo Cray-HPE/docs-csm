@@ -53,6 +53,41 @@ The following IUF topics are discussed in the sections below.
 - [Troubleshooting](#troubleshooting)
 - [Install and Upgrade Observability Framework](#install-and-upgrade-observability-framework)
 
+## Prerequisites
+
+**NOTE** Before starting, perform the following checks.
+
+- [Validate CSM Health](../validate_csm_health.md)
+
+- Ensure that sufficient memory, CPU, and disk usage is available.
+
+    > The following example commands are for reference only; change them accordingly based on number of products used by IUF.
+
+    - (`ncn-m001#`) List processors.
+
+        ```bash
+        nproc --all
+        ```
+
+        Example output:
+
+        ```text
+        40
+        ```
+
+    - (`ncn-m001#`) Show disk usage.
+
+        ```bash
+        df -h /
+        ```
+
+        Example output:
+
+        ```text
+        Filesystem      Size    Used     Avail   Use%  Mounted on
+        LiveOS_rootfs   <N>G    <M>G     <N-M>G  45%   /
+        ```
+
 ## Limitations
 
 - `iuf` must be executed from `ncn-m001`.
@@ -792,8 +827,8 @@ The following actions may be useful if errors are encountered when executing `iu
 - Use the [Argo UI](../argo/Using_the_Argo_UI.md) to find the Argo pod that corresponds to the failed IUF operation. This can be done by finding the Argo workflow identifier displayed on [`iuf` standard output](#iuf-output) for the failed
   IUF operation and performing an Argo UI query with that value. Argo workflow identifiers can also be found by running [`iuf activity`](#activities). The Argo UI will provide additional log information that may help debug the issue.
 - There are two methods for limiting the list of Argo workflows displayed by the Argo UI.
-  1. Display a single workflow of an activity by specifying the Argo workflow identifier, e.g. `admin-230126-ebjx3-process-media-cq89t`, after the Argo UI "magnifying glass" icon.
-  1. Display all workflows for an IUF activity by specifying the activity identifier, e.g. `activity=admin-230126`, in the Argo UI `LABELS` filter.
+    - Display a single workflow of an activity by specifying the Argo workflow identifier, e.g. `admin-230126-ebjx3-process-media-cq89t`, after the Argo UI "magnifying glass" icon.
+    - Display all workflows for an IUF activity by specifying the activity identifier, e.g. `activity=admin-230126`, in the Argo UI `LABELS` filter.
 - If an error is associated with a script invoked by a product's [stage hook](#stages-and-hooks), the script can be found in the expanded product distribution file located in the media directory (`iuf -m MEDIA_DIR`). Examine the
   `hooks` entry in the product's `iuf-product-manifest.yaml` file in the media directory for the path to the script.
 - If Argo UI log output is too verbose, filter it by specifying a value such as `^INFO|^NOTICE|^WARNING|^ERROR` in the `Filter (regexp)...` text field.
