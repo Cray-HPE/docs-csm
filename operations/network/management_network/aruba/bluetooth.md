@@ -78,6 +78,6 @@ Enabled             : No
 * The USB mounts properly
 * Administrators can see and connect to the Bluetooth PAN
 * Administrators can edit the configuration via the Bluetooth connection
-* The output of the show commands looks correct
+* The output of the `show` commands looks correct
 
 [Back to Index](../README.md)

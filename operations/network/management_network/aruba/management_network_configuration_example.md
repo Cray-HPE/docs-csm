@@ -371,4 +371,4 @@ There should now be external connectivity from outside the system to the externa
 
    1. (`external#`) Stop the `ping` command that was started earlier.
 
-[Back to index](README.md).
+[Back to Index](README.md).
