@@ -10,27 +10,25 @@ This procedure requires administrative privileges.
 
 ## Procedure
 
-1. Edit the `cray-ipxe-settings` ConfigMap using one of the following options.
-
-   > **NOTE** Save a backup of the ConfigMap before making any changes.
-
-   The following is an example of creating a backup:
+1. (`ncn-mw#`) Save a backup of the ConfigMap before making any changes.
 
     ```bash
     kubectl get configmap -n services cray-ipxe-settings \
             -o yaml > /root/cray-ipxe-settings-backup.yaml
     ```
 
-1. Within the ConfigMap, edit the following keys to set the desired iPXE binary names.
+1. (`ncn-mw#`) Edit the `cray-ipxe-settings` ConfigMap.
 
-   | iPXE Binary | ConfigMap Key Name | Default Value |
-   | --- | --- | --- |
-   | Regular iPXE | `cray_ipxe_binary_name` | `ipxe.efi` |
-   | Debug iPXE | `cray_ipxe_debug_binary_name` | `debug-ipxe.efi` |
+    Within the ConfigMap, edit the following keys to set the desired iPXE binary names.
 
-   > **NOTE** Do not change the `cray_ipxe_binary_name_active` or
-   `cray_ipxe_debug_binary_name_active` keys in the
-   `cray-ipxe-settings` ConfigMap. The `cray-ipxe` builder will automatically update these keys with the name of the currently built iPXE images once they are available.
+    | iPXE Binary  | ConfigMap Key Name            | Default Value    |
+    |--------------|-------------------------------|------------------|
+    | Regular iPXE | `cray_ipxe_binary_name`       | `ipxe.efi`       |
+    | Debug iPXE   | `cray_ipxe_debug_binary_name` | `debug-ipxe.efi` |
+
+    > **NOTE** Do not change the `cray_ipxe_binary_name_active` or `cray_ipxe_debug_binary_name_active` keys in the
+    > `cray-ipxe-settings` ConfigMap. The `cray-ipxe` builder will automatically update these keys with the name of
+    > the currently built iPXE images once they are available.
 
     - **Option 1:** Edit the `cray-ipxe-settings` ConfigMap directly.
 
@@ -47,13 +45,13 @@ This procedure requires administrative privileges.
                    -o yaml > /root/cray-ipxe-settings.yaml
            ```
 
-        2. Edit the `cray-ipxe-settings.yaml` file.
+        1. Edit the `cray-ipxe-settings.yaml` file.
 
            ```bash
            vi /root/cray-ipxe-bss-ipxe.yaml
            ```
 
-        3. Reload the ConfigMap.
+        1. Reload the ConfigMap.
 
            Deleting and recreating the ConfigMap will reload it.
 

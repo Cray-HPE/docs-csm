@@ -37,10 +37,12 @@ Bifurcation or splitting of the Customer Access Network (CAN) enables customizat
 Customization will be performed during installation.
 In CSM 1.2, there were two new customer access networks introduced as part of the process of splitting the existing monolithic CAN:
 
-1. **High Speed Customer Access - CHN (Customer High Speed Network)** : This feature provides the ability to connect to User Application Nodes (UAN), User Access Instance (UAI), and Compute nodes
-and Kubernetes API endpoints from the customer site via the High Speed Network (HSN).
-2. **Management Customer Access - CMN (Customer Management Network)** :  Using a VLAN on the Management Network, this feature allows system administrative access from the customer site.
-Prior to CSM 1.2, administrative access was available on the original CAN; this feature provided a traffic path and access split.
+- **High Speed Customer Access - CHN (Customer High Speed Network)**
+    - This feature provides the ability to connect to User Application Nodes (UAN), User Access Instances (UAI), and Compute nodes
+      and Kubernetes API endpoints from the customer site via the High Speed Network (HSN).
+- **Management Customer Access - CMN (Customer Management Network)**
+    - Using a VLAN on the management network, this feature allows system administrative access from the customer site.
+    - Prior to CSM 1.2, administrative access was available on the original CAN; this feature provides a traffic path and access split.
 
 Enabling the CHN removes the original CAN.
 
@@ -100,7 +102,7 @@ Once added to CSI, names and IP addresses use the standard CSM data flow, end up
 - The CHN requires a small change in CSI to add this network.
 - Will automatically use the DNS infrastructure from previous CSM install.
 - Name aliases can be added, changed, and removed via the API to SLS and become available in DNS automatically.
-DNS tooling for this was released in Shasta v1.4 with [SLS](../../README.md#system-layout-service-sls).
+  DNS tooling for this was released in CSM 1.4 with [SLS](../../README.md#system-layout-service-sls).
 
 #### 2.3.2 When naming occurs
 
@@ -150,10 +152,10 @@ Isolation is within the Slingshot network as well as separated at the edge route
 - Edge router provides all **routing and access controls** as of CSM 1.2 (via a virtual routing instance, if Arista switch pair is used).
 - Internal to the system, CHN traffic will exist in the same Layer 2 domain with internal HSN traffic until the Slingshot network supports VLAN separation.
 - Compute Node (CN) and Application Node (UAN, in this case) configuration or IPv4 addressing and routing is via CFS.
-  - When multiple HSN interfaces exist, the CHN will be configured on the HSN0 NIC.
+    - When multiple HSN interfaces exist, the CHN will be configured on the HSN0 NIC.
 - UAI addressing and routing over the HSN interfaces for the worker NCNs is required.
 - API endpoints in MetalLB for the CHN will be accessible over worker NCN HSN interfaces (via ECMP Layer 3 routing).
-  - MetalLB will peer with the edge routers to supply load balanced API access.
+    - MetalLB will peer with the edge routers to supply load balanced API access.
 
 #### 2.5.2 When configuration occurs
 
@@ -161,8 +163,8 @@ Installation, as part of a virtual routing instance on the edge routers.
 
 #### 2.5.3 Ability to change post-install
 
-- Not Recommended - Edge router controls external access.
-- No - Node images could be changed, but routing and IP address changes to CFS configurations would need extensive testing to certify.
+- Not recommended because the edge router controls external access.
+- No node images can be changed, but routing and IP address changes to CFS configurations would need extensive testing to certify.
 
 ## 3 Customer Management Management Network (CMN)
 
@@ -199,18 +201,18 @@ As of the CSM 1.2 release, the CMN is only available via customer-supplied IPv4 
 #### 3.4.1 Touchpoints: effects and changes
 
 - CMN required beginning with CSM 1.2.
-  - Customer will supply a subnet similar to the way the CAN is deployed.
-  Sizing is the number of NCNs plus a couple more addresses.
+    - Customer will supply a subnet similar to the way the CAN is deployed.
+      Sizing is the number of NCNs plus a couple more addresses.
 - Edge access to the CMN will need to be configured with the customer site.
-  - ACL and route updates on the edge switches.
-  - [Arista guide.](../customer_accessible_networks/bi-can_arista_metallb_peering.md)
-  - [MetalLB to Arista peering guide.](../customer_accessible_networks/bi-can_arista_metallb_peering.md)
+    - ACL and route updates on the edge switches.
+    - [Arista guide.](../customer_accessible_networks/bi-can_arista_metallb_peering.md)
+    - [MetalLB to Arista peering guide.](../customer_accessible_networks/bi-can_arista_metallb_peering.md)
 - The Management network will require the following changes:
-  - Addition of the new CMN VLAN. This should be similar to the existing CAN configuration.
-  - Termination of the new CMN VLAN on ports supporting NCNs.
-  - Addition of customer-supplied CMN IP addresses to the management switches to support routing.
+    - Addition of the new CMN VLAN. This should be similar to the existing CAN configuration.
+    - Termination of the new CMN VLAN on ports supporting NCNs.
+    - Addition of customer-supplied CMN IP addresses to the management switches to support routing.
 - NCN workers, masters, and storage will require the following changes:
-  - Image support for CMN VLAN, addressing, and routing.
+    - Image support for CMN VLAN, addressing, and routing.
 
 #### 3.4.2 When configuration occurs
 
@@ -236,8 +238,8 @@ At installation time one of the following egress routes from the system to the s
 #### 4.2.1 Touchpoints: effects and changes
 
 - Installer customization changes:
-  - Management Network changes possibly for routing, but new ACLs may be necessary.
-  - NCNs will require specific site routes to prioritize selected path over the system default (CAN).
+    - Management network changes possibly for routing, but new ACLs may be necessary.
+    - NCNs will require specific site routes to prioritize selected path over the system default (CAN).
 - Dependent on CHN and CMN work.
 
 #### 4.2.2 When configuration occurs
