@@ -1,8 +1,9 @@
 # RADIUS
 
-RADIUS servers provide a method for remote users to access the switch. The following commands show how to configure a RADIUS server, and how remote users can authenticate and access the switch.
+RADIUS servers provide a method for remote users to access the switch. The following commands
+show how to configure a RADIUS server, and how remote users can authenticate and access the switch.
 
-## Configuration Commands
+## Configuration commands
 
 Configure RADIUS server:
 
@@ -18,18 +19,18 @@ switch(config)# aaa authentication login default group radius local
 switch(config)# aaa accounting all default start-stop group radius
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show radius-server [detail]
 show aaa <server-groups|authentication>
 ```
 
-## Expected Results
+## Expected results
 
 1. SSH is enabled
-2. Administrators can configure the RADIUS server (reachable from the switch)
-3. The output of the `show` commands is correct
-4. Administrators can successfully access the switch using credentials validated by the RADIUS server
+1. Administrators can configure the RADIUS server (reachable from the switch)
+1. The output of the `show` commands is correct
+1. Administrators can successfully access the switch using credentials validated by the RADIUS server
 
 [Back to Index](../README.md)

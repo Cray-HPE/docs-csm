@@ -1,17 +1,19 @@
-# Cable diagnostics
+# Cable Diagnostics
 
 Cable plugin collects various information from the cables attached to the fabric ports.
 
---get_cable_info	Gets cable info from the fabric ports.
---cable_info_disconnected	Gets cable info on disconnected ports (the cable is attached only to the switch port). This option is applicable with the "get-cable-info" flag.
+`--get_cable_info`: Gets cable info from the fabric ports.
+`--cable_info_disconnected` Gets cable info on disconnected ports (the cable is attached only to the switch port). This option is applicable with the `--get-cable-info` flag.
 
-Relevant Configuration
+## Example
 
-Example:
-
-```
+```console
 ibdiagnet --get-cable-info --cable_info_disconnected
+```
 
+Example output:
+
+```text
 The data is dumped to the ibdiagnet2.cables file in the following format:
 -------------------------------------------------------
 Port=1 Lid=0x00a4 GUID=0xf45214030046a0a1 Port Name=coral-ufm-001/U1/P1
@@ -49,9 +51,9 @@ TX3 Power: 0.000 mW, -999.999 dBm
 TX4 Power: 0.000 mW, -999.999 dBm
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: You can enter diagnostics mode successfully
-* Step 2: You can test the cable and see the results in the CLI output
+* Administrators can enter diagnostics mode successfully.
+* Administrators can test the cable and see the results in the CLI output.
 
 [Back to Index](../README.md)

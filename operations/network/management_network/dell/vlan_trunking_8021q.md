@@ -5,35 +5,37 @@ Packet that ingress on a trunk port are in the VLAN specified in its 802.1Q head
 A packet that egresses through a trunk port will have an 802.1Q header if it has a nonzero VLAN ID.
 Any packet that ingresses on a trunk port tagged with a VLAN that the port does not trunk is dropped.
 
-## Configuration Commands
+## Configuration commands
 
-Configure an interface as a trunk port:
+(`switch(config-if)#`) Configure an interface as a trunk port:
 
 ```text
 switchport mode trunk
 ```
 
-Add the allowed VLANs:
+(`switch(config-if)#`) Add the allowed VLANs:
 
 ```text
-switch(config-if)#switchport trunk allowed vlan add 1,50,100
+switchport trunk allowed vlan add 1,50,100
 ```
 
-Assign a native VLAN:
+(`switch(config-if)#`) Assign a native VLAN:
 
 ```text
 switchport trunk native vlan-id 1
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch#`)
 
 ```text
 show interfaces switchport
 ```
 
-## Expected Results
+## Expected results
 
-1. Administrators can create and enable multiple VLAN interfaces
-2. Administrators can assign the trunk VLAN interfaces
+* Administrators can create and enable multiple VLAN interfaces
+* Administrators can assign the trunk VLAN interfaces
 
 [Back to Index](../README.md)

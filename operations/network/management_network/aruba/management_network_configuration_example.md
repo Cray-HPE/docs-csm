@@ -1,4 +1,4 @@
-# Example of How to Configure Scenario A or B
+# Management Network Configuration Example
 
 This section provides an example of how to configure the management network.
 
@@ -13,9 +13,10 @@ This section provides an example of how to configure the management network.
 
 1. (`sw#`) Move the interfaces into CAN VRF.
 
-   If there is an existing CAN interface configuration, it will be deleted the interface is moved into the new VRF; it will have to be re-applied.
+   If there is an existing CAN interface configuration, then it will be deleted when the interface is moved into the new VRF;
+   it will have to be re-applied.
 
-   > **`NOTE`** These are example configurations only; most implementations of BICAN will be different.
+   > **NOTE** These are example configurations only; most implementations of BICAN will be different.
 
    * Example Aruba primary configuration:
 
@@ -101,7 +102,7 @@ This section provides an example of how to configure the management network.
 
    * Example VLAN 2 configuration:
 
-      > **`NOTE`** VLAN 2 is used for the HSN.
+      > **NOTE** VLAN 2 is used for the HSN.
 
       ```text
       interface Vlan2
@@ -155,46 +156,46 @@ This section provides an example of how to configure the management network.
     data:
       config: |
         peers:
-        - peer-address: 10.252.0.2
+        * peer-address: 10.252.0.2
           peer-asn: 65533
           my-asn: 65533
-        - peer-address: 10.252.0.3
+        * peer-address: 10.252.0.3
           peer-asn: 65533
           my-asn: 65533
-        - peer-address: 10.101.8.2
+        * peer-address: 10.101.8.2
           peer-asn: 65533
           my-asn: 65536
-        - peer-address: 10.101.8.3
+        * peer-address: 10.101.8.3
           peer-asn: 65533
           my-asn: 65536
-        - peer-address: 10.101.10.1
+        * peer-address: 10.101.10.1
           peer-asn: 65534
           my-asn: 65533
         address-pools:
-        - name: customer-access
+        * name: customer-access
           protocol: bgp
           addresses:
-          - 10.101.8.128/25
-        - name: customer-access-static
+          * 10.101.8.128/25
+        * name: customer-access-static
           protocol: bgp
           addresses:
-          - 10.101.8.112/28
-        - name: customer-high-speed
+          * 10.101.8.112/28
+        * name: customer-high-speed
           protocol: bgp
           addresses:
-          - 10.101.10.128/25
-        - name: customer-high-speed-static
+          * 10.101.10.128/25
+        * name: customer-high-speed-static
           protocol: bgp
           addresses:
-          - 10.101.10.112/28
-        - name: hardware-management
+          * 10.101.10.112/28
+        * name: hardware-management
           protocol: bgp
           addresses:
-          - 10.94.100.0/24
-        - name: node-management
+          * 10.94.100.0/24
+        * name: node-management
           protocol: bgp
           addresses:
-          - 10.92.100.0/24
+          * 10.92.100.0/24
     ```
 
 1. Verify BGP and routes.

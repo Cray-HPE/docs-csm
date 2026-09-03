@@ -3,22 +3,22 @@
 This topic describes nodes in the air-cooled cabinet with diagrams and pictures showing where to find the ports on the
 nodes and how to cable the nodes to the management network switches.
 
-* [HPE Hardware](#hpe-hardware)
+* [HPE hardware](#hpe-hardware)
     * [HPE DL385](#hpe-dl385)
     * [HPE DL325](#hpe-dl325)
-    * [HPE Worker Node Cabling](#hpe-worker-node-cabling)
-    * [HPE Master Node Cabling](#hpe-master-node-cabling)
-    * [HPE Storage Node Cabling](#hpe-storage-node-cabling)
-    * [HPE UAN Cabling](#hpe-uan-cabling)
+    * [HPE worker node cabling](#hpe-worker-node-cabling)
+    * [HPE master node cabling](#hpe-master-node-cabling)
+    * [HPE storage node cabling](#hpe-storage-node-cabling)
+    * [HPE UAN cabling](#hpe-uan-cabling)
     * [HPE Apollo 6500 XL645D](#hpe-apollo-6500-xl645d)
     * [HPE Apollo 6500 XL675D](#hpe-apollo-6500-xl675d)
-* [Gigabyte/Intel Hardware](#gigabyteintel-hardware)
-    * [Worker Node Cabling](#worker-node-cabling)
-    * [Master Node Cabling](#master-node-cabling)
-    * [Storage Node Cabling](#storage-node-cabling)
-    * [UAN Cabling](#uan-cabling)
+* [Gigabyte/Intel hardware](#gigabyteintel-hardware)
+    * [Worker node cabling](#worker-node-cabling)
+    * [Master node cabling](#master-node-cabling)
+    * [Storage node cabling](#storage-node-cabling)
+    * [UAN cabling](#uan-cabling)
 
-## HPE Hardware
+## HPE hardware
 
 ### HPE DL385
 
@@ -40,7 +40,7 @@ nodes and how to cable the nodes to the management network switches.
 * The PCIE Slot 1 is on the top left side of the image above (under number 1).
     * Ports are numbered left-to-right: the far left port is port 1.
 
-### HPE Worker Node Cabling
+### HPE worker node cabling
 
 | Device | Port | Linux Device | Destination    | Name | VLAN          | LAG       |
 |:-------|------|:-------------|:---------------|:-----|:--------------|:----------|
@@ -61,9 +61,9 @@ SHCD Example
 
 ![Diagram of HPE Worker Node Cabling](../../../img/network/HPE_Worker.png)
 
-### HPE Master Node Cabling
+### HPE master node cabling
 
-#### Dual Card Installations
+#### Dual card installations
 
 The table below describes the cabling of dual card configurations. Also read notes in this section to see other possible
 customer-based configurations.
@@ -78,12 +78,12 @@ customer-based configurations.
 
 NOTES:
 
-* REQUIRED:  Master 001 (`ncn-m001`) is required to have a site connection on OCP Port 2 for installation and
+* REQUIRED: `ncn-m001` is required to have a site connection on OCP Port 2 for installation and
   maintenance.
-* RECOMMENDED: Masters 002 and 003 may optionally have a site connection on OCP Port 2 for emergency system access.
-* REQUIRED:  Master 001 (`ncn-m001`) is required to have its BMC/iLO connected to the site.
+* RECOMMENDED: Other NCN master nodes may optionally have a site connection on OCP Port 2 for emergency system access.
+* REQUIRED: `ncn-m001` is required to have its BMC/iLO connected to the site.
 
-SHCD Example
+SHCD example
 
 | hostname | Source           | Destination   | Destination |
 |----------|------------------|---------------|-------------|
@@ -92,7 +92,7 @@ SHCD Example
 
 ![Diagram of HPE Master Node Cabling](../../../img/network/HPE_Master.png)
 
-> **`NOTE`**: Master 1 (`ncn-m001`) is required to have a site connection for installation and non-CAN system access.
+> **NOTE**: `ncn-m001` is required to have a site connection for installation and non-CAN system access.
 > This can have several configurations depending on customer requirements/equipment:
 
 * Dual `10/25Gb` card configurations as described in the table above should use PCIe Slot 1, Port 2 as a site connection
@@ -102,7 +102,7 @@ SHCD Example
 * Another possibility (non-HPE hardware mainly) is that a built-in `1Gb` port will be used if available (similar to
   CSM 1.3 PoR on Gigabyte hardware).
 
-### HPE Storage Node Cabling
+### HPE storage node cabling
 
 | Device      | Port | Linux Device | Destination    | Name | VLAN          | LAG       |
 |:------------|------|:-------------|:---------------|:-----|:--------------|:----------|
@@ -145,7 +145,7 @@ SHCD Example with four leaf switches.
 | `sn01`   | `x3000u10ocp-j1` | `x3000u34-j6` | `sw-25g02`  |
 | `sn01`   | `x3000u10s1-j1`  | `x3000u33-j6` | `sw-25g01`  |
 
-### HPE UAN Cabling
+### HPE UAN cabling
 
 | Device      | Port | Linux Device | Destination    | Name | VLAN | LAG       |
 |:------------|------|:-------------|:---------------|:-----|:-----|:----------|
@@ -185,7 +185,7 @@ SHCD Example
     * The iLO firmware must be set to tag traffic to VLAN 4. The switch port must be set to trunk VLAN 4.
 * Ports on the OCP card are numbered left-to-right: the far left port is port 1.
 
-#### Apollo XL645D Cabling (per server)
+#### Apollo XL645D cabling (per server)
 
 | Server Port | Management Network Port | Speed | Use / Configuration    |
 |-------------|-------------------------|-------|------------------------|
@@ -208,7 +208,7 @@ SHCD Example
     * The iLO firmware must be set to tag traffic to VLAN 4. The switch port must be set to trunk VLAN 4.
 * Ports on the PCIe card are numbered left-to-right: the far left port is port 1.
 
-#### Apollo XL675D Cabling
+#### Apollo XL675D cabling
 
 | Server Port | Management Network Port | Speed | Use / Configuration    |
 |-------------|-------------------------|-------|------------------------|
@@ -218,9 +218,9 @@ SHCD Example
 | PCIe port 4 | None                    | None  | None                   |
 | iLO         | 1G `leaf-bmc` switch    | `1Gb` | Management Network HMN |
 
-## Gigabyte/Intel Hardware
+## Gigabyte/Intel hardware
 
-### Worker Node Cabling
+### Worker node cabling
 
 ![Diagram of Gigabyte Worker Node](../../../img/network/gigabyte-worker.png)
 
@@ -238,9 +238,9 @@ SHCD Example
 
 ![Diagram of Gigabyte Worker Node Cabling](../../../img/network/Gigaintel_Worker.png)
 
-> **`NOTE`**: Cabling of `ncn-w001` has changed in CSM 1.4. Please see `ncn-m001` note below.
+> **NOTE**: Cabling of `ncn-w001` has changed in CSM 1.4. See `ncn-m001` note below.
 
-### Master Node Cabling
+### Master node cabling
 
 ![Diagram of Gigabyte Master Node](../../../img/network/gigabyte-master.png)
 
@@ -259,7 +259,7 @@ SHCD Example
 
 ![Diagram of Gigabyte Master Node Cabling](../../../img/network/Gigaintel_Master.png)
 
-> **`NOTE`**: Master 1 (`ncn-m001`) is required to have a site connection for installation and non-CAN system access. In
+> **NOTE**: `ncn-m001` is required to have a site connection for installation and non-CAN system access. In
 > CSM versions <=1.3 this connection was on `ncn-w001`. This can have several
 > configurations depending on customer requirements/equipment:
 
@@ -267,7 +267,7 @@ SHCD Example
 * If the customer requires connectivity greater than `1Gb` (or a different connection type), then a new and separate
   card will be installed on `ncn-m001` and that card will provide site connectivity.
 
-### Storage Node Cabling
+### Storage node cabling
 
 ![Diagram of Gigabyte Storage Node](../../../img/network/gigabyte-storage.png)
 
@@ -285,7 +285,7 @@ SHCD Example
 
 ![Diagram of Gigabyte Storage Node Cabling](../../../img/network/GigaIntel_storage.png)
 
-### UAN Cabling
+### UAN cabling
 
 | Server Port        | Management Network Port        | Speed  | Use / Configuration         |
 |--------------------|--------------------------------|--------|-----------------------------|

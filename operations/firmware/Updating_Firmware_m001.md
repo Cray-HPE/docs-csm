@@ -2,7 +2,7 @@
 
 Retrieve the model name and firmware image required to update an HPE or Gigabyte `ncn-m001` node.
 
-> **`NOTE`**
+> **NOTES**
 >
 > - On HPE nodes, the BMC firmware is iLO 5 or iLO 6 and BIOS is System ROM.
 > - The commands in the procedure must be run on `ncn-m001`.
@@ -157,7 +157,7 @@ The following information is needed:
      1. In the JSON response from the previous step, find the text that resembles the following.
 
          ```text
-         "A new task /redfish/v1/TaskService/Tasks/596 was created."  
+         "A new task /redfish/v1/TaskService/Tasks/596 was created."
          ```
 
      1. (`ncn-m001#`) Using the task number (`596` in the above example), check the state of the task.
@@ -218,7 +218,7 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
     Example output:
 
     ```text
-    Firmware: 
+    Firmware:
     ------------------------------------------------
     iLO 5 : 3.02 Feb 22 2024
     System ROM : A43 v3.60 (01/21/2025)
@@ -277,7 +277,7 @@ The web interface will be used to update iLO 5 or iLO 6 (BMC) firmware and/or Sy
     Example output:
 
     ```text
-    Firmware: 
+    Firmware:
     ------------------------------------------------
     iLO 5 : 3.11 Feb 25 2025
     System ROM : A43 v3.70 (03/21/2025)

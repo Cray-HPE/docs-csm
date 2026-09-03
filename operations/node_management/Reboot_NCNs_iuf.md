@@ -4,11 +4,11 @@
     - [1.1 Utility storage nodes](#11-utility-storage-nodes-ceph)
     - [1.2 NCN worker nodes](#12-ncn-worker-nodes)
 
-**`NOTE`** Rebooting master nodes is not supported with IUF and must be performed manually as mentioned [here](Reboot_NCNs_manual.md#ncn-master-nodes).
+**NOTE** Rebooting master nodes is not supported with IUF and must be performed manually as mentioned [here](Reboot_NCNs_manual.md#ncn-master-nodes).
 
 ## 1. Reboot NCNs with IUF
 
-**`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
+**NOTE** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../iuf/stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
 ### 1.1 Utility storage nodes (Ceph)
@@ -43,7 +43,7 @@ Follow the steps below to reboot storage nodes:
 
 ### 1.2 NCN worker nodes
 
-**`NOTE`** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-reboot=true` is not set on any of the nodes passed in the list.
+**NOTE** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-reboot=true` is not set on any of the nodes passed in the list.
 
 1. (`ncn-m001#`) Verify if any nodes are labeled with `iuf-prevent-reboot=true`.
 
@@ -87,7 +87,7 @@ Follow the steps below to reboot worker nodes:
 
     1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
-        **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
+        **NOTE** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
         node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
         with `iuf-prevent-reboot=true` will be reboot. If a list of worker node names is supplied, then those worker nodes will be reboot.
 
@@ -116,4 +116,4 @@ Follow the steps below to reboot worker nodes:
         kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-reboot-
         ```
 
-**`NOTE`** To complete reboot of master nodes manually, refer to the procedure mentioned [here](Reboot_NCNs_manual.md#ncn-master-nodes).
+**NOTE** To complete reboot of master nodes manually, refer to the procedure mentioned [here](Reboot_NCNs_manual.md#ncn-master-nodes).

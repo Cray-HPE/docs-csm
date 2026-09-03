@@ -1,4 +1,4 @@
-# Very Large (Exascale)
+# Very Large (Exascale) Network
 
 ![Exascale network](../img/exascale.png)
 

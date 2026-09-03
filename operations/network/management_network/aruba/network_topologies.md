@@ -2,18 +2,18 @@
 
 The following images are example network topologies for systems of various sizes.
 
-### Very Large
+## Very large
 
-![](../../../../img/network/management_network/exascale.png)
+![Very large (exascale) network](../img/exascale.png "Very large (exascale) network")
 
-### Large
+## Large
 
-![](../../../../img/network/management_network/large.png)
+![Large network](../img/large.png "Large network")
 
-### Medium
+## Medium
 
-![](../../../../img/network/management_network/medium.png)
+![Medium network](../img/medium.png "Medium network")
 
-### Small
+## Small
 
-![](../../../../img/network/management_network/small.png)
+![Small network](../img/small.png "Small network")

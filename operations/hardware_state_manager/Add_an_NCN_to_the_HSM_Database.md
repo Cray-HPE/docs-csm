@@ -1,12 +1,12 @@
 # Add an NCN to the HSM Database
 
-This procedure details how to customize the bare-metal non-compute node \(NCN\) on a system and add the NCN to the Hardware State Manager \(HSM\) database.
+This procedure details how to customize the bare-metal non-compute node (NCN) on a system and add the NCN to the Hardware State Manager (HSM) database.
 
-The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node \(CAN\). Use the correct CAN for the system.
+The examples in this procedure use `ncn-w0003-nmn` as the Customer Access Node (CAN). Use the correct CAN for the system.
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+- The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 - The initial CSM software installation is complete.
 - Keycloak authentication is complete. See [Configure Keycloak Account](../CSM_product_management/Configure_Keycloak_Account.md).
 

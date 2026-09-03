@@ -10,14 +10,16 @@ Summary of NTP from [RFC-1305 Network Time Protocol (Version 3)](https://tools.i
 The Network Time Protocol (NTP) client is essential for syncing time on various clients in the system.
 This document shows how to view NTP status and configure NTP on a Mellanox switch.
 
-- [Enable NTP](#enable-ntp)
-- [Test the NTP server](#test-the-ntp-server)
-- [Specify a remote NTP server](#specify-a-remote-ntp-server)
-- [Configure the system timezone](#configure-the-system-timezone)
-- [Validate functionality](#validate-functionality)
-- [Expected results](#expected-results)
+* [Enable NTP](#enable-ntp)
+* [Test the NTP server](#test-the-ntp-server)
+* [Specify a remote NTP server](#specify-a-remote-ntp-server)
+* [Configure the system timezone](#configure-the-system-timezone)
+* [Validate functionality](#validate-functionality)
+* [Expected results](#expected-results)
 
 ## Enable NTP
+
+(`switch#`)
 
 ```console
 ntp enable
@@ -25,7 +27,7 @@ ntp enable
 
 ## Test the NTP server
 
-Test the NTP server by querying the current time:
+(`switch#`) Test the NTP server by querying the current time:
 
 ```console
 ntpdate 10.4.0.134
@@ -33,7 +35,7 @@ ntpdate 10.4.0.134
 
 ## Specify a remote NTP server
 
-Specify a remote NTP server to use for time synchronization:
+(`switch#`) Specify a remote NTP server to use for time synchronization:
 
 ```console
 ntp server <FQDN|IP-ADDR>
@@ -41,11 +43,15 @@ ntp server <FQDN|IP-ADDR>
 
 ## Configure the system timezone
 
+(`switch#`)
+
 ```console
 clock timezone UTC-offset UTC-7
 ```
 
 ## Validate functionality
+
+(`switch#`)
 
 ```console
 show ntp
@@ -53,8 +59,8 @@ show ntp
 
 ## Expected results
 
-1. The NTP client can be configured.
-1. The functionality can be validated using the `show` command.
-1. The system time of the switch matches that of the NTP server.
+* The NTP client can be configured.
+* The functionality can be validated using the `show` command.
+* The system time of the switch matches that of the NTP server.
 
 [Back to Index](../README.md)

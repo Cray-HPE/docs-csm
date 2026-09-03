@@ -1,4 +1,4 @@
-# Medium
+# Medium Network
 
 ![Medium network](../img/medium.png)
 

@@ -2,7 +2,7 @@
 
 This page will assist an administrator with changing the NCN `udev` rules for varying PCIe hardware.
 
-> **`NOTE:`** If a system's hardware is Plan of Record (PoR), then this page is not needed.
+> **NOTE:** If a system's hardware is Plan of Record (PoR), then this page is not needed.
 
 ## Procedure
 
@@ -156,7 +156,7 @@ Identify the hardware configuration by PXE booting a node.
     In some cases the cards used for HSN NICs are used for management interfaces (for example, the system's storage and master nodes use ConnectX-5s).
     In this case, this procedure will ensure that they are properly labeled.
 
-    > **`NOTE`** The HSN NICs key off of the Device ID, not the Vendor ID.
+    > **NOTE** The HSN NICs key off of the Device ID, not the Vendor ID.
 
     1. Restore the `initrd.img.xz`, kernel, and `filesystem.squashfs` links to the boot directories.
 

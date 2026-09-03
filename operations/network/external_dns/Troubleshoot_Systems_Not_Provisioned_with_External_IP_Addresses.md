@@ -2,7 +2,7 @@
 
 Systems that do not support CMN/CAN/CHN will not have services provisioned with external IP addresses on CMN/CAN/CHN. Kubernetes will report a `<pending>` status for the external IP address of the service experiencing connectivity issues.
 
-If SSH access to a non-compute node \(NCN\) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP address of the corresponding service.
+If SSH access to a non-compute node (NCN) is available, it is possible to override resolution of external hostnames and forward local ports into the cluster for the cluster IP address of the corresponding service.
 
 **WARNING:** This will bypass the OAuth2 Proxy and Istio ingress gateway, which handle authentication and authorization.
 
@@ -10,7 +10,7 @@ Enable systems without CMN to provision services with external hostnames.
 
 ## Prerequisites
 
-The Customer Management Network \(CMN\) is not supported on the system.
+The Customer Management Network (CMN) is not supported on the system.
 
 ## Procedure
 
@@ -36,7 +36,7 @@ The Customer Management Network \(CMN\) is not supported on the system.
     sysmgmt-health   cray-sysmgmt-health-prometheus    [services/services-gateway]    [vmselect.cmn.SYSTEM_DOMAIN_NAME]                            2d16h
     ```
 
-2. Lookup the cluster IP and port for service.
+1. Look up the cluster IP address and port for service.
 
     The example below is for the `cray-sysmgmt-health-kube-p-prometheus` service.
 
@@ -51,49 +51,50 @@ The Customer Management Network \(CMN\) is not supported on the system.
     cray-sysmgmt-health-grafana   ClusterIP   10.25.124.159   <none>        9090/TCP   23h
     ```
 
-3. Setup port forwarding from a laptop or workstation to access the service.
+1. Setup port forwarding from a laptop or workstation to access the service.
 
-    Use the cluster IP and port for the service obtained in the previous step. If the port is unprivileged, use the same port number on the local side.
+    Use the cluster IP address and port for the service obtained in the previous step. If the port is unprivileged, use the same port number on the local side.
 
-    Replace the cluster IP, port, and system name values in the example below.
+    Replace the cluster IP address, port, and system name values in the example below.
 
     ```bash
-    # ssh -L 9090:10.25.124.159:9090 root@SYSTEM_NCN_DOMAIN_NAME
+    ssh -L 9090:10.25.124.159:9090 root@SYSTEM_NCN_DOMAIN_NAME
     ```
 
-4. Visit `http://localhost:9090/` in a laptop or workstation browser.
+1. Open `http://localhost:9090/` in a laptop or workstation browser.
 
-5. There is no `clusterip` for vmselect due to headless service
-   Below are the steps to access headless service
+1. There is no `clusterip` for `vmselect` due to headless service.
+   Below are the steps to access headless service.
 
-  a) Lookup the service  and port for vmselect service
-   The example below is for the `vmselect-vms` service.
+    1. Look up the service and port for `vmselect` service.
 
-   ```bash
-   kubectl -n sysmgmt-health get service vmselect-vms
-   ```
+        The example below is for the `vmselect-vms` service.
 
-   Example output:
+        ```bash
+        kubectl -n sysmgmt-health get service vmselect-vms
+        ```
 
-   ```console
-   NAME                                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-   vmselect-vms                             ClusterIP   None         <none>        8481/TCP   14d
-   ```
-  
-  Use `kubectl` port-forward to connect to a vmselect server running in a Kubernetes cluster
-  
-  ```bash
-  kubectl port-forward -n sysmgmt-health service/vmselect-vms 8082:8481
-  ```
+        Example output:
 
-  Setup port forwarding from a laptop or workstation to access the service.
+        ```console
+        NAME                                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+        vmselect-vms                             ClusterIP   None         <none>        8481/TCP   14d
+        ```
 
-  Use the cluster IP and port for the service obtained in the previous step. If the port is unprivileged, use the same port number on the local side.
+    1. Use `kubectl` port-forward to connect to a vmselect server running in a Kubernetes cluster
 
-  Replace the cluster IP, port, and system name values in the example below.
+        ```bash
+        kubectl port-forward -n sysmgmt-health service/vmselect-vms 8082:8481
+        ```
 
-  ```bash
-  # ssh -L 9090:10.25.124.159:8082 root@SYSTEM_NCN_DOMAIN_NAME
-  ```
+    1. Setup port forwarding from a laptop or workstation to access the service.
 
-  b Visit `http://localhost:9090/` in a laptop or workstation browser.
+        Use the cluster IP address and port for the service obtained in the previous step. If the port is unprivileged, use the same port number on the local side.
+
+        Replace the cluster IP address, port, and system name values in the example below.
+
+        ```bash
+        ssh -L 9090:10.25.124.159:8082 root@SYSTEM_NCN_DOMAIN_NAME
+        ```
+
+    1. Open `http://localhost:9090/` in a laptop or workstation browser.

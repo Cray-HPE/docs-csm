@@ -1,6 +1,6 @@
 # View BIOS Logs for Liquid-Cooled Nodes
 
-SSH to a liquid-cooled node and view the BIOS logs. The BIOS logs for liquid-cooled node controllers \(nC\) are stored in the `/var/log/n0/current` and `/var/log/n1/current` directories.
+SSH to a liquid-cooled node and view the BIOS logs. The BIOS logs for liquid-cooled node controllers (nC) are stored in the `/var/log/n0/current` and `/var/log/n1/current` directories.
 
 The BIOS logs for liquid-cooled nodes are helpful for troubleshooting boot-related issues.
 
@@ -12,7 +12,7 @@ This procedure requires administrative privileges.
 
 1. Log in to the node.
 
-    SSH into the node controller for the host component name (xname). For example, if the host xname \(as defined in `/etc/hosts`\) is `x5000c1s0b0n0`, then the node controller would be `x5000c1s0b0`.
+    SSH into the node controller for the host component name (xname). For example, if the host xname (as defined in `/etc/hosts`) is `x5000c1s0b0n0`, then the node controller would be `x5000c1s0b0`.
 
     ```bash
     ssh XNAME

@@ -1,40 +1,41 @@
 # MAC Authentication
 
-MAC Authentication (MAC Auth) is a method of authenticating devices for access to the network. The default mode of authentication is RADIUS, through which clients are authenticated by an external RADIUS server.
+MAC Authentication (`MAC Auth`) is a method of authenticating devices for access to the network.
+The default mode of authentication is RADIUS, through which clients are authenticated by an external RADIUS server.
 
-## Configuration Commands
+## Configuration commands
 
-Enter MAC Auth context:
+Enter MAC Authentication context:
 
 ```text
 switch(config)# aaa authentication port-access mac-auth
 ```
 
-Enable MAC Auth on all interfaces:
+Enable MAC Authentication on all interfaces:
 
 ```text
 switch(config-macauth)# enable
 ```
 
-Configure MAC Auth MAC address format:
+Configure MAC Authentication MAC address format:
 
 ```text
 switch(config-macauth)# addr-format <no-delimiter|single-dash|multi-dash|multi-colon|no-delimiter
 ```
 
-Enable MAC Auth password:
+Enable MAC Authentication password:
 
 ```text
 switch(config-macauth)# password <plaintext|ciphertext> PASSWORD
 ```
 
-Configure mac-auth RADIUS authentication method:
+Configure `mac-auth` RADIUS authentication method:
 
 ```text
 switch(config-macauth)# aaa authentication port-access mac-auth auth-method <chap|pap>
 ```
 
-Configure mac-auth server group:
+Configure `mac-auth` server group:
 
 ```text
 switch(config-macauth)# radius server-group NAME
@@ -76,16 +77,16 @@ Enable cached reauthentication on the interface:
 switch(config-macauth)# cached-reauth
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show aaa authentication port-access mac-auth interface <IFACE|all> <port-statistics|client-status [mac MAC-ADDR]>
 ```
 
-## Expected Results
+## Expected results
 
-1. Administrators can enable MAC auth authentication
-2. Administrators are able to authenticate using the specified dot1x authentication method
-3. The output of the `show` commands looks correct
+1. Administrators can enable MAC Authentication
+1. Administrators are able to authenticate using the specified `dot1x` authentication method
+1. The output of the `show` commands looks correct
 
 [Back to Index](../README.md)

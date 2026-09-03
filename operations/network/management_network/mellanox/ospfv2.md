@@ -1,42 +1,49 @@
-# Open shortest path first (OSPF) v2
+# Open Shortest Path First (OSPF) v2
 
-"OSPF is a link-state based routing protocol. It is designed to be run internal to a single Autonomous System. Each OSPF router maintains an identical database describing the Autonomous System's topology. From this database, a routing table is calculated by constructing a shortest-path tree. OSPF recalculates routes quickly in the face of topological changes, utilizing a minimum of routing protocol traffic. OSPF provides support for equal-cost multipath. An area routing capability is provided, enabling an additional level of routing protection and a reduction in routing protocol traffic." –rfc1247
+"OSPF is a link-state based routing protocol. It is designed to be run internal to a
+single Autonomous System. Each OSPF router maintains an identical database describing
+the Autonomous System's topology. From this database, a routing table is calculated by
+constructing a shortest-path tree. OSPF recalculates routes quickly in the face of
+topological changes, utilizing a minimum of routing protocol traffic. OSPF provides
+support for equal-cost multipath. An area routing capability is provided, enabling an
+additional level of routing protection and a reduction in routing protocol traffic." – RFC 1247
 
-Relevant Configuration
+## Configuration commands
 
-Enable Ip routing
+(`switch(config)#`) Enable IP routing:
 
-```
-switch(config)# ip routing
-```
-
-Configure ospf protocol
-
-```
-switch(config)# protocol ospf
-switch(config)#. router ospf
-```
-
-Associate area to vlan interface
-
-```
-switch(config)# interface vlan 10
-switch(config interface vlan 10)# no shutdown
-switch(config interface vlan 10)# ip address 10.10.10.1/24
-switch(config interface vlan 10)# ip ospf area 0
+```console
+ip routing
 ```
 
-Show Commands to Validate Functionality
+(`switch(config)#`) Configure OSPF protocol:
 
+```console
+protocol ospf
+router ospf
 ```
+
+(`switch(config)#`) Associate area to VLAN interface:
+
+```console
+interface vlan 10
+no shutdown
+ip address 10.10.10.1/24
+ip ospf area 0
+```
+
+## Show commands to validate functionality
+
+(`switch#`)
+
+```console
 show ip ospf
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: You can enable OSPF globally on the switch
-* Step 2: You can enable OSPF on the loopback, SVI or routed interfaces.
-* Step 3: The output of the show commands looks correct.
+* Administrators can enable OSPF globally on the switch.
+* Administrators can enable OSPF on the loopback, SVI, or routed interfaces.
+* The output of the show commands looks correct.
 
 [Back to Index](../README.md)
-

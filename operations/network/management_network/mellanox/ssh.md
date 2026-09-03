@@ -1,51 +1,56 @@
-# Secure shell (SSH)
-SSH server enables an SSH client to make a secure and encrypted connection to a switch. Currently, switch supports SSH version 2.0 only. The user authentication mechanisms supported for SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server and sftp-client via the copy command are supported for managing the router.
+# Secure Shell (SSH)
 
-Relevant Configuration
+SSH server enables an SSH client to make a secure and encrypted connection to a switch.
+Switches support SSH version 2.0 only. The user authentication mechanisms supported for
+SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally
+stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server
+and `sftp-client` via the `copy` command are supported for managing the router.
 
-Configure SSH authentication
+## Configuration commands
 
+(`switch(config)#`) Configure SSH authentication:
+
+```console
+ssh server enable
 ```
-switch(config)# ssh server enable
-```
 
-Generate SSH server key
+(`switch(config)#`) Generate SSH server key:
 
-```
-switch(config)# ssh server host-key dsa2 private-key
+```console
+ssh server host-key dsa2 private-key
 ```
 
 NOTE:
 
-key-type
+`key-type`
 
-* rsa1 – RSAv1
-* rsa2 – RSAv2
-* dsa2 – DSAv2
+* `rsa1` – `RSAv1`
+* `rsa2` – `RSAv2`
+* `dsa2` – `DSAv2`
 
-private-key	Sets new private-key for the host keys of the specified type
+* `private-key` – Sets new `private-key` for the host keys of the specified type
+* `public-key` – Sets new `public-key` for the host keys of the specified type
+* `generate` – Generates new RSA and DSA host keys for SSH
 
-public-key	Sets new public-key for the host keys of the specified type
+(`switch(config)#`) Enable SSH to listen for incoming connections:
 
-generate	Generates new RSA and DSA host keys for SSH
-
-Enable SSH to listen for incoming connections
-
-```
-switch(config)# ssh server listen enable
+```console
+ssh server listen enable
 ```
 
-Show Commands to Validate Functionality
+## Show commands to validate functionality
 
-```
+(`switch#`)
+
+```console
 show ssh server
 ```
 
-Expected Results
+## Expected results
 
-* Step 1: You can create the user account
-* Step 2: You can generate working SSH keys
-* Step 3: The output of the show commands is correct
-* Step 4: You can successfully connect to the switch via an SSH client using SSH 2.0.
+* Administrators can create the user account.
+* Administrators can generate working SSH keys.
+* The output of the `show` commands is correct.
+* Administrators can successfully connect to the switch via an SSH client using SSH 2.0.
 
 [Back to Index](../README.md)
