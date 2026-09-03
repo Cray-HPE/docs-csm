@@ -44,6 +44,6 @@ show ip ospf
 
 * Administrators can enable OSPF globally on the switch.
 * Administrators can enable OSPF on the loopback, SVI, or routed interfaces.
-* The output of the show commands looks correct.
+* The output of the `show` commands looks correct.
 
 [Back to Index](../README.md)

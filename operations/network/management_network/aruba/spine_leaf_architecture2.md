@@ -16,4 +16,4 @@ Other common differences in spine-leaf topologies include:
 * The removal of Spanning Tree Protocol (STP) where feasible
 * A scale-out vs. scale-up of infrastructure
 
-[Back to index](README.md).
+[Back to Index](README.md).
