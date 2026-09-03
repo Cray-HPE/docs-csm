@@ -66,28 +66,31 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 
 1. Create a `site_vars.yaml` file in `${ADMIN_DIR}`. This file will contain key/value pairs for any configuration changes that should override entries in the `default` section of the HPE-provided `product_vars.yaml` file.
    There are comments at the top of the `product_vars.yaml` file that describe the variables and related details. The following are a few examples of `site_vars.yaml` changes:
+
     - Add a `default` section containing a `network_type: "cassini"` entry to designate that Cassini is the desired Slingshot network type to be used when executing CFS configurations later in the workflow
     - Add a `suffix` entry to the `default` section to append a string to the names of CFS configuration, image, and BOS session template artifacts created during the workflow to make them easy to identify
     - Add a `system_name` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this system name as the first part of the domain name. Do not add if not using SBPS.
-      - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter)
-        for more information.
-        - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`. See the
-          "Boot set `rootfs_provider_passthrough` parameter" section for more details.
-        - Otherwise, it can be found under the appropriate release branch in <https://github.com/Cray-HPE/docs-csm>.
-      - This documentation indicates how to find the `system_name`.
+        - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter)
+          for more information.
+            - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`.
+              See the "Boot set `rootfs_provider_passthrough` parameter" section for more details.
+            - Otherwise, it can be found under the appropriate release branch in [the `docs-csm` GitHub repository](https://github.com/Cray-HPE/docs-csm).
+        - This documentation indicates how to find the `system_name`.
     - Add a `site_domain` entry to the `default` section. The Scalable Boot Projection Service (SBPS) uses this domain name as the second part of the domain name. Do not add if not using SBPS.
-      - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter)
-        for more information.
-        - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`.
-          See the "Boot set `rootfs_provider_passthrough` parameter"section for more details.
-        - Otherwise, it can be found under the appropriate release branch in <https://github.com/Cray-HPE/docs-csm>.
-      - This documentation indicates how to find the `site_domain`.
+        - See the procedure [Create a Session Template to Boot Compute Nodes with SBPS](../../../operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md#boot-set-rootfs_provider_passthrough-parameter)
+          for more information.
+            - If the `docs-csm` RPM is installed on a node, then this page can be found under `/usr/share/doc/csm/operations/boot_orchestration/Create_a_Session_Template_to_Boot_Compute_Nodes_with_SBPS.md`.
+              See the "Boot set `rootfs_provider_passthrough` parameter" section for more details.
+            - Otherwise, it can be found under the appropriate release branch in [the `docs-csm` GitHub repository](https://github.com/Cray-HPE/docs-csm).
+        - This documentation indicates how to find the `site_domain`.
 
-   Additional information on `site_vars.yaml` files can be found in the [Site and recipe variables](../IUF.md#site-and-recipe-variables) and [`update-vcs-config`](../stages/update_vcs_config.md) sections.
+    Additional information on `site_vars.yaml` files can be found in the [Site and recipe variables](../IUF.md#site-and-recipe-variables) and [`update-vcs-config`](../stages/update_vcs_config.md) sections.
 
     1. Create a `site_vars.yaml` file with desired key/value pairs
 
-    2. Ensure the `site_vars.yaml` file contents are formatted correctly. The following text is an example for verification purposes only.
+    1. Ensure the `site_vars.yaml` file contents are formatted correctly.
+
+        > The following text is for example purposes only.
 
        (`ncn-m001#`) Display the contents of an **example** `site_vars.yaml` file
 
@@ -108,9 +111,9 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
          deploy_pbs: false
        ```
 
-    3. Ensure the expected files are present in the admin directory after performing the steps in this section.
+    1. Ensure the expected files are present in the admin directory after performing the steps in this section.
 
-       (`ncn-m001#`) Examine the contents of `${ADMIN_DIR}` to verify the expected content is present
+       (`ncn-m001#`) Examine the contents of `${ADMIN_DIR}` to verify the expected content is present.
 
        ```bash
        find . -type f
@@ -128,4 +131,4 @@ the HPC CSM Software Recipe with the existing content in `${ADMIN_DIR}`.
 Once this step has completed:
 
 - `${ADMIN_DIR}` is populated with `product_vars.yaml`, `site_vars.yaml`, and `sat bootprep` input files
-- The aforementioned configuration files have been updated to reflect site preferences
+- The configuration files have been updated to reflect site preferences
