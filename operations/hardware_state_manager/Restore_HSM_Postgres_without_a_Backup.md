@@ -4,24 +4,24 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
 
 ## Prerequisite
 
-- Healthy System Layout Service (SLS). Recovered first if also affected.
+- Healthy System Layout Service (SLS). Recover this first, if it is also affected.
 
 - Healthy HSM service.
 
-  Verify all 3 HSM Postgres replicas are up and running:
+    Verify all three HSM Postgres replicas are up and running:
 
-  ```bash
-  kubectl -n services get pods -l cluster-name=cray-smd-postgres
-  ```
+    ```bash
+    kubectl -n services get pods -l cluster-name=cray-smd-postgres
+    ```
 
-  Example output:
+    Example output:
 
-  ```text
-  NAME                  READY   STATUS    RESTARTS   AGE
-  cray-smd-postgres-0   3/3     Running   0          18d
-  cray-smd-postgres-1   3/3     Running   0          18d
-  cray-smd-postgres-2   3/3     Running   0          18d
-  ```
+    ```text
+    NAME                  READY   STATUS    RESTARTS   AGE
+    cray-smd-postgres-0   3/3     Running   0          18d
+    cray-smd-postgres-1   3/3     Running   0          18d
+    cray-smd-postgres-2   3/3     Running   0          18d
+    ```
 
 ## Procedure
 
@@ -37,32 +37,32 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     kubectl wait -n services job cray-smd-init --for=condition=complete --timeout=5m
     ```
 
-2. Verify that the service is functional.
+1. Verify that the service is functional.
 
     ```bash
-    cray hsm service ready list
+    cray hsm service ready list --format toml
     ```
 
     Example output:
 
-    ```text
+    ```toml
     code = 0
     message = "HSM is healthy"
     ```
 
-3. Get the number of node objects stored in HSM.
+1. Get the number of node objects stored in HSM.
 
     ```bash
     cray hsm state components list --type Node --format json | jq .Components[].ID | wc -l
     ```
 
-4. Ensure HMS Discovery Kubernetes cronjob is enabled.
+1. Ensure HMS Discovery Kubernetes cronjob is enabled.
 
     ```bash
     kubectl -n services patch cronjobs hms-discovery -p '{"spec" : {"suspend" : false }}'
     ```
 
-5. Restart MEDS.
+1. Restart MEDS.
 
     To repopulate HSM with components, restart MEDS so it will add known `RedfishEndpoints` back in to HSM. This will also kick off HSM rediscovery to repopulate components and hardware inventory.
 
@@ -71,25 +71,28 @@ This procedure is intended to repopulate HSM in the event when no Postgres backu
     kubectl scale deployment cray-meds -n services --replicas=1
     ```
 
-    Wait for the RedfishEndpoints table to get repopulated and discovery to complete.
+1. Wait for the `RedfishEndpoints` table to get repopulated.
 
     ```bash
     cray hsm inventory redfishEndpoints list --format json | jq .RedfishEndpoints[].ID | wc -l
-    100
-    cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
-    0
     ```
 
-6. Check for Discovery Errors.
+1. Wait for discovery to complete.
+
+    ```bash
+    cray hsm inventory redfishEndpoints list --format json | grep -c "DiscoveryStarted"
+    ```
+
+1. Check for discovery errors.
 
     ```bash
     cray hsm inventory redfishEndpoints list --format json | grep LastDiscoveryStatus | grep -v -c "DiscoverOK"
     ```
 
-    If any of the RedfishEndpoint entries have a `LastDiscoveryStatus` other than `DiscoverOK` after discovery has completed, refer
-    to the [Troubleshoot Issues with Redfish Endpoint Discovery](../node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md) procedure for guidance.
+    If any of the `RedfishEndpoint` entries have a `LastDiscoveryStatus` other than `DiscoverOK` after discovery has completed, then see
+    [Troubleshoot Issues with Redfish Endpoint Discovery](../node_management/Troubleshoot_Issues_with_Redfish_Endpoint_Discovery.md).
 
-7. Re-apply any component group or partition customizations.
+1. Re-apply any component group or partition customizations.
 
     Any component groups or partitions created before HSM's Postgres information was lost will need to be manually re-entered.
 

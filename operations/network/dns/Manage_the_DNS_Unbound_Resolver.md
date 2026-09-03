@@ -337,7 +337,7 @@ To add this record to the DNS configuration:
       kubectl -n services edit cm cray-dns-unbound
       ```
 
-   2. Add the record to the `custom_records.conf` key of the ConfigMap.
+   1. Add the record to the `custom_records.conf` key of the ConfigMap.
 
       **IMPORTANT:** Syntax errors in `custom_records.conf` may cause the DNS service to fail if the configuration cannot be parsed by the server.
 
