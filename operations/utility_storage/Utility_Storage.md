@@ -1,6 +1,7 @@
 # Utility Storage
 
 - [Overview](#overview)
+- [Key concepts](#key-concepts)
 - [Storage tools and information references](#storage-tools-and-information-references)
 - [Storage troubleshooting references](#storage-troubleshooting-references)
 

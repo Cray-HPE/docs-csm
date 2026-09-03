@@ -7,27 +7,29 @@
 
 ## Configuration commands
 
-Configure TACACS:
+(`switch(config)#`) Configure TACACS:
 
 ```text
-switch(config)# tacacs-server host IP-ADDR [key <plain|cipher>text KEY]
+tacacs-server host IP-ADDR [key <plain|cipher>text KEY]
 ```
 
-Depending on the TACACS server, change the `auth-type` from PAP to CHAP:
+(`switch(config)#`) Depending on the TACACS server, change the `auth-type` from PAP to CHAP:
 
 ```text
-switch(config)# tacacs-server auth-type [pap|chap]
+tacacs-server auth-type [pap|chap]
 ```
 
-Configure AAA:
+(`switch(config)#`) Configure AAA:
 
 ```text
-switch(config)# aaa authentication login default group tacacs local
-switch(config)# aaa authorization commands default group tacacs
-switch(config)# aaa accounting all default start-stop group tacacs
+aaa authentication login default group tacacs local
+aaa authorization commands default group tacacs
+aaa accounting all default start-stop group tacacs
 ```
 
 ## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```text
 show tacacs-server [detail]
@@ -35,13 +37,13 @@ show tacacs-server [detail]
 
 ## Expected results
 
-1. SSH is enabled
-1. Administrators can configure TACACS between the server and the DUT correctly
-   1. The key on the DUT matches the key on the server
-   1. Administrators have a valid and working user account in the TACACS configuration file on the server
-1. Administrators can validate the configuration using the show command listed above
-1. Administrators can log into the switch via SSH from the client, and the available CLI is unrestricted
-1. Administrators can see the start-stop logs in the logfile of the TACACS server
-1. Administrators can log into the switch via SSH from the client, but the available CLI is restricted
+* SSH is enabled
+* Administrators can configure TACACS between the server and the DUT correctly.
+    * The key on the DUT matches the key on the server.
+    * Administrators have a valid and working user account in the TACACS configuration file on the server.
+* Administrators can validate the configuration using the `show` command listed above.
+* Administrators can log into the switch via SSH from the client, and the available CLI is unrestricted.
+* Administrators can see the start-stop logs in the logfile of the TACACS server.
+* Administrators can log into the switch via SSH from the client, but the available CLI is restricted.
 
 [Back to Index](../README.md)
