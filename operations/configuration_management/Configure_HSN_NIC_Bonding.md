@@ -1,21 +1,20 @@
 # Configure HSN NIC Bonding
 
-* [Configure HSN NIC Bonding](#configure-hsn-nic-bonding)
-    * [References](#references)
-    * [Limitations](#limitations)
-    * [Prerequisites](#prerequisites)
-    * [Setup](#setup)
-        * [Fabric configuration](#fabric-configuration)
-        * [Host configuration](#host-configuration)
-            * [Prepare VCS branch](#prepare-vcs-branch)
-            * [Configure the `csm.ncn.hsn_bonding` Ansible role](#configure-the-csmncnhsn_bonding-ansible-role)
-            * [Configure CFS to run the `csm.ncn.hsn_bonding` role](#configure-cfs-to-run-the-csmncnhsn_bonding-role)
-    * [Verification](#verification)
-    * [Troubleshooting](#troubleshooting)
-    * [Additional steps](#additional-steps)
+* [References](#references)
+* [Limitations](#limitations)
+* [Prerequisites](#prerequisites)
+* [Setup](#setup)
+    * [Fabric configuration](#fabric-configuration)
+    * [Host configuration](#host-configuration)
+        * [Prepare VCS branch](#prepare-vcs-branch)
+        * [Configure the `csm.ncn.hsn_bonding` Ansible role](#configure-the-csmncnhsn_bonding-ansible-role)
+        * [Configure CFS to run the `csm.ncn.hsn_bonding` role](#configure-cfs-to-run-the-csmncnhsn_bonding-role)
+* [Verification](#verification)
+* [Troubleshooting](#troubleshooting)
+* [Additional steps](#additional-steps)
 
-This procedure can be used to create a bonded HSN interface on an NCN worker node. The `csm.ncn.hsn_bonding` Ansible role is
-merely an automation of the manual steps outlined in the "How to create a bonded IP host interface with HPE Slingshot" document (See [References](#references))
+This procedure can be used to create a bonded [HSN][hsn] interface on an [NCN][ncn] worker node. The `csm.ncn.hsn_bonding` Ansible role is
+merely an automation of the manual steps outlined in the _How to create a bonded IP host interface with HPE Slingshot_ document (See [References](#references))
 
 ## References
 
@@ -27,16 +26,16 @@ The _How to create a bonded IP host interface with HPE Slingshot_ document is av
 
 ## Limitations
 
-* This procedure is only supported on nodes with HPE Slingshot 200Gbps interfaces.
-* More than one bonded interface per NCN worker node is not supported.
+* This procedure is only supported on nodes with HPE [Slingshot][slingshot] 200Gbps interfaces.
+* More than one bonded interface per [NCN][ncn] worker node is not supported.
 
 ## Prerequisites
 
-The following steps should have occurred before configuring a bonded interface on an NCN worker node.
+The following steps should have occurred before configuring a bonded interface on an [NCN][ncn] worker node.
 
-* HPE Slingshot Fabric Manager is installed and configured.
-* Slingshot Host Software (SHS) is installed and an image containing it has been deployed to the NCN worker nodes.
-* User Services Software (USS) is installed and an image containing it has been deployed to the NCN worker nodes.
+* HPE [Slingshot][slingshot] [Fabric Manager][fm] is installed and configured.
+* [Slingshot Host Software (SHS)][shs] is installed and an image containing it has been deployed to the NCN worker nodes.
+* [User Services Software (USS)][uss] is installed and an image containing it has been deployed to the NCN worker nodes.
 * Link Aggregation Groups (LAG) have been created using the HPE Slingshot Fabric Manager.
     * An IP address and netmask have been provided by the fabric administrator.
     * The bonding mode used for the LAG has been provided by the fabric administrator.
@@ -71,11 +70,11 @@ purpose of illustration.
 
 ### Host configuration
 
-The following steps describe how to use CFS to configure a bond on an NCN worker node.
+The following steps describe how to use [CFS][cfs] to configure a bond on an NCN worker node.
 
 #### Prepare VCS branch
 
-1. Use the [Cloning a VCS repository](Version_Control_Service_VCS.md#cloning-a-vcs-repository) procedure to clone the `csm-config-management` repository.
+1. Use the [Cloning a VCS repository](Version_Control_Service_VCS.md#cloning-a-vcs-repository) procedure to clone the `csm-config-management` [VCS][vcs] repository.
 
 1. Determine the import branch to use.
 
@@ -110,7 +109,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
 #### Configure the `csm.ncn.hsn_bonding` Ansible role
 
-1. Determine eligible NCN worker nodes.
+1. Use [SAT] to determine eligible [NCN][ncn] worker nodes.
 
    ```bash
    sat status --hsm-fields --filter SubRole=Worker
@@ -141,7 +140,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
    | `hsn_bond_ip`         | `10.253.254.1`      |
    | `hsn_bond_netmask`    | `255.255.0.0`       |
 
-   The DMAC used should match the one defined in the fabric LAG configuration. The four parameters in this table _must_ be provided. The values for
+   The DMAC used should match the one defined in the fabric LAG configuration. The four [HSN][hsn] parameters in this table _must_ be provided. The values for
    `hsn_bond_mac`, `hsn_bond_ip`, and `hsn_bond_netmask` cannot be derived so must be set. Interface configuration will fail if these values are not provided.
 
    > **NOTE** The `hsn_bond_options` parameter defaults to `"mode=802.3ad xmit_hash_policy=layer2+3 miimon=100 ad_select=bandwidth lacp_rate=fast"` and may need changing if static mode
@@ -159,7 +158,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
    hsn_bond_netmask: '255.255.0.0'
    ```
 
-1. Commit the change and push it back up to the VCS.
+1. Commit the change and push it back up to the [VCS][vcs].
 
    ```bash
    git add host_vars/x3000c0s31b0n0.yml
@@ -169,7 +168,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
 #### Configure CFS to run the `csm.ncn.hsn_bonding` role
 
-1. Create a CFS configuration using the committed changes.
+1. Create a [CFS] [configuration](CFS_Configurations.md) using the committed changes.
 
    1. Obtain the commit hash and create a configuration template file.
 
@@ -192,12 +191,12 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
    1. Create a CFS configuration from the template file.
 
       ```bash
-      cray cfs configurations update hsn-nic-bonding --file ./hsn-nic-bonding.json
+      cray cfs configurations update hsn-nic-bonding --file ./hsn-nic-bonding.json --format toml
       ```
 
       Example output:
 
-      ```text
+      ```toml
       lastUpdated = "2024-10-11T11:13:39Z"
       name = "hsn-nic-bonding"
       [[layers]]
@@ -207,16 +206,16 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
       playbook = "ncn_hsn_bonding.yml"
       ```
 
-1. Create a CFS session to apply the configuration to the node(s).
+1. Create a [CFS session](CFS_Sessions.md) to apply the configuration to the nodes.
 
    ```bash
    SESSION=hsn-nic-bonding-$(date +%Y%m%d%H%M%S)
-   cray cfs sessions create --name "${SESSION}" --configuration-name hsn-nic-bonding
+   cray cfs sessions create --name "${SESSION}" --configuration-name hsn-nic-bonding --format toml
    ```
 
    Example output:
 
-   ```text
+   ```toml
    debug_on_failure = false
    logs = "ara.cmn.surtur.hpc.amslabs.hpecorp.net/?label=hsn-nic-bonding-20241011111435"
    name = "hsn-nic-bonding-20241011111435"
@@ -249,15 +248,15 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
 ## Verification
 
-1. Check the CFS session completed successfully.
+1. Check that the [CFS][cfs] [session](CFS_Sessions.md) completed successfully.
 
    ```bash
-   cray cfs sessions describe ${SESSION}
+   cray cfs sessions describe ${SESSION} --format toml
    ```
 
    Example output:
 
-   ```text
+   ```toml
    name = "hsn-nic-bonding-20241011111435"
 
    [ansible]
@@ -290,11 +289,11 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
    The session status should be "complete" and succeeded should be "true". See the [troubleshooting](#troubleshooting) section if that is not the case.
 
-1. Verify the bonded interface is configured.
+1. Verify that the bonded interface is configured.
 
    1. SSH to the target node.
 
-   1. Check the interface is configured with the correct IP address and MAC address.
+   1. Check that the interface is configured with the correct IP address and MAC address.
 
       ```bash
       ip ad show bond1
@@ -311,7 +310,7 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
              valid_lft forever preferred_lft forever
       ```
 
-   1. Verify both interfaces forming the bonded interface are up.
+   1. Verify that both interfaces forming the bonded interface are up.
 
       ```bash
       cat /proc/net/bonding/bond1
@@ -401,18 +400,97 @@ The following steps describe how to use CFS to configure a bond on an NCN worker
 
 ## Troubleshooting
 
-Refer to [View Configuration Session Logs](View_Configuration_Session_Logs.md) to troubleshoot why the CFS session failed to complete successfully.
+Refer to [View Configuration Session Logs](View_Configuration_Session_Logs.md) to troubleshoot why the [CFS session](CFS_Sessions.md) failed to complete successfully.
 
-If the underlying HSN interfaces are not up or present refer to the Slingshot documentation listed in [References](#references) to verify the fabric is healthy.
+If the underlying [HSN][hsn] interfaces are not up or present refer to the [Slingshot][slingshot] documentation listed in [References](#references) to verify the fabric is healthy.
 Troubleshooting HPE Slingshot is beyond the scope of this document. See the _HPE Slingshot Troubleshooting Guide_ for troubleshooting information.
 
 ## Additional steps
 
-This procedure performs a one time configuration of the target nodes. The bonded HSN configuration will persist through a reboot of the node but a rebuild of the node
+This procedure performs a one time configuration of the target nodes. The bonded [HSN][hsn] configuration will persist through a reboot of the node but a rebuild of the node
 will wipe it.
 
-In order to persist this configuration through a rebuild of the node, the CFS layer should be added to the CFS configuration used for the NCN worker nodes.
-It may also be desirable to add this layer to the `site_vars.yaml` as well as any bootprep file used for `sat bootprep` to ensure that the `update-cfs-configuration` stage
-of IUF does not remove this layer.
+In order to persist this configuration through a rebuild of the node, the [CFS][cfs] layer should be added to the [CFS configuration](CFS_Configurations.md) used for the [NCN][ncn] worker nodes.
+It may also be desirable to add this layer to the `site_vars.yaml` as well as any [SAT][sat] `bootprep` file to ensure that the `update-cfs-configuration` stage
+of [IUF][iuf] does not remove this layer.
 
-See [CFS Configurations](CFS_Configurations.md) and the IUF [overview](../iuf/IUF.md) and [configuration](../iuf/workflows/configuration.md) documentation for more information.
+For more information, see:
+
+* [CFS Configurations](CFS_Configurations.md)
+* [IUF overview](../iuf/IUF.md)
+* [IUF configuration](../iuf/workflows/configuration.md)
+
+<!--- Define the reference-style Markdown links used to make the page easier to edit -->
+
+<!-- markdownlint-disable MD053 -->
+<!---
+    For references that are likely to appear on a lot of pages (glossary references, for example),
+    we allow definitions for entries that are not used on the page, as a convenience.
+-->
+
+<!-- non-glossary common links -->
+
+[config-cli]: ../configure_cray_cli.md
+[check-latest-docs]: ../../update_product_stream/README.md#check-for-latest-documentation
+
+<!-- glossary entries -->
+
+[aee]: ../../glossary.md#ansible-execution-environment-aee
+[an]: ../../glossary.md#application-node-an
+[ara]: ../../glossary.md#ara-records-ansible-ara
+[bmc]: ../../glossary.md#baseboard-management-controller-bmc
+[bos]: ../../glossary.md#boot-orchestration-service-bos
+[bss]: ../../glossary.md#boot-script-service-bss
+[can]: ../../glossary.md#customer-access-network-can
+[canu]: ../../glossary.md#csm-automatic-network-utility-canu
+[capmc]: ../../glossary.md#cray-advanced-platform-monitoring-and-control-capmc
+[cdu]: ../../glossary.md#coolant-distribution-unit-cdu
+[cec]: ../../glossary.md#cabinet-environmental-controller-cec
+[cfs]: ../../glossary.md#configuration-framework-service-cfs
+[chn]: ../../glossary.md#customer-high-speed-network-chn
+[cli]: ../../glossary.md#cray-cli-cray
+[cmn]: ../../glossary.md#customer-management-network-cmn
+[cn]: ../../glossary.md#compute-node-cn
+[csi]: ../../glossary.md#cray-site-init-csi
+[fas]: ../../glossary.md#firmware-action-service-fas
+[fm]: ../../glossary.md#fabric-manager
+[hbtd]: ../../glossary.md#heartbeat-tracker-daemon-hbtd
+[hmn]: ../../glossary.md#hardware-management-network-hmn
+[hmnfd]: ../../glossary.md#hardware-management-notification-fanout-daemon-hmnfd
+[hsm]: ../../glossary.md#hardware-state-manager-hsm
+[hsn]: ../../glossary.md#high-speed-network-hsn
+[ims]: ../../glossary.md#image-management-service-ims
+[iuf]: ../../glossary.md#install-and-upgrade-framework-iuf
+[meds]: ../../glossary.md#mountain-endpoint-discovery-service-meds
+[mgmt-ncns]: ../../glossary.md#management-nodes
+[mountain]: ../../glossary.md#mountain-cabinet
+[nc]: ../../glossary.md#node-controller-nc
+[ncn]: ../../glossary.md#non-compute-node-ncn
+[nid]: ../../glossary.md#node-id-nid
+[nmd]: ../../glossary.md#node-memory-dump-nmd
+[nmn]: ../../glossary.md#node-management-network-nmn
+[pcs]: ../../glossary.md#power-control-service-pcs
+[pdu]: ../../glossary.md#power-distribution-unit-pdu
+[pit]: ../../glossary.md#pre-install-toolkit-pit
+[river]: ../../glossary.md#river-cabinet
+[rts]: ../../glossary.md#redfish-translation-service-rts
+[s3]: ../../glossary.md#simple-storage-service-s3
+[sat]: ../../glossary.md#system-admin-toolkit-sat
+[sbps]: ../../glossary.md#scalable-boot-projection-service-sbps
+[scsd]: ../../glossary.md#system-configuration-service-scsd
+[sdu]: ../../glossary.md#system-diagnostic-utility-sdu
+[shcd]: ../../glossary.md#shasta-cabling-diagram-shcd
+[shs]: ../../glossary.md#slingshot-host-software-shs
+[slingshot]: ../../glossary.md#slingshot
+[sls]: ../../glossary.md#system-layout-service-sls
+[sma]: ../../glossary.md#system-monitoring-application-sma
+[smd]: ../../glossary.md#hardware-state-manager-smd
+[sops]: ../../glossary.md#secrets-operations-sops
+[tapms]: ../../glossary.md#tenant-and-partition-management-system-tapms
+[uan]: ../../glossary.md#user-access-node-uan
+[uss]: ../../glossary.md#user-services-software-uss
+[vcs]: ../../glossary.md#version-control-service-vcs
+[vnid]: ../../glossary.md#virtual-network-identifier-daemon-vnid
+[xname]: ../../glossary.md#xname
+
+<!-- markdownlint-restore -->

@@ -47,4 +47,4 @@ Access to the spine switches is required.
     clear ip bgp all
     ```
 
-[Back to index](README.md).
+[Back to Index](README.md).

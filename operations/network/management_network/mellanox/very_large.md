@@ -2,4 +2,4 @@
 
 ![Exascale network](../img/exascale.png)
 
-[Back to index](README.md).
+[Back to Index](README.md).
