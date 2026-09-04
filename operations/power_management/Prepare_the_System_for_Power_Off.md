@@ -341,10 +341,14 @@ managed nodes, including compute nodes and User Access Nodes (UANs).
 
     1. Use the System Diagnostic Utility (SDU) to capture current state of system before the shutdown.
 
-        **Important:** SDU may take about 45 minutes to run on a small system (longer for large systems).
+        ```bash
+        sdu scenario daily --reason "saving state before powerdown"
+        ```
+
+        **Important:** If there is an active or suspected issue on the system, run the following SDU command instead. This may take about 45 minutes to run on a small system (longer for large systems).
 
         ```bash
-        sdu scenario triage --start_time '-4 hours' \
+        sdu scenario triage --start-time '-4 hours' \
                  --reason "saving state before powerdown"
         ```
 
