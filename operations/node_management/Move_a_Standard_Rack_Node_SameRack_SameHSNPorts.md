@@ -1,4 +1,4 @@
-# Move a Standard Rack Node \(Same Rack/Same HSN Ports\)
+# Move a Standard Rack Node (Same Rack/Same HSN Ports)
 
 This procedure move standard rack UAN or compute node to a different location and uses the same Slingshot switch ports and management network ports.
 
@@ -19,8 +19,8 @@ If a node has an incorrect component name (xname) based on its physical location
    }
    ```
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [configure the Cray CLI](../configure_cray_cli.md).
-- This procedure applies only to standard rack nodes. Liquid-cooled compute blades do not require the use of the `MgmtSwitchConnector` object in the System Layout Service \(SLS\) to perform discovery.
+- The Cray command line interface (CLI) tool is initialized and configured on the system. See [configure the Cray CLI](../configure_cray_cli.md).
+- This procedure applies only to standard rack nodes. Liquid-cooled compute blades do not require the use of the `MgmtSwitchConnector` object in the System Layout Service (SLS) to perform discovery.
 - This procedure moves an application node or compute node to a different location in an HPE Cray standard rack.
 - The node must use the **same Slingshot switch switch ports**.
 - The node must use the **same management network switch ports**.
@@ -35,15 +35,15 @@ This procedure works with both application and compute nodes. This example moves
 
 1. Shut down software and power off the node.
 
-1. Disconnect the power cables, management network cables, and high-speed network \(HSN\) cables.
+1. Disconnect the power cables, management network cables, and high-speed network (HSN) cables.
 
     > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped.
 
-1. Move the node to the new location in the rack \(U27\), connect the management cables and HSN cables, but do not connect the power cables.
+1. Move the node to the new location in the rack (U27), connect the management cables and HSN cables, but do not connect the power cables.
 
     > If this procedure is being followed to correct a node's component name (xname), then this step can be skipped.
 
-### Update Node in the System Layout Service \(SLS\)
+### Update node in the System Layout Service (SLS)
 
 1. (`ncn-mw#`) Set up environment variables for the original node and node BMC component names (xnames).
 
@@ -160,7 +160,7 @@ This procedure works with both application and compute nodes. This example moves
             https://api-gw-service-nmn.local/apis/sls/v1/hardware -d @sls_node.json
         ```
 
-        > **`NOTE`** If a 503 is returned, verify that `get_token` function has been defined.
+        > **NOTE** If a 503 is returned, verify that `get_token` function has been defined.
 
         Expected output:
 
@@ -315,7 +315,7 @@ This procedure works with both application and compute nodes. This example moves
         done
         ```
 
-    1. Delete each `NodeBMC` MAC address from the Hardware State Manager \(HSM\) Ethernet interfaces table.
+    1. Delete each `NodeBMC` MAC address from the Hardware State Manager (HSM) Ethernet interfaces table.
 
         ```bash
         for ID in $(cray hsm inventory ethernetInterfaces list --component-id $OLD_BMC_XNAME --format json | jq -r .[].ID); do
@@ -390,7 +390,7 @@ This procedure works with both application and compute nodes. This example moves
     State = "Off"
     ```
 
-1. (`ncn-mw#`) If necessary, enable the nodes in the HSM database \(in this example, the nodes are `x3000c0s27b[1-4]n0`\).
+1. (`ncn-mw#`) If necessary, enable the nodes in the HSM database (in this example, the nodes are `x3000c0s27b[1-4]n0`).
 
     ```bash
     cray hsm state components bulkEnabled update --enabled true --component-ids x3000c0s27b1n0,x3000c0s27b2n0,x3000c0s27b3n0,x3000c0s27b4n0

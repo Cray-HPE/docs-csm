@@ -1,23 +1,22 @@
-# Backing up switch configuration
+# Backing Up A Switch Configuration
 
-Backing up current configuration of the switch in text format
-Example
+This document describes how to back up the current configuration of the switch in text format.
 
-To create a new text-based configuration file, complete the following steps:
+## Back up configuration
 
-Log in to the switch as Admin.
+(`switch (config) #`) Save the configuration to a text file.
 
-Type the following command:
-
-```
-switch (config) # configuration text generate active running save my-filename
+```console
+configuration text generate active running save my-filename
 ```
 
-To upload a text-based configuration file from a switch to an external file server, complete the following steps:
+## Copy configuration to external location
 
-```
-switch (config) # configuration text file my-filename upload
-scp://root@my-server/root/tmp/my-filename
+(`switch (config) #`) To upload a text-based configuration file from a switch to an external file server,
+run the following command:
+
+```console
+configuration text file my-filename upload scp://root@my-server/root/tmp/my-filename
 ```
 
 [Back to Index](../README.md)

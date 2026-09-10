@@ -553,6 +553,7 @@ making it available via REST queries and message bus events when changes occur.
 - [Hardware Management Services (HMS) Locking API](hardware_state_manager/Hardware_Management_Services_HMS_Locking_API.md)
     - [Lock and Unlock Management Nodes](hardware_state_manager/Lock_and_Unlock_Management_Nodes.md)
     - [Manage HMS Locks](hardware_state_manager/Manage_HMS_Locks.md)
+    - [BOS sessions and HSM locks](boot_orchestration/Sessions.md#bos-sessions-and-hsm-locks)
 - [Component Groups and Partitions](hardware_state_manager/Component_Groups_and_Partitions.md)
     - [Manage Component Groups](hardware_state_manager/Manage_Component_Groups.md)
     - [Component Group Members](hardware_state_manager/Component_Group_Members.md)

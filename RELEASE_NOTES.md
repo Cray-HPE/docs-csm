@@ -51,6 +51,7 @@ changes it includes.
 
 * [CSM 1.7.1 Release Notes](RELEASE_NOTES_1.7.1.md)
 * [CSM 1.7.1-patch.1 Release Notes](RELEASE_NOTES_1.7.1-patch.1.md)
+* [CSM 1.7.1-patch.2 Release Notes](RELEASE_NOTES_1.7.1-patch.2.md)
 
 ## New
 

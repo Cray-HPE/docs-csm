@@ -490,4 +490,6 @@ Repository priorities are without effect. All enabled repositories share the sam
 
 ### Install Fabric Manager on FM baremetal nodes
 
-For install/ upgrade Fabric Manager on the FMNs please refer section "3 Install HPE Slingshot Fabric Manager software on bare metal servers" in _HPE Slingshot Installation Guide for CSM_ PDF.
+For information on installing or upgrading Fabric Manager on the FMNs,
+see section "3 Install HPE Slingshot Fabric Manager software on bare metal servers" in the
+_HPE Slingshot Installation Guide for CSM_.

@@ -2,9 +2,9 @@
 
 These procedures are intended for trained technicians and support personnel only. Always follow ESD precautions when handling this equipment.
 
-The example is this procedure adds a User Access Node \(UAN\) or compute node to an HPE Cray standard rack system. This example adds a node to rack number 3000 at U27.
+The example is this procedure adds a User Access Node (UAN) or compute node to an HPE Cray standard rack system. This example adds a node to rack number 3000 at U27.
 
-Procedures for updating the Hardware State Manager \(HSM\) or System Layout Service \(SLS\) are similar when adding additional compute nodes or User Application Nodes \(UANs\). The contents of the node object in the SLS are slightly different
+Procedures for updating the Hardware State Manager (HSM) or System Layout Service (SLS) are similar when adding additional compute nodes or User Application Nodes (UANs). The contents of the node object in the SLS are slightly different
 for each node type.
 
 Refer to the OEM documentation for information about the node architecture, installation, and cabling.
@@ -13,7 +13,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+* The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 * Knowledge of whether SBPS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
 * Node is being added to an existing air-cooled cabinet in the system.
 * The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
@@ -68,9 +68,9 @@ For this procedure, a new object must be created in the SLS and modifications wi
         ALIAS=nid000001
         jq -n --arg ALIAS "${ALIAS}" --argjson NID "${NID}" '{
             Aliases:[$ALIAS],
-            NID: $NID, 
+            NID: $NID,
             Role: "Compute"
-        }' | tee node_extraproperties.json  
+        }' | tee node_extraproperties.json
         ```
 
         Expected output:
@@ -94,7 +94,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
             Aliases:[$ALIAS],
             Role: "Application",
             SubRole: $SUB_ROLE
-        }' | tee node_extraproperties.json  
+        }' | tee node_extraproperties.json
         ```
 
         Expected output:
@@ -172,7 +172,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
         ```bash
         /usr/share/doc/csm/scripts/operations/node_management/allocate_uan_ip.py allocate-uan-ip \
             --xname "${NODE_XNAME}"
-        ```  
+        ```
 
         Example output:
 
@@ -324,7 +324,7 @@ For this procedure, a new object must be created in the SLS and modifications wi
 
 ### Step 4: Install the node hardware in the rack
 
-1. Install the new node hardware in the rack and connect power cables, HSN cables, and management network cables \(if it has not already been installed\).
+1. Install the new node hardware in the rack and connect power cables, HSN cables, and management network cables (if it has not already been installed).
 
     If the node was added before modifying the SLS, then the node's BMC should have been able to DHCP with Kea, and there will be an unknown MAC address in the HSM Ethernet interfaces table.
 
@@ -355,7 +355,7 @@ Follow the [Added Hardware](../network/management_network/added_hardware.md) pro
     ping "${BMC_XNAME}"
     ```
 
-If adding Foxconn (Paradise) nodes to the system, follow the [Replacing Foxconn Usernames and Passwords in Vault](./Replacing_Foxconn_User_Pass.md) procedure if nodes fail to discover.
+If adding Foxconn (Paradise) nodes to the system, follow the [Replacing Foxconn Usernames and Passwords in Vault](Replacing_Foxconn_User_Pass.md) procedure if nodes fail to discover.
 
 1. (`ncn#`) Verify that discovery has completed.
 
@@ -511,7 +511,7 @@ If adding Foxconn (Paradise) nodes to the system, follow the [Replacing Foxconn 
       configuration to include any new compute nodes added to the system.
    * **If PBS Pro is the installed workload manager**: *Coming soon*
 
-1. (`ncn-mw#`) Use the Boot Orchestration Service \(BOS\) to power on and boot the nodes.
+1. (`ncn-mw#`) Use the Boot Orchestration Service (BOS) to power on and boot the nodes.
 
     Use the appropriate BOS template for the node type.
 
@@ -581,8 +581,8 @@ If adding Foxconn (Paradise) nodes to the system, follow the [Replacing Foxconn 
         If there is a duplicate IP address in the HSM, then an error message similar to the message below will be returned.
 
         ```text
-        [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf': 
-        failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the 
+        [{'result': 1, 'text': "Config reload failed: configuration error using file '/usr/local/kea/cray-dhcp-kea-dhcp4.conf':
+        failed to add new host using the HW address '00:40:a6:83:50:a4 and DUID '(null)' to the IPv4 subnet id '0' for the
         address 10.100.0.105: There's already a reservation for this address"}]
         ```
 

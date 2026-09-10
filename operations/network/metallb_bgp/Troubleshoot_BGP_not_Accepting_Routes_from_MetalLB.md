@@ -1,6 +1,6 @@
 # Troubleshoot BGP not Accepting Routes from MetalLB
 
-Check the number of routes that the Border Gateway Protocol (BGP) Router is accepting in the peering session. This procedure is useful if Kubernetes `LoadBalancer` services in the NMNLB, HMNLB, CMN, CHN or
+Check the number of routes that the Border Gateway Protocol (BGP) Router is accepting in the peering session. This procedure is useful if Kubernetes `LoadBalancer` services in the NMNLB, HMNLB, CMN, CHN, or
 CAN address pools are not accessible from outside the cluster.
 
 Regain access to Kubernetes `LoadBalancer` services from outside the cluster.
@@ -13,26 +13,26 @@ This procedure requires administrative privileges.
 
 1. Log into the spine or aggregate switch.
 
-    In this example, the Aruba or Mellanox spine or aggregate switch is accessed from `ncn-m001`. In this case, `sw-spine-001.hmn` is being accessed:
-    You should check BOTH spine switches during this process.
+    In this example, the Aruba or Mellanox spine or aggregate switch is accessed from `ncn-m001`. In this case, `sw-spine-001.hmn` is being accessed.
+    BOTH spine switches should be checked during this process.
 
     ```bash
     ssh admin@sw-spine-001.hmn
     ```
 
-2. Check the number of routes that the BGP Router is accepting in the peering session.
+1. Check the number of routes that the BGP Router is accepting in the peering session.
 
     - **Mellanox:**
 
-        Look at the number under the `State/Pfx` column in the output. There should be a number that matches the number of unique `LoadBalancer` IP addresses configured in the cluster.
+        (`switch#`) Look at the number under the `State/Pfx` column in the output. There should be a number that matches the number of unique `LoadBalancer` IP addresses configured in the cluster.
 
-        ```bash
-        sw-spine-001 [standalone: master] # show ip bgp vrf all summary
+        ```console
+        show ip bgp vrf all summary
         ```
 
         Example output:
 
-        ```console
+        ```text
         VRF name                  : Customer
         BGP router identifier     : 10.2.0.2
         local AS number           : 65533
@@ -66,15 +66,15 @@ This procedure requires administrative privileges.
         10.252.1.9        4    65533        1195961   1195934   40        0      0      13:20:12:15   ESTABLISHED/12
         ```
 
-        If there is a number smaller than expected, check the routes that have been accepted with the following command:
+        (`switch#`) If there is a number smaller than expected, check the routes that have been accepted:
 
-        ```bash
-        sw-spine-001 [standalone: master] # show ip route vrf all bgp
+        ```console
+        show ip route vrf all bgp
         ```
 
         Example output:
 
-        ```console
+        ```text
         Flags:
           F: Failed to install in H/W
           B: BFD protected (static route)
@@ -168,19 +168,19 @@ This procedure requires administrative privileges.
                                               c        10.101.8.10       vlan7            bgp        20/0
         ```
 
-        If the expected routes are not present, check the route-map or prefix-list configuration on the spine switch.
+        If the expected routes are not present, check the `route-map` or `prefix-list` configuration on the spine switch.
 
     - **Aruba:**
 
-        To check the status for Aruba:
+        (`switch#`) To check the status for Aruba:
 
-        ```bash
+        ```console
         show bgp all-vrf all summary
         ```
 
         Example output:
 
-        ```console
+        ```text
         VRF : default
         BGP Summary
         -----------
@@ -223,15 +223,15 @@ This procedure requires administrative privileges.
         -----------------------------
         ```
 
-        To check the routes for Aruba:
+        (`switch#`) To check the routes for Aruba:
 
-        ```bash
+        ```console
         show ip route bgp all-vrfs
         ```
 
         Example output:
 
-        ```console
+        ```text
         Displaying ipv4 routes selected for forwarding
 
         Origin Codes: C - connected, S - static, L - local

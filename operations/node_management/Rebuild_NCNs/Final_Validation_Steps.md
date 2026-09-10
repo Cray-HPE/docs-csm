@@ -6,7 +6,7 @@ Use this procedure to finish validating the success of rebuilt NCNs.
 
 1. Confirm what the Configuration Framework Service (CFS) `configuration_status` is for the `desired_config` after rebooting the node.
 
-   **`NOTE`** The following command will indicate if a CFS job is currently in progress for this node.
+   **NOTE** The following command will indicate if a CFS job is currently in progress for this node.
 
    **IMPORTANT:** The following command assumes that the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) have been set.
 
@@ -28,7 +28,7 @@ Use this procedure to finish validating the success of rebuilt NCNs.
      [Troubleshoot Failed CFS Sessions](../../configuration_management/Troubleshoot_CFS_Session_Failed.md) for how to analyze the pod logs
      from `cray-cfs` in order to determine why the configuration may not have completed.
 
-1. Collect data about the system management platform health \(can be run from a master or worker NCN\).
+1. Collect data about the system management platform health (can be run from a master or worker NCN).
 
    ```bash
    /opt/cray/platform-utils/ncnHealthChecks.sh

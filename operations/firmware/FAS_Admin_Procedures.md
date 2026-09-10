@@ -45,11 +45,11 @@ The default behavior for FAS to update every node in the system that fits the sp
 
 To exclude one or more nodes the following options are available:
 
-1. Lock the nodes you do not want to update using the Hardware State Manager (HSM).
+1. Use the Hardware State Manager (HSM) to lock the nodes that are not to be updated.
    Refer to [Lock and Unlock Management Nodes](../hardware_state_manager/Lock_and_Unlock_Management_Nodes.md) for more information.
    Make sure to unlock these nodes once the update is complete.
 
-1. Use the `xname` filter to only include the nodes that you wish to update.  **NOTE**: When using FAS, the xname refers to the BMC, not the node.
+1. Use the `xname` filter to only include the nodes to be updated. **NOTE**: When using FAS, the xname refers to the BMC, not the node.
    See [`stateComponentFilter`](FAS_Filters.md#statecomponentfilter) for more information.
 
 ## Ignore management nodes within FAS
@@ -184,7 +184,7 @@ Re-run the FAS actions command using the updated JSON file. **It is strongly rec
 
 ## Check for new firmware versions with a dry-run
 
-Use the Firmware Action Service \(FAS\) dry-run feature to determine what firmware can be updated on the system.
+Use the Firmware Action Service (FAS) dry-run feature to determine what firmware can be updated on the system.
 Dry-runs are enabled by default, and can be configured with the `overrideDryrun` parameter.
 A dry-run will create a query according to the filters requested by the administrator.
 It will initiate an update sequence to determine what firmware is available, but will not actually change the state of the firmware.
@@ -500,7 +500,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
     loaderRunID = "7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce"
     ```
 
-    > **`NOTE`** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
+    > **NOTE** Depending on how many files are in Nexus and how large those files are, the loader may take several minutes to complete.
 
 1. (`ncn-mw#`) Check the results of the loader run.
 
@@ -508,7 +508,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
     cray fas loader describe {loaderRunID} --format json
     ```
 
-    > **`NOTE`** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
+    > **NOTE** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
     Use the `--format json` to make it easier to read.
 
     Example output:
@@ -547,7 +547,7 @@ This procedure will read all RPMs in the Nexus repository and upload firmware im
 
     A successful run will end with `*** Number of Updates: x ***`.
 
-    > **`NOTE`** The FAS loader will not overwrite image records already in FAS.
+    > **NOTE** The FAS loader will not overwrite image records already in FAS.
     >`Number of Updates` will be the number of new images found in Nexus. If the number is 0, all images were already in FAS.
 
 ## Load firmware from RPM or ZIP file
@@ -590,7 +590,7 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
     cray fas loader describe {loaderRunID} --format json
     ```
 
-    > **`NOTE`** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
+    > **NOTE** `{loadRunID}` is the ID from step #2 above -- in that case `7b0ce40f-cd6d-4ff0-9b71-0f3c9686f5ce`.
     Use the `--format json` to make it easier to read.
 
     Example output:
@@ -630,5 +630,5 @@ This procedure will read a single local RPM (or ZIP) file and upload firmware im
 
     A successful run will end with `*** Number of Updates: x ***`.
 
-    > **`NOTE`** The FAS loader will not overwrite image records already in FAS.
+    > **NOTE** The FAS loader will not overwrite image records already in FAS.
     >`Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.

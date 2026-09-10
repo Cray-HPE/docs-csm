@@ -879,7 +879,7 @@ Example output:
 
 A successful run will end with `*** Number of Updates: x ***`.
 
-> **`NOTE`** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
+> **NOTE** The FAS loader will not overwrite image records already in FAS. `Number of Updates` will be the number of new images found in the RPM. If the number is 0, all images were already in FAS.
 
 ### Delete loader run data
 
@@ -893,4 +893,4 @@ cray fas loader delete dd37dd45-84ec-4bd6-b3c9-7af480048966
 
 The delete command does not return anything if successful.
 
-> **`NOTE`** The `loader delete` command does not delete any images from FAS; it only deletes the loader run saved status and removes the ID from the loader run list.
+> **NOTE** The `loader delete` command does not delete any images from FAS; it only deletes the loader run saved status and removes the ID from the loader run list.

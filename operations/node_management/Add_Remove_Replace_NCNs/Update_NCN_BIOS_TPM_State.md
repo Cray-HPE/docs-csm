@@ -85,6 +85,6 @@ With Intel hardware skip these steps and proceed to the next step to [Boot NCN a
 
     The new TPM state will take effect the next time the node is booted.
 
-## Next Step
+## Next step
 
 Proceed to the next step to [Boot NCN and Configure](Boot_NCN.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.

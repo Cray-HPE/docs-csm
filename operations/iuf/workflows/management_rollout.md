@@ -2,8 +2,8 @@
 
 This section updates the software running on management NCNs.
 
-- [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
-- [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
+1. [Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
+1. [Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
     - [Configure optional CSM features](#configure-optional-csm-features)
         - [Selective iSCSI worker node personalization](#selective-iscsi-worker-node-personalization)
         - [IPv6](#ipv6)
@@ -11,8 +11,8 @@ This section updates the software running on management NCNs.
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
     - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
     - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
-- [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware)
-- [4. Next steps](#4-next-steps)
+1. [Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware)
+1. [Next steps](#4-next-steps)
 
 ## 1. Update management host firmware (FAS)
 
@@ -113,7 +113,7 @@ cray cfs configurations describe <cfs_configuration_name>
 For example:
 
 ```bash
-cray cfs configurations describe management-main-1.7-1715924
+cray cfs configurations describe management-main-1.7-1715924 --format toml
 ```
 
 Example output:
@@ -143,7 +143,7 @@ cray ims images describe <ims_image_ID>
 For example:
 
 ```bash
-cray ims images describe f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6
+cray ims images describe f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6 --format toml
 ```
 
 Example output:
@@ -165,7 +165,7 @@ type = "s3"
 > **Important:** There is no built-in mechanism to validate the image and configuration being passed belong to the same role and subrole.
 Administrators must ensure that the correct image and configuration are used for the corresponding node and subrole.
 
-For the new parameters added, please refer to the command information in the [IUF run command details](../IUF.md#run) documentation.
+For the new parameters added, refer to the command information in the [IUF run command details](../IUF.md#run) documentation.
 
 ### 2.1 `management-nodes-rollout` with CSM upgrade
 
@@ -190,9 +190,6 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
         ```bash
         STORAGE_CANARY=ncn-s001
-        ```
-
-        ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
@@ -213,9 +210,6 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         ```bash
         STORAGE_NODES="$(ceph orch host ls | grep ncn-s | grep -v "$STORAGE_CANARY" | awk '{print $1}' | xargs echo)"
         echo "$STORAGE_NODES"
-        ```
-
-        ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
         ```
 
@@ -282,7 +276,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
         See [Configure the Cray Command Line Interface](../../configure_cray_cli.md) for details on how to do this.
 
-    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the new CFS  configuration and image built in previous steps of the workflow.
+    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the new CFS configuration and image built in previous steps of the workflow.
 
         (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
@@ -300,8 +294,8 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         iuf -a "${ACTIVITY_NAME}" --media-host ncn-m002 run -r management-nodes-rollout --limit-management-rollout ncn-m001
         ```
 
-        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should    be restarted.
-        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m001` booted successfully with the desired image and CFS configuration.
 
@@ -311,7 +305,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         cray cfs components describe "${XNAME}"
         ```
 
-    > **NOTE** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
+    > **NOTE** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md).
 
     Once this step has completed:
 
@@ -330,44 +324,42 @@ can update NCN master and storage nodes using CFS configuration only.
 Follow the following steps to complete the `management-nodes-rollout` stage.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
-section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
-Refer to that table and any corresponding product documents before continuing to the next step.
+   section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
+   Refer to that table and any corresponding product documents before continuing to the next step.
 
-### Note check whether `/etc/cray/upgrade/csm/myenv` file is present before starting management rollout for worker nodes
-
-- Verify `/etc/cray/upgrade/csm/myenv` file is present:
+1. Check whether the `/etc/cray/upgrade/csm/myenv` file is present before starting management rollout for worker nodes.
 
     ```bash
     cat /etc/cray/upgrade/csm/myenv
     ```
 
-- If the file is not found, follow the below procedure to create the file:
+    If the file is not found, then follow the below procedure to create the file:
 
-    Get the list of CSM versions:
+    1. Get the list of CSM versions:
 
-    ```bash
-    csm_version_list=$(sat showrev --products --filter product_name=csm --fields product_version --sort-by product_version --reverse --no-headings --no-borders)
-    ```
+        ```bash
+        csm_version_list=$(sat showrev --products --filter product_name=csm --fields product_version --sort-by product_version --reverse --no-headings --no-borders)
+        ```
 
-    Find the latest CSM version from the list:
+    1. Find the latest CSM version from the list:
 
-    ```bash
-    CSM_RELEASE=$(echo "$csm_version_list" | head -n 1 | awk '{print $1}' | grep -Eo '^[^ ]+')
-    ```
+        ```bash
+        CSM_RELEASE=$(echo "$csm_version_list" | head -n 1 | awk '{print $1}' | grep -Eo '^[^ ]+')
+        ```
 
-    Verify the latest CSM version:
+    1. Verify the latest CSM version:
 
-    ```bash
-    echo $CSM_RELEASE
-    ```
+        ```bash
+        echo $CSM_RELEASE
+        ```
 
-    Write the `CSM_RELEASE` variable into `myenv` file:
+    1. Write the `CSM_RELEASE` variable into `myenv` file:
 
-    ```bash
-    echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
-    ```
+        ```bash
+        echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
+        ```
 
-    **Example session:**
+    Example:
 
     ```console
     root@ncn-m001# csm_version_list=$(sat showrev --products --filter product_name=csm --fields product_version --sort-by product_version --reverse --no-headings --no-borders)

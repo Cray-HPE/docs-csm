@@ -33,13 +33,13 @@ argo -n argo submit --from workflowtemplate/nexus-setup-template \
   --watch
 ```
 
-You can view the current template by running:
+View the current template by running:
 
 ```bash
 argo -n argo template get nexus-setup-template -o yaml
 ```
 
-If you wish to make changes, edit the template and then update the template in Argo by running:
+To make changes, edit the template and then update the template in Argo by running:
 
 ```bash
 argo -n argo template delete nexus-setup-template

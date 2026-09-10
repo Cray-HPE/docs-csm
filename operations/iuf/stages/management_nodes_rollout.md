@@ -78,7 +78,7 @@ then NCN master nodes should not be upgraded with a new image and should only be
 created during the [update-cfs-config](../stages/update_cfs_config.md) stage.
 
 **NOTE** In CSM 1.7 and later, the `management-nodes-rollout` stage supports a new rollout strategy called  `reboot` which performs a controlled reboot of worker and storage nodes only,
-please refer to [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md) for instructions.
+refer to [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md) for instructions.
 
 ## Manually upgrade or rebuild NCN worker node with specific image and CFS configuration outside of IUF
 

@@ -9,20 +9,22 @@ The command displays the status of the VSX primary and secondary switches during
 The command also refreshes the progress bar as the image update progresses.
 Do not interrupt the VSX primary CLI session until the software updates completes; however, software update process can be stopped.
 
-If you stop the upgrade when the secondary switch has already installed the image in its flash memory or the secondary switch has started the reboot the process, it comes up with the new software.
+If the upgrade is stopped when the secondary switch has already installed the image in its flash memory or the secondary switch has started the reboot process, it comes up with the new software.
 
 The primary switch continues to have with older software. Administrators can stop the software update process by pressing **`ctrl+c`**.
 
 ## Prerequisites
 
 * Choose the method to upload the new software to the switches:
-  * Via USB
-  * Via WEB UI
-  * Via TFTP or SFTP
+    * Via USB
+    * Via WEB UI
+    * Via TFTP or SFTP
 
-> **`NOTE`** If you do not want to proceed with pre-staging you can also upload the new software directly using `vsx update-software` command. However, you will be limited to only using TFTP if you choose not to pre-stage the firmware.
+> **NOTE** If not wanting to proceed with pre-staging, the new software can be uploaded
+> directly using the `vsx update-software` command. However, if the firmware is not
+> pre-staged, then the method will be limited to only TFTP.
 
-## VSX Upgrade Command
+## VSX upgrade command
 
 The `vsx update-software` command is used to update the switch software. The following describes the syntax and parameters of the command.
 
@@ -46,9 +48,9 @@ vrf <VRF-NAME>
 
 (Optional) Specifies the VRF name for downloading the software.
 
-## Example of Updating Software via TFTP
+## Example of updating software via TFTP
 
-> **`NOTE`** If the new software is already pre-staged, call the image bank where the new image is located instead of using the TFTP.
+> **NOTE** If the new software is already pre-staged, call the image bank where the new image is located instead of using the TFTP.
 
 ```text
 vsx update-software tftp://192.168.1.1/XL.10.0x.xxxx vrf mgmt

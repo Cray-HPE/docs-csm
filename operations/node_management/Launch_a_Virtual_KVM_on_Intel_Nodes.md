@@ -49,6 +49,6 @@ This procedure shows how to launch a virtual KVM to connect to an Intel node. Th
 
         ![Java iKVM Viewer](../../img/operations/Java_iKVM_Viewer.png "Java iKVM Viewer")
 
-The virtual KVM \(iKVM Viewer\) is ready to use. There is now a virtual iKVM session connected to the node that enables control via the web similar to standing directly in front of the physical KVM.
+The virtual KVM (iKVM Viewer) is ready to use. There is now a virtual iKVM session connected to the node that enables control via the web similar to standing directly in front of the physical KVM.
 
-**Troubleshooting:** If the interface appears to lock up while working in the BMC menus \(often encountered when creating virtual drives\), it may be necessary to reset the node using **Power Control** \> **Power Reset**.
+**Troubleshooting:** If the interface appears to lock up while working in the BMC menus (often encountered when creating virtual drives), it may be necessary to reset the node using **Power Control** \> **Power Reset**.

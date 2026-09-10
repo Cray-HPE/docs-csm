@@ -60,7 +60,7 @@ Gigabyte BMCs allow for booting over HTTP.
 
    ![Screen Shot of Gigabyte BMC General Settings](../../img/bmc-virtual-media-settings-gigabyte.png)
 
-   > **NOTE** The Gigabyte URL appears to not allow certain characters and has a limit on path length. You may need to move or rename the ISO to a location with a smaller file name.
+   > **NOTE** The Gigabyte URL appears to not allow certain characters and has a limit on path length. It may be necessary to move or rename the ISO to a location with a smaller file name.
 
 1. Navigate to `Image Redirection` -> `Remote Images`.
 

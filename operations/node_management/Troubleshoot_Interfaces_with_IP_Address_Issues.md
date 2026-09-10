@@ -90,7 +90,7 @@ An NCN has an interface that is failing to assign a static IP address or that ha
         ip a d 10.1.1.1/16 dev bond0
         ```
 
-- \(Not recommended\) Allow the duplicate IP address to exist.
+- (Not recommended) Allow the duplicate IP address to exist.
 
     This is not recommended because it is unstable and can make the work harder to correct down the line.
     The easiest way to deal with the duplicate is by adding another IP address, and then logging into the

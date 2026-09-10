@@ -5,7 +5,6 @@ DHCP issues can result in node boot failures. This procedure helps investigate a
 ## Prerequisites
 
 - This procedure requires administrative privileges.
-- `kubectl` is installed.
 
 ## Limitations
 
@@ -13,9 +12,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
 
 ## Procedure
 
-1. Log in to a non-compute node (NCN) as root.
-
-2. (`ncn-mw#`) Check that the DHCP service is running.
+1. (`ncn-mw#`) Check that the DHCP service is running.
 
     ```bash
     kubectl get pods -A | grep kea
@@ -43,7 +40,7 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     services cray-dhcp-kea-postgres-2            3/3 Running   0 24h
     ```
 
-3. (`ncn-mw#`) Start a `tcpdump` session on the NCN.
+1. (`ncn-mw#`) Start a `tcpdump` session on the NCN.
 
     The following example sends `tcpdump` data to `stdout`.
 
@@ -51,30 +48,30 @@ Encryption of compute node logs is not enabled, so the passwords may be passed i
     tcpdump
     ```
 
-4. (`ncn-mw#`) Obtain the DHCP pod's ID.
+1. (`ncn-mw#`) Obtain the DHCP pod's ID.
 
     ```bash
     PODID=$(kubectl get pods --no-headers -o wide | grep cray-dhcp | awk '{print $1}')
     ```
 
-5. (`ncn-mw#`) Enter the DHCP pod using its ID.
+1. (`ncn-mw#`) Enter the DHCP pod using its ID.
 
     ```bash
     kubectl exec -it $PODID /bin/sh
     ```
 
-6. Start a `tcpdump` session from within the DHCP pod.
+1. Start a `tcpdump` session from within the DHCP pod.
 
-7. Open another terminal to perform the following tasks:
+1. Open another terminal to perform the following tasks:
 
     1. Issue a DHCP discover request from the NCN using `nmap`.
 
-    2. Analyze the NCN `tcpdump` data in order to ensure that the DHCP discover request is visible.
+    1. Analyze the NCN `tcpdump` data in order to ensure that the DHCP discover request is visible.
 
-8. Go back to the original terminal to analyze the DHCP pod's `tcpdump` data in order to ensure that the DHCP discover request is visible inside the pod.
+1. Go back to the original terminal to analyze the DHCP pod's `tcpdump` data in order to ensure that the DHCP discover request is visible inside the pod.
 
-    **Troubleshooting Information:**
+## Troubleshooting
 
-    If the DHCP Discover request is not visible on the NCN, it may be due to a firewall issue. If the DHCP
-    Discover request is not visible inside the pod, double check if the request was issued over the correct
-    interface for the Node Management Network (NMN). If it was, it could indicate a firewall issue.
+If the DHCP discover request is not visible on the NCN, it may be due to a firewall issue. If the DHCP
+Discover request is not visible inside the pod, double check if the request was issued over the correct
+interface for the Node Management Network (NMN). If it was, it could indicate a firewall issue.

@@ -13,7 +13,7 @@ log files are not required for a permanent record of the console activity. See
 for more information on this topic.
 
 > **NOTE** Log rotation will move the current log file and create a new one with the original
-    location and name. If you are using a `tail` operation to watch the console log output,
+    location and name. If using a `tail` operation to watch the console log output,
     make sure to use the `tail -F` option to automatically switch the `tail` to the new
     file through a log rotation. Otherwise the `tail` will follow the old file which has
     moved and is no longer being appended to with new console log information.
@@ -63,18 +63,18 @@ On a regular schedule, the log rotation will execute the following steps:
 
     1. `LOG_ROTATE_ENABLE`
 
-        This enables or disables the log rotation feature overall. If you wish to
-        not have any log rotation happen at all, then set the value to 'False' but
-        you must keep a close eye on the capacity of the PVC.
+        This enables or disables the log rotation feature overall. In order to
+        not have any log rotation happen at all, then set the value to 'False';
+        in this case, it is important to keep a close eye on the capacity of the PVC.
 
     1. `LOG_ROTATE_SEC_FREQ`
 
         This sets how often the log rotation will happen in seconds. The default is
-        every 600 seconds (10 minutes). If you want rotation to happen more often
-        decrease this setting, if you want it to happen more often increase it. This
+        every 600 seconds (10 minutes). In order to have rotation happen less often,
+        decrease this setting; to have it happen more often, increase it. This
         is the interval between when log rotation completes and when it starts again
-        so if the rotation takes a bit of time you may see the actual time between
-        to subsequent log rotations end up longer than this interval.
+        so if the rotation itself takes a bit of time, the actual time between
+        subsequent log rotations may be longer than this interval.
 
     1. `LOG_ROTATE_FILE_SIZE`
 
@@ -82,9 +82,9 @@ On a regular schedule, the log rotation will execute the following steps:
         individual log file is larger than this size, it will be rotated.
 
         Depending on how often the log rotation is executed and how quickly the file
-        is growing you may see the files get quite a bit larger than this size when
+        is growing, the files may get quite a bit larger than this size when
         the rotation actually happens. If files are growing significantly larger than
-        this setting increase the frequency of log rotations.
+        this setting, then increase the frequency of log rotations.
 
     1. `LOG_ROTATE_NUM_KEEP`
 

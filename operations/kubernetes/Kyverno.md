@@ -519,12 +519,12 @@ API Version:  wgpolicyk8s.io/v1alpha2
 Kind:         PolicyReport
 
 Results:
-  Message:  failed to verify image registry.local/arti.hpc.amslabs.hpecorp.net/quay-remote/frrouting/frr:8.4.2: 
-            .attestors[0].entries[0].keys: no signatures found; 
-            .attestors[0].entries[1].keys: no signatures found; 
-            .attestors[0].entries[2].keys: no signatures found; 
-            .attestors[0].entries[3].keys: no signatures found; 
-            .attestors[0].entries[4].keys: no signatures found; 
+  Message:  failed to verify image registry.local/arti.hpc.amslabs.hpecorp.net/quay-remote/frrouting/frr:8.4.2:
+            .attestors[0].entries[0].keys: no signatures found;
+            .attestors[0].entries[1].keys: no signatures found;
+            .attestors[0].entries[2].keys: no signatures found;
+            .attestors[0].entries[3].keys: no signatures found;
+            .attestors[0].entries[4].keys: no signatures found;
             .attestors[0].entries[5].keys: no signatures found
   Policy:   check-image
   Result:   fail
@@ -771,7 +771,7 @@ Summary:
   Skip:   0
   Warn:   0
 Events:   <none>
-ncn-m001:~ # 
+ncn-m001:~ #
 ```
 
 As seen above, the pod fails the `podsecurity-subrule-baseline` policy because it uses `hostPath` volumes, uses additional capabilities, and allows privileged containers.
@@ -877,9 +877,9 @@ As mentioned earlier, pods will NOT be allowed to be admitted to the cluster if 
 A message similar to the following will appear if a violating pod is attempted to be added to the cluster.
 
 ```text
-Error from server: error when creating "badpod.yaml": admission webhook "validate.kyverno.svc-fail" denied the request: 
+Error from server: error when creating "badpod.yaml": admission webhook "validate.kyverno.svc-fail" denied the request:
 
-resource Pod/default/badpod01 was blocked due to the following policies 
+resource Pod/default/badpod01 was blocked due to the following policies
 
 podsecurity-subrule-baseline:
   baseline: 'Validation rule ''baseline'' failed. It violates PodSecurity "baseline:latest":

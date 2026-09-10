@@ -1,12 +1,12 @@
 # Reboot NCNs
 
-The following is a high-level overview of the non-compute node \(NCN\) reboot workflow:
+The following is a high-level overview of the non-compute node (NCN) reboot workflow:
 
 1. Run the NCN pre-reboot checks and procedures.
 
    1. Ensure that `ncn-m001` is not booted to the LiveCD / PIT node.
    1. Check the `metal.no-wipe` settings for all NCNs.
-   1. Run all platform health checks, including checks on the Border Gateway Protocol \(BGP\) peering sessions.
+   1. Run all platform health checks, including checks on the Border Gateway Protocol (BGP) peering sessions.
    1. [Validate the current boot order](../../background/ncn_boot_workflow.md#determine-the-current-boot-order)
       (or [specify the boot order](../../background/ncn_boot_workflow.md#setting-boot-order)).
 
@@ -21,18 +21,23 @@ The following is a high-level overview of the non-compute node \(NCN\) reboot wo
 
 1. Re-run all platform health checks.
 
-The time duration for this procedure \(if health checks are being executed in between each boot, as recommended\) could take between two to four hours for a system with nine management nodes.
+The time duration for this procedure (if health checks are being executed in between each boot, as recommended) could take between two to four hours for a system with nine management nodes.
 
 This same procedure can be used to reboot a single management node as outlined above.
 Be sure to carry out the NCN pre-reboot checks and procedures before and after rebooting the node.
 Execute the rolling NCN reboot procedure steps for the particular node type being rebooted.
 
-## Reboot Options
+## Reboot options
 
 There are two options to perform reboot of NCNs:
 
-1. Reboot NCNs manually  
-Use the manual reboot procedure to reboot NCNs. Please refer to the [Reboot NCNs manually](Reboot_NCNs_manual.md)
+* Reboot NCNs manually
 
-1. Reboot NCNs with IUF. This is used for worker and storage nodes only. Please refer to the [Reboot NCNs with IUF](Reboot_NCNs_iuf.md)  
-**`NOTE`** Rebooting master nodes is not supported with IUF and must be performed manually as mentioned [here](Reboot_NCNs_manual.md#ncn-master-nodes).
+    Use the manual reboot procedure to reboot NCNs. See [Reboot NCNs manually](Reboot_NCNs_manual.md)
+
+* Reboot NCNs with IUF.
+
+    > **NOTE:** This is used for worker and storage nodes only.
+    > Rebooting master nodes is not supported with IUF and [must be performed manually](Reboot_NCNs_manual.md#ncn-master-nodes).
+
+    See [Reboot NCNs with IUF](Reboot_NCNs_iuf.md)

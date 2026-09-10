@@ -1,10 +1,16 @@
 # Virtual Switching Extension (VSX)
 
-Aruba's Virtual Switching Extension (VSX) is a solution that integrates two independent ArubaOS-CX switches into an active/active virtualized high availability (HA) solution. The two switch peers utilize a connected link for control and data. This solution allows the switches to present as one virtualized switch in critical areas.
+Aruba's Virtual Switching Extension (VSX) is a solution that integrates two independent ArubaOS-CX
+switches into an active/active virtualized high availability (HA) solution. The two switch peers
+utilize a connected link for control and data. This solution allows the switches to present as one
+virtualized switch in critical areas.
 
-Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo-single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers.
+Configuration synchronization is one aspect of this VSX solution where the primary switch configuration
+is synced to the secondary switch. This allows for pseudo-single pane of glass configuration and helps
+keep key configuration pieces in sync as operational changes are made. Since the solution is primarily
+for HA, it is expected that the vast majority of configuration policy is the same across both peers.
 
-## Configuration Commands
+## Configuration commands
 
 Enable VSX:
 
@@ -18,7 +24,7 @@ Give the device a role of primary or secondary:
 switch(config-vsx)# role <primary|secondary>
 ```
 
-Configure the VSX keepalive between the two VSX peer switches:
+Configure the VSX `keepalive` between the two VSX peer switches:
 
 ```text
 switch(config-vsx)# keepalive peer PEER-IP source SRC-IP
@@ -63,13 +69,13 @@ switch(config-portgroup)# vsx-sync
 switch(config-addrgroup)# vsx-sync
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show vsx <brief|configuration|status> [config-sync]
 ```
 
-## Example Output
+Example output:
 
 ```text
 switch(config)# int 1/1/49
@@ -187,12 +193,12 @@ access-list ip secure_mcast_sources
     30 permit any any any
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure VSX
-2. Administrators can create a multi-chassis interface
-3. Administrators can add ports to the multi-chassis interface
-4. Administrators can configure the VLANs and ACLs for synchronization
-5. Everything is synchronized from the primary to the secondary
+1. Administrators can create a multi-chassis interface
+1. Administrators can add ports to the multi-chassis interface
+1. Administrators can configure the VLANs and ACLs for synchronization
+1. Everything is synchronized from the primary to the secondary
 
 [Back to Index](../README.md)

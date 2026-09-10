@@ -4,7 +4,9 @@
 
 - Access to the switches.
 
-If you are doing a fresh install of CSM but previously had a different version of CSM installed, then you will need to backup/restore certain switch configurations after the switch has been wiped.
+If doing a fresh install of CSM when a different version of CSM was previously installed,
+then it is necessary to backup/restore certain switch configurations after the switch
+has been wiped.
 
 The backup needs to be done before wiping the switch.
 
@@ -21,14 +23,14 @@ This configuration will likely vary from site to site. This guide will cover the
 
 ## Backup site connection configuration
 
-You can find the site connections in the SHCD file.
+The site connections can be found in the SHCD file.
 
 ```console
 CAN switch  cfcanb6s1         -  31 sw-25g01 x3000 u39   -  j36
 CAN switch  cfcanb6s1         -  46 sw-25g02 x3000 u40   -  j36
 ```
 
-With this information we know that we need to backup the configuration on port 36 on both spine switches.
+This indicates that it is necessary to backup the configuration on port 36 on both spine switches.
 
 Log into the switches. Get the configurations of the ports and the default route. Save this output; this will be used after we apply the generated configurations.
 

@@ -1,6 +1,6 @@
 # Manage Component Partitions
 
-The creation, deletion, and modification of partitions is enabled by the Hardware State Manager \(HSM\) APIs.
+The creation, deletion, and modification of partitions is enabled by the Hardware State Manager (HSM) APIs.
 
 * [Example partition](#example-partition)
 * [Prerequisites](#prerequisites)

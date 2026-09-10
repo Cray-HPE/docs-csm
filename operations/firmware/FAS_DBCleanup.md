@@ -1,4 +1,4 @@
-# Cleaning up FAS Database
+# Cleaning Up FAS Database
 
 FAS stores actions along with all of its operations and snapshots in the database.
 To clean these actions and snapshots use the following scripts.

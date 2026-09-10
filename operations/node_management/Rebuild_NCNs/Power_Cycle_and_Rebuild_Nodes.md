@@ -197,6 +197,6 @@ This section applies to all node types. The commands in this section assume the 
     ssh-keyscan -H "$NODE,$node_ip" >> ~/.ssh/known_hosts
     ```
 
-## Next Step
+## Next step
 
 If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.

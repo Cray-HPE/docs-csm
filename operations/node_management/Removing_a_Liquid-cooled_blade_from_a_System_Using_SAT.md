@@ -4,21 +4,16 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
-
+- The Cray command line interface (CLI) tool is initialized and configured on the system.
+    - See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 - Knowledge of whether SBPS is operating over the Node Management Network (NMN) or the High Speed Network (HSN).
-
 - The Slingshot fabric must be configured with the desired topology for desired state of the blades in the system.
-
 - The System Layout Service (SLS) must have the desired HSN configuration.
-
 - Check the status of the high-speed network (HSN) and record link status before the procedure.
-
 - The blades must have the coolant drained and filled during the swap to minimize cross-contamination of cooling systems.
     - Review procedures in *HPE Cray EX Coolant Service Procedures H-6199*
     - Review the *HPE Cray EX Hand Pump User Guide H-6200*
-
-- The System Admin Toolkit \(SAT\) is installed and configured on the system.
+- The System Admin Toolkit (SAT) is installed and configured on the system.
 
 ## Prepare the system blade for removal
 
@@ -26,7 +21,7 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
 
    Refer to the vendor documentation for the WLM for more information.
 
-1. (`ncn-mw#`) Determine which Boot Orchestration Service \(BOS\) templates to use to shut down nodes on the target blade.
+1. (`ncn-mw#`) Determine which Boot Orchestration Service (BOS) templates to use to shut down nodes on the target blade.
 
    There will be separate session templates for UANs and computes nodes.
 
@@ -69,16 +64,16 @@ This procedure will remove a liquid-cooled blade from an HPE Cray EX system.
       bos_session = "e98cdc5d-3f2d-4fc8-a6e4-1d301d37f52f"
       ```
 
-   1. Find the required `templateName` value with BOS.
+   1. Find the required `template_name` value with BOS.
 
       ```bash
-      cray bos v2 sessions describe BOS_SESSION --format toml | grep templateName
+      cray bos v2 sessions describe BOS_SESSION --format toml | grep template_name
       ```
 
       Example output:
 
       ```toml
-      templateName = "compute-nid1-4-sessiontemplate"
+      template_name = "compute-nid1-4-sessiontemplate"
       ```
 
    1. Determine the list of xnames associated with the desired boot session template.

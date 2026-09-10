@@ -42,7 +42,7 @@ Determine if the master node being removed is the first master node.
       If this is the node being removed, then perform the remaining substeps here in order to promote another
       master node to the initial node, before proceeding with the rest of the overall procedure.
 
-1. (`ncn-mw#`) Reconfigure the Boot Script Service \(BSS\) to point to a new first master node.
+1. (`ncn-mw#`) Reconfigure the Boot Script Service (BSS) to point to a new first master node.
 
     ```bash
     cray bss bootparameters list --name Global --format=json | jq '.[]' > Global.json
@@ -419,7 +419,7 @@ CSM. This is a preventative measure in the event that the boot order on the targ
       Example output:
 
       ```text
-      10.102.4.9 
+      10.102.4.9
       ```
 
 1. (`linux#`) Set and export the `root` user password of the BMC.

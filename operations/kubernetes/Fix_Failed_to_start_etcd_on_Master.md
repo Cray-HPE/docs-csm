@@ -74,7 +74,7 @@ This procedure provides steps to recover from this issue.
 
     ```text
     Member be55f20f284cbc1b added to cluster f1c6e6ee71e931c3
-    
+
     ETCD_NAME="ncn-m001"
     ETCD_INITIAL_CLUSTER="ncn-m003=https://10.252.1.6:2380,ncn-m001=https://10.252.1.4:2380,ncn-m002=https://10.252.1.5:2380"
     ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.252.1.4:2380"

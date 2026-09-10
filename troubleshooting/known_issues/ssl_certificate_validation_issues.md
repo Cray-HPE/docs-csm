@@ -39,7 +39,7 @@ More details here: https://curl.haxx.se/docs/sslcerts.html
 
 curl failed to verify the legitimacy of the server and therefore could not
 establish a secure connection to it. To learn more about this situation and
-how to fix it, please visit the web page mentioned above.
+how to fix it, visit the web page mentioned above.
 ```
 
 ### 1.2 Solution
@@ -184,7 +184,7 @@ More details here: https://curl.haxx.se/docs/sslcerts.html
 
 curl failed to verify the legitimacy of the server and therefore could not
 establish a secure connection to it. To learn more about this situation and
-how to fix it, please visit the web page mentioned above.
+how to fix it, visit the web page mentioned above.
 ```
 
 ### 4.2 Solution

@@ -1,10 +1,10 @@
 # Add a Switch to the HSM Database
 
-Manually add a switch to the Hardware State Manager \(HSM\) database. Switches need to be in the HSM database in order to update their firmware with the Firmware Action Service \(FAS\).
+Manually add a switch to the Hardware State Manager (HSM) database. Switches need to be in the HSM database in order to update their firmware with the Firmware Action Service (FAS).
 
 ## Prerequisites
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+- The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 - The component name (xname), IP address, user name, and password are known for the switch being added.
 
 ## Procedure

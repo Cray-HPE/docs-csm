@@ -1,6 +1,6 @@
 # DHCP
 
-The Dynamic Host Configuration Protocol \(DHCP\) service on the HPE Cray EX system uses the Internet Systems Consortium \(ISC\) Kea tool. Kea provides more robust management capabilities for DHCP servers.
+The Dynamic Host Configuration Protocol (DHCP) service on the HPE Cray EX system uses the Internet Systems Consortium (ISC) Kea tool. Kea provides more robust management capabilities for DHCP servers.
 
 For more information: [`https://www.isc.org/kea/`](https://www.isc.org/kea/).
 
@@ -20,7 +20,7 @@ The order can vary in the workflow outlined below, and the services in this work
 
 1. Retrieve the network information.
 
-- Query the System Layout Service \(SLS\)
+- Query the System Layout Service (SLS)
 - Update Kea
 
 1. Query Kea for active leases to check if SMD knows about the NIC.
@@ -32,7 +32,7 @@ The order can vary in the workflow outlined below, and the services in this work
 - Each NIC in SMD create DHCP reservation in Kea
 - Create DHCP reservation in Kea
 - Create hostname/MAC/IP address DHCP reservations
-- Create hostname\(alias\)/MAC in DHCP reservation
+- Create hostname(alias)/MAC in DHCP reservation
 
 1. Check to see if the NIC in SMD needs to have an IP added.
 

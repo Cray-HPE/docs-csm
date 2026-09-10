@@ -43,7 +43,7 @@ Follow output of the script carefully. The script will pause for manual interact
 /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w001
 ```
 
-> **`NOTES:`**
+> **NOTES:**
 >
 > - The `root` user password for the node may need to be reset after it is rebooted.
 > - See [Starting a new workflow after a failed workflow](../../argo/Using_Argo_Workflows.md) if this command fails and needs to be restarted.
@@ -80,7 +80,7 @@ export CSM_RELEASE=1.4.0
 export CSM_ARTI_DIR="/etc/cray/upgrade/csm/csm-${CSM_RELEASE}/tarball/csm-${CSM_RELEASE}"
 ```
 
-> **`NOTES:`**
+> **NOTES:**
 >
 > - If the `/etc/cray/upgrade/csm/` directory is empty, create an empty directory at the same path. Download and extract CSM tarball to that directory.
 > - Update the value of `CSM_ARTI_DIR` with the newly created directory above.
@@ -104,7 +104,7 @@ See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Ku
 /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh ncn-m002
 ```
 
-> **`NOTES:`**
+> **NOTES:**
 >
 > - This script should be run from `ncn-m002` when rebuilding `ncn-m001`.
 > - This script should be run from `ncn-m001` when rebuilding `ncn-m002` or `ncn-m003`.

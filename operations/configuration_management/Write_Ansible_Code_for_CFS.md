@@ -151,7 +151,7 @@ and [Re-using files and roles](https://docs.ansible.com/ansible/latest/user_guid
 * Use loops rather than individual tasks where modules are called multiple times.
 Some Ansible modules will optimize the command, such as grouping package installations into a single transaction (Refer to the external [Ansible playbook loops](https://docs.ansible.com/ansible/latest/user_guide/playbooks_loops.html) documentation).
 * Use Ansible retries for small, recoverable failures. CFS supports retries on a large scale, but it takes far more time for CFS to detect a failed component and spin up a new session than it does for Ansible to retry a task.
-* Do not use Ansible retries for failures that take a long time to recover from. Retrying for a significant amount of time on one node can hold up all the other successful nodes in a batch. If you cannot recover from a failure quickly,
+* Do not use Ansible retries for failures that take a long time to recover from. Retrying for a significant amount of time on one node can hold up all the other successful nodes in a batch. If it is not possible to recover from a failure quickly,
   then let the node fail and CFS will separate it out from the successful nodes when new sessions are started.
 * Avoid `any_errors_fatal`. In addition to not working with all Ansible strategies, this can cause an Ansible run to exit early, and the nodes that did not have the error will have to start from the beginning of the playbook in the next session.
 * Design playbooks to be run with the `free` Ansible strategy. This means avoiding situations where all nodes in a batch need to complete a task before moving onto the next, and can save time by allowing nodes to proceed through a playbook at their own pace.

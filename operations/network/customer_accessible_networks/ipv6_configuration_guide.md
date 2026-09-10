@@ -202,7 +202,7 @@ See the [CSM Automatic Network Utility](../management_network/canu/index.md) doc
 CANU only generates the networking configuration required by CSM, it does not configure any routes out of the spine switches to site networks.
 External connectivity can configured by means of a CANU custom configuration file.
 There are many ways in which external connectivity can be achieved and discussing these options is beyond the scope of this document.
-See [Connect to the CMN and CAN](./Connect_to_the_CMN_CAN.md) for some suggestions. Administrators are encouraged to consult their site networking team, in order
+See [Connect to the CMN and CAN](Connect_to_the_CMN_CAN.md) for some suggestions. Administrators are encouraged to consult their site networking team, in order
 to design the best solution for the site.
 
 ## Configure services
@@ -213,7 +213,7 @@ Several CSM services can be configured to use IPv6.
 
 The `cray-dns-unbound` service can be configured to access a site DNS server using IPv6. See [`cray-dns-unbound` IPv6 Support](../dns/Manage_the_DNS_Unbound_Resolver.md#ipv6-support) for more information.
 
-**`IMPORTANT`** IPv6 must have been configured and enabled on the CMN and NCNs before this is enabled otherwise DNS queries may timeout resulting in system instability.
+**IMPORTANT** IPv6 must have been configured and enabled on the CMN and NCNs before this is enabled otherwise DNS queries may timeout resulting in system instability.
 
 ### Keycloak
 

@@ -38,7 +38,7 @@ Before redeploying the desired charts, update the `customizations.yaml` file in 
 
 1. Review, add, and commit `customizations.yaml` to the local `site-init` repository as appropriate.
 
-   > **`NOTE:`** If `site-init` was cloned from a remote repository in step 1,
+   > **NOTE:** If `site-init` was cloned from a remote repository in step 1,
    > there may not be any differences and hence nothing to commit. This is
    > okay. If there are differences between what is in the repository and what
    > was stored in the `site-init`, then it suggests settings were changed at some

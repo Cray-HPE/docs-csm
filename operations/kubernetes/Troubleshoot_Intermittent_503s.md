@@ -62,7 +62,10 @@ are being created.
 
 Once the roll out is complete, or the new pod is running, then the HTTP 503 message should clear.
 
-To ensure there are no further pods in this state you may run this script:
+To ensure there are no further pods in this state, run this script:
+
+> Running this script requires the latest CSM documentation RPM.
+> See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
 ```bash
 /usr/share/doc/csm/scripts/operations/known-issues.sh

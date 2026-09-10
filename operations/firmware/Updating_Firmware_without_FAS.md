@@ -1,6 +1,6 @@
-# Updating BMC Firmware and BIOS for NCNs without FAS
+# Updating BMC Firmware and BIOS for NCNs Without FAS
 
-> **`NOTE`**
+> **NOTE**
 >
 > - On HPE nodes, the BMC firmware is iLO 5 or iLO 6 and BIOS is System ROM.
 > - The commands in the procedure must be run on `ncn-m001`.

@@ -1,7 +1,7 @@
 # Manage Component Groups
 
 The creation, deletion, and modification of groups is enabled by the Hardware State Manager
-\(HSM\) APIs.
+(HSM) APIs.
 
 * [Example group](#example-group)
 * [Prerequisites](#prerequisites)

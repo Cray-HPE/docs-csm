@@ -4,10 +4,10 @@ This document shows how to configure the management network when bonded UANs are
 These configurations should be implemented via the [custom configuration](canu/custom_config.md) feature in CANU.
 There are two ways to implement bonded UAN configuration.
 
-1. [25GB Bonded UAN Configuration](#25gb-bonded-uan-configuration) (Most commonly used)
+- [25GB Bonded UAN Configuration](#25gb-bonded-uan-configuration) (Most commonly used)
     - The only difference between this configuration and the default configuration is that OCP & PCIe port 1 are in a bond.
     - These connections are plugged into a spine (TDS) or leaf (FULL) switch.
-2. [1GB or 10GB Bonded UAN](#1gb-or-10gb-bonded-uan) (Not commonly used)
+- [1GB or 10GB Bonded UAN](#1gb-or-10gb-bonded-uan) (Not commonly used)
     - These use a RJ45 NIC to connect to a pair of Aruba 8360 switches that are used as `leaf-bmc` switches.
     - For high availability VSX needs to be configured. This is not typically done on `leaf-bmc` switches so it will require additional custom configuration.
 

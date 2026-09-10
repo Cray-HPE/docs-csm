@@ -2,40 +2,39 @@
 
 * [Usage](#usage)
 * [Validate a fresh system using CSI and CANU](#validate-a-fresh-system-using-csi-and-canu)
-    * [Preparation](#preparation)
-    * [Check network firmware](#check-network-firmware)
-    * [Check network cabling](#check-network-cabling)
-    * [Validate cabling](#validate-cabling)
-    * [Validation using the system's SHCD](#validation-using-the-systems-shcd)
+    1. [Preparation](#1-preparation)
+    1. [Check network firmware](#2-check-network-firmware)
+    1. [Check network cabling](#3-check-network-cabling)
+    1. [Validate cabling](#4-validate-cabling)
+    1. [Validation using the system's SHCD](#5-validation-using-the-systems-shcd)
         * [Validate the SHCD](#validate-the-shcd)
         * [Validate the SHCD against network cabling](#validate-the-shcd-against-network-cabling)
-        * [Generate switch configuration for the network](#generate-switch-configuration-for-the-network)
+* [Generate switch configuration for the network](#generate-switch-configuration-for-the-network)
 
 ## Usage
 
-To run, type `canu`. It should run and display help.
-
-To see a list of commands and arguments, just append `--help`. For example:
+Running `canu` with no arguments displays high level help.
+To see a list of commands and arguments, append `--help`. For example:
 
 ```bash
 canu --help
 ```
 
-or for a specific command like validating network cabling:
+To get help for a specific command (in this example, validating network cabling):
 
 ```bash
 canu validate network cabling --help
 ```
 
-When running CANU, CSM version is required; it can be specified with `--csm`. For example:
+When running CANU, the CSM version is required; it is specified with `--csm`. For example:
 
-   ```bash
-  canu --csm 1.5
-  ```
+```bash
+canu --csm 1.5
+```
 
 ## Validate a fresh system using CSI and CANU
 
-### Preparation
+### 1. Preparation
 
 1. Make a new directory to save switch IP addresses.
 
@@ -44,31 +43,31 @@ When running CANU, CSM version is required; it can be specified with `--csm`. Fo
     cd ips_folder
     ```
 
-2. Parse the CSI generated `sls_input_file.json` and save switch IP addresses.
+1. Parse the CSI generated `sls_input_file.json` and save switch IP addresses.
 
     ```bash
     canu init --sls-file sls_input_file.json --out ips.txt
     ```
 
-### Check network firmware
+### 2. Check network firmware
 
 ```bash
 canu report network firmware --csm 1.5 --ips-file ips.txt
 ```
 
-### Check network cabling
+### 3. Check network cabling
 
 ```bash
 canu report network cabling --ips-file ips.txt
 ```
 
-### Validate cabling
+### 4. Validate cabling
 
 ```bash
 canu validate network cabling --ips-file ips.txt
 ```
 
-### Validation using the system's SHCD
+### 5. Validation using the system's SHCD
 
 With the system's SHCD, CANU can also validate the configuration and cabling.
 
@@ -84,7 +83,7 @@ canu validate shcd --shcd SHCD.xlsx
 canu validate shcd-cabling --shcd SHCD.xlsx --ips-file ips.txt
 ```
 
-#### Generate switch configuration for the network
+## Generate switch configuration for the network
 
 ```bash
 canu generate network config --ccj ccj.json --sls-file sls_input_file.json  --folder configs

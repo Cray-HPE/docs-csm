@@ -19,7 +19,7 @@ This page covers the necessary configuration of a BOS session template in order 
 - [Example session template input file](#example-session-template-input-file)
 - [Appendix: `root=` kernel parameter](#appendix-root-kernel-parameter)
 
-The Scalable Boot Projection Service (SBPS) is the **default**  provider for the `rootfs` on compute nodes.
+The Scalable Boot Projection Service (SBPS) is the **default** provider for the `rootfs` on compute nodes.
 
 Two parameters need to be set to configure SBPS, the `rootfs_provider` and the `rootfs_provider_passthrough`.
 

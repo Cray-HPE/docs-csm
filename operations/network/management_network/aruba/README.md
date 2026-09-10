@@ -8,12 +8,12 @@ administrators easy ways to customize their installation.
 
 Also included in this guide are the current documented and supported network scenarios.
 
-**`NOTE`** Not every configuration option is covered here; for any configuration outside of the scope of this document, refer to the official
+**NOTE** Not every configuration option is covered here; for any configuration outside of the scope of this document, refer to the official
 Aruba user manual. See [Aruba Networks](https://asp.arubanetworks.com/).
 
 This document is intended for network administrators and support personnel.
 
-**`NOTE`** The display and command lines illustrated in this document are examples and might not exactly match any particular environment. The switch
+**NOTE** The display and command lines illustrated in this document are examples and might not exactly match any particular environment. The switch
 and accessory drawings in this document are for illustration only, and may not exactly match installed products.
 
 ## CANU

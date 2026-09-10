@@ -1,24 +1,26 @@
-# Configure Address Resolution Protocol (ARP)
+# Address Resolution Protocol (ARP)
 
 ARP is commonly used for mapping IPv4 addresses to MAC addresses.
 
-## Configuration Commands
+## Configuration commands
 
-Configure static ARP on an interface:
+(`switch#`) Configure static ARP on an interface:
 
 ```text
 ip arp ipv4 IP-ADDR mac MAC-ADDR
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch#`)
 
 ```text
 show ip arp
 ```
 
-## Expected Results
+## Expected results
 
-1. Administrators are able to ping the connected device
-2. Administrators can view the ARP entries
+* Administrators are able to ping the connected device.
+* Administrators can view the ARP entries.
 
 [Back to Index](../README.md)

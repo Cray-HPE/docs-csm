@@ -22,6 +22,8 @@ software. Choose the appropriate procedure from the sections below.
 
 * [CSM 1.7.1-patch.1 Release Notes](../RELEASE_NOTES_1.7.1-patch.1.md)
 
+* [CSM 1.7.1-patch.2 Release Notes](../RELEASE_NOTES_1.7.1-patch.2.md)
+
 ## Fabric Manager on baremetal
 
 After CSM is upgraded from 1.7.0 to CSM 1.7.1, if desiring to enable Fabric Manager on baremetal,

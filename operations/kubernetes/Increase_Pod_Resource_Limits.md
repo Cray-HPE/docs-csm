@@ -28,7 +28,7 @@ Return Kubernetes pods to a healthy state with resources available.
             memory: 64Mi
     ```
 
-1. (`ncn-mw#`) Determine which Kubernetes entity \(`etcdcluster`, `deployment`, `statefulset`, etc\) is creating the pod.
+1. (`ncn-mw#`) Determine which Kubernetes entity (`etcdcluster`, `deployment`, `statefulset`, etc) is creating the pod.
 
     The Kubernetes entity can be found with either of the following options:
 

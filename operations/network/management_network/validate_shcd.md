@@ -34,7 +34,7 @@ network configurations are generated. This is an iterative process to create a m
 1. (`pit#`) Generate the [HMN](../../../glossary.md#hardware-management-network-hmn) paddle file (by default this runs in
    interactive mode to select the tabs and corners).
 
-   > **`NOTE`**
+   > **NOTE**
    > `-a` defines the architecture, this will be:
    >
    > - `v1` if the HPE Cray EX system is composed of Mellanox and Dell switches, typically with Gigabyte or Intel server hardware.
@@ -45,7 +45,7 @@ network configurations are generated. This is an iterative process to create a m
    ARCH=v1
    ```
 
-   > **`NOTE`** The `canu` command below will start interactive mode for defining `--corners`. If
+   > **NOTE** The `canu` command below will start interactive mode for defining `--corners`. If
    > the `--corners` are already known, then append `--corners` with the desired corners to bypass interactive mode.
 
    ```bash
@@ -54,14 +54,14 @@ network configurations are generated. This is an iterative process to create a m
 
 1. (`pit#`) Generate the full paddle file (by default the command below will run in interactive mode.)
 
-   > **`NOTE`** The `canu` command below will start interactive mode for defining `--corners`. If
+   > **NOTE** The `canu` command below will start interactive mode for defining `--corners`. If
    > the `--corners` are already known, then append `--corners` with the desired corners to bypass interactive mode.
 
    ```bash
    canu validate shcd --json --out "${SYSTEM_NAME}-full-paddle.json" -a "${ARCH}" --shcd <shcd_file>.xlsx
    ```
 
-   > **`NOTE`** CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in
+   > **NOTE** CANU will ensure that each cell has valid data and that the connections between devices are allowed. Errors will stop processing and must be fixed in
    > the spreadsheet before moving on. A "clean run" through a worksheet will include the model, a port-map of each node and may include warnings. See a
    > list of typical errors at the end of this document to help in fixing the worksheet data.
 
@@ -80,7 +80,7 @@ In addition, a clean run will have the following sections:
 - Warnings:
     - A list of nodes found that are not categorized on the system.
 
-      **`NOTE`** This list is important as it could include misspellings of nodes that should be included!
+      **NOTE** This list is important as it could include misspellings of nodes that should be included!
 
     - A list of cell-by-cell warnings of misspellings and other nit-picking items that CANU has autocorrected on the system.
 

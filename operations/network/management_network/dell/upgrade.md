@@ -2,7 +2,7 @@
 
 How to perform an upgrade on the Dell switches.
 
-## Configuration Commands
+## Configuration commands
 
 Download the new software image:
 

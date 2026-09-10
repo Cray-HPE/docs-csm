@@ -1,7 +1,7 @@
 # Configuration of NCN Bonding
 
-Non-compute nodes \(NCNs\) have network interface controllers \(NICs\) connected to the management network that are configured in a
-redundant manner via Link Aggregation Control Protocol \(LACP\) link aggregation. The link aggregation configuration can be
+Non-compute nodes (NCNs) have network interface controllers (NICs) connected to the management network that are configured in a
+redundant manner via Link Aggregation Control Protocol (LACP) link aggregation. The link aggregation configuration can be
 modified by editing and applying various configuration files either through Ansible or the interfaces directly.
 
 The bond configuration exists across three files on an NCN. These files may vary depending on the NCN in use:
@@ -31,7 +31,7 @@ The bond is configured with modules that can be changed at the network administr
 
 It may be useful to only adjust the XMIT value to `layer2`; the current setting is chosen as a default to match existing settings
 for compute nodes from previous releases. This can be weighed out if problems arise across the NCNs over the bond and dual-spine
-or Multi-Chassis Link Aggregation \(MLAG\).
+or Multi-Chassis Link Aggregation (MLAG).
 
 ## Wicked NetworkManager
 

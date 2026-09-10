@@ -34,7 +34,7 @@ This page provides instructions for doing a manual reboot of NCN nodes. There is
         /opt/cray/platform-utils/ncnHealthChecks.sh
         ```
 
-        > **`NOTE`** If the `ncnHealthChecks` script output indicates any `kube-multus-ds-` pods are in
+        > **NOTE** If the `ncnHealthChecks` script output indicates any `kube-multus-ds-` pods are in
         > a `Terminating` state, that can indicate that a previous restart of these pods did not complete.
         > In this case, it is safe to force delete these pods in order to let them properly restart; this is
         > done by running `kubectl delete po -n kube-system kube-multus-ds.. --force`. After executing this
@@ -148,7 +148,7 @@ This page provides instructions for doing a manual reboot of NCN nodes. There is
 
    To reset the error count and disable a node:
 
-   **`NOTE`** Be sure to replace the `<xname>` in the following command with the component name (xname) of the NCN component to be reset and disabled.
+   **NOTE** Be sure to replace the `<xname>` in the following command with the component name (xname) of the NCN component to be reset and disabled.
 
    ```bash
    cray cfs v3 components update <xname> --enabled False --error-count 0
@@ -160,7 +160,7 @@ Before rebooting NCNs:
 
 * Ensure that pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
-**`NOTE`** In CSM 1.7 and later, the storage and worker node can be rebooted with IUF. Refer to [Reboot NCNs with IUF](Reboot_NCNs_iuf.md).  
+**NOTE** In CSM 1.7 and later, the storage and worker node can be rebooted with IUF. Refer to [Reboot NCNs with IUF](Reboot_NCNs_iuf.md).
 If you want to continue manually, please follow the steps below.
 
 ### Utility storage nodes (Ceph)
@@ -179,7 +179,7 @@ If you want to continue manually, please follow the steps below.
         shutdown -r now
         ```
 
-        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below.
+        **IMPORTANT:** If the node does not shut down after 5 minutes, then proceed with the power reset below.
 
         1. (`ncn#`) Power off the node.
 
@@ -271,9 +271,9 @@ If you want to continue manually, please follow the steps below.
          Example output:
 
          ```text
-         Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code = 
-         Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545": 
-         Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for 
+         Warning  FailedCreatePodSandBox  27m              kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code =
+         Unknown desc = failed to setup network for sandbox "82c575cc978db00643b1bf84a4773c064c08dcb93dbd9741ba2e581bc7c5d545":
+         Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for
          range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
          ```
 
@@ -284,9 +284,9 @@ If you want to continue manually, please follow the steps below.
          Example output:
 
          ```text
-         Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code 
-         = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491": 
-         Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for 
+         Warning  FailedCreatePodSandBox  29m                    kubelet, ncn-w001  Failed to create pod sandbox: rpc error: code
+         = Unknown desc = failed to setup network for sandbox "314ca4285d0706ec3d76a9e953e412d4b0712da4d0cb8138162b53d807d07491":
+         Multus: Err in tearing down failed plugins: Multus: error in invoke Delegate add - "macvlan": failed to allocate for
          range 0: no IP addresses available in range set: 10.252.2.4-10.252.2.4
          ```
 
@@ -310,7 +310,7 @@ If you want to continue manually, please follow the steps below.
 
     1. Establish a console session to the worker node being rebooted.
 
-        **`IMPORTANT:`** If the ConMan console pod is on the node being rebooted, then the session must be re-established after the cordon/drain step.
+        **IMPORTANT:** If the ConMan console pod is on the node being rebooted, then the session must be re-established after the cordon/drain step.
 
         See [Establish a Serial Connection to NCNs](../conman/Establish_a_Serial_Connection_to_NCNs.md) for more information.
 
@@ -358,7 +358,7 @@ If you want to continue manually, please follow the steps below.
         pdsh -w <node to be rebooted> 'shutdown -r now'
         ```
 
-        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below.
+        **IMPORTANT:** If the node does not shut down after 5 minutes, then proceed with the power reset below.
 
         1. (`ncn#`) Power off the node.
 
@@ -483,7 +483,7 @@ If you want to continue manually, please follow the steps below.
         first-master-hostname = "ncn-m002"
         ```
 
-        **`IMPORTANT:`** If the selected node is set as `first-master-hostname`, then change it to
+        **IMPORTANT:** If the selected node is set as `first-master-hostname`, then change it to
         another master node; for example, `ncn-m001`.
 
         ```bash
@@ -523,7 +523,7 @@ If you want to continue manually, please follow the steps below.
         shutdown -r now
         ```
 
-        **`IMPORTANT:`** If the node does not shut down after 5 minutes, then proceed with the power reset below.
+        **IMPORTANT:** If the node does not shut down after 5 minutes, then proceed with the power reset below.
 
         1. (`ncn#`) Power off the node.
 
@@ -608,7 +608,7 @@ If you want to continue manually, please follow the steps below.
 
     1. Disconnect from the console.
 
-    1. Repeat all of the sub-steps above for the remaining master nodes \(excluding `ncn-m001`\), going from the highest to lowest number, until all master nodes have successfully rebooted.
+    1. Repeat all of the sub-steps above for the remaining master nodes (excluding `ncn-m001`), going from the highest to lowest number, until all master nodes have successfully rebooted.
 
 1. Reboot `ncn-m001`.
 
@@ -624,7 +624,7 @@ If you want to continue manually, please follow the steps below.
         first-master-hostname = "ncn-m001"
         ```
 
-        **`IMPORTANT:`** If `ncn-m001` is set as `first-master-hostname`, then change it to another
+        **IMPORTANT:** If `ncn-m001` is set as `first-master-hostname`, then change it to another
         master node, for example, `ncn-m002`.
 
         ```bash

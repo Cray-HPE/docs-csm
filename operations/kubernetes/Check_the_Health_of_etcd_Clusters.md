@@ -49,7 +49,7 @@ This procedure requires root privileges.
 
     ```text
     **************************************************************************
-    
+
     === Check the Number of Pods in Each Cluster. Verify they are Balanced. ===
     === Each cluster should contain at least three pods, but may contain more. ===
     === Ensure that no two pods in a given cluster exist on the same worker node. ===

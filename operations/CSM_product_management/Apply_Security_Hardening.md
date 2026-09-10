@@ -12,29 +12,29 @@ None.
 
 1. Change passwords and credentials.
 
-   Perform procedure(s) in [Change Passwords and Credentials](Change_Passwords_and_Credentials.md).
+   Perform procedures in [Change Passwords and Credentials](Change_Passwords_and_Credentials.md).
 
-2. Customize ("randomize") iPXE binary name.
+1. Randomize iPXE binary name.
 
-   Perform procedure(s) in [Customize iPXE Binary Names](../boot_orchestration/Customize_iPXE_Binary_Names.md).
+   Perform procedures in [Customize iPXE Binary Names](../boot_orchestration/Customize_iPXE_Binary_Names.md).
 
-3. (Optional) Enable Spire and OPA xname validation.
+1. (Optional) Enable Spire and OPA xname validation.
 
-    Perform procedure(s) in [xname validation](../spire/xname_validation.md).
+    Perform procedures in [xname validation](../spire/xname_validation.md).
 
-4. (Optional) Enable Kubernetes API encryption.
+1. (Optional) Enable Kubernetes API encryption.
 
-    Perform procedure(s) in [Kubernetes Encryption](../kubernetes/encryption/README.md).
+    Perform procedures in [Kubernetes Encryption](../kubernetes/encryption/README.md).
 
-5. (Optional) Change Keycloak OAuth token lifetime.
+1. (Optional) Change Keycloak OAuth token lifetime.
 
-   Perform procedure(s) in [Change Keycloak token lifetime](../security_and_authentication/Change_Keycloak_Token_Lifetime.md).
+   Perform procedures in [Change Keycloak token lifetime](../security_and_authentication/Change_Keycloak_Token_Lifetime.md).
 
-6. (Optional) Remove Kiali.
+1. (Optional) Remove Kiali.
 
-   Perform procedure(s) in [Remove Kiali](../system_management_health/Remove_Kiali.md).
+   Perform procedures in [Remove Kiali](../system_management_health/Remove_Kiali.md).
 
-7. (Optional) Kubernetes API audit log file parameter settings.
+1. (Optional) Kubernetes API audit log file parameter settings.
 
    If Kubernetes API Auditing is enabled, then it is recommended to set `--audit-log-maxage` to 30 or appropriate value
 
