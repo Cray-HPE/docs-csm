@@ -15,7 +15,7 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
 
     1. Enter `root` user password for the BMC of the affected node.
 
-        > **`NOTE`** `read -s` is used to prevent the password from being displayed on the screen or preserved in the shell history.
+        > **NOTE** `read -s` is used to prevent the password from being displayed on the screen or preserved in the shell history.
 
         ```bash
         USERNAME=root
@@ -24,7 +24,7 @@ Console log information is no longer being collected for Gigabyte nodes or ConMa
 
     1. Deactivate the SOL session for the node.
 
-        > **`NOTE`** In the following command, replace `XNAME` with the component name (xname) of the BMC of the affected node.
+        > **NOTE** In the following command, replace `XNAME` with the component name (xname) of the BMC of the affected node.
 
         ```bash
         export IPMI_PASSWORD

@@ -1,34 +1,36 @@
-# Configure VLAN Interface
+# VLAN Interface
 
-The switch also supports classic L3 VLAN interfaces.
+The switch supports classic L3 VLAN interfaces.
 
-## Configuration Commands
+## Configuration commands
 
-Configure the VLAN:
+(`switch#`) Configure the VLAN:
 
 ```text
 vlan VLAN
 ```
 
-The default mode of any VLAN is L2 only. To enable L3 functionality, run `no shutdown` on the VLAN:
+(`switch#`) The default mode of any VLAN is L2 only. To enable L3 functionality, run `no shutdown` on the VLAN:
 
 ```text
 interface vlan 2
 no shutdown
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
+
+(`switch#`)
 
 ```text
 show interface vlan
 ```
 
-## Expected Results
+## Expected results
 
-1. Administrators can configure the VLAN
-2. Administrators can enable the interface and associate it with the VLAN
-3. Administrators can create an IP-enabled VLAN interface, and it is up
-4. Administrators validate the configuration is correct
-5. Administrators can ping from the switch to the client and from the client to the switch
+* Administrators can configure the VLAN.
+* Administrators can enable the interface and associate it with the VLAN.
+* Administrators can create an IP-enabled VLAN interface, and it is up.
+* Administrators validate the configuration is correct.
+* Administrators can ping from the switch to the client and from the client to the switch.
 
 [Back to Index](../README.md)

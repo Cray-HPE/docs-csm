@@ -71,7 +71,7 @@ All preparation steps can be performed prior to an established window. Preparati
 1. (`ncn-m#`) For a system upgrade, analyze the current network state.
 
     ```bash
-    time canu test --sls-file sls.json 
+    time canu test --sls-file sls.json
     ```
 
     - Prior to configuration of NMN Isolation, expect the test `SERVICES ACL TEST` to FAIL
@@ -162,7 +162,7 @@ Repeat the following procedure for every switch (pair) in the network. The examp
 1. (`ncn-m#`) Open a new terminal window and test the switch runtime. Do not exit the terminal window logged into the switch.
 
     ```bash
-    canu test --sls-file sls.json 
+    canu test --sls-file sls.json
     ```
 
     - Review the output of the test for the switch - all tests should PASS

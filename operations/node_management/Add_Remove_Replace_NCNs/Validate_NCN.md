@@ -2,11 +2,11 @@
 
 Only follow the steps in the section for the node type that was added:
 
-- [Master Node](#validate-master-node)
-- [Worker Node](#validate-worker-node)
-- [Storage Node](#validate-storage-node)
+- [Master node](#validate-master-node)
+- [Worker node](#validate-worker-node)
+- [Storage node](#validate-storage-node)
 
-## Validate: Master Node
+## Validate: Master node
 
 Validate that the master node added successfully.
 
@@ -55,7 +55,7 @@ Validate that the master node added successfully.
                    --key=/etc/kubernetes/pki/etcd/ca.key --endpoints=localhost:2379 member list
     ```
 
-## Validate: Worker Node
+## Validate: Worker node
 
 Validate that the worker node added successfully.
 
@@ -121,7 +121,7 @@ Validate that the worker node added successfully.
     kubectl get po -A -o wide | grep $NODE
     ```
 
-## Validate: Storage Node
+## Validate: Storage node
 
 Validate that the storage node added successfully. The following examples are based on a storage cluster that was expanded from three nodes to four.
 
@@ -203,7 +203,7 @@ Validate that the storage node added successfully. The following examples are ba
 
     Run the following command on the added storage node.
 
-    There will be output \(without an error\) if `radosgw` and `haproxy` are correct.
+    There will be output (without an error) if `radosgw` and `haproxy` are correct.
 
     ```bash
     curl -k https://rgw-vip.nmn
@@ -215,6 +215,6 @@ Validate that the storage node added successfully. The following examples are ba
     <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
     ```
 
-## Next Step
+## Next step
 
 Proceed to the next step to [Validate Health](Validate_Health.md) or return to the main [Add, Remove, Replace, or Move NCNs](Add_Remove_Replace_NCNs.md) page.

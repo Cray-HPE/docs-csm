@@ -5,7 +5,7 @@
 - `$SLS_API_GW` and `$SLS_TOKEN` (or `$TOKEN`) must be set in order to query the API.
 - `$SWITCH_USERNAME` and `$SWITCH_PASSWORD` must be set in order to execute playbooks.
 - `ANSIBLE_HOST_KEY_CHECKING=False` can be set to ignore host key checking.
-- `-e config_folder` should be set to the directory containing the switch configs.
+- `-e config_folder` should be set to the directory containing the switch configurations.
 
 ```bash
 # examples
@@ -13,7 +13,7 @@ ansible-inventory -i canu-inventory --list
 ansible-playbook -i canu-inventory aruba-aoscx.yml -e config_folder=/switch_configs
 ```
 
-When running the playbook you may need to input the full path to `canu-inventory`, the playbook, and the switch configs.
+When running the playbook, it may be necessary to input the full path to `canu-inventory`, the playbook, and the switch configurations.
 
 ```bash
 # example

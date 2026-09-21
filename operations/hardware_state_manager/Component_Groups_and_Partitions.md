@@ -1,7 +1,7 @@
 # Component Groups and Partitions
 
-The Hardware State Manager \(HSM\) provides the group and partition services. Both are means of
-grouping \(also known as labeling\) system components that are tracked by HSM. Components
+The Hardware State Manager (HSM) provides the group and partition services. Both are means of
+grouping (also known as labeling) system components that are tracked by HSM. Components
 include the nodes, blades, controllers, and other hardware on a system.
 
 There is no limit to the number of members a group or partition contains. The only limitation
@@ -10,7 +10,7 @@ components exist.
 
 ## Groups
 
-Groups are collections of components \(primarily nodes\) in `/hsm/v2/State/Components`.
+Groups are collections of components (primarily nodes) in `/hsm/v2/State/Components`.
 Components can be members of any number of groups. Groups can be created freely, and HSM
 does not assign them any predetermined meaning.
 

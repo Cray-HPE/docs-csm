@@ -1,5 +1,1 @@
-# Verify the switches are forwarding DHCP traffic
-
-If you made it this far and still cannot pxe boot, you may have run into the IP-Helper breaking on the switch.
-
-[Back to Index](../README.md)
+../aruba/verify-switches_are_forwarding_dhcp_traffic.md

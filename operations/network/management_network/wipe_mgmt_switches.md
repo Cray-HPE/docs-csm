@@ -48,7 +48,7 @@ Out-of-band access to the switches (console)
    - Invoke the reboot:
 
       ```bash
-      boot system   
+      boot system
       ```
 
    - Answer `n` to the prompt:
@@ -61,7 +61,7 @@ Out-of-band access to the switches (console)
 
    - This will boot the switch to factory defaults.
 
-   > **`NOTE`** The default user is `admin` without any password.
+   > **NOTE** The default user is `admin` without any password.
 
 1. See [Apply Switch Configurations](apply_switch_configurations.md).
 
@@ -105,7 +105,7 @@ Out-of-band access to the switches (console)
 
    - This will boot the switch to factory defaults.
 
-   > **`NOTE`** The default username and password are `admin`.
+   > **NOTE** The default username and password are `admin`.
 
 1. See [Apply Switch Configurations](apply_switch_configurations.md) procedure.
 
@@ -119,7 +119,7 @@ Out-of-band access to the switches (console)
    configuration new csm1.2
    ```
 
-   > **`NOTE`** If that configuration exists already, delete it with `configuration delete csm1.2`, or reset to factory defaults with `reset factory`.
+   > **NOTE** If that configuration exists already, delete it with `configuration delete csm1.2`, or reset to factory defaults with `reset factory`.
 
 1. (`(config)`) Check that the configuration files contain the new `csm1.2` blank configuration that was just created.
 
@@ -154,7 +154,7 @@ Out-of-band access to the switches (console)
       Type 'yes' to confirm: yes
       ```
 
-   > **`NOTE`** The default username and password are `admin`
+   > **NOTE** The default username and password are `admin`
 
 1. Follow the prompts as shown below.
 

@@ -8,7 +8,7 @@ All NCN BMCs must have credentials set up for `ipmitool` access.
 
 ## Prerequisites
 
-A new non-compute node \(NCN\) has been added to the system as a hardware replacement.
+A new non-compute node (NCN) has been added to the system as a hardware replacement.
 
 ## Procedure
 

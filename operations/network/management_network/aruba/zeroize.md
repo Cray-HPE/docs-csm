@@ -1,6 +1,6 @@
-# Erase All zeroize
+# Erase All `zeroize`
 
-Erases customer data on the management modules in a secure manner. The command prompts for confirmation of zeroization.
+Erases customer data on the management modules in a secure manner. The command prompts for confirmation.
 
 ## Syntax
 
@@ -8,7 +8,7 @@ Erases customer data on the management modules in a secure manner. The command p
 erase all zeroize
 ```
 
-## Example Erasing Customer Data on the Management Modules in a Secure Manner
+## Example erasing customer data on the management modules in a secure manner
 
 ```text
 erase all zeroize

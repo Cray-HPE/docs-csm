@@ -1,8 +1,20 @@
 # Backup/Restore HSM User Data (Locks, Groups, and Partitions)
 
-## Backup locks to `json` file
+* [Backup/restore locks](#backuprestore-locks)
+    * [Backup locks to JSON file](#backup-locks-to-json-file)
+    * [Restore locks from JSON file](#restore-locks-from-json-file)
+* [Backup/restore groups](#backuprestore-groups)
+    * [Backup groups to JSON file](#backup-groups-to-json-file)
+    * [Restore groups from JSON file](#restore-groups-from-json-file)
+* [Backup/restore partitions](#backuprestore-partitions)
+    * [Backup partitions to JSON file](#backup-partitions-to-json-file)
+    * [Restore partitions from JSON file](#restore-partitions-from-json-file)
 
-1. (`ncn-mw#`) Set locks dump filename (can be anything you would like, suggested format below).
+## Backup/restore locks
+
+### Backup locks to JSON file
+
+1. (`ncn-mw#`) Set locks dump filename (can be anything; suggested format below).
 
     ```bash
     LOCKS_FILE=cray-smd-partitions-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
@@ -15,14 +27,14 @@
     TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. (`ncn-mw#`) Store Locks.
+1. (`ncn-mw#`) Store locks.
 
     ```bash
     LOCK_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/status
     curl -k -s -H "Authorization: Bearer ${TOKEN}" $LOCK_URL | jq > $LOCKS_FILE
     ```
 
-### Restore Locks from `json` file
+### Restore locks from JSON file
 
 1. (`ncn-mw#`) Set locks dump filename.
 
@@ -36,7 +48,7 @@
     TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. (`ncn-mw#`) Restore Locks.
+1. (`ncn-mw#`) Restore locks.
 
     ```bash
     LOCK_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/locks/lock
@@ -45,16 +57,18 @@
     for xname in `cat $LOCKS_FILE | jq '.[][] | select(.Locked|not)' | jq -r .ID`; do echo; echo $xname; curl -k -s -H "Authorization: Bearer ${TOKEN}" --header "Content-Type: application/json" -d '{"ComponentIDs":["'$xname'"], "Verify":false}' $UNLOCK_URL; done
     ```
 
-    You may receive errors which just indicates the xname was already locked/unlocked before running the procedure.
+    There may be errors which just indicate that the xname was already locked or unlocked before running the procedure.
 
     ```json
     {"type":"about:blank","title":"Bad Request","detail":"Component is Locked","status":400}
     {"type":"about:blank","title":"Bad Request","detail":"Component is Unlocked","status":400}
     ```
 
-## Backup groups to `json` file
+## Backup/restore groups
 
-1. (`ncn-mw#`) Set group dump filename (can be anything you would like, suggested format below).
+### Backup groups to JSON file
+
+1. (`ncn-mw#`) Set group dump filename (can be anything; suggested format below).
 
     ```bash
     GROUPS_FILE=cray-smd-partitions-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
@@ -67,14 +81,14 @@
     TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. (`ncn-mw#`) Store Groups.
+1. (`ncn-mw#`) Store groups.
 
     ```bash
     GROUP_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups
     curl -k -s -H "Authorization: Bearer ${TOKEN}" $GROUP_URL | jq > $GROUPS_FILE
     ```
 
-### Restore Groups from `json` file
+### Restore Groups from JSON file
 
 1. (`ncn-mw#`) Set groups filename with dump file.
 
@@ -88,7 +102,7 @@
     TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. (`ncn-mw#`) Restore Groups.
+1. (`ncn-mw#`) Restore groups.
 
     ```bash
     GROUP_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/groups
@@ -99,9 +113,11 @@
     curl -k -s -H "Authorization: Bearer ${TOKEN}" $GROUP_URL | jq
     ```
 
-## Backup partitions to `json` file
+## Backup/restore partitions
 
-1. (`ncn-mw#`) Set partition dump filename (can be anything you would like, suggested format below).
+### Backup partitions to JSON file
+
+1. (`ncn-mw#`) Set partition dump filename (can be anything; suggested format below).
 
     ```bash
     PARTITIONS_FILE=cray-smd-partitions-dump_`date '+%Y-%m-%d_%H-%M-%S'`.json
@@ -114,14 +130,14 @@
     TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. (`ncn-mw#`) Store Partitions.
+1. (`ncn-mw#`) Store partitions.
 
     ```bash
     PARTITION_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions
     curl -k -s -H "Authorization: Bearer ${TOKEN}" $PARTITION_URL | jq > $PARTITIONS_FILE
     ```
 
-### Restore Partitions from `json` file
+### Restore partitions from JSON file
 
 1. (`ncn-mw#`) Set partition filename with dump file.
 
@@ -135,7 +151,7 @@
     TOKEN=$(curl -k -s -S -d grant_type=client_credentials -d client_id=admin-client -d client_secret=$(kubectl get secrets admin-client-auth -o jsonpath='{.data.client-secret}' | base64 -d) https://api-gw-service-nmn.local/keycloak/realms/shasta/protocol/openid-connect/token | jq -r '.access_token')
     ```
 
-1. (`ncn-mw#`) Restore Partitions.
+1. (`ncn-mw#`) Restore partitions.
 
     ```bash
     PARTITION_URL=https://api-gw-service-nmn.local/apis/smd/hsm/v2/partitions

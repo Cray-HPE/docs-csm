@@ -78,7 +78,6 @@ Use this procedure to resolve any external DNS routing issues with backend servi
           host: vmselect-vms
           port:
             number: 8481
-
     ```
 
     From the `VirtualService data`, it is straightforward to see how traffic will be routed. In this example, connections to `vmselect.cmn.SYSTEM_DOMAIN_NAME` will be routed to the

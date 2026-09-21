@@ -15,7 +15,7 @@ Update the location-based component name (xname) for a standard rack node within
     }
     ```
 
-- The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+- The Cray command line interface (CLI) tool is initialized and configured on the system.
   See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure
@@ -31,13 +31,13 @@ Update the location-based component name (xname) for a standard rack node within
     OLDENDPOINT=x3006c0r41b0
     ```
 
-1. (`ncn-mw#`) Generate and upload new management switch port information to the System Layout Service \(SLS\) and save it to a file.
+1. (`ncn-mw#`) Generate and upload new management switch port information to the System Layout Service (SLS) and save it to a file.
 
     This step may be skipped if this is a direct swap of nodes, where both the source and destination are already populated.
 
     1. Query SLS to generate content for the new file.
 
-        Query the old port in SLS and replace the old component name (xname) \(`x3000c0w31j31` in this example\) with the name of the current location of the hardware in the system.
+        Query the old port in SLS and replace the old component name (xname) (`x3000c0w31j31` in this example) with the name of the current location of the hardware in the system.
 
         ```bash
         cray sls hardware describe x3000c0w31j31 --format json
@@ -91,7 +91,7 @@ Update the location-based component name (xname) for a standard rack node within
         curl -i -X PUT -H "Authorization: Bearer $(get_token)" https://api-gw-service-nmn.local/apis/sls/v1/hardware/$NEWPORT -d @CUSTOM_FILE
         ```
 
-1. (`ncn-mw#`) Delete the existing `redfishEndpoint` and `ethernetInterfaces` from the Hardware State Manager \(HSM\).
+1. (`ncn-mw#`) Delete the existing `redfishEndpoint` and `ethernetInterfaces` from the Hardware State Manager (HSM).
 
     1. Delete the `redfishEndpoint`.
 

@@ -1,5 +1,5 @@
-# Medium
+# Medium Network
 
 ![Medium network](../img/medium.png)
 
-[Back to index](README.md).
+[Back to Index](README.md).

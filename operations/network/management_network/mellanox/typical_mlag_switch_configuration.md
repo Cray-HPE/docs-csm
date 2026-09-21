@@ -1,28 +1,25 @@
-# Typical configuration of MLAG between switches
+# Typical Configuration of MLAG Between Switches
 
-The intent here is to show case very basic mlag configuration between two spine switches.
+This document showcases a very basic MLAG configuration between two spine switches.
 
-<table>
+## `Spine-01`
 
-<td>
-<pre>
+```console
 mlag-vip cray-mlag-domain ip 192.168.255.242 /29 force
 no mlag shutdown
 mlag system-mac 00:00:5E:00:01:01
 interface port-channel 100 ipl 1
 interface vlan 4000 ipl 1 peer-address 192.168.255.253
-</td>
-</pre>
+```
 
-<td>
-<pre>
+## `Spine-02`
+
+```console
 mlag-vip cray-mlag-domain ip 192.168.255.242 /29 force
 no mlag shutdown
 mlag system-mac 00:00:5E:00:01:5D
 interface port-channel 100 ipl 1
 interface vlan 4000 ipl 1 peer-address 192.168.255.254
-</td>
-</pre>
-</table>
+```
 
 [Back to Index](../README.md)

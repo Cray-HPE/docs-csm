@@ -1,5 +1,5 @@
-# Very Large (Exascale)
+# Very Large (Exascale) Network
 
 ![Exascale network](../img/exascale.png)
 
-[Back to index](README.md).
+[Back to Index](README.md).

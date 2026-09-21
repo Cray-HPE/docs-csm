@@ -4,8 +4,8 @@ This page contains general Rack Resiliency troubleshooting topics.
 
 - [Cray CLI](#cray-cli)
     - [Wrong critical service type](#wrong-critical-service-type)
-- [Resiliency Monitoring Service](#resiliency-monitoring-service-rms)
-    - [Steps to view RMS logs](#steps-to-view-rms-logs)
+- [Resiliency Monitoring Service (RMS)](#resiliency-monitoring-service-rms)
+    - [View RMS logs](#view-rms-logs)
     - [Interpreting RMS logs](#interpreting-rms-logs)
         - [State change notification from HMNFD](#state-change-notification-from-hmnfd)
         - [Node failure](#node-failure)
@@ -18,8 +18,11 @@ This page contains general Rack Resiliency troubleshooting topics.
             - [Unable to register for notification](#unable-to-register-for-notification)
     - [Getting details about RMS](#getting-details-about-rms)
 - [Critical services health check](#critical-services-health-check)
-- [Deployment status](#cray-rrs-pod-is-in-init-state)
-- [Node movement troubleshooting](#physical-movement-of-nodes-from-one-rack-to-another)
+- [`cray-rrs` pod is in `init` state](#cray-rrs-pod-is-in-init-state)
+    - [Rack Resiliency not enabled](#rack-resiliency-not-enabled)
+    - [Zones not configured](#zones-not-configured)
+    - [ConfigMaps not present](#configmaps-not-present)
+- [Physical movement of nodes from one rack to another](#physical-movement-of-nodes-from-one-rack-to-another)
 
 ## Cray CLI
 
@@ -56,22 +59,13 @@ critical_service_cm_static_type.critical_services.kube-proxy.type
 
 To monitor and debug RMS, check the logs of the `cray-rrs` Kubernetes pod running in the `rack-resiliency` namespace. Follow the steps below:
 
-### Steps to view RMS logs
+### View RMS logs
 
-1. (`ncn-mw#`) Get the `cray-rrs` pod name.
+(`ncn-mw#`) View the RMS container logs.
 
-   ```bash
-   RRS_POD=$(kubectl get pods -n rack-resiliency \
-     -l app.kubernetes.io/instance=cray-rrs \
-     -o custom-columns=:.metadata.name \
-     --no-headers); echo "${RRS_POD}"
-   ```
-
-2. (`ncn-mw#`) View its RMS container logs.
-
-   ```bash
-   kubectl logs "${RRS_POD}" -c cray-rrs-rms -n rack-resiliency
-   ```
+```bash
+kubectl logs -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -c cray-rrs-rms
+```
 
 ### Interpreting RMS logs
 
@@ -84,9 +78,9 @@ Example log entry for a state change notification from the
 2025-06-26 12:49:59,725 - INFO in rms - Notification received from HMNFD 2025-06-26 12:49:59,725 - WARNING in rms - Components '['x3000c0s11b0n0']' are changed to Off state.
 ```
 
-- Cause: The node(s) were shutdown or powered off.
+- Cause: The nodes were shutdown or powered off.
 - Effect: This leads to critical service redistribution based on `Kyverno` policy.
-- Recovery: Power on the node(s).
+- Recovery: Power on the nodes.
 
 #### Node failure
 
@@ -96,9 +90,9 @@ Example log entry reporting a node being down:
 2025-06-26 12:49:59,997 - INFO in rms - Some nodes in rack x3000 are down. Failed nodes: ['x3000c0s11b0n0']
 ```
 
-- Cause: The node(s) were shutdown or powered off.
+- Cause: The nodes were shutdown or powered off.
 - Effect: This leads to critical service redistribution based on `Kyverno` policy.
-- Recovery: Power on the node(s).
+- Recovery: Power on the nodes.
 
 #### Rack failure
 
@@ -228,11 +222,11 @@ After rack resiliency chart is deployed the status of the `cray-rrs` deployment 
 
 This is an expected behavior as the `cray-rrs` deployment waits in case any of the following three conditions are not met:
 
-1. Rack Resiliency is not enabled
-2. [Zones](Zones.md) are not configured(Kubernetes or Ceph)
-3. [ConfigMaps](ConfigMaps.md) not present
+- [Rack Resiliency not enabled](#rack-resiliency-not-enabled)
+- [Zones not configured](#zones-not-configured)
+- [ConfigMaps not present](#configmaps-not-present)
 
-Check the status of pod for `cray-rrs` deployment:
+(`ncn-mw#`) Check the status of pod for `cray-rrs` deployment:
 
 ```bash
 kubectl get pod -n rack-resiliency
@@ -243,12 +237,14 @@ NAME                        READY   STATUS     RESTARTS   AGE
 cray-rrs-6c5585cfdf-lmctt   0/2     Init:0/2   0          6d5h
 ```
 
-### 1. Rack Resiliency is not enabled
+### Rack Resiliency not enabled
 
-This can be confirmed by checking the logs of the `cray-rrs-check` container.
+The `cray-rrs` pod will remain in `init` state if Rack Resiliency is not enabled on the system.
+
+(`ncn-mw#`) This can be confirmed by checking the logs of the `cray-rrs-check` container.
 
 ```bash
-kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
+kubectl logs -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -c cray-rrs-check
 ```
 
 ```text
@@ -257,12 +253,15 @@ kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
 2025-09-18 22:06:22,817 - INFO in wait: Rack Resiliency is disabled.
 ```
 
-### 2. Zones (Kubernetes/Ceph) are not configured
+### Zones not configured
 
-This can be confirmed by checking the logs of the `cray-rrs-check` container.
+The `cray-rrs` pod will remain in `init` state if either
+Kubernetes or Ceph [Zones](Zones.md) are not configured.
+
+(`ncn-mw#`) This can be confirmed by checking the logs of the `cray-rrs-check` container.
 
 ```bash
-kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
+kubectl logs -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -c cray-rrs-check
 ```
 
 ```text
@@ -274,12 +273,14 @@ kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-check
 2025-09-29 15:20:19,966 - INFO in wait: Kubernetes zones are not created.
 ```
 
-### 3. ConfigMaps not present
+### ConfigMaps not present
 
-This can be confirmed by checking the logs of the `cray-rrs-init` container.
+The `cray-rrs` pod will remain in `init` state if the expected [ConfigMaps](ConfigMaps.md) are not found.
+
+(`ncn-mw#`) This can be confirmed by checking the logs of the `cray-rrs-init` container.
 
 ```bash
-kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-init | grep ConfigMap
+kubectl logs -n rack-resiliency -l app.kubernetes.io/instance=cray-rrs -c cray-rrs-init | grep ConfigMap
 ```
 
 ```text
@@ -293,10 +294,12 @@ kubectl logs -n rack-resiliency cray-rrs-6c5585cfdf-lmctt cray-rrs-init | grep C
 2025-09-30 07:26:34,304 - ERROR in lib_configmap: [85f28042] API error fetching ConfigMap
 ```
 
-## Physical movement of node(s) from one rack to another
+## Physical movement of nodes from one rack to another
 
-Considering the case where Rack Resiliency is enabled and when the nodes are moved physically from one rack to another using the [procedure](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md), always rollout restart the `cray-rrs` deployment.
+(`ncn-mw#`) When Rack Resiliency is enabled, any time that nodes are moved physically from one rack to another using the
+[Add/Remove/Replace NCNs procedure](../node_management/Add_Remove_Replace_NCNs/Add_Remove_Replace_NCNs.md),
+after the procedure is completed it is necessary to rollout restart the `cray-rrs` deployment.
 
 ```bash
-(ncn-mw) kubectl rollout restart deployment -n rack-resiliency cray-rrs
+kubectl rollout restart deployment -n rack-resiliency cray-rrs
 ```

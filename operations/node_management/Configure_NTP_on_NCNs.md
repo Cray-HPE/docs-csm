@@ -65,7 +65,7 @@ The following steps are structured to be executed on one node at a time. However
 1. When the upgrade is completed, run this script on `ncn-m001` in order to ensure the time is set correctly on all NCNs:
 
     ```bash
-    for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do 
+    for i in $(grep -oP 'ncn-\w\d+' /etc/hosts | sort -u); do
                   ssh $i "TOKEN=$TOKEN /srv/cray/scripts/common/chrony/csm_ntp.py"; done
     ```
 

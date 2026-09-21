@@ -1,8 +1,12 @@
 # VSX Sync
 
-Configuration synchronization is one aspect of this VSX solution where the primary switch configuration is synced to the secondary switch. This allows for pseudo single pane of glass configuration and helps keep key configuration pieces in sync as operational changes are made. Since the solution is primarily for HA, it is expected that the vast majority of configuration policy is the same across both peers.
+Configuration synchronization is one aspect of this VSX solution where the primary
+switch configuration is synced to the secondary switch. This allows for pseudo single
+pane of glass configuration and helps keep key configuration pieces in sync as
+operational changes are made. Since the solution is primarily for HA, it is
+expected that the vast majority of configuration policy is the same across both peers.
 
-## Configuration Commands
+## Configuration commands
 
 Synchronize VLANs:
 
@@ -34,13 +38,13 @@ Synchronize VLAN memberships and ACLs on physical or LAG interfaces:
 switch(config-if)# vsx-sync access-lists vlans
 ```
 
-Show commands to validate functionality:
+## Show commands to validate functionality
 
 ```text
 show run vsx-sync
 ```
 
-## Example Output
+Example output:
 
 On the first switch:
 
@@ -76,10 +80,10 @@ access-list ip secure_mcast_sources
     30 permit any any any
 ```
 
-## Expected Results
+## Expected results
 
 1. Administrators can configure the VLAN
-2. Administrators can create the ACL
-3. Everything synchronized on the primary is now on the secondary
+1. Administrators can create the ACL
+1. Everything synchronized on the primary is now on the secondary
 
 [Back to Index](../README.md)

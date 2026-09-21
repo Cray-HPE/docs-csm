@@ -1,18 +1,18 @@
-# Update iLO 5 firmware above `v2.78`
+# Update iLO 5 Firmware Above `v2.78`
 
 This procedure is only required if the current version if iLO 5 is below `v2.78`.
 
 iLO 5 versions above `v2.78` are larger than 32MB in size.  iLO 5 versions prior to `v2.78` will only accept 32MB size binary files.  iLO 5 `v2.78` removed this restriction. To upgrade to a version after `v2.78`, iLO 5 must first be update to `v2.78`.
 
-## Find Image Id for iLO 5 version 2.78
+## Find image ID for iLO 5 version 2.78
 
-1. (`ncn-mw#`) Perform a search of the FAS images for version 2.78
+(`ncn-mw#`) Perform a search of the FAS images for version 2.78
 
 ```bash
 cray fas images list --format json | jq '.[][] | select(.target == "iLO 5")' | jq 'select(.firmwareVersion | contains("2.78"))'
 ```
 
-example output:
+Example output:
 
 ```json
 {
@@ -53,23 +53,23 @@ using the [Load Firmware from RPM or ZIP file](FAS_Admin_Procedures.md#load-firm
 
 Firmware can be updated using the FAS Update Script OR using a `json` file and running FAS from the Cray CLI.
 
-### [Using the FAS Update Script](FASUpdate_Script.md)
+### Using the FAS update script
 
-Using the `imageID` from the output (in the example `6fc274ee-6e7c-4b99-8954-4f0f31f03a18`)
-run the FAS Update Script (`ncn-mw#`).
+(`ncn-mw#`) Using the `imageID` from the output (in this example, `6fc274ee-6e7c-4b99-8954-4f0f31f03a18`),
+run the [FAS Update Script](FASUpdate_Script.md).
 
 ```bash
 /usr/share/doc/csm/scripts/operations/firmware/FASUpdate.py --file hpe_nodeBMC_iLO5.json --imageID 6fc274ee-6e7c-4b99-8954-4f0f31f03a18
 ```
 
-You can update select xnames using the `--xnames XNAMES` option
+Updating specific xnames can be done using the `--xnames XNAMES` option
 
-This will run a dryrun on the system, to update the firmware, use the `--overrideDryun true` option
+This will run a dryrun on the system; to update the firmware, use the `--overrideDryun true` option
 
 ### Using a `json` file and running from the Cray CLI
 
-Using the `imageID` from the output (in the example `6fc274ee-6e7c-4b99-8954-4f0f31f03a18`)
-create a `json` file:
+Using the `imageID` from the output (in this example, `6fc274ee-6e7c-4b99-8954-4f0f31f03a18`)
+create a JSON file:
 
 ```json
 {
@@ -101,7 +101,7 @@ create a `json` file:
 }
 ```
 
-Create a FAS actions using the created `json` file (`ncn-mw#`).
+(`ncn-mw#`) Create a FAS action using the created JSON file.
 
 ```bash
 cray fas actions create ilo5v278.json

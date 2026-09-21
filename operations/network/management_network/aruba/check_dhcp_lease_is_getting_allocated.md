@@ -38,4 +38,4 @@ Restarting Kea will fix the `DHCP4_LEASE_ADVERT` issue in most cases.
     kubectl rollout status deployment -n services cray-dhcp-kea
     ```
 
-[Back to index](README.md).
+[Back to Index](README.md).

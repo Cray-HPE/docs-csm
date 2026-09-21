@@ -1,4 +1,4 @@
-# Back Up a Switch Configuration
+# Backing Up A Switch Configuration
 
 The following command copies the running configuration or the startup configuration to a remote location as a file.
 

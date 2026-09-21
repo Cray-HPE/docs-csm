@@ -36,6 +36,7 @@ This is the release notes page for CSM 1.7.1. Each patch for CSM 1.7.1 has its o
 changes it includes.
 
 * [CSM 1.7.1-patch.1 Release Notes](RELEASE_NOTES_1.7.1-patch.1.md)
+* [CSM 1.7.1-patch.2 Release Notes](RELEASE_NOTES_1.7.1-patch.2.md)
 
 ## Additions and improvements
 

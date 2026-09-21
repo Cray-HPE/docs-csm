@@ -25,7 +25,7 @@ Example output:
 The output can be interpreted as follows:
 
 - `11 00 01` - failover mode is enabled.
-- `11 00 00` – failover mode is disabled \(this is the desired state\).
+- `11 00 00` – failover mode is disabled (this is the desired state).
 
 > Note: On Gigabyte BMCs, the default setting is for failover mode to be enabled. Therefore, if a Gigabyte BMC is reset to defaults for any reason, or upgraded, then failover
 > mode must be disabled again in order to switch the BMC to manual mode.

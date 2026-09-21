@@ -2,7 +2,17 @@
 
 VictoriaMetrics is a fast, cost-effective, and scalable time series database. It can be used as a long-term remote storage for Prometheus.
 
-It is recommended to use the single-node version instead of the cluster version for ingestion rates lower than a million data points per second. The single-node version scales perfectly with the number of CPU cores, RAM, and available storage space.
+It is recommended to use the single-node version instead of the cluster version for ingestion rates lower than a million data points per second.
+The single-node version scales perfectly with the number of CPU cores, RAM, and available storage space.
+
+- [Prominent features](#prominent-features)
+- [Architecture overview](#architecture-overview)
+    - [`vmstorage`](#vmstorage)
+    - [`vminsert`](#vminsert)
+    - [`vmselect`](#vmselect)
+    - [`vmagent`](#vmagent)
+    - [`vmalert`](#vmalert)
+- [Cluster resizing and scalability](#cluster-resizing-and-scalability)
 
 ## Prominent features
 
@@ -15,78 +25,92 @@ It is recommended to use the single-node version instead of the cluster version 
 
 ![Prometheus architecture with Thanos](../../img/operations/VictoriaMetrics_Arcitecture.jpg "VictoriaMetrics Architecture")
 
-VictoriaMetrics cluster consists of the following services:
+The VictoriaMetrics cluster consists of several services.
+Each service may scale independently and may run on the most suitable hardware.
+`vmstorage` nodes do not know about each other, do not communicate with each other and do not share any data.
+This is a shared nothing architecture. It increases cluster availability, and simplifies cluster maintenance as well as cluster scaling.
 
-**Vmstorage:** It stores the raw data and returns the queried data on the given time range for the given label filters. This is the only stateful component in the cluster.
+The VictoriaMetrics cluster consists of the following services:
 
-**Vminsert:** It accepts the ingested data and spreads it among `vmstorage` nodes according to consistent hashing over metric name and all its labels.
+### `vmstorage`
 
-**Vmselect:** It performs incoming queries by fetching the needed data from all the configured `vmstoragenodes`.
-To access `vmselect` GUI, use `ssh` port-forwarding.
+`vmstorage` stores the raw data and returns the queried data on the given time range for the given label filters.
+This is the only stateful component in the cluster.
 
-1. Use `kubectl` command to get the `SERVICE-IP` of `vmselect-vms` service.
+### `vminsert`
 
-    ```yaml
+`vminsert` accepts the ingested data and spreads it among `vmstorage` nodes according to consistent hashing over metric name and all its labels.
+
+### `vmselect`
+
+`vmselect` performs incoming queries by fetching the needed data from all the configured `vmstoragenodes`.
+To access the `vmselect` GUI, use SSH port-forwarding.
+
+1. (`ncn-mw#`) Get the port number of the `vmselect-vms` service.
+
+    ```bash
     kubectl get service -n sysmgmt-health vmselect-vms
     ```
 
-   Expected output looks similar to the following:
+    Expected output looks similar to the following:
 
     ```text
     NAME                               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)              AGE
     vmselect-vms                       ClusterIP       None      <none>        8481/TCP             122d
     ```
 
-2. Use `vmselect-vms` service name and `8481` port number to port forward.
+1. (`ncn-mw#`) Enable Kubernetes port forwarding, using the `vmselect-vms` service name and the port number from the previous step.
 
-   ```text
-   kubectl port-forward -n sysmgmt-health service/vmselect-vms  8481:8481
+   ```bash
+   kubectl port-forward -n sysmgmt-health service/vmselect-vms 8481:8481
    ```
 
-3. Use a local laptop or desktop command line to access the cluster.
+1. Use a local laptop or desktop command line to access the cluster.
 
-    Use `ssh` port-forwarding using the service IP.
+    > Replace `SYSTEM-IP` with the IP address of the NCN used for the previous step.
 
-    ```text
+    ```console
     ssh -L 8481:localhost:8481 root@SYSTEM-IP
     ```
 
-4. Open `http://localhost:8481/select/0/prometheus/vmui/` in the browser to access the GUI.
+1. Open `http://localhost:8481/select/0/prometheus/vmui/` in the browser to access the GUI.
 
-NOTE: `10.11.12.13` and `SYSTEM-IP` is the IP Address of the host system.
+### `vmagent`
 
-**Vmagent:** It is a tiny but mighty agent which helps you collect metrics from various sources and store them in VictoriaMetrics or any other Prometheus-compatible storage systems that support the `remote_write` protocol.
+`vmagent` is a tiny but powerful agent which helps collect metrics from various sources and stores them in VictoriaMetrics
+(or any other Prometheus-compatible storage systems that support the `remote_write` protocol).
 
-To access `vmagent` GUI, use `ssh` port-forwarding.
+To access the `vmagent` GUI, use SSH port-forwarding.
 
-1. Use `kubectl` command to get the `SERVICE-IP` of `cray-sysmgmt-health-thanos-query` service.
+1. (`ncn-mw#`) Get the IP address and port number of the `vmagent-vms` service.
 
-    ```yaml
-    kubectl get svc -n sysmgmt-health  vmagent-vms
+    ```bash
+    kubectl get svc -n sysmgmt-health vmagent-vms
     ```
 
-   Expected output looks similar to the following:
+    Expected output looks similar to the following:
 
     ```text
     NAME                               TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)              AGE
     vmagent-vms                        ClusterIP   10.17.40.41   <none>        8429/TCP             6d5h
     ```
 
-2. Use `ssh` port-forwarding using the service IP.
+1. Enable SSH port forwarding, using the IP address and port number from the previous step.
 
-    ```text
-    ssh root@SYSTEM-IP -L 9090:SERVICE-IP:9090
+    > Replace `SYSTEM-IP` with the IP address of a master or worker NCN.
+
+    ```console
+    ssh root@SYSTEM-IP -L 8429:10.17.40.41:8429
     ```
 
-3. Open `localhost:8429` in the browser to access the GUI.
+1. Open `localhost:8429` in the browser to access the GUI.
 
-NOTE: In this case `SERVICE-IP` is `10.11.12.13` and `SYSTEM-IP` is the IP Address of the host system.
+### `vmalert`
 
-**Vmalert:** It executes a list of the given alerting or recording rules against configured data sources. Sending alerting notifications `vmalert` relies on configured Alertmanager.
-Recording rules results are persisted via remote write protocol. `vmalert` is heavily inspired by Prometheus implementation and aims to be compatible with its syntax.
-
-Each service may scale independently and may run on the most suitable hardware. `vmstorage` nodes do not know about each other, do not communicate with each other and don’t share any data.
-This is a shared nothing architecture. It increases cluster availability, and simplifies cluster maintenance as well as cluster scaling.
+`vmalert` executes a list of the given alerting or recording rules against configured data sources.
+When sending alerting notifications, `vmalert` relies on configured Alertmanager.
+Recording rules results are persisted via remote write protocol.
+`vmalert` is heavily inspired by Prometheus implementation and aims to be compatible with its syntax.
 
 ## Cluster resizing and scalability
 

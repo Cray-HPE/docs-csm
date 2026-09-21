@@ -2908,9 +2908,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 1048576,
-      "power_off_graceful_attempts": 1048576,
-      "power_off_forceful_attempts": 1048576
+      "power_on_attempts": 0,
+      "power_off_graceful_attempts": 0,
+      "power_off_forceful_attempts": 0
     },
     "status": {
       "phase": "configuring",
@@ -3057,9 +3057,9 @@ Update the state for a collection of Components in the BOS database
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 1048576,
-      "power_off_graceful_attempts": 1048576,
-      "power_off_forceful_attempts": 1048576
+      "power_on_attempts": 0,
+      "power_off_graceful_attempts": 0,
+      "power_off_forceful_attempts": 0
     },
     "status": {
       "phase": "configuring",
@@ -3131,9 +3131,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 1048576,
-      "power_off_graceful_attempts": 1048576,
-      "power_off_forceful_attempts": 1048576
+      "power_on_attempts": 0,
+      "power_off_graceful_attempts": 0,
+      "power_off_forceful_attempts": 0
     },
     "status": {
       "phase": "configuring",
@@ -3280,9 +3280,9 @@ Update the state for a collection of Components in the BOS database
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 1048576,
-      "power_off_graceful_attempts": 1048576,
-      "power_off_forceful_attempts": 1048576
+      "power_on_attempts": 0,
+      "power_off_graceful_attempts": 0,
+      "power_off_forceful_attempts": 0
     },
     "status": {
       "phase": "configuring",
@@ -3366,9 +3366,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 1048576,
-      "power_off_graceful_attempts": 1048576,
-      "power_off_forceful_attempts": 1048576
+      "power_on_attempts": 0,
+      "power_off_graceful_attempts": 0,
+      "power_off_forceful_attempts": 0
     },
     "status": {
       "phase": "configuring",
@@ -3539,9 +3539,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 1048576,
-    "power_off_graceful_attempts": 1048576,
-    "power_off_forceful_attempts": 1048576
+    "power_on_attempts": 0,
+    "power_off_graceful_attempts": 0,
+    "power_off_forceful_attempts": 0
   },
   "status": {
     "phase": "configuring",
@@ -3694,9 +3694,9 @@ Update the state for a given Component in the BOS database
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 1048576,
-    "power_off_graceful_attempts": 1048576,
-    "power_off_forceful_attempts": 1048576
+    "power_on_attempts": 0,
+    "power_off_graceful_attempts": 0,
+    "power_off_forceful_attempts": 0
   },
   "status": {
     "phase": "configuring",
@@ -3767,9 +3767,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 1048576,
-    "power_off_graceful_attempts": 1048576,
-    "power_off_forceful_attempts": 1048576
+    "power_on_attempts": 0,
+    "power_off_graceful_attempts": 0,
+    "power_off_forceful_attempts": 0
   },
   "status": {
     "phase": "configuring",
@@ -3914,9 +3914,9 @@ Update the state for a given Component in the BOS database
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 1048576,
-    "power_off_graceful_attempts": 1048576,
-    "power_off_forceful_attempts": 1048576
+    "power_on_attempts": 0,
+    "power_off_graceful_attempts": 0,
+    "power_off_forceful_attempts": 0
   },
   "status": {
     "phase": "configuring",
@@ -3987,9 +3987,9 @@ Requests with an empty tenant name, or that omit this parameter, will have no su
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 1048576,
-    "power_off_graceful_attempts": 1048576,
-    "power_off_forceful_attempts": 1048576
+    "power_on_attempts": 0,
+    "power_off_graceful_attempts": 0,
+    "power_off_forceful_attempts": 0
   },
   "status": {
     "phase": "configuring",
@@ -4380,18 +4380,18 @@ Update one or more of the BOS service options.
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "default_retry_policy": 1,
-  "discovery_frequency": 33554432,
+  "discovery_frequency": 0,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
   "ims_images_must_exist": true,
   "ims_read_timeout": 20,
   "logging_level": "string",
-  "max_boot_wait_time": 1048576,
+  "max_boot_wait_time": 0,
   "max_component_batch_size": 1000,
-  "max_power_off_wait_time": 1048576,
-  "max_power_on_wait_time": 1048576,
+  "max_power_off_wait_time": 0,
+  "max_power_on_wait_time": 0,
   "pcs_read_timeout": 20,
-  "polling_frequency": 1048576,
+  "polling_frequency": 0,
   "reject_nids": true,
   "session_limit_required": true
 }
@@ -4415,18 +4415,18 @@ Update one or more of the BOS service options.
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "default_retry_policy": 1,
-  "discovery_frequency": 33554432,
+  "discovery_frequency": 0,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
   "ims_images_must_exist": true,
   "ims_read_timeout": 20,
   "logging_level": "string",
-  "max_boot_wait_time": 1048576,
+  "max_boot_wait_time": 0,
   "max_component_batch_size": 1000,
-  "max_power_off_wait_time": 1048576,
-  "max_power_on_wait_time": 1048576,
+  "max_power_off_wait_time": 0,
+  "max_power_on_wait_time": 0,
   "pcs_read_timeout": 20,
-  "polling_frequency": 1048576,
+  "polling_frequency": 0,
   "reject_nids": true,
   "session_limit_required": true
 }
@@ -4642,18 +4642,18 @@ Retrieve the list of BOS service options.
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "default_retry_policy": 1,
-  "discovery_frequency": 33554432,
+  "discovery_frequency": 0,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
   "ims_images_must_exist": true,
   "ims_read_timeout": 20,
   "logging_level": "string",
-  "max_boot_wait_time": 1048576,
+  "max_boot_wait_time": 0,
   "max_component_batch_size": 1000,
-  "max_power_off_wait_time": 1048576,
-  "max_power_on_wait_time": 1048576,
+  "max_power_off_wait_time": 0,
+  "max_power_on_wait_time": 0,
   "pcs_read_timeout": 20,
-  "polling_frequency": 1048576,
+  "polling_frequency": 0,
   "reject_nids": true,
   "session_limit_required": true
 }
@@ -6387,9 +6387,9 @@ Information on the most recent action taken against the node.
 
 ```json
 {
-  "power_on_attempts": 1048576,
-  "power_off_graceful_attempts": 1048576,
-  "power_off_forceful_attempts": 1048576
+  "power_on_attempts": 0,
+  "power_off_graceful_attempts": 0,
+  "power_off_forceful_attempts": 0
 }
 
 ```
@@ -6536,9 +6536,9 @@ Status information for the Component
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 1048576,
-    "power_off_graceful_attempts": 1048576,
-    "power_off_forceful_attempts": 1048576
+    "power_on_attempts": 0,
+    "power_off_graceful_attempts": 0,
+    "power_off_forceful_attempts": 0
   },
   "status": {
     "phase": "configuring",
@@ -6617,9 +6617,9 @@ the Session responsible for the Component's current state.
     "failed": true
   },
   "event_stats": {
-    "power_on_attempts": 1048576,
-    "power_off_graceful_attempts": 1048576,
-    "power_off_forceful_attempts": 1048576
+    "power_on_attempts": 0,
+    "power_off_graceful_attempts": 0,
+    "power_off_forceful_attempts": 0
   },
   "status": {
     "phase": "configuring",
@@ -6699,9 +6699,9 @@ the Session responsible for the Component's current state.
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 1048576,
-      "power_off_graceful_attempts": 1048576,
-      "power_off_forceful_attempts": 1048576
+      "power_on_attempts": 0,
+      "power_off_graceful_attempts": 0,
+      "power_off_forceful_attempts": 0
     },
     "status": {
       "phase": "configuring",
@@ -6771,9 +6771,9 @@ An array of Component states.
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 1048576,
-      "power_off_graceful_attempts": 1048576,
-      "power_off_forceful_attempts": 1048576
+      "power_on_attempts": 0,
+      "power_off_graceful_attempts": 0,
+      "power_off_forceful_attempts": 0
     },
     "status": {
       "phase": "configuring",
@@ -6892,9 +6892,9 @@ All Components part of this Session will be patched.
       "failed": true
     },
     "event_stats": {
-      "power_on_attempts": 1048576,
-      "power_off_graceful_attempts": 1048576,
-      "power_off_forceful_attempts": 1048576
+      "power_on_attempts": 0,
+      "power_off_graceful_attempts": 0,
+      "power_off_forceful_attempts": 0
     },
     "status": {
       "phase": "configuring",
@@ -7006,18 +7006,18 @@ Mapping from Component staged Session statuses to Components with that status.
   "clear_stage": true,
   "component_actual_state_ttl": "6h",
   "default_retry_policy": 1,
-  "discovery_frequency": 33554432,
+  "discovery_frequency": 0,
   "hsm_read_timeout": 20,
   "ims_errors_fatal": true,
   "ims_images_must_exist": true,
   "ims_read_timeout": 20,
   "logging_level": "string",
-  "max_boot_wait_time": 1048576,
+  "max_boot_wait_time": 0,
   "max_component_batch_size": 1000,
-  "max_power_off_wait_time": 1048576,
-  "max_power_on_wait_time": 1048576,
+  "max_power_off_wait_time": 0,
+  "max_power_on_wait_time": 0,
   "pcs_read_timeout": 20,
-  "polling_frequency": 1048576,
+  "polling_frequency": 0,
   "reject_nids": true,
   "session_limit_required": true
 }

@@ -1,6 +1,6 @@
 # Identify Nodes and Update Metadata
 
-Use the following procedure to inspect and modify the Boot Script Service \(BSS\) boot parameters JSON file.
+Use the following procedure to inspect and modify the Boot Script Service (BSS) boot parameters JSON file.
 
 This section applies to all node types. The commands in this section assume the variables from [the prerequisites section](Rebuild_NCNs.md#prerequisites) have been set.
 
@@ -39,7 +39,7 @@ This section applies to all node types. The commands in this section assume the 
        "https://api-gw-service-nmn.local/apis/bss/boot/v1/bootparameters" -X PUT -d @./${XNAME}.json
        ```
 
-       **IMPORTANT:** Ensure a good response \(`HTTP CODE 200`\) is returned in the output.
+       **IMPORTANT:** Ensure a good response (`HTTP CODE 200`) is returned in the output.
 
 1. Verify the `bss bootparameters list` command returns the expected information.
 
@@ -57,6 +57,6 @@ This section applies to all node types. The commands in this section assume the 
 
        The files should be identical
 
-## Next Step
+## Next step
 
 If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.

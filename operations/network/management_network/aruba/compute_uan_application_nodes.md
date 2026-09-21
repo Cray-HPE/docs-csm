@@ -1,32 +1,42 @@
 # Verify Computes/UANs/Application Nodes
 
-If the computes make it past PXE and go into the PXE shell, verify DNS and connectivity.
+(`iPXE#`) If the computes nodes make it past PXE and go into the PXE shell, verify DNS and connectivity.
 
+```console
+dhcp
 ```
-iPXE> dhcp
+
+Example output:
+
+```text
 Configuring (net0 98:03:9b:a8:60:88).................. No configuration methods succeeded (http://ipxe.org/040ee186)
 Configuring (net1 b4:2e:99:be:1a:37)...... ok
 ```
 
 ## Procedure
 
-1. Verify DNS:
+1. (`iPXE`) Verify DNS:
 
-    ```
-    iPXE> show dns
+    ```console
+    show dns
     ```
 
     Example output:
 
-    ```
+    ```text
     net1.dhcp/dns:ipv4 = 10.92.100.225
     ```
 
-1. Verify connectivity:
+1. (`iPXE`) Verify connectivity:
 
+    ```console
+    nslookup address api-gw-service-nmn.local
+    echo ${address}
     ```
-    iPXE> nslookup address api-gw-service-nmn.local
-    iPXE> echo ${address}
+
+    Example output:
+
+    ```text
     10.92.100.71
     ```
 

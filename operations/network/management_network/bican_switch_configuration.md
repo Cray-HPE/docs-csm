@@ -33,8 +33,8 @@ Topology example:
 
 ```yaml
 sw-spine-001: |
-  interface 1/1/55 
-      no shutdown 
+  interface 1/1/55
+      no shutdown
       vrf attach Customer
       description sw-edge-002:1/1
       ip address 192.168.80.5/31
@@ -42,8 +42,8 @@ sw-spine-001: |
       ip ospf 2 area 0.0.0.0
       ip ospf network point-to-point
 
-  interface 1/1/56 
-      no shutdown 
+  interface 1/1/56
+      no shutdown
       vrf attach Customer
       description sw-edge-001:1/1
       ip address 192.168.80.1/31
@@ -52,8 +52,8 @@ sw-spine-001: |
       ip ospf network point-to-point
 
 sw-spine-002: |
-  interface 1/1/55 
-      no shutdown 
+  interface 1/1/55
+      no shutdown
       mtu 9198
       vrf attach Customer
       description sw-edge-002:2/1
@@ -62,8 +62,8 @@ sw-spine-002: |
       ip ospf 2 area 0.0.0.0
       ip ospf network point-to-point
 
-  interface 1/1/56 
-      no shutdown 
+  interface 1/1/56
+      no shutdown
       mtu 9198
       vrf attach Customer
       description sw-edge-001:2/1
@@ -72,7 +72,6 @@ sw-spine-002: |
       ip ospf 2 area 0.0.0.0
       ip ospf network point-to-point
       exit
-
 ```
 
 ### Generate
@@ -82,16 +81,20 @@ Generate switch configurations with custom configurations (Arista only).
 This is an example only. More details on how to generate configurations with CANU can be found in the [Generate Switch Configurations](generate_switch_configs.md) procedure.
 
 ```bash
-    canu generate network config --ccj ./ccj.json --sls-file ./sls_input_file.json --csm 1.3 --folder ./1.3 --custom-config ./custom_switch_config.yaml
-    sw-edge-001 Config Generated
-    sw-spine-001 Customized Configurations have been detected in the generated switch configurations
-    sw-edge-002 Config Generated
-    sw-spine-002 Customized Configurations have been detected in the generated switch configurations
-    sw-leaf-bmc-001 Config Generated
+canu generate network config --ccj ./ccj.json --sls-file ./sls_input_file.json --csm 1.3 --folder ./1.3 --custom-config ./custom_switch_config.yaml
 ```
 
-1. Validate and apply switch configurations to management network switches, EXCLUDING the edge switches.  [Validate Switch Configurations](validate_switch_configs.md).
-2. Apply the generated edge switch configurations. This is NOT a full configuration, the configuration generated is only what is needed for CHN. This switch should already be setup from the Slingshot documentation.
+Example output:
 
-The following is an example of a full running configuration of two spines and two edge switches. This configuration should be not be copied and should be used as a general reference only. Refer to [BI-CAN Aruba/Arista Configuration
-](../customer_accessible_networks/bi-can_arista_aruba_config.md) for more information.
+```text
+sw-edge-001 Config Generated
+sw-spine-001 Customized Configurations have been detected in the generated switch configurations
+sw-edge-002 Config Generated
+sw-spine-002 Customized Configurations have been detected in the generated switch configurations
+sw-leaf-bmc-001 Config Generated
+```
+
+1. Validate and apply switch configurations to management network switches, EXCLUDING the edge switches. See [Validate Switch Configurations](validate_switch_configs.md).
+1. Apply the generated edge switch configurations. This is NOT a full configuration, the configuration generated is only what is needed for CHN. This switch should already be setup from the Slingshot documentation.
+
+See [BI-CAN Aruba/Arista Configuration](../customer_accessible_networks/bi-can_arista_aruba_config.md) for more information.
