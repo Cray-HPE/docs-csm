@@ -479,12 +479,20 @@ Example output:
 
 ### Delete a repository
 
-To delete a repository, send an HTTP `DELETE` request to the `/service/rest/beta/repositories/NAME`.
+To delete a repository, send an authenticated HTTP `DELETE` request to the `/service/rest/beta/repositories/NAME`.
 
-(`ncn-mw#`) For example:
+(`ncn-mw#`) First set `NEXUS_USERNAME` and `NEXUS_PASSWORD` if they are not already
+set (these capture the values without printing the password):
 
 ```bash
-curl -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/NAME"
+NEXUS_USERNAME=$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.username}} | base64 -d)
+NEXUS_PASSWORD=$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)
+```
+
+(`ncn-mw#`) Then delete the repository (replace `NAME` as appropriate):
+
+```bash
+curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/NAME"
 ```
 
 ### Create a blob store
@@ -508,7 +516,7 @@ To delete a blob store, send an HTTP `DELETE` request to the `/service/rest/v1/b
 (`ncn-mw#`) For example:
 
 ```bash
-curl -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/NAME"
+curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/NAME"
 ```
 
 ### Authenticate to access the REST API
