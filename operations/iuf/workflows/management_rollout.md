@@ -532,7 +532,7 @@ remember to include these workflows.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-### NOTE This subsection to update NIC firmware on management nodes is required only if new Slingshot NIC firmware was provided.
+### NOTE This subsection to update NIC firmware on management nodes is required only if new Slingshot NIC firmware was provided
 
 - If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Host Software Installation and Configuration Guide (S-9009) for CSM_ for details on how to update NIC firmware on management nodes.
 
