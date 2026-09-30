@@ -308,8 +308,9 @@ If you want to continue manually, please follow the steps below.
 
 ### NCN worker nodes
 
-**NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in misalignment of iSCSI LUN indexes
-which leads to iSCSI LUN remapping and I/O errors. Please plan to delete the PE images before upgrade of worker node(s) where management noderollout with rebuild is done.
+**NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in misalignment of
+iSCSI LUN indexes which leads to iSCSI LUN remapping and I/O errors. Please plan to delete the PE images before management-nodes-rollout
+worker node(s) which includes rebuild is done.
 
 1. Reboot each of the worker nodes (one at a time), going from the highest to lowest number.
 
