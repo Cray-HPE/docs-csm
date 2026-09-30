@@ -1,5 +1,8 @@
 # Reboot NCNs with IUF
 
+**NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in
+misalignment of iSCSI LUN indexes which leads to iSCSI LUN remapping and I/O errors.
+
 - [1. Reboot NCNs with IUF](#1-reboot-ncns-with-iuf)
     - [1.1 Utility storage nodes](#11-utility-storage-nodes-ceph)
     - [1.2 NCN worker nodes](#12-ncn-worker-nodes)
@@ -42,6 +45,10 @@ Follow the steps below to reboot storage nodes:
         ```
 
 ### 1.2 NCN worker nodes
+
+**NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in misalignment of iSCSI LUN indexes
+which leads to iSCSI LUN remapping and I/O errors. Please plan to delete the PE images before upgrade of worker node(s) where management node
+rollout with rebuild is done.
 
 **NOTE** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-reboot=true` is not set on any of the nodes passed in the list.
 
