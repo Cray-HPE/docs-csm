@@ -14,7 +14,7 @@ The following is a high-level overview of the non-compute node (NCN) reboot work
 
 **NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in
 misalignment of iSCSI LUN indexes which leads to iSCSI LUN remapping and I/O errors. Please plan to delete
-the PE images before upgrade of worker node(s) where management node rollout with rebuild is done.
+the PE images before management-nodes-rollout of worker node(s) which includes rebuild is done. 
 
    Loop through reboots on storage nodes, worker nodes, and master nodes, where each reboot consists of the following workflow:
 

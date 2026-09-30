@@ -160,8 +160,9 @@ Before rebooting NCNs:
 
 * Ensure that pre-reboot checks have been completed, including checking the `metal.no-wipe` setting for each NCN. Do not proceed if any of the NCN `metal.no-wipe` settings are zero.
 
-**NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in misalignment of iSCSI LUN indexeswhich leads to iSCSI LUN remapping and I/O errors. Please plan to delete the PE images before upgrade of worker node(s) where management node
-rollout with rebuild is done.
+**NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in misalignment of iSCSI LUN
+indexes which leads to iSCSI LUN remapping and I/O errors. Please plan to delete the PE images before management-nodes-rollout of
+worker node(s) which includes rebuild is done.
 
 **NOTE** In CSM 1.7 and later, the storage and worker node can be rebooted with IUF. Refer to [Reboot NCNs with IUF](Reboot_NCNs_iuf.md).
 If you want to continue manually, please follow the steps below.
