@@ -1,13 +1,12 @@
 # Collect MAC Addresses for NCNs
 
-## Topics
-
 1. [Set up networking](#1-set-up-networking)
-2. [Collect MAC addresses](#2-collect-mac-addresses)
+1. [Collect MAC addresses](#2-collect-mac-addresses)
 
 ## 1. Set up networking
 
-This assumes that the HMN is not setup on the PIT node; these steps cater to bare-metal and configured switches.
+This assumes that the [HMN](../glossary.md#hardware-management-network-hmn) is not setup on the
+[PIT](../glossary.md#pre-install-toolkit-pit) node; these steps cater to bare-metal and configured switches.
 
 1. (`pit#`) Change into the preparation directory.
 
@@ -21,7 +20,7 @@ This assumes that the HMN is not setup on the PIT node; these steps cater to bar
 
    > **NOTE** If the file is missing, then generate the file by following the
    > [Create system configuration](pre-installation.md#3-create-system-configuration) procedure,
-   > stopping before the step to run the `csi` tool.
+   > stopping before the step to run the [`csi`](../glossary.md#cray-site-init-csi) tool.
 
    ```bash
    cat ncn_metadata.csv

@@ -3,7 +3,7 @@
 The `process-media` stage extracts all product distribution files found in the media directory specified by the user via `-m` and associates it with an activity identifier provided by the `-a` argument. The product
 content is extracted into that same directory. All future stages associated with the activity will execute for all applicable products found in the media directory, and thus `-m` does not need to be specified for future stages.
 
-**`NOTE`** `process-media` must be run at least once for a given activity before any of the other stages can be run. This is required because `process-media` associates the product content being installed or upgraded with an
+**NOTE** `process-media` must be run at least once for a given activity before any of the other stages can be run. This is required because `process-media` associates the product content being installed or upgraded with an
 activity identifier and that information is used for all other stages.
 
 `process-media` details are explained in the following sections:

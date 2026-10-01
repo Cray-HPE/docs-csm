@@ -1,14 +1,14 @@
 # Resilience of System Management Services
 
-HPE Cray EX systems are designed so that system management services \(SMS\) are fully resilient and that there is no single point of failure.
+HPE Cray EX systems are designed so that system management services (SMS) are fully resilient and that there is no single point of failure.
 The design of the system allows for resiliency in the following ways:
 
-- Three non-compute nodes \(NCNs\) are configured as Kubernetes master nodes. When one master goes down, operations \(such as jobs running across compute nodes\) are expected to continue.
-- At least three utility storage nodes provide persistent storage for the services running on the Kubernetes management nodes. When one of the utility storage nodes goes down, operations \(such as jobs running across compute nodes\) are expected to continue.
+- Three non-compute nodes (NCNs) are configured as Kubernetes master nodes. When one master goes down, operations (such as jobs running across compute nodes) are expected to continue.
+- At least three utility storage nodes provide persistent storage for the services running on the Kubernetes management nodes. When one of the utility storage nodes goes down, operations (such as jobs running across compute nodes) are expected to continue.
 - At least three NCNs are configured as Kubernetes worker nodes. If one of only three Kubernetes worker nodes were to go down, it would be much more difficult for the remaining two NCN
   worker nodes to handle the total balance of pods. It is less significant to lose one of the NCN worker nodes if the system has more than three NCN worker nodes because there are more
   worker nodes able to handle the pod load.
-- The state and configuration of the Kubernetes cluster are stored in an etcd cluster distributed across the Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to Ceph Rados Gateway \(S3\).
+- The state and configuration of the Kubernetes cluster are stored in an etcd cluster distributed across the Kubernetes master nodes. This cluster is also backed up on an interval, and backups are pushed to Ceph Rados Gateway (S3).
 - A micro-service can run on any node that meets the requirements for that micro-service, such as appropriate hardware attributes, which are indicated by labels and taints.
 - All micro-services have shared persistent storage so that they can be restarted on any NCN in the Kubernetes management cluster without losing state.
 
@@ -22,13 +22,13 @@ See [Restore System Functionality if a Kubernetes Worker Node is Down](Restore_S
 To increase the overall resiliency of system management services and software within the system, the following improvements were made:
 
 - Capsules services have implemented replicas for added resiliency.
-- Added support for new storage class that supports Read-Write-Many; this eliminated some of the errors encountered on pods which could not seamlessly start up on other worker NCNs upon termination \(because of PVC unmount errors\).
+- Added support for new storage class that supports Read-Write-Many; this eliminated some of the errors encountered on pods which could not seamlessly start up on other worker NCNs upon termination (because of PVC unmount errors).
 - Additional retries implemented in the BOS, IMS, and CFS services for increased protection around outages of dependent services.
-- Image-based installs emphasizing "non-special" node types eliminated single points of failure previously encountered with DNS, administrative and installation tooling, and gathering of Cray System Management \(CSM\) logging for Ceph and Kubernetes.
+- Image-based installs emphasizing "non-special" node types eliminated single points of failure previously encountered with DNS, administrative and installation tooling, and gathering of Cray System Management (CSM) logging for Ceph and Kubernetes.
 
 ## Expected resiliency behavior
 
-In addition, the following general criteria describe the expected behavior of the system if a single Kubernetes node \(master, worker, or storage\) goes down temporarily:
+In addition, the following general criteria describe the expected behavior of the system if a single Kubernetes node (master, worker, or storage) goes down temporarily:
 
 - Once a job has been launched and is executing on the compute plane, it is expected that it will continue to run without interruption during planned or unplanned outages characterized
   by the loss of an NCN master, worker, or storage node. Applications launched through PALS may show error messages and lost output if a worker node goes down during application runtime.
@@ -41,9 +41,9 @@ In addition, the following general criteria describe the expected behavior of th
   critical operations such as job launch, application run, or compute node boot are expected to continue to work.
 - Not all pods running on a downed NCN worker node are expected to migrate to a remaining NCN worker node. There are some pods which are configured with anti-affinity such that
   if the pod exists on another NCN worker node, it will not start another of those pods on that same NCN worker node. At this time, this mostly only applies to etcd clusters running
-  in the cluster. It is optimal to have those pods balanced across the NCN worker nodes \(and not have multiple etcd pods, from the same etcd cluster, running on the same NCN worker node\).
+  in the cluster. It is optimal to have those pods balanced across the NCN worker nodes (and not have multiple etcd pods, from the same etcd cluster, running on the same NCN worker node).
   Thus, when an NCN worker node goes down, the etcd pods running on it will remain in terminated state and will not attempt to relocate to another NCN worker node. This should be fine as there
-  should be at least two other etcd pods \(from the cluster of 3\) running on other NCN worker nodes. Additionally, any pods that are part of a stateful set will not migrate off a worker node
+  should be at least two other etcd pods (from the cluster of 3) running on other NCN worker nodes. Additionally, any pods that are part of a stateful set will not migrate off a worker node
   when it goes down. Those are expected to stay on the node and also remain in the terminated state until the NCN worker nodes comes back up or unless deliberate action is taken to force that
   pod off the NCN worker node which is down.
 - After an NCN worker, storage, or master node goes down, if there are issues with booting compute nodes, that does not necessarily mean that the problem is due to a
@@ -56,7 +56,7 @@ In addition, the following general criteria describe the expected behavior of th
 
 Though an effort was made to increase the number of pod replicas for services that were critical to system operations such as booting computes, launching jobs, and running applications across the
 compute plane, there are still some services that remain with single copies of their pods. In general, this does not result in a critical issue if these singleton pods are on an NCN worker node
-that goes down. Most micro-services should \(after being terminated by Kubernetes\), simply be rescheduled onto a remaining NCN worker node. That assumes that the remaining NCN worker nodes have
+that goes down. Most micro-services should (after being terminated by Kubernetes), simply be rescheduled onto a remaining NCN worker node. That assumes that the remaining NCN worker nodes have
 sufficient resources available and meet the hardware/network requirements of the pods.
 
 However, it is important to note that some pods, when running on a worker NCN that goes down, may require some manual intervention to be rescheduled. Note the workarounds in this section for such
@@ -114,5 +114,5 @@ In a future release, strides will be made to further improve the resiliency of t
 - Further emphasis on eliminating singleton system management pods.
 - Reduce time delays for individual service responsiveness after its pods are terminated because of it running on a worker node that has gone down.
 - Rebalancing of pods/workloads after an NCN worker node comes back up after being down.
-- Analysis/improvements with respect to outages of the Node Management Network \(NMN\) and the impact to critical system management services.
-- Expanded analysis/improvements of resiliency of noncritical services \(those that are not directly related to job launch, application run, or compute boot\).
+- Analysis/improvements with respect to outages of the Node Management Network (NMN) and the impact to critical system management services.
+- Expanded analysis/improvements of resiliency of noncritical services (those that are not directly related to job launch, application run, or compute boot).

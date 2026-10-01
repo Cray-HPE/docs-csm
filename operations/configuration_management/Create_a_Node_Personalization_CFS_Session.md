@@ -1,6 +1,6 @@
 # Create a Node Personalization CFS Session
 
-Node Personalization is an configuration done by the Configuration Framework Service \(CFS\) that targets live nodes.
+Node Personalization is an configuration done by the Configuration Framework Service (CFS) that targets live nodes.
 By default, CFS will automatically generate the Ansible inventory using CFS' dynamic inventory.
 The inventory will include all nodes on the system, placed into groups according to their Role, Subrole and any Groups in HSM.
 Other inventory options are also available that will give the user more direct control over the Ansible inventory.
@@ -9,7 +9,7 @@ See [CFS Session Inventory](CFS_Session_Inventory.md) for more information.
 ## Prerequisites
 
 - The Cray CLI must be configured on the node where the commands are being run.
-  - See [Configure the Cray CLI](../configure_cray_cli.md).
+    - See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## 1. Create CFS node personalization session
 

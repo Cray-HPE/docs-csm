@@ -348,7 +348,7 @@ Repeat the above step on every master node.
 
 1. (`ncn-m001#`) Fix `kubectl` command access on the first master node `ncn-m001`.
 
-   **`NOTE`** The following command will only respond with `Unauthorized` if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
+   **NOTE** The following command will only respond with `Unauthorized` if certificates have expired. In any case, the new client certificates will need to be distributed in the following steps.
 
    1. View the status of the nodes.
 
@@ -388,18 +388,18 @@ Repeat the above step on every master node.
 
 1. (`ncn-m001#`) Distribute the client certificate to the rest of the cluster.
 
-   **`NOTE`** There may be errors when copying files. The target may or may not exist depending on the version of CSM.
+   **NOTE** There may be errors when copying files. The target may or may not exist depending on the version of CSM.
 
    - **DO NOT** copy this to the master node where this work is being performed.
    - Copy `/etc/kubernetes/admin.conf` to the other master and worker nodes, as well as the first storage node `ncn-s001`.
 
-   **`NOTE`** Update the following command with the appropriate range of worker nodes.
+   **NOTE** Update the following command with the appropriate range of worker nodes.
 
    ```bash
    pdcp -w ncn-m00[2-3] -w ncn-w00[1-3] -w ncn-s001 /etc/kubernetes/admin.conf /etc/kubernetes/
    ```
 
-   **IMPORTANT:** You are now done renewing all certificates. Do NOT perform the next section unless your `kubelet` client certificate also expired. Use the following command to check:
+   **IMPORTANT:** All certificate renewal is now complete. Do NOT perform the next section unless the `kubelet` client certificate also expired. Use the following command to check:
 
    ```bash
    pdsh -w ncn-m00[1-3] -w ncn-w00[1-3] openssl x509 -enddate -noout -in /var/lib/kubelet/pki/kubelet-client-current.pem
@@ -407,7 +407,7 @@ Repeat the above step on every master node.
 
 ### Regenerate `kubelet` `.pem` certificates
 
-**`NOTE`** This section is typically not necessary unless your `kubelet` client certificate expired (see above section).
+**NOTE** This section is typically not necessary unless the `kubelet` client certificate expired (see above section).
 
 1. (`ncn#`) Backup certificates for `kubelet` on each master and worker node:
 
@@ -450,7 +450,7 @@ Repeat the above step on every master node.
 
 1. (`ncn-m#`) Copy each file to the corresponding node shown in the filename.
 
-   **`NOTE`** Update the below command with the appropriate number of master and worker nodes.
+   **NOTE** Update the below command with the appropriate number of master and worker nodes.
 
    ```bash
    for node in ncn-m00{1..3} ncn-w00{1..3}; do scp /root/$node.kubelet.conf $node:/etc/kubernetes/; done
@@ -462,14 +462,14 @@ Repeat the above step on every master node.
    systemctl stop kubelet.service &&
         rm -v /etc/kubernetes/kubelet.conf /var/lib/kubelet/pki/* &&
         cp -v /etc/kubernetes/$(hostname -s).kubelet.conf /etc/kubernetes/kubelet.conf &&
-        systemctl start kubelet.service && 
+        systemctl start kubelet.service &&
         kubeadm init phase kubelet-finalize all --cert-dir /var/lib/kubelet/pki/ && echo OK
    ```
 
 1. (`ncn#`) Check the expiration of the `kubelet` certificate files. See [File locations](#file-locations) for the list of files.
 
    **This task is for each master and worker node. The example checks each `kubelet` certificate in [File locations](#file-locations).**
-   **`NOTE`** As long as the `kubelet-client-current.pem` certificate is current, expiration dates for other `kubelet` certificates can be ignored.
+   **NOTE** As long as the `kubelet-client-current.pem` certificate is current, expiration dates for other `kubelet` certificates can be ignored.
 
    ```bash
    for i in $(ls /var/lib/kubelet/pki/*.crt;ls /var/lib/kubelet/pki/*.pem);do echo ${i}; openssl x509 -enddate -noout -in ${i};done
@@ -623,7 +623,7 @@ Run the following steps from a master node.
 
       ```bash
       PROM_IP=$(kubectl get services -n sysmgmt-health vmagent-vms -o json | jq -r '.spec.clusterIP')
-      curl -s http://${PROM_IP}:8429/targets |  grep kube-etcd | sort -u 
+      curl -s http://${PROM_IP}:8429/targets |  grep kube-etcd | sort -u
       ```
 
       Example output:

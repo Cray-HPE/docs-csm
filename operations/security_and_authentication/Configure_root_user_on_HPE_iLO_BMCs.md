@@ -5,7 +5,7 @@ By default, HPE BMC controllers have the `Administrator` user account. In order 
 This procedure is applicable in the following situations:
 
 - The root password is known and does not match the destination system default air-cooled BMC credentials.
-  - For example, a node has been moved between systems and each system has different default global credentials.
+    - For example, a node has been moved between systems and each system has different default global credentials.
 - The root user does not exist.
 - The root user exists with an unknown password.
 
@@ -143,7 +143,7 @@ This procedure is applicable in the following situations:
     1. Determine if the root user account already exists.
 
         ```bash
-        for account in $(curl -s -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" -k "https://${BMC}/redfish/v1/AccountService/Accounts" | jq '.Members[]."@odata.id"' -r); do 
+        for account in $(curl -s -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" -k "https://${BMC}/redfish/v1/AccountService/Accounts" | jq '.Members[]."@odata.id"' -r); do
             echo "Checking $account"
             curl -k -s -u "${DEFAULT_USERNAME}:${DEFAULT_PASSWORD}" -k "https://${BMC}${account}" | jq '. | {Id: .Id, UserName: .UserName, RoleId: .RoleId}' -c
         done

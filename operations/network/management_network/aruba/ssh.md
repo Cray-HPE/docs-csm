@@ -1,45 +1,56 @@
 # Secure Shell (SSH)
 
-SSH server enables an SSH client to make a secure and encrypted connection to a switch. Currently, switch supports SSH version 2.0 only. The user authentication mechanisms supported for SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server and sftp-client via the copy command are supported for managing the router.
+SSH server enables an SSH client to make a secure and encrypted connection to a switch.
+Switches support SSH version 2.0 only. The user authentication mechanisms supported for
+SSH are public key authentication and password authentication (RADIUS, TACACS+ or locally
+stored password). Secure File Transfer Protocol (SFTP) provides file transfer. SSH Server
+and `sftp-client` via the `copy` command are supported for managing the router.
 
-## Configuration Commands
+## Configuration commands
 
-Configure SSH authentication:
-
-```text
-switch(config)# ssh password-authentication
-```
-
-Generate SSH server key:
+(`switch(config)#`) Configure SSH authentication:
 
 ```text
-switch(config)# ssh host-key <rsa [bits 2048]|ecdsa CURVE|ed25519>
+ssh password-authentication
 ```
 
-Enable SSH on the VRF:
+(`switch(config)#`) Generate SSH server key:
 
 ```text
-switch(config)# ssh server vrf <default|mgmt|VRF>
+ssh host-key <rsa [bits 2048]|ecdsa CURVE|ed25519>
 ```
 
-Configure SSH options:
+(`switch(config)#`) Enable SSH on the VRF:
 
 ```text
-switch(config)# ssh certified-algorithms-only
-switch(config)# ssh maximum-auth-attempts VALUE
-switch(config)# ssh known-host remove <all|IP-ADDR>
+ssh server vrf <default|mgmt|VRF>
 ```
 
-Show commands to validate functionality:
+(`switch(config)#`) Configure SSH options:
+
+```text
+ssh certified-algorithms-only
+ssh maximum-auth-attempts VALUE
+ssh known-host remove <all|IP-ADDR>
+```
+
+## Show commands to validate functionality
+
+(`switch(config)#`)
 
 ```text
 show ssh server [vrf VRF|all-vrfs]
 ```
 
-## Example Output
+(`switch(config)#`)
 
 ```text
 show ssh server all-vrfs
+```
+
+Example output:
+
+```text
 SSH server configuration on VRF vrf_default :
 IP Version
 TCP Port
@@ -58,11 +69,11 @@ MACs      :  umac-64-etm@openssh.com,umac-128-etm@openssh.com,
              hmac-sha2-256,hmac-sha2-512,hmac-sha1
 ```
 
-## Expected Results
+## Expected results
 
-1. Administrators can create the user account
-2. Administrators can generate working SSH keys
-3. The output of the `show` commands is correct
-4. Administrators can successfully connect to the switch via an SSH client using SSH 2.0
+* Administrators can create the user account.
+* Administrators can generate working SSH keys.
+* The output of the `show` commands is correct.
+* Administrators can successfully connect to the switch via an SSH client using SSH 2.0.
 
 [Back to Index](../README.md)

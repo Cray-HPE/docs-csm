@@ -12,8 +12,8 @@ Use this procedure to renew or reinstall the SSH key on the BMCs.
 This procedure requires administrative privileges. If checking the existing SSH key on BMCs,
 the BMC username and password are also required.
 
-> **`NOTE`** The procedure to find a BMC username and password is listed in
-[Determine the system's default BMC `root` user password](../security_and_authentication/Recovering_from_Mismatched_BMC_Credentials.md)
+> **NOTE** For the procedure to find a BMC username and password, see
+> [Determine the system's default BMC `root` user password](../security_and_authentication/Recovering_from_Mismatched_BMC_Credentials.md).
 
 ## Check if a key is incorrect on a node
 
@@ -54,9 +54,9 @@ the BMC username and password are also required.
 If the key on the BMC does not match the key used by ConMan, then the ConMan sessions will not have permission to access
 the consoles. Proceed to resetting the SSH keys to resolve the issue.
 
-## Procedure to Reset SSH keys
+## Procedure to reset SSH keys
 
-> **`NOTE`** this procedure has changed since the CSM 0.9 release.
+> **NOTE** this procedure has changed since the CSM 0.9 release.
 
 1. (`ncn-mw#`) Scale the `cray-console-operator` pods to 0 replicas.
 

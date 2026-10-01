@@ -1,4 +1,4 @@
-# Manual NCN upgrade
+# Manual NCN Upgrade
 
 **This page should NOT be used for a normal CSM upgrade.**
 

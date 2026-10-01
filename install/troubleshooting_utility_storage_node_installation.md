@@ -1,35 +1,32 @@
 # Utility Storage Installation Troubleshooting
 
-## Topics
-
 - [`ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'](#ncn-s001-console-is-stuck-sleeping-for-five-seconds-waiting-ceph-to-be-healthy)
 - [Ceph install failed](#ceph-install-failed)
 
-## Details
+## `ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'
 
-### `ncn-s001` console is stuck 'Sleeping for five seconds waiting Ceph to be healthy...'
+> **NOTE:**
+> It can be appropriate for `ncn-s001` to wait with this message for a while.
+> To check if Ceph OSDs are still coming up, run `ceph -s` and check the number of OSDs.
+> After a couple minutes, run `ceph -s` again and see if there are more OSDs. If OSDs are still increasing, then continue to wait.
 
-> **NOTES:**
-> It can be appropriate for `ncn-s001` to wait with this message for a while. To check if Ceph OSDs are still coming up, run `ceph -s` and check the number of OSDs.
-After a couple minutes, run `ceph -s` again and see if there are more OSDs. If OSDs are still increasing, then continue to wait.
+(`ncn-s001`) Check Ceph health.
 
-1. (`ncn-s001`) Check Ceph health.
+```bash
+ceph health detail
+ceph -s
+```
 
-   ```bash
-   ceph health detail
-   ceph -s
-   ```
+- Check if Ceph health shows the following health warning:
 
-2. If Ceph health shows the following health warning
-
-   ```bash
+   ```text
    HEALTH_WARN 1 pool(s) do not have an application enabled
    [WRN] POOL_APP_NOT_ENABLED: 1 pool(s) do not have an application enabled
       application not enabled on pool '.mgr'
       use 'ceph osd pool application enable <pool-name> <app-name>', where <app-name> is 'cephfs', 'rbd', 'rgw', or freeform for custom applications.
    ```
 
-   (`ncn-s001`) Then enable the `.mgr` pool with the following command.
+   (`ncn-s001`) If the above warning is shown, then enable the `.mgr` pool.
 
    ```bash
    ceph osd pool application enable .mgr mgr
@@ -37,21 +34,26 @@ After a couple minutes, run `ceph -s` again and see if there are more OSDs. If O
 
    Expected output:
 
-   ```bash
+   ```text
    enabled application 'mgr' on pool '.mgr'
    ```
 
-3. If Ceph health does not show the warning above, then most likely the storage node install will finish after waiting longer. Other Ceph troubleshooting procedures are in the
-[troubleshooting section](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references) of the [utility storage documentation](../operations/utility_storage/Utility_Storage.md).
+- If Ceph health does not show the warning above, then most likely the storage node install will finish after waiting longer.
+  Other Ceph troubleshooting procedures are in the [troubleshooting section](../operations/utility_storage/Utility_Storage.md#storage-troubleshooting-references)
+  of the [utility storage documentation](../operations/utility_storage/Utility_Storage.md).
 
-### Ceph install failed
+## Ceph install failed
 
-If there is a failure in the creation of Ceph storage on the utility storage nodes for the following scenario, the Ceph storage might need to be reinitialized.
+If there is a failure in the creation of Ceph storage on the utility storage nodes for the following scenario,
+then the Ceph storage might need to be reinitialized.
 
 **IMPORTANT (FOR NODE INSTALLS/REINSTALLS ONLY):** If the Ceph install failed, check the following:
 
 ```bash
 ceph osd tree
+```
+
+```text
 ID  CLASS  WEIGHT    TYPE NAME          STATUS  REWEIGHT  PRI-AFF
 -1         31.43875  root default
 -3         10.47958      host ncn-s001
@@ -81,6 +83,9 @@ Get more information using the host and OSD.
 
 ```bash
 ceph orch ps --daemon-type osd ncn-s002
+```
+
+```text
 NAME    HOST      STATUS         REFRESHED  AGE  VERSION  IMAGE NAME                        IMAGE ID      CONTAINER ID
 osd.0   ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  98859a09a946
 osd.10  ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ceph:v15.2.8  5553b0cb212c  808162b421b8
@@ -94,10 +99,15 @@ osd.7   ncn-s002  running (23h)  7m ago     2d   15.2.8   registry.local/ceph/ce
 
 In order to zap a single OSD, it is necessary to gather some information.
 
-1. (`ncn-s#`) List the devices on that host with `ceph orch device ls <hostname>`.
+1. (`ncn-s#`) List the devices on that host.
 
    ```bash
    ceph orch device ls ncn-s002 --wide
+   ```
+
+   Example output:
+
+   ```text
    Hostname  Path      Type  Transport  RPM      Vendor  Model             Serial          Size   Health   Ident  Fault  Available  Reject Reasons
    ncn-s002  /dev/sdc  ssd   Unknown    Unknown  ATA     SAMSUNG MZ7LH1T9  S455NY0M811867  1920G  Unknown  N/A    N/A    No         locked, LVM detected, Insufficient space (<10 extents) on vgs
    ncn-s002  /dev/sdd  ssd   Unknown    Unknown  ATA     SAMSUNG MZ7LH1T9  S455NY0M812407  1920G  Unknown  N/A    N/A    No         locked, LVM detected, Insufficient space (<10 extents) on vgs
@@ -107,12 +117,17 @@ In order to zap a single OSD, it is necessary to gather some information.
    ncn-s002  /dev/sdh  ssd   Unknown    Unknown  ATA     SAMSUNG MZ7LH1T9  S455NY0M811873  1920G  Unknown  N/A    N/A    No         locked, LVM detected, Insufficient space (<10 extents) on vgs
    ```
 
-   The locked status in the Reject column is likely the result of a wipe failure.
+   The `locked` status in the `Reject` column is likely the result of a wipe failure.
 
 1. (`ncn-s#`) Find the drive path.
 
    ```bash
-    cephadm ceph-volume lvm list
+   cephadm ceph-volume lvm list
+   ```
+
+   Example output (truncated for the purposes of this example):
+
+   ```text
    Inferring fsid 8f4dd38b-ee84-4d29-8305-1ef24e61a5d8
    Using recent Ceph image docker.io/ceph/ceph@sha256:16d37584df43bd6545d16e5aeba527de7d6ac3da3ca7b882384839d2d86acc7d
    /usr/bin/podman: stdout
@@ -137,9 +152,7 @@ In order to zap a single OSD, it is necessary to gather some information.
    /usr/bin/podman: stdout
    ```
 
-   > Above output truncated for the purposes of this example.
-
-1. (`ncn-s#`)Zap a single device with `ceph orch device zap (hostname) (device path)`.
+1. (`ncn-s#`) Zap a single device.
 
    ```bash
    ceph orch device zap ncn-s002 /dev/sdf

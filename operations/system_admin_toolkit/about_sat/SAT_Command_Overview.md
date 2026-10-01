@@ -54,7 +54,7 @@ command.
 
 <!-- markdownlint-disable MD053 -->
 <!---
-    For references that are likely to appear on a lot of pages (glossary references, for example), 
+    For references that are likely to appear on a lot of pages (glossary references, for example),
     we allow definitions for entries that are not used on the page, as a convenience.
 -->
 

@@ -2,8 +2,8 @@
 
 This section updates the software running on management NCNs.
 
-- [1. Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
-- [2. Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
+1. [Update management host firmware (FAS)](#1-update-management-host-firmware-fas)
+1. [Execute the IUF `management-nodes-rollout` stage](#2-execute-the-iuf-management-nodes-rollout-stage)
     - [Configure optional CSM features](#configure-optional-csm-features)
         - [Selective iSCSI worker node personalization](#selective-iscsi-worker-node-personalization)
         - [IPv6](#ipv6)
@@ -11,12 +11,12 @@ This section updates the software running on management NCNs.
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
     - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
     - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
-- [3. Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware)
-- [4. Next steps](#4-next-steps)
+1. [Update management host Slingshot NIC firmware](#3-update-management-host-slingshot-nic-firmware)
+1. [Next steps](#4-next-steps)
 
 ## 1. Update management host firmware (FAS)
 
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+**NOTE** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
 Refer to [Update Non-Compute Node (NCN) BIOS and BMC Firmware](../../firmware/FAS_Use_Cases.md#update-non-compute-node-ncn-bios-and-bmc-firmware) for details on how to upgrade the firmware on management nodes.
 
@@ -66,10 +66,10 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
 `prepare-images` and `update-cfs-config` stages respectively; see the [`prepare-images` Artifacts created](../stages/prepare_images.md#artifacts-created) documentation for details on how to query the images and CFS configurations and see the
 [update-cfs-config](../stages/update_cfs_config.md) documentation for details about how the CFS configuration is updated.
 
-**`NOTE`** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
+**NOTE** Additional arguments are available to control the behavior of the `management-nodes-rollout` stage, for example `--limit-management-rollout` and `-cmrp`. See the
 [`management-nodes-rollout` stage documentation](../stages/management_nodes_rollout.md) for details and adjust the examples below if necessary.
 
-**`NOTE`** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
+**NOTE** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
 
 1. (`ncn-m001#`) Verify if any nodes are labeled with `iuf-prevent-rollout=true`.
 
@@ -83,7 +83,7 @@ nodes. This initial test node is referred to as the "canary node". Modify the pr
     kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
     ```
 
-**`IMPORTANT`** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not
+**IMPORTANT** There is a different procedure for `management-nodes-rollout` depending on whether or not CSM is being upgraded. The two procedures differ in the handling of NCN storage nodes and NCN master nodes. If CSM is not
 being upgraded, then NCN storage nodes and NCN master nodes will not be upgraded with new images and will be updated by the CFS configuration created in [update-cfs-config](../stages/update_cfs_config.md) only. If CSM is being
 upgraded, the NCN storage nodes and NCN master nodes will be upgraded with new images and the new CFS configuration. Both procedures use the same steps for rebuilding/upgrading NCN worker nodes. Select **one** of the following
 procedures based on whether or not CSM is being upgraded:
@@ -113,7 +113,7 @@ cray cfs configurations describe <cfs_configuration_name>
 For example:
 
 ```bash
-cray cfs configurations describe management-main-1.7-1715924
+cray cfs configurations describe management-main-1.7-1715924 --format toml
 ```
 
 Example output:
@@ -143,7 +143,7 @@ cray ims images describe <ims_image_ID>
 For example:
 
 ```bash
-cray ims images describe f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6
+cray ims images describe f9fb3b2b-5527-47cb-a2de-8fa9dec7cec6 --format toml
 ```
 
 Example output:
@@ -165,7 +165,7 @@ type = "s3"
 > **Important:** There is no built-in mechanism to validate the image and configuration being passed belong to the same role and subrole.
 Administrators must ensure that the correct image and configuration are used for the corresponding node and subrole.
 
-For the new parameters added, please refer to the command information in the [IUF run command details](../IUF.md#run) documentation.
+For the new parameters added, refer to the command information in the [IUF run command details](../IUF.md#run) documentation.
 
 ### 2.1 `management-nodes-rollout` with CSM upgrade
 
@@ -177,22 +177,19 @@ Follow the steps below to upgrade all management nodes.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-1. _management-nodes-rollout prehook:_ A script named `management-nodes-rollout-prehook.sh` runs before `management-nodes-rollout` stage. This hook is only executed before the first NCN is upgraded(i.e `STORAGE_CANARY`).  
+1. _management-nodes-rollout prehook:_ A script named `management-nodes-rollout-prehook.sh` runs before `management-nodes-rollout` stage. This hook is only executed before the first NCN is upgraded(i.e `STORAGE_CANARY`).
 This hook executes operations including upgrading CSM applications and services and validating CSM health post-service upgrade.
 The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgrade/scripts/upgrade/csm-upgrade.sh` and `/opt/cray/tests/install/ncn/automated/ncn-k8s-combined-healthcheck iuf` .
 
 1. Perform the NCN storage node upgrades. This upgrades a single storage node first to test the storage node image and then upgrades the remaining storage nodes.
 
-    **`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
+    **NOTE** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
     If monitoring progress with the Argo UI, remember to include these workflows.
 
     1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN storage node.
 
         ```bash
         STORAGE_CANARY=ncn-s001
-        ```
-
-        ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
         ```
 
@@ -213,9 +210,6 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         ```bash
         STORAGE_NODES="$(ceph orch host ls | grep ncn-s | grep -v "$STORAGE_CANARY" | awk '{print $1}' | xargs echo)"
         echo "$STORAGE_NODES"
-        ```
-
-        ```bash
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
         ```
 
@@ -229,7 +223,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
 1. Perform the NCN master node upgrade of `ncn-m002` and `ncn-m003`.
 
-    > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+    > **NOTE** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
     1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m002`. This will rebuild `ncn-m002` with the new CFS configuration and image built in
@@ -241,7 +235,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ncn-m002
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
         See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m002` booted successfully with the desired image and CFS configuration.
@@ -261,7 +255,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ncn-m003
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
 
     1. Verify that `ncn-m003` booted successfully with the desired image and CFS configuration.
 
@@ -275,14 +269,14 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
 1. Perform the NCN master node upgrade of `ncn-m001`.
 
-    > **`NOTE`** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
+    > **NOTE** If Kubernetes encryption has been enabled via the [Kubernetes Encryption Documentation](../../kubernetes/encryption/README.md),
     then backup the `/etc/cray/kubernetes/encryption` directory on the master node before upgrading and restore the directory after the node has been upgraded.
 
     1. Authenticate with the Cray CLI on `ncn-m002`.
 
         See [Configure the Cray Command Line Interface](../../configure_cray_cli.md) for details on how to do this.
 
-    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the new CFS  configuration and image built in previous steps of the workflow.
+    1. Invoke `iuf run` with `-r` to execute the [`management-nodes-rollout`](../stages/management_nodes_rollout.md) stage on `ncn-m001`. This will rebuild `ncn-m001` with the new CFS configuration and image built in previous steps of the workflow.
 
         (`ncn-m002#`) Upgrade `ncn-m001`. This **must** be executed on **`ncn-m002`**.
 
@@ -300,8 +294,8 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         iuf -a "${ACTIVITY_NAME}" --media-host ncn-m002 run -r management-nodes-rollout --limit-management-rollout ncn-m001
         ```
 
-        > **`NOTE`** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should    be restarted.
-        See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
+        > **NOTE** The `/etc/cray/kubernetes/encryption` directory should be restored if it was backed up. Once it is restored, the `kube-apiserver` on the rebuilt node should be restarted.
+        > See [Kubernetes `kube-apiserver` Failing](../../../troubleshooting/kubernetes/Kubernetes_Kube_apiserver_failing.md) for details on how to restart the `kube-apiserver`.
 
     1. Verify that `ncn-m001` booted successfully with the desired image and CFS configuration.
 
@@ -311,7 +305,7 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         cray cfs components describe "${XNAME}"
         ```
 
-    > **`NOTE`** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md)
+    > **NOTE** After `management-nodes-rollout` stage for management NCNs is completed, re-initialize cray CLI. Refer to [Configure the Cray Command Line Interface (cray CLI)](../../configure_cray_cli.md).
 
     Once this step has completed:
 
@@ -330,44 +324,42 @@ can update NCN master and storage nodes using CFS configuration only.
 Follow the following steps to complete the `management-nodes-rollout` stage.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
-section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
-Refer to that table and any corresponding product documents before continuing to the next step.
+   section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
+   Refer to that table and any corresponding product documents before continuing to the next step.
 
-### Note check whether `/etc/cray/upgrade/csm/myenv` file is present before starting management rollout for worker nodes
-
-- Verify `/etc/cray/upgrade/csm/myenv` file is present:
+1. Check whether the `/etc/cray/upgrade/csm/myenv` file is present before starting management rollout for worker nodes.
 
     ```bash
     cat /etc/cray/upgrade/csm/myenv
     ```
 
-- If the file is not found, follow the below procedure to create the file:
+    If the file is not found, then follow the below procedure to create the file:
 
-    Get the list of CSM versions:
+    1. Get the list of CSM versions:
 
-    ```bash
-    csm_version_list=$(sat showrev --products --filter product_name=csm --fields product_version --sort-by product_version --reverse --no-headings --no-borders)
-    ```
+        ```bash
+        csm_version_list=$(sat showrev --products --filter product_name=csm --fields product_version --sort-by product_version --reverse --no-headings --no-borders)
+        ```
 
-    Find the latest CSM version from the list:
+    1. Find the latest CSM version from the list:
 
-    ```bash
-    CSM_RELEASE=$(echo "$csm_version_list" | head -n 1 | awk '{print $1}' | grep -Eo '^[^ ]+')
-    ```
+        ```bash
+        CSM_RELEASE=$(echo "$csm_version_list" | head -n 1 | awk '{print $1}' | grep -Eo '^[^ ]+')
+        ```
 
-    Verify the latest CSM version:
+    1. Verify the latest CSM version:
 
-    ```bash
-    echo $CSM_RELEASE
-    ```
+        ```bash
+        echo $CSM_RELEASE
+        ```
 
-    Write the `CSM_RELEASE` variable into `myenv` file:
+    1. Write the `CSM_RELEASE` variable into `myenv` file:
 
-    ```bash
-    echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
-    ```
+        ```bash
+        echo "export CSM_RELEASE=${CSM_RELEASE}" >> /etc/cray/upgrade/csm/myenv
+        ```
 
-    **Example session:**
+    Example:
 
     ```console
     root@ncn-m001# csm_version_list=$(sat showrev --products --filter product_name=csm --fields product_version --sort-by product_version --reverse --no-headings --no-borders)
@@ -538,7 +530,7 @@ for details on how to query the images and CFS configurations and see the [updat
     hook.cray-nls.hpe.com "cos-prechecks-for-worker-reboots" deleted
     ```
 
-**`NOTE`** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
+**NOTE** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 
 1. The "Install and Upgrade Framework" section of each individual product's installation document may contain special actions that need to be performed outside of IUF for a stage. The "IUF Stage Documentation Per Product"
@@ -575,15 +567,15 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```
 
 1. Ensure to [follow these steps after worker node rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
-  
+
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
 
-   **`NOTE`** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high
+   **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high
    availability for iSCSI SBPS. We can rollout one more worker node other than canary node to be labeled with `iuf-prevent-rollout=true` followed by rest of
    the worker nodes rollout. Verify the health of these nodes before proceeding to the next batch of worker node rollouts. Continue this process until the rollout of
    all remaining worker nodes is complete.
 
-   **`NOTE`** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
+   **NOTE** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
    node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
    with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
@@ -633,16 +625,16 @@ either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-
 
 ## 3. Update management host Slingshot NIC firmware
 
-**`NOTE`** This subsection is optional and can be skipped if upgrading only CSM through IUF.
+**NOTE** This subsection is optional and can be skipped if upgrading only CSM through IUF.
 
 If new Slingshot NIC firmware was provided, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Installation Guide for CSM_
 for details on how to update NIC firmware on management nodes.
 
-After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.  
+After updating management host Slingshot NIC firmware, all nodes where the firmware was updated must be power cycled.
 
 Choose one of the below options to reboot worker nodes:
 
-- To manually reboot the nodes follow the [Reboot NCNs manually](../../node_management/Reboot_NCNs_manual.md#ncn-worker-nodes) procedure for all nodes where the firmware was updated.  
+- To manually reboot the nodes follow the [Reboot NCNs manually](../../node_management/Reboot_NCNs_manual.md#ncn-worker-nodes) procedure for all nodes where the firmware was updated.
 - To use IUF to reboot the nodes, follow the [Reboot NCNs with IUF](../../node_management/Reboot_NCNs_iuf.md#12-ncn-worker-nodes) procedure for all nodes where the firmware was updated.
 
 Once this step has completed:

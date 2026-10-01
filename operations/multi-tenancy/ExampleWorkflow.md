@@ -73,12 +73,13 @@ For the purposes of this guide, the tenant configuration settings are made in ea
 
 #### Tenant names
 
-* Choose your naming convention for each system and tenant
-* Example:
-    * system `Development`
-    * two tenants `devten01a` and `devten02a`
-    * future iterations might use suffix `01b`, `01c`, etc
+Choose a naming convention for each system and tenant.
 
+Example:
+
+* System `Development`
+* Two tenants `devten01a` and `devten02a`
+* Future iterations might use suffix `01b`, `01c`, etc
 * Example of these settings in configuration file `devten01a.yaml`:
 
     ```yaml
@@ -116,16 +117,19 @@ These configuration settings are made:
 
 #### `SlurmCluster` names
 
-* Choose your naming convention for each system and `SlurmCluster`
-* Example:
-    * system `Development`
-    * `SlurmClusters` `devcls01a` and `devcls02a`
-    * future iterations might use suffix `01b`, `01c`, etc
-* **Name length limitation**:
-    * longer names are automatically generated from `SlurmCluster` name
-    * for example, `devcls01a-slurmdb` (16 characters)
-    * name length limitation is 22 characters
+Choose a naming convention for each system and `SlurmCluster`.
 
+**Name length limitation**:
+
+* Longer names are automatically generated from `SlurmCluster` name
+    * for example, `devcls01a-slurmdb` (16 characters)
+* Name length limitation is 22 characters
+
+Example:
+
+* System `Development`
+* `SlurmClusters` `devcls01a` and `devcls02a`
+* Future iterations might use suffix `01b`, `01c`, etc
 * Example of settings in configuration file `devcls01a.yaml`:
 
     ```yaml
@@ -136,10 +140,10 @@ These configuration settings are made:
 
 #### `SlurmCluster` IP addresses
 
-**`IMPORTANT`** Each High-Speed Network (HSN) IP address must be unique, within all the `SlurmClusters` on any one system.
+**IMPORTANT** Each High-Speed Network (HSN) IP address must be unique, within all the `SlurmClusters` on any one system.
 
 * These HSN IP addresses are assigned in the USS configuration, below
-    * **You will need to know the base HSN IP address for each system**
+    * **It is necessary to know the base HSN IP address for each system**
 * Four HSN IP addresses are used in each `SlurmCluster`
 * Example:
     * System `Development` base HSN IP address 10.156.0.0
@@ -177,7 +181,7 @@ These configuration settings are made in each `SlurmCluster's` `/etc/slurm/slurm
 
 #### `SlurmCluster` Slingshot VNI allocation
 
-**`IMPORTANT`** Each block of HPE Slingshot `VNIs` on the High-Speed Network (HSN) must not overlap with other blocks on the same system.
+**IMPORTANT** Each block of HPE Slingshot `VNIs` on the High-Speed Network (HSN) must not overlap with other blocks on the same system.
 
 * Note that there is one `/etc/slurm/slurm.conf` file in each tenant's `SlurmCluster`
 * Example with no tenants:
@@ -220,7 +224,7 @@ Borrow the `NodeSet`, `PartitionName`, and `NodeName` directives that apply to e
 #### `SlurmCluster` secrets (for `nonroot` users)
 
 These configuration settings are made in each `SlurmCluster's` `/etc/sssd/sssd.conf` file (in each `slurmctld` pod)
-You should not need to create or edit the `sssd.conf` file.
+It should not be necessary to create or edit the `sssd.conf` file.
 Simply clone that file from the primary `SlurmCluster` (`user` namespace) to each tenant namespace.
 
 ### USS configuration
@@ -288,8 +292,9 @@ Filename: `devten01a.yaml`
     cray hsm groups describe devten01a
     ```
 
-1. (`ncn-mw#`) Create your `tenant.yaml` file, and apply it:
-    * See Appendix A for an example
+1. (`ncn-mw#`) Create the `tenant.yaml` file, and apply it:
+
+    > See [Appendix A](#appendix-a---development-tenant) for an example.
 
     ```bash
     vi devten01a.yaml
@@ -320,8 +325,9 @@ Filename: `devcls01a.yaml`
     kubectl get pods -A | grep vcluster-devcls01a-slurm
     ```
 
-1. (`ncn-mw#`) Create your `cluster.yaml` file, and apply it:
-    * See Appendix B for an example
+1. (`ncn-mw#`) Create the `cluster.yaml` file, and apply it:
+
+    > See [Appendix B](#appendix-b---development-slurmcluster) for an example.
 
     ```bash
     vi devcls01a.yaml
@@ -354,7 +360,8 @@ Filename: `/etc/slurm/slurm.conf`
     ```
 
 1. (`ncn-mw#`) Edit the `slurm.conf`:
-    * See Appendix C
+
+    > See [Appendix C](#appendix-c---slurm-configuration).
 
     ```bash
     vi slurm.conf
@@ -439,7 +446,7 @@ Filename: `group_vars/devten01a/slurm.yml`
     git clone https://api-gw-service-nmn.local/vcs/cray/uss-config-management.git
     ```
 
-1. (`ncn-mw#`) Go to repo:
+1. (`ncn-mw#`) Go to repository:
 
     ```bash
     cd uss-config-management
@@ -458,7 +465,8 @@ Filename: `group_vars/devten01a/slurm.yml`
     ```
 
 1. (`ncn-mw#`) Edit the file `group_vars/devten01a/slurm.yml`
-    * See an appropriate example in Appendix D
+
+    > See [Appendix D](#appendix-d---uss-group-variables) for an example.
 
 1. (`ncn-mw#`) Add the new file:
 
@@ -503,9 +511,11 @@ A single BOS session template may be used for many tenants of the same node type
     cp ssi-compute-cr_2024.x86_64-cr_2024_1.json ssi-compute-cr_2024.x86_64-cr_2024_1-tenants.json
     ```
 
-* Edit the new copy:
-    * Delete block of lines starting with `enable_cfs:`, `name:`, and `tenant:` and remove the comma from the preceding line
-    * Change the name of the CFS configuration in the BOS session template to add a `-tenants` suffix, as seen in the next section
+1. Edit the new copy.
+
+    1. Delete block of lines starting with `enable_cfs:`, `name:`, and `tenant:` and remove the comma from the preceding line
+
+    1. Change the name of the CFS configuration in the BOS session template to add a `-tenants` suffix, as seen in the next section
 
 1. (`ncn-mw#`) Upload the new template, specifying the filename and the name of the new template:
 
@@ -532,11 +542,12 @@ A single CFS configuration may be used for many tenants of the same node type.
     cp ssi-compute-cr_2024-cr_2024_1.json ssi-compute-cr_2024-cr_2024_1-tenants.json
     ```
 
-* Edit the new copy:
-    * Delete lines starting with `lastUpdated`:
-    * Delete the last instance in the file of name: and remove the comma from the preceding line
-    * Be SURE to replace the commit ID for each JSON block that refers to `uss-config-management.git`;
-      use the commit ID from "git log" command in the earlier step that created the USS `group_vars` file
+1. Edit the new copy.
+
+    1. Delete lines starting with `lastUpdated`
+    1. Delete the last instance in the file of name: and remove the comma from the preceding line
+    1. Be SURE to replace the commit ID for each JSON block that refers to `uss-config-management.git`;
+       use the commit ID from `git log` command in the earlier step that created the USS `group_vars` file
 
 1. (`ncn-mw#`) Upload the new configuration, specifying the filename and the name of the new configuration:
 
@@ -725,7 +736,7 @@ spec:
 
 ### Appendix B - `Development` `SlurmCluster`
 
-**`IMPORTANT`** The values for `cpu` and `memory` and `initialDelaySeconds` are recommended by the WLM team.
+**IMPORTANT** The values for `cpu` and `memory` and `initialDelaySeconds` are recommended by the WLM team.
 
 This is filename `devcls01a.yaml`; complete file is shown.
 
@@ -854,8 +865,8 @@ Here is an example for primary and one tenant:
     ...
     ```
 
-Second, insert the `NodeSet`, `PartitionName`, and `NodeName` directives that apply to your tenant.
-In this example on `Development`, we have two X86 Compute nodes (1002 and 1003), and one X86 UAN (`uan02`).
+Second, insert the `NodeSet`, `PartitionName`, and `NodeName` directives that apply to this tenant.
+In this example on `Development`, there are two `x86` Compute nodes (1002 and 1003), and one `x86` UAN (`uan02`).
 
 * This is filename `/etc/slurm/slurm.conf` for `vcluster-devten01-slurm` namespace; partial file is shown.
 

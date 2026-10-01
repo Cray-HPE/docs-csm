@@ -9,7 +9,7 @@
 
 ## Overview
 
-The Configuration Framework Service \(CFS\) allows users to define optional sources.
+The Configuration Framework Service (CFS) allows users to define optional sources.
 Sources contain all the information needed to clone information from a repository, and
 can be used when the repository does not share the default credentials or CA certificate
 as the [Version Control Service (VCS)](Version_Control_Service_VCS.md).
@@ -129,7 +129,7 @@ of the CA certificate file.
 
 1. (`ncn-mw#`) Either create a new source, or update an existing source with the new ConfigMap.
 
-    > **`NOTE`** If the Kubernetes ConfigMap contains more than one file, then only the first
+    > **NOTE** If the Kubernetes ConfigMap contains more than one file, then only the first
     > file will be used.
 
     * Create a new source.

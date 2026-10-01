@@ -1,4 +1,4 @@
-# Version Control Service \(VCS\)
+# Version Control Service (VCS)
 
 * [VCS web interface](#vcs-web-interface)
 * [Cloning a VCS repository](#cloning-a-vcs-repository)
@@ -13,7 +13,7 @@
 
 ## VCS web interface
 
-The Version Control Service \(VCS\) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations. The following URL is for the VCS web interface:
+The Version Control Service (VCS) includes a web interface for repository management, pull requests, and a visual view of all repositories and organizations. The following URL is for the VCS web interface:
 
 `https://vcs.ext.system.domain.com`
 
@@ -31,8 +31,8 @@ Example output:
 
 ## Cloning a VCS repository
 
-On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository \(see
-[VCS Administrative User](VCS_Administrative_User.md)\).
+On cluster nodes, the VCS service can be accessed through the gateway. VCS credentials for the `crayvcs` user are required before cloning a repository (see
+[VCS Administrative User](VCS_Administrative_User.md)).
 
 (`ncn#`) To clone a repository in the `cray` organization, use the following command:
 

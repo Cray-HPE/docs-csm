@@ -1,19 +1,19 @@
 # System Configuration Service
 
-The System Configuration Service \(SCSD\) allows administrators to set various BMC and controller parameters.
+The System Configuration Service (SCSD) allows administrators to set various BMC and controller parameters.
 These parameters are typically set during discovery, but this tool enables parameters to be set before or after discovery.
 The operations to change these parameters are available in the Cray CLI under the `scsd` command.
 
 The following are the parameters that most commonly must be set:
 
 - SSH keys
-  - **IMPORTANT:** If the `scsd` tool is used to update the `SSHConsoleKey` value outside of ConMan, it will disrupt the
-    ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md) for more information.
+    - **IMPORTANT:** If the `scsd` tool is used to update the `SSHConsoleKey` value outside of ConMan, it will disrupt the
+      ConMan connection to the console and collection of console logs. Refer to [ConMan](../conman/ConMan.md) for more information.
 - NTP server
 - `syslog` server
 - BMC/controller passwords
 
-The `scsd` tool includes a REST API to facilitate operations to set parameters. It contacts the Hardware State Manager \(HSM\)
+The `scsd` tool includes a REST API to facilitate operations to set parameters. It contacts the Hardware State Manager (HSM)
 to verify that targets are correct and in a valid hardware state, unless the `force` flag is specified. Once it has a list of
 targets, `scsd` performs the needed Redfish operations in parallel using TRS. Any credentials needed are retrieved from Vault.
 

@@ -1,6 +1,6 @@
 # Check and Set the `metal.no-wipe` Setting on NCNs
 
-Configure the `metal.no-wipe` setting on non-compute nodes \(NCNs\) to preserve data on the nodes before doing an NCN reboot.
+Configure the `metal.no-wipe` setting on non-compute nodes (NCNs) to preserve data on the nodes before doing an NCN reboot.
 
 Run the `ncnGetXnames.sh`script to view the `metal.no-wipe` settings for each NCN. The component name (xname) and `metal.no-wipe` settings are also dumped out when executing the `/opt/cray/platform-utils/ncnHealthChecks.sh` script.
 

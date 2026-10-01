@@ -115,7 +115,7 @@ Remove NCN data to System Layout Service (SLS), Boot Script Service (BSS), and H
     Successfully removed x3000c0s26b0n0 - ncn-s004
     ```
 
-    **`NOTE`**
+    **NOTE**
     If workers have been removed and the worker count is currently at two, then a timeout restarting `cray-bss` can be ignored.
     For example, the following failure output from `remove_management_ncn.py` can be ignored.
 

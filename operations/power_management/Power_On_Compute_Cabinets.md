@@ -4,9 +4,9 @@ Power on liquid-cooled and standard rack cabinet PDUs.
 
 **Liquid-cooled Cabinets** - HPE Cray EX liquid-cooled cabinet CDU and PDU circuit breakers are controlled manually.
 
-After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers can be switched ON. With PDU breakers ON, the Chassis Management Modules \(CMM\) and Cabinet Environmental Controllers \(CEC\) power on and boot.
+After the CDU is switched on and healthy, the liquid-cooled PDU circuit breakers can be switched ON. With PDU breakers ON, the Chassis Management Modules (CMM) and Cabinet Environmental Controllers (CEC) power on and boot.
 These devices can then communicate with the management cluster and larger system management network. HVDC power remains OFF on liquid-cooled chassis until environmental conditions are normal and the CMMs receive a chassis
-power-on command from Cray System Management \(CSM\) software.
+power-on command from Cray System Management (CSM) software.
 
 **Standard Racks** - HPE Cray standard EIA racks include redundant PDUs. Some PDU models may require a flat-blade screw driver to open or close the PDU circuit breakers.
 
@@ -40,7 +40,7 @@ power-on command from Cray System Management \(CSM\) software.
 
    ![PSU Status LEDs](../../img/operations/PSU_Status.svg)
 
-1. (`ncn-m001#`) Use the System Admin Toolkit \(`sat`\) to power on liquid-cooled cabinets, chassis, and slots.
+1. (`ncn-m001#`) Use the System Admin Toolkit (`sat`) to power on liquid-cooled cabinets, chassis, and slots.
 
    ```console
    sat bootsys boot --stage cabinet-power
@@ -102,13 +102,13 @@ power-on command from Cray System Management \(CSM\) software.
 1. Switch the standard rack compute cabinet PDU circuit breakers to ON.
 
    This applies power to the server BMCs and connects them to the management network. Compute nodes
-   **do not power on and boot automatically**. The Boot Orchestration Service \(BOS\) brings up compute nodes and User Access Nodes \(UANs\).
+   **do not power on and boot automatically**. The Boot Orchestration Service (BOS) brings up compute nodes and User Access Nodes (UANs).
 
    If necessary, use IPMI commands to power on individual servers as needed.
 
 1. Verify that all system management network switches and Slingshot network switches are powered on in each rack, and that
    there are no error LEDS or hardware failures.
 
-## Next Step
+## Next step
 
 Return to [System Power On Procedures](System_Power_On_Procedures.md) and continue with next step.

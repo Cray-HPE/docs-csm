@@ -6,7 +6,7 @@ The `update-cfs-config` stage creates updated CFS configurations used for image 
 The product content used to create the CFS configurations is defined in `sat bootprep` input files. The `sat bootprep` input files used can be specified by `-bc`, `-bm`, and/or `-bpcd` as described below. Variables within the `sat bootprep`
 files can be substituted with values found in the recipe variables (`-rv`) and/or site variables (`-sv`) files.
 
-**`NOTE`** Before `update-cfs-config` is executed, any desired site configuration customizations in VCS should be performed. Refer to individual product documentation for configuration customization details.
+**NOTE** Before `update-cfs-config` is executed, any desired site configuration customizations in VCS should be performed. Refer to individual product documentation for configuration customization details.
 
 `update-cfs-config` details are explained in the following sections:
 

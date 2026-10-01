@@ -111,8 +111,8 @@ This procedure can be performed on `ncn-m00[1-3]` or `ncn-s00[1-3]`. It is sugge
     Daemons for Ceph cluster 5f79a490-c281-11ed-b6ec-fa163e741e89 stopped on host ncn-s003. Host ncn-s003 moved to maintenance mode
     ```
 
-    **IMPORTANT**: The --force flag is used to bypass warnings. These pertain to Ceph services which can handle failures, like `rgw`.  
-    * ***IF*** the command returns any lines with an **ALERT** status then please follow the output to remedy.  
+    **IMPORTANT**: The --force flag is used to bypass warnings. These pertain to Ceph services which can handle failures, like `rgw`.
+    * ***IF*** the command returns any lines with an **ALERT** status then please follow the output to remedy.
       * Typically this will be something like the active MGR process is on that node and it must be failed over first.
 
     Example:
@@ -223,7 +223,7 @@ This procedure can be performed on `ncn-m00[1-3]` or `ncn-s00[1-3]`. It is sugge
     ```
 
 1. (`ncn-m001#`) Remove the OSD references to allow the rebuild to re-use the original OSD references on the drives.
-  
+
     By default, if the OSD reference is not removed, then there will still a reference to them in the CRUSH map.
     This will result in OSDs that no longer exist appearing to be down.
 

@@ -2,9 +2,9 @@
 
 Use the following procedure to re-add a Ceph node to the Ceph cluster.
 
-**`NOTE`** This operation can be done to add more than one node at the same time.
+**NOTE** This operation can be done to add more than one node at the same time.
 
-## Run the Ceph Join Script
+## Run the Ceph join script
 
 Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
 
@@ -26,7 +26,7 @@ Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
 
 **IMPORTANT:** Only do this if unable to wipe the node prior to rebuild. For example, when a storage node unintentionally goes down and needs to be rebuilt.
 
-**`NOTE`** The commands in the Zapping OSDs section must be run on a node running `ceph-mon`. Typically these are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
+**NOTE** The commands in the Zapping OSDs section must be run on a node running `ceph-mon`. Typically these are `ncn-s001`, `ncn-s002`, and `ncn-s003`.
 
 1. Find the devices on the node being rebuilt.
 
@@ -34,7 +34,7 @@ Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
    ceph orch device ls $NODE
    ```
 
-   Example Output:
+   Example output:
 
    ```screen
    Hostname  Path      Type  Serial          Size   Health   Ident  Fault  Available
@@ -48,9 +48,9 @@ Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
 
    **IMPORTANT:** In the above example the drives on our rebuilt node are showing "Available = no". This is expected because the check is based on the presence of an LVM on the volume.
 
-   **`NOTE`** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that there are no OS drives. These will have a size of 480G.
+   **NOTE** The `ceph orch device ls $NODE` command excludes the drives being used for the OS. Please double check that there are no OS drives. These will have a size of 480G.
 
-2. Zap the drives.
+1. Zap the drives.
 
    ```bash
    for drive in $(ceph orch device ls $NODE --format json-pretty |jq -r '.[].devices[].path')
@@ -59,7 +59,7 @@ Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
    done
    ```
 
-3. Validate the drives are being added to the cluster.
+1. Validate the drives are being added to the cluster.
 
    ```bash
    watch ceph -s
@@ -74,7 +74,7 @@ Watch `ceph -s` and run the `ceph_join_cluster.sh` script.
    ceph mgr fail
    ```
 
-## Regenerate Rados-GW Load Balancer Configuration for the Rebuilt Nodes
+## Regenerate Rados Gateway load balancer configuration for the rebuilt nodes
 
 **IMPORTANT:** `Rados-GW` by default is deployed to the first 3 storage nodes. This includes `HAproxy` and `Keepalived`.
 This is automated as part of the install, but administrators may have to regenerate the configuration if they are not running on the first 3 storage nodes or all nodes.
@@ -121,6 +121,6 @@ This is automated as part of the install, but administrators may have to regener
                     systemctl restart keepalived.service'
    ```
 
-## Next Step
+## Next step
 
 If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.

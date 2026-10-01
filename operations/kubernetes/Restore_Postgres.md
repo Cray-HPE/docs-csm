@@ -42,7 +42,7 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
     1. List the available Postgres logical backups by date.
 
         ```bash
-        cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/keycloak")) | "\(.LastModified) \(.Key)"'
+        cray artifacts list postgres-backup --format json | jq -r '.artifacts[] | select(.Key | contains("spilo/keycloak")) | "(.LastModified) (.Key)"'
         ```
 
         Example output:
@@ -144,7 +144,7 @@ In the event that the Keycloak Postgres cluster must be rebuilt and the data res
 1. (`ncn-mw#`) Restore the data.
 
     ```bash
-    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- bash -c "zcat -f ${DUMPFILE} | psql -U postgres" 
+    kubectl exec "${POSTGRESQL}-0" -c postgres -n "${NAMESPACE}" -it -- bash -c "zcat -f ${DUMPFILE} | psql -U postgres"
     ```
 
     Errors such as `... already exists` can be ignored; the restore can be considered successful when it completes.

@@ -1,7 +1,7 @@
-# Rolling Upgrades using BOS
+# Rolling Upgrades Using BOS
 
 <!-- -->
-> **`NOTE`** This feature is the replacement for the Compute Rolling Upgrade Service (CRUS). CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.5.0.
+> **NOTE** This feature is the replacement for the Compute Rolling Upgrade Service (CRUS). CRUS was deprecated in CSM 1.2.0 and removed in CSM 1.5.0.
 > See [Deprecated Features](../../introduction/deprecated_features/README.md).
 
 BOS v2 allows users to stage boot artifacts, configuration, and an operation such as a reboot.
@@ -12,7 +12,7 @@ The workload manager can later trigger the operation through BOS to apply that s
 1. An administrator configures the workload manager to call the `applystaged` endpoint of BOS with a payload containing the `xnames` of the components to be operated on.
    For more information on the endpoint and payload, see [Applying a staged state](Stage_Changes_with_BOS.md#applying-a-staged-state)
 
-    > **`NOTE`** The boot artifacts and configuration staged with BOS will not be applied if the node is rebooted outside BOS.
+    > **NOTE** The boot artifacts and configuration staged with BOS will not be applied if the node is rebooted outside BOS.
     This is because BOS is caching the staged boot information and configuration internally, but not updating the
     [Boot Script Service (BSS)](../../glossary.md#boot-script-service-bss) and the
     [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)

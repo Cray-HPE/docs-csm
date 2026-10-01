@@ -1,4 +1,4 @@
-# Troubleshoot Compute Node Boot Issues Related to Unified Extensible Firmware Interface \(UEFI\)
+# Troubleshoot Compute Node Boot Issues Related to Unified Extensible Firmware Interface (UEFI)
 
 If a node is stuck in the UEFI shell, ConMan will be able to connect to it, but nothing else will appear in its logs.
 The node's logs will look similar to the following, indicating that ConMan is updating its log hourly:

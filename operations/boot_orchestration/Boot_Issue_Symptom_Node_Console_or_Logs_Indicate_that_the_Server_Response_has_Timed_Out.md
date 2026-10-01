@@ -1,4 +1,4 @@
-# Compute Node Boot Issue Symptom: Node Console or Logs Indicate that the Server Response has Timed Out
+# Compute Node Boot Issue Symptom: Node Console or Logs Indicate That the Server Response has Timed Out
 
 If the TFTP request is able to access the TFTP service pod but is unable to find its way back to the node, it may be
 because the kernel is not tracking established TFTP connections.

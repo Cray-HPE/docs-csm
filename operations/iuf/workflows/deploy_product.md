@@ -10,7 +10,7 @@ section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide
 Refer to that table and any corresponding product documents before continuing to the next step.
 
 1. _deploy-product onexit hook:_ When upgrading CSM, a script named `deploy-product-onexit.sh` runs after all other products have completed their `post-deploy-product` hooks after `deploy-product` stage.
-This hook executes application of networking changes, CoreDNS anti-affinity changes, upgrade of the Kubernetes control plane and initiates a Kubernetes job named `upgrade-k8s-job` .  
+This hook executes application of networking changes, CoreDNS anti-affinity changes, upgrade of the Kubernetes control plane and initiates a Kubernetes job named `upgrade-k8s-job` .
 The specific scripts executed as part of this hook are `/srv/cray/scripts/common/apply-networking-manifests.sh`, `/usr/share/doc/csm/upgrade/scripts/k8s/apply-coredns-pod-affinity.sh`, and `/usr/share/doc/csm/upgrade/scripts/k8s/upgrade_control_plane.sh`.
 
    > **NOTE** During the Kubernetes control plane upgrade, if Kubernetes audit logging is enabled, local audit log
@@ -33,7 +33,7 @@ The specific scripts executed as part of this hook are `/srv/cray/scripts/common
 
 Once this step has completed:
 
-> **NOTE**  
+> **NOTE**
 > As part of the `deploy-product` stage during upgrades from CSM 1.6 to CSM 1.7,
 > the `deploy-product-onexit` hook will launch a Kubernetes upgrade job that runs outside of IUF, in the `argo` namespace.
 >
@@ -41,7 +41,7 @@ Once this step has completed:
 > - This job must be monitored manually and must complete successfully before proceeding to the next stage.
 > - The job will restart when upgrading the master nodes to 1.32 and `kubelet` restarts. When the job restarts, a new output log will be created.
 >
-> **For CSM 1.7 to `1.7.x` upgrades:**  
+> **For CSM 1.7 to `1.7.x` upgrades:**
 > The `upgrade-k8s-job` will still run but will only deploy the latest manifests without performing a Kubernetes version upgrade. Monitor the job to ensure it completes successfully before proceeding to the next stage.
 >
 > (`ncn-mw#`) To tail the log file and see the progress, run:
@@ -55,7 +55,7 @@ Once this step has completed:
 > ```text
 > INFO Job upgrade-k8s-job-zm55x has been created in the argo namespace. This is performing k8s upgrade from 1.26 to 1.32
 > INFO Monitor the job and ensure it is successful before proceeding to next stage.
-> ```  
+> ```
 >
 >(`ncn-mw#`) To get the job name, run:
 >
@@ -82,7 +82,7 @@ Once this step has completed:
 > | 20        | 430      |
 > | 28        | 590      |
 >
-> **IMPORTANT**  
+> **IMPORTANT**
 > If the following error appears in the job execution logs and `cray-fox` pods show errors like below:
 >
 > ```text

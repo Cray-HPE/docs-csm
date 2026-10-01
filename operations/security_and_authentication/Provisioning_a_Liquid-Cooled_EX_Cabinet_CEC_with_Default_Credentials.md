@@ -22,7 +22,7 @@ in the HPE Slingshot product documentation. Refer to "Change HPE Slingshot switc
   $6$v5YlqfghB$scBci.GbT8...
   ```
 
- > **`NOTE`**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
+ > **NOTE**: The example password hash is truncated to prevent using this example value. The password hash is a SHA-512 hash.
 
 ## Procedure
 
@@ -49,7 +49,7 @@ in the HPE Slingshot product documentation. Refer to "Change HPE Slingshot switc
 
    - Enter return a few times to start the connection.
 
-   > **`NOTE`**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow
+   > **NOTE**: If the network connection to the CEC is lost, or if a CEC command does not return to the prompt, it may be necessary to reboot the CEC. Use the Right Arrow
    > on the CEC control panel to display the Action menu, select Reset CEC, and press the green checkmark button to reboot the CEC. Then re-establish the `nc` or `telnet` connection.
    >
    >  ![CEC Front Panel Controls](../../img/CEC_Display_Controls_CEC_Actions.svg)
@@ -97,7 +97,7 @@ in the HPE Slingshot product documentation. Refer to "Change HPE Slingshot switc
     set_hash $6$v5YlqxKB$scBci.GbT8...
     ```
 
-  > **`NOTE`**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
+  > **NOTE**: Example truncated to prevent accidental setting of production password hash to example values. The password hash is a SHA-512 hash.
 
 1. Exit privileged command mode.
 

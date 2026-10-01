@@ -1,12 +1,12 @@
 # Nexus Configuration
 
-Expect each product to create and use its own `File` type blob store. For example, the Cray System Management \(CSM\) product uses `csm`.
+Expect each product to create and use its own `File` type blob store. For example, the Cray System Management (CSM) product uses `csm`.
 
 The `default` blob store is also available, but Cray products are discouraged from using it.
 
 ## Repositories
 
-CSM creates the `registry` \(format `docker`\) and `charts` \(format `helm`\) repositories for managing container images and Helm charts across all Cray products. However,
+CSM creates the `registry` (format `docker`) and `charts` (format `helm`) repositories for managing container images and Helm charts across all Cray products. However,
 each product's release may contain a number of RPM repositories that are added to Nexus. RPM repositories are created in Nexus as `raw` repositories to support signed
 repository metadata and to enable client GPG checks.
 

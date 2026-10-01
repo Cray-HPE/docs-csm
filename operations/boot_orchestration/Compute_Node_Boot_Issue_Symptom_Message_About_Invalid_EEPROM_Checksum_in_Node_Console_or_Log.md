@@ -1,8 +1,8 @@
 # Compute Node Boot Issue Symptom: Message About Invalid EEPROM Checksum in Node Console or Log
 
-On rare occasions, the processor hardware may lose the Serial Over Lan \(SOL\) connections and may need to be reseated to allow the node to successfully boot.
+On rare occasions, the processor hardware may lose the Serial Over LAN (SOL) connections and may need to be reseated to allow the node to successfully boot.
 
-### Symptoms
+## Symptoms
 
 This issue can be identified if the following is displayed in the node's console or log:
 
@@ -15,7 +15,7 @@ The following figure shows that the EEPROM checksum errors lead to a `dracut-ini
 
 ![EEPROM Error Dropping to Dracut Emergency Shell](../../img/operations/EEPROM_Error_Dropping_to_Dracut_Emergency_Shell.png)
 
-### Problem Detection
+## Problem detection
 
 Run `dmidecode` from the compute node to identify its model. H87926-500 is the silver model that may exhibit this issue, whereas the production model, H87926-550, does not exhibit SOL connection issues.
 
@@ -29,7 +29,6 @@ Example output:
 Version: H87926-550
 ```
 
-### Resolution
+## Resolution
 
 One way to resolve this issue is to ensure that the latest `ixgbe` network driver is installed on the nodes.
-

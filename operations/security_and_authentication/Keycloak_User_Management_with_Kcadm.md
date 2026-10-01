@@ -21,18 +21,18 @@ Usage of Bash functions provided below will require making additions to the Linu
 
 ### Topics
 
-* [Check the Status of a Keycloak User](#check-the-status-of-a-keycloak-user)
-* [Update a Local Keycloak User Credential](#update-a-local-keycloak-user-credential)
-* [Create a Local Keycloak Cray CLI User](#create-a-local-keycloak-cray-cli-user)
-* [Delete a Local Keycloak User](#delete-a-local-keycloak-user)
+* [Check the status of a Keycloak user](#check-the-status-of-a-keycloak-user)
+* [Update a local Keycloak user credential](#update-a-local-keycloak-user-credential)
+* [Create a local Keycloak Cray CLI user](#create-a-local-keycloak-cray-cli-user)
+* [Delete a local Keycloak user](#delete-a-local-keycloak-user)
 
-## Check the Status of a Keycloak User
+## Check the status of a Keycloak user
 
 This procedure determines whether or not a user exists in Keycloak and whether or not that user is LDAP federated.
 
 If a user is LDAP federated and the credential is not known, then that user credential must be updated in LDAP.
 
-Add the following Bash function to your environment:
+Define the following Bash function:
 
 ```bash
 kc-find-user(){
@@ -64,6 +64,11 @@ Example when the user account is LDAP federated, as indicated by the presence of
 
 ```bash
 kc-find-user vers
+```
+
+Example output:
+
+```text
 Looking for the Keycloak user: vers
 Logging into http://localhost:8080/keycloak as user admin of realm master
 [ {
@@ -106,6 +111,11 @@ Example when the user account is a local Keycloak user (no `federationLink` attr
 
 ```bash
 kc-find-user localcli
+```
+
+Example output:
+
+```text
 Looking for the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 [ {
@@ -134,17 +144,20 @@ Example when the user account is not known to Keycloak:
 
 ```bash
 kc-find-user nouser
-Looking for the Keycloak user: nouser
-Logging into http://localhost:8080/keycloak as user admin of realm master
-
-[ ]ncn-m001#
 ```
 
-## Update a Local Keycloak User Credential
+Example output:
+
+```text
+Looking for the Keycloak user: nouser
+Logging into http://localhost:8080/keycloak as user admin of realm master
+```
+
+## Update a local Keycloak user credential
 
 This procedure resets the credential for a local Keycloak user. This procedure will not work if the user is LDAP federated.
 
-Add the following Bash function to your environment:
+Define the following Bash function:
 
 ```bash
 kc-set-local-user-password(){
@@ -182,6 +195,11 @@ Example of updating the credential with an overridden password:
 
 ```bash
 KC_USER_NEWPASSWD=wax0nwax0ff kc-set-local-user-password localcli
+```
+
+Example output:
+
+```text
 Resetting password for the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 ```
@@ -190,6 +208,11 @@ If the user cannot be found by username, then the account credential will not be
 
 ```bash
 kc-set-local-user-password localc
+```
+
+Example output:
+
+```text
 Resetting password for the Keycloak user: localc
 Logging into http://localhost:8080/keycloak as user admin of realm master
 User not found for username: localc
@@ -200,17 +223,22 @@ If the user is LDAP federated, then the account credential will not be updated, 
 
 ```bash
 KC_USER_NEWPASSWD=wax0nwax0ff && kc-set-local-user-password vers
+```
+
+Example output:
+
+```text
 Resetting password for the Keycloak user: vers
 Logging into http://localhost:8080/keycloak as user admin of realm master
 null [Can't reset password as account is read only]
 command terminated with exit code 1
 ```
 
-## Create a Local Keycloak Cray CLI User
+## Create a local Keycloak Cray CLI user
 
 This procedure creates a new local Keycloak user that is compatible with the Cray CLI. This may be needed because it is not possible to use a federated user account to initialize the Cray CLI if LDAP is not available.
 
-Add the following Bash function to your environment:
+Define the following Bash function:
 
 ```bash
 kc-create-local-cli-user(){
@@ -259,6 +287,11 @@ Example of creating a user:
 
 ```bash
 KC_USER_NEWPASSWD=wax0ffwax0n kc-create-local-cli-user localcli
+```
+
+Example output:
+
+```text
 Creating the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 Created new user with id 'b49abdcc-a314-4355-89d7-44f4d8d33ab8'
@@ -278,17 +311,22 @@ If the user to be created already exists, then the function will just exit, as i
 
 ```bash
 kc-create-local-cli-user localcli
+```
+
+Example output:
+
+```text
 Creating the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 User exists with same username
 command terminated with exit code 1
 ```
 
-## Delete a Local Keycloak User
+## Delete a local Keycloak user
 
 This procedure deletes a local Keycloak user. This will not work if the user is LDAP federated.
 
-Add the following Bash function to your environment:
+Define the following Bash function:
 
 ```bash
 kc-delete-local-user(){
@@ -322,6 +360,11 @@ Example usage:
 
 ```bash
 kc-find-user localcli
+```
+
+Example output:
+
+```text
 Looking for the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
 [ {
@@ -342,21 +385,30 @@ Logging into http://localhost:8080/keycloak as user admin of realm master
     "manage" : true
   }
 } ]
+```
+
+```bash
 kc-delete-local-user b49abdcc-a314-4355-89d7-44f4d8d33ab8
+```
+
+```text
 This will delete the Keycloak userID b49abdcc-a314-4355-89d7-44f4d8d33ab8. Continue? (y/N): y
 Deleting the Keycloak user UUID: b49abdcc-a314-4355-89d7-44f4d8d33ab8
 Logging into http://localhost:8080/keycloak as user admin of realm master
 kc-find-user localcli
 Looking for the Keycloak user: localcli
 Logging into http://localhost:8080/keycloak as user admin of realm master
-
-[ ]
 ```
 
 If the user can not be found by ID, then it will not be removed, as in this example:
 
 ```bash
 kc-delete-local-user b49abdcc-a314-4355-89d7-44f4d8d33ab8
+```
+
+Example output:
+
+```text
 This will delete the Keycloak userID b49abdcc-a314-4355-89d7-44f4d8d33ab8. Continue? (y/N): y
 Deleting the Keycloak user UUID: b49abdcc-a314-4355-89d7-44f4d8d33ab8
 Logging into http://localhost:8080/keycloak as user admin of realm master

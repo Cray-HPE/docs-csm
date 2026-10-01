@@ -1,6 +1,6 @@
 # Automatic Configuration Management
 
-In addition to creating individual configuration sessions, the Configuration Framework Service \(CFS\)
+In addition to creating individual configuration sessions, the Configuration Framework Service (CFS)
 can also automatically configure any registered system components.
 The [CFS Batcher](CFS_Batcher.md) periodically examines the configuration state of registered components
 and schedules CFS sessions against those that have not been configured to their desired state.
@@ -52,7 +52,7 @@ Both mechanisms are indicated in the logs:
     * If CFS Batcher is restarted, it will attempt to rebuild its state based on sessions with the "batcher-" naming scheme that are still in progress.
       This ensures that scheduling conflicts will not occur even if CFS Batcher is restarted.
     * On restart, some information on the in-flight sessions is lost, so this wait ensures that CFS Batcher does not schedule multiple configuration sessions for the same component at the same time.
-* If several CFS sessions that are created by the CFS Batcher fail in a row \(the most recent 20 sessions\), CFS Batcher will start
+* If several CFS sessions that are created by the CFS Batcher fail in a row (the most recent 20 sessions), CFS Batcher will start
   throttling the creation of new sessions.
     * The throttling is automatically reset if a single session succeeds. Users can also manually reset this by restarting CFS Batcher.
     * The back-off is increased if new sessions continue to fail.
@@ -104,7 +104,7 @@ Use the `cray cfs v3 sessions list --help` command output for all filtering opti
 ## Map CFS Batcher sessions to BOS sessions
 
 (`ncn-mw#`) To find all of the sessions created by the CFS Batcher because of configuration requests made by a specific
-Boot Orchestration Service \(BOS\) session, filter the sessions by the name of the BOS session, which is added as a tag on the CFS sessions.
+Boot Orchestration Service (BOS) session, filter the sessions by the name of the BOS session, which is added as a tag on the CFS sessions.
 The BOS session ID is required to run the following command.
 
 ```bash

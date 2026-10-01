@@ -287,7 +287,7 @@ data:
       config_version: 3
     input:
       type: file
-      paths: 
+      paths:
       - /logs/goss_tests/*
       fail_on_missing_logfile: false
     grok_patterns:

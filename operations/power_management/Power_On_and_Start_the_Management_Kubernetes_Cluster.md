@@ -14,7 +14,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
 
 1. If necessary, power on the management cabinet [CDU](../../glossary.md#coolant-distribution-unit-cdu) and chilled doors.
 
-1. Set all management cabinet PDU circuit breakers to `ON` \(all cabinets that contain Kubernetes master nodes, worker nodes, or storage nodes\).
+1. Set all management cabinet PDU circuit breakers to `ON` (all cabinets that contain Kubernetes master nodes, worker nodes, or storage nodes).
 
 1. Power on the HPE Cray EX cabinet PDUs and standard rack cabinet PDUs.
 
@@ -39,7 +39,7 @@ Power on and start management services on the HPE Cray EX management Kubernetes 
     ipmitool -I lanplus -U $USERNAME -E -H NCN_M001_BMC_HOSTNAME sol activate
     ```
 
-1. (`remote#`) In a separate window, power on the master node 1 \(`ncn-m001`\) chassis using IPMI tool.
+1. (`remote#`) In a separate window, power on the master node 1 (`ncn-m001`) chassis using IPMI tool.
 
     > `read -s` is used to prevent the password from being written to the screen or the shell history.
 
@@ -524,7 +524,7 @@ Some systems are configured with lazy mounts that do not have this requirement f
 
 ### Verify BGP peering sessions
 
-1. Check the status of the Border Gateway Protocol \(BGP\).
+1. Check the status of the Border Gateway Protocol (BGP).
 
     See [Check BGP Status and Reset Sessions](../network/metallb_bgp/Check_BGP_Status_and_Reset_Sessions.md).
 

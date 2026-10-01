@@ -1,6 +1,6 @@
 # CFS Global Options
 
-The Configuration Framework Service \(CFS\) provides a global service options endpoint for modifying the base configuration of the service itself.
+The Configuration Framework Service (CFS) provides a global service options endpoint for modifying the base configuration of the service itself.
 
 View the options with the following command:
 
@@ -62,7 +62,7 @@ The following are the CFS global options, their names in CFS v2 and v3, and thei
 
 ## Additional inventory source
 
-> **`NOTE`** This option is only available in the v3 CFS API.
+> **NOTE** This option is only available in the v3 CFS API.
 
 The name of a CFS source to supply additional inventory content to all CFS sessions.
 
@@ -106,7 +106,7 @@ needing configuration has not reached the [batch size][bat-siz] limit.
 * Default: `60` seconds
 
 The batch window time-boxes the creation of sessions so no component needs to wait for the queue to fill.
-  
+
 > **WARNING:** Lower values will cause CFS batcher to be more responsive to creating sessions, but values too low may result in
 > degraded performance of both the CFS APIs as well as the overall system.
 
@@ -174,7 +174,7 @@ See [Automatic Configuration Management](Automatic_Configuration_Management.md) 
 
 ## Debug wait time
 
-> **`NOTE`** This option is only available in the v3 CFS API.
+> **NOTE** This option is only available in the v3 CFS API.
 
 Any sessions that have failed while using the `debug_on_failure` option will wait for this many seconds before automatically terminating if the completion flag
 is not touched.
@@ -208,7 +208,7 @@ See [Automatic Configuration Management](Automatic_Configuration_Management.md) 
 
 ## Default page size
 
-> **`NOTE`** This option is only available in the v3 CFS API.
+> **NOTE** This option is only available in the v3 CFS API.
 
 When listing component, session, or configuration records, CFS will by default return a maximum of this many records.
 

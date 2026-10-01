@@ -10,7 +10,7 @@ This procedure requires administrative privileges.
 
 1. (`ncn-mw#`) Edit the ConfigMap using one of the following options.
 
-    > **`NOTE`** Save a backup of the ConfigMap before making any changes.
+    > **NOTE** Save a backup of the ConfigMap before making any changes.
 
     The following is an example of creating a backup:
 

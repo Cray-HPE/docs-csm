@@ -42,7 +42,7 @@
     ],
     "httpHeaders": [
         {
-            "urls": ["https://buy.hpe.com/us/en/", "https://www.dell.com/support/", "https://www.arubanetworks.com/techdocs/","https://docs.redhat.com/en/"],
+            "urls": ["https://buy.hpe.com/us/en/", "https://www.dell.com/support/", "https://www.arubanetworks.com/techdocs/","https://docs.redhat.com/en/","https://docs.ansible.com/"],
             "headers": {
                 "Accept-Encoding": "UTF-8"
             }

@@ -81,7 +81,7 @@ This image is identified by examining the management node's boot parameters in t
    ```bash
    IMS_IMAGE_ID=$(cray bss bootparameters list --name "${NODE_XNAME}" --format json | \
                      jq -r '.[0].params' | \
-                     sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
+                     sed 's#(^.*[[:space:]]\|^)metal[.]server=[^[:space:]]*/boot-images/([^[:space:]]\+)/rootfs.*#\2#')
    echo "${IMS_IMAGE_ID}"
    ```
 
@@ -120,7 +120,7 @@ image is identified by examining the kernel command-line parameters on the boote
 
    ```bash
    IMS_IMAGE_ID=$(ssh "${BOOTED_NODE}" sed \
-                    "'s#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#'" \
+                    "'s#(^.*[[:space:]]\|^)metal[.]server=[^[:space:]]*/boot-images/([^[:space:]]\+)/rootfs.*#\2#'" \
                     /proc/cmdline)
    echo "${IMS_IMAGE_ID}"
    ```
@@ -231,11 +231,16 @@ The following procedure describes how to find the CFS configuration applied to t
    The value of the `Desired Config` column is the name of the CFS configuration currently applied to the nodes. There
    will typically be only one CFS configuration applied to all management nodes.
 
-   Kindly ensure the selected "desired config" from above has the `ncn-initrd.yml` within the layers by using command as
+   Ensure that the selected "desired configuration" from above has `ncn-initrd.yml` within the layers by using command as
    below:
 
    ```bash
-   cray cfs configurations describe "<config name>"
+   cray cfs configurations describe "<config name>" --format toml
+   ```
+
+   Excerpt of output:
+
+   ```text
      lastUpdated = "<yyyy-mm-ddThh:mm:ssZ>"
      name = "<config name>"
      [[layers]]
@@ -245,10 +250,9 @@ The following procedure describes how to find the CFS configuration applied to t
      commit = "<hash value>"
      name = "<name>"
      playbook = "ncn-initrd.yml"
-   
    ```
 
-   In case the "desired config" from above does not have `ncn-initrd.yml` within the layers, create a configuration as
+   In case the "desired configuration" from above does not have `ncn-initrd.yml` within the layers, create a configuration as
    follows:
 
    ```bash
@@ -269,8 +273,12 @@ The following procedure describes how to find the CFS configuration applied to t
      }
     ]
    }
+   cray cfs configurations update <configname> --file <filename>.json --format toml
+   ```
 
-   cray cfs configurations update <configname> --file <filename>.json
+   Excerpt of output:
+
+   ```text
     lastUpdated = "<yyyy-mm-ddThh:mm:ssZ>"
     name = "<configname>"
     [[layers]]
@@ -283,8 +291,15 @@ The following procedure describes how to find the CFS configuration applied to t
     "commit": "<hash value>"
     "name": "<name>"
     playbook = "ncn-initrd.yml"
+   ```
 
+   ```bash
    cray cfs configurations describe <configname> --format json
+   ```
+
+   Example output:
+
+   ```json
    {
     "lastUpdated": "<yyyy-mm-ddThh:mm:ssZ>",
     "layers": [
@@ -324,24 +339,33 @@ The following procedure describes how to create a CFS configuration that contain
    branch which has the required YAML files.
 
    ```bash
-    git branch -a
-    cray/csm/<version>
-    * main
-    ...
-    git checkout cray/csm/<version>
-    Switched to branch 'cray/csm/<version>'
-    Your branch is up to date with 'origin/cray/csm/<version>'.
-    ...
-    ls
-    initrd.yml ...
-       
-    ```
+   git branch -a
+   ```
+
+   Example output:
+
+   ```text
+   cray/csm/<version>
+   * main
+   ...
+   ```
+
+   ```bash
+   git checkout cray/csm/<version>
+   ```
+
+   Example output:
+
+   ```text
+   Switched to branch 'cray/csm/<version>'
+   Your branch is up to date with 'origin/cray/csm/<version>'.
+   ```
 
 1. (`ncn-mw#`) Create the CFS configuration to use for image customization.
 
-   For more information on creating CFS configurations, see [CFS Configurations](CFS_Configurations.md).
+    For more information on creating CFS configurations, see [CFS Configurations](CFS_Configurations.md).
 
-   The first layer in the CFS configuration should be similar to this:
+    The first layer in the CFS configuration should be similar to this:
 
     ```json
     {
@@ -352,7 +376,7 @@ The following procedure describes how to create a CFS configuration that contain
     }
     ```
 
-   The last layer in the CFS configuration should be similar to this:
+    The last layer in the CFS configuration should be similar to this:
 
     ```json
     {
@@ -367,8 +391,8 @@ The following procedure describes how to create a CFS configuration that contain
 
 1. (`ncn-mw#`) Record the name of the CFS configuration to use for image customization.
 
-   Set the `CFS_CONFIG_NAME` variable to the name of the CFS configuration identified or created in the previous
-   section, [2. Find or create a CFS configuration](#2-find-or-create-a-cfs-configuration).
+    Set the `CFS_CONFIG_NAME` variable to the name of the CFS configuration identified or created in the previous
+    section, [2. Find or create a CFS configuration](#2-find-or-create-a-cfs-configuration).
 
     ```bash
     CFS_CONFIG_NAME=management-23.4.0
@@ -376,8 +400,8 @@ The following procedure describes how to create a CFS configuration that contain
 
 1. (`ncn-mw#`) Ensure that the environment variable `IMS_IMAGE_ID` is set.
 
-   This variable should have been set in the earlier step,
-   [1. Determine management node image ID](#1-determine-management-node-image-id)
+    This variable should have been set in the earlier step,
+    [1. Determine management node image ID](#1-determine-management-node-image-id)
 
     ```bash
     echo "${IMS_IMAGE_ID}"
@@ -385,8 +409,8 @@ The following procedure describes how to create a CFS configuration that contain
 
 1. (`ncn-mw#`) Create an image customization CFS session.
 
-   See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional
-   information.
+    See [Create an Image Customization CFS Session](Create_an_Image_Customization_CFS_Session.md) for additional
+    information.
 
     1. Set a name for the session.
 
@@ -438,7 +462,7 @@ The following procedure describes how to create a CFS configuration that contain
         echo "${IMS_RESULTANT_IMAGE_ID}"
         ```
 
-       Example output:
+        Example output:
 
         ```text
         a44ff301-6232-46b4-9ba6-88ee1d19e2c2

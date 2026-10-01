@@ -1,8 +1,10 @@
 # Troubleshoot Common DNS Issues
 
-The Domain Name Service \(DNS\) is part of an integrated infrastructure set designed to provide dynamic host discovery, addressing, and naming.
-There are several different place to look for troubleshooting as DNS interacts with Dynamic Host Configuration Protocol \(DHCP\), the Hardware
-Management Service \(HMS\), the System Layout Service \(SLS\), and the State Manager Daemon \(SMD\).
+The Domain Name Service (DNS) is part of an integrated infrastructure set designed to provide dynamic host discovery, addressing, and naming.
+There are several different place to look for troubleshooting as DNS interacts with Dynamic Host Configuration Protocol (DHCP),
+the [Hardware Management Service (HMS)](../../../glossary.md#hardware-management-service-hms),
+the [System Layout Service (SLS)](../../../glossary.md#system-layout-service-sls), and
+the [State Manager Daemon (SMD)](../../../glossary.md#hardware-state-manager-smd).
 
 The information below describes what to check when experiencing issues with DNS.
 
@@ -12,22 +14,22 @@ It is important to verify if a hostname is correct. The values in the `networks.
 
 The formats show below are valid hostnames:
 
-- Component names (xnames)
-  - Node Management Network \(NMN\):
-    - `<xname\>`
-    - `<xname\>.local`
-  - Hardware Management Network \(HMN\):
-    - `<xname\>-mgmt`
-    - `<xname\>-mgmt.local`
+- Component names ([xnames](../../../glossary.md#xname))
+    - Node Management Network (NMN):
+        - `<xname\>`
+        - `<xname\>.local`
+    - Hardware Management Network (HMN):
+        - `<xname\>-mgmt`
+        - `<xname\>-mgmt.local`
 - NID
-  - Node Management Network \(NMN\):
-    - `nid<nid\_number\>-nmn`
-    - `nid<nid\_number\>-nmn.local`
+    - Node Management Network (NMN):
+        - `nid<nid\_number\>-nmn`
+        - `nid<nid\_number\>-nmn.local`
 
 Additional steps are needed if a hostname or component name (xname) is either listed incorrectly or not listed at all in the `networks.yml` or `networks_derived.yml` files.
 In that case, the following actions must be taken:
 
-1. Update the hostname in the Hardware State Manager \(HSM\).
+1. Update the hostname in the Hardware State Manager (HSM).
 1. Re-run any Ansible plays that require the data in these files.
 
 ## Check if a host is in DNS
@@ -146,7 +148,7 @@ BGP neighbor: 10.252.0.4, remote AS: 65533, link: internal:
   Minimum holdtime from neighbor in seconds            : 90
 ```
 
-(`sw-spine#`) Confirm that routes to Kea \(`10.92.100.222`\) via all the NCN worker nodes are available:
+(`sw-spine#`) Confirm that routes to Kea (`10.92.100.222`) via all the NCN worker nodes are available:
 
 ```text
 show ip route 10.92.100.222

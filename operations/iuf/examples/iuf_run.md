@@ -1,6 +1,6 @@
 # `iuf run` Examples
 
-**`NOTE`** Due to the large number of arguments available for `iuf run` invocations, these examples only include often used key arguments.
+**NOTE** Due to the large number of arguments available for `iuf run` invocations, these examples only include often used key arguments.
 
 (`ncn-m001#`) Execute stages `process-media` through `deliver-product` for activity `admin-230126`.
 

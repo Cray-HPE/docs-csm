@@ -29,7 +29,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
     Server: ServerTech-AWS/v8.0v
     ```
 
-    **`NOTE`**: The firmware version is listed after the '/'. In this case, the firmware version is `8.0v`.
+    **NOTE**: The firmware version is listed after the '/'. In this case, the firmware version is `8.0v`.
 
 ## Procedure
 
@@ -134,7 +134,7 @@ all ServerTech PDUs in the system can be updated to the same global credentials.
 
     - Update all ServerTech PDUs in the system to the same password.
 
-        **`NOTE`**: In order to change the password on all PDUs, the PDUs must be successfully discovered by HSM.
+        **NOTE**: In order to change the password on all PDUs, the PDUs must be successfully discovered by HSM.
 
         1. (`ncn-mw#`) Change password for the `admn` user on the ServerTech PDUs currently discovered in the system.
 

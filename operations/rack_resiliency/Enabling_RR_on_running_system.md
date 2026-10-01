@@ -150,7 +150,7 @@ SUCCESS
 
     ```text
     NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
-    cray-rrs        rack-resiliency 1               2025-09-26 21:43:12.5031915 +0000 UTC   deployed        cray-rrs-1.1.0  1.1.0      
+    cray-rrs        rack-resiliency 1               2025-09-26 21:43:12.5031915 +0000 UTC   deployed        cray-rrs-1.1.0  1.1.0
     ```
 
 1. (`ncn-mw#`) List the resources in the `rack-resiliency` namespace.

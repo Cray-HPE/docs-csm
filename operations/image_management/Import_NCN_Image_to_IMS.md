@@ -21,18 +21,18 @@ explanation of the various subtasks being carried out, that procedure also cover
 ## Prerequisites
 
 * CSM is fully installed, configured, and healthy.
-  * The Image Management Service \(IMS\) is healthy.
-  * The Simple Storage Service \(S3\) is healthy.
-  * The NCN Certificate Authority \(CA\) public key has been properly installed into the CA cache for this system.
-  * These may be validated by performing the following health checks:
-    * [Platform health checks](../validate_csm_health.md#1-platform-health-checks)
-    * [Software Management Service health checks](../validate_csm_health.md#3-software-management-services-sms-health-checks)
+    * The Image Management Service (IMS) is healthy.
+    * The Simple Storage Service (S3) is healthy.
+    * The NCN Certificate Authority (CA) public key has been properly installed into the CA cache for this system.
+    * These may be validated by performing the following health checks:
+        * [Platform health checks](../validate_csm_health.md#1-platform-health-checks)
+        * [Software Management Service health checks](../validate_csm_health.md#3-software-management-services-sms-health-checks)
 * The Cray CLI is configured.
-  * See [Configure the Cray CLI](../configure_cray_cli.md).
+    * See [Configure the Cray CLI](../configure_cray_cli.md).
 * The CSM documentation RPM must be installed on the node where the procedure is being run. See
   [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 * Image artifact files are available on the system where the procedure is being run.
-  * A SquashFS image root file, a kernel file, and an `initrd` file are required.
+    * A SquashFS image root file, a kernel file, and an `initrd` file are required.
 
 ## Limitations
 

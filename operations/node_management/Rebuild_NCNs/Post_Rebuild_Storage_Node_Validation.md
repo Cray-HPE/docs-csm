@@ -73,7 +73,7 @@ Skip this section if a master or worker node was rebuilt.
 
 1. Verify the `radosgw` and `haproxy` are correct.
 
-    There will be an output \(without an error\) returned if `radosgw` and `haproxy` are correct.
+    There will be an output (without an error) returned if `radosgw` and `haproxy` are correct.
 
     ```bash
     curl -k https://rgw-vip.nmn
@@ -82,9 +82,9 @@ Skip this section if a master or worker node was rebuilt.
     Example output:
 
     ```text
-    <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult
+    <?xml version="1.0" encoding="UTF-8"?><ListAllMyBucketsResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/ "><Owner><ID>anonymous</ID><DisplayName></DisplayName></Owner><Buckets></Buckets></ListAllMyBucketsResult>
     ```
 
-## Next Step
+## Next step
 
 If executing this procedure as part of an NCN rebuild, return to the main [Rebuild NCNs](Rebuild_NCNs.md#storage-node) page and proceed with the next step.

@@ -39,7 +39,7 @@ in the [Management Node Personalization](../configuration_management/Management_
 
 1. (`ncn-mw#`) Create a CFS configuration layer to run the SSH key change Ansible playbook.
 
-   **`NOTE`** This step only needs to be done once, as long as the commit in the CSM
+   **NOTE** This step only needs to be done once, as long as the commit in the CSM
    configuration management Git repository has not changed. If the commit has not changed since the
    last time this step was run, this step may be skipped, because the previously created CFS configuration
    will still work.

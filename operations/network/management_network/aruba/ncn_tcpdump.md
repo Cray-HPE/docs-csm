@@ -1,8 +1,8 @@
 # NCN `tcpdump`
 
-- [Running a packet capture](#running-a-packet-capture)
-- [View traffic captured to a file](#view-traffic-captured-to-a-file)
-- [Filter packet capture output](#filter-packet-capture-output)
+* [Running a packet capture](#running-a-packet-capture)
+* [View traffic captured to a file](#view-traffic-captured-to-a-file)
+* [Filter packet capture output](#filter-packet-capture-output)
 
 ## Running a packet capture
 
@@ -10,6 +10,7 @@
 
 > This example will look for DHCP traffic on interface `bond0.nmn0`. It will collect all DHCP
 > traffic on ports 67 and 68, and write the output to a file named `dhcp.pcap` in the current directory.
+> This example is looking for DHCP traffic on interface `bond0.nmn0`
 
 ```bash
 tcpdump -w dhcp.pcap -envli bond0.nmn0 port 67 or port 68
@@ -37,4 +38,4 @@ Use filters to sort the output if it is very long.
 tcpdump -i eth0 -vvv -s 1500 '((port 67 or port 68) and (udp[38:4] = 0x993b7030))'
 ```
 
-[Back to index](README.md).
+[Back to Index](README.md).

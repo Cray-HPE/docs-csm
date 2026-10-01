@@ -1,6 +1,6 @@
 # Manage a Session Template
 
-A session template must be created before starting a session with the Boot Orchestration Service \(BOS\).
+A session template must be created before starting a session with the Boot Orchestration Service (BOS).
 
 This page shows Cray CLI commands for managing BOS session templates. To find the API versions of any commands listed, add `-vvv` to the end of the CLI command,
 and the CLI will print the underlying call to the API in the output.

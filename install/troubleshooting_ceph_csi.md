@@ -52,7 +52,7 @@ Verify that the `ceph-csi` requirements are in place.
       csi-sma-secret                Opaque                                2      3h51m
       ```
 
-      Check your results against the above examples.
+      Check the results against the above examples.
 
       If any components are missing, see [Rerun storage node `cloud-init`](#2-rerun-storage-node-cloud-init).
 

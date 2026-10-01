@@ -1,4 +1,4 @@
-# Create a Backup of HMS Items for reinstall
+# Create a Backup of HMS Items for Reinstall
 
 ## Procedure
 

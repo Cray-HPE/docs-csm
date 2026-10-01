@@ -3,24 +3,24 @@
 In general, most systems will require some customization from the default values provided by HPE Cray products.
 As stated in the previous section, these changes cannot be made on the pristine product branches that are imported during product installation and upgrades. Changes can only be made in Git branches that are based on the pristine branches.
 
-Changing or overriding default values should be done in accordance with Ansible best practices \(see the external [Ansible best practices guide](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#content-organization)\)
-and variable precedence \(see the external [Ansible variable guide](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html)\) in mind.
+Changing or overriding default values should be done in accordance with Ansible best practices (see the external [Ansible best practices guide](https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#content-organization))
+and variable precedence (see the external [Ansible variable guide](https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html)) in mind.
 
 The following practices should also be followed:
 
 * When it is necessary to add more functionality beyond an Ansible playbook provided by an HPE Cray product, include the product playbook in a new playbook instead of modifying it directly.
 Any modifications to a product playbook will result in a merge being required during a product upgrade.
-* Do not modify default Ansible role variables, override all values using inventory \(`group_vars` and `host_vars` directories\).
+* Do not modify default Ansible role variables, override all values using inventory (`group_vars` and `host_vars` directories).
 Cray products do not import any content to inventory locations, so merges of new product content will not cause conflicts if variables are located in inventory.
 * Do not put any sensitive or secret information, such as passwords, in the Git repository. These values should be pulled during runtime from an external key management system.
 
 ## Handling sensitive information
 
-Passwords and other sensitive content should not be stored in a Version Control Service \(VCS\) repository. Instead, consider writing Ansible tasks/roles that pull the value in dynamically while the playbook is running from an external secrets management system.
+Passwords and other sensitive content should not be stored in a Version Control Service (VCS) repository. Instead, consider writing Ansible tasks/roles that pull the value in dynamically while the playbook is running from an external secrets management system.
 
-At this time, the Ansible Vault is not supported by the Configuration Framework Service \(CFS\).
+At this time, the Ansible Vault is not supported by the Configuration Framework Service (CFS).
 
-## Example: Override a Role Default Value
+## Example: Override a Role default value
 
 To override a value that is defined in an Ansible role in a configuration repository, set the value in the Ansible inventory. If the override pertains to an entire Ansible group of nodes, create a file as follows:
 
@@ -41,7 +41,7 @@ To override a value that is defined in an Ansible role in a configuration reposi
 
 1. Stage the file in the Git branch, commit it, and promote the change.
 
-This change will be applied to all nodes by using the group name `all`. To narrow the variable scope to a specific group \(`Compute` for example\), use the group name instead of `all` as follows:
+This change will be applied to all nodes by using the group name `all`. To narrow the variable scope to a specific group (`Compute` for example), use the group name instead of `all` as follows:
 
 ```bash
 mkdir -p group_vars/Compute && touch group_vars/Compute/[role name].yml
@@ -60,7 +60,7 @@ To override role variables for roles that exist across multiple repositories, co
 
 ## Example: Add or remove functionality to a provided playbook
 
-To add more functionality to a playbook provided by a configuration repository, it is considered best practice to leave the existing playbook unmodified \(if possible\) to not have merge conflicts when new versions of the playbook are installed.
+To add more functionality to a playbook provided by a configuration repository, it is considered best practice to leave the existing playbook unmodified (if possible) to not have merge conflicts when new versions of the playbook are installed.
 For instance, if a `site.yml` playbook needs to be extended with a custom `site-custom.yml` playbook, consider creating a new playbook that imports and runs them both. For example, the `site-all.yml` playbook.
 
 ```bash

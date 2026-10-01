@@ -9,9 +9,9 @@ There are some caveats that are mentioned below.
 ## Prerequisites
 
 - Switch without any configuration
-  - [Wipe Management Switches](wipe_mgmt_switches.md)
+    - [Wipe Management Switches](wipe_mgmt_switches.md)
 - Generated switch configurations
-  - [Generate Switch Configuration](generate_switch_configs.md)
+    - [Generate Switch Configuration](generate_switch_configs.md)
 
 ## Aruba
 
@@ -41,8 +41,10 @@ There are some caveats that are mentioned below.
 
 1. Paste in the generated configuration.
 
-    - When pasting in the configuration be sure that all the commands were accepted. In some cases you will need to back out of the current configuration context and back to global configuration for the commands to work as intended.
-    - `banner exec` will need to be manually applied.
+    - When pasting in the configuration be sure that all the commands were accepted.
+      In some cases, it will be necessary to back out of the current configuration
+      context and back to global configuration, in order for the commands to work as intended.
+    - `banner exec` must be manually applied.
 
       For example:
 

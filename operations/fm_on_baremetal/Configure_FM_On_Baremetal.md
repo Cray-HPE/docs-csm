@@ -300,7 +300,7 @@ For Example:
 cray sls hardware describe x3000c0s28b0n0
 ```
 
-Example Output:
+Example output:
 
 ```text
 Parent = "x3000c0s28b0"
@@ -326,7 +326,7 @@ For Example:
 cray hsm inventory ethernetInterfaces list --component-id x3000c0s28b0n0 --format json
 ```
 
-Example Output:
+Example output:
 
 ```json
 [
@@ -490,4 +490,6 @@ Repository priorities are without effect. All enabled repositories share the sam
 
 ### Install Fabric Manager on FM baremetal nodes
 
-For install/ upgrade Fabric Manager on the FMNs please refer section "3 Install HPE Slingshot Fabric Manager software on bare metal servers" in _HPE Slingshot Installation Guide for CSM_ PDF.
+For information on installing or upgrading Fabric Manager on the FMNs,
+see section "3 Install HPE Slingshot Fabric Manager software on bare metal servers" in the
+_HPE Slingshot Installation Guide for CSM_.

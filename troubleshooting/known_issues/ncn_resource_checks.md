@@ -1,4 +1,4 @@
-# Known issues with NCN resource checks
+# Known Issues With NCN Resource Checks
 
 ## `pods_not_running`
 

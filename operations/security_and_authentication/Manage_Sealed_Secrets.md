@@ -24,7 +24,7 @@ locations depending on the state of the system:
 * Fresh install location: `/mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
 * Post-install location: `/root/site-init/${CSM_DISTDIR}/shasta-cfg/customizations.yaml`
 
-## Generate Sealed Secrets Post-Install
+## Generate sealed secrets post-install
 
 Sealed secrets are stored in `customizations.yaml` as `SealedSecret` resources
 (encrypted secrets), which are deployed by specific charts and decrypted by the
@@ -139,7 +139,7 @@ If LDAP user federation is required, then refer to
    Generating type static...
    ```
 
-## Prevent Regeneration of Tracked Sealed Secrets
+## Prevent regeneration of tracked sealed secrets
 
 Before performing the task to generate or regenerate sealed secrets,
 administrators are able to prevent existing tracked sealed secrets from being regenerated.
@@ -156,7 +156,7 @@ yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kub
 yq delete -i /mnt/pitdata/${CSM_DISTDIR}/shasta-cfg/customizations.yaml spec.kubernetes.tracked_sealed_secrets.cray_hms_rts_credentials
 ```
 
-## View Tracked Sealed Secrets
+## View tracked sealed secrets
 
 Tracked sealed secrets are regenerated every time secrets are seeded (see the
 use of `utils/secrets-seed-customizations.sh` above).
@@ -175,7 +175,7 @@ Expected output looks similar to the following:
 - cray_hms_rts_credentials
 ```
 
-## Decrypt Sealed Secrets for Review
+## Decrypt sealed secrets for review
 
 Use the `secrets-decrypt.sh` utility in the `SHASTA-CFG` to decrypt and review previously encrypted
 sealed secrets.
@@ -196,7 +196,7 @@ Expected output looks similar to the following:
 {"Username": "root", "Password": "..."}
 ```
 
-## Fix an Incorrect Value in a Sealed Secret
+## Fix an incorrect value in a sealed secret
 
 This procedure describes how to correct an invalid password in the `customizations.yaml` file during an install.
 In the following example, a typo was made in the `SNMPAuthPassword` field of the `vault_switch_defaults` credentials

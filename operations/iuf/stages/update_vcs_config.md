@@ -3,7 +3,7 @@
 The `update-vcs-config` stage performs a variety of update operations for each product being installed that provides a configuration management repository in VCS. It ensures new product configuration content has been uploaded to VCS in
 a pristine branch and attempts to merge the new product configuration content into a corresponding customer branch.
 
-**`NOTE`** After `update-vcs-config` has completed and before proceeding to additional stages, any desired site configuration customizations should be performed. Refer to individual product documentation for configuration customization details.
+**NOTE** After `update-vcs-config` has completed and before proceeding to additional stages, any desired site configuration customizations should be performed. Refer to individual product documentation for configuration customization details.
 
 `update-vcs-config` details are explained in the following sections:
 
@@ -47,7 +47,7 @@ The following describes how `update-vcs-config` determines how to create or merg
 `update-vcs-config` will display information describing the operations performed. In the case of an error, such as a merge conflict, error information will be displayed and `iuf` will exit so the administrator can resolve the issue.
 Once it is resolved, the session can be continued with `iuf resume`, restarted with `iuf restart`, or abandoned with `iuf abort`.
 
-**`NOTE`** Any product-specific stage hooks specified for `update-vcs-config` will also be executed and may also create or modify VCS content. Refer to individual product documentation for information on any stage hook operations performed by the product.
+**NOTE** Any product-specific stage hooks specified for `update-vcs-config` will also be executed and may also create or modify VCS content. Refer to individual product documentation for information on any stage hook operations performed by the product.
 
 ## Customer branch name
 

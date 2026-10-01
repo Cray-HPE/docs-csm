@@ -44,7 +44,7 @@ location is `secret/csm/users/root password=...`.
        read -r -s -p "Enter again: " PW2
        echo
        if [[ ${PW1} != ${PW2} ]]; then
-           echo "ERROR: Passwords do not match"        
+           echo "ERROR: Passwords do not match"
        else
            echo -n "${PW1}" | openssl passwd -6 -salt $(< /dev/urandom tr -dc ./A-Za-z0-9 | head -c4) --stdin
        fi
@@ -64,7 +64,7 @@ in the [Management Node Personalization](../configuration_management/Management_
 
 1. (`ncn-mw#`) Create a CFS configuration layer to run the password change Ansible playbook.
 
-   **`NOTE`** This step only needs to be done once, as long as the commit in the CSM
+   **NOTE** This step only needs to be done once, as long as the commit in the CSM
    configuration management Git repository has not changed. If the commit has not changed since the
    last time this step was run, this step may be skipped, because the previously created CFS configuration
    will still work.

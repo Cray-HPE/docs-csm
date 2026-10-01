@@ -8,7 +8,7 @@ error state. Once any remaining testing or validation work is complete, these po
 
 ## Collect information before powering down the node
 
-1. (`ncn-mw#`) Check the Persistent Volume Claims \(PVC\) that have been created on the system.
+1. (`ncn-mw#`) Check the Persistent Volume Claims (PVC) that have been created on the system.
 
     1. View the PVCs in all namespaces.
 

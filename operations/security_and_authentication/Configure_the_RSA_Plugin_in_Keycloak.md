@@ -57,7 +57,7 @@ Access to the Keycloak UI is needed.
         | `Alias`                                 | Enter the desired alias. For example, `RSA` could be used.                                                                                                 |
         | `RSA URL`                               | The base URL of the RSA API service. For example, `https://rsa.mycompany.com:5555/`                                                                        |
         | `RSA Verify Endpoint`                   | `/mfa/v1_1/authn/initialize`                                                                                                                               |
-        | `Keycloak Client ID`                    | The authentication agent. For example, `rsa.mycompany.com`. The value is from `Access` \> `Authentication Agents` \> `Manage Existing in the RSA Console`. |
+        | `Keycloak Client ID`                    | The authentication agent. For example, `rsa.mycompany.com`. The value is from `Access` - `Authentication Agents` - `Manage Existing in the RSA Console`.   |
         | `RSA Authentication Manager Client Key` | The key for the RSA API.                                                                                                                                   |
 
     1. Set the `Shared username` if applicable.

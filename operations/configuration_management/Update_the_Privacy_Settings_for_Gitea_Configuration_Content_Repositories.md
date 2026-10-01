@@ -10,7 +10,7 @@ Change the visibility of Gitea configuration content repositories from public to
 
 ## Procedure
 
-1. Log in to the Version Control Service \(VCS\) as the `crayvcs` user.
+1. Log in to the Version Control Service (VCS) as the `crayvcs` user.
 
    Use the following URL to access the VCS web interface: `https://vcs.cmn.SYSTEM_DOMAIN_NAME`
 

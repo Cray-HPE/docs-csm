@@ -1,6 +1,6 @@
 # SAT Uninstall and Downgrade
 
-## Uninstall: Remove a Version of SAT
+## Uninstall: Remove a version of SAT
 
 This procedure can be used to uninstall a version of SAT installed as a separate product stream.
 This is an optional procedure. Its main benefits are that it frees up a small amount of space in
@@ -15,7 +15,7 @@ releases are the last releases of SAT as a separate product stream.
 - Only versions 2.2 or newer of SAT can be uninstalled with `prodmgr`.
 - CSM version 1.2 or newer must be installed, so that the `prodmgr` command is available.
 
-### Uninstall Procedure
+### Uninstall procedure
 
 1. (`ncn-m001#`) Use `sat showrev` to list versions of SAT which have been installed as a separate
    product.
@@ -65,7 +65,7 @@ releases are the last releases of SAT as a separate product stream.
    Deleted sat-2.2.10 from product catalog.
    ```
 
-## Downgrade: Switch Between SAT Versions
+## Downgrade: Switch between SAT versions
 
 Starting in CSM 1.6.0, it is no longer recommended to use `prodmgr activate` to switch between SAT
 versions.

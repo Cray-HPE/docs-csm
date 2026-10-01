@@ -1,6 +1,7 @@
 # Large Number of DHCP Declines During a Node Boot
 
-If something similar to the following is in the logs, then this indicates an issue that an IP address being allocated is already being used.
+If something similar to the following is in the logs, then this indicates an issue where
+an IP address being allocated is already being used.
 It is not able to get the IP address assigned to the device.
 
 ```text

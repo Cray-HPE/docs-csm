@@ -14,7 +14,7 @@ This procedure shows how the ConMan utility can be used to retrieve compute node
 
 ## Procedure
 
-> **`NOTE`** this procedure has changed since the CSM 1.6.x releases.
+> **NOTE** this procedure has changed since the CSM 1.6.x releases.
 
 1. Log on to a Kubernetes master or worker node.
 

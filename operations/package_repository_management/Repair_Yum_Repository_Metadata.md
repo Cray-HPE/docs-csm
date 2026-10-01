@@ -1,6 +1,6 @@
 # Repair Yum Repository Metadata
 
-Nexus may have trouble generating or regenerating repository metadata \(for example, `repodata/repomd.xml`\), especially for larger repositories.
+Nexus may have trouble generating or regenerating repository metadata (for example, `repodata/repomd.xml`), especially for larger repositories.
 Configure the `Repair - Rebuild Yum repository metadata (repodata)` task in Nexus to create the metadata if the standard generation fails.
 This is not typically needed, so it is considered to be a repair task.
 

@@ -86,7 +86,7 @@ BOS session templates or BOS options can also be manually exported and imported 
    mkdir -pv "${BOS_EXPORT_DIR}/templates"
    ```
 
-1. (`ncn-mw#`) For each session template that you wish to export, perform the following steps.
+1. (`ncn-mw#`) For each session template to be exported, perform the following steps.
 
    1. Record the name of the template to be exported.
 

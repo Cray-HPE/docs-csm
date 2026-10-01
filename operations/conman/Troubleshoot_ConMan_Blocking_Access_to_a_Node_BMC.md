@@ -1,13 +1,13 @@
 # Troubleshoot ConMan Blocking Access to a Node BMC
 
 Disable ConMan if it is blocking access to a node by other means. ConMan runs on the system as a containerized service, and it is enabled by default. However, the use of ConMan to connect to a node
-blocks access to that node by other Serial over LAN \(SOL\) utilities or by a virtual KVM.
+blocks access to that node by other Serial over LAN (SOL) utilities or by a virtual KVM.
 
 For information about how ConMan works, see [ConMan](ConMan.md).
 
 ## Prerequisites
 
-The Cray command line interface \(CLI\) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
+The Cray command line interface (CLI) tool is initialized and configured on the system. See [Configure the Cray CLI](../configure_cray_cli.md).
 
 ## Procedure
 
@@ -25,7 +25,7 @@ The Cray command line interface \(CLI\) tool is initialized and configured on th
     Even after the console services are disabled, the ConMan SOL session might need to be directly disabled using `ipmitool`.
     Note: This is only required for River nodes because Mountain hardware does not use IPMI.
 
-    > **`NOTE`** `read -s` is used to prevent the password from appearing in the command history.
+    > **NOTE** `read -s` is used to prevent the password from appearing in the command history.
 
     ```bash
     USERNAME=root

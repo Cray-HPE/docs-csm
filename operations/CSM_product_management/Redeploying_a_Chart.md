@@ -2,8 +2,8 @@
 
 Administrators are able to customize many aspects of the system in order to address problems or tailor it to better suit their requirements.
 Often this requires redeploying one or more Helm charts. This page outlines the procedure for doing this in CSM. Other parts of the CSM
-documentation will reference this page if you are instructed to redeploy a chart. In those cases, the source page that links to this one should
-specify which charts should be redeployed and what customizations (if any) should be made to them.
+documentation will reference this page when administrators are instructed to redeploy a chart.
+In those cases, the source page that links to this one should specify which charts should be redeployed and what customizations (if any) should be made to them.
 
 * [Prerequisites](#prerequisites)
 * [Procedure](#procedure)

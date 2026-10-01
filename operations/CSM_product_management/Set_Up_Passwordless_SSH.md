@@ -1,4 +1,4 @@
-# Set up passwordless SSH
+# Set Up Passwordless SSH
 
 - [Overview]
 - [Options to set SSH keys]
@@ -36,7 +36,7 @@ public key to the `authorized_keys` file, which allows passwordless SSH with the
 The `trust-csm-ssh-keys` role is used on management nodes and on managed nodes, ensuring that
 passwordless SSH works to either of these node types.
 
-> **`NOTE`** CFS itself does not use the CSM-provided (or user-supplied) SSH keys to make
+> **NOTE** CFS itself does not use the CSM-provided (or user-supplied) SSH keys to make
 > connections between nodes. CFS will continue to function if passwordless SSH is disabled between
 > as described in [Option 3: Disable CSM-provided passwordless SSH](#option-3-disable-csm-provided-passwordless-ssh)
 
@@ -116,7 +116,7 @@ keys.
 Passwordless SSH with the provided keys will be set up once node personalization
 runs on the management nodes.
 
-> **`NOTE`**: This keypair may be the same keypair used for the `root` user on management nodes, but
+> **NOTE**: This keypair may be the same keypair used for the `root` user on management nodes, but
 > it is not required to be the same. Either option is valid.
 
 In order to apply this change, see [Apply configuration with CFS node personalization](#apply-configuration-with-cfs-node-personalization).
@@ -218,7 +218,7 @@ Host nid*
   IdentityFile /root/.ssh/csm-ecdsa
   StrictHostKeyChecking no
 
-Host uan* 
+Host uan*
   IdentityFile /root/.ssh/csm-ecdsa
   StrictHostKeyChecking no
 

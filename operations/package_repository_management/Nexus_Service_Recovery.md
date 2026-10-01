@@ -107,7 +107,7 @@ The following covers redeploying the Nexus service and restoring the data.
       1. Delete the `nexus-data` PVC if it still exists.
 
          ```bash
-         kubectl delete pvc nexus-data -n nexus 
+         kubectl delete pvc nexus-data -n nexus
          ```
 
          Example output:

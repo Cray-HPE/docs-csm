@@ -2,13 +2,15 @@
 
 The ConMan utility is enabled by default. The first procedure provides instructions for disabling it after the system software has been installed, and the second procedure provides instructions on how to later re-enable it.
 
+* [Prerequisites](#prerequisites)
+* [Disable procedure](#disable-procedure)
+* [Re-enable procedure](#re-enable-procedure)
+
 ## Prerequisites
 
 This procedure requires administrative privileges.
 
-## Disable Procedure
-
-> **`NOTE`** this procedure has changed since the CSM 0.9 release.
+## Disable procedure
 
 1. Log on to a Kubernetes master or worker node.
 
@@ -52,7 +54,7 @@ This procedure requires administrative privileges.
     kubectl -n services get pods | grep console-node
     ```
 
-## Re-enable Procedure
+## Re-enable procedure
 
 1. (`ncn-mw#`) Scale the `cray-console-operator` service back to 1 replica. It will scale the `cray-console-node` pods after it starts operation.
 

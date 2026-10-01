@@ -19,7 +19,7 @@ This page covers the necessary configuration of a BOS session template in order 
 - [Example session template input file](#example-session-template-input-file)
 - [Appendix: `root=` kernel parameter](#appendix-root-kernel-parameter)
 
-The Scalable Boot Projection Service (SBPS) is the **default**  provider for the `rootfs` on compute nodes.
+The Scalable Boot Projection Service (SBPS) is the **default** provider for the `rootfs` on compute nodes.
 
 Two parameters need to be set to configure SBPS, the `rootfs_provider` and the `rootfs_provider_passthrough`.
 
@@ -130,7 +130,7 @@ The following is an explanation of the values used in this example:
 To use the Node Management Network (NMN) for content projection, the service is set to `_sbps-nmn`.
 
 - `"rootfs_provider_passthrough"`: Set to `"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-nmn._tcp.my-system.my-site-domain:300"`
-  
+
 To use the High Speed Network (HSN) for content projection, the service is set to `_sbps-hsn`.
 
 - `"rootfs_provider_passthrough"`: Set to `"sbps:v1:iqn.2023-06.csm.iscsi:_sbps-hsn._tcp.my-system.my-site-domain:300"`

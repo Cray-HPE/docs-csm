@@ -1,7 +1,7 @@
 # Troubleshoot Issues with Redfish Endpoint Discovery
 
 If a Redfish endpoint is in the `HTTPsGetFailed` status, then the endpoint does not need to be fully rediscovered. The error indicates
-an issue in the inventory process done by the Hardware State Manager \(HSM\). Restart the inventory process to fix this issue.
+an issue in the inventory process done by the Hardware State Manager (HSM). Restart the inventory process to fix this issue.
 
 Update the HSM inventory to resolve issues with discovering Redfish endpoints.
 
@@ -35,7 +35,7 @@ LastDiscoveryStatus = "HTTPsGetFailed"
 
 ## Prerequisites
 
-* The Cray command line interface \(CLI\) tool is initialized and configured on the system.
+* The Cray command line interface (CLI) tool is initialized and configured on the system.
 
 ## Procedure
 

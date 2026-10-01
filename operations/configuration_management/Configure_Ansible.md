@@ -1,6 +1,6 @@
 # Configure Ansible
 
-The Configuration Framework Service \(CFS\) allows users to configure Ansible in the Ansible Execution Environment \(AEE\).
+The Configuration Framework Service (CFS) allows users to configure Ansible in the Ansible Execution Environment (AEE).
 The default Ansible configuration file is accessible through the `cfs-default-ansible-cfg` Kubernetes ConfigMap in the `services` namespace.
 Administrators can either update the existing ConfigMap, or create separate ConfigMaps to allow easy switching between Ansible configurations.
 

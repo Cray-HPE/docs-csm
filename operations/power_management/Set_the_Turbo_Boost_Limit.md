@@ -6,7 +6,7 @@ limiting the amount of turbo boost can reduce performance variability and reduce
 Turbo boost can be limited by setting the `turbo_boost_limit` kernel parameter to one of these values:
 
 - 0 - Disable turbo boost
-- 999 - \(default\) No limit is applied.
+- 999 - (default) No limit is applied.
 
 The following values are not supported in USS v1.4:
 
@@ -20,7 +20,7 @@ For example, on a 12-core processor, the limit is in effect when 12, 11, 10, or 
 
 ## Set or change the turbo boost limit parameter
 
-Modify the Boot Orchestration Service \(BOS\) template for the nodes. This example below disables turbo boost. The default setting is 999 \(no limit\).
+Modify the Boot Orchestration Service (BOS) template for the nodes. This example below disables turbo boost. The default setting is 999 (no limit).
 
 ```json
 {

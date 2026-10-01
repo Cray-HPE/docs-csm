@@ -1,9 +1,9 @@
 # CFS Sessions
 
-Configuration Framework Service \(CFS\) sessions apply a configuration, including any number of layers, to a target or set of targets, which can be live nodes or images mounted by IMS.
+Configuration Framework Service (CFS) sessions apply a configuration, including any number of layers, to a target or set of targets, which can be live nodes or images mounted by IMS.
 
-A session clones down Ansible content, creates an Ansible inventory \(whether dynamic, static, or image customization\), launches an Ansible Execution Environment \(AEE\), and reports the session status to the CFS API.
-When configuring an image, the CFS session also calls Image Management Service \(IMS\) to start a configuration job and tears down the IMS job after configuration is complete.
+A session clones down Ansible content, creates an Ansible inventory (whether dynamic, static, or image customization), launches an Ansible Execution Environment (AEE), and reports the session status to the CFS API.
+When configuring an image, the CFS session also calls Image Management Service (IMS) to start a configuration job and tears down the IMS job after configuration is complete.
 IMS then tears down the image root environment, packages up the resultant image and CFS records the new image ID in the session metadata.
 
 Sessions can be created manually via the Cray CLI or through the CFS REST API, or created automatically by setting a desired configuration for components.
@@ -14,35 +14,32 @@ See [Automatic Configuration Management](Automatic_Configuration_Management.md) 
 CFS progresses through a session by running a series of commands in containers located in a Kubernetes job pod.
 Up to four container types are present in the job pod which pertain to CFS session setup, execution, and teardown:
 
-* **`git-clone`**
+* `git-clone`
 
   This `init` container is responsible for cloning the configuration repositories and checking out the branch/commit specified in each configuration layer.
   This `init` container also clones the repository specified in the parameter `additional_inventory_url`, if specified.
 
-* **`inventory`**
+* `inventory`
 
   This container is responsible for generating the dynamic inventory or for communicating to IMS to stage boot image roots that need to be made available via SSH when the session `--target-definition` is `image`.
 
-* **`ansible`**
+* `ansible`
 
   This container runs the AEE after CFS injects the inventory and Git repository content from previous containers. This container runs the Ansible configuration for each layer specified.
 
-* **`teardown`**
+* `teardown`
 
   This container waits for the `ansible` container to complete and subsequently calls IMS to package up customized image roots. The container only exists when the session `--target-definition` is `image`.
-  
+
 ## Session data
 
 The following fields are comprise a session record, including both the session definition used to setup and session, as well as any information on the session results.
 
-* **`configuration_status`**
-
-  The status of the component's configuration. Valid status values are:
-
-  * **`unconfigured`** - The component has no recorded state and no desired configuration or no valid desired configuration.
-  * **`failed`** - One of the configuration layers for the component has failed and the retry limit has been exceeded.
-  * **`pending`** - The component's desired state and actual state do not match. The component will be configured automatically if enabled.
-  * **`configured`** - The component's desired state and actual state match.
+* `configuration_status` - The status of the component's configuration. Valid status values are:
+    * `unconfigured` - The component has no recorded state and no desired configuration or no valid desired configuration.
+    * `failed` - One of the configuration layers for the component has failed and the retry limit has been exceeded.
+    * `pending` - The component's desired state and actual state do not match. The component will be configured automatically if enabled.
+    * `configured` - The component's desired state and actual state match.
 
 ## Viewing sessions
 

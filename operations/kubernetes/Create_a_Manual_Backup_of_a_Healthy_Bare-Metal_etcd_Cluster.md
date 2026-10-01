@@ -6,7 +6,7 @@ bare-metal etcd cluster backups are automatically created every ten minutes and 
 When necessary, these procedures can be used to create an additional backup, and then save a separate copy of it, or one of the automated backups.
 When needed, a bare-metal etcd cluster can be restored from a saved backup.
 
-The commands in these procedures can be run on any master (control plane) node \(`ncn-m#`\) on the system.
+The commands in these procedures can be run on any master (control plane) node (`ncn-m#`) on the system.
 These procedures assume a healthy bare-metal etcd cluster.
 
 * [Check health of bare-metal etcd cluster](#check-health-of-bare-metal-etcd-cluster)
@@ -17,7 +17,7 @@ These procedures assume a healthy bare-metal etcd cluster.
 
 ## Check health of bare-metal etcd cluster
 
-1. Verify bare-metal etcd cluster health on each master (control plane) node \(`ncn-m#`\) on the system.
+1. Verify bare-metal etcd cluster health on each master (control plane) node (`ncn-m#`) on the system.
 
     ```bash
     ETCDCTL_API=3 etcdctl --cacert /etc/kubernetes/pki/etcd/ca.crt \

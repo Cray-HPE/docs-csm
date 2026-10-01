@@ -10,7 +10,7 @@
 ## Overview
 
 A deployment of HashiCorp Vault, managed via the Bitnami `Bank-vaults` operator, stores private and public Certificate Authority
-\(CA\) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.
+(CA) material, and serves APIs through a PKI engine instance. This instance also serves as a general secrets engine for the system.
 
 (`ncn-mw#`) Kubernetes service account authorization is utilized to authenticate access to Vault. The configuration of Vault, as deployed on
 the system, can be viewed with the following command:
@@ -31,12 +31,12 @@ For more information, refer to the following resources:
 
 ## Storage model
 
-In previous releases, Vault used etcd as a high-availability \(HA\) storage back-end. Currently, Vault uses HashiCorp's Raft
+In previous releases, Vault used etcd as a high-availability (HA) storage back-end. Currently, Vault uses HashiCorp's Raft
 implementation. Raft is now configured to run natively inside the Vault StatefulSet instead of as an independent deployment.
 
 ## Unseal keys
 
-Vault requires unseal keys for start-up. If the unseal keys are not present, or are incorrect, Vault \(by design\) will not start.
+Vault requires unseal keys for start-up. If the unseal keys are not present, or are incorrect, Vault (by design) will not start.
 Unseal keys are stored in the `cray-vault-unseal-keys` Kubernetes Secret on a system, which is inside the `vault` namespace.
 
 ## Administrative access
@@ -53,7 +53,7 @@ kubectl exec -it -n vault -c vault cray-vault-0 -- sh -c "VAULT_ADDR=http://loca
 
 ## Kubernetes service account access
 
-Vault is configured to allow service account access from the `services` namespace \(among others\). This access is tied to a role,
+Vault is configured to allow service account access from the `services` namespace (among others). This access is tied to a role,
 which is also subject to specific access policies.
 
 (`ncn-mw#`) To obtain and use the service account token:

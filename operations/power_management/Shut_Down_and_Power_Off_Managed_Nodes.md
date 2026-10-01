@@ -9,7 +9,7 @@ nodes, which are powered off later.
 - The `cray` and `sat` commands must be initialized and authenticated with valid credentials for Keycloak. If these have not been prepared, see
 [Configure the Cray Command Line Interface (`cray` CLI)](../configure_cray_cli.md) and
 [Authenticate SAT Commands](../../operations/system_admin_toolkit/configuration/Authenticate_SAT_Commands.md).
-- The BOS session templates to use for shutting down all managed nodes in the system have been identified as described in [Identify BOS session templates for managed nodes](./Prepare_the_System_for_Power_Off.md#identify-bos-session-templates-for-managed-nodes).
+- The BOS session templates to use for shutting down all managed nodes in the system have been identified as described in [Identify BOS session templates for managed nodes](Prepare_the_System_for_Power_Off.md#identify-bos-session-templates-for-managed-nodes).
 
 ## Procedure
 

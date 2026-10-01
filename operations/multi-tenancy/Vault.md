@@ -4,7 +4,7 @@
 - [Transit Engine Creation](#transit-engine-creation)
 - [Transit Engine Modifications](#transit-engine-modifications)
 - [Transit Engine Removal](#transit-engine-removal)
-  
+
 ## Overview
 
 When a tenant is created or modified, the TAPMS operator can optionally create a tenant-specific Cray Vault transit engine for the purpose of data encryption/decryption as required.

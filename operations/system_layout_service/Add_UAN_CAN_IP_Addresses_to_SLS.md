@@ -1,6 +1,6 @@
 # Add UAN CAN IP Addresses to SLS
 
-Add the Customer Access Network \(CAN\) IP addresses for User Access Nodes \(UANs\) to the IP address reservations in the System Layout Service \(SLS\). Adding these IP addresses will propagate the data needed for the Domain Name Service \(DNS\).
+Add the Customer Access Network (CAN) IP addresses for User Access Nodes (UANs) to the IP address reservations in the System Layout Service (SLS). Adding these IP addresses will propagate the data needed for the Domain Name Service (DNS).
 
 For more information on CAN IP addresses, refer to the [Customer Accessible Networks](../network/customer_accessible_networks/Customer_Accessible_Networks.md).
 
@@ -25,7 +25,7 @@ This procedure requires administrative privileges.
     cp CAN.json CAN.json.bak
     ```
 
-2. Edit the `CAN.json` file and add the desired UAN CAN IP addresses in the `ExtraProperties.Subnets` section.
+1. Edit the `CAN.json` file and add the desired UAN CAN IP addresses in the `ExtraProperties.Subnets` section.
 
     This subsection is located under the CAN Bootstrap DHCP Subnet section. The IP address reservations array needs to be added in the following JSON format:
 
@@ -54,7 +54,7 @@ This procedure requires administrative privileges.
     IMPORTANT: There must be an alias or name defined in a format that matches the hostname of the UAN. This is required by the CFS play uan_interfaces that configures the CAN interface on UANs. If the CAN is not
     being configured for a particular UAN, then this requirement is not needed.
 
-3. Upload the updated `CAN.json` file to SLS.
+1. Upload the updated `CAN.json` file to SLS.
 
     ```bash
     curl -s -k -H "Authorization: Bearer ${TOKEN}" --header \
@@ -62,7 +62,7 @@ This procedure requires administrative privileges.
     https://api-gw-service-nmn.local/apis/sls/v1/networks/CAN
     ```
 
-4. Verify that DNS records were created.
+1. Verify that DNS records were created.
 
     It will take about five minutes before any records will show up.
 

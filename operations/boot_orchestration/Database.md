@@ -1,4 +1,4 @@
-# BOS database
+# BOS Database
 
 * [Overview](#overview)
 * [Kubernetes deployment](#kubernetes-deployment)

@@ -1,20 +1,21 @@
-# Remote logging
+# Remote Logging
 
-"In its most simplistic terms, the syslog protocol provides a transport to allow a machine to send event notification messages across IP networks to event message collectors - also known as syslog servers." –rfc3164
+"In its most simplistic terms, the `syslog` protocol provides a transport to allow a machine to send event notification
+messages across IP networks to event message collectors - also known as `syslog` servers." – RFC 3164
 
-Note: the default facility is 3(DAEMON)
+> **NOTE** The default facility is `3(DAEMON)`.
 
-Relevant Configuration
+## Configuration commands
 
-Configure logging
+(`switch(config)#`) Configure logging:
 
+```console
+logging <syslog-ip-address> [trap {<log-level> | override class <class> priority <log-level>}]
 ```
-switch(config)# logging <syslog-ip-address> [trap {<log-level> | override class <class> priority <log-level>}]
-```
 
-Expected Results
+## Expected results
 
-* Step 1: You can configure remote logging
-* Step 2: You can see the log files from the switch on the remote server
+* Administrators can configure remote logging
+* Administrators can see the log files from the switch on the remote server
 
 [Back to Index](../README.md)

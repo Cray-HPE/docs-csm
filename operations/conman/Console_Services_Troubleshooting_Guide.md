@@ -151,7 +151,7 @@ to the system, they will not be able to get new nodes assigned to the currently 
 lead to some `cray-console-node` pods continuing to monitor nodes, but other pods not having any nodes
 assigned to them.
 
-> **`NOTE`** There is no persistent data in the `cray-console-data` Postgres database. It only contains
+> **NOTE** There is no persistent data in the `cray-console-data` Postgres database. It only contains
 current state information and will rebuild itself automatically once it is functional again. There is no
 need to save or restore data from this database.
 

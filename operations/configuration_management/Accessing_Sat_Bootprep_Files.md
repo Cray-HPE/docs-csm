@@ -39,7 +39,7 @@ The following procedure describes how to access the CFS configuration. This proc
 1. (`ncn-m#`) Show the remote branches.
 
     ```bash
-    git branch -r 
+    git branch -r
     ```
 
 1. (`ncn-m#`) Check out the branch for the installed version.

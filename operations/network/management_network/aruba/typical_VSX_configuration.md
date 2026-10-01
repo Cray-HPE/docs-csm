@@ -1,12 +1,12 @@
 # Typical Configuration of VSX
 
-The following is a very basic VSX configuration between two spine switches. Do note that the inter-switch-link (ISL) between the two spine switches is configured as regular lag, not a multi-chassis lag like a connected server would.
+The following is a very basic VSX configuration between two spine switches.
+Note that the inter-switch-link (ISL) between the two spine switches is configured
+as regular LAG, not a multi-chassis LAG like a connected server would.
 
-<table>
+## `Spine-01`
 
-<td>
-<pre>
-Spine-01
+```console
 vrf keepalive
 
 interface lag 254
@@ -40,12 +40,11 @@ interface 1/1/47
     vrf attach keepalive
     description VSX keepalive
     ip address 192.168.255.0/31
-</td>
-</pre>
+```
 
-<td>
-<pre>
-Spine-02
+## `Spine-02`
+
+```console
 vrf keepalive
 
 interface lag 254
@@ -79,8 +78,6 @@ interface 1/1/47
     vrf attach keepalive
     description VSX keepalive
     ip address 192.168.255.1/31
-</td>
-</pre>
-</table>
+```
 
 [Back to Index](../README.md)

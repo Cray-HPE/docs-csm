@@ -1,4 +1,4 @@
-# Configure CSM packages with CFS
+# Configure CSM Packages with CFS
 
 CSM includes a playbook that should be applied to [Compute node](../../glossary.md#compute-node-cn) and
 [Application node](../../glossary.md#application-node-an) images.

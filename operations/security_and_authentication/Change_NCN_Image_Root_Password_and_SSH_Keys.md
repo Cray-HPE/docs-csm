@@ -15,7 +15,7 @@ All of the commands in this procedure are intended to be run on a single master 
 ## Prerequisites
 
 - This procedure can only be done after the PIT node is rebuilt to become a normal master node.
-  - To change the NCN images from the PIT node during CSM installation, see [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
+    - To change the NCN images from the PIT node during CSM installation, see [Set NCN Image Root Password, SSH Keys, and Timezone on PIT Node](Change_NCN_Image_Root_Password_and_SSH_Keys_on_PIT_Node.md).
 - The Cray CLI must be configured on the node where the procedure is being done. See [Configure the Cray Command Line Interface](../configure_cray_cli.md).
 - The CSM documentation RPM must be installed on the node where the procedure is being run. See [Check for Latest Documentation](../../update_product_stream/README.md#check-for-latest-documentation).
 
@@ -88,7 +88,7 @@ It obtains the boot image which will be used the next time that the NCN boots. T
       ```bash
       K8S_IMS_ID=$(cray bss bootparameters list --name "${K8S_NCN_XNAME}" --format json | \
                        jq -r '.[0].params' | \
-                       sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
+                       sed 's#(^.*[[:space:]]\|^)metal[.]server=[^[:space:]]*/boot-images/([^[:space:]]\+)/rootfs.*#\2#')
       echo "${K8S_IMS_ID}"
       ```
 
@@ -113,7 +113,7 @@ It obtains the boot image which will be used the next time that the NCN boots. T
       ```bash
       CEPH_IMS_ID=$(cray bss bootparameters list --name "${CEPH_NCN_XNAME}" --format json | \
                        jq -r '.[0].params' | \
-                       sed 's#\(^.*[[:space:]]\|^\)metal[.]server=[^[:space:]]*/boot-images/\([^[:space:]]\+\)/rootfs.*#\2#')
+                       sed 's#(^.*[[:space:]]\|^)metal[.]server=[^[:space:]]*/boot-images/([^[:space:]]\+)/rootfs.*#\2#')
       echo "${CEPH_IMS_ID}"
       ```
 
@@ -234,7 +234,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
       for xname in "${K8S_XNAMES[@]}"; do
          echo "${xname}"
          cray bss bootparameters list --name "${xname}" --format json > "bss_${xname}.json" &&
-         sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/${K8S_IMS_ID}\([\"/[:space:]]\)@/${NEW_K8S_IMS_ID}\1@g" "bss_${xname}.json" &&
+         sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/${K8S_IMS_ID}([\"/[:space:]])@/${NEW_K8S_IMS_ID}\1@g" "bss_${xname}.json" &&
          kernel=$(cat "bss_${xname}.json" | jq -r '.[]  .kernel') &&
          initrd=$(cat "bss_${xname}.json" | jq -r '.[]  .initrd') &&
          params=$(cat "bss_${xname}.json" | jq -r '.[]  .params') &&
@@ -261,7 +261,7 @@ This step updates the entries in BSS for the NCNs to use the new images.
       for xname in "${CEPH_XNAMES[@]}"; do
          echo "${xname}"
          cray bss bootparameters list --name "${xname}" --format json > "bss_${xname}.json" &&
-         sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/${CEPH_IMS_ID}\([\"/[:space:]]\)@/${NEW_CEPH_IMS_ID}\1@g" "bss_${xname}.json" &&
+         sed -i.$(date +%Y%m%d_%H%M%S%N).orig "s@/${CEPH_IMS_ID}([\"/[:space:]])@/${NEW_CEPH_IMS_ID}\1@g" "bss_${xname}.json" &&
          kernel=$(cat "bss_${xname}.json" | jq -r '.[]  .kernel') &&
          initrd=$(cat "bss_${xname}.json" | jq -r '.[]  .initrd') &&
          params=$(cat "bss_${xname}.json" | jq -r '.[]  .params') &&

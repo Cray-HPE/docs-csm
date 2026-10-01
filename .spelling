@@ -674,6 +674,7 @@ oversubscription
 passthrough
 passwordless
 patch.1
+patch.2
 permissioned
 pickup
 playbook
@@ -733,6 +734,8 @@ ssd
 ssds
 standalone
 startup
+submodule
+submodules
 subnetting
 subrole
 subroles

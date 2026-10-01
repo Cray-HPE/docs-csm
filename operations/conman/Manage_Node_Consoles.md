@@ -18,7 +18,7 @@ See [ConMan](ConMan.md) for other procedures related to remote consoles and node
 This procedure can be run from any member of the Kubernetes cluster to verify node consoles are being managed
 by ConMan and to connect to a console.
 
-**`NOTE`** this procedure has changed since the CSM 1.6.x releases.
+**NOTE** this procedure has changed since the CSM 1.6.x releases.
 
 1. Follow a node's console logs.
 

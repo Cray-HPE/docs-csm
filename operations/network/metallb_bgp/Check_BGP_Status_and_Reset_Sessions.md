@@ -1,6 +1,6 @@
 # Check BGP Status and Reset Sessions
 
-Check the Border Gateway Protocol \(BGP\) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state.
+Check the Border Gateway Protocol (BGP) status on the Aruba and Mellanox switches and verify that all sessions are in an Established state.
 If the state of any session in the table is Idle, then the BGP sessions must be reset.
 
 - [Prerequisites](#prerequisites)

@@ -72,10 +72,10 @@ In order to simplify HNC management CSM NCNs are installed with the `kubectl-hns
 
     ```text
     Manipulates hierarchical namespaces provided by HNC
-    
+
     Usage:
       kubectl-hns [command]
-    
+
     Available Commands:
       completion  generate the autocompletion script for the specified shell
       config      Manipulates the HNC configuration
