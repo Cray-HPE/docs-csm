@@ -35,12 +35,12 @@
 Jenkinsfile.github                                       @Cray-HPE/ci
 
 # CMS Items
-/operations/boot_orchestration                           @Cray-HPE/cms-core-bos
-/operations/CSM_product_management                       @Cray-HPE/cms-core-cfs @Cray-HPE/cms-core-csm-product
-/operations/conman                                       @Cray-HPE/cms-core-console-logging
-/operations/compute_rolling_upgrades                     @Cray-HPE/cms-core-crus
-/operations/configuration_management                     @Cray-HPE/cms-core-cfs @Cray-HPE/cms-core-vcs
-/operations/image_management                             @Cray-HPE/cms-core-ims @Cray-HPE/cms-core-images
+/operations/boot_orchestration                           @Cray-HPE/cray-management-systems
+/operations/CSM_product_management                       @Cray-HPE/cray-management-systems
+/operations/conman                                       @Cray-HPE/cray-management-systems
+/operations/compute_rolling_upgrades                     @Cray-HPE/cray-management-systems
+/operations/configuration_management                     @Cray-HPE/cray-management-systems
+/operations/image_management                             @Cray-HPE/cray-management-systems
 
 # User Access items
 /operations/UAS_user_and_admin_topics                    @Cray-HPE/user-access
