@@ -489,10 +489,10 @@ NEXUS_USERNAME=$(kubectl -n nexus get secret nexus-admin-credential --template {
 NEXUS_PASSWORD=$(kubectl -n nexus get secret nexus-admin-credential --template {{.data.password}} | base64 -d)
 ```
 
-(`ncn-mw#`) Then delete the repository (replace `NAME` as appropriate):
+(`ncn-mw#`) Then delete the repository (replace `REPOSITORY-NAME` as appropriate):
 
 ```bash
-curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/NAME"
+curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" -sfkSL -X DELETE "https://packages.local/service/rest/beta/repositories/REPOSITORY-NAME"
 ```
 
 ### Create a blob store
@@ -511,12 +511,12 @@ Installers typically define Nexus blob stores in `nexus-blobstores.yaml` and rel
 
 ### Delete a blob store
 
-To delete a blob store, send an HTTP `DELETE` request to the `/service/rest/v1/blobstores/NAME` endpoint.
+To delete a blob store, send an HTTP `DELETE` request to the `/service/rest/v1/blobstores/BLOB-STORE-NAME` endpoint.
 
 (`ncn-mw#`) For example:
 
 ```bash
-curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/NAME"
+curl -u "$NEXUS_USERNAME:$NEXUS_PASSWORD" -sfkSL -X DELETE "https://packages.local/service/rest/v1/blobstores/BLOB-STORE-NAME"
 ```
 
 ### Authenticate to access the REST API
