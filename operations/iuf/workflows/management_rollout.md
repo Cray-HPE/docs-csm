@@ -530,6 +530,8 @@ for details on how to query the images and CFS configurations and see the [updat
     hook.cray-nls.hpe.com "cos-prechecks-for-worker-reboots" deleted
     ```
 
+**NOTE:** Please cleanup any unused PE images before management-nodes-rollout of NCN worker node(s). For safe removal of PE images please see [`iSCSI_Best_Practices`](../../iscsi_sbps/Best_Practices.md) documentation.
+
 **NOTE** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN worker nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`. If monitoring progress with the Argo UI,
 remember to include these workflows.
 

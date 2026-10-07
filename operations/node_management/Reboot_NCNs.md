@@ -12,6 +12,10 @@ The following is a high-level overview of the non-compute node (NCN) reboot work
 
 1. Run the rolling NCN reboot procedure.
 
+   **NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in
+   misalignment of iSCSI LUN indexes which leads to iSCSI LUN remapping and I/O errors. Please plan to delete
+   the PE images before management-nodes-rollout of worker node(s) which includes rebuild is done.
+
    Loop through reboots on storage nodes, worker nodes, and master nodes, where each reboot consists of the following workflow:
 
    1. Establish console session with node to reboot.
