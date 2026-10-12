@@ -28,6 +28,11 @@ For additional reference material on the upgrade processes and scripts mentioned
   For more information about modifying `customizations.yaml` and tuning for specific systems, see
   [Post-Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
 
+
+###  Preparatory step to follow to avoid issues with iSCSI SBPS
+
+**NOTE:** Please cleanup any unused PE images before management-nodes-rollout of NCN worker node(s). For safe removal of PE images please see [`iSCSI_Best_Practices`](../operations/iscsi_sbps/Best_Practices.md) documentation.
+
 ## Upgrade stages
 
 The upgrade to CSM 1.7 is done through IUF. Follow one of the following two procedures:
