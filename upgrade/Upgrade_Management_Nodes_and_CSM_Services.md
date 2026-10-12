@@ -30,7 +30,7 @@ For additional reference material on the upgrade processes and scripts mentioned
 
 ###  Preparatory step to follow to avoid issues with iSCSI SBPS
 
-**NOTE:** Please cleanup any unused PE images before management-nodes-rollout of NCN worker node(s). For safe removal of PE images please see [`iSCSI_Best_Practices`](../operations/iscsi_sbps/Best_Practices.md) documentation.
+Please cleanup any unused PE images before management-nodes-rollout of NCN worker node(s). For safe removal of PE images please see [`iSCSI_Best_Practices`](../operations/iscsi_sbps/Best_Practices.md) documentation.
 
 ## Upgrade stages
 
