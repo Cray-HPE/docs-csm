@@ -28,7 +28,7 @@ For additional reference material on the upgrade processes and scripts mentioned
   For more information about modifying `customizations.yaml` and tuning for specific systems, see
   [Post-Install Customizations](../operations/CSM_product_management/Post_Install_Customizations.md).
 
-### Deleting unused PE Images 
+### Delete unused PE Images
 
 Please cleanup any unused PE images before management-nodes-rollout of NCN worker node(s). For safe removal of PE images please see [`iSCSI_Best_Practices`](../operations/iscsi_sbps/Best_Practices.md) documentation.
 
