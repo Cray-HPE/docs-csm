@@ -167,7 +167,7 @@ def _verify_upgrade_version(starting_version: str, upgrade_version: str) -> bool
     Checks that the version being run is a greater version than the Ceph version
     that is currently running.
     """
-    if version.parse(starting_version) == version.parse(upgrade_version):
+    if version.parse(starting_version) >= version.parse(upgrade_version):
         print(f'Ceph version is already {starting_version}. Nothing to upgrade.')
         return False
     if not version.parse(starting_version) < version.parse(upgrade_version):
