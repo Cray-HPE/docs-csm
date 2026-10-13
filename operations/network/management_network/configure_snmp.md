@@ -70,7 +70,7 @@ Find Aruba-specific documentation in the [Aruba Management Docs](aruba/README.md
 
 ```console
 conf t
-   snmp-server vrf default
+   snmp-server vrf CSM 
    snmpv3 user testuser auth md5 auth-pass plaintext xxxxxx priv des priv-pass plaintext xxxxx
 ```
 
