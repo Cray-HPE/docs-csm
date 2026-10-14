@@ -30,7 +30,7 @@ same stage does not always reproduce it.
 
 ### Workaround
 
-1. Confirm the failure is this race by checking that the `deliver-product` Argo logs show a
+1. Ensure the failure is whether the race condition mentioned by checking that the `deliver-product` Argo logs show a
    `500 Server Error` on `.../org/cray/repos` for a repository shared by more than one product
    architecture variant.
 
