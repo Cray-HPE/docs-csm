@@ -1,4 +1,4 @@
-# Race Condition Creating Gitea Repository During IUF `deliver-product`
+# Race Condition Creating Gitea Repository during IUF `deliver-product` Stage
 
 ## Summary
 
@@ -6,16 +6,11 @@ During the IUF `deliver-product` stage, `cf-gitea-import` can fail with a
 `500 Internal Server Error` while creating a Gitea repository. This happens when two product
 variants (for example, the same product built for two different architectures, such as
 `aarch64` and `x86_64`) are delivered in the same IUF session and both resolve to the **same**
-Gitea repository name (e.g. a shared `*-config-management` repository).
+Gitea repository name (e.g. a shared `slingshot-shmem-config-management` repository).
 
-`cf-gitea-import` creates the repository with a `POST` to `/vcs/api/v1/org/<org>/repos` before
-importing content. When two `deliver-product` sub-workflows for different architecture variants
-of the same product start at (or very near) the same time, both issue this `POST` call almost
-simultaneously. Gitea's repository-creation endpoint is not safely idempotent under this kind of
-concurrent, identical request: only one caller's request actually creates the repository. The
-losing caller does not receive the "repository already exists" response that `cf-gitea-import`
-already knows how to tolerate; instead it receives `500 Internal Server Error`, which is not
-caught, so `resp.raise_for_status()` raises an unhandled `HTTPError` and the stage fails:
+`cf-gitea-import` tries creating the repository before importing content. When two `deliver-product` sub-workflows for different architecture variants of the same product requests creating the same repository to be handled near-simultaneous(
+collision), both tries creating the same repository almost simultaneously while the first sub-workflow receives "repository already exists" or "successfully created" response
+while the second sub-workflow instead receives `500 Internal Server Error` and the stage fails:
 
 ```text
 DEBUG - Attempting to create gitea repository: https://api-gw-service-nmn.local/vcs/api/v1/org/cray/repos
@@ -29,10 +24,8 @@ Traceback (most recent call last):
 requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://api-gw-service-nmn.local/vcs/api/v1/org/cray/repos
 ```
 
-If there is any time gap between the two `POST` calls (rather than a near-simultaneous
-collision), the second caller correctly receives the "already exists" response from Gitea and
-`cf-gitea-import` proceeds normally without error. The failure is therefore a narrow,
-timing-dependent race rather than a deterministic misconfiguration, which is why re-running the
+If there is no near-simultaneous(collision), the second caller also receives the "repository already exists" response from Gitea and `cf-gitea-import` proceeds normally without error.
+The failure is timing-dependent race rather than a deterministic misconfiguration, which is why re-running the
 same stage does not always reproduce it.
 
 ### Workaround
