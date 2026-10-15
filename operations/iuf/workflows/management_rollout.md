@@ -536,7 +536,7 @@ Refer to that table and any corresponding product documents before continuing to
 
 - If new Slingshot NIC firmware has been released, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Host Software Installation and Configuration Guide (S-9009) for CSM_ for details on how to update NIC firmware on management nodes.
 
-    i. Locate the Slingshot NIC firmware rpms and ensure _pdsh_ is installed on the target nodes.
+    Locate the Slingshot NIC firmware `rpms` and ensure `pdsh` is installed on the target nodes.
 
     ```bash
     cd $MEDIA_DIR
@@ -545,20 +545,20 @@ Refer to that table and any corresponding product documents before continuing to
     pdsh -V
     ```
 
-    ii. Copy the two new rpms to the target nodes
+    Copy the two new rpms to the target nodes
 
     ```bash
     pdsh -w $(kubectl get nodes | grep ncn-w | cut -f1 -d" " | xargs | sed 's/ /,/g') 'zypper --non-interactive install pdsh' | dshbak -c
     pdcp -w $(kubectl get nodes | grep ncn-w | cut -f1 -d" " | xargs | sed 's/ /,/g') slingshot-host-software-14.0.0-31-sle15-sp7_x86_64/rpms/cassini/sle15-sp7/ncn/slingshot-firmware-management-2.1.1-SHS14.0.0_20260202212512_382621c0bd58.noarch.rpm slingshot-host-software-14.0.0-31-sle15-sp7_x86_64/rpms/cassini/sle15-sp7/ncn/slingshot-firmware-cassini-1.5.61-SHS14.0.0_20260127140241_068a29ca68b1.noarch.rpm /tmp/
     ```
 
-    iii. Install the new rpms on the target nodes
+    Install the new rpms on the target nodes
 
     ```bash
     pdsh -w $(kubectl get nodes | grep ncn-w | cut -f1 -d" " | xargs | sed 's/ /,/g') 'rpm -Uvh /tmp/slingshot-firmware*rpm' | dshbak -c
     ```
 
-    iv. Check and update firmware version if needed.
+    check and update firmware version if needed.
 
     ```bash
     pdsh -w $(kubectl get nodes | grep ncn-w | cut -f1 -d" " | xargs | sed 's/ /,/g') slingshot-firmware query | dshbak -c
@@ -566,7 +566,7 @@ Refer to that table and any corresponding product documents before continuing to
     pdsh -w $(kubectl get nodes | grep ncn-w | cut -f1 -d" " | xargs | sed 's/ /,/g') slingshot-firmware query | dshbak -c
     ```
 
-- After updating management host Slingshot NIC firmware, all NCN worker nodes where the firmware has been updated must be power cycled. This is done as part of management nodes rebuild procedure.
+    After updating management host Slingshot NIC firmware, all NCN worker nodes where the firmware has been updated must be power cycled. This is done as part of management nodes rebuild procedure.
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN worker node.
 This will rebuild the canary node with the new CFS configuration and image built in previous steps of the workflow.
