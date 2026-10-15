@@ -1190,6 +1190,11 @@ Expat-15
 # To allow Site Init
 Init
 
+- troubleshooting/known_issues/iuf_gitea_repo_creation_race_deliver_product.md
+slingshot-shmem-config-management
+slingshot-shmem
+gitea
+
 - troubleshooting/debugging_with_hms_pprof_images.md
 mutexes
 
