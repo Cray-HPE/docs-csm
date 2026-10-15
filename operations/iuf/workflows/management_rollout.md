@@ -532,15 +532,14 @@ remember to include these workflows.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-**NOTE**  This subsection to update NIC firmware on management nodes is required only if new "Slingshot NIC firmware" has been released
+**NOTE**  The below procedure to update NIC firmware on management nodes is required only if new "Slingshot NIC firmware" has been released.
 
 - If new Slingshot NIC firmware has been released, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Host Software Installation and Configuration Guide (S-9009) for CSM_ for details on how to update NIC firmware on management nodes.
 
-    i. Locate the rpms and ensure pdsh is installed on the target nodes, so the pdcp command will exist
+    i. Locate the Slingshot NIC firmware rpms and ensure _pdsh_ is installed on the target nodes.
 
     ```bash
     cd $MEDIA_DIR
-    Locate the rpms
     find . -name slingshot-firmware* | grep -v cassini2
 
     pdsh -V
@@ -567,7 +566,7 @@ Refer to that table and any corresponding product documents before continuing to
     pdsh -w $(kubectl get nodes | grep ncn-w | cut -f1 -d" " | xargs | sed 's/ /,/g') slingshot-firmware query | dshbak -c
     ```
 
-- After updating management host Slingshot NIC firmware, all NCN worker nodes where the firmware has been updated must be power cycled. which is done as part of management nodes rebuild procedure.
+- After updating management host Slingshot NIC firmware, all NCN worker nodes where the firmware has been updated must be power cycled. This is done as part of management nodes rebuild procedure.
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN worker node.
 This will rebuild the canary node with the new CFS configuration and image built in previous steps of the workflow.
