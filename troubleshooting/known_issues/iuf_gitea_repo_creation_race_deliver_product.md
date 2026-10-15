@@ -1,8 +1,8 @@
-# Race Condition Creating Gitea Repository during IUF `deliver-product` Stage
+# Troubleshooting guide for IUF `deliver-product` stage failure for slingshot-shmem-config-management creating gitea repository 
 
-## Summary
+## Description
 
-During the IUF `deliver-product` stage, `cf-gitea-import` can fail with a
+During upgrades the IUF `deliver-product` stage, `cf-gitea-import` can fail with a
 `500 Internal Server Error` while creating a Gitea repository. This happens when two product
 variants (for example, the same product built for two different architectures, such as
 `aarch64` and `x86_64`) are delivered in the same IUF session and both resolve to the **same**
@@ -27,6 +27,15 @@ requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: 
 If there is no near-simultaneous(collision), the second caller also receives the "repository already exists" response from Gitea and `cf-gitea-import` proceeds normally without error.
 The failure is timing-dependent race rather than a deterministic misconfiguration, which is why re-running the
 same stage does not always reproduce it.
+
+## Symptoms
+
+- IUF `deliver-product` stage fail with a
+`500 Internal Server Error` while creating a Gitea repository.
+
+## Impact
+
+- IUF `deliver-product` stage may not complete.
 
 ### Workaround
 
