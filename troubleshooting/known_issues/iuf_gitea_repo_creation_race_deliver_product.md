@@ -1,16 +1,15 @@
-# Troubleshooting guide for IUF `deliver-product` stage failure for slingshot-shmem-config-management creating gitea repository 
+# slingshot-shmem-config-management VCS repository creation fails with a `500 Internal Server Error`
 
 ## Description
 
-During upgrades the IUF `deliver-product` stage, `cf-gitea-import` can fail with a
-`500 Internal Server Error` while creating a Gitea repository. This happens when two product
-variants (for example, the same product built for two different architectures, such as
-`aarch64` and `x86_64`) are delivered in the same IUF session and both resolve to the **same**
-Gitea repository name (e.g. a shared `slingshot-shmem-config-management` repository).
+During _slingshot-shmem_ upgrade with IUF, the `deliver-product` stage fails with `500 Internal Server Error`.
+This happens when creating VCS repository for _slingshot-shmem_(`slingshot-shmem-config-management`).
+_slingshot-shmem_ has two different branches for two different architectures(`aarch64` and `x86_64`).
 
-`cf-gitea-import` tries creating the repository before importing content. When two `deliver-product` sub-workflows for different architecture variants of the same product requests creating the same repository to be handled near-simultaneous(
-collision), both tries creating the same repository almost simultaneously while the first sub-workflow receives "repository already exists" or "successfully created" response
-while the second sub-workflow instead receives `500 Internal Server Error` and the stage fails:
+IUF operation to import VCS artifacts for the two different architectures initially creates the repository.
+During repository creation, if the request to create repository is given simultaneously to gitea for the two different branches, one of the requests succeeds while other fails with `500 Internal Server Error`
+
+## Symptoms
 
 ```text
 DEBUG - Attempting to create gitea repository: https://api-gw-service-nmn.local/vcs/api/v1/org/cray/repos
@@ -24,37 +23,22 @@ Traceback (most recent call last):
 requests.exceptions.HTTPError: 500 Server Error: Internal Server Error for url: https://api-gw-service-nmn.local/vcs/api/v1/org/cray/repos
 ```
 
-If there is no near-simultaneous(collision), the second caller also receives the "repository already exists" response from Gitea and `cf-gitea-import` proceeds normally without error.
-The failure is timing-dependent race rather than a deterministic misconfiguration, which is why re-running the
-same stage does not always reproduce it.
-
-## Symptoms
-
-- IUF `deliver-product` stage fail with a
-`500 Internal Server Error` while creating a Gitea repository.
-
 ## Impact
 
-- IUF `deliver-product` stage may not complete.
+- IUF `deliver-product` stage fail with a `500 Internal Server Error` while creating a Gitea repository.
 
 ### Workaround
 
-1. Ensure the failure is whether the race condition mentioned by checking that the `deliver-product` Argo logs show a
-   `500 Server Error` on `.../org/cray/repos` for a repository shared by more than one product
-   architecture variant.
-
-1. Re-run the `deliver-product` stage:
+1. Rerun the `deliver-product` stage:
 
     ```bash
     iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run --site-vars "${ADMIN_DIR}/site_vars.yaml" -bpcd "${ADMIN_DIR}" -r deliver-product --force
     ```
 
-    On the re-run, the repository already exists (created by the variant that won the original
-    race), so `cf-gitea-import` receives the "repository already exists" response and continues
-    without error.
+    On the rerun, since the repository already exists the `deliver-product` stage succeeds with "repository already exists" message.
 
-1. Verify the repository is present and importable:
+1. Verify the repository is present :
 
     ```bash
-    curl -s https://api-gw-service-nmn.local/vcs/api/v1/repos/cray/<repo_name>
+    curl -s https://api-gw-service-nmn.local/vcs/api/v1/repos/cray/slingshot-shmem-config-management
     ```
