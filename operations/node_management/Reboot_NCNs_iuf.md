@@ -43,6 +43,10 @@ Follow the steps below to reboot storage nodes:
 
 ### 1.2 NCN worker nodes
 
+**NOTE:** Please avoid deleting any PE images before rebooting any NCN worker node(s) as it might result in misalignment of iSCSI LUN
+indexes which leads to iSCSI LUN remapping and I/O errors. Please plan to delete the PE images before management-nodes-rollout of
+worker node(s) which includes rebuild is done.
+
 **NOTE** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-reboot=true` is not set on any of the nodes passed in the list.
 
 1. (`ncn-m001#`) Verify if any nodes are labeled with `iuf-prevent-reboot=true`.
