@@ -61,6 +61,8 @@ uan_sles_repositories:
 **Note:** This step is required until the USS fix to include LTSS repo in the base image recipe which will be delivered
 in USS 1.3.7. This step can be skipped if USS 1.3.7 or higher version is installed.
 
+Please see [Support Documentation](https://support.hpe.com/hpesc/public/docDisplay?docId=dp00007877en_us&page=operations/Images_built_with_USS_1_3_6_do_not_include_the_MUNGE_security_fix.html) for complete details.
+
 1. Restart the IMS pod to pick up the `configmap` change
 
 ```bash

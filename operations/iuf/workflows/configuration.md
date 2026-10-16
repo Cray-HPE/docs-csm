@@ -37,11 +37,11 @@ corresponding customer working branch.
 - If there are workarounds checked into VCS that modify the HPE-provided Ansible plays or roles and the workarounds are no longer needed in the new version of software being upgraded to, it is beneficial to revert the workarounds
   prior to running the `update-vcs-config` stage to avoid merge conflicts.
 
-    For example, if the following workaround was present in the Slurm `integration-1.2.9` branch:
+    For example, if the following workaround was present in the USS `integration-1.2.9` branch:
 
     ```bash
-    ncn-m001:/mnt/admin/cfg/slurm-config-management# git checkout integration-1.2.9
-    ncn-m001:/mnt/admin/cfg/slurm-config-management# git log
+    ncn-m001:/mnt/admin/cfg/uss-config-management# git checkout integration-1.2.9
+    ncn-m001:/mnt/admin/cfg/uss-config-management# git log
     commit 133d5fc815aafd502d3aca07961524e4f9eab445 (origin/integration-1.2.9, integration-1.2.9)
     Author: Joe Smith <joe.smith@example.com>
     Date:   Fri Mar 3 19:26:53 2023 +0000
@@ -49,13 +49,13 @@ corresponding customer working branch.
     Workaround for bug #234232
     ```
 
-    ... and an upgrade to Slurm `integration-1.2.10` is being performed, then a new working branch should be created and the workaround should be reverted from the new branch:
+    ... and an upgrade to USS `integration-1.2.10` is being performed, then a new working branch should be created and the workaround should be reverted from the new branch:
 
     ```bash
-    ncn-m001:/mnt/admin/cfg/slurm-config-management# git branch integration-1.2.10
-    ncn-m001:/mnt/admin/cfg/slurm-config-management# git checkout integration-1.2.10
-    ncn-m001:/mnt/admin/cfg/slurm-config-management# git revert 133d5fc815aafd502d3aca07961524e4f9eab445
-    ncn-m001:/mnt/admin/cfg/slurm-config-management# git push
+    ncn-m001:/mnt/admin/cfg/uss-config-management# git branch integration-1.2.10
+    ncn-m001:/mnt/admin/cfg/uss-config-management# git checkout integration-1.2.10
+    ncn-m001:/mnt/admin/cfg/uss-config-management# git revert 133d5fc815aafd502d3aca07961524e4f9eab445
+    ncn-m001:/mnt/admin/cfg/uss-config-management# git push
     ```
 
     When the `update-vcs-config` stage is run, IUF will now use the `integration-1.2.10` branch, and the merge conflict that would have occurred will be avoided as the workaround was reverted.
