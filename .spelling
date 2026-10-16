@@ -1086,6 +1086,12 @@ unexecuted
 unlabeled
 userspace
 
+- operations/iuf/workflows/management_rollout.md
+rpms
+pdsh
+pdcp
+i 
+
 - operations/network/dns/DNS.md
 ExternalDNS
 
