@@ -531,5 +531,5 @@ After all nodes are rolled out, validate the system:
 ## 6. Next steps
 
 - Return to the
-  [Install Rapid Release Update with IUF](installation_iuf.md)
+  [Deploying Rapid Release Update with IUF](installation_iuf.md)
   workflow to continue the install.

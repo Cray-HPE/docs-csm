@@ -79,5 +79,5 @@ patches.
 ## Next steps
 
 - Return to the
-  [Install Rapid Release Update with IUF](installation_iuf.md)
+  [Deploying Rapid Release Update with IUF](installation_iuf.md)
   workflow to continue the install.

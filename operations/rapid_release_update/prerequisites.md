@@ -46,11 +46,9 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
 ### 4. Prepare for the install
 
 1. An operational CSM system at a base version supported by the selected RRU
-   (see the [supported CSM baselines](csm-security-rru-overview.md#supported-csm-base-versions)).
+   (see the [supported CSM baselines](rru-overview.md#supported-csm-base-versions)).
 1. IUF CLI available on `ncn-m001` (`iuf list-stages`)
 1. `sat` CLI available (`sat --version`)
-1. A published `csm-security` RRU and its checksum file, qualified for the
-   installed CSM and SLE versions.
 1. `product_vars.yaml`, `site_vars.yaml`, and the active bootprep file are
    current for the installed recipe and site (see below).
 
@@ -77,7 +75,7 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
    Adjust `BOOTPREP_FILE`, `SITE_VARS`, and `RECIPE_VARS` if your site uses different paths.
 
 ```bash
-export CSM_SEC_VERSION=@@security_patch_version@@
+export CSM_SEC_VERSION=<Rapid_Release_Update_Version>
 export VERSION=$(echo $CSM_SEC_VERSION | cut -f6 -d-)
 export ACTIVITY_NAME="csm-sec-$VERSION"
 export MEDIA_DIR="/etc/cray/upgrade/csm/media/csm-security/${CSM_SEC_VERSION}"
@@ -100,7 +98,7 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
    (`workstation#`) Set the required variables and copy the tarball:
 
    ```bash
-   CSM_SEC_VERSION=@@security_patch_version@@
+   CSM_SEC_VERSION=<Rapid_Release_Update_Version>
    MEDIA_DIR="/etc/cray/upgrade/csm/media/csm-security/${CSM_SEC_VERSION}"
    scp -p csm-security-${CSM_SEC_VERSION}.tar.gz <ncn-m001>:${MEDIA_DIR}/
    ```
@@ -118,5 +116,5 @@ Once the above steps are completed:
 ### 6. Next steps
 
 - Return to the
-  [Install Rapid Release Update with IUF](installation_iuf.md)
+  [Deploying Rapid Release Update with IUF](installation_iuf.md)
   workflow to continue the install.

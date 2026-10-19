@@ -56,5 +56,5 @@ iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run \
 ## 3. Next steps
 
 - Return to the
-  [Install Rapid Release Update with IUF](installation_iuf.md)
+  [Deploying Rapid Release Update with IUF](installation_iuf.md)
   workflow to continue the install.
