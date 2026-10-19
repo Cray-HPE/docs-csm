@@ -1,0 +1,53 @@
+# Rapid Release Update - 26.09.01 — Release Notes
+
+This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.1
+
+This page documents the changes introduced by this RRU, compared to the previous RRU version. 
+
+* [CVE fixes](#cve-fixes)
+* [Deploy steps](#deploy-steps)
+
+## CVEs Fixes
+
+CVEs fixed which have NVD score > 9.
+
+* `CVE-2026-53398` - Linux Kernel NFSD SECINFO_NO_NAME Use-After-Free
+Improper cleanup when decoding a truncated NFS SECINFO_NO_NAME request can leave a stale export pointer behind, resulting in a use-after-free that may cause memory corruption or denial of service.
+* `CVE-2026-53399` - Linux Kernel NFSD Layout Stateid Use-After-Free
+On a layout setlease failure, an NFSD layout stateid is freed without being removed from the IDR, leaving a dangling pointer that later IDR walkers can dereference, leading to a use-after-free.
+* `CVE-2026-63795` - Linux Kernel 9p Client Reference Underflow
+The 9p client may drop an extra reference to a shared fid on a walk error path, which can clunk a still-in-use fid and trigger a use-after-free or refcount underflow.
+* `CVE-2026-63912` - Linux Kernel IPsec ESP Page Fragment Handling Flaw
+A vulnerability in the Linux kernel IPsec ESP output path may incorrectly allow a fast path when the combined packet fragment length exceeds a page. A local user could potentially trigger memory corruption in packet processing, impacting confidentiality, integrity, or availability.
+* `CVE-2026-63922` - Linux Kernel IPv6 Extension Header Pointer Handling Flaw
+A flaw in IPv6 extension header parsing may continue using a stale network header pointer after packet buffer storage changes. A local user could potentially trigger memory corruption during IPv6 packet processing, leading to privilege escalation or denial of service.
+* `CVE-2026-63924` - Linux Kernel IPv6 Jumbo Header Pointer Handling Flaw
+A vulnerability in IPv6 jumbo payload option handling may fail to refresh internal packet header pointers after packet buffer changes. A local user could potentially trigger memory corruption during IPv6 extension header processing, affecting system confidentiality, integrity, or availability.
+* `CVE-2026-63938` - Linux Kernel KVM SEV PSC Buffer Validation Flaw
+A vulnerability in Linux kernel KVM SEV handling may fail to properly validate Page State Change request indices against the effective scratch buffer size. A local user with access to affected virtualization functionality could cause memory corruption, potentially impacting confidentiality, integrity, or availability.
+* `CVE-2026-63939` - Linux Kernel KVM SEV Scratch Buffer Length Calculation Flaw
+A related KVM SEV issue may calculate the available GHCB scratch buffer length incorrectly when the guest-provided pointer does not start at the beginning of the shared buffer. A local user with access to affected virtualization paths could trigger buffer handling errors that may affect system confidentiality, integrity, or availability.
+* `CVE-2026-63940` - Linux Kernel KVM SEV Zero-Length Port I/O Handling Flaw
+A flaw in KVM SEV handling of zero-length Port I/O requests could allow invalid scratch-area length processing. A local user with access to affected virtualization functionality could potentially cause kernel instability or denial of service.
+* `CVE-2026-63984` - Linux Kernel IPv6 RPL Header Length Overflow
+A flaw in IPv6 RPL source routing header decompression may allow the computed header length to overflow and truncate. A local user able to exercise affected RPL packet handling could cause header corruption, potentially leading to denial of service or broader kernel impact.
+* `CVE-2026-63994` - Linux Kernel Tunnel PMTU Use-After-Free
+A vulnerability in Linux kernel tunnel Path MTU Discovery handling may cache IP header pointers before a socket buffer copy-on-write operation that can move packet memory. A local user could potentially trigger a use-after-free condition during tunnel ICMP or ICMPv6 processing, impacting confidentiality, integrity, or availability.
+* `CVE-2026-64025` - Linux Kernel BPF Sockmap and KTLS Race Condition
+A race condition between BPF sockmap verdict handling and kernel TLS receive processing may cause the kernel to access freed socket buffer memory. A highly privileged local user able to configure the affected BPF and TLS socket paths could potentially trigger memory corruption or denial of service.
+* `CVE-2026-64089` - Linux Kernel B.A.T.M.A.N. Advanced Length Handling Flaw
+A flaw in the B.A.T.M.A.N. advanced mesh networking subsystem may allow a translation-table length value to wrap into a negative signed value. In affected adjacent-network mesh configurations, this could result in disclosure of uninitialized kernel memory.
+* `CVE-2026-64106` - Linux Kernel KVM ARM64 VGIC ITS Restore Validation Flaw
+A flaw in KVM ARM64 virtual interrupt controller restore handling may accept a restored ITS device table entry with an out-of-range EventID size. A local user with access to affected virtual machine restore paths could cause oversized table processing, potentially resulting in information disclosure or denial of service.
+* `CVE-2026-64564` - Linux Kernel SCTP ASCONF DEL-IP Use-After-Free
+A flaw in SCTP ASCONF DEL-IP processing can free the transport the ASCONF is being processed against, leaving a dangling pointer that is reused by a following wildcard DEL-IP. This use-after-free can corrupt association state and lead to memory corruption or denial of service.
+* `CVE-2026-64530` - Linux Kernel net/sched cls_api Use-After-Free
+The traffic-control qevent handler did not account for TC_ACT_CONSUMED, so a socket buffer already consumed by the defragmentation engine (for example act_ct on out-of-order fragments) could be reused by the RED qdisc, resulting in a use-after-free.
+* `CVE-2026-53131` - Linux Kernel Netfilter Ethernet Header Out-of-Bounds Access
+Several netfilter and ipset paths accessed the Ethernet MAC header without first confirming the socket buffer is from an Ethernet device with a valid, fully present header, which could lead to out-of-bounds memory access.
+* `CVE-2026-52986` - Linux Kernel Netfilter SIP Conntrack Out-of-Bounds Read
+The SIP connection-tracking helper used unsafe port parsing with simple_strtoul() on non-NUL-terminated packet data, allowing out-of-bounds reads on malformed packets; the fix adds a bounds-checked port parser.
+
+## Deploy RRU
+
+See [Rapid Release Update (RRU) for CSM kernel CVE fixes](rru_overview.md).
