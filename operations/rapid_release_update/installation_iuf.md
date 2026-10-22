@@ -31,23 +31,10 @@ The deployment workflow comprises the following steps. Instructions should be ex
 
    Follow the [Management Nodes Rollout](management_nodes_rollout.md) instructions.
 
-1. [Further Reading](#further-reading)
+1. Post-Rollout Verification
 
-## Further Reading
+   Follow the [Post-Rollout Verification](post_rollout_verification.md) instructions.
 
-For comprehensive IUF documentation including advanced workflows, stage details,
-and troubleshooting, refer to the official CSM documentation for your installed
-CSM version:
-
-- **Online:** <https://cray-hpe.github.io/docs-csm/en-17/operations/iuf/iuf/>
-- **On-system:** If the `docs-csm` RPM matching your CSM version is installed,
-  IUF documentation is available locally at `/usr/share/doc/csm/operations/iuf/`
-
-Install or update the docs RPM:
-
-```bash
-zypper install -y docs-csm
-```
-
-> **Note:** IUF behavior and available stages may differ between CSM versions.
-> Always reference the documentation that matches your installed CSM release.
+1. Return to the
+  [Rapid Release Update (RRU) for CSM kernel CVE fixes](rru_overview.md)
+ for [Further Reading](rru_overview.md#further-reading) section of Deploying Steps.

@@ -4,9 +4,8 @@
 * [Terminology](#terminology)
 * [Valid upgrade paths](#valid-upgrade-paths)
 * [CSM upgrade procedures](#csm-upgrade-procedures)
-    * [Option 1: Upgrade CSM with additional HPE Cray EX software products](#option-1-upgrade-csm-with-additional-hpe-cray-ex-software-products)
-    * [Option 2: Upgrade only additional HPE Cray EX software products](#option-2-upgrade-only-additional-hpe-cray-ex-software-products)
-    * [Option 3: Upgrade only CSM](#option-3-upgrade-only-csm)
+* [Update NCNs with Rapid Release Update](#update-ncns-with-rapid-release-update)
+* [Further Reading](#further-reading)
 
 ## Overview
 
@@ -53,3 +52,21 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 2. For troubleshooting common failures, see [Troubleshooting Guide](troubleshooting.md).
 3. For rollback procedure, see [Rollingback RRU](rollback.md).
 
+## Further Reading
+
+For comprehensive IUF documentation including advanced workflows, stage details,
+and troubleshooting, refer to the official CSM documentation for your installed
+CSM version:
+
+- **Online:** <https://cray-hpe.github.io/docs-csm/en-17/operations/iuf/iuf/>
+- **On-system:** If the `docs-csm` RPM matching your CSM version is installed,
+  IUF documentation is available locally at `/usr/share/doc/csm/operations/iuf/`
+
+Install or update the docs RPM:
+
+```bash
+zypper install -y docs-csm
+```
+
+> **Note:** IUF behavior and available stages may differ between CSM versions.
+> Always reference the documentation that matches your installed CSM release.

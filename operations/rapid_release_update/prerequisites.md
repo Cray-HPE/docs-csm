@@ -75,7 +75,7 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
    Adjust `BOOTPREP_FILE`, `SITE_VARS`, and `RECIPE_VARS` if your site uses different paths.
 
 ```bash
-export CSM_SEC_VERSION=<Rapid_Release_Update_Version>
+export CSM_SEC_VERSION=Rapid-Update-sle15-sp7-171-26.10.01
 export VERSION=$(echo $CSM_SEC_VERSION | cut -f6 -d-)
 export ACTIVITY_NAME="csm-sec-$VERSION"
 export MEDIA_DIR="/etc/cray/upgrade/csm/media/csm-security/${CSM_SEC_VERSION}"
@@ -98,7 +98,7 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
    (`workstation#`) Set the required variables and copy the tarball:
 
    ```bash
-   CSM_SEC_VERSION=<Rapid_Release_Update_Version>
+   CSM_SEC_VERSION=Rapid-Update-sle15-sp7-171-26.10.01
    MEDIA_DIR="/etc/cray/upgrade/csm/media/csm-security/${CSM_SEC_VERSION}"
    scp -p csm-security-${CSM_SEC_VERSION}.tar.gz <ncn-m001>:${MEDIA_DIR}/
    ```
