@@ -11,6 +11,7 @@ This section updates the software running on management NCNs.
     - [2.1 `management-nodes-rollout` with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade)
     - [2.2 `management-nodes-rollout` without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade)
     - [2.3 NCN worker nodes](#23-ncn-worker-nodes)
+    - [2.4 Update Ceph manager endpoints for Grafana](#24-update-ceph-manager-endpoints-for-grafana)
 1. [Next steps](#3-next-steps)
 
 ## 1. Update management host firmware (FAS)
@@ -201,6 +202,8 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
         ```
 
         The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
+
+    1. **Optional, only if Rack Resiliency is enabled:** Follow [2.4 Update Ceph manager endpoints for Grafana](#24-update-ceph-manager-endpoints-for-grafana) and then return here.
 
     1. (`ncn-m001#`) Upgrade the remaining NCN storage nodes once the first has upgraded successfully. This upgrades NCN storage nodes serially.
     Get the number of storage nodes based on the cluster and verify that it is correct. The storage canary node should not be in the list since it has already been upgraded.
@@ -653,6 +656,72 @@ Once this step has completed:
 Return to the procedure that was being followed for `management-nodes-rollout` to complete the next step:
 either [Management-nodes-rollout with CSM upgrade](#21-management-nodes-rollout-with-csm-upgrade) or
 [Management-nodes-rollout without CSM upgrade](#22-management-nodes-rollout-without-csm-upgrade).
+
+### 2.4 Update Ceph manager endpoints for Grafana
+
+> This step is optional and applies only if Rack Resiliency is enabled.
+
+With Rack Resiliency enabled, the storage canary rollout may move Ceph managers to other storage nodes. If `nmn_ncn_storage_mons` in
+`customizations.yaml` no longer matches them, Grafana Ceph dashboards show no data.
+
+1. (`ncn-m001#`) Compare the Ceph manager IP addresses with those in `customizations.yaml`. If they match, skip the rest of this section.
+
+    ```bash
+    CEPH_MGR_IPS=$(for host in $(ceph orch ps --daemon_type mgr -f json | jq -r '.[].hostname' | sort -u); do
+        ceph orch host ls -f json | jq -r --arg host "${host}" '.[] | select(.hostname == $host) | .addr'
+    done | sort -V | xargs)
+    CUSTOMIZATIONS_MGR_IPS=$(kubectl get secrets -n loftsman site-init -o jsonpath='{.data.customizations\.yaml}' | base64 -d |
+        yq r - 'spec.network.netstaticips.nmn_ncn_storage_mons[*]' | sort -V | xargs)
+    echo "Ceph managers:     ${CEPH_MGR_IPS}"
+    echo "customizations:    ${CUSTOMIZATIONS_MGR_IPS}"
+    [[ "${CEPH_MGR_IPS}" == "${CUSTOMIZATIONS_MGR_IPS}" ]] && echo "No update needed" || echo "Update required"
+    ```
+
+    Example output:
+
+    ```text
+    Ceph managers:     10.252.1.15 10.252.1.16 10.252.1.17
+    customizations:    10.252.1.11 10.252.1.12 10.252.1.13
+    Update required
+    ```
+
+1. (`ncn-m001#`) In the same shell where `CEPH_MGR_IPS` was set, follow the [Redeploying a Chart](../../CSM_product_management/Redeploying_a_Chart.md) procedure with the following specifications:
+
+    - In [2. Obtain and optionally update customizations](../../CSM_product_management/Redeploying_a_Chart.md#2-obtain-and-optionally-update-customizations), step 2 (edit the `${CUSTOMIZATIONS}` file):
+
+        ```bash
+        yq d -i "${CUSTOMIZATIONS}" 'spec.network.netstaticips.nmn_ncn_storage_mons'
+        for ip in ${CEPH_MGR_IPS}; do
+            yq w -i "${CUSTOMIZATIONS}" 'spec.network.netstaticips.nmn_ncn_storage_mons[+]' "${ip}"
+        done
+        yq r "${CUSTOMIZATIONS}" 'spec.network.netstaticips.nmn_ncn_storage_mons'
+        ```
+
+    - In [3. Redeploy charts](../../CSM_product_management/Redeploying_a_Chart.md#3-redeploy-charts), step 1 (set helper variables):
+
+        ```bash
+        CHART_NAME=cray-sysmgmt-health
+        BASE_MANIFEST_NAME=platform
+        ```
+
+    - In [3. Redeploy charts](../../CSM_product_management/Redeploying_a_Chart.md#3-redeploy-charts), step 5 (edit the `spec.charts` list):
+
+        ```bash
+        for chart in $(yq r "${BASE_CHART_FILE}" 'spec.charts[*].name' | grep -vx "${CHART_NAME}"); do
+            yq d -i "${BASE_CHART_FILE}" "spec.charts(name==${chart})"
+        done
+        yq r "${BASE_CHART_FILE}" 'spec.charts'
+        ```
+
+    - In [3. Redeploy charts](../../CSM_product_management/Redeploying_a_Chart.md#3-redeploy-charts), step 11 (validate the redeploy), verify that the Ceph exporter endpoints match `CEPH_MGR_IPS`:
+
+        ```bash
+        kubectl get endpoints -l app=cray-sysmgmt-health-ceph-exporter -n sysmgmt-health -o jsonpath='{.items[*].subsets[].addresses}' | jq -r '.[] | .ip' | sort -V
+        ```
+
+    - Complete [4. Save updated customizations](../../CSM_product_management/Redeploying_a_Chart.md#4-save-updated-customizations).
+
+> **NOTE** It may take a couple of minutes for Grafana to pick up the new endpoints and display Ceph data.
 
 ## 3. Next steps
 
