@@ -14,7 +14,6 @@ This section updates the kernel running on management NCNs.
 > master and storage nodes — it does not reboot them. You must follow the
 > full image rollout procedures below for all management node types to ensure
 > all management nodes are rebuilt to include these new CSM Security fixes.
-
 > **Note:** The rollout order below (Storage → Worker → Master) follows
 > the full image rollout sequence used during CSM upgrades. Because
 > csm-security includes kernel updates, this is effectively a full image
@@ -52,7 +51,7 @@ This section updates the kernel running on management NCNs.
          XNAME=$(ssh $STORAGE_CANARY 'cat /etc/cray/xname')
          echo "${XNAME}"
          ```
-      
+
       1. Record current image id and configuration name on the `STORAGE_CANARY` node
 
          ```bash
@@ -101,7 +100,7 @@ This section updates the kernel running on management NCNs.
 
          The desired value for `configuration` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
 
-      1. Verify image name is changed. 
+      1. Verify image name is changed.
 
          ```bash
          NEW_IMAGE_NAME=$(ssh $STORAGE_CANARY "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
@@ -192,7 +191,7 @@ This section updates the kernel running on management NCNs.
 Roll out the new image and CFS configuration to one worker node, validate the change, then a second worker node, then proceed to the rest of the worker nodes.
 
    1. Set `iscsid.safe_logout=No` for iSCSI clients on the application and compute nodes.
-      
+
       > **Important:** The iSCSI LUNs mapping to `rootfs/PE` images before worker node rebuild can get mapped to different `rootfs/PE` images after the
       > rebuild and get different LUN numbers. The iSCSI client nodes will send the I/O’s to the iSCSI LUNs that were created before rebuild and I/O’s
       > fail as those LUNs may not exist with the same LUN number or mapped to different images after rebuild.
@@ -230,9 +229,10 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       ncn-m001:~ # cray hsm groups list | grep iscsi_worker
       label = "iscsi_worker"        # Output with label iscsi-worker present. If not present then there will be no output
       ```
+
       If the iscsi-worker label is not found, the above command will produce no output. In that case, skip the next command, as this indicates that all worker nodes are enabled as iSCSI targets.
 
-      ```
+      ```bash
       ncn-m001:~ # cray hsm groups members list iscsi_worker
       ids = [ "x3000c0s7b0n0", "x3000c0s9b0n0", "x3000c0s11b0n0",]
       ```
@@ -251,6 +251,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       OLDUNAME=$(ssh $WORKER_CANARY uname -r)
       echo $OLDUNAME
       ```
+
    1. Record the xname of the `WORKER_CANARY` node.
 
       ```bash
@@ -286,8 +287,6 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       ```bash
       cray cfs components describe "${XNAME}"
-      ```
-      ```bash
       NEW_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
       echo "${OLD_CFG_NAME}"
       echo "${NEW_CFG_NAME}"
@@ -319,21 +318,20 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       ```
 
    1. When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list.
-   
+
       ```bash
       kubectl get nodes --show-labels | grep iuf-prevent-rollout
       ```
-   
+
       If necessary, use kubectl to remove the iuf-prevent-rollout=true label from the node.
-   
+
       ```bash
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
-   
+
    1. If the iscsi-worker group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
       **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with `iuf-prevent-rollout=true` followed by rolling out the rest of the worker nodes.
-
       **Note:** Choose the canary node wisely, don't use one running slingshot-fabric-manager or nexus.
 
       ```bash
@@ -355,6 +353,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       ```
 
    1. Record current image id and configuration name on the `WORKER_CANARY` node.
+
       ```bash
       OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
       echo "${OLD_CFG_NAME}"
@@ -382,8 +381,6 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       ```bash
       cray cfs components describe "${XNAME}"
-      ```
-      ```bash
       NEW_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
       echo "${OLD_CFG_NAME}"
       echo "${NEW_CFG_NAME}"
@@ -415,25 +412,24 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       ```
 
    1. When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list.
-   
+
       ```bash
       kubectl get nodes --show-labels | grep iuf-prevent-rollout
       ```
-   
+
       If necessary, use kubectl to remove the iuf-prevent-rollout=true label from the node.
-   
+
       ```bash
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
-   
+
    1. Execute the management-nodes-rollout stage on all remaining worker nodes.
 
       **NOTE** For this step, the argument to --limit-management-rollout can be `Management_Worker` or a list of worker node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
-      
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
 
       1. Choose one of the following two options. The difference between the options is the limit-management-rollout argument, but the two options do the same thing.
-      
+
          1. Option 1:
 
             ```bash
@@ -443,7 +439,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
          2. Option 2:
 
             Execute management-nodes-rollout on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
-      
+
             ```bash
             WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -vE "$WORKER_CANARY|$WORKER_CANARY2" | awk '{print $1}' | xargs)
             echo $WORKER_NODES
@@ -453,7 +449,6 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       1. Only if the worker node is an iSCSI target node then execute `iscsi_post_rollout.sh` script to help the `iSCSI` clients on the application and compute nodes to adjust to the new LUNs on the worker node.
 
          **Warning:** as each node from the previous `IUF management-nodes-rollout` command gets to the point where Linux has powered off and the node powers on to show POST/BIOS messages, then run these `pdsh` commands on all `iSCSI` clients.
-
          **Important:** Ensure that the hostname `REPLACEHOST` is replaced with the actual value of the worker node hostname which has just started powering on before running these commands.
 
          ```bash
@@ -523,14 +518,14 @@ The rebuild script handles first-master promotion automatically.
 
    1. Record current image id and configuration name on the `MASTER` node.
 
+      ```bash
       OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
       echo "${OLD_CFG_NAME}"
       OLD_IMAGE_NAME=$(ssh $MASTER "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
       echo "${OLD_IMAGE_NAME}"
+      ```
 
-   2. Assign the new image to BSS. The rebuild script sets
-      `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs
-      for kernel, initrd, and rootfs.
+   2. Assign the new image to BSS. The rebuild script sets `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs for kernel, initrd, and rootfs.
 
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
@@ -587,6 +582,7 @@ The rebuild script handles first-master promotion automatically.
          ```bash
          cray cfs components describe $XNAME
          ```
+
          If not `configured` wait until the node's configurationStatus changes to `configured` state.
 
          ```bash
@@ -596,7 +592,7 @@ The rebuild script handles first-master promotion automatically.
          ```
 
    1. Record the xname of the next MASTER node.
-   
+
       ```bash
       MASTER=ncn-m002
       XNAME=$(ssh $MASTER 'cat /etc/cray/xname')
@@ -626,13 +622,13 @@ The rebuild script handles first-master promotion automatically.
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
       ```
-   
+
    4. Check for important files which are not backed up from the node.
 
       **Warning:** If there are any special local files customized, they will be removed when the storage on the node is wiped.
-   
+
       Some master nodes have information in these files which is not placed there by CFS Ansible tasks and might disappear if not backed up.
-   
+
       ```bash
       /etc/hosts
       /etc/motd
@@ -677,6 +673,7 @@ The rebuild script handles first-master promotion automatically.
          ```bash
          cray cfs components describe $XNAME
          ```
+
          If not `configured` wait until the node's configurationStatus changes to `configured` state.
 
          ```bash
@@ -702,6 +699,7 @@ The rebuild script handles first-master promotion automatically.
       ```
 
       Example output
+
       ```bash
       eniac.dev.hpe.com
       ```
@@ -731,7 +729,7 @@ The rebuild script handles first-master promotion automatically.
       ```
 
    1. Record the xname of the MASTER node.
-   
+
       ```bash
       MASTER=ncn-m001
       XNAME=$(ssh $MASTER 'cat /etc/cray/xname')
@@ -754,22 +752,20 @@ The rebuild script handles first-master promotion automatically.
       echo "${OLD_IMAGE_NAME}"
       ```
 
-   2. Assign the new image to BSS. The rebuild script sets
-      `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs
-      for kernel, initrd, and rootfs.
+   2. Assign the new image to BSS. The rebuild script sets `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs for kernel, initrd, and rootfs.
 
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
       ```
 
       > **Known Issue:** If the above command fails, see [Master node `assign-ncn-images.sh` fails with 'Error: Error received from server: 403 Forbidden'](troubleshooting.md#2-master-node-assign-ncn-imagessh-fails-with-error-error-received-from-server-403-forbidden).
-   
+
    4. Check for important files which are not backed up from the node.
 
       **Warning:** If there are any special local files customized, they will be removed when the storage on the node is wiped.
-   
+
       Some master nodes have information in these files which is not placed there by CFS Ansible tasks and might disappear if not backed up.
-   
+
       ```bash
       /etc/hosts
       /etc/motd
@@ -814,6 +810,7 @@ The rebuild script handles first-master promotion automatically.
          ```bash
          cray cfs components describe $XNAME
          ```
+
          If not `configured` wait until the node's configurationStatus changes to `configured` state.
 
          ```bash

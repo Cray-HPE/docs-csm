@@ -2,20 +2,22 @@
 
 * [Overview](#overview)
 * [Terminology](#terminology)
+* [Release Notes](#release-notes)
 * [Valid upgrade paths](#valid-upgrade-paths)
-* [CSM upgrade procedures](#csm-upgrade-procedures)
 * [Update NCNs with Rapid Release Update](#update-ncns-with-rapid-release-update)
 * [Further Reading](#further-reading)
 
 ## Overview
 
-A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called `csm-security` that delivers approved security content for a specific CSM base release and its corresponding SLE version. It does not upgrade the installed CSM release. RRU updates the NCN with SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the images (kubernetes and storage). The NCNs are then rebooted with the new image.
+A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called `csm-security` that delivers approved security
+content for a specific CSM base release and its corresponding SLE version. It does not upgrade the installed CSM release. RRU updates the NCN with
+SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the images (kubernetes and storage). The NCNs are then rebooted with the new image.
 
 ## Terminology
 
 | Term | Meaning |
 | --- | --- |
-| CVE | Common Vulnerabilities and Exposures — a publicly catalogued security flaw (e.g. CVE-2025-26465). Work typically starts from a Jira ticket referencing a CVE, which is looked up at https://www.suse.com/security/cve/<CVE-ID>.html to find the severity, the SUSE advisory, and the fixed RPM versions. |
+| CVE | Common Vulnerabilities and Exposures — (e.g. CVE-2025-26465). A CVE is looked up at https://www.suse.com/security/cve/CVE-2025-26465.html to find the severity, the SUSE advisory, and the fixed RPM versions. |
 | CSM base version | The installed CSM release that the RRU is built and qualified for. The RRU does not change this version. |
 | RRU version | The independent version of the `csm-security` product, for example `csm-security-1.2.3`. |
 | SLE version | The SUSE Linux Enterprise release/service pack used by the target NCN images and specified by the RRU. |
@@ -47,12 +49,11 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 | 1.7.0 | SLE SP6 | Rapid-Update-sle15-sp6-170-26.10.01 | 6.4.0-150600.23.138.1 |
 | 1.7.1 | SLE SP7 | Rapid-Update-sle15-sp7-171-26.09.01 | 6.4.0-150700.53.78.1 |
 
-
 > **Note:** RRU Version mentioned above is the latest released version. Previous versions can be found in the [Release Notes](#release-notes).
 
 ## Update NCNs with Rapid Release Update
 
-1. For updating NCNs with RRU, see [Deploying Rapid Release Update with IUF](installation_iuf.md). 
+1. For updating NCNs with RRU, see [Deploying Rapid Release Update with IUF](installation_iuf.md).
 2. For troubleshooting common failures, see [Troubleshooting Guide](troubleshooting.md).
 3. For rollback procedure, see [Rollingback RRU](rollback.md).
 
@@ -62,8 +63,8 @@ For comprehensive IUF documentation including advanced workflows, stage details,
 and troubleshooting, refer to the official CSM documentation for your installed
 CSM version:
 
-- **Online:** <https://cray-hpe.github.io/docs-csm/en-17/operations/iuf/iuf/>
-- **On-system:** If the `docs-csm` RPM matching your CSM version is installed,
+* **Online:** <https://cray-hpe.github.io/docs-csm/en-17/operations/iuf/iuf/>
+* **On-system:** If the `docs-csm` RPM matching your CSM version is installed,
   IUF documentation is available locally at `/usr/share/doc/csm/operations/iuf/`
 
 Install or update the docs RPM:
@@ -72,5 +73,4 @@ Install or update the docs RPM:
 zypper install -y docs-csm
 ```
 
-> **Note:** IUF behavior and available stages may differ between CSM versions.
-> Always reference the documentation that matches your installed CSM release.
+> **Note:** IUF behavior and available stages may differ between CSM versions. Always reference the documentation that matches your installed CSM release.

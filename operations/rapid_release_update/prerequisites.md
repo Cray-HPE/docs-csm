@@ -1,4 +1,4 @@
-## Preparation steps
+# Preparation steps
 
 1. [Start typescript](#1-start-typescript)
 1. [Ensure latest documentation installed](#2-ensure-latest-documentation-is-installed)
@@ -8,7 +8,7 @@
 1. [Check and clean old images on storage nodes](#6-check-and-clean-old-images-on-storage-nodes)
 1. [Next Steps](#7-next-steps)
 
-### 1. Start typescript
+## 1. Start typescript
 
 1. (`ncn-m001#`) If a typescript session is already running in the shell, then first stop it with
    the `exit` command.
@@ -23,7 +23,7 @@
 If additional shells are opened during this procedure, then record those with typescripts as well.
 When resuming a procedure after a break, always be sure that a typescript is running before proceeding.
 
-### 2. Ensure latest documentation is installed
+## 2. Ensure latest documentation is installed
 
 Before following the steps to prepare for the install of RRU, make sure that the latest CSM documentation RPMs are
 installed on any NCNs where preparation procedures are being performed. These should be for the **CURRENT**
@@ -31,11 +31,12 @@ CSM version on the system -- not the target version of the upgrade.
 
 See [Check for latest documentation](../../update_product_stream/README.md#check-for-latest-documentation) for instructions.
 
-### 3. Health validation
+## 3. Health validation
 
 1. Validate CSM health.
 
-   Run the CSM health checks to ensure that everything is working properly before the installing RRU starts. After the upgrade is completed, another health check is performed, and it is important to know if any problems observed at that time existed prior to the install.
+   Run the CSM health checks to ensure that everything is working properly before the installing RRU starts. After the upgrade is completed, 
+   another health check is performed, and it is important to know if any problems observed at that time existed prior to the install.
 
    Reference [Validate CSM Health](../validate_csm_health.md) for details.
 
@@ -44,7 +45,7 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
    If a Lustre file system is being used, then see the ClusterStor documentation for details on how
    to validate Lustre health.
 
-### 4. Prepare for the install
+## 4. Prepare for the install
 
 1. An operational CSM system at a base version supported by the selected RRU
    (see the [supported CSM baselines](rru-overview.md#supported-csm-base-versions)).
@@ -99,13 +100,15 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
    ```bash
    grep "-rru-$VERSION"/' $SITE_VARS
    ```
+
    Sample Output
    ```bash
      suffix: "-rru-26.10.01"
    ```
+
    **Important:** This suffix value will be used to identify the new image and configuration name.
 
-### 5. Upload Product Media
+## 5. Upload Product Media
 
 1. (`ncn-m001#`) Create the media directory.
 
@@ -131,11 +134,10 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
    iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} activity --create in_progress
    ```
 
-Once the above steps are completed:
+4. Once the above steps are completed:
+   Environment variables have been set and required IUF directories have been created
 
- - Environment variables have been set and required IUF directories have been created
-
-### 6. Check and clean old images on storage nodes
+## 6. Check and clean old images on storage nodes
 
 1. Determine the number of storage nodes on the system.
 
@@ -173,8 +175,7 @@ Once the above steps are completed:
    done
    ```
 
-
-### 7. Next steps
+## 7. Next steps
 
 - Return to the
   [Deploying Rapid Release Update with IUF](installation_iuf.md)

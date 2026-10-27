@@ -41,9 +41,8 @@ Before running any IUF stages that use `sat bootprep`, you must add the
    > and `ncn-initrd.yml`. Security patches must be applied first so
    > subsequent layers build on the patched base. The `ncn-initrd.yml` layer
    > must always remain last because it regenerates the initrd.
-   
-   Example for master/worker nodes:
 
+   Example for master/worker nodes:
 
    ```yaml
    configurations:
@@ -68,9 +67,9 @@ Before running any IUF stages that use `sat bootprep`, you must add the
          name: csm
          version: "{{csm.version}}"
    ```
+
    Example for storage nodes:
-   
-   
+
    ```yaml
    # this configuration can be used to personalize the storage nodes with SMA and Diags
    - name: "{{default.note}}storage-{{recipe.version}}{{default.suffix}}"
@@ -96,7 +95,6 @@ Before running any IUF stages that use `sat bootprep`, you must add the
    ```
 
    Example for minimal-management (if present in your bootprep):
-
 
    ```yaml
    - name: "{{default.note}}minimal-management-{{recipe.version}}{{default.suffix}}"

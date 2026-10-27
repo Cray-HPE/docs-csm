@@ -1,6 +1,6 @@
 # Product Delivery and Update CFS Configuration
 
-1. [Execute the IUF `deliver-product` stage](#1-execute-the-iuf-deliver-product-stage)
+1. [Execute the IUF `process-media` through `deliver-product` stages](#1-execute-the-iuf-process-media-through-deliver-product-stages)
 1. [Update CFS Configuration](#2-update-cfs-configuration)
 1. [Next steps](#3-next-steps)
 

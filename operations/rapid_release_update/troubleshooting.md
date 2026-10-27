@@ -8,7 +8,7 @@
 
 ## 1. Storage node `cloud-init` fails with 'Timed out waiting for device' error
 
-### Observed Error
+**Observed Error**
 
 This error can be observed from a storage node's console.
 
@@ -23,12 +23,12 @@ This error can be observed from a storage node's console.
 [DEPEND] Dependency failed for File System Check on /dev/disk/by-label/CEPHVAR.
 ```
 
-### Description
+**Description**
 
 This error happens when a storage node is being upgraded to a new image outside of the normal CSM major release upgrade.
 This happens because `rd.live.dir` still exists after the node reboots and the node does not pull the new image.
 
-### Procedure
+**Procedure**
 
 1. (`ncn-m001#`) Set `TARGET_NCN` to the storage node hostname for the node that will be booted into a new image.
 
@@ -88,7 +88,7 @@ This happens because `rd.live.dir` still exists after the node reboots and the n
         [DEPEND] Dependency failed for File System Check on /dev/disk/by-label/CEPHVAR.
         ```
 
-        1. (`ncn-m001#`) Power cycle the storage node. Follow the steps in [Power Cycle and Rebuild Nodes](./Rebuild_NCNs/Power_Cycle_and_Rebuild_Nodes.md) to power cycle the node. Do not perform steps after "wait for `cloud-init`".
+        1. (`ncn-m001#`) Power cycle the storage node. Follow the steps in [Power Cycle and Rebuild Nodes](../node_management/Rebuild_NCNs/Power_Cycle_and_Rebuild_Nodes.md) to power cycle the node. Do not perform steps after "wait for `cloud-init`".
         These steps are unnecessary and will be completed by the remaining steps of the storage node upgrade Argo Workflow.
 
         1. (`ncn-m001#`) Perform this step only if the Argo workflow for the storage node upgrade was stopped.
@@ -115,7 +115,7 @@ This happens because `rd.live.dir` still exists after the node reboots and the n
 
 ## 2. Master node `assign-ncn-images.sh` fails with 'Error: Error received from server: 403 Forbidden'
 
-### Observed Error
+**Observed Error**
 
 ```bash
 /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
@@ -130,11 +130,11 @@ Try 'cray bss bootparameters list -h' for help.
 Error: Error received from server: 403 Forbidden
 ```
 
-### Description
+**Description**
 
 Cray Command Line Interface (`cray` CLI) is not configured
 
-### Procedure
+**Procedure**
 
 1. (`ncn-mws#`) Initialize the `cray` CLI
 
@@ -172,18 +172,22 @@ Cray Command Line Interface (`cray` CLI) is not configured
 
 ## 3. Secret "kubeadm-certs" was not found in the "kube-system" Namespace
 
-### Observed Error
+**Observed Error**
 
 **Warning:**  While watching the console for ncn-m003, you might see an error like this as part of a set of looping messages.
 
     ```bash
-    2026-10-20 14:50:09 [ 1617.920705] cloud-init[12514]: error execution phase control-plane-prepare/download-certs: error downloading certs: error downloading the secret: Secret "kubeadm-certs" was not found in the "kube-system" Namespace. This Secret might have expired. Please, run `kubeadm init phase upload-certs --upload-certs` on a control plane to generate a new one
+    2026-10-20 14:50:09 [ 1617.920705] cloud-init[12514]: error execution phase control-plane-prepare/download-certs: error downloading
+    certs: error downloading the secret: Secret "kubeadm-certs" was not found in the "kube-system" Namespace. This Secret might have expired.
+    Please, run `kubeadm init phase upload-certs --upload-certs` on a control plane to generate a new one
     ```
 
-### Description
+**Description**
 
 Kubeadm join token missing during NCN rebuild
 
-### Procedure
+**Procedure**
 
-If this happens, then follow the [Kubeadm join token missing during NCN rebuild](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/troubleshooting/known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md) procedure which includes steps to promote the initial master script which clears the Kubernetes bootstrap tokens, loads them into a `cluster-info` config map and regenates the Kubernetes join scripts in /etc/cray/kubernetes, then configures an hourly cronjob to create/update the tokens.  After that the node being rebuilt will have to be power cycled to attempt the rebuild again.
+If this happens, then follow the [Kubeadm join token missing during NCN rebuild](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/troubleshooting/known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md)
+procedure which includes steps to promote the initial master script which clears the Kubernetes bootstrap tokens, loads them into a `cluster-info` config map
+and regenates the Kubernetes join scripts in /etc/cray/kubernetes, then configures an hourly cronjob to create/update the tokens.  After that the node being rebuilt will have to be power cycled to attempt the rebuild again.
