@@ -36,5 +36,5 @@ The deployment workflow comprises the following steps. Instructions should be ex
    Follow the [Post-Rollout Verification](post_rollout_verification.md) instructions.
 
 1. Return to the
-  [Rapid Release Update (RRU) for CSM kernel CVE fixes](rru_overview.md)
- for [Further Reading](rru_overview.md#further-reading) section of Deploying Steps.
+  [Rapid Release Update (RRU) for CSM kernel CVE fixes](README.md)
+ for [Further Reading](README.md#further-reading) section of Deploying Steps.

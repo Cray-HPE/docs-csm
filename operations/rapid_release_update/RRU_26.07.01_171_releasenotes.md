@@ -37,4 +37,4 @@ A vulnerability in the Linux kernel IPv6 networking stack could result in an out
 
 ## Deploy Steps
 
-See [Rapid Release Update (RRU) for CSM kernel CVE fixes](rru_overview.md#release-notes).
+See [Rapid Release Update (RRU) for CSM kernel CVE fixes](README.md#release-notes).

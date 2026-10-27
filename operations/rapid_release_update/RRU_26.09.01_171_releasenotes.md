@@ -55,4 +55,4 @@ The SIP connection-tracking helper used unsafe port parsing with simple_strtoul(
 
 ## Deploy Steps
 
-See [Rapid Release Update (RRU) for CSM kernel CVE fixes](rru_overview.md#release-notes).
+See [Rapid Release Update (RRU) for CSM kernel CVE fixes](README.md#release-notes).

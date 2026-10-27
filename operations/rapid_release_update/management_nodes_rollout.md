@@ -85,7 +85,7 @@ This section updates the kernel running on management NCNs.
          echo "New: $NEWUNAME"
          ```
 
-         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
       1. Verify CFS configuration name is changed to `STORAGE_CFG_ID` as set in the [Prepare Images](image_preparation.md) and the status shows `configured`.
 
@@ -163,7 +163,7 @@ This section updates the kernel running on management NCNs.
       done
       ```
 
-      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
    1. Verify Ceph health reports `HEALTH_OK` before continuing.
 
@@ -304,7 +304,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       echo $NEWUNAME
       ```
 
-      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
    1. ncn-m001#) Use kubectl to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
@@ -400,7 +400,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       echo $NEWUNAME
       ```
 
-      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
    1. ncn-m001#) Use kubectl to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
@@ -580,7 +580,7 @@ The rebuild script handles first-master promotion automatically.
          echo "New: $NEWUNAME"
          ```
 
-         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
       2. Verify the node booted successfully with the new image and CFS configuration.
 
@@ -670,7 +670,7 @@ The rebuild script handles first-master promotion automatically.
          echo "New: $NEWUNAME"
          ```
 
-         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
       2. Verify the node booted successfully with the new image and CFS configuration.
 
@@ -807,7 +807,7 @@ The rebuild script handles first-master promotion automatically.
          echo "New: $NEWUNAME"
          ```
 
-         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
       2. Verify the node booted successfully with the new image and CFS configuration.
 

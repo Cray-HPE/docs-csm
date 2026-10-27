@@ -75,7 +75,7 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
 1. (`ncn-m001#`) Set environment variables used throughout this procedure:
    Adjust `BOOTPREP_FILE`, `SITE_VARS`, and `RECIPE_VARS` if your site uses different paths.
 
-**Important:** Note that CSM_SEC_VERSION `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+**Important:** Note that CSM_SEC_VERSION `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](README.md#valid-update-paths)
 
 ```bash
 export CSM_SEC_VERSION=<REPLACE_RRU_VERSION>
@@ -117,7 +117,7 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
 
    (`workstation#`) Set the required variables and copy the tarball:
 
-   **Important:** Note that CSM_SEC_VERSION `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+   **Important:** Note that CSM_SEC_VERSION `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](README.md#valid-update-paths)
 
    ```bash
    CSM_SEC_VERSION=<REPLACE_RRU_VERSION>

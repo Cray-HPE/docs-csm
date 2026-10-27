@@ -35,4 +35,4 @@ When a modified PDE pointed to a non-leaf page, kvm_mmu_get_child_sp() reused a 
 
 ## Deploy Steps
 
-See [Rapid Release Update (RRU) for CSM kernel CVE fixes](rru_overview.md#release-notes).
+See [Rapid Release Update (RRU) for CSM kernel CVE fixes](README.md#release-notes).
