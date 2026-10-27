@@ -12,7 +12,7 @@ Before running any IUF stages that use `sat bootprep`, you must add the
    Identify whichever bootprep file is actively used for your
    management node CFS configurations.
 
-   If no bootprep file exists yet, clone the recipe repo from gitea:
+   If no bootprep file exists yet, clone the recipe repo from Gitea:
 
    > **WARNING:** The recipe repo contains the default bootprep file.
    > If any customizations were made to your bootprep configuration

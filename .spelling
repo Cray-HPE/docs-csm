@@ -1229,3 +1229,49 @@ README.md
 
 - upgrade/1.7.1/README.md
 Patch1
+
+- operations/rapid_release_update/management_nodes_rollout.md
+LUNs
+iuf-prevent-rollout=true
+rootfs
+
+- operations/rapid_release_update/RRU_26.07.01_171_releasenotes.md
+Eventpoll
+GhostLock
+Epoll
+
+- operations/rapid_release_update/RRU_26.07.01_170_releasenotes.md
+eventpoll
+ep_remove
+rtmutex
+fraggap
+undersizing
+refcount
+sched
+pedit
+struct
+rmap
+memslot
+
+- operations/rapid_release_update/RRU_26.09.01_171_releasenotes.md
+SECINFO_NO_NAME
+stateid
+9p
+setlease
+fid
+refcount
+IPsec
+Sockmap
+B.A.T.M.A.N
+DEL-IP
+sched
+cls_api
+qevent
+netfilter
+Conntrack
+
+- operations/rapid_release_update/RRU_26.10.01_170_releasenotes.md
+Base64
+CHAP_R
+Overread
+linearize

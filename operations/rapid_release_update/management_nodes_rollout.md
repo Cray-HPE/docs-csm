@@ -8,15 +8,15 @@ This section updates the kernel running on management NCNs.
 1. [References](#4-references)
 1. [Next Steps](#5-next-steps)
 
-> **Important:** Because csm-security includes kernel updates, **all node
-> types** must be rebooted into new images. The standard docs-csm
+> **Important:** Because `csm-security` includes kernel updates, **all node
+> types** must be rebooted into new images. The standard `docs-csm`
 > non-CSM-upgrade workflow (section 2.2) only applies CFS configuration to
 > master and storage nodes — it does not reboot them. You must follow the
 > full image rollout procedures below for all management node types to ensure
 > all management nodes are rebuilt to include these new CSM Security fixes.
 > **Note:** The rollout order below (Storage → Worker → Master) follows
 > the full image rollout sequence used during CSM upgrades. Because
-> csm-security includes kernel updates, this is effectively a full image
+> `csm-security` includes kernel updates, this is effectively a full image
 > upgrade rather than a simple CFS personalization.
 
 ## 1. Storage Nodes
@@ -66,13 +66,13 @@ This section updates the kernel running on management NCNs.
 
       > **Known Issue:** If `cloud-init` fails on the storage node with a timed out error, see [storage node `cloud-init` fails with 'Timed out waiting for device' error](troubleshooting.md#1-storage-node-cloud-init-fails-with-timed-out-waiting-for-device-error).
 
-   1. (ncn-m001#) Execute the management-nodes-rollout stage with a single NCN storage node.
+   1. (`ncn-m001#`) Execute the management-nodes-rollout stage with a single NCN storage node.
 
       ```bash
       iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
       ```
 
-   1. (ncn-m001#) Monitor the Argo Workflow using the Argo UI. See [using the Argo UI for instructions to access the Argo UI](https://cray-hpe.github.io/docs-csm/en-17/operations/argo/using_the_argo_ui/).
+   1. (`ncn-m001#`) Monitor the Argo Workflow using the Argo UI. See [using the Argo UI for instructions to access the Argo UI](https://cray-hpe.github.io/docs-csm/en-17/operations/argo/using_the_argo_ui/).
 
    1. After the node boots, verify the node:
 
@@ -221,7 +221,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
          pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/g' /etc/iscsi/iscsid.conf && systemctl restart iscsid.service && echo Success || echo Fail" 2>/dev/null | dshbak -c
          ```
 
-   1. Verify the iscsi_worker group is present then selective iSCSI worker node personalizatiuon feature is enabled else all worker nodes by default are enabled as iSCSI targets.
+   1. Verify the `iscsi_worker` group is present then selective iSCSI worker node personalization feature is enabled else all worker nodes by default are enabled as iSCSI targets.
 
       Identify which worker nodes are configured as iSCSI targets.
 
@@ -286,7 +286,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY | grep 'State: L'" 2>/dev/null
       ```
 
-   1. (ncn-m001#) Verify that the node booted successfully with the desired image and CFS configuration.
+   1. (`ncn-m001#`) Verify that the node booted successfully with the desired image and CFS configuration.
 
       ```bash
       cray cfs components describe "${XNAME}"
@@ -308,13 +308,13 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-   1. ncn-m001#) Use kubectl to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
+   1. (`ncn-m001#`) Use `kubectl` to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
       ```bash
       kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout=true
       ```
 
-   1. (ncn-m001#) Verify that the IUF node label is present on the worker canary node.
+   1. (`ncn-m001#`) Verify that the IUF node label is present on the worker canary node.
 
       ```bash
       kubectl get nodes "${WORKER_CANARY}" --show-labels | grep iuf-prevent-rollout
@@ -384,7 +384,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY2 | grep 'State: L'" 2>/dev/null
       ```
 
-   1. (ncn-m001#) Verify that the node booted successfully with the desired image and CFS configuration.
+   1. (`ncn-m001#`) Verify that the node booted successfully with the desired image and CFS configuration.
 
       ```bash
       cray cfs components describe "${XNAME}"
@@ -406,13 +406,13 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-   1. ncn-m001#) Use kubectl to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
+   1. (`ncn-m001#`) Use kubectl to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
       ```bash
       kubectl label nodes "${WORKER_CANARY2}" --overwrite iuf-prevent-rollout=true
       ```
 
-   1. (ncn-m001#) Verify that the IUF node label is present on the worker canary node.
+   1. (`ncn-m001#`) Verify that the IUF node label is present on the worker canary node.
 
       ```bash
       kubectl get nodes "${WORKER_CANARY2}" --show-labels | grep iuf-prevent-rollout
@@ -474,13 +474,13 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = Yes/g' /etc/iscsi/iscsid.conf && systemctl restart iscsid.service"
       ```
 
-   1. (ncn-m001#) Use kubectl to remove the iuf-prevent-rollout=true label from the canary node.
+   1. (`ncn-m001#`) Use `kubectl` to remove the iuf-prevent-rollout=true label from the canary node.
 
       ```bash
       kubectl label nodes "${WORKER_CANARY ${WORKER_CANARY2}" --overwrite iuf-prevent-rollout-
       ```
 
-   1. (ncn-m001#) Verify that all worker nodes booted successfully with the desired image and CFS configuration.
+   1. (`ncn-m001#`) Verify that all worker nodes booted successfully with the desired image and CFS configuration.
 
       ```bash
       for ncn in $(cray hsm state components list --subrole Worker --type Node \
@@ -510,7 +510,7 @@ The rebuild script handles first-master promotion automatically.
    echo $CSM_ARTI_DIR
    ```
 
-1. Update ncn-m003 and ncn-m002 while running commands on ncn-m001.
+1. Update `ncn-m003` and `ncn-m002` while running commands on `ncn-m001`.
 
    1. Record the xname of the MASTER node.
 
@@ -536,13 +536,13 @@ The rebuild script handles first-master promotion automatically.
       echo "${OLD_IMAGE_NAME}"
       ```
 
-   2. Assign the new image to BSS. The rebuild script sets `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs for kernel, initrd, and rootfs.
+   1. Assign the new image to BSS. The rebuild script sets `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs for kernel, initrd, and rootfs.
 
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
       ```
 
-   4. Check for important files which are not backed up from the node.
+   1. Check for important files which are not backed up from the node.
 
       **Warning:** If there are any special local files customized, they will be removed when the storage on the node is wiped.
 
@@ -563,13 +563,14 @@ The rebuild script handles first-master promotion automatically.
 
       If SDU and RDA are configured on this node, save the configuration information so it can be restored after the node has the new image.
 
-   3. Rebuild the master node.
+   1. Rebuild the master node.
 
       ```bash
       /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh $MASTER
       ```
 
-      > **Known Issue:** If you see error while watching the console of `ncn-m003`, see [Secret "kubeadm-certs" was not found in the "kube-system" Namespace](troubleshooting.md#3-secret-kubeadm-certs-was-not-found-in-the-kube-system-namespace).
+      > **Known Issue:** If you see error while watching the console of `ncn-m003`, see [Secret "kubeadm-certs" was not found in the "kube-system"
+      Namespace](troubleshooting.md#3-secret-kubeadm-certs-was-not-found-in-the-kube-system-namespace).
 
    1. After the node boots, 
       1. Update the node's CFS configuration.
@@ -588,7 +589,7 @@ The rebuild script handles first-master promotion automatically.
 
          **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-      2. Verify the node booted successfully with the new image and CFS configuration.
+      1. Verify the node booted successfully with the new image and CFS configuration.
 
          ```bash
          cray cfs components describe $XNAME
@@ -626,7 +627,7 @@ The rebuild script handles first-master promotion automatically.
       echo "${OLD_IMAGE_NAME}"
       ```
 
-   2. Assign the new image to BSS. The rebuild script sets
+   1. Assign the new image to BSS. The rebuild script sets
       `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs
       for kernel, initrd, and rootfs.
 
@@ -634,7 +635,7 @@ The rebuild script handles first-master promotion automatically.
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
       ```
 
-   4. Check for important files which are not backed up from the node.
+   1. Check for important files which are not backed up from the node.
 
       **Warning:** If there are any special local files customized, they will be removed when the storage on the node is wiped.
 
@@ -655,13 +656,13 @@ The rebuild script handles first-master promotion automatically.
 
       If SDU and RDA are configured on this node, save the configuration information so it can be restored after the node has the new image.
 
-   3. Rebuild the master node.
+   1. Rebuild the master node.
 
       ```bash
       /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh $MASTER
       ```
 
-   4. After the node boots:
+   1. After the node boots:
 
       1. Update the node's CFS configuration.
 
@@ -679,7 +680,7 @@ The rebuild script handles first-master promotion automatically.
 
          **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-      2. Verify the node booted successfully with the new image and CFS configuration.
+      1. Verify the node booted successfully with the new image and CFS configuration.
 
          ```bash
          cray cfs components describe $XNAME
@@ -702,7 +703,7 @@ The rebuild script handles first-master promotion automatically.
       echo $MASTER_CFG_ID
       ```
 
-   1. Determine the SYSTEM_NAME for the system.
+   1. Determine the `SYSTEM_NAME` for the system.
 
       ```bash
       SYSTEM_NAME=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:" | cut -f2 -d: | sed -e 's/ //')
@@ -763,7 +764,7 @@ The rebuild script handles first-master promotion automatically.
       echo "${OLD_IMAGE_NAME}"
       ```
 
-   2. Assign the new image to BSS. The rebuild script sets `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs for kernel, initrd, and rootfs.
+   1. Assign the new image to BSS. The rebuild script sets `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs for kernel, initrd, and rootfs.
 
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
@@ -771,7 +772,7 @@ The rebuild script handles first-master promotion automatically.
 
       > **Known Issue:** If the above command fails, see [Master node `assign-ncn-images.sh` fails with 'Error: Error received from server: 403 Forbidden'](troubleshooting.md#2-master-node-assign-ncn-imagessh-fails-with-error-error-received-from-server-403-forbidden).
 
-   4. Check for important files which are not backed up from the node.
+   1. Check for important files which are not backed up from the node.
 
       **Warning:** If there are any special local files customized, they will be removed when the storage on the node is wiped.
 
@@ -792,13 +793,13 @@ The rebuild script handles first-master promotion automatically.
 
       If SDU and RDA are configured on this node, save the configuration information so it can be restored after the node has the new image.
 
-   3. Rebuild the master node.
+   1. Rebuild the master node.
 
       ```bash
       /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh $MASTER
       ```
 
-   4. After the node boots:
+   1. After the node boots:
 
       1. Update the node's CFS configuration.
 
@@ -816,7 +817,7 @@ The rebuild script handles first-master promotion automatically.
 
          **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-      2. Verify the node booted successfully with the new image and CFS configuration.
+      1. Verify the node booted successfully with the new image and CFS configuration.
 
          ```bash
          cray cfs components describe $XNAME

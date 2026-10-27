@@ -1,6 +1,6 @@
-# Release Notes - Rapid-Update-sle15-sp6-170-26.10.01
+# Release Notes - `Rapid-Update-sle15-sp6-170-26.10.01`
 
-This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.0.
+This document guides an administrator through the deploy of Rapid Release Update on `CSM-1.7.0`.
 
 This page documents the changes introduced by this RRU, compared to the previous RRU version.
 
@@ -16,16 +16,16 @@ This page documents the changes introduced by this RRU, compared to the previous
 
 CVEs fixed which have NVD score > 9.
 
-* `CVE-2026-63795` - Linux Kernel 9p Client Reference Underflow
-The 9p client may drop an extra reference to a shared fid on a walk error path, which can clunk a still-in-use fid and trigger a use-after-free or refcount underflow.
+* `CVE-2026-63795` - Linux Kernel `9p` Client Reference Underflow
+The `9p` client may drop an extra reference to a shared `fid` on a walk error path, which can clunk a still-in-use `fid` and trigger a use-after-free or `refcount` underflow.
 * `CVE-2026-63886` - Linux Kernel iSCSI Target CHAP_R Base64 Heap Overflow
-The iSCSI target CHAP authentication path base64-decoded a CHAP_R response without validating its length, so an oversized response could write past the fixed-size client_digest buffer, causing a heap overflow.
+The iSCSI target CHAP authentication path `base64-decoded` a CHAP_R response without validating its length, so an oversized response could write past the fixed-size `client_digest` buffer, causing a heap overflow.
 * `CVE-2026-63887` - Linux Kernel iSCSI Target Text Response Heap Overrun
-iscsi_encode_text_output() appended "key=value" records into the fixed 8 KiB login response buffer without bounds checking, so a crafted Login PDU expanding many unknown keys could overrun the kmalloc-8k slab.
+`iscsi_encode_text_output()` appended "key=value" records into the fixed 8 KiB login response buffer without bounds checking, so a crafted Login PDU expanding many unknown keys could overrun the `kmalloc-8k` slab.
 * `CVE-2026-63888` - Linux Kernel iSCSI Target Text Command CRC Overread and Double-Free
-iscsit_handle_text_cmd() read 4 bytes past the text_in allocation when computing the DataDigest CRC, and on an ERL>0 bad-digest drop left a stale pointer that could be freed again, leading to an out-of-bounds read and double-free.
+`iscsit_handle_text_cmd()` read 4 bytes past the `text_in` allocation when computing the `DataDigest` CRC, and on an ERL>0 bad-digest drop left a stale pointer that could be freed again, leading to an out-of-bounds read and double-free.
 * `CVE-2026-63992` - Linux Kernel Tunnel PMTU ICMP Out-of-Bounds Access
-iptunnel_pmtud_check_icmp() assumed the skb transport header was set, so when it was not, the computed offset caused an out-of-bounds access while decoding the ICMP header during tunnel PMTU handling.
+`iptunnel_pmtud_check_icmp()` assumed the `skb` transport header was set, so when it was not, the computed offset caused an out-of-bounds access while decoding the ICMP header during tunnel PMTU handling.
 * `CVE-2026-64000` - Linux Kernel HSR Supervision Frame Out-of-Bounds Read
 The HSR supervision frame handler did not linearize the entire TLV header before accessing it, so a truncated frame could trigger an out-of-bounds read.
 * `CVE-2026-64007` - Linux Kernel Netfilter SYNPROXY Stale TCP Header Use-After-Free

@@ -4,7 +4,7 @@
 
 1. [Storage node `cloud-init` fails with 'Timed out waiting for device' error](#1-storage-node-cloud-init-fails-with-timed-out-waiting-for-device-error)
 1. [Master node `assign-ncn-images.sh` fails with 'Error: Error received from server: 403 Forbidden'](#2-master-node-assign-ncn-imagessh-fails-with-error-error-received-from-server-403-forbidden)
-1. [Secret "kubeadm-certs" was not found in the "kube-system" Namespace](#3-secret-kubeadm-certs-was-not-found-in-the-kube-system-namespace)
+1. [Secret `kubeadm-certs` was not found in the `kube-system` Namespace](#3-secret-kubeadm-certs-was-not-found-in-the-kube-system-namespace)
 
 ## 1. Storage node `cloud-init` fails with 'Timed out waiting for device' error
 
@@ -170,24 +170,24 @@ Cray Command Line Interface (`cray` CLI) is not configured
     Success!
     ```
 
-## 3. Secret "kubeadm-certs" was not found in the "kube-system" Namespace
+## 3. Secret `kubeadm-certs` was not found in the `kube-system` Namespace
 
 ## 3.1. Observed Error
 
-**Warning:**  While watching the console for ncn-m003, you might see an error like this as part of a set of looping messages.
+**Warning:**  While watching the console for `ncn-m003`, you might see an error like this as part of a set of looping messages.
 
-    ```bash
-    2026-10-20 14:50:09 [ 1617.920705] cloud-init[12514]: error execution phase control-plane-prepare/download-certs: error downloading
-    certs: error downloading the secret: Secret "kubeadm-certs" was not found in the "kube-system" Namespace. This Secret might have expired.
-    Please, run `kubeadm init phase upload-certs --upload-certs` on a control plane to generate a new one
-    ```
+```bash
+2026-10-20 14:50:09 [ 1617.920705] cloud-init[12514]: error execution phase control-plane-prepare/download-certs: error downloading
+certs: error downloading the secret: Secret "kubeadm-certs" was not found in the "kube-system" Namespace. This Secret might have expired.
+Please, run `kubeadm init phase upload-certs --upload-certs` on a control plane to generate a new one
+```
 
 ## 3.2. Description
 
-Kubeadm join token missing during NCN rebuild
+`Kubeadm` join token missing during NCN rebuild
 
 ## 3.3. Procedure
 
-If this happens, then follow the [Kubeadm join token missing during NCN rebuild](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/troubleshooting/known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md)
+If this happens, then follow the [`Kubeadm` join token missing during NCN rebuild](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/troubleshooting/known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md)
 procedure which includes steps to promote the initial master script which clears the Kubernetes bootstrap tokens, loads them into a `cluster-info` config map
-and regenates the Kubernetes join scripts in /etc/cray/kubernetes, then configures an hourly cronjob to create/update the tokens.  After that the node being rebuilt will have to be power cycled to attempt the rebuild again.
+and regenerates the Kubernetes join scripts in `/etc/cray/kubernetes`, then configures an hourly cronjob to create/update the tokens.  After that the node being rebuilt will have to be power cycled to attempt the rebuild again.

@@ -11,13 +11,13 @@
 
 A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called `csm-security` that delivers approved security
 content for a specific CSM base release and its corresponding SLE version. It does not upgrade the installed CSM release. RRU updates the NCN with
-SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the images (kubernetes and storage). The NCNs are then rebooted with the new image.
+SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the images (Kubernetes and Storage). The NCNs are then rebooted with the new image.
 
 ## Terminology
 
 | Term | Meaning |
 | --- | --- |
-| CVE | Common Vulnerabilities and Exposures — (e.g. CVE-2025-26465). A CVE is looked up at [SUSE URL](https://www.suse.com/security/cve/CVE-2025-26465.html) to find the severity, the SUSE advisory, and the fixed RPM versions. |
+| CVE | Common Vulnerabilities and Exposures — (e.g. `CVE-2025-26465`). A CVE is looked up at [SUSE URL](https://www.suse.com/security/cve/CVE-2025-26465.html) to find the severity, the SUSE advisory, and the fixed RPM versions. |
 | CSM base version | The installed CSM release that the RRU is built and qualified for. The RRU does not change this version. |
 | RRU version | The independent version of the `csm-security` product, for example `csm-security-1.2.3`. |
 | SLE version | The SUSE Linux Enterprise release/service pack used by the target NCN images and specified by the RRU. |
@@ -30,13 +30,13 @@ SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the im
 
 ## Release notes
 
-[Rapid-Update-sle15-sp7-170-26.07.01 Release Notes](RRU_26.07.01_170_releasenotes.md)
+[`Rapid-Update-sle15-sp7-170-26.07.01` Release Notes](RRU_26.07.01_170_releasenotes.md)
 
-[Rapid-Update-sle15-sp7-170-26.10.01 Release Notes](RRU_26.10.01_170_releasenotes.md)
+[`Rapid-Update-sle15-sp7-170-26.10.01` Release Notes](RRU_26.10.01_170_releasenotes.md)
 
-[Rapid-Update-sle15-sp7-171-26.07.01 Release Notes](RRU_26.07.01_171_releasenotes.md)
+[`Rapid-Update-sle15-sp7-171-26.07.01` Release Notes](RRU_26.07.01_171_releasenotes.md)
 
-[Rapid-Update-sle15-sp7-171-26.09.01 Release Notes](RRU_26.09.01_171_releasenotes.md)
+[`Rapid-Update-sle15-sp7-171-26.09.01` Release Notes](RRU_26.09.01_171_releasenotes.md)
 
 ## Valid update paths
 
@@ -45,9 +45,9 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 
 | Installed CSM base version | Base SLE version | RRU version | Kernel version |
 | --- | --- | --- | --- |
-| 1.6.2 | SLE SP6 | Rapid-Update-sle15-sp6-162-26.10.01 | 6.4.0-150600.23.135.1 |
-| 1.7.0 | SLE SP6 | Rapid-Update-sle15-sp6-170-26.10.01 | 6.4.0-150600.23.138.1 |
-| 1.7.1 | SLE SP7 | Rapid-Update-sle15-sp7-171-26.09.01 | 6.4.0-150700.53.78.1 |
+| 1.6.2 | SLE SP6 | `Rapid-Update-sle15-sp6-162-26.10.01` | 6.4.0-150600.23.135.1 |
+| 1.7.0 | SLE SP6 | `Rapid-Update-sle15-sp6-170-26.10.01` | 6.4.0-150600.23.138.1 |
+| 1.7.1 | SLE SP7 | `Rapid-Update-sle15-sp7-171-26.09.01` | 6.4.0-150700.53.78.1 |
 
 > **Note:** RRU Version mentioned above is the latest released version. Previous versions can be found in the [Release Notes](#release-notes).
 

@@ -29,7 +29,7 @@ After all nodes are rolled out, validate the system:
 
    **Important:** Note that kernel version `NEW_KERNEL_VERSION` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-1. Verify the csm-security product is registered in the product catalog:
+1. Verify the `csm-security` product is registered in the product catalog:
 
    ```bash
    sat showrev --products | grep csm-security

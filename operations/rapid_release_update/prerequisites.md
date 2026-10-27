@@ -35,7 +35,7 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
 
 1. Validate CSM health.
 
-   Run the CSM health checks to ensure that everything is working properly before the installing RRU starts. After the upgrade is completed, 
+   Run the CSM health checks to ensure that everything is working properly before the installing RRU starts. After the upgrade is completed,
    another health check is performed, and it is important to know if any problems observed at that time existed prior to the install.
 
    Reference [Validate CSM Health](../validate_csm_health.md) for details.
@@ -48,7 +48,7 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
 ## 4. Prepare for the install
 
 1. An operational CSM system at a base version supported by the selected RRU
-   (see the [supported CSM baselines](rru-overview.md#supported-csm-base-versions)).
+   (see the [valid update paths](README.md#valid-update-paths)).
 1. IUF CLI available on `ncn-m001` (`iuf list-stages`)
 1. `sat` CLI available (`sat --version`)
 1. `product_vars.yaml`, `site_vars.yaml`, and the active bootprep file are
@@ -69,14 +69,14 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
 > **Before proceeding, verify that your `product_vars.yaml` matches the
 > versions actually installed on the system.** The authoritative source is
 > your installed recipe's `product_vars.yaml.in` in the
-> `hpc-csm-software-recipe` gitea repository (branch matching your recipe
+> `hpc-csm-software-recipe` Gitea repository (branch matching your recipe
 > version). If your system was freshly installed with the current recipe, these
 > files should already be correct.
 
 1. (`ncn-m001#`) Set environment variables used throughout this procedure:
    Adjust `BOOTPREP_FILE`, `SITE_VARS`, and `RECIPE_VARS` if your site uses different paths.
 
-**Important:** Note that CSM_SEC_VERSION `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](README.md#valid-update-paths)
+**Important:** Note that `CSM_SEC_VERSION` `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](README.md#valid-update-paths)
 
 ```bash
 export CSM_SEC_VERSION=<REPLACE_RRU_VERSION>
@@ -121,7 +121,7 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
 
    (`workstation#`) Set the required variables and copy the tarball:
 
-   **Important:** Note that CSM_SEC_VERSION `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](README.md#valid-update-paths)
+   **Important:** Note that `CSM_SEC_VERSION` `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](README.md#valid-update-paths)
 
    ```bash
    CSM_SEC_VERSION=<REPLACE_RRU_VERSION>
@@ -145,6 +145,7 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
    ```bash
    STORAGE_NODES="$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs echo)"
    echo "$STORAGE_NODES"
+   ```
 
 1. Check if there are more than one images under directory /run/initramfs/live on all storage nodes. If yes then clean up old images. If not cleaned then the storage node rebuild fails at cloud-init stage.
 

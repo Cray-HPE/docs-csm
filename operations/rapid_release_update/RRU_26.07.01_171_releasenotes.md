@@ -1,6 +1,6 @@
-# Release Notes - Rapid-Update-sle15-sp7-171-26.07.01
+# Release Notes - `Rapid-Update-sle15-sp7-171-26.07.01`
 
-This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.1.
+This document guides an administrator through the deploy of Rapid Release Update on `CSM-1.7.1`.
 
 This page documents the changes introduced by this RRU, compared to the previous RRU version.
 
@@ -17,19 +17,19 @@ This page documents the changes introduced by this RRU, compared to the previous
 CVEs fixed which have NVD score > 9.
 
 * `CVE-2026-43074` - Linux Kernel Eventpoll Use-After-Free.
-A race condition in the Linux kernel eventpoll subsystem may result in a use-after-free condition when eventpoll structures are accessed concurrently
+A race condition in the Linux kernel Eventpoll subsystem may result in a use-after-free condition when Eventpoll structures are accessed concurrently
 during cleanup. Successful exploitation could lead to memory corruption, information disclosure, denial of service, or privilege escalation.
 * `CVE-2026-43456` - Linux Kernel Bonding Type Confusion.
 A flaw in the Linux kernel bonding driver may cause a bond interface to invoke a non-Ethernet slave device's header-processing functions with
 incompatible private data. This type confusion could result in invalid memory access and a kernel crash, leading to a denial of service.
-* `CVE-2026-43499` - Linux Kernel rtmutex/Futex Privilege Escalation (GhostLock).
-A vulnerability in the Linux kernel real-time mutex and futex locking subsystem may result in a use-after-free condition caused by improper waiter
+* `CVE-2026-43499` - Linux Kernel `rtmutex/Futex` Privilege Escalation (GhostLock).
+A vulnerability in the Linux kernel real-time `mutex` and `futex` locking subsystem may result in a use-after-free condition caused by improper waiter
 tracking during lock cleanup. Successful exploitation could allow a local attacker to elevate privileges, execute arbitrary code, or cause a denial of service.
 * `CVE-2026-46242` - Linux Kernel Eventpoll ep_remove() Use-After-Free ("Bad Epoll").
-A race condition in the Linux kernel eventpoll ep_remove() function may allow a concurrent file release to observe a transiently cleared f_ep state
-and skip the normal eventpoll_release_file() cleanup path. This could result in a use-after-free condition, potentially causing memory corruption, denial of service, or privilege escalation.
+A race condition in the Linux kernel Eventpoll ep_remove() function may allow a concurrent file release to observe a transiently cleared `f_ep` state
+and skip the normal `eventpoll_release_file()` cleanup path. This could result in a use-after-free condition, potentially causing memory corruption, denial of service, or privilege escalation.
 * `CVE-2026-46266` - Linux Kernel RAW Socket ICMP Processing Vulnerability.
-A flaw in the Linux kernel networking stack could allow specially crafted ICMP packets to interact improperly with RAW sockets using the IPPROTO_RAW protocol.
+A flaw in the Linux kernel networking stack could allow specially crafted ICMP packets to interact improperly with RAW sockets using the `IPPROTO_RAW` protocol.
 Successful exploitation may alter network-routing state and affect system integrity or availability.
 * `CVE-2026-46331` - Linux Kernel Traffic Control Page Cache Corruption.
 A vulnerability in the Linux kernel traffic-control subsystem could result in page-cache corruption due to improper copy-on-write handling.

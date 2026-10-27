@@ -19,7 +19,7 @@ patches.
 2. After `prepare-images` completes, identify the image IDs and CFS configurations it created.
    You will need these for the storage and master node rollout steps.
 
-   The artifacts created by the prepare-images stage can found by examining the output from iuf run or by examining a Kubernetes ConfigMap associated with the
+   The artifacts created by the prepare-images stage can found by examining the output from `iuf` run or by examining a Kubernetes ConfigMap associated with the
    IUF activity specified when executing the prepare-images stage. The following examples show how to find the management node and managed node artifacts from the ConfigMap.
 
    (`ncn-mw#`) Examine the activity ConfigMap to identify the management node images and CFS configurations created by prepare-images.
@@ -68,7 +68,7 @@ patches.
 
 3. Set variables for the images created
 
-   Using the example output from the previous step, set the values for `MASTER_IMAGE_ID`, `STORAGE_IMAGE_ID`, and `WORKER_IMAGE_ID` with the `IMS` `final_image_id` in the configmap for each image type.
+   Using the example output from the previous step, set the values for `MASTER_IMAGE_ID`, `STORAGE_IMAGE_ID`, and `WORKER_IMAGE_ID` with the `IMS` `final_image_id` in the `configmap` for each image type.
 
    ```bash
    export MASTER_IMAGE_ID=a70de793-859a-44e0-8d53-f27893097158
@@ -78,7 +78,7 @@ patches.
 
 4. Set variables for the CFS configurations created
 
-   Using the example output from the previous step, set the values for `MASTER_CFG_ID`, `STORAGE_CFG_ID`, and `WORKER_CFG_ID` with the `IMS` `configuration` in the configmap for each image type.
+   Using the example output from the previous step, set the values for `MASTER_CFG_ID`, `STORAGE_CFG_ID`, and `WORKER_CFG_ID` with the `IMS` `configuration` in the `configmap` for each image type.
 
    ```bash
    export MASTER_CFG_ID=management-26.3.0-rru-26.10.01
