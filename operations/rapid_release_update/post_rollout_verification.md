@@ -23,8 +23,10 @@ After all nodes are rolled out, validate the system:
    ----------------
    ncn-m[001-003],ncn-s[001-003],ncn-w[001-004]
    ----------------
-   6.4.0-150700.53.78-default
+   <NEW_KERNEL_VERSION>
    ```
+   **Important:** Note that kernel version `NEW_KERNEL_VERSION` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+
 
 1. Verify the csm-security product is registered in the product catalog:
 
@@ -35,8 +37,9 @@ After all nodes are rolled out, validate the system:
    Expected output:
 
    ```bash
-   | csm-security                        | Rapid-Update-sle15-sp7-171-26.09.01 | -                                           | -                                                   |
+   | csm-security                        | <NEW_RRU_VERSION> | -                                           | -                                                   |
    ```
+   **Important:** Note that `NEW_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
 
 ## 2. Stop the typescript
 

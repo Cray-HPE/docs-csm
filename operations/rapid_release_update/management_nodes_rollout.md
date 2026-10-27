@@ -25,7 +25,7 @@ This section updates the kernel running on management NCNs.
    Roll out the new image and CFS configuration to one storage node at a time.
    Wait for Ceph `HEALTH_OK` before proceeding to the next node.
 
-   2. Determine the number of storage nodes on the system.
+   1. Determine the number of storage nodes on the system.
 
       ```bash
       STORAGE_NODES="$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs echo)"
@@ -36,7 +36,7 @@ This section updates the kernel running on management NCNs.
    > nodes. Choose one storage node to be the canary — verify the kernel update and CFS
    > personalization succeeded before proceeding to the remaining storage nodes.
 
-   3. Test this set of commands on the `STORAGE_CANARY` node
+   1. Test this set of commands on the `STORAGE_CANARY` node
 
       1. Record the existing kernel version on the first storage node.
 
@@ -46,72 +46,90 @@ This section updates the kernel running on management NCNs.
          echo $OLDUNAME
          ```
 
-      2. Record the xname of the STORAGE_CANARY node.
+      1. Record the xname of the STORAGE_CANARY node.
 
          ```bash
          XNAME=$(ssh $STORAGE_CANARY 'cat /etc/cray/xname')
          echo "${XNAME}"
          ```
       
+      1. Record current image id and configuration name on the `STORAGE_CANARY` node
+
+         ```bash
+         OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
+         echo "${OLD_CFG_NAME}"
+         OLD_IMAGE_NAME=$(ssh $STORAGE_CANARY "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+         echo "${OLD_IMAGE_NAME}"
+         ```
+
       **NOTE** The `management-nodes-rollout` stage creates additional separate Argo workflows when rebuilding NCN storage nodes. The Argo workflow names will include the string `ncn-lifecycle-rebuild`.
       If monitoring progress with the Argo UI, remember to include these workflows.
 
-      > **Known Issue:** If `cloud-init` fails on the storage node with a timed out error, see [storage node `cloud-init` fails with 'Timed out waiting for device' error](../../../troubleshooting/known_issues/storage_node_cloud_init_fails_with_timed_out.md).
+      > **Known Issue:** If `cloud-init` fails on the storage node with a timed out error, see [storage node `cloud-init` fails with 'Timed out waiting for device' error](troubleshooting.md#1-storage-node-cloud-init-fails-with-timed-out-waiting-for-device-error).
 
+   1. (ncn-m001#) Execute the management-nodes-rollout stage with a single NCN storage node.
 
-      3. (ncn-m001#) Execute the management-nodes-rollout stage with a single NCN storage node.
+      ```bash
+      iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
+      ```
 
-         ```bash
-        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_CANARY}
-        ```
-      
-      7. (ncn-m001#) Monitor the Argo Workflow using the Argo UI. See [using the Argo UI for instructions to access the Argo UI](https://cray-hpe.github.io/docs-csm/en-17/operations/argo/using_the_argo_ui/).
+   1. (ncn-m001#) Monitor the Argo Workflow using the Argo UI. See [using the Argo UI for instructions to access the Argo UI](https://cray-hpe.github.io/docs-csm/en-17/operations/argo/using_the_argo_ui/).
 
-      8. After the node boots, verify the node:
+   1. After the node boots, verify the node:
 
-         1. Verify that the kernel version has changed.
-
-            ```bash
-            NEWUNAME=$(ssh $STORAGE_CANARY uname -r)
-            echo "Old: $OLDUNAME"
-            echo "New: $NEWUNAME"
-            ```
-
-         2. Verify CFS configuration status shows `configured`.
-
-            ```bash
-            sat status --filter subrole=Storage --fields xname,aliases,desired,configuration | grep $STORAGE_CANARY
-            ```
-
-            Example output:
-
-            ```bash
-            | x3000c0s13b0n0 | ncn-s001 | storage-26.3.0-rru     | configured           |
-            ```
-
-            The desired value for `configuration` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
-
-         3. Verify Ceph health reports `HEALTH_OK` before continuing.
-
-            ```bash
-            ceph health
-            ```
-
-            Use this command to get more detail about Ceph health status.
-
-            ```bash
-            ceph -s
-            ```
-
-      7. Clean up old images on the node:
+      1. Verify that the kernel version has changed.
 
          ```bash
-         ssh $STORAGE_CANARY /srv/cray/scripts/metal/cleanup-live-images.sh -y -o
+         NEWUNAME=$(ssh $STORAGE_CANARY uname -r)
+         echo "Old: $OLDUNAME"
+         echo "New: $NEWUNAME"
          ```
 
-   3. Get OLDUNAME of remaining storage nodes.
+         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
 
-       ```bash
+      1. Verify CFS configuration name is changed to `STORAGE_CFG_ID` as set in the [Prepare Images](image_preparation.md) and the status shows `configured`.
+
+         ```bash
+         sat status --filter subrole=Storage --fields xname,aliases,desired,configuration | grep $STORAGE_CANARY
+         ```
+
+         Example output:
+
+         ```bash
+         | x3000c0s13b0n0 | ncn-s001 | storage-26.3.0-rru-26.10.1     | configured           |
+         ```
+
+         The desired value for `configuration` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
+
+      1. Verify image name is changed. 
+
+         ```bash
+         NEW_IMAGE_NAME=$(ssh $STORAGE_CANARY "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+         echo "${OLD_IMAGE_NAME}"
+         echo "${NEW_IMAGE_NAME}"
+         ```
+
+      1. Verify Ceph health reports `HEALTH_OK` before continuing.
+
+         ```bash
+         ceph health
+         ```
+
+         Use this command to get more detail about Ceph health status.
+
+         ```bash
+         ceph -s
+         ```
+
+   1. Clean up old images on the node:
+
+      ```bash
+      ssh $STORAGE_CANARY /srv/cray/scripts/metal/cleanup-live-images.sh -y -o
+      ```
+
+   1. Get OLDUNAME of remaining storage nodes.
+
+      ```bash
       STORAGE_NODES="$(ceph orch host ls | grep ncn-s | grep -v "$STORAGE_CANARY" | awk '{print $1}' | xargs echo)"
       echo "$STORAGE_NODES"
       for node in $STORAGE_NODES
@@ -120,13 +138,14 @@ This section updates the kernel running on management NCNs.
          echo $OLDUNAME
       done
       ```
-   4. Execute the management-nodes-rollout stage on the remaining storage nodes.
+
+   1. Execute the management-nodes-rollout stage on the remaining storage nodes.
 
       ```bash
       iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${STORAGE_NODES}
       ```
 
-   4. Verify that all storage nodes are now configured and the kernel version is changed.
+   1. Verify that all storage nodes booted successfully with new image and CFS configuration
 
       ```bash
       for ncn in $(cray hsm state components list --subrole Storage --type Node \
@@ -135,12 +154,18 @@ This section updates the kernel running on management NCNs.
 
       for node in $STORAGE_NODES
       do
+         NEW_CFG_NAME=$(cray cfs components describe $node --format json | jq .desiredConfig)
+         echo $NEW_CFG_NAME
          NEWUNAME=$(ssh $node 'uname -r')
          echo $NEWUNAME
+         NEW_IMAGE_NAME=$(ssh $node "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+         echo $NEW_IMAGE_NAME
       done
       ```
 
-   5. Verify Ceph health reports `HEALTH_OK` before continuing.
+      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+
+   1. Verify Ceph health reports `HEALTH_OK` before continuing.
 
       ```bash
       ceph health
@@ -152,7 +177,7 @@ This section updates the kernel running on management NCNs.
       ceph -s
       ```
 
-   6. Clean up old images on the storage nodes:
+   1. Clean up old images on the storage nodes:
 
       ```bash
       for node in $STORAGE_NODES
@@ -165,22 +190,6 @@ This section updates the kernel running on management NCNs.
 ## 2. Worker Nodes
 
 Roll out the new image and CFS configuration to one worker node, validate the change, then a second worker node, then proceed to the rest of the worker nodes.
-
-   1. If the iscsi_worker group is present then selective iSCSI worker node personalizatiuon feature is enabled else all worker nodes by default are enabled as iSCSI targets.
-   
-      Identify which worker nodes are configured as iSCSI targets.
-
-      ```bash
-      ncn-m001:~ # cray hsm groups list | grep iscsi_worker
-      label = "iscsi_worker"
-      ```
-
-      If label is not found then skip to next step.
-
-      ```
-      ncn-m001:~ # cray hsm groups members list iscsi_worker
-      ids = [ "x3000c0s7b0n0", "x3000c0s9b0n0", "x3000c0s11b0n0",]
-      ```
 
    1. Set `iscsid.safe_logout=No` for iSCSI clients on the application and compute nodes.
       
@@ -213,7 +222,22 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
          pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/g' /etc/iscsi/iscsid.conf && systemctl restart iscsid.service && echo Success || echo Fail" 2>/dev/null | dshbak -c
          ```
 
-   1. Select a node to be the `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
+   1. Verify the iscsi_worker group is present then selective iSCSI worker node personalizatiuon feature is enabled else all worker nodes by default are enabled as iSCSI targets.
+
+      Identify which worker nodes are configured as iSCSI targets.
+
+      ```bash
+      ncn-m001:~ # cray hsm groups list | grep iscsi_worker
+      label = "iscsi_worker"        # Output with label iscsi-worker present. If not present then there will be no output
+      ```
+      If the iscsi-worker label is not found, the above command will produce no output. In that case, skip the next command, as this indicates that all worker nodes are enabled as iSCSI targets.
+
+      ```
+      ncn-m001:~ # cray hsm groups members list iscsi_worker
+      ids = [ "x3000c0s7b0n0", "x3000c0s9b0n0", "x3000c0s11b0n0",]
+      ```
+
+   1. If the iscsi-worker group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
 
       **Note:** Choose the canary node wisely, don't use one running slingshot-fabric-manager or nexus.
 
@@ -221,16 +245,25 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       WORKER_CANARY=ncn-w001 
       ```
 
-   1. Ssh to `WORKER_CANARY` and get the current/existing kernel version.
+   1. SSH to `WORKER_CANARY` and get the current/existing kernel version.
 
       ```bash
       OLDUNAME=$(ssh $WORKER_CANARY uname -r)
       echo $OLDUNAME
       ```
-      Sample output:
+   1. Record the xname of the `WORKER_CANARY` node.
 
       ```bash
-      6.4.0-150700.53.52-default
+      XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
+      echo "${XNAME}"
+      ```
+
+   1. Record current image id and configuration name on the `WORKER_CANARY` node.
+      ```bash
+      OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
+      echo "${OLD_CFG_NAME}"
+      OLD_IMAGE_NAME=$(ssh $WORKER_CANARY "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+      echo "${OLD_IMAGE_NAME}"
       ```
 
    1. Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY`.
@@ -243,20 +276,24 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
    1. If the selected `WORKER_CANARY` is an iSCSI target node then execute `iscsi_post_rollout.sh` script to help the `iSCSI` clients on the application and compute nodes to adjust to the new LUNs on the worker node.
 
-      **Important:** Ensure that the hostname REPLACEHOST is replaced with the actual value of the worker node hostname before running these commands.
-
       ```bash
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 REPLACEHOST | grep "State: L"' 2>/dev/null
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY | grep 'State: L'" 2>/dev/null
       pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sh /tmp/iscsi_post_rollout.sh $WORKER_CANARY && echo Success" 2>/dev/null | dshbak -c
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 REPLACEHOST | grep "State: L"' 2>/dev/null
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY | grep 'State: L'" 2>/dev/null
       ```
 
    1. (ncn-m001#) Verify that the node booted successfully with the desired image and CFS configuration.
 
       ```bash
-      XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
-      echo "${XNAME}"
       cray cfs components describe "${XNAME}"
+      ```
+      ```bash
+      NEW_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
+      echo "${OLD_CFG_NAME}"
+      echo "${NEW_CFG_NAME}"
+      NEW_IMAGE_NAME=$(ssh $WORKER_CANARY "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+      echo "${OLD_IMAGE_NAME}"
+      echo "${NEW_IMAGE_NAME}"
       ```
 
    1. Verify that the kernel version has changed.
@@ -267,12 +304,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       echo $NEWUNAME
       ```
 
-      Sample output:
-
-      ```bash
-      6.4.0-150700.53.52-default
-      6.4.0-150700.53.78-default
-      ```
+      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
 
    1. ncn-m001#) Use kubectl to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
@@ -298,7 +330,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
    
-   1. Select a second node to be the `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
+   1. If the iscsi-worker group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
       **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with `iuf-prevent-rollout=true` followed by rolling out the rest of the worker nodes.
 
@@ -308,16 +340,26 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       WORKER_CANARY2=ncn-w002 
       ```
 
-   1. Ssh to `WORKER_CANARY2` and get the current/existing kernel version.
+   1. SSH to `WORKER_CANARY2` and get the current/existing kernel version.
 
       ```bash
       OLDUNAME=$(ssh $WORKER_CANARY2 uname -r)
       echo $OLDUNAME
       ```
-      Sample output:
+
+   1. Record the xname of the `WORKER_CANARY2` node.
 
       ```bash
-      6.4.0-150700.53.52-default
+      XNAME=$(ssh $WORKER_CANARY2 'cat /etc/cray/xname')
+      echo "${XNAME}"
+      ```
+
+   1. Record current image id and configuration name on the `WORKER_CANARY` node.
+      ```bash
+      OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
+      echo "${OLD_CFG_NAME}"
+      OLD_IMAGE_NAME=$(ssh $WORKER_CANARY2 "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+      echo "${OLD_IMAGE_NAME}"
       ```
 
    1. Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY2`.
@@ -330,21 +372,24 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
    1. Only if the selected `WORKER_CANARY2` is an iSCSI target node then execute `iscsi_post_rollout.sh` script to help the `iSCSI` clients on the application and compute nodes to adjust to the new LUNs on the worker node.
 
-
-      **Important:** Ensure that the hostname REPLACEHOST is replaced with the actual value of the worker node hostname before running these commands.
-
       ```bash
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 REPLACEHOST | grep "State: L"' 2>/dev/null
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY2 | grep 'State: L'" 2>/dev/null
       pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sh /tmp/iscsi_post_rollout.sh $WORKER_CANARY2 && echo Success" 2>/dev/null | dshbak -c
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 REPLACEHOST | grep "State: L"' 2>/dev/null
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY2 | grep 'State: L'" 2>/dev/null
       ```
 
    1. (ncn-m001#) Verify that the node booted successfully with the desired image and CFS configuration.
 
       ```bash
-      XNAME=$(ssh $WORKER_CANARY2 'cat /etc/cray/xname')
-      echo "${XNAME}"
       cray cfs components describe "${XNAME}"
+      ```
+      ```bash
+      NEW_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
+      echo "${OLD_CFG_NAME}"
+      echo "${NEW_CFG_NAME}"
+      NEW_IMAGE_NAME=$(ssh $WORKER_CANARY2 "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+      echo "${OLD_IMAGE_NAME}"
+      echo "${NEW_IMAGE_NAME}"
       ```
 
    1. Verify that the kernel version has changed.
@@ -355,12 +400,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       echo $NEWUNAME
       ```
 
-      Sample output:
-
-      ```bash
-      6.4.0-150700.53.52-default
-      6.4.0-150700.53.78-default
-      ```
+      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
 
    1. ncn-m001#) Use kubectl to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
@@ -405,21 +445,21 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
             Execute management-nodes-rollout on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
       
             ```bash
-            WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -v $WORKER_CANARY |  awk '{print $1}' | xargs)
+            WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -vE "$WORKER_CANARY|$WORKER_CANARY2" | awk '{print $1}' | xargs)
             echo $WORKER_NODES
             iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
             ```
 
-      1. Execute `iscsi_post_rollout.sh` script to help the `iSCSI` clients on the application and compute nodes to adjust to the new LUNs on the worker node.
+      1. Only if the worker node is an iSCSI target node then execute `iscsi_post_rollout.sh` script to help the `iSCSI` clients on the application and compute nodes to adjust to the new LUNs on the worker node.
 
          **Warning:** as each node from the previous `IUF management-nodes-rollout` command gets to the point where Linux has powered off and the node powers on to show POST/BIOS messages, then run these `pdsh` commands on all `iSCSI` clients.
 
-         **Important:** Ensure that the hostname REPLACEHOST is replaced with the actual value of the worker node hostname which has just started powering on before running these commands.
+         **Important:** Ensure that the hostname `REPLACEHOST` is replaced with the actual value of the worker node hostname which has just started powering on before running these commands.
 
          ```bash
-         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 REPLACEHOST | grep "State: L"' 2>/dev/null
-         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sh /tmp/iscsi_post_rollout.sh REPLACEHOST && echo Success" 2>/dev/null | dshbak -c
-         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 REPLACEHOST | grep "State: L"' 2>/dev/null
+         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 <REPLACEHOST> | grep "State: L"' 2>/dev/null
+         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sh /tmp/iscsi_post_rollout.sh <REPLACEHOST> && echo Success" 2>/dev/null | dshbak -c
+         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 <REPLACEHOST> | grep "State: L"' 2>/dev/null
          ```
 
    1. After all worker nodes have finished their image rollout, set `iSCSI` `iscsid.safe_logout=Yes` again and restart `iscsid.service` on all application and compute nodes.
@@ -434,13 +474,16 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       kubectl label nodes "${WORKER_CANARY ${WORKER_CANARY2}" --overwrite iuf-prevent-rollout-
       ```
 
-   1. (ncn-m001#) Verify that all worker nodes configured successfully.
+   1. (ncn-m001#) Verify that all worker nodes booted successfully with the desired image and CFS configuration.
 
       ```bash
       for ncn in $(cray hsm state components list --subrole Worker --type Node \
           --format json | jq -r .Components[].ID | grep b0n | sort)
       do
-          cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
+         cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
+         NEW_IMAGE_NAME=$(ssh $ncn "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+         echo "${OLD_IMAGE_NAME}"
+         echo "${NEW_IMAGE_NAME}"
       done
       ```
 
@@ -471,6 +514,20 @@ The rebuild script handles first-master promotion automatically.
       echo "${XNAME}"
       ```
 
+   1. SSH to `MASTER` and get the current/existing kernel version.
+
+      ```bash
+      OLDUNAME=$(ssh $MASTER uname -r)
+      echo $OLDUNAME
+      ```
+
+   1. Record current image id and configuration name on the `MASTER` node.
+
+      OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
+      echo "${OLD_CFG_NAME}"
+      OLD_IMAGE_NAME=$(ssh $MASTER "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+      echo "${OLD_IMAGE_NAME}"
+
    2. Assign the new image to BSS. The rebuild script sets
       `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs
       for kernel, initrd, and rootfs.
@@ -506,19 +563,37 @@ The rebuild script handles first-master promotion automatically.
       /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh $MASTER
       ```
 
-      **Warning:**  While watching the console for ncn-m003, you might see an error like this as part of a set of looping messages.
+      > **Known Issue:** If you see error while watching the console of `ncn-m003`, see [Secret "kubeadm-certs" was not found in the "kube-system" Namespace](troubleshooting.md#3-secret-kubeadm-certs-was-not-found-in-the-kube-system-namespace).
 
-      ```bash
-      2026-10-20 14:50:09 [ 1617.920705] cloud-init[12514]: error execution phase control-plane-prepare/download-certs: error downloading certs: error downloading the secret: Secret "kubeadm-certs" was not found in the "kube-system" Namespace. This Secret might have expired. Please, run `kubeadm init phase upload-certs --upload-certs` on a control plane to generate a new one
-      ```
+   1. After the node boots, 
+      1. Update the node's CFS configuration.
 
-      If this happens, then follow the [Kubeadm join token missing during NCN rebuild](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/troubleshooting/known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md) procedure which includes steps to promote the initial master script which clears the Kubernetes bootstrap tokens, loads them into a `cluster-info` config map and regenates the Kubernetes join scripts in /etc/cray/kubernetes, then configures an hourly cronjob to create/update the tokens.  After that the node being rebuilt will have to be power cycled to attempt the rebuild again.
+         ```bash
+         cray cfs components update $XNAME --enabled true --desired-config $MASTER_CFG_ID
+         ```
 
-   1. Verify that CFS has completed for this node before moving to the next node.
+      1. Verify that the kernel version has changed.
 
-      ```bash
-      cray cfs components describe $XNAME
-      ```
+         ```bash
+         NEWUNAME=$(ssh $MASTER uname -r)
+         echo "Old: $OLDUNAME"
+         echo "New: $NEWUNAME"
+         ```
+
+         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+
+      2. Verify the node booted successfully with the new image and CFS configuration.
+
+         ```bash
+         cray cfs components describe $XNAME
+         ```
+         If not `configured` wait until the node's configurationStatus changes to `configured` state.
+
+         ```bash
+         NEW_IMAGE_NAME=$(ssh $MASTER "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+         echo "${OLD_IMAGE_NAME}"
+         echo "${NEW_IMAGE_NAME}"
+         ```
 
    1. Record the xname of the next MASTER node.
    
@@ -528,6 +603,22 @@ The rebuild script handles first-master promotion automatically.
       echo "${XNAME}"
       ```
 
+   1. SSH to `MASTER` and get the current/existing kernel version.
+
+      ```bash
+      OLDUNAME=$(ssh $MASTER uname -r)
+      echo $OLDUNAME
+      ```
+
+   1. Record current image id and configuration name on the `MASTER` node.
+
+      ```bash
+      OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
+      echo "${OLD_CFG_NAME}"
+      OLD_IMAGE_NAME=$(ssh $MASTER "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+      echo "${OLD_IMAGE_NAME}"
+      ```
+
    2. Assign the new image to BSS. The rebuild script sets
       `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs
       for kernel, initrd, and rootfs.
@@ -563,24 +654,50 @@ The rebuild script handles first-master promotion automatically.
       /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh $MASTER
       ```
 
-   1. Verify that CFS has completed for this node.
+   4. After the node boots:
 
-      ```bash
-      cray cfs components describe $XNAME
-      ```
+      1. Update the node's CFS configuration.
+
+         ```bash
+         cray cfs components update $XNAME --enabled true --desired-config $MASTER_CFG_ID
+         ```
+
+      1. Verify that the kernel version has changed.
+
+         ```bash
+         NEWUNAME=$(ssh $MASTER uname -r)
+         echo "Old: $OLDUNAME"
+         echo "New: $NEWUNAME"
+         ```
+
+         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+
+      2. Verify the node booted successfully with the new image and CFS configuration.
+
+         ```bash
+         cray cfs components describe $XNAME
+         ```
+         If not `configured` wait until the node's configurationStatus changes to `configured` state.
+
+         ```bash
+         NEW_IMAGE_NAME=$(ssh $MASTER "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+         echo "${OLD_IMAGE_NAME}"
+         echo "${NEW_IMAGE_NAME}"
+         ```
 
 1. Update `ncn-m001`.
 
-   1. Show the value of the `MASTER_IMAGE_ID`.  This environment variable will need to be set after logging into `ncn-m002`.
+   1. Show the value of the `MASTER_IMAGE_ID` and `MASTER_CFG_ID`.  This environment variable will need to be set after logging into `ncn-m002`.
 
       ```bash
       echo $MASTER_IMAGE_ID
+      echo $MASTER_CFG_ID
       ```
 
    1. Determine the SYSTEM_NAME for the system.
 
       ```bash
-      SYSTEM_NAME=kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:" | cut -f2 -d: | sed -e 's/ //'
+      SYSTEM_NAME=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:" | cut -f2 -d: | sed -e 's/ //')
       echo $SYSTEM_NAME
       ```
 
@@ -598,10 +715,11 @@ The rebuild script handles first-master promotion automatically.
       ssh ncn-m002.cmn.eniac.dev.hpe.com
       ```
 
-   1. Once logged into `ncn-m002`, set the MASTER_IMAGE_ID for the new image to be used on `ncn-m001`.
+   1. Once logged into `ncn-m002`, set the `MASTER_IMAGE_ID` and `MASTER_CFG_ID` for the new image to be used on `ncn-m001`.
 
       ```bash
       export MASTER_IMAGE_ID=d5c99503-096f-4279-a0a9-be4789a1bea5
+      export MASTER_CFG_ID=management-26.3.0-rru-26.10.01
       ```
 
    1. Verify `/etc/cray/upgrade/csm/myenv` exists and sets `CSM_RELEASE` and `CSM_ARTI_DIR`.
@@ -620,6 +738,22 @@ The rebuild script handles first-master promotion automatically.
       echo "${XNAME}"
       ```
 
+   1. SSH to `MASTER` and get the current/existing kernel version.
+
+      ```bash
+      OLDUNAME=$(ssh $MASTER uname -r)
+      echo $OLDUNAME
+      ```
+
+   1. Record current image id and configuration name on the `MASTER` node.
+
+      ```bash
+      OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
+      echo "${OLD_CFG_NAME}"
+      OLD_IMAGE_NAME=$(ssh $MASTER "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+      echo "${OLD_IMAGE_NAME}"
+      ```
+
    2. Assign the new image to BSS. The rebuild script sets
       `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs
       for kernel, initrd, and rootfs.
@@ -627,6 +761,8 @@ The rebuild script handles first-master promotion automatically.
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
       ```
+
+      > **Known Issue:** If the above command fails, see [Master node `assign-ncn-images.sh` fails with 'Error: Error received from server: 403 Forbidden'](troubleshooting.md#2-master-node-assign-ncn-imagessh-fails-with-error-error-received-from-server-403-forbidden).
    
    4. Check for important files which are not backed up from the node.
 
@@ -655,15 +791,40 @@ The rebuild script handles first-master promotion automatically.
       /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh $MASTER
       ```
 
-   1. Verify that CFS has completed for this node.
+   4. After the node boots:
 
-      ```bash
-      cray cfs components describe $XNAME
-      ```
+      1. Update the node's CFS configuration.
+
+         ```bash
+         cray cfs components update $XNAME --enabled true --desired-config $MASTER_CFG_ID
+         ```
+
+      1. Verify that the kernel version has changed.
+
+         ```bash
+         NEWUNAME=$(ssh $MASTER uname -r)
+         echo "Old: $OLDUNAME"
+         echo "New: $NEWUNAME"
+         ```
+
+         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+
+      2. Verify the node booted successfully with the new image and CFS configuration.
+
+         ```bash
+         cray cfs components describe $XNAME
+         ```
+         If not `configured` wait until the node's configurationStatus changes to `configured` state.
+
+         ```bash
+         NEW_IMAGE_NAME=$(ssh $MASTER "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
+         echo "${OLD_IMAGE_NAME}"
+         echo "${NEW_IMAGE_NAME}"
+         ```
 
 1. Restore the SDU and RDA configuration on the master node.
 
-1. Verify that all master nodes have completed CFS configuration.
+1. Verify that all master nodes have completed CFS configuration and the kernel version is updated
 
    ```bash
    for ncn in $(cray hsm state components list --subrole Master --type Node \
@@ -671,6 +832,7 @@ The rebuild script handles first-master promotion automatically.
    do
      cray cfs components describe "$ncn" --format json \
        | jq -r '.id + " " + .desiredConfig + " status=" + .configurationStatus'
+     ssh $ncn 'uname -r'
    done
    ```
 
@@ -678,7 +840,6 @@ The rebuild script handles first-master promotion automatically.
 
 - [Management Rollout workflow](https://cray-hpe.github.io/docs-csm/en-17/operations/iuf/workflows/management_rollout/)
 - [`management-nodes-rollout` stage](https://cray-hpe.github.io/docs-csm/en-17/operations/iuf/stages/management_nodes_rollout/)
-- [Boot storage node into new image](https://cray-hpe.github.io/docs-csm/en-17/operations/node_management/boot_storage_node_into_new_image/)
 - [Rebuild NCNs](https://cray-hpe.github.io/docs-csm/en-17/operations/node_management/rebuild_ncns/rebuild_ncns/)
 
 ## 5. Next steps

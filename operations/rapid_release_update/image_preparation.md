@@ -16,8 +16,8 @@ patches.
      -r prepare-images
    ```
 
-2. After `prepare-images` completes, identify the image IDs and CFS configurations
-   it created. You will need these for the storage and master node rollout steps.
+2. After `prepare-images` completes, identify the image IDs and CFS configurations it created.
+   You will need these for the storage and master node rollout steps.
 
    The artifacts created by the prepare-images stage can found by examining the output from iuf run or by examining a Kubernetes ConfigMap associated with the
    IUF activity specified when executing the prepare-images stage. The following examples show how to find the management node and managed node artifacts from the ConfigMap.
@@ -26,43 +26,43 @@ patches.
 
    ```bash
    kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' \
-       | jq '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout' \
-       | xargs -0 echo -e
+        | jq '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout' \
+        | xargs -0 echo -e
    ```
 
    Example output:
 
    ```bash
    "{
-       \"images\": [
-           {
-               \"name\": \"master-secure-kubernetes-7.2.21-x86_64.squashfs\",
-               \"preconfigured_image_id\": null,
-               \"final_image_id\": \"d5c99503-096f-4279-a0a9-be4789a1bea5\",
-               \"configuration\": \"management-26.3.1\",
-               \"configuration_group_names\": [
-                   \"Management_Master\"
-               ]
-           },
-           {
-               \"name\": \"storage-secure-storage-ceph-7.2.21-x86_64.squashfs\",
-               \"preconfigured_image_id\": null,
-               \"final_image_id\": \"7603a2ee-3732-4c60-9fe4-b289e48c717f\",
-               \"configuration\": \"storage-26.3.1\",
-               \"configuration_group_names\": [
-                   \"Management_Storage\"
-               ]
-           },
-           {
-               \"name\": \"worker-secure-kubernetes-7.2.21-x86_64.squashfs\",
-               \"preconfigured_image_id\": null,
-               \"final_image_id\": \"43079045-952b-485a-96bc-a967e1c2dc88\",
-               \"configuration\": \"management-26.3.1\",
-               \"configuration_group_names\": [
-                   \"Management_Worker\"
-               ]
-           }
-       ]
+        \"images\": [
+            {
+                \"name\": \"worker-secure-kubernetes-7.2.18-x86_64.squashfs-rru-26.10.01\",
+                \"preconfigured_image_id\": null,
+                \"final_image_id\": \"d0de60c0-e939-46fb-b10b-99ddaccec273\",
+                \"configuration\": \"management-26.3.0-rru-26.10.01\",
+                \"configuration_group_names\": [
+                    \"Management_Worker\"
+                ]
+            },
+            {
+                \"name\": \"storage-secure-storage-ceph-7.2.18-x86_64.squashfs-rru-26.10.01\",
+                \"preconfigured_image_id\": null,
+                \"final_image_id\": \"8eb5dc4d-8041-47e0-aa4c-542e10516c1e\",
+                \"configuration\": \"storage-26.3.0-rru-26.10.01\",
+                \"configuration_group_names\": [
+                    \"Management_Storage\"
+                ]
+            },
+            {
+                \"name\": \"master-secure-kubernetes-7.2.18-x86_64.squashfs-rru-26.10.01\",
+                \"preconfigured_image_id\": null,
+                \"final_image_id\": \"a70de793-859a-44e0-8d53-f27893097158\",
+                \"configuration\": \"management-26.3.0-rru-26.10.01\",
+                \"configuration_group_names\": [
+                    \"Management_Master\"
+                ]
+            }
+        ]
    }"
    ```
 
@@ -71,9 +71,19 @@ patches.
    Using the example output from the previous step, set the values for `MASTER_IMAGE_ID`, `STORAGE_IMAGE_ID`, and `WORKER_IMAGE_ID` with the `IMS` `final_image_id` in the configmap for each image type.
 
    ```bash
-   export MASTER_IMAGE_ID=d5c99503-096f-4279-a0a9-be4789a1bea5
-   export STORAGE_IMAGE_ID=7603a2ee-3732-4c60-9fe4-b289e48c717f
-   export WORKER_IMAGE_ID=43079045-952b-485a-96bc-a967e1c2dc88
+   export MASTER_IMAGE_ID=a70de793-859a-44e0-8d53-f27893097158
+   export STORAGE_IMAGE_ID=8eb5dc4d-8041-47e0-aa4c-542e10516c1e
+   export WORKER_IMAGE_ID=d0de60c0-e939-46fb-b10b-99ddaccec273
+   ```
+
+4. Set variables for the CFS configurations created
+
+   Using the example output from the previous step, set the values for `MASTER_CFG_ID`, `STORAGE_CFG_ID`, and `WORKER_CFG_ID` with the `IMS` `configuration` in the configmap for each image type.
+
+   ```bash
+   export MASTER_CFG_ID=management-26.3.0-rru-26.10.01
+   export STORAGE_CFG_ID=storage-26.3.0-rru-26.10.01
+   export WORKER_CFG_ID=management-26.3.0-rru-26.10.01
    ```
 
 ## Next steps

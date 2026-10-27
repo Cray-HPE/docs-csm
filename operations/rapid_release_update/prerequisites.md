@@ -5,6 +5,7 @@
 1. [Health validation](#3-health-validation)
 1. [Prepare for the install](#4-prepare-for-the-install)
 1. [Upload Product Media](#5-upload-product-media)
+1. [Check and clean old images on storage nodes](#6-check-and-clean-old-images-on-storage-nodes)
 1. [Next Steps](#7-next-steps)
 
 ### 1. Start typescript
@@ -74,8 +75,10 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
 1. (`ncn-m001#`) Set environment variables used throughout this procedure:
    Adjust `BOOTPREP_FILE`, `SITE_VARS`, and `RECIPE_VARS` if your site uses different paths.
 
+**Important:** Note that CSM_SEC_VERSION `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+
 ```bash
-export CSM_SEC_VERSION=Rapid-Update-sle15-sp7-171-26.10.01
+export CSM_SEC_VERSION=<REPLACE_RRU_VERSION>
 export VERSION=$(echo $CSM_SEC_VERSION | cut -f6 -d-)
 export ACTIVITY_NAME="csm-sec-$VERSION"
 export MEDIA_DIR="/etc/cray/upgrade/csm/media/csm-security/${CSM_SEC_VERSION}"
@@ -84,6 +87,23 @@ export BOOTPREP_FILE="$ADMIN_DIR/bootprep/management-bootprep.yaml"
 export SITE_VARS="$ADMIN_DIR/site_vars.yaml"
 export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
 ```
+
+1. Modify the suffix in `SITE_VARS` to `rru-$VERSION`. This will generate configuration and image name with suffix `rru-$VERSION`.
+
+   ```bash
+   sed -i 's/^[[:space:]]*suffix:.*/  suffix: "-rru-$VERSION"/' $SITE_VARS
+   ```
+
+1. Verify the suffix is updated in `SITE_VARS`
+
+   ```bash
+   grep "-rru-$VERSION"/' $SITE_VARS
+   ```
+   Sample Output
+   ```bash
+     suffix: "-rru-26.10.01"
+   ```
+   **Important:** This suffix value will be used to identify the new image and configuration name.
 
 ### 5. Upload Product Media
 
@@ -97,8 +117,10 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
 
    (`workstation#`) Set the required variables and copy the tarball:
 
+   **Important:** Note that CSM_SEC_VERSION `REPLACE_RRU_VERSION` is replaced with RRU version based on the current CSM version, as specified in [Valid update paths](rru_overview.md#valid-update-paths)
+
    ```bash
-   CSM_SEC_VERSION=Rapid-Update-sle15-sp7-171-26.10.01
+   CSM_SEC_VERSION=<REPLACE_RRU_VERSION>
    MEDIA_DIR="/etc/cray/upgrade/csm/media/csm-security/${CSM_SEC_VERSION}"
    scp -p csm-security-${CSM_SEC_VERSION}.tar.gz <ncn-m001>:${MEDIA_DIR}/
    ```
@@ -113,7 +135,46 @@ Once the above steps are completed:
 
  - Environment variables have been set and required IUF directories have been created
 
-### 6. Next steps
+### 6. Check and clean old images on storage nodes
+
+1. Determine the number of storage nodes on the system.
+
+   ```bash
+   STORAGE_NODES="$(ceph orch host ls | grep ncn-s | awk '{print $1}' | xargs echo)"
+   echo "$STORAGE_NODES"
+
+1. Check if there are more than one images under directory /run/initramfs/live on all storage nodes. If yes then clean up old images. If not cleaned then the storage node rebuild fails at cloud-init stage.
+
+   ```bash
+   for node in $STORAGE_NODES
+   do
+      NUM_IMAGES=$(ssh $node ls /run/initramfs/live | wc -l)
+      if [ $NUM_IMAGES -gt 1 ]; then
+         read -r -p "Multiple images were found on node $node. Clean up old images? (Y/n): " response
+
+         case "$response" in
+            [nN]|[nN][oO])
+               echo "Cleanup skipped. If images are not cleaned up, the storage rebuild will fail at the cloud-init stage."
+               break
+               ;;
+            ""|[yY]|[yY][eE][sS])
+               echo "Cleaning up old images on node $node..."
+               ssh "$node" /srv/cray/scripts/metal/cleanup-live-images.sh -y -o || {
+                     echo "ERROR: Failed to clean up old images on node $node."
+                     break
+               }
+               ;;
+            *)
+               echo "Invalid input. Please enter Y or n."
+               break
+               ;;
+         esac
+      fi
+   done
+   ```
+
+
+### 7. Next steps
 
 - Return to the
   [Deploying Rapid Release Update with IUF](installation_iuf.md)

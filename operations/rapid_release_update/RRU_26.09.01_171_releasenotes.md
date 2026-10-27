@@ -1,11 +1,16 @@
-# Rapid Release Update - 26.09.01 — Release Notes
+# Release Notes - Rapid-Update-sle15-sp7-171-26.09.01
 
-This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.1
+This document guides an administrator through the deploy of Rapid Release Update on CSM-1.7.1.
 
 This page documents the changes introduced by this RRU, compared to the previous RRU version. 
 
+* [Expected Kernel Version](#expected-kernel-version)
 * [CVE fixes](#cve-fixes)
 * [Deploy steps](#deploy-steps)
+
+## Expected Kernel Version
+
+`6.4.0-150700.53.78.1`
 
 ## CVEs Fixes
 
@@ -48,6 +53,6 @@ Several netfilter and ipset paths accessed the Ethernet MAC header without first
 * `CVE-2026-52986` - Linux Kernel Netfilter SIP Conntrack Out-of-Bounds Read
 The SIP connection-tracking helper used unsafe port parsing with simple_strtoul() on non-NUL-terminated packet data, allowing out-of-bounds reads on malformed packets; the fix adds a bounds-checked port parser.
 
-## Deploy RRU
+## Deploy Steps
 
-See [Rapid Release Update (RRU) for CSM kernel CVE fixes](rru_overview.md).
+See [Rapid Release Update (RRU) for CSM kernel CVE fixes](rru_overview.md#release-notes).

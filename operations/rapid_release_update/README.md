@@ -27,10 +27,14 @@ A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-
 | Kernel version | The SUSE kernel the NCN runs (e.g. kernel-default=6.4.0-150600.23.50.1). A security fix usually means moving to a kernel NVR that contains the patch. The 150600 / 150700 encoding identifies the SLE service pack (SP6 / SP7). |
 
 ## Release notes
- 
-[Rapid-Update-sle15-sp7-171-26.07.01 Release Notes](RRU_26.07.01_releasenote.md)
 
-[Rapid-Update-sle15-sp7-171-26.09.01 Release Notes](RRU_26.09.01_releasenote.md)
+[Rapid-Update-sle15-sp7-170-26.07.01 Release Notes](RRU_26.07.01_170_releasenotes.md)
+
+[Rapid-Update-sle15-sp7-170-26.10.01 Release Notes](RRU_26.10.01_170_releasenotes.md)
+
+[Rapid-Update-sle15-sp7-171-26.07.01 Release Notes](RRU_26.07.01_171_releasenotes.md)
+
+[Rapid-Update-sle15-sp7-171-26.09.01 Release Notes](RRU_26.09.01_171_releasenotes.md)
 
 ## Valid update paths
 
@@ -40,8 +44,8 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 | Installed CSM base version | Base SLE version | RRU version | Kernel version |
 | --- | --- | --- | --- |
 | 1.6.2 | SLE SP6 | Rapid-Update-sle15-sp6-162-26.10.01 | 6.4.0-150600.23.135.1 |
-| 1.7.0 | SLE SP6 | Rapid-Update-sle15-sp6-170-26.07.01 | 6.4.0-150600.23.125.1 |
-| 1.7.1 | SLE SP7 | Rapid-Update-sle15-sp7-171-26.09.01 | 6.4.0-150600.53.78.1 |
+| 1.7.0 | SLE SP6 | Rapid-Update-sle15-sp6-170-26.10.01 | 6.4.0-150600.23.138.1 |
+| 1.7.1 | SLE SP7 | Rapid-Update-sle15-sp7-171-26.09.01 | 6.4.0-150700.53.78.1 |
 
 
 > **Note:** RRU Version mentioned above is the latest released version. Previous versions can be found in the [Release Notes](#release-notes).
