@@ -8,7 +8,7 @@
 
 ## 1. Storage node `cloud-init` fails with 'Timed out waiting for device' error
 
-**Observed Error**
+## 1.1. Observed Error
 
 This error can be observed from a storage node's console.
 
@@ -23,12 +23,12 @@ This error can be observed from a storage node's console.
 [DEPEND] Dependency failed for File System Check on /dev/disk/by-label/CEPHVAR.
 ```
 
-**Description**
+## 1.2. Description
 
 This error happens when a storage node is being upgraded to a new image outside of the normal CSM major release upgrade.
 This happens because `rd.live.dir` still exists after the node reboots and the node does not pull the new image.
 
-**Procedure**
+## 1.3. Procedure
 
 1. (`ncn-m001#`) Set `TARGET_NCN` to the storage node hostname for the node that will be booted into a new image.
 
@@ -115,7 +115,7 @@ This happens because `rd.live.dir` still exists after the node reboots and the n
 
 ## 2. Master node `assign-ncn-images.sh` fails with 'Error: Error received from server: 403 Forbidden'
 
-**Observed Error**
+## 2.1. Observed Error
 
 ```bash
 /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
@@ -130,11 +130,11 @@ Try 'cray bss bootparameters list -h' for help.
 Error: Error received from server: 403 Forbidden
 ```
 
-**Description**
+## 2.2. Description
 
 Cray Command Line Interface (`cray` CLI) is not configured
 
-**Procedure**
+## 2.3. Procedure
 
 1. (`ncn-mws#`) Initialize the `cray` CLI
 
@@ -172,7 +172,7 @@ Cray Command Line Interface (`cray` CLI) is not configured
 
 ## 3. Secret "kubeadm-certs" was not found in the "kube-system" Namespace
 
-**Observed Error**
+## 3.1. Observed Error
 
 **Warning:**  While watching the console for ncn-m003, you might see an error like this as part of a set of looping messages.
 
@@ -182,11 +182,11 @@ Cray Command Line Interface (`cray` CLI) is not configured
     Please, run `kubeadm init phase upload-certs --upload-certs` on a control plane to generate a new one
     ```
 
-**Description**
+## 3.2. Description
 
 Kubeadm join token missing during NCN rebuild
 
-**Procedure**
+## 3.3. Procedure
 
 If this happens, then follow the [Kubeadm join token missing during NCN rebuild](https://github.com/Cray-HPE/docs-csm/blob/release/1.7/troubleshooting/known_issues/kubeadm_join_token_missing_during_ncn_rebuild.md)
 procedure which includes steps to promote the initial master script which clears the Kubernetes bootstrap tokens, loads them into a `cluster-info` config map

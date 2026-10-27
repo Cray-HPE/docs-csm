@@ -35,7 +35,7 @@ In mana_hwc_rx_event_handler(), rx_req_idx was derived from DMA-coherent memory 
 * `CVE-2026-64034` - Linux Kernel MANA TOCTOU Double-Fetch
 hwc_msg_id was read twice from a shared DMA buffer in the MANA driver, allowing a time-of-check/time-of-use double-fetch that could bypass the bounds check and corrupt memory, particularly in Confidential VMs.
 * `CVE-2026-74669` - Linux Kernel IPVS Tunnel ICMP Stack Out-of-Bounds Write
-ip_vs_in_icmp() left stale IPv4 option metadata after rebasing an skb, so a crafted outer timestamp option could point __ip_options_echo() at a stale offset and cause a stack out-of-bounds write in __icmp_send().
+ip_vs_in_icmp() left stale IPv4 option metadata after rebasing an skb, so a crafted outer timestamp option could point `__ip_options_echo()` at a stale offset and cause a stack out-of-bounds write in __icmp_send().
 * `CVE-2026-74612` - Linux Kernel veth XDP skb Length Accounting Flaw
 After an XDP program adjusted the fragment area, veth_xdp_rcv_skb() left skb->len out of sync with the linear area, causing copies past the linear tail that leaked shared-info and kernel pointers to userspace and could trigger SKB_LINEAR_ASSERT().
 * `CVE-2026-74581` - Linux Kernel IPv6 Suppressed FIB6 Rule Use-After-Free
@@ -207,7 +207,7 @@ dm-verity-fec allowed *neras to reach roots + 1, which was passed as no_eras to 
 * `CVE-2026-90413` - Linux Kernel IB/isert Login PDU Over-Declared Length Out-of-Bounds Read
 isert did not validate a login PDU's declared DataSegmentLength against the bytes actually received, so an initiator declaring more than it sent caused out-of-bounds reads past the fixed MAX_KEY_VALUE_PAIRS login buffer in both login paths.
 * `CVE-2026-74688` - Linux Kernel SCTP Queued Control Chunk Transport Use-After-Free
-sctp_make_heartbeat_ack() cached the destination transport in chunk->transport without a reference, so a HEARTBEAT ACK queued on control_chunk_list 
+sctp_make_heartbeat_ack() cached the destination transport in chunk->transport without a reference, so a HEARTBEAT ACK queued on control_chunk_list
 retained a dangling pointer after the peer transport was removed, leading to a use-after-free on transmit; the fix clears queued chunk transports.
 * `CVE-2026-74493` - Linux Kernel net/smc Link Group Termination Socket Use-After-Free
 __smc_lgr_terminate() dropped conns_lock after finding a connection but before taking a socket reference, so a concurrent close could free the socket before sock_hold() ran; the fix takes the reference while conns_lock still protects the tree entry.

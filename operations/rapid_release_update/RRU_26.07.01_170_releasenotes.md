@@ -17,7 +17,7 @@ This page documents the changes introduced by this RRU, compared to the previous
 CVEs fixed which have NVD score > 9.
 
 * `CVE-2026-46242` - Linux Kernel eventpoll ep_remove Use-After-Free
-ep_remove() cleared file->f_ep but kept using the file inside the critical section, so a concurrent __fput() could observe the transient NULL, 
+ep_remove() cleared file->f_ep but kept using the file inside the critical section, so a concurrent __fput() could observe the transient NULL,
 skip eventpoll_release_file(), and free the watched eventpoll, leading to a use-after-free and attacker-controllable wrong-cache free.
 * `CVE-2026-43499` - Linux Kernel rtmutex remove_waiter() Use-After-Free
 remove_waiter() operated on current instead of waiter::task during futex_requeue() proxy-lock rollback, dequeuing the rbtree without the correct

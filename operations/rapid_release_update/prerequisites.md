@@ -102,6 +102,7 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
    ```
 
    Sample Output
+
    ```bash
      suffix: "-rru-26.10.01"
    ```

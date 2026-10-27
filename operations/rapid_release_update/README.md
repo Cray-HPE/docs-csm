@@ -3,7 +3,7 @@
 * [Overview](#overview)
 * [Terminology](#terminology)
 * [Release Notes](#release-notes)
-* [Valid upgrade paths](#valid-upgrade-paths)
+* [Valid upgrade paths](#valid-update-paths)
 * [Update NCNs with Rapid Release Update](#update-ncns-with-rapid-release-update)
 * [Further Reading](#further-reading)
 
@@ -17,7 +17,7 @@ SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the im
 
 | Term | Meaning |
 | --- | --- |
-| CVE | Common Vulnerabilities and Exposures — (e.g. CVE-2025-26465). A CVE is looked up at https://www.suse.com/security/cve/CVE-2025-26465.html to find the severity, the SUSE advisory, and the fixed RPM versions. |
+| CVE | Common Vulnerabilities and Exposures — (e.g. CVE-2025-26465). A CVE is looked up at [SUSE URL](https://www.suse.com/security/cve/CVE-2025-26465.html) to find the severity, the SUSE advisory, and the fixed RPM versions. |
 | CSM base version | The installed CSM release that the RRU is built and qualified for. The RRU does not change this version. |
 | RRU version | The independent version of the `csm-security` product, for example `csm-security-1.2.3`. |
 | SLE version | The SUSE Linux Enterprise release/service pack used by the target NCN images and specified by the RRU. |

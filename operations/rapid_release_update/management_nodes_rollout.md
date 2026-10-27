@@ -260,6 +260,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       ```
 
    1. Record current image id and configuration name on the `WORKER_CANARY` node.
+
       ```bash
       OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
       echo "${OLD_CFG_NAME}"
@@ -269,7 +270,9 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
    1. Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY`.
 
-      **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
+      **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
+      console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to
+      show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
 
       ```bash
       iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run -r management-nodes-rollout --limit-management-rollout $WORKER_CANARY
@@ -331,7 +334,9 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
    1. If the iscsi-worker group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
-      **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with `iuf-prevent-rollout=true` followed by rolling out the rest of the worker nodes.
+      **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
+      maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
+      `iuf-prevent-rollout=true` followed by rolling out the rest of the worker nodes.
       **Note:** Choose the canary node wisely, don't use one running slingshot-fabric-manager or nexus.
 
       ```bash
@@ -363,7 +368,9 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
    1. Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY2`.
 
-      **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
+      **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
+      console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to
+      show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
 
       ```bash
       iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run -r management-nodes-rollout --limit-management-rollout $WORKER_CANARY2
@@ -425,8 +432,12 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
    1. Execute the management-nodes-rollout stage on all remaining worker nodes.
 
-      **NOTE** For this step, the argument to --limit-management-rollout can be `Management_Worker` or a list of worker node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
-      **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
+      **NOTE** For this step, the argument to --limit-management-rollout can be `Management_Worker` or a list of worker node names separated by
+      spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled with `iuf-prevent-rollout=true` will be rebuilt/upgraded.
+      If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
+      **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
+      console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to
+      show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
 
       1. Choose one of the following two options. The difference between the options is the limit-management-rollout argument, but the two options do the same thing.
 
