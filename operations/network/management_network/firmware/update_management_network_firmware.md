@@ -22,7 +22,8 @@ firmware can be found in the switch user guides, available from the specific swi
 * Firmware in a location that the switches can reach.
     * Examples in this document will use `/root/firmware/` on `ncn-m001`
 
-Aruba firmware is no longer bundled in the HFP package. Download the latest Long Supported Release (LSR) from the
+Aruba firmware is no longer bundled in the HFP package. Download the Long Supported Release (LSR) listed in the
+[Switch firmware](#switch-firmware) table, or a newer LSR, from the
 [HPE Networking Support Portal](https://networkingsupport.hpe.com/).
 Dell and Mellanox firmware must be downloaded from the manufacturer.
 
