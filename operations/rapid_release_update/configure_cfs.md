@@ -126,7 +126,7 @@ Before running any IUF stages that use `sat bootprep`, you must add the
 
    The `{{csm_security.version}}` template variable resolves automatically
    from the product catalog after `IUF deliver-product` registers the product —
-   no bootprep edit is needed between future csm-security updates.
+   no bootprep edit is needed between future `csm-security` updates.
 
 ## Next steps
 

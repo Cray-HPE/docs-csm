@@ -147,7 +147,7 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
    echo "$STORAGE_NODES"
    ```
 
-1. Check if there are more than one images under directory /run/initramfs/live on all storage nodes. If yes then clean up old images. If not cleaned then the storage node rebuild fails at cloud-init stage.
+1. Check if there are more than one images under directory `/run/initramfs/live` on all storage nodes. If yes then clean up old images. If not cleaned then the storage node rebuild fails at cloud-init stage.
 
    ```bash
    for node in $STORAGE_NODES

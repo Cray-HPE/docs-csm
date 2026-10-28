@@ -572,7 +572,7 @@ The rebuild script handles first-master promotion automatically.
       > **Known Issue:** If you see error while watching the console of `ncn-m003`, see [Secret "kubeadm-certs" was not found in the "kube-system"
       Namespace](troubleshooting.md#3-secret-kubeadm-certs-was-not-found-in-the-kube-system-namespace).
 
-   1. After the node boots, 
+   1. After the node boots,
       1. Update the node's CFS configuration.
 
          ```bash

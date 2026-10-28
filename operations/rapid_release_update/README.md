@@ -55,7 +55,7 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 
 1. For updating NCNs with RRU, see [Deploying Rapid Release Update with IUF](installation_iuf.md).
 2. For troubleshooting common failures, see [Troubleshooting Guide](troubleshooting.md).
-3. For rollback procedure, see [Rollingback RRU](rollback.md).
+3. For rollback procedure, see [Rollback RRU](rollback.md).
 
 ## Further Reading
 
