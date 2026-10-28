@@ -28,12 +28,14 @@ Dell and Mellanox firmware must be downloaded from the manufacturer.
 
 ## Switch firmware
 
+For Aruba switches, use software version `10.16.1060` or newer.
+
 | Model                         | software version |
 |-------------------------------|-----------------:|
-| Aruba 8320 Switch Series      |     `10.13.1080` |
-| Aruba 8325 Switch Series      |     `10.13.1080` |
-| Aruba 8360 Switch Series      |     `10.13.1080` |
-| Aruba 6300 Switch Series      |     `10.13.1080` |
+| Aruba 8320 Switch Series      |     `10.16.1060` |
+| Aruba 8325 Switch Series      |     `10.16.1060` |
+| Aruba 8360 Switch Series      |     `10.16.1060` |
+| Aruba 6300 Switch Series      |     `10.16.1060` |
 | Mellanox SN2100 Switch Series |       `3.9.3210` |
 | Mellanox SN2700 Switch Series |       `3.9.3210` |
 | Dell S3048-ON Switch Series   |       `10.5.1.4` |
