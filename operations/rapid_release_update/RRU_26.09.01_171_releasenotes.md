@@ -34,7 +34,7 @@ CVEs fixed which have NVD score > 9.
 * `CVE-2026-64530` - Linux Kernel net/sched cls_api Use-After-Free
 * `CVE-2026-53131` - Linux Kernel Netfilter Ethernet Header Out-of-Bounds Access
 * `CVE-2026-52986` - Linux Kernel Netfilter SIP Conntrack Out-of-Bounds Read
-ß
+
 ## Deploy Steps
 
 See [Rapid Release Update (RRU) for CSM kernel CVE fixes](README.md#release-notes).

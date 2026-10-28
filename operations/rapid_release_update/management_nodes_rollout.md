@@ -406,7 +406,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-   1. (`ncn-m001#`) Use kubectl to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
+   1. (`ncn-m001#`) Use `kubectl` to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
       ```bash
       kubectl label nodes "${WORKER_CANARY2}" --overwrite iuf-prevent-rollout=true
