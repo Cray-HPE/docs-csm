@@ -21,9 +21,10 @@ Once this step has completed:
 
 **NOTE** This section is optional and can be skipped or deferred unless network configuration that requires updated firmware is being applied to the system.
 
-Management network switch firmware is shipped in the HPC Firmware Pack (HFP) product tarball.
+Management network switch firmware is no longer shipped in the HPC Firmware Pack (HFP) product tarball.
 
-Refer to [Update Management Network Firmware](../../network/management_network/firmware/update_management_network_firmware.md) for instructions on performing the switch firmware update.
+Refer to [Update Management Network Firmware](../../network/management_network/firmware/update_management_network_firmware.md)
+for required firmware versions, download sources, and instructions for performing the switch firmware update.
 
 **NOTE** The firmware on spine, leaf, and CDU switches can be updated without disruption. Air-cooled compute nodes, their BMCs, and other air-cooled devices
 such as HPE Slingshot switches will experience a loss of connectivity while the leaf-bmc switch the device is connected to restarts.
