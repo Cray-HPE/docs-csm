@@ -92,7 +92,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
 1. (`ncn-mw#`) Search for the signed packages using the version number from the previous step.
 
     ```bash
-    rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '19CFB373'
+    rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '19cfb373'
     ```
 
     Example output:
