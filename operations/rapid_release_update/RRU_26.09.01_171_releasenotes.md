@@ -4,11 +4,11 @@ This document guides an administrator through the deploy of Rapid Release Update
 
 This page documents the changes introduced by this RRU, compared to the previous RRU version.
 
-* [Expected Kernel Version](#expected-kernel-version)
+* [Kernel Version](#kernel-version)
 * [CVE fixes](#cves-fixes)
 * [Deploy steps](#deploy-steps)
 
-## Expected Kernel Version
+## Kernel Version
 
 `6.4.0-150700.53.78.1`
 

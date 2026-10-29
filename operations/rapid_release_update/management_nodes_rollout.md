@@ -213,11 +213,9 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
          echo $COMPUNODES
          ```
 
-      1. Copy the `iscsi_post_rollout.sh` script to all application and compute nodes.
+      1. Prepare the applicaiton and compute nodes to logout of their iSCSI session with the worker nodes.
 
          ```bash
-         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'zypper --non-interactive install pdsh' | dshbak -c
-         pdcp -t2 -f256 -w $APPNODES,$COMPUNODES /usr/share/doc/csm/scripts/operations/iscsi_sbps/iscsi_post_rollout.sh /tmp/
          pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/g' /etc/iscsi/iscsid.conf && systemctl restart iscsid.service && echo Success || echo Fail" 2>/dev/null | dshbak -c
          ```
 
@@ -227,17 +225,17 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       ```bash
       ncn-m001:~ # cray hsm groups list | grep iscsi_worker
-      label = "iscsi_worker"        # Output with label iscsi-worker present. If not present then there will be no output
+      label = "iscsi_worker"        # Output with label iscsi_worker present. If not present then there will be no output
       ```
 
-      If the iscsi-worker label is not found, the above command will produce no output. In that case, skip the next command, as this indicates that all worker nodes are enabled as iSCSI targets.
+      If the iscsi_worker label is not found, the above command will produce no output. In that case, skip the next command, as this indicates that all worker nodes are enabled as iSCSI targets.
 
       ```bash
       ncn-m001:~ # cray hsm groups members list iscsi_worker
       ids = [ "x3000c0s7b0n0", "x3000c0s9b0n0", "x3000c0s11b0n0",]
       ```
 
-   1. If the iscsi-worker group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
+   1. If the iscsi_worker group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
 
       **Note:** Choose the canary node wisely, don't use one running slingshot-fabric-manager or nexus.
 
@@ -268,6 +266,14 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       echo "${OLD_IMAGE_NAME}"
       ```
 
+   1. On the application and compute nodes, logout of their iSCSI session with the worker node, `WORKER_CANARY`.
+
+      ```bash
+      IQN=iqn.2023-06.csm.iscsi:$WORKER_CANARY
+      PORTAL=$(host $(sat status --fields xname --filter alias=$WORKER_CANARY --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
+      ```
+
    1. Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY`.
 
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
@@ -276,14 +282,6 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       ```bash
       iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run -r management-nodes-rollout --limit-management-rollout $WORKER_CANARY
-      ```
-
-   1. If the selected `WORKER_CANARY` is an iSCSI target node then execute `iscsi_post_rollout.sh` script to help the `iSCSI` clients on the application and compute nodes to adjust to the new LUNs on the worker node.
-
-      ```bash
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY | grep 'State: L'" 2>/dev/null
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sh /tmp/iscsi_post_rollout.sh $WORKER_CANARY && echo Success" 2>/dev/null | dshbak -c
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY | grep 'State: L'" 2>/dev/null
       ```
 
    1. (`ncn-m001#`) Verify that the node booted successfully with the desired image and CFS configuration.
@@ -307,6 +305,13 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       ```
 
       **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+
+   1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node. 
+
+      ```bash
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
+      ```
 
    1. (`ncn-m001#`) Use `kubectl` to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
@@ -332,7 +337,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
 
-   1. If the iscsi-worker group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
+   1. If the iscsi_worker group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
       **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
       maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
@@ -366,6 +371,14 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       echo "${OLD_IMAGE_NAME}"
       ```
 
+   1. On the application and compute nodes logout of their iSCSI session with the worker node, `WORKER_CANARY2`
+
+      ```bash
+      IQN=iqn.2023-06.csm.iscsi:$WORKER_CANARY2
+      PORTAL=$(host $(sat status --fields xname --filter alias=$WORKER_CANARY2 --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
+      ```
+
    1. Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY2`.
 
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
@@ -374,14 +387,6 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       ```bash
       iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run -r management-nodes-rollout --limit-management-rollout $WORKER_CANARY2
-      ```
-
-   1. Only if the selected `WORKER_CANARY2` is an iSCSI target node then execute `iscsi_post_rollout.sh` script to help the `iSCSI` clients on the application and compute nodes to adjust to the new LUNs on the worker node.
-
-      ```bash
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY2 | grep 'State: L'" 2>/dev/null
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sh /tmp/iscsi_post_rollout.sh $WORKER_CANARY2 && echo Success" 2>/dev/null | dshbak -c
-      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session -P 3 | grep -A20 $WORKER_CANARY2 | grep 'State: L'" 2>/dev/null
       ```
 
    1. (`ncn-m001#`) Verify that the node booted successfully with the desired image and CFS configuration.
@@ -405,6 +410,15 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       ```
 
       **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+
+   1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node. 
+
+      **Important:** Ensure that the hostname REPLACEHOST is replaced with the actual value of the worker node hostname before running these commands.
+
+      ```bash
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
+      pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
+      ```
 
    1. (`ncn-m001#`) Use `kubectl` to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
@@ -439,6 +453,24 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to
       show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
 
+      1. Determine the remaining worker nodes by excluding the `WORKER_CANARY` and `WORKER_CANARY2`.
+
+            ```bash
+            WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | egrep -v "$WORKER_CANARY|$WORKER_CANARY2" |  awk '{print $1}' | xargs)
+            echo $WORKER_NODES
+            ```
+
+      1. On the application and compute nodes logout of their iSCSI session with the worker nodes, `WORKER_NODES`.
+
+         ```bash
+         for node in $WORKER_NODES
+         do
+           IQN=iqn.2023-06.csm.iscsi:$node
+           PORTAL=$(host $(sat status --fields xname --filter alias=$node --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
+           pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
+         done
+         ```
+
       1. Choose one of the following two options. The difference between the options is the limit-management-rollout argument, but the two options do the same thing.
 
          1. Option 1:
@@ -457,15 +489,19 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
             iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
             ```
 
-      1. Only if the worker node is an iSCSI target node then execute `iscsi_post_rollout.sh` script to help the `iSCSI` clients on the application and compute nodes to adjust to the new LUNs on the worker node.
-
-         **Warning:** as each node from the previous `IUF management-nodes-rollout` command gets to the point where Linux has powered off and the node powers on to show POST/BIOS messages, then run these `pdsh` commands on all `iSCSI` clients.
-         **Important:** Ensure that the hostname `REPLACEHOST` is replaced with the actual value of the worker node hostname which has just started powering on before running these commands.
-
+      1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker nodes. 
+ 
          ```bash
-         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 <REPLACEHOST> | grep "State: L"' 2>/dev/null
-         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sh /tmp/iscsi_post_rollout.sh <REPLACEHOST> && echo Success" 2>/dev/null | dshbak -c
-         pdsh -t2 -f256 -w $APPNODES,$COMPUNODES 'iscsiadm -m session -P 3 | grep -A20 <REPLACEHOST> | grep "State: L"' 2>/dev/null
+         for node in $WORKER_NODES
+         do
+           echo $node
+           IQN=iqn.2023-06.csm.iscsi:$node
+           echo $IQN
+           PORTAL=$(host $(sat status --fields xname --filter alias=$node --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
+           echo $PORTAL
+           pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "echo iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
+           pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "echo iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
+         done
          ```
 
    1. After all worker nodes have finished their image rollout, set `iSCSI` `iscsid.safe_logout=Yes` again and restart `iscsid.service` on all application and compute nodes.

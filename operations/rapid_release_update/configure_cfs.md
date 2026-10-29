@@ -19,9 +19,10 @@ Before running any IUF stages that use `sat bootprep`, you must add the
    > previously, using this default file will lose those customizations.
 
    ```bash
+   VCS_USERNAME=$(kubectl get secret -n services vcs-user-credentials   -o jsonpath={.data.vcs_username} |  base64 -d)
    VCS_PASSWORD=$(kubectl get secret -n services vcs-user-credentials \
      -o jsonpath={.data.vcs_password} | base64 -d)
-   git clone "https://crayvcs:${VCS_PASSWORD}@api-gw-service-nmn.local/vcs/cray/hpc-csm-software-recipe.git"
+   git clone "https://${VCS_USERNAME}:${VCS_PASSWORD}@api-gw-service-nmn.local/vcs/cray/hpc-csm-software-recipe.git"
    cd hpc-csm-software-recipe
    git branch -r  # list available recipe versions
    git checkout cray/hpc-csm-software-recipe/<recipe-version>

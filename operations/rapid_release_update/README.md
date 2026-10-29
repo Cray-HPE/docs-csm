@@ -30,9 +30,9 @@ SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the im
 
 ## Release notes
 
-[`Rapid-Update-sle15-sp7-170-26.07.01` Release Notes](RRU_26.07.01_170_releasenotes.md)
+[`Rapid-Update-sle15-sp6-170-26.07.01` Release Notes](RRU_26.07.01_170_releasenotes.md)
 
-[`Rapid-Update-sle15-sp7-170-26.10.01` Release Notes](RRU_26.10.01_170_releasenotes.md)
+[`Rapid-Update-sle15-sp6-170-26.10.01` Release Notes](RRU_26.10.01_170_releasenotes.md)
 
 [`Rapid-Update-sle15-sp7-171-26.07.01` Release Notes](RRU_26.07.01_171_releasenotes.md)
 
@@ -55,7 +55,6 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 
 1. For updating NCNs with RRU, see [Deploying Rapid Release Update with IUF](installation_iuf.md).
 2. For troubleshooting common failures, see [Troubleshooting Guide](troubleshooting.md).
-3. For rollback procedure, see [Rollback RRU](rollback.md).
 
 ## Further Reading
 
