@@ -94,6 +94,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     ```bash
     rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '19CFB373'
     ```
+
     Example output:
 
     ```text
