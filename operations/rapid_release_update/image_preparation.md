@@ -68,23 +68,67 @@ patches.
 
 3. Set variables for the images created
 
-   Using the example output from the previous step, set the values for `MASTER_IMAGE_ID`, `STORAGE_IMAGE_ID`, and `WORKER_IMAGE_ID` with the `IMS` `final_image_id` in the `configmap` for each image type.
-
-   ```bash
-   export MASTER_IMAGE_ID=a70de793-859a-44e0-8d53-f27893097158
-   export STORAGE_IMAGE_ID=8eb5dc4d-8041-47e0-aa4c-542e10516c1e
-   export WORKER_IMAGE_ID=d0de60c0-e939-46fb-b10b-99ddaccec273
-   ```
+    ```bash
+    export MASTER_IMAGE_ID=$(
+        kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' |
+            jq -r '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout
+            | fromjson
+            | .images[]
+            | select(.configuration_group_names | index("Management_Master"))
+            | .final_image_id'
+        )
+    echo $MASTER_IMAGE_ID
+    export STORAGE_IMAGE_ID=$(
+        kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' |
+            jq -r '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout
+            | fromjson
+            | .images[]
+            | select(.configuration_group_names | index("Management_Storage"))
+            | .final_image_id'
+        )
+    echo $STORAGE_IMAGE_ID
+    export WORKER_IMAGE_ID=$(
+        kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' |
+            jq -r '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout
+            | fromjson
+            | .images[]
+            | select(.configuration_group_names | index("Management_Worker"))
+            | .final_image_id'
+        )
+    echo $WORKER_IMAGE_ID
+    ```
 
 4. Set variables for the CFS configurations created
 
-   Using the example output from the previous step, set the values for `MASTER_CFG_ID`, `STORAGE_CFG_ID`, and `WORKER_CFG_ID` with the `IMS` `configuration` in the `configmap` for each image type.
-
-   ```bash
-   export MASTER_CFG_ID=management-26.3.0-rru-26.10.01
-   export STORAGE_CFG_ID=storage-26.3.0-rru-26.10.01
-   export WORKER_CFG_ID=management-26.3.0-rru-26.10.01
-   ```
+    ```bash
+    export MASTER_CFG_ID=$(
+        kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' |
+            jq -r '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout
+            | fromjson
+            | .images[]
+            | select(.configuration_group_names | index("Management_Master"))
+            | .configuration'
+        )
+    echo $MASTER_CFG_ID
+    export STORAGE_CFG_ID=$(
+        kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' |
+            jq -r '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout
+            | fromjson
+            | .images[]
+            | select(.configuration_group_names | index("Management_Storage"))
+            | .configuration'
+        )
+    echo $STORAGE_CFG_ID
+    export WORKER_CFG_ID=$(
+        kubectl get configmaps -n argo "${ACTIVITY_NAME}" -o jsonpath='{.data.iuf_activity}' |
+            jq -r '.operation_outputs.stage_params["prepare-images"]["prepare-management-images"]["sat-bootprep-run"].script_stdout
+            | fromjson
+            | .images[]
+            | select(.configuration_group_names | index("Management_Worker"))
+            | .configuration'
+        )
+    echo $WORKER_CFG_ID
+    ```
 
 ## Next steps
 

@@ -1345,3 +1345,9 @@ macvlan
 gss_krb5_unwrap_v2
 ByteCount
 xdr_buf_trim
+netif_running
+nfsd
+espintcp
+skmsg
+inet_opt
+ireq_opt
