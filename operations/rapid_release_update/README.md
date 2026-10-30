@@ -32,7 +32,7 @@ SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the im
 
 [`Rapid-Update-sle15-sp6-170-26.07.01` Release Notes](RRU_26.07.01_170_releasenotes.md)
 
-[`Rapid-Update-sle15-sp6-170-26.10.01` Release Notes](RRU_26.10.01_170_releasenotes.md)
+[`Rapid-Update-sle15-sp6-170-26.11.01` Release Notes](RRU_26.11.01_170_releasenotes.md)
 
 [`Rapid-Update-sle15-sp7-171-26.07.01` Release Notes](RRU_26.07.01_171_releasenotes.md)
 

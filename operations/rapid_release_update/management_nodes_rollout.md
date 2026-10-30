@@ -228,14 +228,14 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       label = "iscsi_worker"        # Output with label iscsi_worker present. If not present then there will be no output
       ```
 
-      If the iscsi_worker label is not found, the above command will produce no output. In that case, skip the next command, as this indicates that all worker nodes are enabled as iSCSI targets.
+      If the `iscsi_worker` label is not found, the above command will produce no output. In that case, skip the next command, as this indicates that all worker nodes are enabled as iSCSI targets.
 
       ```bash
       ncn-m001:~ # cray hsm groups members list iscsi_worker
       ids = [ "x3000c0s7b0n0", "x3000c0s9b0n0", "x3000c0s11b0n0",]
       ```
 
-   1. If the iscsi_worker group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
+   1. If the `iscsi_worker` group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
 
       **Note:** Choose the canary node wisely, don't use one running slingshot-fabric-manager or nexus.
 
@@ -306,7 +306,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-   1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node. 
+   1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node.
 
       ```bash
       pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
@@ -337,7 +337,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
 
-   1. If the iscsi_worker group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
+   1. If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
       **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
       maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
@@ -411,7 +411,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
       **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
 
-   1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node. 
+   1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node.
 
       **Important:** Ensure that the hostname REPLACEHOST is replaced with the actual value of the worker node hostname before running these commands.
 
@@ -489,8 +489,8 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
             iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
             ```
 
-      1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker nodes. 
- 
+      1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker nodes.
+
          ```bash
          for node in $WORKER_NODES
          do

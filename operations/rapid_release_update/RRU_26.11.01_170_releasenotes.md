@@ -112,6 +112,15 @@ CVEs fixed which have NVD score > 9.
 * `CVE-2026-89631` - Linux Kernel SMB Client Tree Connect ByteCount Underflow
 * `CVE-2026-74588` - Linux Kernel SCTP chunk->transport Retransmit Use-After-Free
 * `CVE-2026-89551` - Linux Kernel SUNRPC xdr_buf_trim Length Underflow
+* `CVE-2026-99999` - Linux Kernel IPv4 Checksum Start Validation
+* `CVE-2026-74611` - Linux Kernel TLS 1.3 RX Optimistic Retry Iterator Overwrite
+* `CVE-2026-72493` - Linux Kernel Backlog netif_running() TOCTOU Use-After-Free
+* `CVE-2026-98323` - Linux Kernel RDMA/siw Fragmented Header Copy Out-of-Bounds Write
+* `CVE-2026-74587` - Linux Kernel SCTP Cached ASCONF Chunk Use-After-Free
+* `CVE-2026-89669` - Linux Kernel nfsd Copy-Notify Stateid Publish Race Use-After-Free
+* `CVE-2026-72041` - Linux Kernel espintcp Partial Send skmsg Accounting Flaw
+* `CVE-2026-90011` - Linux Kernel iSCSI Target Login Payload Missing Terminator Overread
+* `CVE-2026-98432` - Linux Kernel IPv4 inet_opt/ireq_opt RCU Free Use-After-Free
 
 ## Deploy Steps
 
