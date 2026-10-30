@@ -335,7 +335,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
 
-   1. Verify the health of iSCSI intitiators and iSCSI targets by following the steps in [iSCSI SBPS Verification](iscsi_sbps/iSCSI_SBPS_Verification.md).
+   1. Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
    1. If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
@@ -443,7 +443,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
 
-   1. Verify the health of iSCSI intitiators and iSCSI targets by following the steps in [iSCSI SBPS Verification](iscsi_sbps/iSCSI_SBPS_Verification.md).
+   1. Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
    1. Execute the management-nodes-rollout stage on all remaining worker nodes.
 
@@ -529,7 +529,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       done
       ```
 
-   1. Verify the health of iSCSI intitiators and iSCSI targets by following the steps in [iSCSI SBPS Verification](iscsi_sbps/iSCSI_SBPS_Verification.md).
+   1. Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
 ## 3. Master Nodes
 

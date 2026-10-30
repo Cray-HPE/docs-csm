@@ -92,13 +92,13 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
 1. Modify the suffix in `SITE_VARS` to `rru-$VERSION`. This will generate configuration and image name with suffix `rru-$VERSION`.
 
    ```bash
-   sed -i 's/^[[:space:]]*suffix:.*/  suffix: "-rru-$VERSION"/' $SITE_VARS
+   sed -i "s/^[[:space:]]*suffix:.*/  suffix: \"-rru-${VERSION}\"/" $SITE_VARS
    ```
 
 1. Verify the suffix is updated in `SITE_VARS`
 
    ```bash
-   grep "-rru-$VERSION"/' $SITE_VARS
+   grep "\-rru\-$VERSION" $SITE_VARS
    ```
 
    Sample Output
