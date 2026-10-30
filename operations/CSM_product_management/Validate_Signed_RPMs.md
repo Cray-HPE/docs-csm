@@ -89,7 +89,7 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     rpm --import hpe-signing-key-dst-2026.asc
     ```
 
-1. (`ncn-mw#`) Get the 8-character key ID (version) from the signing key.
+1. (`ncn-mw#`) Get the 8 character key ID (version) from the signing key.
 
     ```bash
     KEYID=$(gpg --show-keys --with-colons hpe-signing-key-dst-2026.asc | awk -F: '$1=="pub" {print substr($5, 9, 8); exit}')
