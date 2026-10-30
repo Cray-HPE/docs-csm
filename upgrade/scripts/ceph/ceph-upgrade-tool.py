@@ -2,7 +2,7 @@
 #
 #  MIT License
 #
-#  (C) Copyright 2023 Hewlett Packard Enterprise Development LP
+#  (C) Copyright 2023,2026 Hewlett Packard Enterprise Development LP
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a
 #  copy of this software and associated documentation files (the "Software"),
@@ -167,7 +167,7 @@ def _verify_upgrade_version(starting_version: str, upgrade_version: str) -> bool
     Checks that the version being run is a greater version than the Ceph version
     that is currently running.
     """
-    if version.parse(starting_version) == version.parse(upgrade_version):
+    if version.parse(starting_version) >= version.parse(upgrade_version):
         print(f'Ceph version is already {starting_version}. Nothing to upgrade.')
         return False
     if not version.parse(starting_version) < version.parse(upgrade_version):
