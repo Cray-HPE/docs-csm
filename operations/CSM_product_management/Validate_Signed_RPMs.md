@@ -89,10 +89,23 @@ The RPMs will vary on compute, application, worker, master, and storage nodes. C
     rpm --import hpe-signing-key-dst-2026.asc
     ```
 
-1. (`ncn-mw#`) Search for the signed packages using the version number from the previous step.
+1. (`ncn-mw#`) Get the 8-character key ID (version) from the signing key.
 
     ```bash
-    rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep '19cfb373'
+    KEYID=$(gpg --show-keys --with-colons hpe-signing-key-dst-2026.asc | awk -F: '$1=="pub" {print substr($5, 9, 8); exit}')
+    echo "$KEYID"
+    ```
+
+    Example output:
+
+    ```text
+    19CFB373
+    ```
+
+1. (`ncn-mw#`) Search for the signed packages using the key ID from the previous step.
+
+    ```bash
+    rpm -qa --qf '%{NAME}-%{VERSION}-%{RELEASE} %{SIGGPG:pgpsig}\n' | grep -i "$KEYID"
     ```
 
     Example output:
