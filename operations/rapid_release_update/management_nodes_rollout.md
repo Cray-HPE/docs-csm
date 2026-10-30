@@ -8,16 +8,15 @@ This section updates the kernel running on management NCNs.
 1. [References](#4-references)
 1. [Next Steps](#5-next-steps)
 
-> **Important:** Because `csm-security` includes kernel updates, **all node
-> types** must be rebooted into new images. The standard `docs-csm`
-> non-CSM-upgrade workflow (section 2.2) only applies CFS configuration to
-> master and storage nodes — it does not reboot them. You must follow the
-> full image rollout procedures below for all management node types to ensure
-> all management nodes are rebuilt to include these new CSM Security fixes.
+> **Important:** `csm-security` includes kernel updates, this requires **all node
+> types** to be rebooted into a new image. The standard `docs-csm`
+> non-CSM-upgrade workflow (section 2.2) cannot be used here, because it only
+> applies CFS configuration to master and storage nodes without rebooting them.
+> To ensure that all management nodes are rebuilt to include these new `csm-security` fixes,
+> follow the full image rollout procedures below for all management node types.
 > **Note:** The rollout order below (Storage → Worker → Master) follows
-> the full image rollout sequence used during CSM upgrades. Because
-> `csm-security` includes kernel updates, this is effectively a full image
-> upgrade rather than a simple CFS personalization.
+> the full image rollout sequence used during CSM upgrades. Since `csm-security` includes
+> kernel updates all management nodes are updated with the new kernel and CFS configuration.
 
 ## 1. Storage Nodes
 
@@ -32,10 +31,10 @@ This section updates the kernel running on management NCNs.
       ```
 
    > **Important:** Storage nodes use a different CFS configuration than worker
-   > nodes. Choose one storage node to be the canary — verify the kernel update and CFS
-   > personalization succeeded before proceeding to the remaining storage nodes.
+   > nodes. Choose one storage node to be the canary and verify that the new kernel version
+   > and CFS configuration is applied successfully before proceeding to the remaining storage nodes.
 
-   1. Test this set of commands on the `STORAGE_CANARY` node
+   1. Run below sequence of steps on the `STORAGE_CANARY` node
 
       1. Record the existing kernel version on the first storage node.
 
@@ -84,7 +83,7 @@ This section updates the kernel running on management NCNs.
          echo "New: $NEWUNAME"
          ```
 
-         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+         **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
       1. Verify CFS configuration name is changed to `STORAGE_CFG_ID` as set in the [Prepare Images](image_preparation.md) and the status shows `configured`.
 
@@ -114,7 +113,7 @@ This section updates the kernel running on management NCNs.
          ceph health
          ```
 
-         Use this command to get more detail about Ceph health status.
+         Run below command to get more detail about Ceph health status.
 
          ```bash
          ceph -s
@@ -162,7 +161,7 @@ This section updates the kernel running on management NCNs.
       done
       ```
 
-      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+      **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
    1. Verify Ceph health reports `HEALTH_OK` before continuing.
 
@@ -170,7 +169,7 @@ This section updates the kernel running on management NCNs.
       ceph health
       ```
 
-      Use this command to get more detail about Ceph health status.
+      Run below command to get more detail about Ceph health status.
 
       ```bash
       ceph -s
@@ -219,7 +218,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
          pdsh -t2 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/g' /etc/iscsi/iscsid.conf && systemctl restart iscsid.service && echo Success || echo Fail" 2>/dev/null | dshbak -c
          ```
 
-   1. Verify the `iscsi_worker` group is present then selective iSCSI worker node personalization feature is enabled else all worker nodes by default are enabled as iSCSI targets.
+   1. Verify the `iscsi_worker` group is present then selective iSCSI worker node personalization feature is enabled else all the worker nodes by default are enabled as iSCSI targets.
 
       Identify which worker nodes are configured as iSCSI targets.
 
@@ -237,7 +236,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
 
    1. If the `iscsi_worker` group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
 
-      **Note:** Choose the canary node wisely, don't use one running slingshot-fabric-manager or nexus.
+      **Note:** Choose the canary node wisely, don't use the one running slingshot-fabric-manager or nexus.
 
       ```bash
       WORKER_CANARY=ncn-w001 
@@ -277,8 +276,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
    1. Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY`.
 
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
-      console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to
-      show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
+      console log for the node being rebuilt with a new image.
 
       ```bash
       iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run -r management-nodes-rollout --limit-management-rollout $WORKER_CANARY
@@ -304,7 +302,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       echo $NEWUNAME
       ```
 
-      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+      **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
    1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node.
 
@@ -337,12 +335,14 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
 
+   1. Verify the health of iSCSI intitiators and iSCSI targets by following the steps in [iSCSI SBPS Verification](iscsi_sbps/iSCSI_SBPS_Verification.md).
+
    1. If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
       **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
       maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
       `iuf-prevent-rollout=true` followed by rolling out the rest of the worker nodes.
-      **Note:** Choose the canary node wisely, don't use one running slingshot-fabric-manager or nexus.
+      **Note:** Choose the canary node wisely, don't use the one running slingshot-fabric-manager or nexus.
 
       ```bash
       WORKER_CANARY2=ncn-w002 
@@ -382,8 +382,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
    1. Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY2`.
 
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
-      console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to
-      show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
+      console log for the node being rebuilt with a new image.
 
       ```bash
       iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run -r management-nodes-rollout --limit-management-rollout $WORKER_CANARY2
@@ -409,7 +408,7 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       echo $NEWUNAME
       ```
 
-      **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+      **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
    1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node.
 
@@ -444,14 +443,15 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
       kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
 
+   1. Verify the health of iSCSI intitiators and iSCSI targets by following the steps in [iSCSI SBPS Verification](iscsi_sbps/iSCSI_SBPS_Verification.md).
+
    1. Execute the management-nodes-rollout stage on all remaining worker nodes.
 
       **NOTE** For this step, the argument to --limit-management-rollout can be `Management_Worker` or a list of worker node names separated by
       spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled with `iuf-prevent-rollout=true` will be rebuilt/upgraded.
       If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
-      console log for the node being rebuilt with a new image. After each worker node has powered off Linux and then the node powers on and begins to
-      show POST/BIOS messages, there is an action in the next step which must be done on the application and compute nodes to run the `iscsi_post_rollout.sh` script on all `iSCSI` clients.
+      console log for the node being rebuilt with a new image.
 
       1. Determine the remaining worker nodes by excluding the `WORKER_CANARY` and `WORKER_CANARY2`.
 
@@ -528,6 +528,8 @@ Roll out the new image and CFS configuration to one worker node, validate the ch
          echo "${NEW_IMAGE_NAME}"
       done
       ```
+
+   1. Verify the health of iSCSI intitiators and iSCSI targets by following the steps in [iSCSI SBPS Verification](iscsi_sbps/iSCSI_SBPS_Verification.md).
 
 ## 3. Master Nodes
 
@@ -623,7 +625,7 @@ The rebuild script handles first-master promotion automatically.
          echo "New: $NEWUNAME"
          ```
 
-         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+         **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
       1. Verify the node booted successfully with the new image and CFS configuration.
 
@@ -714,7 +716,7 @@ The rebuild script handles first-master promotion automatically.
          echo "New: $NEWUNAME"
          ```
 
-         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+         **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
       1. Verify the node booted successfully with the new image and CFS configuration.
 
@@ -851,7 +853,7 @@ The rebuild script handles first-master promotion automatically.
          echo "New: $NEWUNAME"
          ```
 
-         **Important:** Note that kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths)
+         **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
       1. Verify the node booted successfully with the new image and CFS configuration.
 
