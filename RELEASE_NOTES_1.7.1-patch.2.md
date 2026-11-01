@@ -49,24 +49,25 @@ This patch includes many fixes and improvements for [CFS](glossary.md#configurat
   [Ansible execution environment](operations/configuration_management/Ansible_Execution_Environments.md).
 
 ## Upgrade steps
+
 When upgrading from CSM 1.7.1 directly to CSM 1.7.1-patch.2, install the new HPE RPM signing
 key on all master and worker and storage nodes before proceeding with the upgrade:
- 
+
 1. Download the new HPE signing key from **My HPE Software Center:**.
- 
+
     Download the signing key.
 
     ```bash
     curl LINK_TO_KEY_IN_My_HPE_Software_Center
     ```
- 
+
 2. Install the signing key on all master,worker and storage nodes.
- 
+
     ```bash
     pdsh -w "$(grep -oP 'ncn-[mws]\w+' /etc/hosts | sort -u | paste -sd,)" \
     'rpm --import hpe-signing-key-dst-2026.asc'
     ```
- 
+
 3. After the signing key is installed, verify the new key has installed or not:
 
     1. (`ncn-mw#`) Get the 8 character key ID (version) from the signing key.
