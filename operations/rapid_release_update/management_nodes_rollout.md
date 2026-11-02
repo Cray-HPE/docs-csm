@@ -191,7 +191,9 @@ Roll out the new image and CFS configuration to one worker node first and valida
 
    1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients on the application and compute nodes.
 
-      > **Important:** After a worker node rebuild, the iSCSI LUNs previously mapped to `rootfs/PE` images may get reassigned to different images and receive different LUN numbers. However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before the rebuild. Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
+      > **Important:** After a worker node rebuild, the iSCSI LUNs previously mapped to `rootfs/PE` images may get reassigned to different images and receive different LUN numbers.
+      > However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before the rebuild.
+      > Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
 
       1. Determine the hostnames of the application nodes.
 
@@ -224,7 +226,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
       cray hsm groups list | grep iscsi_worker
       ```
 
-      Example  Output: 
+      Example  Output:
 
       ```toml
       label = "iscsi_worker"  # Output with label iscsi_worker present. If not present then there will be no output
@@ -345,7 +347,8 @@ Roll out the new image and CFS configuration to one worker node first and valida
 
    1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
-   1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`. If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
+   1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`.
+   If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
       **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
       maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
@@ -363,7 +366,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
       echo $OLDUNAME
       ```
 
-   1.(`ncn-m001#`)  Record the xname of the `WORKER_CANARY2` node.
+   1. (`ncn-m001#`) Record the xname of the `WORKER_CANARY2` node.
 
       ```bash
       XNAME=$(ssh $WORKER_CANARY2 'cat /etc/cray/xname')
