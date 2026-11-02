@@ -71,7 +71,7 @@ key on all master and worker and storage nodes before proceeding with the upgrad
     pdsh -w "$(grep -oP 'ncn-[mws]\w+' /etc/hosts | sort -u | paste -sd,)" 'rpm --import /tmp/hpe-signing-key-dst-2026.asc'
     ```
 
-3. After the signing key is installed, verify the new key has installed or not:
+3. After the signing key is installed, verify the new key has installed:
 
     1. (`ncn-mw#`) Get the 8 character key ID (version) from the signing key.
 
