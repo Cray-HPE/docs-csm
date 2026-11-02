@@ -63,7 +63,7 @@ This can be added to the execution time profiling tasks if desired, or it can be
 
    ```yaml
    [callback_cgroupmemrecap]
-   cur_mem_file = /sys/fs/cgroup/memory/memory.usage_in_bytes
+   cur_mem_file = /sys/fs/cgroup/memory.current 
    max_mem_file = /tmp/memory.max_usage_in_bytes
    ```
 
