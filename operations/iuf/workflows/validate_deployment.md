@@ -17,7 +17,7 @@ expected Kubernetes version and there are no residual `.done` marker files under
     (`ncn-m001#`) Execute the `post-install-service-check` stage.
 
     ```bash
-    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r post-install-service-check
+    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run --site-vars ${ADMIN_DIR}/site_vars.yaml -r post-install-service-check
     ```
 
 Once this step has completed:
