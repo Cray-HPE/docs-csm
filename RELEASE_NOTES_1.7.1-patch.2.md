@@ -64,7 +64,7 @@ key on all master and worker and storage nodes before proceeding with the upgrad
 2. Install the signing key on all master,worker and storage nodes.
 
     ```bash
-    pdcp -w "$(grep -oP 'ncn-[mws]\w+' /etc/hosts | sort -u | paste -sd,)" PATH-TO-KEY/hpe-signing-key-dst-2026.asc /tmp/hpe-signing-key-dst-2026.asc
+    pdcp -w "$(grep -oP 'ncn-[mws]\w+' /etc/hosts | sort -u | paste -sd,)" PATH-TO-KEY/hpe-signing-key-dst-2026.asc PATH-TO-KEY/hpe-signing-key-dst-2026.asc
     ```
 
     ```bash
