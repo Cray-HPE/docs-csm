@@ -522,7 +522,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
    1. (`ncn-m001#`) Use `kubectl` to remove the iuf-prevent-rollout=true label from the canary node.
 
       ```bash
-      kubectl label nodes "${WORKER_CANARY ${WORKER_CANARY2}" --overwrite iuf-prevent-rollout-
+      kubectl label nodes ${WORKER_CANARY} ${WORKER_CANARY2} --overwrite iuf-prevent-rollout-
       ```
 
    1. (`ncn-m001#`) Verify that all worker nodes booted successfully with the desired image and CFS configuration.
