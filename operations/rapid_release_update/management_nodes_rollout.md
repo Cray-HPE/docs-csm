@@ -234,16 +234,46 @@ Roll out the new image and CFS configuration to one worker node first and valida
       label = "iscsi_worker"  # Output with label iscsi_worker present. If not present then there will be no output
       ```
 
-      If the `iscsi_worker` label is not found, the above command will produce no output. In that case, skip the next command, as this indicates that all worker nodes are enabled as iSCSI targets.
+      If the `iscsi_worker` label is not found, the above command will produce no output. This indicates that all worker nodes are enabled as iSCSI targets.
 
       ```bash
-      cray hsm groups members list iscsi_worker
+      ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+'  | awk '{print $1}' | xargs)
+      ```
+
+      If the `iscsi_worker` label is found, then use the below command to get the list of worker nodes that are enabled as iSCSI targets.
+
+      ```bash
+      ISCSI_TARGET_XNAMES=$(cray hsm groups members list iscsi_worker --format json | jq .ids[])
+      echo $ISCSI_TARGET_XNAMES
       ```
 
       Example Output:
 
       ```toml
-      ids = [ "x3000c0s7b0n0", "x3000c0s9b0n0", "x3000c0s11b0n0",]
+      "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0"
+      ```
+
+      Map the `ISCSI_TARGET_XNAMES` to worker node name
+
+      ```bash
+      ISCSI_TARGET_NODES=''
+      for node in $ISCSI_TARGET_XNAMES
+      do
+         worker_node=$(sat status --fields alias --filter xname=$node --no-borders --no-headings | sed 's/ //g')
+         if [[ $ISCSI_TARGET_NODES == '' ]]
+         then
+            ISCSI_TARGET_NODES=$worker_node
+         else
+            ISCSI_TARGET_NODES="$ISCSI_TARGET_NODES $worker_node"
+         fi
+      done
+      echo $ISCSI_TARGET_NODES
+      ```
+
+      Example Output:
+
+      ```toml
+      ncn-w001 ncn-w002 ncn-w003
       ```
 
    1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
@@ -469,12 +499,14 @@ Roll out the new image and CFS configuration to one worker node first and valida
          ```bash
          WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | egrep -v "$WORKER_CANARY|$WORKER_CANARY2" |  awk '{print $1}' | xargs)
          echo $WORKER_NODES
+
+         ISCSI_TARGET_NODES=$(echo "$ISCSI_TARGET_NODES" | sed "s/$WORKER_CANARY//; s/$WORKER_CANARY2//")
          ```
 
-      1. On the application and compute nodes logout of their iSCSI session with the worker nodes, `WORKER_NODES`.
+      1. On the application and compute nodes logout of their iSCSI session with the iSCSI target worker nodes, `ISCSI_TARGET_NODES`.
 
          ```bash
-         for node in $WORKER_NODES
+         for node in $ISCSI_TARGET_NODES
          do
            IQN=iqn.2023-06.csm.iscsi:$node
            PORTAL=$(host $(sat status --fields xname --filter alias=$node --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
@@ -503,7 +535,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
       1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker nodes.
 
          ```bash
-         for node in $WORKER_NODES
+         for node in $ISCSI_TARGET_NODES
          do
            echo $node
            IQN=iqn.2023-06.csm.iscsi:$node
@@ -515,7 +547,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
          done
          ```
 
-   1. (`ncn-m001#`) After all worker nodes have finished their image rollout, set `iSCSI` `iscsid.safe_logout=Yes` again and restart `iscsid.service` on all application and compute nodes.
+   1. (`ncn-m001#`) After all worker nodes have finished their image rollout, set `iscsid.safe_logout=Yes` again and restart `iscsid.service` on all application and compute nodes.
 
       ```bash
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = Yes/g' /etc/iscsi/iscsid.conf &&
@@ -553,7 +585,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
 Rebuild one master at a time: `ncn-m003` → `ncn-m002` → `ncn-m001`.
 The rebuild script handles first-master promotion automatically.
 
-1. Verify `/etc/cray/upgrade/csm/myenv` exists and sets `CSM_RELEASE` and `CSM_ARTI_DIR`.
+1. (`ncn-m001#`) Verify `/etc/cray/upgrade/csm/myenv` exists and sets `CSM_RELEASE` and `CSM_ARTI_DIR`.
 
    ```bash
    . /etc/cray/upgrade/csm/myenv
@@ -561,7 +593,7 @@ The rebuild script handles first-master promotion automatically.
    echo $CSM_ARTI_DIR
    ```
 
-1. Update `ncn-m003` and `ncn-m002` while running commands on `ncn-m001`.
+1. (`ncn-m001#`) Update `ncn-m003` and `ncn-m002` while running commands on `ncn-m001`.
 
    1. Record the xname of the MASTER node.
 
@@ -747,14 +779,14 @@ The rebuild script handles first-master promotion automatically.
 
 1. Update `ncn-m001`.
 
-   1. Show the value of the `MASTER_IMAGE_ID` and `MASTER_CFG_ID`.  This environment variable will need to be set after logging into `ncn-m002`.
+   1. (`ncn-m001#`) Show the value of the `MASTER_IMAGE_ID` and `MASTER_CFG_ID`.  This environment variable will need to be set after logging into `ncn-m002`.
 
       ```bash
       echo $MASTER_IMAGE_ID
       echo $MASTER_CFG_ID
       ```
 
-   1. Determine the `SYSTEM_NAME` for the system.
+   1. (`ncn-m001#`) Determine the `SYSTEM_NAME` for the system.
 
       ```bash
       SYSTEM_NAME=$(kubectl get secret site-init -n loftsman -o jsonpath='{.data.customizations\.yaml}' | base64 -d | grep "external:" | cut -f2 -d: | sed -e 's/ //')
@@ -776,14 +808,14 @@ The rebuild script handles first-master promotion automatically.
       ssh ncn-m002.cmn.eniac.dev.hpe.com
       ```
 
-   1. Once logged into `ncn-m002`, set the `MASTER_IMAGE_ID` and `MASTER_CFG_ID` for the new image to be used on `ncn-m001`.
+   1. (`ncn-m002#`) Once logged into `ncn-m002`, set the `MASTER_IMAGE_ID` and `MASTER_CFG_ID` for the new image to be used on `ncn-m001`.
 
       ```bash
       export MASTER_IMAGE_ID=d5c99503-096f-4279-a0a9-be4789a1bea5
       export MASTER_CFG_ID=management-26.3.0-rru-26.10.01
       ```
 
-   1. Verify `/etc/cray/upgrade/csm/myenv` exists and sets `CSM_RELEASE` and `CSM_ARTI_DIR`.
+   1. (`ncn-m002#`) Verify `/etc/cray/upgrade/csm/myenv` exists and sets `CSM_RELEASE` and `CSM_ARTI_DIR`.
 
       ```bash
       . /etc/cray/upgrade/csm/myenv
@@ -791,7 +823,7 @@ The rebuild script handles first-master promotion automatically.
       echo $CSM_ARTI_DIR
       ```
 
-   1. Record the xname of the MASTER node.
+   1. (`ncn-m002#`) Record the xname of the MASTER node.
 
       ```bash
       MASTER=ncn-m001
@@ -799,14 +831,14 @@ The rebuild script handles first-master promotion automatically.
       echo "${XNAME}"
       ```
 
-   1. SSH to `MASTER` and get the current/existing kernel version.
+   1. (`ncn-m002#`) SSH to `MASTER` and get the current/existing kernel version.
 
       ```bash
       OLDUNAME=$(ssh $MASTER uname -r)
       echo $OLDUNAME
       ```
 
-   1. Record current image id and configuration name on the `MASTER` node.
+   1. (`ncn-m002#`) Record current image id and configuration name on the `MASTER` node.
 
       ```bash
       OLD_CFG_NAME=$(cray cfs components describe $XNAME --format json | jq .desiredConfig)
@@ -815,7 +847,7 @@ The rebuild script handles first-master promotion automatically.
       echo "${OLD_IMAGE_NAME}"
       ```
 
-   1. Assign the new image to BSS. The rebuild script sets `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs for kernel, initrd, and rootfs.
+   1. (`ncn-m002#`) Assign the new image to BSS. The rebuild script sets `rd.live.dir=${CSM_RELEASE}` but relies on BSS having the correct S3 URLs for kernel, initrd, and rootfs.
 
       ```bash
       /usr/share/doc/csm/scripts/operations/node_management/assign-ncn-images.sh -p $MASTER_IMAGE_ID $XNAME
@@ -844,7 +876,7 @@ The rebuild script handles first-master promotion automatically.
 
       If SDU and RDA are configured on this node, save the configuration information so it can be restored after the node has the new image.
 
-   1. Rebuild the master node.
+   1. (`ncn-m002#`) Rebuild the master node.
 
       ```bash
       /usr/share/doc/csm/upgrade/scripts/rebuild/ncn-rebuild-master-nodes.sh $MASTER
@@ -852,13 +884,13 @@ The rebuild script handles first-master promotion automatically.
 
    1. After the node boots:
 
-      1. Update the node's CFS configuration.
+      1. (`ncn-m002#`) Update the node's CFS configuration.
 
          ```bash
          cray cfs components update $XNAME --enabled true --desired-config $MASTER_CFG_ID
          ```
 
-      1. Verify that the kernel version has changed.
+      1. (`ncn-m002#`) Verify that the kernel version has changed.
 
          ```bash
          NEWUNAME=$(ssh $MASTER uname -r)
@@ -868,7 +900,7 @@ The rebuild script handles first-master promotion automatically.
 
          **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
-      1. Verify the node booted successfully with the new image and CFS configuration.
+      1. (`ncn-m002#`) Verify the node booted successfully with the new image and CFS configuration.
 
          ```bash
          cray cfs components describe $XNAME
@@ -884,7 +916,7 @@ The rebuild script handles first-master promotion automatically.
 
 1. Restore the SDU and RDA configuration on the master node.
 
-1. Verify that all master nodes have completed CFS configuration and the kernel version is updated
+1. (`ncn-m002#`) Verify that all master nodes have completed CFS configuration and the kernel version is updated
 
    ```bash
    for ncn in $(cray hsm state components list --subrole Master --type Node \
