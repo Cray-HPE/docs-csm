@@ -3,7 +3,7 @@
 This procedure changes the SNMPv3 credentials used on management network switches that are already
 discovered by CSM, and updates the matching per-switch credentials stored in Vault.
 
-HMS Discovery and the SNMP-backed Redfish Translation Service (RTS) read SNMP credentials for each switch from
+HMS Discovery and the SNMP backed Redfish Translation Service (RTS) read SNMP credentials for each switch from
 Vault at `secret/hms-creds/<switch-xname>`. HMS Discovery only writes that entry when it is empty, using the
 default credentials in `secret/reds-creds/switch_defaults`. As a result, updating the default credentials does
 **not** change the credentials used for switches that already exist. For existing switches, the credentials
@@ -22,7 +22,7 @@ must be changed in three places so that they match:
     1. [Update SNMP on the management switches](#4-update-snmp-on-the-management-switches)
     1. [Update the SNMP credentials in Vault](#5-update-the-snmp-credentials-in-vault)
     1. [Update the default SNMP credentials](#6-update-the-default-snmp-credentials)
-    1. [Restart the SNMP-backed RTS](#7-restart-the-snmp-backed-rts)
+    1. [Restart the SNMP backed RTS](#7-restart-the-snmp-backed-rts)
     1. [Verify](#8-verify)
 - [Troubleshooting](#troubleshooting)
 
@@ -142,9 +142,9 @@ in [Verify](#8-verify).
 Follow [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
 with the same values, including saving the updated `customizations.yaml`; otherwise the old defaults are restored during the next CSM upgrade.
 
-### 7. Restart the SNMP-backed RTS
+### 7. Restart the SNMP backed RTS
 
-(`ncn-mw#`) Restart the SNMP-backed RTS to pick up the new credentials.
+(`ncn-mw#`) Restart the SNMP backed RTS to pick up the new credentials.
 
 ```bash
 kubectl -n services rollout restart deployment cray-hms-rts-snmp
@@ -153,7 +153,7 @@ kubectl -n services rollout status deployment cray-hms-rts-snmp
 
 ### 8. Verify
 
-1. (`ncn-mw#`) Wait a few minutes, then check the SNMP-backed RTS logs for SNMP authentication errors.
+1. (`ncn-mw#`) Wait a few minutes, then check the SNMP backed RTS logs for SNMP authentication errors.
 
     ```bash
     kubectl -n services logs deployment/cray-hms-rts-snmp --all-containers --since=15m |
