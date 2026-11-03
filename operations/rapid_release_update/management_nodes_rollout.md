@@ -215,7 +215,9 @@ Roll out the new image and CFS configuration to one worker node first and valida
       > **Note:** Ensure that all ongoing I/O operations have completed successfully before logging out of their iSCSI session, especially on systems running SLURM workloads.
 
          ```bash
-         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/g' /etc/iscsi/iscsid.conf && systemctl restart iscsid.service && echo Success || echo Fail" 2>/dev/null | dshbak -c
+         pdsh -t10 -f256 -w "$APPNODES,$COMPUNODES" "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/' /etc/iscsi/iscsid.conf &&
+         grep -q '^iscsid.safe_logout = No$' /etc/iscsi/iscsid.conf && echo 'Configuration update: Success' || { echo 'Configuration update: Fail'; exit 1; }
+         systemctl restart iscsid.service && echo 'iscsid restart: Success' || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
          ```
 
    1. (`ncn-m001#`) Check whether the `iscsi_worker` group exists. If the group exists, selective iSCSI worker node personalization is enabled. Otherwise, all worker nodes are enabled as iSCSI targets by default.
@@ -464,10 +466,10 @@ Roll out the new image and CFS configuration to one worker node first and valida
 
       1. Determine the remaining worker nodes by excluding the `WORKER_CANARY` and `WORKER_CANARY2`.
 
-            ```bash
-            WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | egrep -v "$WORKER_CANARY|$WORKER_CANARY2" |  awk '{print $1}' | xargs)
-            echo $WORKER_NODES
-            ```
+         ```bash
+         WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | egrep -v "$WORKER_CANARY|$WORKER_CANARY2" |  awk '{print $1}' | xargs)
+         echo $WORKER_NODES
+         ```
 
       1. On the application and compute nodes logout of their iSCSI session with the worker nodes, `WORKER_NODES`.
 
@@ -516,7 +518,9 @@ Roll out the new image and CFS configuration to one worker node first and valida
    1. (`ncn-m001#`) After all worker nodes have finished their image rollout, set `iSCSI` `iscsid.safe_logout=Yes` again and restart `iscsid.service` on all application and compute nodes.
 
       ```bash
-      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = Yes/g' /etc/iscsi/iscsid.conf && systemctl restart iscsid.service"
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = Yes/g' /etc/iscsi/iscsid.conf &&
+      grep -q '^iscsid.safe_logout = Yes$' /etc/iscsi/iscsid.conf && echo 'Configuration update: Success' || { echo 'Configuration update: Fail'; exit 1; }
+      systemctl restart iscsid.service" || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
       ```
 
    1. (`ncn-m001#`) Use `kubectl` to remove the iuf-prevent-rollout=true label from the canary node.
