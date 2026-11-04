@@ -194,7 +194,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
    > Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
    > To prevent this issue, we need to ensure that certain iSCSI related operations **must be** performed on compute and application nodes against their iSCSI targets.
 
-   1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients on the application and compute nodes.
+   1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients (application and compute nodes).
 
       1. Determine the hostnames of the application nodes.
 
@@ -346,7 +346,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
 
       **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
-   1. (`ncn-m001#`) Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node.
+   1. (`ncn-m001#`) Perform iSCSI discovery on the application and compute nodes, then login to the iSCSI session on the worker node, `WORKER_CANARY`.
 
       ```bash
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
@@ -453,7 +453,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
 
       **Important:** Note that the kernel version `NEWUNAME` is the version based on the current CSM version and RRU version, as specified in [Valid update paths](README.md#valid-update-paths).
 
-   1. (`ncn-m001#`) Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker node.
+   1. (`ncn-m001#`) Perform iSCSI discovery on the application and compute nodes, then login to the iSCSI session on the worker node, `WORKER_CANARY2`.
 
       ```bash
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
@@ -488,11 +488,11 @@ Roll out the new image and CFS configuration to one worker node first and valida
 
    1. (`ncn-m001#`) Execute the management-nodes-rollout stage on all remaining worker nodes.
 
-      **NOTE** For this step, the argument to --limit-management-rollout can be `Management_Worker` or a list of worker node names separated by
-      spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled with `iuf-prevent-rollout=true` will be rebuilt/upgraded.
-      If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
-      **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
-      console log for the node being rebuilt with a new image.
+      > **NOTE** For this step, the argument to --limit-management-rollout can be `Management_Worker` or a list of worker node names separated by
+      > spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled with `iuf-prevent-rollout=true` will be rebuilt/upgraded.
+      > If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
+
+      > **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the console log for the node being rebuilt with a new image.
 
       1. Determine the remaining worker nodes which are iSCSI targets by excluding the `WORKER_CANARY` and `WORKER_CANARY2`.
 
@@ -529,7 +529,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
             iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
             ```
 
-      1. Perform iSCSI discovery on application and compute nodes, then login to the iSCSI session on the worker nodes.
+      1. Perform iSCSI discovery on the application and compute nodes, then login to the iSCSI session on the worker nodes, `ISCSI_TARGET_NODES`.
 
          ```bash
          for node in $ISCSI_TARGET_NODES
