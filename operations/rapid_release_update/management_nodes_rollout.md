@@ -492,7 +492,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
       > spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled with `iuf-prevent-rollout=true` will be rebuilt/upgraded.
       > If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
 
-      > **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the console log for the node being rebuilt with a new image.
+      **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the console log for the node being rebuilt with a new image.
 
       1. Determine the remaining worker nodes which are iSCSI targets by excluding the `WORKER_CANARY` and `WORKER_CANARY2`.
 
