@@ -11,7 +11,21 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
 
 * [Patch releases](#patch-releases)
 * [Bug fixes, additions, and improvements](#bug-fixes-additions-and-improvements)
+  * [General](#general)
+  * [Security](#security)
+  * [Metal](#metal-mtl)
+  * [Configuration Management Service](#configuration-management-service)
+  * [Hardware Management Services](#hardware-management-services-hms)
+  * [Base platform components](#base-platform-components-pet)
+  * [Rack Resiliency](#rack-resiliency-rr)
+  * [iscsi SBPS](#iscsi-sbps)
+  * [System Monitoring Application](#system-monitoring-application-sma)
+  * [System Diagnostics](#system-diagnostics-diags)
+  * [System Monitoring Framework](#system-monitoring-framework-smf)
+  * [Other Major Documentation Updates](#other-major-documentation-updates)
+* [Known Issues](#known-issues)
 * [Upgrade steps](#upgrade-steps)
+
 
 ## Patch releases
 
@@ -22,11 +36,33 @@ For a full list of CSM 1.7.1 patch releases, see
 
 ## Bug fixes, additions, and improvements
 
-* Resolved CVEs in `console-node` and `csm-config`
+### General
 
-### Configuration Framework Service (CFS)
+* Updated SLES base OS to <kernel-version-tbd> version of SLES 15 SP7.
+* New signing key for HPE delivered RPMs. See [here](#upgrade-steps) for installation instructions before starting upgrade.
 
-This patch includes many fixes and improvements for [CFS](glossary.md#configuration-framework-service-cfs).
+### Security
+
+* Updated several HMS services to point to latest upstream image and Go module dependencies.
+* Many SLES security vulnerabilities remediated.
+* Remediated KEVs and CVEs across CSM components.
+
+### Metal (MTL)
+
+This patch includes many fixes and improvements for METAL.
+
+* Improvements
+* Known issues fixed
+* Bugs Fixed
+```text
+```    
+* Important Document Updates
+```text
+```    
+
+### Configuration Management Service (CMS)
+
+This patch includes many fixes and improvements for CMS.
 
 * Improvements
     * Improved Kafka reliability in the CFS
@@ -43,10 +79,111 @@ This patch includes many fixes and improvements for [CFS](glossary.md#configurat
     * [CFS Operator Creating Multiple Jobs For Same Session](troubleshooting/known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
     * [CFS Component State Updates Allow Invalid Values](troubleshooting/known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
     * [CFS Component State Update Does Not Preserve Layer Timestamps](troubleshooting/known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
-* Several CVEs patched in CFS Batcher, CFS Operator,
-  [CFS Hardware Synchronization Agent](operations/configuration_management/CFS_Hardware_Synchronization_Agent.md),
-  CFS [ARA](glossary.md#ansible-records-ansible-ara), and the
-  [Ansible execution environment](operations/configuration_management/Ansible_Execution_Environments.md).
+* Bugs Fixed
+```text
+  CASMTRIAGE-9260 CAST-40271 Conman restarting frequently
+```    
+* Important Document Updates
+```text
+```    
+
+### Hardware Management Services (HMS)
+
+This patch includes many fixes and improvements for HMS.
+
+* Improvements
+* Known issues fixed
+* Bugs Fixed
+```text
+```    
+* Major Documentation Updates
+```text
+```    
+
+### Base platform components (PET)
+
+This patch includes many fixes and improvements for base platform components.
+
+* Improvements
+* Known issues fixed
+* Bugs Fixed
+```text
+```    
+* Major Documentation Updates
+```text
+```    
+
+### Rack Resiliency (RR)
+
+This patch includes many fixes and improvements for base platform components.
+
+* Improvements
+* Known issues fixed
+* Bugs Fixed
+```text
+```    
+* Major Documentation Updates
+```text
+```    
+
+### iscsi SBPS
+
+This patch includes many fixes and improvements for base platform components.
+
+* Improvements
+* Known issues fixed
+* Bugs Fixed
+```text
+```    
+* Major Documentation Updates
+```text
+```    
+
+### System Monitoring Application (SMA)
+
+This patch includes many fixes and improvements for base platform components.
+
+* Improvements
+* Known issues fixed
+* Bugs Fixed
+```text
+```    
+* Major Documentation Updates
+```text
+```    
+
+### System Diagnostics (DIAGS)
+
+This patch includes many fixes and improvements for base platform components.
+
+* Improvements
+* Known issues fixed
+* Bugs Fixed
+```text
+```    
+* Major Documentation Updates
+```text
+```    
+
+### System Monitoring Framework (SMF)
+
+This patch includes many fixes and improvements for base platform components.
+
+* Improvements
+* Known issues fixed
+* Bugs Fixed
+```text
+```    
+* Major Documentation Updates
+```text
+```    
+
+### Other Major Documentation Updates
+
+```text
+```
+
+## Known Issues
 
 ## Upgrade steps
 
