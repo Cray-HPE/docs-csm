@@ -189,11 +189,12 @@ This section updates the kernel running on management NCNs.
 
 Roll out the new image and CFS configuration to one worker node first and validate the changes. Once validated, proceed with a second worker node, followed by the remaining worker nodes in batches.
 
-   1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients on the application and compute nodes.
+   > **Important:** After a worker node rebuild, the iSCSI LUNs previously mapped to `rootfs/PE` images may get reassigned to different images and receive different LUN numbers.
+   > However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before the rebuild.
+   > Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
+   > To prevent this issue, we need to ensure that certain iSCSI related operations **must be** performed on compute and application nodes against their iSCSI targets.
 
-      > **Important:** After a worker node rebuild, the iSCSI LUNs previously mapped to `rootfs/PE` images may get reassigned to different images and receive different LUN numbers.
-      > However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before the rebuild.
-      > Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
+   1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients on the application and compute nodes.
 
       1. Determine the hostnames of the application nodes.
 
@@ -211,8 +212,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
          echo $COMPUNODES
          ```
 
-      1. Prepare the applicaiton and compute nodes to logout of their iSCSI session with the worker nodes.
-      > **Note:** Ensure that all ongoing I/O operations have completed successfully before logging out of their iSCSI session, especially on systems running SLURM workloads.
+      1. Prepare the applicaton and compute nodes to logout of their iSCSI session with the worker nodes.
 
          ```bash
          pdsh -t10 -f256 -w "$APPNODES,$COMPUNODES" "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/' /etc/iscsi/iscsid.conf &&
@@ -494,12 +494,9 @@ Roll out the new image and CFS configuration to one worker node first and valida
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
       console log for the node being rebuilt with a new image.
 
-      1. Determine the remaining worker nodes by excluding the `WORKER_CANARY` and `WORKER_CANARY2`.
+      1. Determine the remaining worker nodes which are iSCSI targets by excluding the `WORKER_CANARY` and `WORKER_CANARY2`.
 
          ```bash
-         WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | egrep -v "$WORKER_CANARY|$WORKER_CANARY2" |  awk '{print $1}' | xargs)
-         echo $WORKER_NODES
-
          ISCSI_TARGET_NODES=$(echo "$ISCSI_TARGET_NODES" | sed "s/$WORKER_CANARY//; s/$WORKER_CANARY2//")
          ```
 
