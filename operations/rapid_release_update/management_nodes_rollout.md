@@ -336,7 +336,8 @@ Roll out the new image and CFS configuration to one worker node first and valida
       echo "${NEW_IMAGE_NAME}"
       ```
 
-   1. (`ncn-m001#`) When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list. Since we have already rolled out `WORKER_CANARY` we need not remove the label for `WORKER_CANARY`.
+   1. (`ncn-m001#`) When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list.
+   Since we have already rolled out `WORKER_CANARY` we need not remove the label for `WORKER_CANARY`.
 
       List the nodes that have the iuf-prevent-rollout=true label, excluding `WORKER_CANARY`
 
@@ -481,7 +482,8 @@ Roll out the new image and CFS configuration to one worker node first and valida
       kubectl get nodes "${WORKER_CANARY2}" --show-labels | grep iuf-prevent-rollout
       ```
 
-   1. (`ncn-m001#`) When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list. Since we have already rolled out `WORKER_CANARY` and `WORKER_CANARY2` we need not remove the label for these nodes.
+   1. (`ncn-m001#`) When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list.
+   Since we have already rolled out `WORKER_CANARY` and `WORKER_CANARY2` we need not remove the label for these nodes.
 
       List the nodes that have the iuf-prevent-rollout=true label, excluding `WORKER_CANARY` and `WORKER_CANARY2`
 
