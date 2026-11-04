@@ -336,6 +336,27 @@ Roll out the new image and CFS configuration to one worker node first and valida
       echo "${NEW_IMAGE_NAME}"
       ```
 
+   1. (`ncn-m001#`) When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list. Since we have already rolled out `WORKER_CANARY` we need not remove the label for `WORKER_CANARY`.
+
+      List the nodes that have the iuf-prevent-rollout=true label, excluding `WORKER_CANARY`
+
+      ```bash
+      LABELLED_NODES=$(kubectl get nodes --show-labels | grep iuf-prevent-rollout | grep -v $WORKER_CANARY | cut -d' ' -f1 | xargs)
+      echo $LABELLED_NODES
+      ```
+
+      Example Output:
+
+      ```toml
+      ncn-w002
+      ```
+
+      If any nodes appear in the output above, use kubectl to remove the iuf-prevent-rollout=true label from each of those nodes:
+
+      ```bash
+      kubectl label nodes "${LABELLED_NODES}" --overwrite iuf-prevent-rollout-
+      ```
+
    1. (`ncn-m001#`) Verify that the kernel version has changed.
 
       ```bash
@@ -363,18 +384,6 @@ Roll out the new image and CFS configuration to one worker node first and valida
 
       ```bash
       kubectl get nodes "${WORKER_CANARY}" --show-labels | grep iuf-prevent-rollout
-      ```
-
-   1. (`ncn-m001#`) When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list.
-
-      ```bash
-      kubectl get nodes --show-labels | grep iuf-prevent-rollout
-      ```
-
-      If necessary, use kubectl to remove the iuf-prevent-rollout=true label from the node.
-
-      ```bash
-      kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
       ```
 
    1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
@@ -472,16 +481,25 @@ Roll out the new image and CFS configuration to one worker node first and valida
       kubectl get nodes "${WORKER_CANARY2}" --show-labels | grep iuf-prevent-rollout
       ```
 
-   1. (`ncn-m001#`) When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list.
+   1. (`ncn-m001#`) When using the option --limit-management-rollout to pass the list of nodes for management-nodes-rollout, ensure that the label iuf-prevent-rollout=true is not set on any of the nodes passed in the list. Since we have already rolled out `WORKER_CANARY` and `WORKER_CANARY2` we need not remove the label for these nodes.
+
+      List the nodes that have the iuf-prevent-rollout=true label, excluding `WORKER_CANARY` and `WORKER_CANARY2`
 
       ```bash
-      kubectl get nodes --show-labels | grep iuf-prevent-rollout
+      LABELLED_NODES=$(kubectl get nodes --show-labels | grep iuf-prevent-rollout | grep -vE "$WORKER_CANARY|$WORKER_CANARY2" | cut -d' ' -f1 | xargs)
+      echo $LABELLED_NODES
       ```
 
-      If necessary, use kubectl to remove the iuf-prevent-rollout=true label from the node.
+      Example Output:
+
+      ```toml
+      ncn-w003
+      ```
+
+      If any nodes appear in the output above, use kubectl to remove the iuf-prevent-rollout=true label from each of those nodes:
 
       ```bash
-      kubectl label nodes "${NODE}" --overwrite iuf-prevent-rollout-
+      kubectl label nodes "${LABELLED_NODES}" --overwrite iuf-prevent-rollout-
       ```
 
    1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
