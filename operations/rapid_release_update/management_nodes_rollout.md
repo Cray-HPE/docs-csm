@@ -212,7 +212,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
          echo $COMPUNODES
          ```
 
-      1. Prepare the applicaton and compute nodes to logout of their iSCSI session with the worker nodes.
+      1. Prepare the application and compute nodes to logout of their iSCSI session with the worker nodes.
 
          ```bash
          pdsh -t10 -f256 -w "$APPNODES,$COMPUNODES" "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/' /etc/iscsi/iscsid.conf &&
