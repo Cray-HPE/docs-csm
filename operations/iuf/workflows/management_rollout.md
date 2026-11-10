@@ -571,11 +571,11 @@ Refer to that table and any corresponding product documents before continuing to
 
     After updating management host Slingshot NIC firmware, all NCN worker nodes where the firmware has been updated must be power cycled. This is done as part of management nodes rebuild procedure.
 
-> **Important:** After a worker node rebuild, the iSCSI LUNs previously mapped to `rootfs/PE` images may get reassigned
-> to different images and receive different LUN numbers. However, iSCSI client nodes may continue sending I/O requests
-> using the LUN mappings established before the rebuild. Since these LUN numbers may no longer exist or may point to
-> different images after the rebuild, this can result in I/O failures. To prevent this issue, we need to ensure that
-> certain iSCSI related operations **must be** performed on compute and application nodes against their iSCSI targets.
+> **Important:** After a worker node rebuild, the iSCSI `LUNs` previously mapped to `rootfs/PE` images may get reassigned to different images
+> and receive different LUN numbers. However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before
+> the rebuild. Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
+> To prevent this issue, we need to ensure that certain iSCSI related operations **must be** erformed on compute and application nodes against
+> their iSCSI targets.
 
 1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients (application and compute nodes).
 
@@ -584,12 +584,12 @@ Refer to that table and any corresponding product documents before continuing to
       ```bash
       APPNODES="$(sat status --filter role=application --filter Enabled=true --fields aliases --no-borders --no-headings | xargs | sed 's/ /,/g')"
       echo $APPNODES
-      ```      
+      ```
 
    1. Determine the hostnames for the compute nodes.  Two different methods are shown. Use the one which produces a more compact list in the variable.
-  
-      **Note:** The compute node hostnames should have "-nmn" as the suffix so that they can be reached from a master node using the `NMN`. The master nodes are not on the `HSN`.
-      
+
+      **Note:** The compute node hostnames should have `-nmn` as the suffix so that they can be reached from a master node using the `NMN`. The master nodes are not on the `HSN`.
+
       ```bash
       COMPUNODES="$(sat status --filter role=compute --filter Enabled=true --fields aliases --no-borders --no-headings | xargs | sed 's/ /-nmn,/g' | sed 's/$/-nmn/')"
       echo $COMPUNODES
@@ -598,12 +598,12 @@ Refer to that table and any corresponding product documents before continuing to
    1. Prepare the application and compute nodes to logout of their iSCSI session with the worker nodes.
 
       ```bash
-      pdsh -t10 -f256 -w "$APPNODES,$COMPUNODES" "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/' /etc/iscsi/iscsid.conf &&  
+      pdsh -t10 -f256 -w "$APPNODES,$COMPUNODES" "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/' /etc/iscsi/iscsid.conf &&
       grep -q '^iscsid.safe_logout = No$' /etc/iscsi/iscsid.conf && echo 'Configuration update: Success' || { echo 'Configuration update: Fail'; exit 1; }
       systemctl restart iscsid.service && echo 'iscsid restart: Success' || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
       ```
 
-1. (`ncn-m001#`) Check whether the `iscsi_worker` group exists. If the group exists, selective iSCSI worker node personalization is enabled. 
+1. (`ncn-m001#`) Check whether the `iscsi_worker` group exists. If the group exists, selective iSCSI worker node personalization is enabled.
    Otherwise, all worker nodes are enabled as iSCSI targets by default.
 
    Identify which worker nodes are configured as iSCSI targets.
@@ -636,7 +636,7 @@ Refer to that table and any corresponding product documents before continuing to
    ```toml
    "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0"
    ```
-    
+
    Map the `ISCSI_TARGET_XNAMES` to worker node name
 
    ```bash
@@ -653,7 +653,7 @@ Refer to that table and any corresponding product documents before continuing to
    done
    echo $ISCSI_TARGET_NODES
    ```
-    
+
    Example Output:
 
    ```toml
@@ -714,7 +714,7 @@ Refer to that table and any corresponding product documents before continuing to
    ```
 
 1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).   
-         
+
 1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`.
 If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
@@ -759,7 +759,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
    ```
 
-1. (`ncn-m001#`) Use `kubectl` to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
+1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the node to prevent it from unnecessarily rebuilding again.
 
    ```bash
    kubectl label nodes "${WORKER_CANARY2}" --overwrite iuf-prevent-rollout=true
@@ -798,7 +798,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
       done
       ```
-   
+
    1. Choose one of the following two options. The difference between the options is the limit-management-rollout argument, but the two options do
       the same thing.
 
@@ -843,7 +843,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
    systemctl restart iscsid.service" || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
    ```
 
-1. (`ncn-m001#`) Use `kubectl` to remove the iuf-prevent-rollout=true label from the canary nodes.
+1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary nodes.
 
    ```bash
    kubectl label nodes ${WORKER_CANARY} ${WORKER_CANARY2} --overwrite iuf-prevent-rollout-
