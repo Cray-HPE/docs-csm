@@ -393,7 +393,7 @@ Follow the following steps to complete the `management-nodes-rollout` stage.
 
         ```bash
         /usr/share/doc/csm/scripts/operations/configuration/apply_csm_configuration.sh \
-management_rollout.md            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
+            --no-config-change --config-name "${CFS_CONFIG_NAME}" --xnames $MASTER_XNAMES --clear-state
         ```
 
         Sample output for configuring multiple management nodes is:
@@ -574,7 +574,7 @@ Refer to that table and any corresponding product documents before continuing to
 > **Important:** After a worker node rebuild, the iSCSI `LUNs` previously mapped to `rootfs/PE` images may get reassigned to different images
 > and receive different LUN numbers. However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before
 > the rebuild. Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
-> To prevent this issue, we need to ensure that certain iSCSI related operations **must be** erformed on compute and application nodes against
+> To prevent this issue, we need to ensure that certain iSCSI related operations **must be** performed on compute and application nodes against
 > their iSCSI targets.
 
 1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients (application and compute nodes).
@@ -619,7 +619,7 @@ Refer to that table and any corresponding product documents before continuing to
    ```
 
    If the `iscsi_worker` label is not found, the above command will produce no output. This indicates that all worker nodes are enabled as iSCSI targets.
- 
+
    ```bash
    ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}' | xargs)
    ```
@@ -688,7 +688,7 @@ Refer to that table and any corresponding product documents before continuing to
   
 1. (`ncn-m001#`) Verify that the node booted successfully with the desired image and CFS configuration.
 
-   ```
+   ```bash
    XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
    echo "${XNAME}"
    cray cfs components describe "${XNAME}"
@@ -713,7 +713,7 @@ Refer to that table and any corresponding product documents before continuing to
    kubectl get nodes "${WORKER_CANARY}" --show-labels | grep iuf-prevent-rollout
    ```
 
-1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).   
+1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
 1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`.
 If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
@@ -872,8 +872,8 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
    done
    ```
 
-1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).  
-    
+1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
+
 Once this step has completed:
 
 - Management NCN worker nodes have been rebuilt with the image and CFS configuration created in previous steps of this workflow
