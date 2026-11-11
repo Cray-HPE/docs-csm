@@ -1276,6 +1276,8 @@ Conntrack
 
 - operations/rapid_release_update/RRU_26.11.01_170_releasenotes.md
 9p
+IPsec
+DEL-IP
 Base64
 CHAP_R
 Overread
@@ -1351,3 +1353,7 @@ espintcp
 skmsg
 inet_opt
 ireq_opt
+sched
+cls_api
+Conntrack
+Stateid
