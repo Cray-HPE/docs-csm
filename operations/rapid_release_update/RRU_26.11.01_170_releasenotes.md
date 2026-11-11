@@ -10,7 +10,7 @@ This page documents the changes introduced by this RRU, compared to the previous
 
 ## Kernel Version
 
-`6.4.0-150600.23.138.1`
+`6.4.0-150600.23.143.1`
 
 ## CVEs Fixes
 
