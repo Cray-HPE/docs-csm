@@ -24,10 +24,10 @@ This section updates the kernel running on management NCNs.
    Wait for Ceph `HEALTH_OK` before proceeding to the next node.
 
    > **Important:** When a storage node is booted into a new node image, the storage node is not wiped. Because the storage node is not wiped, the `rd.live.dir` still
-   > exists when the node is rebooted. This is due to a change in how rd.live.overlay.reset works in CSM 1.5 and 1.6. If the `rd.live.dir` is not changed when
+   > exists when the node is rebooted. This is due to a change in how `rd.live.overlay.reset` works in CSM 1.5 and 1.6. If the `rd.live.dir` is not changed when
    > booting a storage node to a new node image, the new image will not be pulled since the `rd.live.dir` still exists. This can cause `cloud-init` to fail on the
-   > storage node or the node will boot but will use the previous /run/initramfs/live/<CSM_version> directory that still contains the previous image. To avoid
-   > this issue and ensure the new node image is pulled, the `rd.live.dir` should be set to unique value. In this procedure, the STORAGE_NODE_IMAGE_ID is used
+   > storage node or the node will boot but will use the previous `/run/initramfs/live/<CSM_version>` directory that still contains the previous image. To avoid
+   > this issue and ensure the new node image is pulled, the `rd.live.dir` should be set to unique value. In this procedure, the `STORAGE_NODE_IMAGE_ID` is used
    > as the unique value.
    >
    > This issue is not hit when upgrading from one CSM major release to the next CSM major release because the `rd.live.dir` is changed on all NCNs to the
@@ -207,7 +207,6 @@ This section updates the kernel running on management NCNs.
 
       1. (ncn-m001#) Monitor the Argo Workflow using the Argo UI. See [using the Argo UI for instructions to access the Argo UI](https://cray-hpe.github.io/docs-csm/en-16/operations/argo/using_the_argo_ui/).
 
-   
    1. (`ncn-m001#`) Verify that all storage nodes booted successfully with new image and CFS configuration
 
       ```bash
@@ -250,7 +249,7 @@ This section updates the kernel running on management NCNs.
       done
       ```
 
-   10. (`ncn-m001#`) Restore the original `storage.upgrade` workflow for `rd.live.dir` so that it uses the `CSM_RELEASE` rather than the `STORAGE_IMAGE_ID`.
+   1. (`ncn-m001#`) Restore the original `storage.upgrade` workflow for `rd.live.dir` so that it uses the `CSM_RELEASE` rather than the `STORAGE_IMAGE_ID`.
 
       ```bash
       cp -p /usr/share/doc/csm/workflows/ncn/storage/storage.upgrade.yaml.orig /usr/share/doc/csm/workflows/ncn/storage/storage.upgrade.yaml

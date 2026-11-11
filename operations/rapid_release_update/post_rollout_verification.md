@@ -1,7 +1,7 @@
 # Post-Rollout Verification
 
 1. [Post-Rollout Verification Steps](#1-post-rollout-verification-steps)
-1. [Stop typescript](#2-stop-typescript)
+1. [Stop the typescript](#2-stop-the-typescript)
 1. [References](#3-references)
 1. [Next Steps](#4-next-steps)
 
@@ -17,6 +17,7 @@ After all nodes are rolled out, validate the system:
    ```bash
    pdsh -w $(echo $(ceph orch host ls | grep ncn | cut -f1 -d" " | xargs) $(kubectl get nodes | grep ncn | cut -f1 -d" " | xargs) | sed 's/ /,/g') 'uname -r' |dshbak -c
    ```
+
    Example output:
 
    ```bash
@@ -55,4 +56,3 @@ For any typescripts that were started during this preparation stage, stop them w
 - Return to the
   [Deploying Rapid Release Update with IUF](installation_iuf.md)
   workflow to continue the install.
-

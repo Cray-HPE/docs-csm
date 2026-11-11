@@ -1,13 +1,13 @@
 # Product Delivery and Update CFS Configuration
 
-1. [Execute the IUF `deliver-product` stage](#1-execute-the-iuf-deliver-product-stage)
+1. [Execute the IUF `deliver-product` stage](#1-execute-the-iuf-process-media-through-deliver-product-stages)
 1. [Update CFS Configuration](#2-update-cfs-configuration)
 1. [Next steps](#3-next-steps)
 
 ## 1. Execute the IUF `process-media` through `deliver-product` stages
 
 This stage extracts the tarball, validates the product manifest, uploads RPMs to
-Nexus, pushes CFS content to gitea, and registers the product in the product
+Nexus, pushes CFS content to Gitea, and registers the product in the product
 catalog.
 
 1. (`ncn-m001#`) Run from `process-media` through `deliver-product`.
@@ -25,7 +25,7 @@ catalog.
    - Pre-install-check hook validates prerequisites (CSM version, API health)
    - RPMs are uploaded to a Nexus yum-hosted repository
      (`csm-security-SUSE-<sle-version>`)
-   - CFS Ansible content is pushed to a `csm-security` gitea repository
+   - CFS Ansible content is pushed to a `csm-security` Gitea repository
      with a versioned branch
    - Product `csm-security` is registered in the Cray product catalog
 

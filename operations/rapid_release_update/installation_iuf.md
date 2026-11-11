@@ -1,6 +1,8 @@
 # Deploying Rapid Release Update with IUF
 
-This procedure describes how to deploy a Rapid Release Update (RRU) to an operational CSM system using the Install and Upgrade Framework (IUF). It updates the operational CSM release with the CVE patches from `csm-security` product. The kernels of all the NCNs are updated using CFS to create new NCN images. NCNs are rebooted with the new image to complete the deployment.
+This procedure describes how to deploy a Rapid Release Update(RRU) to an operational CSM system using the Install and Upgrade Framework (IUF).
+It updates the operational CSM release with the CVE patches from `csm-security` product. The kernels of all the NCNs are updated using CFS to create new NCN images.
+NCNs are rebooted with the new image to complete the deployment.
 
 This procedure is limited to the deployment of the new images to management nodes (NCNs) only.
 

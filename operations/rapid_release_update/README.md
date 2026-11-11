@@ -2,8 +2,8 @@
 
 * [Overview](#overview)
 * [Terminology](#terminology)
-* [Valid upgrade paths](#valid-upgrade-paths)
-* [CSM upgrade procedures](#csm-upgrade-procedures)
+* [Release Notes](#release-notes)
+* [Valid update paths](#valid-update-paths)
 * [Update NCNs with Rapid Release Update](#update-ncns-with-rapid-release-update)
 * [Further Reading](#further-reading)
 
@@ -30,11 +30,11 @@ SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the im
 
 ## Release notes
 
-[Rapid-Update-sle15-sp6-162-26.11.01](RRU_26_11_01_162_releasenotes.md)
+[`Rapid-Update-sle15-sp6-162-26.11.01` Release Notes](RRU_26_11_01_162_releasenotes.md)
 
-[Rapid-Update-sle15-sp6-162-26.10.01](RRU_26_10_01_162_releasenotes.md)
+[`Rapid-Update-sle15-sp6-162-26.10.01` Release Notes](RRU_26_10_01_162_releasenotes.md)
 
-[Rapid-Update-sle15-sp6-162-26.07.01](RRU_26_07_01_162_releasenotes.md)
+[`Rapid-Update-sle15-sp6-162-26.07.01` Release Notes](RRU_26_07_01_162_releasenotes.md)
 
 ## Valid update paths
 
@@ -43,13 +43,13 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 
 | Installed CSM base version | Base SLE version | RRU version | Kernel version |
 | --- | --- | --- | --- |
-| 1.6.2 | SLE SP6 | Rapid-Update-sle15-sp6-162-26.10.01 | 6.4.0-150600.23.143.1 |
+| 1.6.2 | SLE SP6 | `Rapid-Update-sle15-sp6-162-26.11.01` | 6.4.0-150600.23.143.1 |
 
 > **Note:** RRU Version mentioned above is the latest released version. Previous versions can be found in the [Release Notes](#release-notes).
 
 ## Update NCNs with Rapid Release Update
 
-1. For updating NCNs with RRU, see [Deploying Rapid Release Update with IUF](installation_iuf.md). 
+1. For updating NCNs with RRU, see [Deploying Rapid Release Update with IUF](installation_iuf.md).
 2. For troubleshooting common failures, see [Troubleshooting Guide](troubleshooting.md).
 
 ## Further Reading
@@ -58,8 +58,8 @@ For comprehensive IUF documentation including advanced workflows, stage details,
 and troubleshooting, refer to the official CSM documentation for your installed
 CSM version:
 
-- **Online:** <https://cray-hpe.github.io/docs-csm/en-16/operations/iuf/iuf/>
-- **On-system:** If the `docs-csm` RPM matching your CSM version is installed,
+* **Online:** <https://cray-hpe.github.io/docs-csm/en-16/operations/iuf/iuf/>
+* **On-system:** If the `docs-csm` RPM matching your CSM version is installed,
   IUF documentation is available locally at `/usr/share/doc/csm/operations/iuf/`
 
 Install or update the docs RPM:

@@ -35,7 +35,8 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
 
 1. Validate CSM health.
 
-   Run the CSM health checks to ensure that everything is working properly before the installing RRU starts. After the upgrade is completed, another health check is performed, and it is important to know if any problems observed at that time existed prior to the install.
+   Run the CSM health checks to ensure that everything is working properly before the installing RRU starts. After the upgrade is completed,
+   another health check is performed, and it is important to know if any problems observed at that time existed prior to the install.
 
    Reference [Validate CSM Health](../validate_csm_health.md) for details.
 
@@ -68,7 +69,7 @@ See [Check for latest documentation](../../update_product_stream/README.md#check
 > **Before proceeding, verify that your `product_vars.yaml` matches the
 > versions actually installed on the system.** The authoritative source is
 > your installed recipe's `product_vars.yaml.in` in the
-> `hpc-csm-software-recipe` gitea repository (branch matching your recipe
+> `hpc-csm-software-recipe` Gitea repository (branch matching your recipe
 > version). If your system was freshly installed with the current recipe, these
 > files should already be correct.
 
@@ -135,8 +136,7 @@ export RECIPE_VARS="$ADMIN_DIR/product_vars.yaml"
    ```
 
 1. Once the above steps are completed:
-
- - Environment variables have been set and required IUF directories have been created
+   Environment variables have been set and required IUF directories have been created
 
 ## 6. Check and clean old images on storage nodes
 
