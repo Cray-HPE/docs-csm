@@ -822,7 +822,7 @@ The rebuild script handles first-master promotion automatically.
       export MASTER_CFG_ID=<MASTER_CFG_ID>
       ```
 
-      **Note:** `MASTER_IMAGE_ID` and `MASTER_CFG_ID` values should be replaced with the values captured in step 1.
+      **Note:** `MASTER_IMAGE_ID` and `MASTER_CFG_ID` values should be replaced with the values captured in step `3.i`.
 
    1. (`ncn-m002#`) Verify `/etc/cray/upgrade/csm/myenv` exists and sets `CSM_RELEASE` and `CSM_ARTI_DIR`.
 
