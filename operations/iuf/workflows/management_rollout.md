@@ -571,82 +571,308 @@ Refer to that table and any corresponding product documents before continuing to
 
     After updating management host Slingshot NIC firmware, all NCN worker nodes where the firmware has been updated must be power cycled. This is done as part of management nodes rebuild procedure.
 
-1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage with a single NCN worker node.
-This will rebuild the canary node with the new CFS configuration and image built in previous steps of the workflow.
-The worker canary node can be any worker node and does not have to be `ncn-w001`.
+> **Important:** After a worker node rebuild, the iSCSI `LUNs` previously mapped to `rootfs/PE` images may get reassigned to different images
+> and receive different LUN numbers. However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before
+> the rebuild. Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
+> To prevent this issue, we need to ensure that certain iSCSI related operations **must be** performed on compute and application nodes against
+> their iSCSI targets.
 
-    ```bash
-    WORKER_CANARY=ncn-w001
-    iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout ${WORKER_CANARY}
-    ```
+1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients (application and compute nodes).
 
-1. (`ncn-m001#`) Verify that the canary node booted successfully with the desired image and CFS configuration.
+   1. Determine the hostnames of the application nodes.
 
-    ```bash
-    XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
-    echo "${XNAME}"
-    cray cfs components describe "${XNAME}"
-    ```
+      ```bash
+      APPNODES="$(sat status --filter role=application --filter Enabled=true --fields aliases --no-borders --no-headings | xargs | sed 's/ /,/g')"
+      echo $APPNODES
+      ```
+
+   1. Determine the hostnames for the compute nodes.  Two different methods are shown. Use the one which produces a more compact list in the variable.
+
+      **Note:** The compute node hostnames should have `-nmn` as the suffix so that they can be reached from a master node using the `NMN`. The master nodes are not on the `HSN`.
+
+      ```bash
+      COMPUNODES="$(sat status --filter role=compute --filter Enabled=true --fields aliases --no-borders --no-headings | xargs | sed 's/ /-nmn,/g' | sed 's/$/-nmn/')"
+      echo $COMPUNODES
+      ```
+
+   1. Prepare the application and compute nodes to logout of their iSCSI session with the worker nodes.
+
+      ```bash
+      pdsh -t10 -f256 -w "$APPNODES,$COMPUNODES" "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = No/' /etc/iscsi/iscsid.conf &&
+      grep -q '^iscsid.safe_logout = No$' /etc/iscsi/iscsid.conf && echo 'Configuration update: Success' || { echo 'Configuration update: Fail'; exit 1; }
+      systemctl restart iscsid.service && echo 'iscsid restart: Success' || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
+      ```
+
+1. (`ncn-m001#`) Check whether the `iscsi_worker` group exists. If the group exists, selective iSCSI worker node personalization is enabled.
+   Otherwise, all worker nodes are enabled as iSCSI targets by default.
+
+   Identify which worker nodes are configured as iSCSI targets.
+
+   ```bash
+   cray hsm groups list | grep iscsi_worker
+   ```
+
+   Example  Output:
+
+   ```toml
+   label = "iscsi_worker"  # Output with label iscsi_worker present. If not present then there will be no output
+   ```
+
+   If the `iscsi_worker` label is not found, the above command will produce no output. This indicates that all worker nodes are enabled as iSCSI targets.
+
+   ```bash
+   ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}' | xargs)
+   ```
+
+   If the `iscsi_worker` label is found, then use the below command to get the list of worker nodes that are enabled as iSCSI targets.
+
+   ```bash
+   ISCSI_TARGET_XNAMES=$(cray hsm groups members list iscsi_worker --format json | jq .ids[])
+   echo $ISCSI_TARGET_XNAMES
+   ```
+
+   Example Output:
+
+   ```toml
+   "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0"
+   ```
+
+   Map the `ISCSI_TARGET_XNAMES` to worker node name
+
+   ```bash
+   ISCSI_TARGET_NODES=''
+   for node in $ISCSI_TARGET_XNAMES
+   do
+     worker_node=$(sat status --fields alias --filter xname=$node --no-borders --no-headings | sed 's/ //g')
+     if [[ $ISCSI_TARGET_NODES == '' ]]
+     then
+        ISCSI_TARGET_NODES=$worker_node
+     else
+        ISCSI_TARGET_NODES="$ISCSI_TARGET_NODES $worker_node"
+     fi
+   done
+   echo $ISCSI_TARGET_NODES
+   ```
+
+   Example Output:
+
+   ```toml
+   ncn-w001 ncn-w002 ncn-w003
+   ```
+
+1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node
+   as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
+
+   **Note:** Choose the canary node wisely, don't use the one running slingshot-fabric-manager or nexus.
+
+   ```bash
+   WORKER_CANARY=ncn-w001
+   ```
+
+1. (`ncn-m001#`) On the application and compute nodes, logout of their iSCSI session with the worker node, `WORKER_CANARY`.
+
+   ```bash
+   IQN=iqn.2023-06.csm.iscsi:$WORKER_CANARY
+   PORTAL=$(host $(sat status --fields xname --filter alias=$WORKER_CANARY --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
+   ```
+
+1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY`.
+
+   **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
+   console log for the node being rebuilt with a new image.
+
+   ```bash
+   iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run -r management-nodes-rollout --limit-management-rollout $WORKER_CANARY
+   ```
+  
+1. (`ncn-m001#`) Verify that the node booted successfully with the desired image and CFS configuration.
+
+   ```bash
+   XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
+   echo "${XNAME}"
+   cray cfs components describe "${XNAME}"
+   ```
+
+1. (`ncn-m001#`) Perform iSCSI discovery on the application and compute nodes, then login to the iSCSI session on the worker node, `WORKER_CANARY`.
+
+   ```bash
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
+   ```
 
 1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the canary node to prevent it from unnecessarily rebuilding again.
 
-    ```bash
-    kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout=true
-    ```
+   ```bash
+   kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout=true
+   ```
 
-1. (`ncn-m001#`) Verify that the IUF node labels are present on the desired node.
+1. (`ncn-m001#`) Verify that the IUF node labels are present on the worker canary node.
 
-    ```bash
-    kubectl get nodes --show-labels | grep iuf-prevent-rollout
-    ```
+   ```bash
+   kubectl get nodes "${WORKER_CANARY}" --show-labels | grep iuf-prevent-rollout
+   ```
 
-1. Ensure to [follow these steps after worker node rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
+1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
-1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage on all remaining worker nodes.
+1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`.
+If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
-   **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to maintain high
-   availability for iSCSI SBPS. We can rollout one more worker node other than canary node to be labeled with `iuf-prevent-rollout=true` followed by rest of
-   the worker nodes rollout. Verify the health of these nodes before proceeding to the next batch of worker node rollouts. Continue this process until the rollout of
-   all remaining worker nodes is complete.
+   **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
+   maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
+   `iuf-prevent-rollout=true` followed by rolling out the rest of the worker nodes.
+   **Note:** Choose the canary node wisely, don't use the one running slingshot-fabric-manager or nexus.
 
-   **NOTE** For this step, the argument to `--limit-management-rollout` can be `Management_Worker` or a list of worker
-   node names separated by spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled
-   with `iuf-prevent-rollout=true` will be rebuilt/upgraded. If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
+   ```bash
+   WORKER_CANARY2=ncn-w002
+   ```
 
-   **Choose one** of the following two options. The difference between the options is the `limit-management-rollout` argument, but the two options do the same thing.
+1. (`ncn-m001#`) On the application and compute nodes logout of their iSCSI session with the worker node, `WORKER_CANARY2`
 
-    - (`ncn-m001#`) Execute `management-nodes-rollout` on all `Management_Worker` nodes.
+   ```bash
+   IQN=iqn.2023-06.csm.iscsi:$WORKER_CANARY2
+   PORTAL=$(host $(sat status --fields xname --filter alias=$WORKER_CANARY2 --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
+   ```
 
-        ```bash
-        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
-        ```
+1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY2`.
 
-    - (`ncn-m001#`) Execute `management-nodes-rollout` on a group of worker nodes.
-      The list of worker nodes can be manually edited if it is undesirable to rebuild/upgrade all of the workers with one execution.
+   **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
+   console log for the node being rebuilt with a new image.
 
-        ```bash
-        WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -v $WORKER_CANARY |  awk '{print $1}' | xargs)
-        echo $WORKER_NODES
-        iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
-        ```
+   ```bash
+   iuf -a ${ACTIVITY_NAME} -m ${MEDIA_DIR} run -r management-nodes-rollout --limit-management-rollout $WORKER_CANARY2
+   ```
 
-1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary node.
+1. (`ncn-m001#`) Verify that the node booted successfully with the desired image and CFS configuration.
 
-    ```bash
-    kubectl label nodes "${WORKER_CANARY}" --overwrite iuf-prevent-rollout-
-    ```
+   ```bash
+   XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
+   echo "${XNAME}"
+   cray cfs components describe "${XNAME}"
+   ```
 
-1. (`ncn-m001#`) Verify that all worker nodes configured successfully.
+1. (`ncn-m001#`) Perform iSCSI discovery on the application and compute nodes, then login to the iSCSI session on the worker node, `WORKER_CANARY2`.
 
-    ```bash
-    for ncn in $(cray hsm state components list --subrole Worker --type Node \
-        --format json | jq -r .Components[].ID | grep b0n | sort)
-    do
-        cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
-    done
-    ```
+   ```bash
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
+   ```
 
-1. Ensure to [follow these steps after worker nodes rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
+1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the node to prevent it from unnecessarily rebuilding again.
+
+   ```bash
+   kubectl label nodes "${WORKER_CANARY2}" --overwrite iuf-prevent-rollout=true
+   ```
+
+1. (`ncn-m001#`) Verify that the IUF node label is present on the worker canary node.
+
+   ```bash
+   kubectl get nodes "${WORKER_CANARY2}" --show-labels | grep iuf-prevent-rollout
+   ```
+
+1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
+
+1. (`ncn-m001#`) Execute the management-nodes-rollout stage on all remaining worker nodes.
+
+   > **NOTE** For this step, the argument to --limit-management-rollout can be `Management_Worker` or a list of worker node names separated by
+   > spaces. If `Management_Worker` is supplied, all worker nodes that are not labeled with `iuf-prevent-rollout=true` will be rebuilt/upgraded.
+   > If a list of worker node names is supplied, then those worker nodes will be rebuilt/upgraded.
+
+   **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including
+   the console log for the node being rebuilt with a new image.
+
+   1. Determine the remaining worker nodes which are iSCSI targets by excluding the `WORKER_CANARY` and `WORKER_CANARY2`.
+
+      ```bash
+      ISCSI_TARGET_NODES=$(echo "$ISCSI_TARGET_NODES" | sed "s/$WORKER_CANARY//; s/$WORKER_CANARY2//")
+      ```
+
+   1. On the application and compute nodes logout of their iSCSI session with the iSCSI target worker nodes, `ISCSI_TARGET_NODES`.
+
+      ```bash
+      for node in $ISCSI_TARGET_NODES
+      do
+        IQN=iqn.2023-06.csm.iscsi:$node
+        PORTAL=$(host $(sat status --fields xname --filter alias=$node --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
+        pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
+      done
+      ```
+
+   1. Choose one of the following two options. The difference between the options is the limit-management-rollout argument, but the two options do
+      the same thing.
+
+      1. Option 1:
+
+         ```bash
+         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout Management_Worker
+         ```
+
+      2. Option 2:
+
+         Execute management-nodes-rollout on a group of worker nodes. The list of worker nodes can be manually edited if it is undesirable to
+         rebuild/upgrade all of the workers with one execution.
+
+         ```bash
+         WORKER_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | grep -vE "$WORKER_CANARY|$WORKER_CANARY2" | awk '{print $1}' | xargs)
+         echo $WORKER_NODES
+         iuf -a "${ACTIVITY_NAME}" -m "${MEDIA_DIR}" run -r management-nodes-rollout --limit-management-rollout $WORKER_NODES
+         ```
+
+   1. Perform iSCSI discovery on the application and compute nodes, then login to the iSCSI session on the worker nodes, `ISCSI_TARGET_NODES`.
+
+      ```bash
+      for node in $ISCSI_TARGET_NODES
+      do
+        echo $node
+        IQN=iqn.2023-06.csm.iscsi:$node
+        echo $IQN
+        PORTAL=$(host $(sat status --fields xname --filter alias=$node --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
+        echo $PORTAL
+        pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "echo iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
+        pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "echo iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
+      done
+      ```
+
+1. (`ncn-m001#`) After all worker nodes have finished their image rollout, set `iscsid.safe_logout=Yes` again and restart `iscsid.service` on
+   all application and compute nodes.
+
+   ```bash
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = Yes/g' /etc/iscsi/iscsid.conf &&
+   grep -q '^iscsid.safe_logout = Yes$' /etc/iscsi/iscsid.conf && echo 'Configuration update: Success' || { echo 'Configuration update: Fail'; exit 1; }
+   systemctl restart iscsid.service" || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
+   ```
+
+1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary nodes.
+
+   ```bash
+   kubectl label nodes ${WORKER_CANARY} ${WORKER_CANARY2} --overwrite iuf-prevent-rollout-
+   ```
+
+1. (`ncn-m001#`) Verify that no nodes are labeled with `iuf-prevent-rollout=true`.
+
+   ```bash
+   LABELLED_NODES=$(kubectl get nodes --show-labels | grep iuf-prevent-rollout | cut -d' ' -f1 | xargs)
+   echo $LABELLED_NODES
+   ```
+
+1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the node.
+
+   ```bash
+   kubectl label nodes ${LABELLED_NODES} --overwrite iuf-prevent-rollout-
+   ```
+
+1. (`ncn-m001#`) Verify that all worker nodes booted successfully with the desired image and CFS configuration.
+
+   ```bash
+   for ncn in $(cray hsm state components list --subrole Worker --type Node \
+       --format json | jq -r .Components[].ID | grep b0n | sort)
+   do
+       cray cfs components describe $ncn --format json | jq -r ' .id+" "+.desiredConfig+" status="+.configurationStatus'
+   done
+   ```
+
+1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
 Once this step has completed:
 
