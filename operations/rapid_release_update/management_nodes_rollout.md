@@ -818,9 +818,11 @@ The rebuild script handles first-master promotion automatically.
    1. (`ncn-m002#`) Once logged into `ncn-m002`, set the `MASTER_IMAGE_ID` and `MASTER_CFG_ID` for the new image to be used on `ncn-m001`.
 
       ```bash
-      export MASTER_IMAGE_ID=d5c99503-096f-4279-a0a9-be4789a1bea5
-      export MASTER_CFG_ID=management-26.3.0-rru-26.10.01
+      export MASTER_IMAGE_ID=<MASTER_IMAGE_ID>
+      export MASTER_CFG_ID=<MASTER_CFG_ID>
       ```
+
+      **Note:** `MASTER_IMAGE_ID` and `MASTER_CFG_ID` values should be replaced with the values captured in step 1.
 
    1. (`ncn-m002#`) Verify `/etc/cray/upgrade/csm/myenv` exists and sets `CSM_RELEASE` and `CSM_ARTI_DIR`.
 
