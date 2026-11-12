@@ -33,14 +33,6 @@ This section updates the kernel running on management NCNs.
    > This issue is not hit when upgrading from one CSM major release to the next CSM major release because the `rd.live.dir` is changed on all NCNs to the
    > new CSM major release version. This allows the node image to be pulled successfully during `cloud-init`
 
-   1. Patch the `storage_upgrade` workflow for `rd.live.dir` to use the `STORAGE_IMAGE_ID` rather than the `CSM_RELEASE`.
-
-      ```bash
-      cp -p /usr/share/doc/csm/workflows/ncn/storage/storage.upgrade.yaml /usr/share/doc/csm/workflows/ncn/storage/storage.upgrade.yaml.orig
-      sed -i "s/\${CSM_RELEASE}/$STORAGE_IMAGE_ID/" /usr/share/doc/csm/workflows/ncn/storage/storage.upgrade.yaml
-      /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
-      ```
-
    1. Set the TOKEN variable.
 
       ```bash
@@ -249,18 +241,15 @@ This section updates the kernel running on management NCNs.
       done
       ```
 
-   1. (`ncn-m001#`) Restore the original `storage.upgrade` workflow for `rd.live.dir` so that it uses the `CSM_RELEASE` rather than the `STORAGE_IMAGE_ID`.
-
-      ```bash
-      cp -p /usr/share/doc/csm/workflows/ncn/storage/storage.upgrade.yaml.orig /usr/share/doc/csm/workflows/ncn/storage/storage.upgrade.yaml
-      /usr/share/doc/csm/workflows/scripts/upload-rebuild-templates.sh
-      ```
-
 ## 2. Worker Nodes
 
 Roll out the new image and CFS configuration to one worker node first and validate the changes. Once validated, proceed with a second worker node, followed by the remaining worker nodes in batches.
 
-   1. In CSM 1.6.2, when iSCSI is configured instead of DVS, all worker nodes are considered as iSCSI targets.
+   1. In CSM 1.6.2, when iSCSI is configured instead of DVS, all worker nodes are considered as iSCSI targets. So retrieve all worker nodes.
+
+      ```bash
+      ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+'  | awk '{print $1}' | xargs)
+      ```
 
    **NOTE** When using the option `--limit-management-rollout` to pass the list of nodes for `management-nodes-rollout`, ensure that the label `iuf-prevent-rollout=true` is not set on any of the nodes passed in the list.
 
@@ -314,63 +303,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
          systemctl restart iscsid.service && echo 'iscsid restart: Success' || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
          ```
 
-   1. (`ncn-m001#`) Check whether the `iscsi_worker` group exists. If the group exists, selective iSCSI worker node personalization is enabled. Otherwise, all worker nodes are enabled as iSCSI targets by default.
-
-      Identify which worker nodes are configured as iSCSI targets.
-
-      ```bash
-      cray hsm groups list | grep iscsi_worker
-      ```
-
-      Example  Output:
-
-      ```toml
-      label = "iscsi_worker"  # Output with label iscsi_worker present. If not present then there will be no output
-      ```
-
-      If the `iscsi_worker` label is not found, the above command will produce no output. This indicates that all worker nodes are enabled as iSCSI targets.
-
-      ```bash
-      ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+'  | awk '{print $1}' | xargs)
-      ```
-
-      If the `iscsi_worker` label is found, then use the below command to get the list of worker nodes that are enabled as iSCSI targets.
-
-      ```bash
-      ISCSI_TARGET_XNAMES=$(cray hsm groups members list iscsi_worker --format json | jq .ids[])
-      echo $ISCSI_TARGET_XNAMES
-      ```
-
-      Example Output:
-
-      ```toml
-      "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0"
-      ```
-
-      Map the `ISCSI_TARGET_XNAMES` to worker node name
-
-      ```bash
-      ISCSI_TARGET_NODES=''
-      for node in $ISCSI_TARGET_XNAMES
-      do
-         worker_node=$(sat status --fields alias --filter xname=$node --no-borders --no-headings | sed 's/ //g')
-         if [[ $ISCSI_TARGET_NODES == '' ]]
-         then
-            ISCSI_TARGET_NODES=$worker_node
-         else
-            ISCSI_TARGET_NODES="$ISCSI_TARGET_NODES $worker_node"
-         fi
-      done
-      echo $ISCSI_TARGET_NODES
-      ```
-
-      Example Output:
-
-      ```toml
-      ncn-w001 ncn-w002 ncn-w003
-      ```
-
-   1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
+   1. (`ncn-m001#`) Select any worker node as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
 
       **Note:** Choose the canary node wisely, don't use the one running slingshot-fabric-manager or nexus.
 
@@ -459,10 +392,9 @@ Roll out the new image and CFS configuration to one worker node first and valida
       kubectl get nodes "${WORKER_CANARY}" --show-labels | grep iuf-prevent-rollout
       ```
 
-   1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
+   1. (`ncn-m001#`) Verify the health of iSCSI target and initiator by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
-   1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`.
-   If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
+   1. (`ncn-m001#`) Select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
       **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
       maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
@@ -554,7 +486,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
       kubectl get nodes "${WORKER_CANARY2}" --show-labels | grep iuf-prevent-rollout
       ```
 
-   1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
+   1. (`ncn-m001#`) Verify the health of iSCSI target and initiator by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
    1. (`ncn-m001#`) Execute the management-nodes-rollout stage on all remaining worker nodes.
 
@@ -654,7 +586,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
       done
       ```
 
-   1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
+   1. (`ncn-m001#`) Verify the health of iSCSI target and initiator by following the steps in [iSCSI SBPS Verification](../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
 ## 3. Master Nodes
 
@@ -891,9 +823,11 @@ The rebuild script handles first-master promotion automatically.
    1. (`ncn-m002#`) Once logged into `ncn-m002`, set the `MASTER_IMAGE_ID` and `MASTER_CFG_ID` for the new image to be used on `ncn-m001`.
 
       ```bash
-      export MASTER_IMAGE_ID=d5c99503-096f-4279-a0a9-be4789a1bea5
-      export MASTER_CFG_ID=management-26.3.0-rru-26.10.01
+      export MASTER_IMAGE_ID=<MASTER_IMAGE_ID>
+      export MASTER_CFG_ID=<MASTER_CFG_ID>
       ```
+
+      **Note:** `MASTER_IMAGE_ID` and `MASTER_CFG_ID` values should be replaced with the values captured in step 1 of `Update ncn-m001`.
 
    1. (`ncn-m002#`) Verify `/etc/cray/upgrade/csm/myenv` exists and sets `CSM_RELEASE` and `CSM_ARTI_DIR`.
 

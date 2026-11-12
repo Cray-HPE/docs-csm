@@ -1,4 +1,4 @@
-# Release Notes - `Rapid-Update-sle15-sp6-170-26.10.01`
+# Release Notes - `Rapid-Update-sle15-sp6-162-26.11.01`
 
 This document guides an administrator through the deploy of Rapid Release Update on `CSM-1.6.2`.
 
