@@ -19,6 +19,7 @@ The following administrative topics can be found in this guide:
 - [Security and authentication](#security-and-authentication)
 - [Resiliency](#resiliency)
     - [Rack Resiliency](#rack-resiliency)
+- [Rapid Release Update](#rapid-release-update)
 - [ConMan](#conman)
 - [Utility storage](#utility-storage)
 - [System management health](#system-management-health)
@@ -428,6 +429,16 @@ successful scheduling and execution of user jobs.
 - [`cray-rrs` Deployment](rack_resiliency/cray-rrs_Deployment.md)
 - [Troubleshooting](rack_resiliency/Troubleshooting.md)
 - [Rack Resiliency API](../api/rrs.md)
+
+## Rapid Release Update
+
+A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called csm-security that delivers approved security content for a specific CSM base release and its corresponding SLE version. It does not upgrade the installed CSM release.
+
+- [Overview](rapid_release_update/README.md#overview)
+- [Release Notes](rapid_release_update/README.md#release-notes)
+- [Valid update paths](rapid_release_update/README.md#valid-update-paths)
+- [Deploying Rapid Release Update with IUF](rapid_release_update/installation_iuf.md)
+- [Troubleshooting Guide](rapid_release_update/troubleshooting.md)
 
 ## ConMan
 

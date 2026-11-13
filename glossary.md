@@ -625,6 +625,12 @@ For more information, see [Rack Resiliency Service](operations/rack_resiliency/R
 Air-Cooled compute cabinets house a cluster of [compute nodes](#compute-node-cn), [Slingshot ToR switches](#slingshot-top-of-rack-tor-switch),
 and [SMNet](#system-management-network-smnet) ToR switches.
 
+## Rapid Release Update
+
+A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called csm-security that delivers approved security content for a specific CSM base release and its corresponding SLE version.
+
+For more information, see [Rapid Release Update](operations/rapid_release_update/README.md)
+
 ## Redfish Translation Service (RTS)
 
 The Redfish Translation Service (RTS) aids in management of any hardware components which are not managed by
