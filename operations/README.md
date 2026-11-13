@@ -432,7 +432,7 @@ successful scheduling and execution of user jobs.
 
 ## Rapid Release Update
 
-A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called csm-security that delivers approved security content for a specific CSM base release and its corresponding SLE version. It does not upgrade the installed CSM release.
+A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called `csm-security` that delivers approved security content for a specific CSM base release and its corresponding SLE version.
 
 - [Overview](rapid_release_update/README.md#overview)
 - [Release Notes](rapid_release_update/README.md#release-notes)

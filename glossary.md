@@ -627,7 +627,7 @@ and [SMNet](#system-management-network-smnet) ToR switches.
 
 ## Rapid Release Update
 
-A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called csm-security that delivers approved security content for a specific CSM base release and its corresponding SLE version.
+A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called `csm-security` that delivers approved security content for a specific CSM base release and its corresponding SLE version.
 
 For more information, see [Rapid Release Update](operations/rapid_release_update/README.md)
 
