@@ -451,7 +451,9 @@ the iSCSI clients may result in a memory crunch situation. For details on image 
 
 > For more details on the information discussed in this section, see [iSCSI SBPS solution details](README.md#iscsi-sbps-solution-details).
 
-The health of the compute nodes from iSCSI SBPS perspective can be checked by running [iSCSI compute health](../../scripts/operations/iscsi_sbps/iscsi_compute_health.sh) on any one of the compute node. Copy this script to one of the compute node to /tmp and run:
+The health of the compute nodes from iSCSI SBPS perspective can be checked by running 
+[iSCSI compute health](../../scripts/operations/iscsi_sbps/iscsi_compute_health.sh) on any one of the compute node.
+Copy this script to one of the compute node to `/tmp` and run:
 
 Example:
 
