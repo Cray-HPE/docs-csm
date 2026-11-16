@@ -35,8 +35,8 @@ echo "Multipath Path Health Check"
 echo "==========================="
 
 [ "$CMD_STATUS" -eq 0 ] || {
-    echo "ERROR: multipath -ll command failed"
-    exit 1
+  echo "ERROR: multipath -ll command failed"
+  exit 1
 }
 
 PATH_COUNT=0
@@ -45,9 +45,8 @@ FAILED=0
 TMPFILE=$(mktemp) || exit 1
 printf '%s\n' "$OUTPUT" > "$TMPFILE"
 
-while IFS= read -r line
-do
-    DEVICE=$(printf '%s\n' "$line" | awk '
+while IFS= read -r line; do
+  DEVICE=$(printf '%s\n' "$line" | awk '
     {
         for (i=1; i<=NF; i++) {
             if ($i ~ /^[a-zA-Z]+$/ &&
@@ -59,16 +58,16 @@ do
         }
     }')
 
-    if [ -n "$DEVICE" ]; then
-        PATH_COUNT=$((PATH_COUNT + 1))
+  if [ -n "$DEVICE" ]; then
+    PATH_COUNT=$((PATH_COUNT + 1))
 
-        if printf '%s\n' "$line" | grep -q 'active ready running'; then
-            echo "PASS: $DEVICE - active ready running"
-        else
-            echo "FAIL: $DEVICE - $line"
-            FAILED=1
-        fi
+    if printf '%s\n' "$line" | grep -q 'active ready running'; then
+      echo "PASS: $DEVICE - active ready running"
+    else
+      echo "FAIL: $DEVICE - $line"
+      FAILED=1
     fi
+  fi
 done < "$TMPFILE"
 
 rm -f "$TMPFILE"
@@ -77,13 +76,13 @@ echo "==========================="
 echo "Total paths checked: $PATH_COUNT"
 
 if [ "$PATH_COUNT" -eq 0 ]; then
-    echo "OVERALL RESULT: FAIL - No paths found"
-    exit 1
+  echo "OVERALL RESULT: FAIL - No paths found"
+  exit 1
 elif [ "$FAILED" -eq 1 ]; then
-    echo "OVERALL RESULT: FAIL - Faulty paths detected"
-    exit 1
+  echo "OVERALL RESULT: FAIL - Faulty paths detected"
+  exit 1
 else
-    echo "OVERALL PATH HEALTH RESULT: PASS - All paths active, ready and running"
+  echo "OVERALL PATH HEALTH RESULT: PASS - All paths active, ready and running"
 fi
 
 echo "                            "
@@ -95,23 +94,23 @@ FAILED=0
 
 for SERVICE in iscsid.service multipathd.service; do
 
-    STATUS=$(systemctl is-active "$SERVICE" 2>/dev/null)
+  STATUS=$(systemctl is-active "$SERVICE" 2>/dev/null)
 
-    if [ "$STATUS" = "active" ]; then
-        echo "PASS: $SERVICE is active and running"
-    else
-        echo "FAIL: $SERVICE is not active (Status: $STATUS)"
-        FAILED=1
-    fi
+  if [ "$STATUS" = "active" ]; then
+    echo "PASS: $SERVICE is active and running"
+  else
+    echo "FAIL: $SERVICE is not active (Status: $STATUS)"
+    FAILED=1
+  fi
 
 done
 
 echo "============================"
 
 if [ "$FAILED" -eq 0 ]; then
-    echo "OVERALL RESULT: PASS - iscsid and multipathd services are acitve and running"
-    exit 0
+  echo "OVERALL RESULT: PASS - iscsid and multipathd services are acitve and running"
+  exit 0
 else
-    echo "OVERALL RESULT: FAIL"
-    exit 1
+  echo "OVERALL RESULT: FAIL"
+  exit 1
 fi
