@@ -26,6 +26,7 @@
 # perspective. This is mainly used during post worker rollout.
 
 # shellcheck disable=SC3030
+# shellcheck disable=SC3054
 
 OUTPUT=$(multipath -ll 2>&1)
 CMD_STATUS=$?
@@ -90,11 +91,9 @@ echo "============================"
 echo "Systemd Service Health Check"
 echo "============================"
 
-SERVICES=("iscsid.service" "multipathd.service")
-
 FAILED=0
 
-for SERVICE in "${SERVICES[@]}"; do
+for SERVICE in iscsid.service multipathd.service; do
 
     STATUS=$(systemctl is-active "$SERVICE" 2>/dev/null)
 
