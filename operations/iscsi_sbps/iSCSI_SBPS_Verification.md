@@ -23,7 +23,30 @@ The fastest way to check the overall readiness of the iSCSI targets is to run th
 
 ```bash
  /opt/cray/tests/install/ncn/automated/ncn-healthcheck-worker
- ```
+```
+
+The log file having different health check high-level results will be located on master node:
+
+Example:
+
+```text
+ncn-m001:~ # ls -l /opt/cray/tests/install/logs/__main__/20261111_121718.068570-1361693-DSUr4Z8L/out
+-rw-r--r-- 1 root root 76166 Nov 11 12:17 /opt/cray/tests/install/logs/__main__/20261111_121718.068570-1361693-DSUr4Z8L/out
+``` 
+
+The detailed iSCSI SBPS Goss tests log file will be located under `/opt/cray/tests/install/logs/iscsi_cps_sanity` 
+directory on respective worker nodes. This log file needs to be checked for any failures/errors. 
+
+Example: 
+
+```text
+ncn-w002:/opt/cray/tests/install/logs/iscsi_cps_sanity # ls -l
+total 8
+-rw-r--r-- 1 root root 3028 Nov  4 05:19 20261104_051904_825633245_8546.log
+-rw-r--r-- 1 root root 3028 Nov  4 05:26 20261104_052650_946727224_114584.log
+```
+
+The 20261104_051904_825633245_8546.log is the latest log file that needs to be checked for the latest test run.
 
 ## Node personalization
 
@@ -428,29 +451,7 @@ the iSCSI clients may result in a memory crunch situation. For details on image 
 
 > For more details on the information discussed in this section, see [iSCSI SBPS solution details](README.md#iscsi-sbps-solution-details).
 
-```bash
-multipath -ll
-```
-
-Example output:
-
-```text
-11218.831779 | /etc/multipath.conf line 10: ignoring deprecated option "disable_changed_wwids", using built-in value: "yes"
-PE_CPE-base.x86_64-24.11.squashfs (36001405de4cc04e7dacfb9ada0a6b4cc) dm-0 LIO-ORG,de4cc04e7dacfb9
-size=7.7G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
-`-+- policy='round-robin 0' prio=50 status=active
-  |- 1:0:0:14 sdo  8:224  active ready running
-  |- 2:0:0:14 sdaq 66:160 active ready running
-  |- 3:0:0:14 sdbs 68:96  active ready running
-  `- 4:0:0:14 sdcu 70:32  active ready running
-f731d8d5-0fed-41d7-996e-6a0d19b6ff6d_rootfs (36001405380840014ffe295091e8689db) dm-24 LIO-ORG,380840014ffe295
-size=11G features='1 queue_if_no_path' hwhandler='1 alua' wp=ro
-`-+- policy='round-robin 0' prio=50 status=active
-  |- 1:0:0:27 sdab 65:176 active ready running
-  |- 2:0:0:27 sdbd 67:112 active ready running
-  |- 3:0:0:27 sdcf 69:48  active ready running
-  `- 4:0:0:27 sddh 70:240 active ready running
-```
+The health of the compute nodes from iSCSI SBPS perspective can be checked by running [iSCSI compute health](../../scripts/operations/iscsi_sbps/iscsi_compute_health.sh).
 
 ## DNS SRV and A records
 
