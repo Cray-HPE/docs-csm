@@ -32,12 +32,12 @@ Example:
 ```text
 ncn-m001:~ # ls -l /opt/cray/tests/install/logs/__main__/20261111_121718.068570-1361693-DSUr4Z8L/out
 -rw-r--r-- 1 root root 76166 Nov 11 12:17 /opt/cray/tests/install/logs/__main__/20261111_121718.068570-1361693-DSUr4Z8L/out
-``` 
+```
 
-The detailed iSCSI SBPS Goss tests log file will be located under `/opt/cray/tests/install/logs/iscsi_cps_sanity` 
-directory on respective worker nodes. This log file needs to be checked for any failures/errors. 
+The detailed iSCSI SBPS Goss tests log file will be located under `/opt/cray/tests/install/logs/iscsi_cps_sanity`
+directory on respective worker nodes. This log file needs to be checked for any failures/errors.
 
-Example: 
+Example:
 
 ```text
 ncn-w002:/opt/cray/tests/install/logs/iscsi_cps_sanity # ls -l
@@ -46,7 +46,7 @@ total 8
 -rw-r--r-- 1 root root 3028 Nov  4 05:26 20261104_052650_946727224_114584.log
 ```
 
-The 20261104_051904_825633245_8546.log is the latest log file that needs to be checked for the latest test run.
+The `20261104_052650_946727224_114584.log` is the latest log file that needs to be checked for the latest run of the test.
 
 ## Node personalization
 

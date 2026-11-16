@@ -25,6 +25,8 @@
 # This script is to check health of the compute/uan nodes from iSCSI SBPS
 # perspective. This is mainly used during post worker rollout.
 
+# shellcheck disable=SC3030
+
 OUTPUT=$(multipath -ll 2>&1)
 CMD_STATUS=$?
 
