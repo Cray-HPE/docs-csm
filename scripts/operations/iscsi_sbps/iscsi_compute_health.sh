@@ -94,7 +94,7 @@ FAILED=0
 
 for SERVICE in iscsid.service multipathd.service; do
 
-  STATUS=$(systemctl is-active "$SERVICE" 2>/dev/null)
+  STATUS=$(systemctl is-active "$SERVICE" 2> /dev/null)
 
   if [ "$STATUS" = "active" ]; then
     echo "PASS: $SERVICE is active and running"
