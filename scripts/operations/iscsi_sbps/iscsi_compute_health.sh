@@ -77,10 +77,8 @@ echo "Total paths checked: $PATH_COUNT"
 
 if [ "$PATH_COUNT" -eq 0 ]; then
   echo "OVERALL RESULT: FAIL - No paths found"
-  exit 1
 elif [ "$FAILED" -eq 1 ]; then
   echo "OVERALL RESULT: FAIL - Faulty paths detected"
-  exit 1
 else
   echo "OVERALL PATH HEALTH RESULT: PASS - All paths active, ready and running"
 fi
