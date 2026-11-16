@@ -152,8 +152,6 @@ This section updates the kernel running on management NCNs.
 
       for node in $STORAGE_NODES
       do
-         NEW_CFG_NAME=$(cray cfs components describe $node --format json | jq .desiredConfig)
-         echo $NEW_CFG_NAME
          NEWUNAME=$(ssh $node 'uname -r')
          echo $NEWUNAME
          NEW_IMAGE_NAME=$(ssh $node "grep -oP 'metal\.server=.*?/boot-images/\K[^/]+' /proc/cmdline")
