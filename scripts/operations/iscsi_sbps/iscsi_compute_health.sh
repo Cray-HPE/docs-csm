@@ -58,7 +58,7 @@ while IFS= read -r line; do
   if [ -n "$DEVICE" ]; then
     PATH_COUNT=$((PATH_COUNT + 1))
 
-    if printf '%s\n' "$line" | grep -q 'active ready running'; then
+    if printf '%s\n' "$line" | grep -Eq 'active[[:space:]]+ready[[:space:]]+running'; then
       echo "PASS: $DEVICE - active ready running"
     else
       echo "FAIL: $DEVICE - $line"
