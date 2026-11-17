@@ -586,7 +586,7 @@ Refer to that table and any corresponding product documents before continuing to
       echo $APPNODES
       ```
 
-   1. Determine the hostnames for the compute nodes.  Two different methods are shown. Use the one which produces a more compact list in the variable.
+   1. Determine the hostnames for the compute nodes.
 
       **Note:** The compute node hostnames should have `-nmn` as the suffix so that they can be reached from a master node using the `NMN`. The master nodes are not on the `HSN`.
 
@@ -622,6 +622,7 @@ Refer to that table and any corresponding product documents before continuing to
 
    ```bash
    ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}' | xargs)
+   echo $ISCSI_TARGET_NODES
    ```
 
    If the `iscsi_worker` label is found, then use the below command to get the list of worker nodes that are enabled as iSCSI targets.
@@ -713,7 +714,7 @@ Refer to that table and any corresponding product documents before continuing to
    kubectl get nodes "${WORKER_CANARY}" --show-labels | grep iuf-prevent-rollout
    ```
 
-1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
+1. (`ncn-m001#`) Verify the health of iSCSI targets and iSCSI initiators by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
 1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`.
 If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
@@ -747,7 +748,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
 1. (`ncn-m001#`) Verify that the node booted successfully with the desired image and CFS configuration.
 
    ```bash
-   XNAME=$(ssh $WORKER_CANARY 'cat /etc/cray/xname')
+   XNAME=$(ssh $WORKER_CANARY2 'cat /etc/cray/xname')
    echo "${XNAME}"
    cray cfs components describe "${XNAME}"
    ```
@@ -771,7 +772,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
    kubectl get nodes "${WORKER_CANARY2}" --show-labels | grep iuf-prevent-rollout
    ```
 
-1. (`ncn-m001#`) Verify the health of iSCSI targets by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
+1. (`ncn-m001#`) Verify the health of iSCSI targets and iSCSI initiators by following the steps in [iSCSI SBPS Verification](../../iscsi_sbps/iSCSI_SBPS_Verification.md).
 
 1. (`ncn-m001#`) Execute the management-nodes-rollout stage on all remaining worker nodes.
 
@@ -786,6 +787,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
 
       ```bash
       ISCSI_TARGET_NODES=$(echo "$ISCSI_TARGET_NODES" | sed "s/$WORKER_CANARY//; s/$WORKER_CANARY2//")
+      echo $ISCSI_TARGET_NODES
       ```
 
    1. On the application and compute nodes logout of their iSCSI session with the iSCSI target worker nodes, `ISCSI_TARGET_NODES`.
