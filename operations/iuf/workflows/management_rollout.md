@@ -831,8 +831,8 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
         echo $IQN
         PORTAL=$(host $(sat status --fields xname --filter alias=$node --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
         echo $PORTAL
-        pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "echo iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
-        pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "echo iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
+        pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
+        pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
       done
       ```
 
@@ -842,7 +842,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
    ```bash
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = Yes/g' /etc/iscsi/iscsid.conf &&
    grep -q '^iscsid.safe_logout = Yes$' /etc/iscsi/iscsid.conf && echo 'Configuration update: Success' || { echo 'Configuration update: Fail'; exit 1; }
-   systemctl restart iscsid.service" || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
+   systemctl restart iscsid.service" || "{ echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
    ```
 
 1. (`ncn-m001#`) Use `kubectl` to remove the `iuf-prevent-rollout=true` label from the canary nodes.
