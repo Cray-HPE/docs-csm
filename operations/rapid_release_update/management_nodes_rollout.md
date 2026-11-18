@@ -284,7 +284,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
          echo $APPNODES
          ```
 
-      1. Determine the hostnames for the compute nodes.  Two different methods are shown.  Use the one which produces a more compact list in the variable.
+      1. Determine the hostnames for the compute nodes.
 
          **Note:** The compute node hostnames should have "-nmn" as the suffix so that they can be reached from a master node using the `NMN`. The master nodes are not on the `HSN`.
 
@@ -340,6 +340,14 @@ Roll out the new image and CFS configuration to one worker node first and valida
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
       ```
 
+   1. (`ncn-m001#`) Verify that the iSCSI session with `WORKER_CANARY` is logged out.
+
+      ```bash
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      ```
+
+      This command should not list the session with `WORKER_CANARY`.
+
    1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY`.
 
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
@@ -377,6 +385,14 @@ Roll out the new image and CFS configuration to one worker node first and valida
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
       ```
+
+   1. (`ncn-m001#`) Verify that the iSCSI session is logged in with `WORKER_CANARY`
+
+      ```bash
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      ```
+
+      This command should list the session with `WORKER_CANARY`.
 
    1. (`ncn-m001#`) Use `kubectl` to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
@@ -434,6 +450,14 @@ Roll out the new image and CFS configuration to one worker node first and valida
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
       ```
 
+   1. (`ncn-m001#`) Verify that the iSCSI session with `WORKER_CANARY2` is logged out.
+
+      ```bash
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      ```
+
+      This command should not list the session with `WORKER_CANARY2`.
+
    1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY2`.
 
       **Warning:** To maintain health of the iSCSI clients on application and compute nodes, watch the rebuild workflow for each node including the
@@ -472,6 +496,14 @@ Roll out the new image and CFS configuration to one worker node first and valida
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
       ```
 
+   1. (`ncn-m001#`) Verify that the iSCSI session is logged in with `WORKER_CANARY2`
+
+      ```bash
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      ```
+
+      This command should list the session with `WORKER_CANARY2`.
+
    1. (`ncn-m001#`) Use `kubectl` to apply the iuf-prevent-rollout=true label to the node to prevent it from unnecessarily rebuilding again.
 
       ```bash
@@ -498,6 +530,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
 
          ```bash
          ISCSI_TARGET_NODES=$(echo "$ISCSI_TARGET_NODES" | sed "s/$WORKER_CANARY//; s/$WORKER_CANARY2//")
+         echo $ISCSI_TARGET_NODES
          ```
 
       1. On the application and compute nodes logout of their iSCSI session with the iSCSI target worker nodes, `ISCSI_TARGET_NODES`.
@@ -510,6 +543,14 @@ Roll out the new image and CFS configuration to one worker node first and valida
            pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
          done
          ```
+
+      1. (`ncn-m001#`) Verify that the iSCSI session with remaining worker nodes is logged out.
+
+         ```bash
+         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+         ```
+
+         This command should not list the session with `ISCSI_TARGET_NODES`.
 
       1. Choose one of the following two options. The difference between the options is the limit-management-rollout argument, but the two options do the same thing.
 
@@ -539,17 +580,25 @@ Roll out the new image and CFS configuration to one worker node first and valida
            echo $IQN
            PORTAL=$(host $(sat status --fields xname --filter alias=$node --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
            echo $PORTAL
-           pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "echo iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
-           pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "echo iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
+           pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
+           pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
          done
          ```
+
+      1. (`ncn-m001#`) Verify that the iSCSI session with remaining worker nodes is logged in.
+
+         ```bash
+         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+         ```
+
+         This command should list the session with `ISCSI_TARGET_NODES`.
 
    1. (`ncn-m001#`) After all worker nodes have finished their image rollout, set `iscsid.safe_logout=Yes` again and restart `iscsid.service` on all application and compute nodes.
 
       ```bash
       pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "sed -ri 's/^iscsid.safe_logout =.*/iscsid.safe_logout = Yes/g' /etc/iscsi/iscsid.conf &&
       grep -q '^iscsid.safe_logout = Yes$' /etc/iscsi/iscsid.conf && echo 'Configuration update: Success' || { echo 'Configuration update: Fail'; exit 1; }
-      systemctl restart iscsid.service" || { echo 'iscsid restart: Fail'; exit 1; }" 2>/dev/null | dshbak -c
+      systemctl restart iscsid.service" || { echo 'iscsid restart: Fail'; exit 1; } 2>/dev/null | dshbak -c
       ```
 
    1. (`ncn-m001#`) Use `kubectl` to remove the iuf-prevent-rollout=true label from the canary nodes.
