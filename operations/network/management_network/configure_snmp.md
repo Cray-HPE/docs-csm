@@ -24,10 +24,6 @@ These credentials are read from Vault and pushed into `customizations.yaml` as a
 [sealed secret](../../security_and_authentication/Manage_Sealed_Secrets.md). For the SNMP Exporter and PCS/RTS
 management switch availability monitoring to work, three things need to have been done by an administrator:
 
-  1. The SNMP credentials need to have been pushed into the correct path in Vault.
-      * [Updating the SNMP credentials for existing switches](Update_SNMP_Credentials_on_Existing_Management_Switches.md)
-  1. The SNMP credentials need to have been encrypted as sealed secrets and written to `customizations.yaml`.
-      * [Updating the SNMP credentials for switches added in the future](../../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
   1. The SNMP credentials need to be added to the running configuration on every management network switch.
       * Information about [managing Dell switches](dell/README.md) including [SNMPv2 community](dell/snmp-community.md) and
         [SNMPv3 user](dell/snmpv3_users.md) settings
@@ -35,6 +31,10 @@ management switch availability monitoring to work, three things need to have bee
         [SNMPv3](mellanox/snmpv3_users.md) settings
       * Information about [managing Aruba switches](aruba/README.md) including [SNMPv2 community](aruba/snmp-community.md) and
         [SNMPv3](aruba/snmpv3_users.md) settings
+  1. The SNMP credentials need to have been encrypted as sealed secrets and written to `customizations.yaml`.
+      * [Updating the SNMP credentials for switches added in the future](../../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
+  1. The SNMP credentials need to have been pushed into the correct path in Vault.
+      * [Updating the SNMP credentials for existing switches](Update_SNMP_Credentials_on_Existing_Management_Switches.md)
 
 Note: While the [CSM Automatic Network Utility (CANU)](../../../glossary.md#csm-automatic-network-utility-canu) will typically not overwrite
 SNMP settings that are manually applied to the management switches, there are certain cases where SNMP configuration can be over-written or
