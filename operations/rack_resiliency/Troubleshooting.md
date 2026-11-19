@@ -24,6 +24,7 @@ This page contains general Rack Resiliency troubleshooting topics.
     - [ConfigMaps not present](#configmaps-not-present)
 - [Physical movement of nodes from one rack to another](#physical-movement-of-nodes-from-one-rack-to-another)
 - [Update Ceph manager endpoints for Grafana](#update-ceph-manager-endpoints-for-grafana)
+- [Topology zone labels are removed post-worker node rollout](#topology-zone-labels-are-removed-post-worker-node-rollout)
 
 ## Cray CLI
 
@@ -370,3 +371,62 @@ With Rack Resiliency enabled, the storage canary rollout may move Ceph managers 
     - Complete [4. Save updated customizations](../CSM_product_management/Redeploying_a_Chart.md#4-save-updated-customizations).
 
 > **NOTE** It may take a couple of minutes for Grafana to pick up the new endpoints and display Ceph data.
+
+## Topology zone labels are removed for worker nodes `post-worker` node rollout
+
+When Rack Resiliency (RR) is enabled and a worker-node rollout/rebuild is planned only for worker-node maintenance (not as part of a full CSM management NCN rollout), the following behavior should be considered.
+
+The topology.kubernetes.io/zone label is applied as part of the Management_Master play. A worker rebuild destroys and recreates the corresponding Kubernetes Node object, causing the existing topology zone label to be lost. Since the worker rollout does not execute the Management_Master layer, the label is not automatically reapplied.
+
+Follow the procedure below to preserve the existing topology zone labels before the rollout and restore them after the rollout is complete.
+
+### Preserve the existing RR topology zone labels before the rollout
+
+**For Example:**
+
+Preserving labels for ncn-w001, ncn-w002 and ncn-w003.
+
+```bash
+kubectl get nodes ncn-w001 ncn-w002 ncn-w003 \
+-o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.labels.topology\.kubernetes\.io/zone}{"\n"}{end}' \
+> /tmp/ncn-zone-labels.txt
+```
+
+**Verify the backup:**
+
+```bash
+cat /root/ncn-zone-labels.txt
+```
+
+**Example output:**
+
+```text
+ncn-w001    my-k8s-zone-x3000
+ncn-w002    my-k8s-zone-x3001
+ncn-w003    my-k8s-zone-x3002
+```
+### Reapply the same zone labels to the respective worker nodes after the rollout, if they are removed
+
+Execute the below script:
+
+```bash
+while IFS=$'\t' read -r NODE ZONE; do
+    [ -z "$NODE" ] || [ -z "$ZONE" ] && continue
+    kubectl label node "$NODE" topology.kubernetes.io/zone="$ZONE" --overwrite
+done < /root/ncn-zone-labels.txt
+```
+
+### Verify that all worker nodes retain their original RR zone assignments
+
+```bash
+kubectl get nodes ncn-w001 ncn-w002 ncn-w003 -L topology.kubernetes.io/zone
+```
+
+**Example output:**
+
+```text
+NAME       STATUS   ROLES    AGE   VERSION   ZONE
+ncn-w001   Ready    <none>   47h   v1.32.5   my-k8s-zone-x3000
+ncn-w002   Ready    <none>   46h   v1.32.5   my-k8s-zone-x3001
+ncn-w003   Ready    <none>   45h   v1.32.5   my-k8s-zone-x3002
+```
