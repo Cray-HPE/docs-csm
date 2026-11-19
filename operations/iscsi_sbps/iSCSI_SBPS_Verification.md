@@ -7,20 +7,20 @@
     * [iSCSI-enabled workers](#iscsi-enabled-workers)
     * [SBPS Marshal Agent](#sbps-marshal-agent)
     * [`targetcli` command](#targetcli-command)
-    * [DNS SRV and A records](#dns-srv-and-a-recordsi)
+    * [DNS SRV and A records](#dns-srv-and-a-records)
 * [iSCSI Initiator Validation](#iscsi-initiator-validation)
 
 ## Introduction
 
 iSCSI target (worker nodes) and iSCSI initiator (compute/UAN) nodes configuration needs to be verified to ensure health of
 iSCSI target and initiators health is fine. Before booting manged nodes (iSCSI initiator), it is important to validate
-the iSCSI configuration. Most of this configuration is either done by the 
+the iSCSI configuration. Most of this configuration is either done by the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
 during [Node personalization](#node-personalization), or done periodically by the [SBPS Marshal Agent](#sbps-marshal-agent).
 
 ## iSCSI Target Validation
 
-Below need to be verified to ensure iSCSI target configuration 
+Below need to be verified to ensure iSCSI target configuration
 
 ### Automated tests
 
@@ -526,9 +526,9 @@ The DNS records check only needs to be performed on a single worker NCN.
 
     Confirm that the number of DNS A records listed by this command equals the number of DNS SRV records listed in the previous step.
 
-## iSCSI Initiator Validation 
+## iSCSI Initiator Validation
 
-Administrators also need to check the health of initiator (compute/UAN) nodes. 
+Administrators also need to check the health of initiator (compute/UAN) nodes.
 
 > For more details on the information discussed in this section, see [iSCSI SBPS solution details](README.md#iscsi-sbps-solution-details).
 

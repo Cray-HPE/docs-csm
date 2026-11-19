@@ -623,12 +623,12 @@ Refer to that table and any corresponding product documents before continuing to
       ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}' | xargs)
       echo $ISCSI_TARGET_NODES
       ```
-   
+
       Example Output:
 
       ```toml
       "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0" “x3000c0s4b0n0” “x3000c0s5b0n0”
-      ``` 
+      ```
 
    1. If the `iscsi_worker` label is found, then use the below command to get the list of worker nodes that are enabled as iSCSI targets.
 
@@ -639,7 +639,6 @@ Refer to that table and any corresponding product documents before continuing to
 
       Example Output:
 
-   
       ```toml
       "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0"
       ```
@@ -676,7 +675,7 @@ Refer to that table and any corresponding product documents before continuing to
    WORKER_CANARY=ncn-w001
    ```
 
-1. (`ncn-m001#`) On the application and compute nodes, logout of their iSCSI session with the worker node, `WORKER_CANARY`. 
+1. (`ncn-m001#`) On the application and compute nodes, logout of their iSCSI session with the worker node, `WORKER_CANARY`.
 
    ```bash
    IQN=iqn.2023-06.csm.iscsi:$WORKER_CANARY
@@ -690,7 +689,7 @@ Refer to that table and any corresponding product documents before continuing to
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
    ```
 
-   This should not list the iSCSI session with `WORKER_CANARY`. 
+   This should not list the iSCSI session with `WORKER_CANARY`.
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY`.
 
@@ -721,9 +720,9 @@ Refer to that table and any corresponding product documents before continuing to
    ```bash
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
    ```
- 
+
    This command should list the session with `WORKER_CANARY`.
-    
+
 1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the canary node to prevent it from unnecessarily rebuilding again.
 
    ```bash
@@ -796,7 +795,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
    ```
 
-   This command should list the session with `WORKER_CANARY2`. 
+   This command should list the session with `WORKER_CANARY2`.
 
 1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the node to prevent it from unnecessarily rebuilding again.
 
