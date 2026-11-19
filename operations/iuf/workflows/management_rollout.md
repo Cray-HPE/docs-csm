@@ -574,8 +574,7 @@ Refer to that table and any corresponding product documents before continuing to
 > **Important:** After a worker node rebuild, the iSCSI `LUNs` previously mapped to `rootfs/PE` images may get reassigned to different images
 > and receive different LUN numbers. However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before
 > the rebuild. Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
-> To prevent this issue, we need to ensure that certain iSCSI related operations **must be** performed on compute and application nodes against
-> their iSCSI targets.
+> To prevent this issue, we need to run certain iSCSI related operations on compute and application nodes against their iSCSI targets.
 
 1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients (application and compute nodes).
 
@@ -612,54 +611,61 @@ Refer to that table and any corresponding product documents before continuing to
    cray hsm groups list | grep iscsi_worker
    ```
 
-   Example  Output:
+   Example Output:
 
    ```toml
    label = "iscsi_worker"  # Output with label iscsi_worker present. If not present then there will be no output
    ```
 
-   If the `iscsi_worker` label is not found, the above command will produce no output. This indicates that all worker nodes are enabled as iSCSI targets.
+   1. If the `iscsi_worker` label is not found, the above command will produce no output. This indicates that all worker nodes are enabled as iSCSI targets.
 
-   ```bash
-   ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}' | xargs)
-   echo $ISCSI_TARGET_NODES
-   ```
+      ```bash
+      ISCSI_TARGET_NODES=$(kubectl get node | grep -P 'ncn-w\d+' | awk '{print $1}' | xargs)
+      echo $ISCSI_TARGET_NODES
+      ```
+   
+      Example Output:
 
-   If the `iscsi_worker` label is found, then use the below command to get the list of worker nodes that are enabled as iSCSI targets.
+      ```toml
+      "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0" “x3000c0s4b0n0” “x3000c0s5b0n0”
+      ``` 
 
-   ```bash
-   ISCSI_TARGET_XNAMES=$(cray hsm groups members list iscsi_worker --format json | jq .ids[])
-   echo $ISCSI_TARGET_XNAMES
-   ```
+   1. If the `iscsi_worker` label is found, then use the below command to get the list of worker nodes that are enabled as iSCSI targets.
 
-   Example Output:
+      ```bash
+      ISCSI_TARGET_XNAMES=$(cray hsm groups members list iscsi_worker --format json | jq .ids[])
+      echo $ISCSI_TARGET_XNAMES
+      ```
 
-   ```toml
-   "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0"
-   ```
+      Example Output:
 
-   Map the `ISCSI_TARGET_XNAMES` to worker node name
+   
+      ```toml
+      "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0"
+      ```
 
-   ```bash
-   ISCSI_TARGET_NODES=''
-   for node in $ISCSI_TARGET_XNAMES
-   do
-     worker_node=$(sat status --fields alias --filter xname=$node --no-borders --no-headings | sed 's/ //g')
-     if [[ $ISCSI_TARGET_NODES == '' ]]
-     then
-        ISCSI_TARGET_NODES=$worker_node
-     else
-        ISCSI_TARGET_NODES="$ISCSI_TARGET_NODES $worker_node"
-     fi
-   done
-   echo $ISCSI_TARGET_NODES
-   ```
+      Map the `ISCSI_TARGET_XNAMES` to worker node name
 
-   Example Output:
+      ```bash
+      ISCSI_TARGET_NODES=''
+      for node in $ISCSI_TARGET_XNAMES
+      do
+        worker_node=$(sat status --fields alias --filter xname=$node --no-borders --no-headings | sed 's/ //g')
+        if [[ $ISCSI_TARGET_NODES == '' ]]
+        then
+           ISCSI_TARGET_NODES=$worker_node
+        else
+           ISCSI_TARGET_NODES="$ISCSI_TARGET_NODES $worker_node"
+        fi
+      done
+      echo $ISCSI_TARGET_NODES
+      ```
 
-   ```toml
-   ncn-w001 ncn-w002 ncn-w003
-   ```
+      Example Output:
+
+      ```toml
+      ncn-w001 ncn-w002 ncn-w003
+      ```
 
 1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a node from its member list as `WORKER_CANARY`. If the group is not present, select any worker node
    as `WORKER_CANARY`. This node can be any worker node and does not have to be `ncn-w001`.
@@ -670,13 +676,21 @@ Refer to that table and any corresponding product documents before continuing to
    WORKER_CANARY=ncn-w001
    ```
 
-1. (`ncn-m001#`) On the application and compute nodes, logout of their iSCSI session with the worker node, `WORKER_CANARY`.
+1. (`ncn-m001#`) On the application and compute nodes, logout of their iSCSI session with the worker node, `WORKER_CANARY`. 
 
    ```bash
    IQN=iqn.2023-06.csm.iscsi:$WORKER_CANARY
    PORTAL=$(host $(sat status --fields xname --filter alias=$WORKER_CANARY --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
-   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail; iscsiadm -m session" 2>/dev/null | dshbak -c
    ```
+
+1. (`ncn-m001#`) Verify that the iSCSI session with `WORKER_CANARY` is logged out.
+
+   ```bash
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+   ```
+
+   This should not list the iSCSI session with `WORKER_CANARY`. 
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY`.
 
@@ -702,6 +716,14 @@ Refer to that table and any corresponding product documents before continuing to
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
    ```
 
+1. (`ncn-m001#`) Verify that the iSCSI session is logged in with `WORKER_CANARY`
+
+   ```bash
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+   ```
+ 
+   This command should list the session with `WORKER_CANARY`.
+    
 1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the canary node to prevent it from unnecessarily rebuilding again.
 
    ```bash
@@ -719,7 +741,7 @@ Refer to that table and any corresponding product documents before continuing to
 1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`.
 If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
-   **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
+   **NOTE** During the worker node rollout, ensure that atleast two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
    maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
    `iuf-prevent-rollout=true` followed by rolling out the rest of the worker nodes.
    **Note:** Choose the canary node wisely, don't use the one running slingshot-fabric-manager or nexus.
@@ -735,6 +757,14 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
    PORTAL=$(host $(sat status --fields xname --filter alias=$WORKER_CANARY2 --no-borders --no-headings | sed 's/ //g')h0 | cut -f4 -d" "):3260
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -u && echo Success || echo Fail" 2>/dev/null | dshbak -c
    ```
+
+1. (`ncn-m001#`) Verify that the iSCSI session with `WORKER_CANARY2` is logged out.
+
+   ```bash
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+   ```
+
+   This command should not list the session with `WORKER_CANARY2`.
 
 1. (`ncn-m001#`) Execute the `management-nodes-rollout` stage of `IUF` with the `WORKER_CANARY2`.
 
@@ -759,6 +789,14 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m discovery -t sendtargets -p ${PORTAL} && echo Success || echo Fail" 2>/dev/null | dshbak -c
    pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
    ```
+
+1. (`ncn-m001#`) Verify that the iSCSI session is logged in with `WORKER_CANARY2`
+
+   ```bash
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+   ```
+
+   This command should list the session with `WORKER_CANARY2`. 
 
 1. (`ncn-m001#`) Use `kubectl` to apply the `iuf-prevent-rollout=true` label to the node to prevent it from unnecessarily rebuilding again.
 
@@ -801,6 +839,14 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
       done
       ```
 
+   1. (`ncn-m001#`) Verify that the iSCSI session with remaining worker nodes is logged out.
+
+      ```bash
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      ```
+
+      This command should not list the session with `ISCSI_TARGET_NODES`.
+
    1. Choose one of the following two options. The difference between the options is the limit-management-rollout argument, but the two options do
       the same thing.
 
@@ -835,6 +881,14 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m node -T ${IQN} -p ${PORTAL} -l && echo Success || echo Fail" 2>/dev/null | dshbak -c
       done
       ```
+
+1. (`ncn-m001#`) Verify that the iSCSI session with remaining worker nodes is logged in.
+
+   ```bash
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+   ```
+
+   This command should list the session with `ISCSI_TARGET_NODES`.
 
 1. (`ncn-m001#`) After all worker nodes have finished their image rollout, set `iscsid.safe_logout=Yes` again and restart `iscsid.service` on
    all application and compute nodes.

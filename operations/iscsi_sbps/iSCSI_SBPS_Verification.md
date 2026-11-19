@@ -1,21 +1,28 @@
 # iSCSI SBPS Verification
 
 * [Introduction](#introduction)
-* [Automated tests](#automated-tests)
-* [Node personalization](#node-personalization)
-* [iSCSI-enabled workers](#iscsi-enabled-workers)
-* [SBPS Marshal Agent](#sbps-marshal-agent)
-* [`targetcli` command](#targetcli-command)
-* [`multipath` command](#multipath-command)
-* [DNS SRV and A records](#dns-srv-and-a-records)
+* [iSCSI Target Validation](#iscsi-target-validation)
+    * [Automated tests](#automated-tests)
+    * [Node personalization](#node-personalization)
+    * [iSCSI-enabled workers](#iscsi-enabled-workers)
+    * [SBPS Marshal Agent](#sbps-marshal-agent)
+    * [`targetcli` command](#targetcli-command)
+    * [DNS SRV and A records](#dns-srv-and-a-recordsi)
+* [iSCSI Initiator Validation](#iscsi-initiator-validation)
 
 ## Introduction
 
-Before booting managed nodes, it is important to validate the iSCSI configuration. Most of this configuration is either done
-by the [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
+iSCSI target (worker nodes) and iSCSI initiator (compute/UAN) nodes configuration needs to be verified to ensure health of
+iSCSI target and initiators health is fine. Before booting manged nodes (iSCSI initiator), it is important to validate
+the iSCSI configuration. Most of this configuration is either done by the 
+[Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
 during [Node personalization](#node-personalization), or done periodically by the [SBPS Marshal Agent](#sbps-marshal-agent).
 
-## Automated tests
+## iSCSI Target Validation
+
+Below need to be verified to ensure iSCSI target configuration 
+
+### Automated tests
 
 The fastest way to check the overall readiness of the iSCSI targets is to run the automated Goss health checks.
 
@@ -25,25 +32,30 @@ The fastest way to check the overall readiness of the iSCSI targets is to run th
  /opt/cray/tests/install/ncn/automated/ncn-healthcheck-worker
 ```
 
-The log file having various high-level health check results will be located on master node:
+(`ncn-m001#`) The log file having various high-level health check results will be located on master node:
 
-Example:
+Example command:
+
+```bash
+ls -l /opt/cray/tests/install/logs/__main__/20261111_121718.068570-1361693-DSUr4Z8L/out
+```
+
+Example command output:
 
 ```text
-ncn-m001:~ # ls -l /opt/cray/tests/install/logs/__main__/20261111_121718.068570-1361693-DSUr4Z8L/out
 -rw-r--r-- 1 root root 76166 Nov 11 12:17 /opt/cray/tests/install/logs/__main__/20261111_121718.068570-1361693-DSUr4Z8L/out
 ```
 
 The detailed iSCSI SBPS Goss tests log file will be located under `/opt/cray/tests/install/logs/iscsi_cps_sanity`
 directory on respective worker nodes. This log file needs to be checked for any failures/errors.
 
-Example command:
+(`ncn-w#`) Example command:
 
 ```bash
-ncn-w002:/opt/cray/tests/install/logs/iscsi_cps_sanity # ls -l
+/opt/cray/tests/install/logs/iscsi_cps_sanity # ls -l
 ```
 
-Example output:
+Example command output:
 
 ```text
 total 8
@@ -53,7 +65,7 @@ total 8
 
 Here the `20261104_052650_946727224_114584.log` is the latest log file that needs to be checked for the latest run of the test.
 
-## Node personalization
+### Node personalization
 
 The `config_sbps_iscsi_targets.yml` Ansible playbook in the `csm-config-management`
 [Version Control Service (VCS)](../../glossary.md#version-control-service-vcs) repository is responsible for much of the
@@ -68,7 +80,7 @@ this playbook does the following:
 See [Managing Selective Node Personalization](Managing_Selective_Node_Personalization.md) for details on how worker NCNs are
 designated to be iSCSI targets.
 
-## iSCSI-enabled workers
+### iSCSI-enabled workers
 
 (`ncn-mw#`) List all iSCSI-enabled worker NCNs.
 
@@ -86,7 +98,7 @@ ncn-w003   Ready    <none>   7d1h   v1.32.5
 ncn-w004   Ready    <none>   7d1h   v1.32.5
 ```
 
-## SBPS Marshal Agent
+### SBPS Marshal Agent
 
 The SBPS Marshal Agent runs on the iSCSI-enabled worker NCNs as a Linux `systemd` service.
 Every 180 seconds it looks for `rootfs` and `PE` images in the
@@ -131,7 +143,7 @@ the Marshal Agent is running without errors.
     journalctl -xeu sbps-marshal.service | tac | sed '/START SCAN/q' | grep -i error
     ```
 
-## `targetcli` command
+### `targetcli` command
 
 (`ncn-w#`) On each of the iSCSI-enabled worker NCNs, display information on the `fileio` backing stores, LUNs, and network portals.
 
@@ -450,23 +462,7 @@ The above `targetcli ls` command output shows the following:
 Ensure that only images intended for projection are tagged, and it is recommended to remove the tag for unused images. If the unused images are left tagged,
 the iSCSI clients may result in a memory crunch situation. For details on image tagging, see [Image Tagging](README.md#4-ims-image-tagging).
 
-## `multipath` command
-
-(`nid#`) Administrators may also view the state of the initiator nodes (i.e. managed nodes using iSCSI LUNs).
-
-> For more details on the information discussed in this section, see [iSCSI SBPS solution details](README.md#iscsi-sbps-solution-details).
-
-The health of the compute nodes from iSCSI SBPS perspective can be checked by running
-[iSCSI compute health](../../scripts/operations/iscsi_sbps/iscsi_compute_health.sh) on any one of the compute node.
-Copy this script to one of the compute node to `/tmp` and run:
-
-Example:
-
-```text
-ncn-m001:~ # pdsh -w x3000c0s19b1n0 "sh /tmp/iscsi_compute_health.sh"
-```
-
-## DNS SRV and A records
+### DNS SRV and A records
 
 The DNS records check only needs to be performed on a single worker NCN.
 
@@ -529,3 +525,47 @@ The DNS records check only needs to be performed on a single worker NCN.
     ```
 
     Confirm that the number of DNS A records listed by this command equals the number of DNS SRV records listed in the previous step.
+
+## iSCSI Initiator Validation 
+
+Administrators also need to check the health of initiator (compute/UAN) nodes. 
+
+> For more details on the information discussed in this section, see [iSCSI SBPS solution details](README.md#iscsi-sbps-solution-details).
+
+The health of the compute nodes from iSCSI SBPS perspective can be checked by running
+[iSCSI compute health](../../scripts/operations/iscsi_sbps/iscsi_compute_health.sh) on any one of the compute node.
+Copy this script to one of the compute node to `/tmp` and run:
+
+Example command:
+
+```bash
+ncn-m001:~ # pdsh -w x3000c0s19b1n0 "sh /tmp/iscsi_compute_health.sh"
+```
+
+Example command output:
+
+```text
+Multipath Path Health Check
+===========================
+PASS: sdw - active ready running
+PASS: sdi - active ready running
+PASS: sdb - active ready running
+PASS: sdr - active ready running
+PASS: sdah - active ready running
+PASS: sdab - active ready running
+PASS: sdn - active ready running
+PASS: sdg - active ready running
+PASS: sdad - active ready running
+PASS: sdaq - active ready running
+===========================
+Total paths checked: 10
+OVERALL PATH HEALTH RESULT: PASS - All paths active, ready and running
+                            
+============================
+Systemd Service Health Check
+============================
+PASS: iscsid.service is active and running
+PASS: multipathd.service is active and running
+============================
+OVERALL RESULT: PASS - iscsid and multipathd services are acitve and running
+```
