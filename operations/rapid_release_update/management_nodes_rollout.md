@@ -273,7 +273,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
    > **Important:** After a worker node rebuild, the iSCSI LUNs previously mapped to `rootfs/PE` images may get reassigned to different images and receive different LUN numbers.
    > However, iSCSI client nodes may continue sending I/O requests using the LUN mappings established before the rebuild.
    > Since these LUN numbers may no longer exist or may point to different images after the rebuild, this can result in I/O failures.
-   > To prevent this issue, we need to ensure that certain iSCSI related operations **must be** performed on compute and application nodes against their iSCSI targets.
+   > To prevent this issue, we need to ensure that certain iSCSI related operations are performed on compute and application nodes against their iSCSI targets.
 
    1. (`ncn-m001#`) Set `iscsid.safe_logout=No` for iSCSI clients (application and compute nodes).
 
