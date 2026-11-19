@@ -95,9 +95,12 @@ This patch includes many fixes and improvements for HMS.
 * Known issues fixed
 * Bugs Fixed
 ```text
+Fixed an issue where telemetry from River nodes was not collected and displayed in the River Sensors dashboard from CSM 1.7.0.
 ```    
 * Major Documentation Updates
 ```text
+Created documentation to update SNMP credentials for existing switches.
+Corrected and improved various operational procedures for system power-down, SDU diagnostics, non-compute-node dumps, HSM postgres duplicate-event cleanup along with guidance on large-database and compute-blade replacement.
 ```    
 
 ### Base platform components (PET)
@@ -121,6 +124,7 @@ This patch includes many fixes and improvements for base platform components.
 * Known issues fixed
 * Bugs Fixed
 ```text
+Fixed Ceph configuration updates during storage canary rollouts when rack-resiliency is enabled. Ceph monitor and service placement changes are now consistently propagated to all storage nodes, Kubernetes ConfigMaps, customizations.yaml, and exporter endpoints, preventing Ceph command failures, inaccurate Grafana data, and PVC mount failures.
 ```    
 * Major Documentation Updates
 ```text
