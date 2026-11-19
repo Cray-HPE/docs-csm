@@ -18,6 +18,7 @@ The following administrative topics can be found in this guide:
 - [Package repository management](#package-repository-management)
 - [Security and authentication](#security-and-authentication)
 - [Resiliency](#resiliency)
+- [Rapid Release Update](#rapid-release-update)
 - [ConMan](#conman)
 - [Utility storage](#utility-storage)
 - [System management health](#system-management-health)
@@ -407,6 +408,16 @@ HPE Cray EX systems are designed so that system management services (SMS) are fu
 - [Restore System Functionality if a Kubernetes Worker Node is Down](resiliency/Restore_System_Functionality_if_a_Kubernetes_Worker_Node_is_Down.md)
 - [Recreate `StatefulSet` Pods on Another Node](resiliency/Recreate_StatefulSet_Pods_on_Another_Node.md)
 - [Resiliency Testing Procedure](resiliency/Resiliency_Testing_Procedure.md)
+
+## Rapid Release Update
+
+A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called `csm-security` that delivers approved security content for a specific CSM base release and its corresponding SLE version.
+
+- [Overview](rapid_release_update/README.md#overview)
+- [Release Notes](rapid_release_update/README.md#release-notes)
+- [Valid update paths](rapid_release_update/README.md#valid-update-paths)
+- [Deploying Rapid Release Update with IUF](rapid_release_update/installation_iuf.md)
+- [Troubleshooting Guide](rapid_release_update/troubleshooting.md)
 
 ## ConMan
 

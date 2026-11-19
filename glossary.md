@@ -69,6 +69,7 @@ Glossary of terms used in CSM documentation.
 * [Public Key Infrastructure (PKI)](operations/security_and_authentication/Public_Key_Infrastructure_PKI.md)
 * [Rack-Mounted CDU](#rack-mounted-cdu)
 * [Rack System Compute Cabinet](#rack-system-compute-cabinet)
+* [Rapid Release Update](#rapid-release-update)
 * [Redfish Translation Service (RTS)](#redfish-translation-service-rts)
 * [River Cabinet](#river-cabinet)
 * [Rosetta ASIC](#rosetta-asic)
@@ -608,6 +609,12 @@ Liquid-Cooled TDS cabinet coolant manifolds.
 
 Air-Cooled compute cabinets house a cluster of [compute nodes](#compute-node-cn), [Slingshot ToR switches](#slingshot-top-of-rack-tor-switch),
 and [SMNet](#system-management-network-smnet) ToR switches.
+
+## Rapid Release Update
+
+A Rapid Release Update (RRU) for kernel CVE fixes is a separately versioned add-on product called `csm-security` that delivers approved security content for a specific CSM base release and its corresponding SLE version.
+
+For more information, see [Rapid Release Update](operations/rapid_release_update/README.md)
 
 ## Redfish Translation Service (RTS)
 
