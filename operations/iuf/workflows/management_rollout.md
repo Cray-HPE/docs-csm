@@ -627,7 +627,7 @@ Refer to that table and any corresponding product documents before continuing to
       Example Output:
 
       ```toml
-      "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0" “x3000c0s4b0n0” “x3000c0s5b0n0”
+      "x3000c0s7b0n0" "x3000c0s9b0n0" "x3000c0s11b0n0" "x3000c0s4b0n0" "x3000c0s5b0n0"
       ```
 
    1. If the `iscsi_worker` label is found, then use the below command to get the list of worker nodes that are enabled as iSCSI targets.
@@ -740,7 +740,7 @@ Refer to that table and any corresponding product documents before continuing to
 1. (`ncn-m001#`) If the `iscsi_worker` group is present, select a second node from its member list as `WORKER_CANARY2`.
 If the group is not present, select any second worker node as `WORKER_CANARY2`. This node can be any worker node and does not have to be `ncn-w002`.
 
-   **NOTE** During the worker node rollout, ensure that atleast two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
+   **NOTE** During the worker node rollout, ensure that at least two worker nodes (iSCSI SBPS targets) remain healthy after each rollout batch to
    maintain high availability for iSCSI SBPS. You can rollout one more worker node other than the worker canary node to be labeled with
    `iuf-prevent-rollout=true` followed by rolling out the rest of the worker nodes.
    **Note:** Choose the canary node wisely, don't use the one running slingshot-fabric-manager or nexus.

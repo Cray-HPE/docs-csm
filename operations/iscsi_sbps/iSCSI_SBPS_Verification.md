@@ -13,7 +13,7 @@
 ## Introduction
 
 iSCSI target (worker nodes) and iSCSI initiator (compute/UAN) nodes configuration needs to be verified to ensure health of
-iSCSI target and initiators health is fine. Before booting manged nodes (iSCSI initiator), it is important to validate
+iSCSI target and initiators health is fine. Before booting managed nodes (iSCSI initiator), it is important to validate
 the iSCSI configuration. Most of this configuration is either done by the
 [Configuration Framework Service (CFS)](../../glossary.md#configuration-framework-service-cfs)
 during [Node personalization](#node-personalization), or done periodically by the [SBPS Marshal Agent](#sbps-marshal-agent).
