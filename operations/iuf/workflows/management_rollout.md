@@ -535,9 +535,6 @@ remember to include these workflows.
 section of the _HPE Cray EX System Software Stack Installation and Upgrade Guide for CSM (S-8052)_ provides a table that summarizes which product documents contain information or actions for the `management-nodes-rollout` stage.
 Refer to that table and any corresponding product documents before continuing to the next step.
 
-**NOTE** If Rack Resiliency (RR) is enabled and a worker rollout/rebuild is planned only for worker-node maintenance (not as part of a full CSM management NCN rollout),
-[preserve the existing RR topology zone labels](https://github.com/Cray-HPE/docs-csm/blob/CASMTRIAGE-9276-RR/operations/rack_resiliency/Troubleshooting.md#preserve-the-existing-rr-topology-zone-labels-before-the-rollout) before the rollout and restore them after the rollout is complete.
-
 **NOTE**  The below procedure to update NIC firmware on management nodes is required only if new "Slingshot NIC firmware" has been released.
 
 - If new Slingshot NIC firmware has been released, refer to the "200Gbps NIC Firmware Management" section of the _HPE Slingshot Host Software Installation and Configuration Guide (S-9009) for CSM_ for details on how to update NIC firmware on management nodes.
@@ -650,9 +647,6 @@ The worker canary node can be any worker node and does not have to be `ncn-w001`
     ```
 
 1. Ensure to [follow these steps after worker nodes rollout is complete](../../iscsi_sbps/iscsi_steps_post_rollout.md) for iSCSI SBPS.
-
-1. If Rack Resiliency (RR) is enabled and a worker rollout/rebuild is planned only for worker-node maintenance (not as part of a full CSM management NCN rollout),
-[reapply the existing RR topology zone labels](https://github.com/Cray-HPE/docs-csm/blob/CASMTRIAGE-9276-RR/operations/rack_resiliency/Troubleshooting.md#reapply-the-same-zone-labels-to-the-respective-worker-nodes-after-the-rollout-if-they-are-removed) after the rollout is complete.
 
 Once this step has completed:
 
