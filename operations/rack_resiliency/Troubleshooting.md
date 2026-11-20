@@ -374,10 +374,10 @@ With Rack Resiliency enabled, the storage canary rollout may move Ceph managers 
 
 ## Topology zone labels are removed post worker node rollout
 
-If Rack Resiliency (RR) is enabled and a worker rebuild is planned, the following behavior should be considered.
+If Rack Resiliency (RR) is enabled and a worker node rebuild is planned, the following behavior should be considered.
 
-The `topology.kubernetes.io/zone` label is applied as part of the `Management_Master` play. A worker rebuild destroys and recreates the corresponding Kubernetes Node object, causing the
-existing topology zone label to be lost. Since the worker rollout does not execute the `Management_Master` layer, the label is not automatically reapplied.
+The `topology.kubernetes.io/zone` label is applied as part of the `Management_Master` play. A worker node rebuild destroys and recreates the corresponding Kubernetes Node object, causing the
+existing topology zone label to be lost. Since the worker node rollout does not execute the `Management_Master` layer, the label is not automatically reapplied.
 
 Follow the procedure below to preserve the existing topology zone labels before the rollout and restore them after the rollout is complete.
 
