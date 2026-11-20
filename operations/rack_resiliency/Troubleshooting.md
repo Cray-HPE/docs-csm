@@ -414,7 +414,7 @@ while IFS=$'\t' read -r NODE ZONE; do [ -z "$NODE" ] || [ -z "$ZONE" ] && contin
 
 ### Verify that all worker nodes retain their original RR zone labels
 
-(`ncn-mw#`) Get topology zone lebel's
+(`ncn-mw#`) Get topology zone `lebels`
 
 ```bash
 kubectl get nodes ncn-w001 ncn-w002 ncn-w003 -L topology.kubernetes.io/zone
