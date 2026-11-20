@@ -33,6 +33,10 @@ Only follow the steps in the section for the node type that is being rebuilt.
 
 ### Worker node
 
+**NOTE** If Rack Resiliency (RR) is enabled and a worker node rebuild is planned,
+[preserve RR topology zone labels](../../rack_resiliency/Troubleshooting.md#preserve-the-existing-rr-topology-zone-labels-before-the-rollout) before the rebuild
+and restore them after the rebuild is complete.
+
 #### Option 1
 
 (`ncn-m001#`) Run `ncn-upgrade-worker-storage-nodes.sh` for `ncn-w001`.
@@ -68,6 +72,10 @@ make sure that the following conditions are met:
 ```bash
 /usr/share/doc/csm/upgrade/scripts/upgrade/ncn-upgrade-worker-storage-nodes.sh ncn-w002,ncn-w003,ncn-w004
 ```
+
+**NOTE** If Rack Resiliency (RR) is enabled and a worker node rebuild is planned,
+[reapply the RR topology zone labels](../..//rack_resiliency/Troubleshooting.md#reapply-the-same-zone-labels-to-the-respective-worker-nodes-after-the-rollout-if-they-are-removed)
+after the rebuild is complete.
 
 ### Master node
 
