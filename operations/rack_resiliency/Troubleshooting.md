@@ -402,7 +402,6 @@ cat /root/ncn-zone-labels.txt
 ```text
 ncn-w001    my-k8s-zone-x3000
 ncn-w002    my-k8s-zone-x3001
-ncn-w003    my-k8s-zone-x3002
 ```
 
 ### Reapply the same zone labels to the respective worker nodes after the rollout, if they are removed
@@ -427,5 +426,4 @@ kubectl get nodes ncn-w001 ncn-w002 -L topology.kubernetes.io/zone
 NAME       STATUS   ROLES    AGE   VERSION   ZONE
 ncn-w001   Ready    <none>   47h   v1.32.5   my-k8s-zone-x3000
 ncn-w002   Ready    <none>   46h   v1.32.5   my-k8s-zone-x3001
-ncn-w003   Ready    <none>   45h   v1.32.5   my-k8s-zone-x3002
 ```
