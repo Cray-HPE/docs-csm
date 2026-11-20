@@ -404,6 +404,7 @@ ncn-w001    my-k8s-zone-x3000
 ncn-w002    my-k8s-zone-x3001
 ncn-w003    my-k8s-zone-x3002
 ```
+
 ### Reapply the same zone labels to the respective worker nodes after the rollout, if they are removed
 
 (`ncn-mw#`) Execute the below script.
