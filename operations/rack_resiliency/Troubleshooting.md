@@ -24,7 +24,7 @@ This page contains general Rack Resiliency troubleshooting topics.
     - [ConfigMaps not present](#configmaps-not-present)
 - [Physical movement of nodes from one rack to another](#physical-movement-of-nodes-from-one-rack-to-another)
 - [Update Ceph manager endpoints for Grafana](#update-ceph-manager-endpoints-for-grafana)
-- [Topology zone labels are removed post worker node rollout](#topology-zone-labels-are-removed-post-worker-node-rollout)
+- [Topology zone labels are removed post worker node rebuild](#topology-zone-labels-are-removed-post-worker-node-rebuild)
 
 ## Cray CLI
 
@@ -372,20 +372,20 @@ With Rack Resiliency enabled, the storage canary rollout may move Ceph managers 
 
 > **NOTE** It may take a couple of minutes for Grafana to pick up the new endpoints and display Ceph data.
 
-## Topology zone labels are removed post worker node rollout
+## Topology zone labels are removed post worker node rebuild
 
 If Rack Resiliency (RR) is enabled and a worker node rebuild is planned, the following behavior should be considered.
 
 The `topology.kubernetes.io/zone` label is applied as part of the `Management_Master` play. A worker node rebuild destroys and recreates the corresponding Kubernetes Node object, causing the
-existing topology zone label to be lost. Since the worker node rollout does not execute the `Management_Master` layer, the label is not automatically reapplied.
+existing topology zone label to be lost. Since the worker node rebuild does not execute the `Management_Master` layer, the label is not automatically reapplied.
 
-Follow the procedure below to preserve the existing topology zone labels before the rollout and restore them after the rollout is complete.
+Follow the procedure below to preserve the existing topology zone labels before the rebuild and restore them after the rebuild is complete.
 
-### Preserve the existing RR topology zone labels before the rollout
+### Preserve the existing RR topology zone labels before the rebuild
 
 **For Example:**
 
-(`ncn-mw#`) Preserve the labels for the worker nodes that are being rebuilt.
+(`ncn-mw#`) Preserve the labels for the worker nodes that are being rebuild.
 
 ```bash
 kubectl get nodes ncn-w001 ncn-w002 -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.labels.topology\.kubernetes\.io/zone}{"\n"}{end}' > /tmp/ncn-zone-labels.txt
@@ -404,7 +404,7 @@ ncn-w001    my-k8s-zone-x3000
 ncn-w002    my-k8s-zone-x3001
 ```
 
-### Reapply the same zone labels to the respective worker nodes after the rollout, if they are removed
+### Reapply the same zone labels to the respective worker nodes after the rebuild, if they are removed
 
 (`ncn-mw#`) Execute the below script.
 
