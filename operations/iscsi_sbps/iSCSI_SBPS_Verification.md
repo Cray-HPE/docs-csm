@@ -536,7 +536,7 @@ The health of the compute nodes from iSCSI SBPS perspective can be checked by ru
 [iSCSI compute health](../../scripts/operations/iscsi_sbps/iscsi_compute_health.sh) on any one of the compute node.
 Copy this script to one of the compute node to `/tmp` and run:
 
-(`ncn-m#`)Example command:
+(`ncn-m#`) Example command:
 
 ```bash
 pdsh -w x3000c0s19b1n0 "sh /tmp/iscsi_compute_health.sh"
