@@ -376,7 +376,8 @@ With Rack Resiliency enabled, the storage canary rollout may move Ceph managers 
 
 When Rack Resiliency (RR) is enabled and a worker-node rollout/rebuild is planned only for worker-node maintenance (not as part of a full CSM management NCN rollout), the following behavior should be considered.
 
-The topology.kubernetes.io/zone label is applied as part of the Management_Master play. A worker rebuild destroys and recreates the corresponding Kubernetes Node object, causing the existing topology zone label to be lost. Since the worker rollout does not execute the Management_Master layer, the label is not automatically reapplied.
+The `topology.kubernetes.io/zone` label is applied as part of the `Management_Master` play. A worker rebuild destroys and recreates the corresponding Kubernetes Node object, causing the
+existing topology zone label to be lost. Since the worker rollout does not execute the `Management_Master layer`, the label is not automatically reapplied.
 
 Follow the procedure below to preserve the existing topology zone labels before the rollout and restore them after the rollout is complete.
 
@@ -384,7 +385,7 @@ Follow the procedure below to preserve the existing topology zone labels before 
 
 **For Example:**
 
-(`ncn-mw#`) Preserving labels for ncn-w001, ncn-w002 and ncn-w003.
+(`ncn-mw#`) Preserving labels for `ncn-w001`, `ncn-w002` and `ncn-w003`.
 
 ```bash
 kubectl get nodes ncn-w001 ncn-w002 ncn-w003 -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.labels.topology\.kubernetes\.io/zone}{"\n"}{end}' > /tmp/ncn-zone-labels.txt
@@ -413,7 +414,7 @@ while IFS=$'\t' read -r NODE ZONE; do [ -z "$NODE" ] || [ -z "$ZONE" ] && contin
 
 ### Verify that all worker nodes retain their original RR zone labels
 
-(`ncn-mw#`) Get topology zone lebels
+(`ncn-mw#`) Get topology zone lebel's
 
 ```bash
 kubectl get nodes ncn-w001 ncn-w002 ncn-w003 -L topology.kubernetes.io/zone
