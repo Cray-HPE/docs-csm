@@ -1,22 +1,18 @@
 # Update SNMP Credentials on Existing Management Switches
 
-This procedure changes the SNMPv3 credentials used on management network switches that are already
+This procedure updates the SNMPv3 credentials used on management network switches that are already
 discovered by CSM, and updates the matching per-switch credentials stored in Vault.
 
 HMS Discovery and the SNMP backed Redfish Translation Service (RTS) read SNMP credentials for each switch from
 Vault at `secret/hms-creds/<switch-xname>`. HMS Discovery only writes that entry when it is empty, using the
 default credentials in `secret/reds-creds/switch_defaults`. As a result, updating the default credentials does
-**not** change the credentials used for switches that already exist. For existing switches, the credentials
-must be changed in three places so that they match:
+**not** update the credentials used for switches that already exist. For existing switches, the credentials
+must be updated in three places so that they match:
 
 - The running configuration of each management switch
 - The per-switch entries in Vault (`secret/hms-creds/<switch-xname>`)
 - The default credentials (`cray_reds_credentials` sealed secret in `customizations.yaml` and
   `secret/reds-creds/switch_defaults` in Vault), so that switches added later use the same values
-
-> **`NOTE`** If you arrived here from [Configuring SNMP in CSM](configure_snmp.md#how-snmp-is-used-in-csm), you have already
-> configured SNMP on the management switches and updated the default credentials there. Skip
-> [step 4](#4-update-snmp-on-the-management-switches) and [step 5](#5-update-the-default-snmp-credentials), and perform all the other steps.
 
 - [Prerequisites](#prerequisites)
     - [Identify the management switches](#identify-the-management-switches)
@@ -26,9 +22,7 @@ must be changed in three places so that they match:
     1. [Update the SNMP credentials in Vault](#3-update-the-snmp-credentials-in-vault)
     1. [Update SNMP on the management switches](#4-update-snmp-on-the-management-switches)
     1. [Update the default SNMP credentials](#5-update-the-default-snmp-credentials)
-    1. [Restart the SNMP backed RTS](#6-restart-the-snmp-backed-rts)
-    1. [Verify](#7-verify)
-    1. [Clear the credential environment variables](#8-clear-the-credential-environment-variables)
+    1. [Post-requisites](#6-post-requisites)
 - [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
@@ -138,13 +132,18 @@ x3000c0w36   sw-leaf-bmc-002   Username=testuser SNMPAuthPass_length=13 SNMPPriv
 1. (`ncn-mw#`) Run the command from [Review the current SNMP credentials in Vault](#2-review-the-current-snmp-credentials-in-vault)
    and confirm that every selected switch shows the new username and password lengths.
 
+1. (`ncn-mw#`) Clear the credential environment variables.
+
+    ```bash
+    unset SNMP_USER SNMP_AUTH_PASS SNMP_PRIV_PASS
+    ```
+
+> **`NOTE`** If you arrived here from [Configuring SNMP in CSM](configure_snmp.md#how-snmp-is-used-in-csm), skip steps 4 and 5 and continue with [Post-requisites](#6-post-requisites).
+
 ### 4. Update SNMP on the management switches
 
-> **`NOTE`** If you arrived from [Configuring SNMP in CSM](configure_snmp.md#how-snmp-is-used-in-csm) and have already
-> configured SNMP on the switches, skip this step and continue with [step 5](#5-update-the-default-snmp-credentials).
->
-> If the SNMP username changed, remove the old SNMP user from each switch after the new credentials are verified
-> in [Verify](#7-verify).
+> **`NOTE`** If the SNMP username is updated, remove the old SNMP user from each switch after the new credentials are verified
+> in [Post-requisites](#6-post-requisites).
 
 1. (`sw#`) On each selected leaf-BMC switch and on each spine switch, configure the new SNMPv3 username, authentication password,
    and privacy password. Use the same values that were stored in Vault. See the switch-specific documentation:
@@ -161,22 +160,17 @@ x3000c0w36   sw-leaf-bmc-002   Username=testuser SNMPAuthPass_length=13 SNMPPriv
 
 ### 5. Update the default SNMP credentials
 
-> **`NOTE`** If you arrived from [Configuring SNMP in CSM](configure_snmp.md#how-snmp-is-used-in-csm) and have already
-> updated the default credentials, skip this step and continue with [step 6](#6-restart-the-snmp-backed-rts).
-
 Follow [Update Default Air-Cooled BMC and Leaf-BMC Switch SNMP Credentials](../../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
 with the same values, including saving the updated `customizations.yaml`; otherwise the old defaults are restored during the next CSM upgrade.
 
-### 6. Restart the SNMP backed RTS
+### 6. Post-requisites
 
-(`ncn-mw#`) Restart the SNMP backed RTS to pick up the new credentials.
+1. (`ncn-mw#`) Restart the SNMP backed RTS to pick up the new credentials.
 
-```bash
-kubectl -n services rollout restart deployment cray-hms-rts-snmp
-kubectl -n services rollout status deployment cray-hms-rts-snmp
-```
-
-### 7. Verify
+    ```bash
+    kubectl -n services rollout restart deployment cray-hms-rts-snmp
+    kubectl -n services rollout status deployment cray-hms-rts-snmp
+    ```
 
 1. (`ncn-mw#`) Wait a few minutes, then check the SNMP backed RTS logs for SNMP authentication errors.
 
@@ -202,14 +196,6 @@ kubectl -n services rollout status deployment cray-hms-rts-snmp
     ```bash
     /opt/cray/csm/scripts/hms_verification/verify_hsm_discovery.py
     ```
-
-### 8. Clear the credential environment variables
-
-(`ncn-mw#`) Clear the credential environment variables.
-
-```bash
-unset SNMP_USER SNMP_AUTH_PASS SNMP_PRIV_PASS
-```
 
 ## Troubleshooting
 

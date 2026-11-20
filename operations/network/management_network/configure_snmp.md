@@ -34,7 +34,7 @@ management switch availability monitoring to work, three things need to have bee
   1. The SNMP credentials need to have been encrypted as sealed secrets and written to `customizations.yaml`.
       * [Updating the SNMP credentials for switches added in the future](../../security_and_authentication/Update_Default_Air-Cooled_BMC_and_Leaf_BMC_Switch_SNMP_Credentials.md)
   1. The SNMP credentials need to have been pushed into the correct path in Vault.
-      * [Updating the SNMP credentials for existing switches](Update_SNMP_Credentials_on_Existing_Management_Switches.md)
+      * [Updating the SNMP credentials for existing switches in vault](Update_SNMP_Credentials_on_Existing_Management_Switches.md#1-set-up-the-vault-alias)
 
 Note: While the [CSM Automatic Network Utility (CANU)](../../../glossary.md#csm-automatic-network-utility-canu) will typically not overwrite
 SNMP settings that are manually applied to the management switches, there are certain cases where SNMP configuration can be over-written or
