@@ -158,6 +158,48 @@ fi
 # Restart CFS deployments to avoid CASMINST-6852
 "${basedir}/../common/restart-cfs.sh"
 
+# CASMTRIAGE-9136: Restore the Ansible profiling value that was captured by
+# prerequisites.sh (run earlier from pre-install-check-prehook.sh) into
+# CFS_ANSIBLE_CALLBACK_WHITELIST in /etc/cray/upgrade/csm/myenv, since the
+# CFS pod restart above resets cfs-default-ansible-cfg to its chart default
+# and silently disables profiling if it had been enabled prior to the
+# upgrade. Only the single callback_whitelist value is patched back in;
+# every other line of the (post-upgrade) ansible.cfg is left untouched.
+state_name="RESTORE_CFS_ANSIBLE_PROFILING_STATE"
+#shellcheck disable=SC2046
+state_recorded=$(is_state_recorded "${state_name}" $(hostname))
+if [[ $state_recorded == "0" ]]; then
+  echo "====> ${state_name} ..."
+  {
+    # Re-source myenv defensively; CFS_ANSIBLE_CALLBACK_WHITELIST is written
+    # by prerequisites.sh, a separate script run earlier in the upgrade.
+    . /etc/cray/upgrade/csm/myenv
+    if [[ -n ${CFS_ANSIBLE_CALLBACK_WHITELIST} ]]; then
+      current_whitelist=$(kubectl get cm cfs-default-ansible-cfg -n services -o json | jq -r '.data["ansible.cfg"]' \
+        | grep -E '^\s*callback_whitelist\s*=' | grep -v '^\s*#' | sed 's/^\s*callback_whitelist\s*=\s*//' | head -1 || true)
+      if [[ ${current_whitelist} != "${CFS_ANSIBLE_CALLBACK_WHITELIST}" ]]; then
+        echo "INFO Restoring cfs-default-ansible-cfg callback_whitelist to: ${CFS_ANSIBLE_CALLBACK_WHITELIST}"
+        # Only rewrite the active (non-comment) callback_whitelist line; every other line is left as-is.
+        new_ansible_cfg=$(kubectl get cm cfs-default-ansible-cfg -n services -o json | jq -r '.data["ansible.cfg"]' \
+          | sed "/^\s*#/! s|^\(\s*\)callback_whitelist\s*=.*|\1callback_whitelist    = ${CFS_ANSIBLE_CALLBACK_WHITELIST}|")
+        # Apply a JSON merge patch that updates only the ansible.cfg data key,
+        # leaving every other ConfigMap key, label, and annotation untouched
+        # (no delete/recreate of the object).
+        kubectl patch configmap cfs-default-ansible-cfg -n services --type merge \
+          -p "$(jq -n --arg content "${new_ansible_cfg}" '{data: {"ansible.cfg": $content}}')"
+      else
+        echo "INFO cfs-default-ansible-cfg callback_whitelist already matches captured pre-upgrade value; nothing to restore"
+      fi
+    else
+      echo "INFO No pre-upgrade CFS_ANSIBLE_CALLBACK_WHITELIST was captured; skipping Ansible profiling restore"
+    fi
+  } >> ${LOG_FILE} 2>&1
+  #shellcheck disable=SC2046
+  record_state ${state_name} $(hostname)
+else
+  echo "====> ${state_name} has been completed"
+fi
+
 state_name="UPDATE_TEST_CLI_RPMS"
 #shellcheck disable=SC2046
 state_recorded=$(is_state_recorded "${state_name}" $(hostname))
