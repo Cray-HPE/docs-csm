@@ -528,7 +528,7 @@ The DNS records check only needs to be performed on a single worker NCN.
 
 ## iSCSI Initiator Validation
 
-Administrators also need to check the health of initiator (compute/UAN) nodes.
+Administrators also need to check the health of initiator (Compute/UAN) nodes.
 
 > For more details on the information discussed in this section, see [iSCSI SBPS solution details](README.md#iscsi-sbps-solution-details).
 
@@ -536,10 +536,10 @@ The health of the compute nodes from iSCSI SBPS perspective can be checked by ru
 [iSCSI compute health](../../scripts/operations/iscsi_sbps/iscsi_compute_health.sh) on any one of the compute node.
 Copy this script to one of the compute node to `/tmp` and run:
 
-Example command:
+(`ncn-m#`)Example command:
 
 ```bash
-ncn-m001:~ # pdsh -w x3000c0s19b1n0 "sh /tmp/iscsi_compute_health.sh"
+pdsh -w x3000c0s19b1n0 "sh /tmp/iscsi_compute_health.sh"
 ```
 
 Example command output:
