@@ -75,7 +75,6 @@ make sure that the following conditions are met:
 
 **NOTE** If Rack Resiliency (RR) is enabled and a worker node rebuild is done,
 [reapply the RR topology zone labels](../..//rack_resiliency/Troubleshooting.md#reapply-the-same-zone-labels-to-the-respective-worker-nodes-after-the-rollout-if-they-are-removed)
-after the rebuild is complete.
 
 ### Master node
 
