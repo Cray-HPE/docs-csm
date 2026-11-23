@@ -102,6 +102,8 @@ See [CSM Automatic Network Utility (CANU)](canu/README.md).
 | [Generate Switch Configurations](generate_switch_configs.md)                         | Generate configurations for all management switches                                                                                    |
 | [Manual Switch Configurations](manual_switch_config.md)                              | Some configuration needs to be done manually (authentication/SNMP)                                                                     |
 | [Validate SHCD](validate_shcd.md)                                                    | Validate the SHCD against the CSM network architecture                                                                                 |
+| [Configure SNMP](configure_snmp.md)                                                  | Describes how SNMP is used within CSM                                                                                                  |
+| [Update SNMP Credentials on Existing Management Switches](Update_SNMP_Credentials_on_Existing_Management_Switches.md)| Update SNMP Credentials on Existing Management Switches                                                                                |
 
 ## Products supported
 
