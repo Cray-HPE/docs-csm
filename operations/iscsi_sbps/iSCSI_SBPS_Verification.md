@@ -539,7 +539,7 @@ Copy this script to one of the compute node to `/tmp` and run:
 (`ncn-m#`) Example command:
 
 ```bash
-pdsh -w x3000c0s19b1n0 "sh /tmp/iscsi_compute_health.sh"
+pdsh -w x3000c0s19b1n0 "sh /tmp/iscsi_compute_health.sh" 2>/dev/null | dshbak -c
 ```
 
 Example command output:
