@@ -884,7 +884,7 @@ If the group is not present, select any second worker node as `WORKER_CANARY2`. 
 1. (`ncn-m001#`) Verify that the iSCSI session with remaining worker nodes is logged in.
 
    ```bash
-   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+   pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session" 2>/dev/null | dshbak -c
    ```
 
    This command should list the session with `ISCSI_TARGET_NODES`.
