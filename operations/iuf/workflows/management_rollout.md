@@ -202,6 +202,9 @@ The specific scripts executed as part of this hook are `/usr/share/doc/csm/upgra
 
         The desired value for `configuration_status` is `configured`. If it is `pending`, then wait for the status to change to `configured`.
 
+    1. **Optional, only if Rack Resiliency is enabled and the Ceph dashboards in Grafana show no data:**
+       Follow [Update Ceph manager endpoints for Grafana](../../rack_resiliency/Troubleshooting.md#update-ceph-manager-endpoints-for-grafana) and then return here.
+
     1. (`ncn-m001#`) Upgrade the remaining NCN storage nodes once the first has upgraded successfully. This upgrades NCN storage nodes serially.
     Get the number of storage nodes based on the cluster and verify that it is correct. The storage canary node should not be in the list since it has already been upgraded.
     The list of storage nodes can be manually entered if it is not desired to upgrade all of the remaining storage nodes.

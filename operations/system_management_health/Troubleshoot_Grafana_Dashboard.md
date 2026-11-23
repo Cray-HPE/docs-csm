@@ -6,6 +6,7 @@ General Grafana dashboard troubleshooting topics
 - [Ceph - RBD Overview Dashboard](#ceph---rbd-overview-dashboard-no-data)
 - [Ceph - RGW Instance Detail Dashboard](#ceph---rgw-instance-detail-dashboard-panel-missing-and-no-data)
 - [Ceph - RGW Overview Dashboard](#ceph---rgw-overview-dashboard-no-data)
+- [Ceph Dashboards: No data with Rack Resiliency enabled](#ceph-dashboards-no-data-with-rack-resiliency-enabled)
 
 ## Ceph - OSD Overview Dashboard: 3 panels not found
 
@@ -51,3 +52,8 @@ This will be fixed in a future release.
 
 Ceph - RGW Overview Dashboard uses a 30 second time range in queries, which is a very short duration. Because of this, the dashboard is unable to load the data.
 This will be fixed in a future release.
+
+## Ceph Dashboards: No data with Rack Resiliency enabled
+
+With Rack Resiliency enabled, Ceph managers may move to other storage nodes. If the Ceph manager IP addresses in `customizations.yaml` no longer match,
+then the Ceph dashboards show no data. To fix this, see [Update Ceph manager endpoints for Grafana](../rack_resiliency/Troubleshooting.md#update-ceph-manager-endpoints-for-grafana).
