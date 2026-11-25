@@ -18,7 +18,8 @@ If it is necessary to build `aarch64` images, modify the sat bootprep files to i
 
 ## 2. Execute the IUF `update-cfs-config` and `prepare-images` stages
 
-**NOTE** If Rapid Release Updates (RRUs) were installed on the system prior to this upgrade, and the [verification procedure](../../../operations/rapid_release_update/upgrade_csm_with_installed_rru.md#determine-the-kernel-versions) recommends updating the `CFS configuration`, then follow the procedure documented in [Configure SAT bootprep CFS Layers](../../rapid_release_update/configure_cfs.md).
+**NOTE** If Rapid Release Updates (`RRUs`) were installed on the system prior to this upgrade, and the [verification procedure](../../../operations/rapid_release_update/upgrade_csm_with_installed_rru.md#determine-the-kernel-versions)
+recommends updating the `CFS configuration`, then follow the procedure documented in [Configure SAT bootprep CFS Layers](../../rapid_release_update/configure_cfs.md).
 
 **NOTE** Additional arguments are available to control the behavior of the `update-cfs-config` and `prepare-images` stages, for example `-bc`, `-bm`, and `-rv`. See the [`update-cfs-config` stage
 documentation](../stages/update_cfs_config.md) and the [`prepare-images` stage documentation](../stages/prepare_images.md) for details and adjust the examples below if necessary.
