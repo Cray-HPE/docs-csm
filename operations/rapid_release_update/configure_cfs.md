@@ -131,6 +131,7 @@ Before running any IUF stages that use `sat bootprep`, you must add the
 
 ## Next steps
 
-- Return to the
-  [Install Rapid Release Update with IUF](installation_iuf.md)
+- If deploying RRU, return to the [Install Rapid Release Update with IUF](installation_iuf.md)
   workflow to continue the install.
+
+- If upgrading CSM, return to [Update CFS configuration](../iuf/workflows/image_preparation.md#2-execute-the-iuf-update-cfs-config-and-prepare-images-stages) workflow to continue the upgrade.

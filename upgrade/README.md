@@ -5,6 +5,9 @@ software. Choose the appropriate procedure from the sections below.
 
 > **NOTE** After CSM 1.7.1, the patch release versions follow a new naming convention
 > (`1.7.1-patch.<patch-number>`), starting with 1.7.1-patch.1
+>
+> **NOTE:** If the CSM system has ever had a Rapid Release Update (RRU) installed, then follow the [Upgrade CSM with Rapid Release Update Installed](../operations/rapid_release_update/README.md#considerations-for-upgrading-csm-after-installing-rru)
+> procedure before proceeding with the upgrade.
 
 * [Release notes](#release-notes)
 * [Fabric Manager on baremetal](#fabric-manager-on-baremetal)

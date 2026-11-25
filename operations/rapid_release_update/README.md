@@ -3,9 +3,10 @@
 * [Overview](#overview)
 * [Terminology](#terminology)
 * [Release Notes](#release-notes)
-* [Valid upgrade paths](#valid-update-paths)
+* [Valid update paths](#valid-update-paths)
 * [Update NCNs with Rapid Release Update](#update-ncns-with-rapid-release-update)
 * [Further Reading](#further-reading)
+* [Considerations when upgrading CSM after installing RRU](#considerations-for-upgrading-csm-after-installing-rru)
 
 ## Overview
 
@@ -73,3 +74,12 @@ zypper install -y docs-csm
 ```
 
 > **Note:** IUF behavior and available stages may differ between CSM versions. Always reference the documentation that matches your installed CSM release.
+
+## Considerations for upgrading CSM after installing RRU
+
+| Current Release | Upgrade to | Required Action |
+| --- | --- | --- |
+| CSM 1.6.x | CSM 1.7.x | [Return back to the Upgrade page to continue upgrade process](../../upgrade/README.md) |
+| CSM 1.7.0 | CSM 1.7.1 | [Return back to the Upgrade page to continue upgrade process](../../upgrade/README.md) |
+| CSM 1.7.1 | CSM 1.7.1-patch.x | [Upgrade with Rapid Release Update ](upgrade_csm_with_installed_rru.md) |
+| CSM 1.7.1-patch.x | CSM 1.7.1-patch.y | When y > x [Upgrade with Rapid Release Update ](upgrade_csm_with_installed_rru.md) otherwise [Return back to the Upgrade page to continue upgrade process](../../upgrade/README.md) |
