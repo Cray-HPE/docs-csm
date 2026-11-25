@@ -1460,5 +1460,32 @@ echo "====> PATCH_SMA_CRONJOBS ..." | tee -a "${LOG_FILE}"
 rm -f /root/.ssh/config
 test -f /root/.ssh/config.bak && mv /root/.ssh/config.bak /root/.ssh/config
 
+# CASMTRIAGE-9136: Capture the pre-upgrade Ansible profiling value from the
+state_name="CAPTURE_CFS_ANSIBLE_PROFILING_STATE"
+state_recorded=$(is_state_recorded "${state_name}" "$(hostname)")
+if [[ ${state_recorded} == "0" && $(hostname) == "${PRIMARY_NODE}" ]]; then
+  echo "====> ${state_name} ..." | tee -a "${LOG_FILE}"
+  {
+    # Grep only the active (non-comment) callback_whitelist line.
+    callback_whitelist=$(kubectl get cm cfs-default-ansible-cfg -n services -o json  --ignore-not-found=true | jq -r '.data["ansible.cfg"]' \
+      | grep -E '^\s*callback_whitelist\s*=' | grep -v '^\s*#' | sed 's/^\s*callback_whitelist\s*=\s*//' | head -1 || true)
+    if [[ -n ${callback_whitelist} ]]; then
+      echo "INFO Captured cfs-default-ansible-cfg callback_whitelist: ${callback_whitelist}"
+      if [[ ! -f /etc/cray/upgrade/csm/myenv ]]; then
+        echo "WARNING /etc/cray/upgrade/csm/myenv not found; creating it"
+        touch /etc/cray/upgrade/csm/myenv
+      fi
+      sed -i '/^export CFS_ANSIBLE_CALLBACK_WHITELIST=/d' /etc/cray/upgrade/csm/myenv
+      echo "export CFS_ANSIBLE_CALLBACK_WHITELIST=\"${callback_whitelist}\"" >> /etc/cray/upgrade/csm/myenv
+    else
+      echo "WARNING Unable to read callback_whitelist from cfs-default-ansible-cfg; Ansible profiling state will not be restored automatically"
+    fi
+  } >> "${LOG_FILE}" 2>&1
+  record_state "${state_name}" "$(hostname)" | tee -a "${LOG_FILE}"
+  echo
+else
+  echo "====> ${state_name} has been completed" | tee -a "${LOG_FILE}"
+fi
+
 ok_report
 touch ${PREREQS_DONE_FILE}
