@@ -46,7 +46,6 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 
 | Installed CSM base version | Base SLE version | RRU version | Kernel version |
 | --- | --- | --- | --- |
-| 1.6.2 | SLE SP6 | `Rapid-Update-sle15-sp6-162-26.10.01` | 6.4.0-150600.23.135.1 |
 | 1.7.0 | SLE SP6 | `Rapid-Update-sle15-sp6-170-26.11.01` | 6.4.0-150600.23.143.1 |
 | 1.7.1 | SLE SP7 | `Rapid-Update-sle15-sp7-171-26.09.01` | 6.4.0-150700.53.78.1 |
 
@@ -79,7 +78,7 @@ zypper install -y docs-csm
 
 | Current Release | Upgrade to | Required Action |
 | --- | --- | --- |
-| `CSM 1.6.x` | `CSM 1.7.x` | When x = 0 [Upgrade with Rapid Release Update](upgrade_csm_with_installed_rru.md) otherwise [Return back to the Upgrade page to continue upgrade process](../../upgrade/README.md) |
-| `CSM 1.7.0` | `CSM 1.7.1` | [Return back to the Upgrade page to continue upgrade process](../../upgrade/README.md) |
+| `CSM 1.6.2` | `CSM 1.7.x` | When x = 0 [Upgrade with Rapid Release Update](upgrade_csm_with_installed_rru.md) otherwise return back to continue [CSM Upgrade process](../../upgrade/README.md) |
+| `CSM 1.7.0` | `CSM 1.7.1` | Return back to continue [CSM Upgrade process](../../upgrade/README.md) |
 | `CSM 1.7.1` | `CSM 1.7.1-patch.x` | [Upgrade with Rapid Release Update](upgrade_csm_with_installed_rru.md) |
-| `CSM 1.7.1-patch.x` | `CSM 1.7.1-patch.y` | When y > x [Upgrade with Rapid Release Update](upgrade_csm_with_installed_rru.md) otherwise [Return back to the Upgrade page to continue upgrade process](../../upgrade/README.md) |
+| `CSM 1.7.1-patch.x` | `CSM 1.7.1-patch.y` | When y > x [Upgrade with Rapid Release Update](upgrade_csm_with_installed_rru.md) otherwise return back to continue [CSM Upgrade process](../../upgrade/README.md) |

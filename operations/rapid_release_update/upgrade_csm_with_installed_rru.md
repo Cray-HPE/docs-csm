@@ -24,14 +24,20 @@ Depending on the CSM version installed on the system, refer to [Considerations w
   echo $CURR_KERNEL_VERSION
   ```
 
-1. Determine the kernel version of the target CSM version, as listed in [CSM Release Notes](../../upgrade/README.md#release-notes)
+1. Determine the kernel version of the target CSM version, from the below table.
+
+| CSM Version | Kernel Version |
+| --- | --- |
+| `CSM 1.6.2` | `6.4.0-150600.23.17-default` |
+| `CSM 1.7.0` | `6.4.0-150600.23.53-default` |
+| `CSM 1.7.1` | `6.4.0-150700.53.25-default` |
 
   ```bash
-  TARGET_KERNEL_VERSION=<KERNEL_VERSION_FROM_RN_DOC>
+  TARGET_KERNEL_VERSION=<KERNEL_VERSION>
   echo $TARGET_KERNEL_VERSION
   ```
 
-  **Note:** Replace `KERNEL_VERSION_FROM_RN_DOC` with the target kernel version specified in the Release Notes document.
+  **Note:** Replace `KERNEL_VERSION` with the identified target kernel version.
 
 1. Compare the current and new kernel version
 
