@@ -13,7 +13,7 @@ A Rapid Release Update (RRU) delivers SUSE kernel security (CVE) fixes for a spe
 
 A subsequent CSM upgrade delivers new NCN images, which may contain kernel versions that are either higher or lower than the kernel version currently installed on the system.
 
-Depending on the CSM version installed on the system, refer to [Considerations when upgrading CSM after installing RRU](README.md#considerations-for-upgrading-csm-after-installing-rru) before proceeding with the upgrade.
+Depending on the CSM version installed on the system, refer to [Considerations for upgrading CSM after installing RRU](README.md#considerations-for-upgrading-csm-after-installing-rru) before proceeding with the upgrade.
 
 ## Determine the kernel versions
 
