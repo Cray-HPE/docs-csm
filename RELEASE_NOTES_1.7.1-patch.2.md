@@ -35,7 +35,7 @@ For a full list of CSM 1.7.1 patch releases, see
 
 ### General
 
-* Updated SLES base OS to '6.4.0-150700.53.84-default' version of SLES 15 SP7.
+* Updated SLES base OS to `6.4.0-150700.53.84-default` version of SLES 15 SP7.
 * New signing key for HPE delivered RPMs. See [here](#upgrade-steps) for installation instructions before starting upgrade.
 
 ### Security
