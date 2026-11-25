@@ -337,7 +337,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
    1. (`ncn-m001#`) Verify that the iSCSI session with `WORKER_CANARY` is logged out.
 
       ```bash
-      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session" 2>/dev/null | dshbak -c
       ```
 
       This command should not list the session with `WORKER_CANARY`.
@@ -383,7 +383,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
    1. (`ncn-m001#`) Verify that the iSCSI session is logged in with `WORKER_CANARY`
 
       ```bash
-      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session" 2>/dev/null | dshbak -c
       ```
 
       This command should list the session with `WORKER_CANARY`.
@@ -448,7 +448,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
    1. (`ncn-m001#`) Verify that the iSCSI session with `WORKER_CANARY2` is logged out.
 
       ```bash
-      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session" 2>/dev/null | dshbak -c
       ```
 
       This command should not list the session with `WORKER_CANARY2`.
@@ -494,7 +494,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
    1. (`ncn-m001#`) Verify that the iSCSI session is logged in with `WORKER_CANARY2`
 
       ```bash
-      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+      pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session" 2>/dev/null | dshbak -c
       ```
 
       This command should list the session with `WORKER_CANARY2`.
@@ -542,7 +542,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
       1. (`ncn-m001#`) Verify that the iSCSI session with remaining `ISCSI_TARGET_NODES` is logged out.
 
          ```bash
-         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session" 2>/dev/null | dshbak -c
          ```
 
          This command should not list the session with `ISCSI_TARGET_NODES`.
@@ -583,7 +583,7 @@ Roll out the new image and CFS configuration to one worker node first and valida
       1. (`ncn-m001#`) Verify that the iSCSI session with remaining `ISCSI_TARGET_NODES` is logged in.
 
          ```bash
-         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session"
+         pdsh -t10 -f256 -w $APPNODES,$COMPUNODES "iscsiadm -m session" 2>/dev/null | dshbak -c
          ```
 
          This command should list the session with `ISCSI_TARGET_NODES`.
