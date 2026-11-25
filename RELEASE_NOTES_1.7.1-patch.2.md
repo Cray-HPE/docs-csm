@@ -58,27 +58,27 @@ This patch includes many fixes and improvements for METAL.
 This patch includes many fixes and improvements for CMS.
 
 * Improvements
-    * Improved Kafka reliability in the CFS
-      API server and [CFS Operator](operations/configuration_management/CFS_Operator.md).
+    * Improved Kafka reliability in the CFS API server and [CFS Operator](operations/configuration_management/CFS_Operator.md).
     * Significantly faster [CFS session](operations/configuration_management/CFS_Sessions.md) creation.
-    * Improved debug logging by the CFS API server, CFS Operator, and
-      [CFS Batcher](operations/configuration_management/CFS_Batcher.md).
-    * Minor performance improvements to session filtering (used when performing bulk list, patch,
-      or delete operations on sessions).
+    * Improved debug logging by the CFS API server, CFS Operator, and [CFS Batcher](operations/configuration_management/CFS_Batcher.md).
+    * Minor performance improvements to session filtering (used when performing bulk list, patch, or delete operations on sessions).
     * Improve CFS Batcher reliability with regards to system clock changes.
+
 * Known issues fixed
     * [CFS Batcher Can Be Slow To See Updated CFS Options](troubleshooting/known_issues/CFS_Batcher_Can_Be_Slow_To_See_Updated_CFS_Options.md)
     * [CFS Batcher Creating Multiple Sessions For Same Batch](troubleshooting/known_issues/CFS_Batcher_Creating_Multiple_Sessions_For_Same_Batch.md)
     * [CFS Operator Creating Multiple Jobs For Same Session](troubleshooting/known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
     * [CFS Component State Updates Allow Invalid Values](troubleshooting/known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
     * [CFS Component State Update Does Not Preserve Layer Timestamps](troubleshooting/known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
+
 * Bugs Fixed
-```text
-  CASMTRIAGE-9260 CAST-40271 Conman restarting frequently
-```    
+    * Fixed frequent ConMon restarts triggered by changes detected in River passwords, which resulted in missing ConMon logs.
+    * Preserved the Ansible profiling setting across upgrades by backing up and restoring its value before upgrading the CFS Operator Helm chart.
+ 
+* CVE fixes
+    * <>
+
 * Important Document Updates
-```text
-```    
 
 ### Hardware Management Services (HMS)
 
@@ -101,8 +101,8 @@ This patch includes many fixes and documentation improvements for base platform 
 
 * Bugs Fixed
 ```text
-   Corrected etcd health check failures when a cluster has no ready pods
-   Corrected the cluster role `cray-k8s-encryption` to move resources to appropriate `apiGroups`
+   * Corrected etcd health check failures when a cluster has no ready pods
+   * Corrected the cluster role `cray-k8s-encryption` to move resources to appropriate `apiGroups`
 ```    
 
 * Major Documentation Updates
@@ -115,24 +115,26 @@ This patch includes many fixes and documentation improvements for base platform 
 This patch includes fixes for Rack Resiliency.
 
 * Bugs Fixed
-```text
-   Fixed Ceph configuration updates during storage canary rollouts when Rack Resiliency is enabled. 
-   Ceph monitor and service placement changes are now consistently propagated.
-```    
+    * Fixed Ceph configuration updates during storage canary rollouts when Rack Resiliency is enabled.
+    * Ceph monitor and service placement changes are now consistently propagated.
+      
+* Major Documentation Updates
+    * Fixed an issue where the topology.kubernetes.io/zone labels were not preserved on worker nodes after
+      a worker-node rollout/rebuild when Rack Resiliency (RR) was enabled.
 
-### iscsi SBPS
+### iSCSI SBPS (Scalable boot projection service). 
 
 This patch includes many fixes and improvements for base platform components.
 
 * Improvements
 * Known issues fixed
-* Bugs Fixed
-```text
-```    
-* Major Documentation Updates
-```text
-```    
 
+* Bugs Fixed
+    * Optimized iSCSI SBPS Kubernetes label and HSN/NMN DNS record configuration to process only the current CFS batch, reducing rollout time, preventing CFS failures,
+      and avoiding DNS records reconfigurations.
+      
+* Major Documentation Updates
+    * Updated the IUF documentation with revised iSCSI SBPS upgrade and worker-node rollout procedures to eliminate timing dependencies and prevent LUN remapping issues.
 
 ### Other Major Documentation Updates
 
