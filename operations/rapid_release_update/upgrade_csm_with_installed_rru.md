@@ -45,4 +45,4 @@ Depending on the CSM version installed on the system, refer to [Considerations w
 
 ## Next steps
 
-- Return back to the [Upgrade page](../../upgrade/README.md) to continue the upgrade process.
+* Return back to the [Upgrade page](../../upgrade/README.md) to continue the upgrade process.
