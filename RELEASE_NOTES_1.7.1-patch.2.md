@@ -19,9 +19,6 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   * [Base platform components](#base-platform-components-pet)
   * [Rack Resiliency](#rack-resiliency-rr)
   * [iscsi SBPS](#iscsi-sbps)
-  * [System Monitoring Application](#system-monitoring-application-sma)
-  * [System Diagnostics](#system-diagnostics-diags)
-  * [System Monitoring Framework](#system-monitoring-framework-smf)
   * [Other Major Documentation Updates](#other-major-documentation-updates)
 * [Known Issues](#known-issues)
 * [Upgrade steps](#upgrade-steps)
@@ -38,7 +35,7 @@ For a full list of CSM 1.7.1 patch releases, see
 
 ### General
 
-* Updated SLES base OS to <kernel-version-tbd> version of SLES 15 SP7.
+* Updated SLES base OS to '6.4.0-150700.53.84-default' version of SLES 15 SP7.
 * New signing key for HPE delivered RPMs. See [here](#upgrade-steps) for installation instructions before starting upgrade.
 
 ### Security
@@ -51,13 +48,9 @@ For a full list of CSM 1.7.1 patch releases, see
 
 This patch includes many fixes and improvements for METAL.
 
-* Improvements
-* Known issues fixed
-* Bugs Fixed
-```text
-```    
 * Important Document Updates
 ```text
+   Corrected procedure to validate Signed rpms
 ```    
 
 ### Configuration Management Service (CMS)
@@ -89,45 +82,42 @@ This patch includes many fixes and improvements for CMS.
 
 ### Hardware Management Services (HMS)
 
-This patch includes many fixes and improvements for HMS.
+This patch includes many fixes and documentation improvements for HMS.
 
-* Improvements
-* Known issues fixed
 * Bugs Fixed
 ```text
-Fixed an issue where telemetry from River nodes was not collected and displayed in the River Sensors dashboard from CSM 1.7.0.
+   Fixed telemetry collection and display issue with River Sensors dashboard
 ```    
 * Major Documentation Updates
 ```text
-Created documentation to update SNMP credentials for existing switches.
-Corrected and improved various operational procedures for system power-down, SDU diagnostics, non-compute-node dumps, HSM postgres duplicate-event cleanup along with guidance on large-database and compute-blade replacement.
+   Procedure to update SNMP credentials for existing switches.
+   Updates to various operational procedures in HMS including system power-down,
+   SDU diagnostics, non-compute-node dumps, compute-blade replacement, et.al.
 ```    
 
 ### Base platform components (PET)
 
-This patch includes many fixes and improvements for base platform components.
+This patch includes many fixes and documentation improvements for base platform components.
 
-* Improvements
-* Known issues fixed
 * Bugs Fixed
 ```text
+   Corrected etcd health check failures when a cluster has no ready pods
+   Corrected the cluster role `cray-k8s-encryption` to move resources to appropriate `apiGroups`
 ```    
+
 * Major Documentation Updates
 ```text
+   Added a procedure to diagnose and resolve a Kubernetes encryption status mismatch
 ```    
 
 ### Rack Resiliency (RR)
 
-This patch includes many fixes and improvements for base platform components.
+This patch includes fixes for Rack Resiliency.
 
-* Improvements
-* Known issues fixed
 * Bugs Fixed
 ```text
-Fixed Ceph configuration updates during storage canary rollouts when rack-resiliency is enabled. Ceph monitor and service placement changes are now consistently propagated to all storage nodes, Kubernetes ConfigMaps, customizations.yaml, and exporter endpoints, preventing Ceph command failures, inaccurate Grafana data, and PVC mount failures.
-```    
-* Major Documentation Updates
-```text
+   Fixed Ceph configuration updates during storage canary rollouts when Rack Resiliency is enabled. 
+   Ceph monitor and service placement changes are now consistently propagated.
 ```    
 
 ### iscsi SBPS
@@ -143,48 +133,11 @@ This patch includes many fixes and improvements for base platform components.
 ```text
 ```    
 
-### System Monitoring Application (SMA)
-
-This patch includes many fixes and improvements for base platform components.
-
-* Improvements
-* Known issues fixed
-* Bugs Fixed
-```text
-```    
-* Major Documentation Updates
-```text
-```    
-
-### System Diagnostics (DIAGS)
-
-This patch includes many fixes and improvements for base platform components.
-
-* Improvements
-* Known issues fixed
-* Bugs Fixed
-```text
-```    
-* Major Documentation Updates
-```text
-```    
-
-### System Monitoring Framework (SMF)
-
-This patch includes many fixes and improvements for base platform components.
-
-* Improvements
-* Known issues fixed
-* Bugs Fixed
-```text
-```    
-* Major Documentation Updates
-```text
-```    
 
 ### Other Major Documentation Updates
 
 ```text
+   Procedure to upgrade NCN kernel to higher version between Rapid Release Update and CSM base version during a CSM upgrade
 ```
 
 ## Known Issues
