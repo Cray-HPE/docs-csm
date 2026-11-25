@@ -24,7 +24,7 @@ Depending on the CSM version installed on the system, refer to [Considerations w
   echo $CURR_KERNEL_VERSION
   ```
 
-2. Determine the kernel version of the target CSM version, as listed in [CSM Release Notes](../../upgrade/README.md#release-notes)
+1. Determine the kernel version of the target CSM version, as listed in [CSM Release Notes](../../upgrade/README.md#release-notes)
 
   ```bash
   TARGET_KERNEL_VERSION=<KERNEL_VERSION_FROM_RN_DOC>
@@ -33,7 +33,7 @@ Depending on the CSM version installed on the system, refer to [Considerations w
 
   **Note:** Replace `KERNEL_VERSION_FROM_RN_DOC` with the target kernel version specified in the Release Notes document.
 
-3. Compare the current and new kernel version
+1. Compare the current and new kernel version
 
   ```bash
   if [[ "$CURR_KERNEL_VERSION" != "$TARGET_KERNEL_VERSION" ]] && [[ "$(printf '%s\n' "$CURR_KERNEL_VERSION" "$TARGET_KERNEL_VERSION" | sort -V | tail -n 1)" == "$CURR_KERNEL_VERSION" ]]; then
@@ -41,7 +41,7 @@ Depending on the CSM version installed on the system, refer to [Considerations w
   fi
   ```
 
-4. If the above command prints the message, then during the `update-cfs-config` stage of the CSM upgrade, [update the bootprep file](configure_cfs.md) to include the `csm-security` layer before proceeding with the `update-vcs-config` stage.
+1. If the above command prints the message, then during the `update-cfs-config` stage of the CSM upgrade, [update the bootprep file](configure_cfs.md) to include the `csm-security` layer before proceeding with the `update-vcs-config` stage.
 
 ## Next steps
 
