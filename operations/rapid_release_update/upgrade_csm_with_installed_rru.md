@@ -31,6 +31,8 @@ Depending on the CSM version installed on the system, refer to [Considerations f
 | `CSM 1.6.2` | `6.4.0-150600.23.17-default` |
 | `CSM 1.7.0` | `6.4.0-150600.23.53-default` |
 | `CSM 1.7.1` | `6.4.0-150700.53.25-default` |
+| `CSM 1.7.1-patch.1` | `6.4.0-150700.53.52-default` |
+| `CSM 1.7.1-patch.2` | `6.4.0-150700.53.78-default` |
 
   ```bash
   TARGET_KERNEL_VERSION=<KERNEL_VERSION>
