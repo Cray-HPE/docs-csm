@@ -60,9 +60,10 @@ This patch includes many fixes and improvements for CMS.
 * Improvements
     * Improved Kafka reliability in the CFS API server and [CFS Operator](operations/configuration_management/CFS_Operator.md).
     * Significantly faster [CFS session](operations/configuration_management/CFS_Sessions.md) creation.
-    * Improved debug logging by the CFS API server, CFS Operator, and [CFS Batcher](operations/configuration_management/CFS_Batcher.md).
+    * Improved debug logging by the Kafka operations, CFS API server, CFS Operator, and [CFS Batcher](operations/configuration_management/CFS_Batcher.md).
     * Minor performance improvements to session filtering (used when performing bulk list, patch, or delete operations on sessions).
     * Improve CFS Batcher reliability with regards to system clock changes.
+    * Make Kafka ProducerWrapper thread safe.
 
 * Known issues fixed
     * [CFS Batcher Can Be Slow To See Updated CFS Options](troubleshooting/known_issues/CFS_Batcher_Can_Be_Slow_To_See_Updated_CFS_Options.md)
@@ -70,15 +71,17 @@ This patch includes many fixes and improvements for CMS.
     * [CFS Operator Creating Multiple Jobs For Same Session](troubleshooting/known_issues/CFS_Operator_Creating_Multiple_Jobs_For_Same_Session.md)
     * [CFS Component State Updates Allow Invalid Values](troubleshooting/known_issues/CFS_Component_State_Updates_Allow_Invalid_Values.md)
     * [CFS Component State Update Does Not Preserve Layer Timestamps](troubleshooting/known_issues/CFS_Component_State_Update_Does_Not_Preserve_Layer_Timestamps.md)
+    * CFS API spec to enforce required fields in V2 and V3 component configuration state layers, preventing invalid patches that could cause CFS Batcher failures.
 
 * Bugs Fixed
     * Fixed frequent ConMon restarts triggered by changes detected in River passwords, which resulted in missing ConMon logs.
     * Preserved the Ansible profiling setting across upgrades by backing up and restoring its value before upgrading the CFS Operator Helm chart.
  
-* CVE fixes
-    * <>
+* Security fixes
+    * Remediated CVEs across CMS servcies: CFS ara, CFS Batcher, CFS hwsync agent, CFS Operator, Cray AEE, Console node and CSM Configuration.
 
 * Important Document Updates
+    * Added documentation describing the IMS image creation job's missing extended attributes (xattr) support, its impact on image builds, and the workaround to resolve the issue.
 
 ### Hardware Management Services (HMS)
 
