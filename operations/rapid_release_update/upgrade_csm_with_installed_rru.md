@@ -5,6 +5,7 @@ has already been installed.
 
 * [Overview](#overview)
 * [Determine the kernel versions](#determine-the-kernel-versions)
+* [Next Steps](#next-steps)
 
 ## Overview
 
@@ -41,3 +42,7 @@ Depending on the CSM version installed on the system, refer to [Considerations w
   ```
 
 1. If the above command prints the message, then during the `update-cfs-config` stage of the CSM upgrade, [update the bootprep file](configure_cfs.md) to include the `csm-security` layer before proceeding with the `update-vcs-config` stage.
+
+## Next steps
+
+- Return back to the [Upgrade page](../../upgrade/README.md) to continue the upgrade process.
