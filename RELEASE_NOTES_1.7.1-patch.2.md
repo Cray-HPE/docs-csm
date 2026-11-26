@@ -148,8 +148,9 @@ This patch includes many fixes and improvements for base platform components.
 ### Other Major Documentation Updates
 
 * Procedure to upgrade NCN kernel to higher version between Rapid Release Update and CSM base version during a CSM upgrade
-* Updated the IUF documentation to perform management host Slingshot NIC firmware update before deploying a new image to worker nodes,
+* Updated the upgrade documentation to perform management host Slingshot NIC firmware update before deploying a new image to worker nodes,
   avoiding an additional rolling reboot.
+* [Race Condition Creating Gitea Repository During IUF deliver-product](troubleshooting/known_issues/iuf_gitea_repo_creation_race_deliver_product.md)
 
 ## Known Issues
 
