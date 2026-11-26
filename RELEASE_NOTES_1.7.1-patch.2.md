@@ -78,10 +78,14 @@ This patch includes many fixes and improvements for CMS.
     * Preserved the Ansible profiling setting across upgrades by backing up and restoring its value before upgrading the CFS Operator Helm chart.
  
 * Security fixes
-    * Remediated CVEs across CMS servcies: CFS ara, CFS Batcher, CFS hwsync agent, CFS Operator, Cray AEE, Console node and CSM Configuration.
+    * Remediated CVEs across CMS servcies: CFS Batcher, CFS hwsync agent, CFS Operator, Cray AEE(ansible-execution-environment),
+      Console node and CSM Configuration and CFS ara.
+    * Document the race condition vulnerabilities in BOS and CFS.
 
 * Important Document Updates
-    * Added documentation describing the IMS image creation job's missing extended attributes (xattr) support, its impact on image builds, and the workaround to resolve the issue.
+    * Added documentation describing the IMS image creation job's missing extended attributes (xattr) support, its impact on image builds,
+      and the workaround to resolve the issue.
+    * [Common issues with staging sessions](../operations/boot_orchestration/Stage_Changes_with_BOS.md#common-issues-with-staging).
 
 ### Hardware Management Services (HMS)
 
@@ -133,17 +137,19 @@ This patch includes many fixes and improvements for base platform components.
 * Known issues fixed
 
 * Bugs Fixed
-    * Optimized iSCSI SBPS Kubernetes label and HSN/NMN DNS record configuration to process only the current CFS batch, reducing rollout time, preventing CFS failures,
-      and avoiding DNS records reconfigurations.
+    * Optimized iSCSI SBPS Kubernetes label and HSN/NMN DNS record configuration to process only the current CFS batch,
+      reducing rollout time, preventing CFS failures, and avoiding DNS records reconfigurations.
       
 * Major Documentation Updates
-    * Updated the IUF documentation with revised iSCSI SBPS upgrade and worker-node rollout procedures to eliminate timing dependencies and prevent LUN remapping issues.
-
+    * Updated the IUF documentation with revised worker node rollout procedure w.r.t iSCSI SBPS to avoid issues with
+      timing dependencies and prevent LUN remapping issues.
+    * Updated the documentation for safe unused PE image deletion.
+    
 ### Other Major Documentation Updates
 
-```text
-   Procedure to upgrade NCN kernel to higher version between Rapid Release Update and CSM base version during a CSM upgrade
-```
+* Procedure to upgrade NCN kernel to higher version between Rapid Release Update and CSM base version during a CSM upgrade
+* Updated the IUF documentation to perform management host Slingshot NIC firmware update before deploying a new image to worker nodes,
+  avoiding an additional rolling reboot.
 
 ## Known Issues
 
