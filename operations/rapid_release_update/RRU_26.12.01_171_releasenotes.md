@@ -1,6 +1,6 @@
 # Release Notes - `Rapid-Update-sle15-sp7-171-26.12.01`
 
-This document guides an administrator through the deploy of Rapid Release Update on `CSM-1.7.1`.
+This document guides an administrator through the deploy of Rapid Release Update on `CSM-1.7.1` and its patch releases.
 
 This page documents the changes introduced by this RRU, compared to the previous RRU version.
 
