@@ -39,6 +39,8 @@ SUSE kernel security (CVE) fixes by adding a new CFS layer and rebuilding the im
 
 [`Rapid-Update-sle15-sp7-171-26.09.01` Release Notes](RRU_26.09.01_171_releasenotes.md)
 
+[`Rapid-Update-sle15-sp7-171-26.12.01` Release Notes](RRU_26.12.01_171_releasenotes.md)
+
 ## Valid update paths
 
 The below table gives mapping between CSM version and the latest Rapid Release Update version along with the SLES kernel version getting updated.
@@ -47,7 +49,7 @@ Use only an RRU whose release information explicitly matches the installed CSM a
 | Installed CSM base version | Base SLE version | RRU version | Kernel version |
 | --- | --- | --- | --- |
 | 1.7.0 | SLE SP6 | `Rapid-Update-sle15-sp6-170-26.11.01` | 6.4.0-150600.23.143.1 |
-| 1.7.1 | SLE SP7 | `Rapid-Update-sle15-sp7-171-26.09.01` | 6.4.0-150700.53.78.1 |
+| 1.7.1 | SLE SP7 | `Rapid-Update-sle15-sp7-171-26.12.01` | 6.4.0-150700.53.90.1 |
 
 > **Note:** RRU Version mentioned above is the latest released version. Previous versions can be found in the [Release Notes](#release-notes).
 
