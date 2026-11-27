@@ -20,7 +20,7 @@ see [CSM 1.7 release notes](RELEASE_NOTES.md).
   * [Rack Resiliency](#rack-resiliency-rr)
   * [iscsi SBPS](#iscsi-sbps)
   * [Other Major Documentation Updates](#other-major-documentation-updates)
-* [Known Issues](#known-issues)
+* [Troubleshooting Guides](#troubleshooting)
 * [Upgrade steps](#upgrade-steps)
 
 
@@ -46,12 +46,10 @@ For a full list of CSM 1.7.1 patch releases, see
 
 ### Metal (MTL)
 
-This patch includes many fixes and improvements for METAL.
+This patch includes document improvements for METAL.
 
 * Important Document Updates
-```text
-   Corrected procedure to validate Signed rpms
-```    
+   * Corrected procedure to validate Signed rpms 
 
 ### Configuration Management Service (CMS)
 
@@ -92,30 +90,24 @@ This patch includes many fixes and improvements for CMS.
 This patch includes many fixes and documentation improvements for HMS.
 
 * Bugs Fixed
-```text
-   Fixed telemetry collection and display issue with River Sensors dashboard
-```    
-* Major Documentation Updates
-```text
-   Procedure to update SNMP credentials for existing switches.
-   Updates to various operational procedures in HMS including system power-down,
-   SDU diagnostics, non-compute-node dumps, compute-blade replacement, et.al.
-```    
+   * Fixed telemetry collection and display issue with River Sensors dashboard
 
+* Major Documentation Updates
+
+   * Procedure to update SNMP credentials for existing switches.
+   * Updates to various operational procedures in HMS including system power-down, SDU diagnostics, non-compute-node dumps, compute-blade replacement, et.al.
+ 
 ### Base platform components (PET)
 
 This patch includes many fixes and documentation improvements for base platform components.
 
 * Bugs Fixed
-```text
    * Corrected etcd health check failures when a cluster has no ready pods
    * Corrected the cluster role `cray-k8s-encryption` to move resources to appropriate `apiGroups`
-```    
 
 * Major Documentation Updates
-```text
-   Added a procedure to diagnose and resolve a Kubernetes encryption status mismatch
-```    
+   * Added a procedure to diagnose and resolve a Kubernetes encryption status mismatch
+
 
 ### Rack Resiliency (RR)
 
@@ -126,33 +118,28 @@ This patch includes fixes for Rack Resiliency.
     * Ceph monitor and service placement changes are now consistently propagated.
       
 * Major Documentation Updates
-    * Fixed an issue where the topology.kubernetes.io/zone labels were not preserved on worker nodes after
-      a worker-node rollout/rebuild when Rack Resiliency (RR) was enabled.
+    * Document method to reset worker node `topology` labels after a adhoc rebuild.
 
-### iSCSI SBPS (Scalable boot projection service). 
+### iSCSI SBPS 
 
-This patch includes many fixes and improvements for base platform components.
-
-* Improvements
-* Known issues fixed
+This patch includes many fixes and documentation updates for iscsi SBPS.
 
 * Bugs Fixed
-    * Optimized iSCSI SBPS Kubernetes label and HSN/NMN DNS record configuration to process only the current CFS batch,
-      reducing rollout time, preventing CFS failures, and avoiding DNS records reconfigurations.
+    * Optimized iSCSI SBPS Kubernetes label and HSN/NMN DNS record configuration to process only the current CFS batch, reducing rollout time, preventing CFS failures, and avoiding DNS records reconfigurations.
       
 * Major Documentation Updates
-    * Updated the IUF documentation with revised worker node rollout procedure w.r.t iSCSI SBPS to avoid issues with
+    * Updated the worker node upgrade rollout procedure to avoid issues with
       timing dependencies and prevent LUN remapping issues.
-    * Updated the documentation for safe unused PE image deletion.
+    * Document methods for safe deletion of unused PE image.
     
 ### Other Major Documentation Updates
 
 * Procedure to upgrade NCN kernel to higher version between Rapid Release Update and CSM base version during a CSM upgrade
-* Updated the upgrade documentation to perform management host Slingshot NIC firmware update before deploying a new image to worker nodes,
-  avoiding an additional rolling reboot.
-* [Race Condition Creating Gitea Repository During IUF deliver-product](troubleshooting/known_issues/iuf_gitea_repo_creation_race_deliver_product.md)
+* Procedure to perform management host Slingshot NIC firmware update before deploying a new image to worker nodes, avoiding an additional rolling reboot.
 
-## Known Issues
+### Troubleshooting Guides
+
+* [Race Condition Creating Gitea Repository During IUF deliver-product](troubleshooting/known_issues/iuf_gitea_repo_creation_race_deliver_product.md)
 
 ## Upgrade steps
 
