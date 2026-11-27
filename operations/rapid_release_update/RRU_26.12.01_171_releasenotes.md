@@ -16,87 +16,87 @@ This page documents the changes introduced by this RRU, compared to the previous
 
 CVEs fixed which have NVD score > 9.
 
-* `CVE-2026-63808` - Linux Kernel exFAT Directory Entry Lookup Use-After-Free
-* `CVE-2026-63886` - Linux Kernel iSCSI Target CHAP_R Base64 Heap Overflow
+* `CVE-2026-63808` - Linux Kernel `exFAT` Directory Entry Lookup Use-After-Free
+* `CVE-2026-63886` - Linux Kernel iSCSI Target `CHAP_R` Base64 Heap Overflow
 * `CVE-2026-63887` - Linux Kernel iSCSI Target Text Response Heap Overrun
 * `CVE-2026-63888` - Linux Kernel iSCSI Target Text Command CRC Overread and Double-Free
 * `CVE-2026-63992` - Linux Kernel Tunnel PMTU ICMP Out-of-Bounds Access
 * `CVE-2026-64000` - Linux Kernel HSR Supervision Frame Out-of-Bounds Read
 * `CVE-2026-64007` - Linux Kernel Netfilter SYNPROXY Stale TCP Header Use-After-Free
 * `CVE-2026-64018` - Linux Kernel MANA Out-of-Bounds Array Access
-* `CVE-2026-64033` - Linux Kernel RDMA/rtrs Path File Creation Cleanup Use-After-Free
+* `CVE-2026-64033` - Linux Kernel RDMA/`rtrs` Path File Creation Cleanup Use-After-Free
 * `CVE-2026-64034` - Linux Kernel MANA TOCTOU Double-Fetch
-* `CVE-2026-64047` - Linux Kernel TLS Wrapped sk_msg Ring Chain Off-by-One
+* `CVE-2026-64047` - Linux Kernel TLS Wrapped `sk_msg` Ring Chain Off-by-One
 * `CVE-2026-64055` - Linux Kernel Cortina Gemini Ethernet RX Fragment Counter Reset
 * `CVE-2026-64056` - Linux Kernel Cortina Gemini Ethernet Shared RX SKB Race
 * `CVE-2026-64102` - Linux Kernel RDMA/siw MPA FPDU Length Underflow
-* `CVE-2026-64113` - Linux Kernel ixgbevf VEPA Multicast Source Pruning Use-After-Free
-* `CVE-2026-64125` - Linux Kernel bcmgenet RBUF EEE/PM RX Stall
-* `CVE-2026-64136` - Linux Kernel SMB Client Unprotected tcon Reference Count Increment
-* `CVE-2026-53384` - Linux Kernel serial 8250_dw Port Leak on Clock Notifier Failure
+* `CVE-2026-64113` - Linux Kernel `ixgbevf` VEPA Multicast Source Pruning Use-After-Free
+* `CVE-2026-64125` - Linux Kernel `bcmgenet` RBUF EEE/PM RX Stall
+* `CVE-2026-64136` - Linux Kernel SMB Client Unprotected `tcon` Reference Count Increment
+* `CVE-2026-53384` - Linux Kernel serial `8250_dw` Port Leak on Clock Notifier Failure
 * `CVE-2026-63993` - Linux Kernel vxlan Cached IP Header Use-After-Free After PMTU Check
 * `CVE-2026-64046` - Linux Kernel TLS Plaintext Scatterlist Chain-After-Chain
 * `CVE-2026-63830` - Linux Kernel skmsg sg.copy Ownership Bit Loss
-* `CVE-2026-74712` - Linux Kernel vdpa/mlx5 create_direct_keys() Buffer Length Out-of-Bounds Read
+* `CVE-2026-74712` - Linux Kernel `vdpa`/`mlx5` create_direct_keys() Buffer Length Out-of-Bounds Read
 * `CVE-2026-74669` - Linux Kernel IPVS Tunnel ICMP Stack Out-of-Bounds Write
 * `CVE-2026-74581` - Linux Kernel IPv6 Suppressed FIB6 Rule Use-After-Free
-* `CVE-2026-74556` - Linux Kernel libiscsi_tcp SCSI Response Buffer Overflow
-* `CVE-2026-74495` - Linux Kernel igbvf TX DMA Error Cleanup Off-by-One Leak
+* `CVE-2026-74556` - Linux Kernel `libiscsi_tcp` SCSI Response Buffer Overflow
+* `CVE-2026-74495` - Linux Kernel `igbvf` TX DMA Error Cleanup Off-by-One Leak
 * `CVE-2026-74474` - Linux Kernel vxlan Transmit Path Header Pull Out-of-Bounds Read
-* `CVE-2026-74394` - Linux Kernel RDMA/srpt Immediate Data Integer Overflow
+* `CVE-2026-74394` - Linux Kernel RDMA/`srpt` Immediate Data Integer Overflow
 * `CVE-2026-74345` - Linux Kernel RDMA/siw Endpoint Socket Use-After-Free
-* `CVE-2026-74269` - Linux Kernel bnxt XDP Head-Grow Underflow
-* `CVE-2026-72496` - Linux Kernel RDMA/bnxt_re Missing Rollback on ioremap Failure
-* `CVE-2026-72495` - Linux Kernel RDMA/bnxt_re Repeated WC Page Allocation Race
-* `CVE-2026-72494` - Linux Kernel RDMA/irdma CQP Request Completion Race
-* `CVE-2026-72473` - Linux Kernel xprtrdma Request Recycling Use-After-Free
-* `CVE-2026-72466` - Linux Kernel xprtrdma Backchannel Reply Leak and Unbounded Peek
-* `CVE-2026-72463` - Linux Kernel xfrm Async Resumption Device Use-After-Free
-* `CVE-2026-72317` - Linux Kernel SUNRPC TLS connect_worker Use-After-Free
+* `CVE-2026-74269` - Linux Kernel `bnxt` XDP Head-Grow Underflow
+* `CVE-2026-72496` - Linux Kernel RDMA/`bnxt_re` Missing Rollback on `ioremap` Failure
+* `CVE-2026-72495` - Linux Kernel RDMA/`bnxt_re` Repeated WC Page Allocation Race
+* `CVE-2026-72494` - Linux Kernel RDMA/`irdma` CQP Request Completion Race
+* `CVE-2026-72473` - Linux Kernel `xprtrdma` Request Recycling Use-After-Free
+* `CVE-2026-72466` - Linux Kernel `xprtrdma` Backchannel Reply Leak and Unbounded Peek
+* `CVE-2026-72463` - Linux Kernel `xfrm` Async Resumption Device Use-After-Free
+* `CVE-2026-72317` - Linux Kernel SUNRPC TLS `connect_worker` Use-After-Free
 * `CVE-2026-72296` - Linux Kernel net/sched IFE Decode Inner Ethernet Header Out-of-Bounds Read
 * `CVE-2026-72289` - Linux Kernel KVM arm64 vGIC Interrupt Migration Use-After-Free
 * `CVE-2026-72288` - Linux Kernel KVM arm64 vGIC LPI Disable Race Use-After-Free
-* `CVE-2026-72251` - Linux Kernel Netfilter nf_nat_sip Stale Data Pointer
+* `CVE-2026-72251` - Linux Kernel Netfilter `nf_nat_sip` Stale Data Pointer
 * `CVE-2026-72222` - Linux Kernel SUNRPC TLS Handshake Callback Use-After-Free
 * `CVE-2026-72221` - Linux Kernel SUNRPC TLS Cancel Race Use-After-Free
 * `CVE-2026-72084` - Linux Kernel SCSI Target PR-OUT TransportID Out-of-Bounds Read
 * `CVE-2026-72083` - Linux Kernel SCSI Target REGISTER AND MOVE Use-After-Free
-* `CVE-2026-72069` - Linux Kernel locking/rt rt_spin_unlock() RCU Use-After-Free
-* `CVE-2026-72046` - Linux Kernel gve Header-Split HW-GRO Header Buffer Corruption
-* `CVE-2026-72020` - Linux Kernel IPVS ip_vs_conn_new Uninitialized Sequence Data
-* `CVE-2026-68426` - Linux Kernel xfrm Async Crypto Stale skb Use-After-Free
+* `CVE-2026-72069` - Linux Kernel locking/rt `rt_spin_unlock`() RCU Use-After-Free
+* `CVE-2026-72046` - Linux Kernel `gve` Header-Split `HW-GRO` Header Buffer Corruption
+* `CVE-2026-72020` - Linux Kernel IPVS `ip_vs_conn_new` Uninitialized Sequence Data
+* `CVE-2026-68426` - Linux Kernel `xfrm` Async Crypto Stale skb Use-After-Free
 * `CVE-2026-68343` - Linux Kernel SMB Client DFS Referral PathConsumed Out-of-Bounds Read
 * `CVE-2026-68302` - Linux Kernel AMT Stale skb Header Pointer Use-After-Free
-* `CVE-2026-68300` - Linux Kernel SCTP AUTH Verification Bypass When auth_chunk Is NULL
+* `CVE-2026-68300` - Linux Kernel SCTP AUTH Verification Bypass When `auth_chunk` Is NULL
 * `CVE-2026-68161` - Linux Kernel SCTP UDP Tunnel Socket Leak on Netns Teardown
-* `CVE-2026-68160` - Linux Kernel Ceph Pre-Auth Snaptrace Out-of-Bounds Read
-* `CVE-2026-68159` - Linux Kernel libceph pg_temp/pg_upmap Stack Out-of-Bounds Write
-* `CVE-2026-68158` - Linux Kernel libceph OSDMap Multiplication Overflow
+* `CVE-2026-68160` - Linux Kernel Ceph Pre-Auth `Snaptrace` Out-of-Bounds Read
+* `CVE-2026-68159` - Linux Kernel libceph `pg_temp`/`pg_upmap` Stack Out-of-Bounds Write
+* `CVE-2026-68158` - Linux Kernel libceph `OSDMap` Multiplication Overflow
 * `CVE-2026-68156` - Linux Kernel libceph Stale Authorizer Buffer Use-After-Free
 * `CVE-2026-68154` - Linux Kernel libceph CRUSH Zero Bucket Type Negative Index
-* `CVE-2026-68137` - Linux Kernel X.25 x25_kill_by_neigh() Socket Use-After-Free
+* `CVE-2026-68137` - Linux Kernel X.25 `x25_kill_by_neigh`() Socket Use-After-Free
 * `CVE-2026-68136` - Linux Kernel GRO Double Aggregation NULL Dereference
 * `CVE-2026-68127` - Linux Kernel ILA Checksum Adjust Stale IPv6 Header Use-After-Free
 * `CVE-2026-68124` - Linux Kernel MCTP Serial Zero-Length Frame RX Buffer Overflow
-* `CVE-2026-68123` - Linux Kernel Open vSwitch GSO Userspace Truncation Underflow
-* `CVE-2026-68117` - Linux Kernel TIPC Socket Create Failure Dangling sk Pointer
-* `CVE-2026-68082` - Linux Kernel libceph decode_lockers() Out-of-Bounds Read
-* `CVE-2026-64597` - Linux Kernel SMB Client SMB2_close() Replay Double-Free
-* `CVE-2026-64551` - Linux Kernel SCTP STALE_COOKIE Cause Length Out-of-Bounds Read
-* `CVE-2026-64541` - Linux Kernel net/smc smc_cdc_rx_handler() Socket Use-After-Free
+* `CVE-2026-68123` - Linux Kernel Open `vSwitch` GSO `Userspace` Truncation Underflow
+* `CVE-2026-68117` - Linux Kernel TIPC Socket Create Failure Dangling `sk` Pointer
+* `CVE-2026-68082` - Linux Kernel libceph `decode_lockers`() Out-of-Bounds Read
+* `CVE-2026-64597` - Linux Kernel SMB Client `SMB2_close`() Replay Double-Free
+* `CVE-2026-64551` - Linux Kernel SCTP `STALE_COOKIE` Cause Length Out-of-Bounds Read
+* `CVE-2026-64541` - Linux Kernel net/smc `smc_cdc_rx_handler`() Socket Use-After-Free
 * `CVE-2026-64450` - Linux Kernel TIPC Broadcast Gap ACK Out-of-Bounds Read
 * `CVE-2026-64387` - Linux Kernel SMB Client Query Directory Replay Double-Free
 * `CVE-2026-64386` - Linux Kernel SMB Client Query Info Replay Double-Free
 * `CVE-2026-64385` - Linux Kernel SMB Client IOCTL Replay Double-Free
 * `CVE-2026-64384` - Linux Kernel SMB Client Change Notify Replay Double-Free
 * `CVE-2026-64383` - Linux Kernel SMB Client Flush Replay Double-Free
-* `CVE-2026-64355` - Linux Kernel BPF devmap Fragmented Frame Out-of-Bounds Access
-* `CVE-2026-64303` - Linux Kernel fsl-lpspi RX DMA Not Terminated on TX Prepare Failure
-* `CVE-2026-64269` - Linux Kernel RDMA/rtrs-srv RDMA-Write Length Out-of-Bounds Read
+* `CVE-2026-64355` - Linux Kernel BPF `devmap` Fragmented Frame Out-of-Bounds Access
+* `CVE-2026-64303` - Linux Kernel `fsl-lpspi` RX DMA Not Terminated on TX Prepare Failure
+* `CVE-2026-64269` - Linux Kernel RDMA/`rtrs-srv` RDMA-Write Length Out-of-Bounds Read
 * `CVE-2026-64268` - Linux Kernel RDMA/siw Read Response Out-of-Bounds Write
 * `CVE-2026-64257` - Linux Kernel SMB Client Overlapping SMB2 Response Data Area
-* `CVE-2026-64320` - Linux Kernel nvmet Discovery Get Log Page Pre-Auth Out-of-Bounds Heap Read
-* `CVE-2026-80603` - Linux Kernel Netfilter IRC Helper parse_dcc() Off-by-One Read
+* `CVE-2026-64320` - Linux Kernel `nvmet` Discovery Get Log Page Pre-Auth Out-of-Bounds Heap Read
+* `CVE-2026-80603` - Linux Kernel Netfilter IRC Helper `parse_dcc`() Off-by-One Read
 * `CVE-2026-74597` - Linux Kernel IPv6 Tunnel Stale HAO Metadata Out-of-Bounds Access
 * `CVE-2026-74475` - Linux Kernel vxlan route_shortcircuit() Torn Neighbour Address Read
 * `CVE-2026-90151` - Linux Kernel NFSv4 Callback IDR Entry Use-After-Free on Client Allocation Failure
@@ -105,8 +105,8 @@ CVEs fixed which have NVD score > 9.
 * `CVE-2026-89662` - Linux Kernel NFSD Lock Owner Use-After-Free During Client Teardown
 * `CVE-2026-74473` - Linux Kernel vxlan route_shortcircuit() Network Header Out-of-Bounds Read
 * `CVE-2026-80725` - Linux Kernel GRO BIG TCP Aggregation Validation Out-of-Bounds Write
-* `CVE-2026-72129` - Linux Kernel nvmet-rdma Inline Data Offset Length Underflow
-* `CVE-2026-90414` - Linux Kernel IB/isert Over-Declared Data Segment Out-of-Bounds Read
+* `CVE-2026-72129` - Linux Kernel `nvmet-rdma` Inline Data Offset Length Underflow
+* `CVE-2026-90414` - Linux Kernel IB/`isert` Over-Declared Data Segment Out-of-Bounds Read
 * `CVE-2026-80589` - Linux Kernel Block Layer Timeout Timer Use-After-Free on Unadded Disk
 * `CVE-2026-72398` - Linux Kernel SCTP COOKIE-ECHO Missing INIT Re-Verification
 * `CVE-2026-89702` - Linux Kernel NFSD fh_verify Tracepoint Sockaddr Slot Overflow
@@ -142,12 +142,12 @@ CVEs fixed which have NVD score > 9.
 * `CVE-2026-72491` - Linux Kernel 9p RDMA Transport State Race
 * `CVE-2026-89674` - Linux Kernel NFSD Layoutget XDR Length Miscalculation
 * `CVE-2026-72098` - Linux Kernel dm-verity FEC Erasure Buffer Overflow
-* `CVE-2026-90413` - Linux Kernel IB/isert Login PDU Over-Declared Length Out-of-Bounds Read
+* `CVE-2026-90413` - Linux Kernel IB/`isert` Login PDU Over-Declared Length Out-of-Bounds Read
 * `CVE-2026-74688` - Linux Kernel SCTP Queued Control Chunk Transport Use-After-Free
 * `CVE-2026-74493` - Linux Kernel net/smc Link Group Termination Socket Use-After-Free
 * `CVE-2026-72130` - Linux Kernel nvmet-auth Short AUTH_RECEIVE Buffer Heap Overflow
 * `CVE-2026-74398` - Linux Kernel IPv6 addrconf DAD Failure State Race Use-After-Free
-* `CVE-2026-97413` - Linux Kernel RDMA/rtrs-srv process_read/process_write Integer Underflow
+* `CVE-2026-97413` - Linux Kernel RDMA/`rtrs-srv` process_read/process_write Integer Underflow
 * `CVE-2026-72399` - Linux Kernel enetc XDP Frame BD Count Out-of-Bounds Write
 * `CVE-2026-89479` - Linux Kernel SCTP Bundled Chunk Association Use-After-Free
 * `CVE-2026-80557` - Linux Kernel libceph decode_watchers() Out-of-Bounds Read
@@ -161,7 +161,7 @@ CVEs fixed which have NVD score > 9.
 * `CVE-2026-72339` - Linux Kernel qede Off-by-One BD Ring Desynchronization
 * `CVE-2026-74737` - Linux Kernel TI AM65 CPSW Source Tag Port ID Out-of-Bounds Access
 * `CVE-2026-74665` - Linux Kernel Generic XDP Fragment Adjust skb Length Accounting Flaw
-* `CVE-2026-72348` - Linux Kernel netfilter ip6tables Malformed Extension Header Rule Bypass
+* `CVE-2026-72348` - Linux Kernel Netfilter ip6tables Malformed Extension Header Rule Bypass
 * `CVE-2026-74743` - Linux Kernel macvlan Missing Headroom/Tailroom Reservation
 * `CVE-2026-74268` - Linux Kernel TCP BPF sock_ops Flags on Force-Closed Child Socket
 * `CVE-2026-68477` - Linux Kernel IPVS Incorrect IPv6 Transport Header Offsets
